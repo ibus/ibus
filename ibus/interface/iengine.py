@@ -104,8 +104,8 @@ class IEngine(dbus.service.Object):
     @signal(signature="v")
     def CommitText(self, text): pass
 
-    @signal(signature="uu")
-    def ForwardKeyEvent(self, keyval, state): pass
+    @signal(signature="uuu")
+    def ForwardKeyEvent(self, keyval, keycode, state): pass
 
     @signal(signature="vubu")
     def UpdatePreeditText(self, text, cursor_pos, visible, mode): pass

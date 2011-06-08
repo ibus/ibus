@@ -114,8 +114,8 @@ class EngineBase(object.Object):
         text = serializable.serialize_object(text)
         return self.__proxy.CommitText(text)
 
-    def forward_key_event(self, keyval, state):
-        return self.__proxy.ForwardKeyEvent(keyval, state)
+    def forward_key_event(self, keyval, keycode, state):
+        return self.__proxy.ForwardKeyEvent(keyval, keycode, state)
 
     def update_preedit_text(self, text, cursor_pos, visible, mode=common.IBUS_ENGINE_PREEDIT_CLEAR):
         text = serializable.serialize_object(text)

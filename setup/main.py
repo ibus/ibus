@@ -329,7 +329,7 @@ class Setup(object):
             # self.__bus.config_add_watch("/panel")
         except:
             while self.__bus == None:
-                message = _("IBus daemon is not started. Do you want to start it now?")
+                message = _("The IBus daemon is not running. Do you wish to start it?")
                 dlg = gtk.MessageDialog(type = gtk.MESSAGE_QUESTION,
                         buttons = gtk.BUTTONS_YES_NO,
                         message_format = message)
@@ -345,7 +345,7 @@ class Setup(object):
                 except:
                     continue
                 message = _("IBus has been started! "
-                    "If you can not use IBus, please add below lines in $HOME/.bashrc, and relogin your desktop.\n"
+                    "If you cannot use IBus, add the following lines to your $HOME/.bashrc; then relog into your desktop.\n"
                     "  export GTK_IM_MODULE=ibus\n"
                     "  export XMODIFIERS=@im=ibus\n"
                     "  export QT_IM_MODULE=ibus"

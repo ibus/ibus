@@ -299,6 +299,9 @@ if test x"$enable_dconf" = x"yes"; then
         [dconf >= 0.7.5], ,
         enable_dconf=no
     )
+    PKG_CHECK_EXISTS([dconf >= 0.13.4],
+        [AC_DEFINE(DCONF_0_13_4, TRUE, [dconf is 0.13.4 or later])],
+        [])
     # check glib-compile-schemas
     GLIB_GSETTINGS
 fi

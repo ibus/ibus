@@ -23,7 +23,7 @@
 #include <ibus.h>
 #include <stdlib.h>
 #include <locale.h>
-#include "config.h"
+#include "config-private.h"
 
 static IBusBus *bus = NULL;
 static IBusConfigDConf *config = NULL;

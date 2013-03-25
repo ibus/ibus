@@ -22,8 +22,17 @@
 #ifndef __CONFIG_DCONF_H__
 #define __CONFIG_DCONF_H__
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include <ibus.h>
-#include <dconf/dconf.h>
+#ifdef DCONF_0_13_4
+#  include <client/dconf-client.h>
+#  include <common/dconf-paths.h>
+#else
+#  include <dconf/dconf.h>
+#endif
 
 #define IBUS_TYPE_CONFIG_DCONF            \
     (ibus_config_dconf_get_type ())

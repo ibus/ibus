@@ -29,7 +29,7 @@ libexec_PROGRAMS = \
 ibus_dconf_SOURCES = \
 	main.c \
 	config.c \
-	config.h \
+	config-private.h \
 	$(NULL)
 ibus_dconf_CFLAGS = \
 	@GLIB2_CFLAGS@ \

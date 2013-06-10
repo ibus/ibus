@@ -195,6 +195,9 @@ static const gchar introspection_xml[] =
     "    <method name='GetUseGlobalEngine'>\n"
     "      <arg direction='out' type='b' name='enabled' />\n"
     "    </method>\n"
+    "    <method name='SetUseGlobalEngine'>\n"
+    "      <arg direction='in' type='b' name='enabled' />\n"
+    "    </method>\n"
     "    <method name='GetGlobalEngine'>\n"
     "      <arg direction='out' type='v' name='desc' />\n"
     "    </method>\n"
@@ -331,6 +334,26 @@ _dbus_name_owner_changed_cb (BusDBusImpl   *dbus,
     bus_registry_name_owner_changed (ibus->registry, name, old_name, new_name);
 }
 
+
+static gboolean
+_get_boolean_env(const gchar *name,
+                 gboolean     defval)
+{
+    const gchar *value = g_getenv (name);
+
+    if (value == NULL)
+      return defval;
+
+    if (g_strcmp0 (value, "") == 0 ||
+        g_strcmp0 (value, "0") == 0 ||
+        g_strcmp0 (value, "false") == 0 ||
+        g_strcmp0 (value, "False") == 0 ||
+        g_strcmp0 (value, "FALSE") == 0)
+      return FALSE;
+
+    return TRUE;
+}
+
 /**
  * bus_ibus_impl_init:
  *
@@ -373,9 +396,9 @@ bus_ibus_impl_init (BusIBusImpl *ibus)
 
     ibus->keymap = ibus_keymap_get ("us");
 
-    ibus->use_sys_layout = TRUE;
-    ibus->embed_preedit_text = TRUE;
-    ibus->use_global_engine = TRUE;
+    ibus->use_sys_layout = _get_boolean_env("IBUS_USE_SYS_LAYOUT", TRUE);
+    ibus->embed_preedit_text = _get_boolean_env("IBUS_EMBED_PREEDIT_TEXT", TRUE);
+    ibus->use_global_engine = _get_boolean_env("IBUS_USE_GLOBAL_ENGINE", TRUE);
     ibus->global_engine_name = NULL;
     ibus->global_previous_engine_name = NULL;
 
@@ -1095,6 +1118,44 @@ _ibus_get_use_global_engine (BusIBusImpl           *ibus,
 }
 
 /**
+ * _ibus_set_use_global_engine:
+ *
+ * Implement the "SetUseGlobalEngine" method call of the org.freedesktop.IBus interface.
+ */
+static void
+_ibus_set_use_global_engine (BusIBusImpl           *ibus,
+                             GVariant              *parameters,
+                             GDBusMethodInvocation *invocation)
+{
+    gboolean new_value;
+    g_variant_get (parameters, "(b)", &new_value);
+
+    if (ibus->use_global_engine == new_value) {
+        ;
+    }
+    else if (new_value) {
+        /* turn on use_global_engine option */
+        ibus->use_global_engine = TRUE;
+        if (ibus->panel && ibus->focused_context == NULL) {
+            bus_panel_proxy_focus_in (ibus->panel, ibus->fake_context);
+        }
+    }
+    else {
+        /* turn off use_global_engine option */
+        ibus->use_global_engine = FALSE;
+
+        /* if fake context has the focus, we should focus out it */
+        if (ibus->panel && ibus->focused_context == NULL) {
+            bus_panel_proxy_focus_out (ibus->panel, ibus->fake_context);
+        }
+        /* remove engine in fake context */
+        bus_input_context_set_engine (ibus->fake_context, NULL);
+    }
+
+    g_dbus_method_invocation_return_value (invocation, NULL);
+}
+
+/**
  * _ibus_get_global_engine:
  *
  * Implement the "GetGlobalEngine" method call of the org.freedesktop.IBus interface.
@@ -1393,6 +1454,7 @@ bus_ibus_impl_service_method_call (IBusService           *service,
         { "Ping",                  _ibus_ping },
         { "GetUseSysLayout",       _ibus_get_use_sys_layout },
         { "GetUseGlobalEngine",    _ibus_get_use_global_engine },
+        { "SetUseGlobalEngine",    _ibus_set_use_global_engine },
         { "GetGlobalEngine",       _ibus_get_global_engine },
         { "SetGlobalEngine",       _ibus_set_global_engine },
         { "IsGlobalEngineEnabled", _ibus_is_global_engine_enabled },

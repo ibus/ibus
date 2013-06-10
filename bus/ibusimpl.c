@@ -334,6 +334,26 @@ _dbus_name_owner_changed_cb (BusDBusImpl   *dbus,
     bus_registry_name_owner_changed (ibus->registry, name, old_name, new_name);
 }
 
+
+static gboolean
+_get_boolean_env(const gchar *name,
+                 gboolean     defval)
+{
+    const gchar *value = g_getenv (name);
+
+    if (value == NULL)
+      return defval;
+
+    if (g_strcmp0 (value, "") == 0 ||
+        g_strcmp0 (value, "0") == 0 ||
+        g_strcmp0 (value, "false") == 0 ||
+        g_strcmp0 (value, "False") == 0 ||
+        g_strcmp0 (value, "FALSE") == 0)
+      return FALSE;
+
+    return TRUE;
+}
+
 /**
  * bus_ibus_impl_init:
  *
@@ -376,9 +396,9 @@ bus_ibus_impl_init (BusIBusImpl *ibus)
 
     ibus->keymap = ibus_keymap_get ("us");
 
-    ibus->use_sys_layout = TRUE;
-    ibus->embed_preedit_text = TRUE;
-    ibus->use_global_engine = TRUE;
+    ibus->use_sys_layout = _get_boolean_env("IBUS_USE_SYS_LAYOUT", TRUE);
+    ibus->embed_preedit_text = _get_boolean_env("IBUS_EMBED_PREEDIT_TEXT", TRUE);
+    ibus->use_global_engine = _get_boolean_env("IBUS_USE_GLOBAL_ENGINE", TRUE);
     ibus->global_engine_name = NULL;
     ibus->global_previous_engine_name = NULL;
 

@@ -41,6 +41,7 @@ class Panel : IBus.PanelService {
     private Gtk.Menu m_ime_menu;
     private Gtk.Menu m_sys_menu;
     private IBus.EngineDesc[] m_engines = {};
+    private IBus.EngineDesc current_engine = null;
     private CandidatePanel m_candidate_panel;
     private Switcher m_switcher;
     private PropertyManager m_property_manager;
@@ -524,6 +525,17 @@ class Panel : IBus.PanelService {
         }
     }
 
+    private int get_current_engine_index() {
+        if (current_engine == null) return 0;
+
+        for (int i = 0; i < m_engines.length; ++i) {
+            if (m_engines[i].get_name() == current_engine.get_name())
+                return i;
+        }
+
+        return 0;
+    }
+
     private void handle_engine_switch(Gdk.Event event, bool revert) {
         // Do not need switch IME
         if (m_engines.length <= 1)
@@ -542,8 +554,9 @@ class Panel : IBus.PanelService {
             modifiers &= ~Gdk.ModifierType.SHIFT_MASK;
         }
 
+        int i = get_current_engine_index() + (revert ? - 1 : 1) + m_engines.length;
+        i %= m_engines.length;
         if (pressed && m_switcher_delay_time >= 0) {
-            int i = revert ? m_engines.length - 1 : 1;
             i = m_switcher.run(keyval, modifiers, event, m_engines, i);
             if (i < 0) {
                 debug("switch cancelled");
@@ -552,7 +565,6 @@ class Panel : IBus.PanelService {
                 switch_engine(i);
             }
         } else {
-            int i = revert ? m_engines.length - 1 : 1;
             switch_engine(i);
         }
     }
@@ -768,7 +780,6 @@ class Panel : IBus.PanelService {
     }
 
     public override void focus_out(string input_context_path) {
-        state_changed();
     }
 
     public override void register_properties(IBus.PropList props) {
@@ -814,8 +825,10 @@ class Panel : IBus.PanelService {
         var icon_name = "ibus-keyboard";
 
         var engine = m_bus.get_current_engine();
-        if (engine != null)
+
+        if (engine != null) {
             icon_name = engine.get_icon();
+        }
 
         if (icon_name[0] == '/')
             m_status_icon.set_from_file(icon_name);
@@ -831,9 +844,18 @@ class Panel : IBus.PanelService {
         if (engine == null)
             return;
 
+        if (m_bus.get_use_global_engine()) {
+            adjust_engines_order(engine);
+            current_engine = null;
+        } else {
+            current_engine = engine;
+        }
+    }
+
+    private void adjust_engines_order(IBus.EngineDesc first_engine) {
         int i;
         for (i = 0; i < m_engines.length; i++) {
-            if (m_engines[i].get_name() == engine.get_name())
+            if (m_engines[i].get_name() == first_engine.get_name())
                 break;
         }
 
@@ -848,7 +870,7 @@ class Panel : IBus.PanelService {
         for (int j = i; j > 0; j--) {
             m_engines[j] = m_engines[j - 1];
         }
-        m_engines[0] = engine;
+        m_engines[0] = first_engine;
 
         string[] names = {};
         foreach(var desc in m_engines) {

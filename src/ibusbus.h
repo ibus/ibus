@@ -867,6 +867,100 @@ gboolean     ibus_bus_is_global_engine_enabled_async_finish
                                          GError        **error);
 
 /**
+ * ibus_bus_get_current_engine:
+ * @bus: An #IBusBus.
+ * @returns: (transfer none): The description of current current engine,
+ * or %NULL if there is no current engine.
+ *
+ * Get the description of current current engine synchronously.
+ */
+IBusEngineDesc *
+             ibus_bus_get_current_engine (IBusBus        *bus);
+
+/**
+ * ibus_bus_get_current_engine_async:
+ * @bus: An #IBusBus.
+ * @timeout_msec: The timeout in milliseconds or -1 to use the default timeout.
+ * @cancellable: A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL
+ *      if you don't care about the result of the method invocation.
+ * @user_data: The data to pass to callback.
+ *
+ * Get the description of current engine asynchronously.
+ */
+void         ibus_bus_get_current_engine_async
+                                        (IBusBus        *bus,
+                                         gint            timeout_msec,
+                                         GCancellable   *cancellable,
+                                         GAsyncReadyCallback
+                                                         callback,
+                                         gpointer        user_data);
+
+/**
+ * ibus_bus_get_current_engine_async_finish:
+ * @bus: An #IBusBus.
+ * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to
+ *   ibus_bus_get_current_engine_async_finish().
+ * @error: Return location for error or %NULL.
+ * @returns: (transfer none): The description of current current engine,
+ * or %NULL if there is no current engine.
+ *
+ * Finishes an operation started with ibus_bus_get_current_engine_async_finish().
+ */
+IBusEngineDesc *
+             ibus_bus_get_current_engine_async_finish
+                                        (IBusBus        *bus,
+                                         GAsyncResult   *res,
+                                         GError        **error);
+
+/**
+ * ibus_bus_set_current_engine:
+ * @bus: An #IBusBus.
+ * @current_engine: A new engine name.
+ * @returns: %TRUE if the current engine was set successfully.
+ *
+ * Set current engine synchronously.
+ */
+gboolean     ibus_bus_set_current_engine (IBusBus        *bus,
+                                         const gchar    *current_engine);
+
+/**
+ * ibus_bus_set_current_engine_async:
+ * @bus: An #IBusBus.
+ * @current_engine: A new engine name.
+ * @timeout_msec: The timeout in milliseconds or -1 to use the default timeout.
+ * @cancellable: A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied
+ *      or %NULL if you don't care about the result of the method invocation.
+ * @user_data: The data to pass to callback.
+ *
+ * Set current engine asynchronously.
+ */
+void         ibus_bus_set_current_engine_async
+                                        (IBusBus        *bus,
+                                         const gchar    *current_engine,
+                                         gint            timeout_msec,
+                                         GCancellable   *cancellable,
+                                         GAsyncReadyCallback
+                                                         callback,
+                                         gpointer        user_data);
+
+/**
+ * ibus_bus_set_current_engine_async_finish:
+ * @bus: An #IBusBus.
+ * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to
+ *   ibus_bus_set_current_engine_async().
+ * @error: Return location for error or %NULL.
+ * @returns: %TRUE if no IPC errros. %FALSE otherwise.
+ *
+ * Finishes an operation started with ibus_bus_set_current_engine_async().
+ */
+gboolean     ibus_bus_set_current_engine_async_finish
+                                        (IBusBus        *bus,
+                                         GAsyncResult   *res,
+                                         GError        **error);
+
+/**
  * ibus_bus_get_global_engine:
  * @bus: An #IBusBus.
  * @returns: (transfer none): The description of current global engine,

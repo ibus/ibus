@@ -1875,6 +1875,127 @@ gboolean ibus_bus_is_global_engine_enabled_async_finish (IBusBus      *bus,
     return _async_finish_gboolean (res, error);
 }
 
+
+IBusEngineDesc *
+ibus_bus_get_current_engine (IBusBus *bus)
+{
+    g_return_val_if_fail (IBUS_IS_BUS (bus), NULL);
+
+    GVariant *result;
+    IBusEngineDesc *engine = NULL;
+    result = ibus_bus_call_sync (bus,
+                                 IBUS_SERVICE_IBUS,
+                                 IBUS_PATH_IBUS,
+                                 IBUS_INTERFACE_IBUS,
+                                 "GetCurrentEngine",
+                                 NULL,
+                                 G_VARIANT_TYPE ("(v)"));
+
+    if (result) {
+        GVariant *variant = NULL;
+        g_variant_get (result, "(v)", &variant);
+        if (variant) {
+            engine = IBUS_ENGINE_DESC (ibus_serializable_deserialize (variant));
+            g_variant_unref (variant);
+        }
+        g_variant_unref (result);
+    }
+
+    return engine;
+}
+
+void
+ibus_bus_get_current_engine_async (IBusBus            *bus,
+                                   gint                timeout_msec,
+                                   GCancellable       *cancellable,
+                                   GAsyncReadyCallback callback,
+                                   gpointer            user_data)
+{
+    g_return_if_fail (IBUS_IS_BUS (bus));
+
+    ibus_bus_call_async (bus,
+                         IBUS_SERVICE_IBUS,
+                         IBUS_PATH_IBUS,
+                         IBUS_INTERFACE_IBUS,
+                         "GetCurrentEngine",
+                         NULL,
+                         G_VARIANT_TYPE ("(v)"),
+                         ibus_bus_get_current_engine_async,
+                         timeout_msec,
+                         cancellable,
+                         callback,
+                         user_data);
+}
+
+IBusEngineDesc *
+ibus_bus_get_current_engine_async_finish (IBusBus      *bus,
+                                          GAsyncResult *res,
+                                          GError      **error)
+{
+    GSimpleAsyncResult *simple = (GSimpleAsyncResult *) res;
+    if (g_simple_async_result_propagate_error (simple, error))
+        return NULL;
+    GVariant *variant = g_simple_async_result_get_op_res_gpointer (simple);
+    g_return_val_if_fail (variant != NULL, NULL);
+    GVariant *inner_variant = NULL;
+    g_variant_get (variant, "(v)", &inner_variant);
+
+    IBusEngineDesc *engine = NULL;
+    if (inner_variant) {
+        engine = IBUS_ENGINE_DESC (ibus_serializable_deserialize (inner_variant));
+        g_variant_unref (inner_variant);
+    }
+    return engine;
+}
+
+gboolean
+ibus_bus_set_current_engine (IBusBus     *bus,
+                             const gchar *current_engine)
+{
+    g_return_val_if_fail (IBUS_IS_BUS (bus), FALSE);
+    g_return_val_if_fail (current_engine != NULL, FALSE);
+
+    GVariant *result;
+    result = ibus_bus_call_sync (bus,
+                                 IBUS_SERVICE_IBUS,
+                                 IBUS_PATH_IBUS,
+                                 IBUS_INTERFACE_IBUS,
+                                 "SetCurrentEngine",
+                                 g_variant_new ("(s)", current_engine),
+                                 NULL);
+
+    if (result) {
+        g_variant_unref (result);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+void
+ibus_bus_set_current_engine_async (IBusBus            *bus,
+                                  const gchar        *current_engine,
+                                  gint                timeout_msec,
+                                  GCancellable       *cancellable,
+                                  GAsyncReadyCallback callback,
+                                  gpointer            user_data)
+{
+    g_return_if_fail (IBUS_IS_BUS (bus));
+    g_return_if_fail (current_engine != NULL);
+
+    ibus_bus_call_async (bus,
+                         IBUS_SERVICE_IBUS,
+                         IBUS_PATH_IBUS,
+                         IBUS_INTERFACE_IBUS,
+                         "SetCurrentEngine",
+                         g_variant_new ("(s)", current_engine),
+                         NULL, /* no return value */
+                         ibus_bus_set_current_engine_async,
+                         timeout_msec,
+                         cancellable,
+                         callback,
+                         user_data);
+}
+
 IBusEngineDesc *
 ibus_bus_get_global_engine (IBusBus *bus)
 {

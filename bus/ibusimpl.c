@@ -64,7 +64,7 @@ struct _BusIBusImpl {
 
     BusRegistry     *registry;
 
-    BusInputContext *focused_context;
+    BusInputContext *focused_context, *last_present_context;
     BusPanelProxy   *panel;
 
     /* a default keymap of ibus-daemon (usually "us") which is used only
@@ -391,6 +391,7 @@ bus_ibus_impl_init (BusIBusImpl *ibus)
     ibus->register_engine_list = NULL;
     ibus->contexts = NULL;
     ibus->focused_context = NULL;
+    ibus->last_present_context = NULL;
     ibus->panel = NULL;
     ibus->registry = bus_registry_new ();
 
@@ -484,6 +485,11 @@ bus_ibus_impl_destroy (BusIBusImpl *ibus)
     if (ibus->fake_context) {
         g_object_unref (ibus->fake_context);
         ibus->fake_context = NULL;
+    }
+
+    if (ibus->last_present_context) {
+        g_object_unref (ibus->last_present_context);
+        ibus->last_present_context = NULL;
     }
 
     IBUS_OBJECT_CLASS (bus_ibus_impl_parent_class)->destroy (IBUS_OBJECT (ibus));
@@ -620,6 +626,15 @@ bus_ibus_impl_set_focused_context (BusIBusImpl     *ibus,
 
         if (ibus->panel != NULL)
             bus_panel_proxy_focus_in (ibus->panel, context);
+
+        /* remember last non-null context. helpful for set_current_engine
+         * when focus is stolen (for example, by the switcher). */
+        if (!ibus->use_global_engine) {
+            if (ibus->last_present_context) {
+                g_object_unref(ibus->last_present_context);
+            }
+            ibus->last_present_context = (BusInputContext *) g_object_ref(context);
+        }
     }
 
     if (engine != NULL)
@@ -1205,7 +1220,7 @@ _ibus_set_current_engine_ready_cb (BusInputContext       *context,
         g_dbus_method_invocation_return_error (data->invocation,
                                                G_DBUS_ERROR,
                                                G_DBUS_ERROR_FAILED,
-                                               "Set active engine failed.");
+                                               "Set current engine failed.");
 
     }
     else {
@@ -1231,11 +1246,15 @@ _ibus_set_current_engine (BusIBusImpl           *ibus,
     if (context == NULL && ibus->use_global_engine)
         context = ibus->fake_context;
 
+    /* best effect, try last not null context */
+    if (context == NULL)
+        context = ibus->last_present_context;
+
     if (context == NULL) {
         g_dbus_method_invocation_return_error (invocation,
                                                G_DBUS_ERROR,
                                                G_DBUS_ERROR_FAILED,
-                                               "No active context.");
+                                               "No focused context.");
         return;
     }
 

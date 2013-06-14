@@ -764,9 +764,11 @@ class Panel : IBus.PanelService {
     }
 
     public override void focus_in(string input_context_path) {
+        state_changed();
     }
 
     public override void focus_out(string input_context_path) {
+        state_changed();
     }
 
     public override void register_properties(IBus.PropList props) {

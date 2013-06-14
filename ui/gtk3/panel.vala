@@ -471,15 +471,16 @@ class Panel : IBus.PanelService {
         GLib.assert(i >= 0 && i < m_engines.length);
 
         // Do not need switch
-        if (i == 0 && !force)
+        if (i == 0 && !force && m_bus.get_use_global_engine())
             return;
 
         IBus.EngineDesc engine = m_engines[i];
 
-        if (!m_bus.set_global_engine(engine.get_name())) {
+        if (!m_bus.set_current_engine(engine.get_name())) {
             warning("Switch engine to %s failed.", engine.get_name());
             return;
         }
+
         // set xkb layout
         if (!m_use_system_keyboard_layout) {
             exec_setxkbmap(engine);
@@ -810,7 +811,7 @@ class Panel : IBus.PanelService {
     public override void state_changed() {
         var icon_name = "ibus-keyboard";
 
-        var engine = m_bus.get_global_engine();
+        var engine = m_bus.get_current_engine();
         if (engine != null)
             icon_name = engine.get_icon();
 

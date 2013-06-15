@@ -1001,7 +1001,8 @@ You may use up/down buttons to change it.&lt;/i&gt;&lt;/small&gt;</property>
                     </child>
                     <child>
                       <object class="GtkFrame" id="frame5">
-                        <property name="no_show_all">True</property>
+                        <property name="no_show_all">False</property>
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label_xalign">0</property>
                         <property name="shadow_type">none</property>

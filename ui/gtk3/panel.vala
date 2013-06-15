@@ -299,6 +299,24 @@ class Panel : IBus.PanelService {
                                 var_embed_preedit);
     }
 
+    private void set_use_global_engine(Variant? variant) {
+        Variant var_use_global_engine = variant;
+
+        if (var_use_global_engine == null) {
+            var_use_global_engine = m_config.get_value("general",
+                                                       "use_global_engine");
+        }
+
+        if (var_use_global_engine == null) {
+            return;
+        }
+
+        m_bus.set_ibus_property("UseGlobalEngine",
+                                var_use_global_engine);
+
+    }
+
+
     private int compare_versions(string version1, string version2) {
         string[] version1_list = version1.split(".");
         string[] version2_list = version2.split(".");
@@ -402,6 +420,7 @@ class Panel : IBus.PanelService {
             m_config.watch("general", "embed_preedit_text");
             m_config.watch("general", "engines_order");
             m_config.watch("general", "switcher_delay_time");
+            m_config.watch("general", "use_global_engine");
             m_config.watch("general", "use_system_keyboard_layout");
             m_config.watch("general/hotkey", "triggers");
             m_config.watch("panel", "custom_font");
@@ -415,6 +434,7 @@ class Panel : IBus.PanelService {
             bind_switch_shortcut(null);
             set_switcher_delay_time(null);
             set_embed_preedit_text(null);
+            set_use_global_engine(null);
             set_custom_font();
 
             set_version();
@@ -521,6 +541,11 @@ class Panel : IBus.PanelService {
 
         if (section == "general" && name == "embed_preedit_text") {
             set_embed_preedit_text(variant);
+            return;
+        }
+
+        if (section == "general" && name == "use_global_engine") {
+            set_use_global_engine(variant);
             return;
         }
     }

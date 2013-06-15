@@ -623,6 +623,9 @@ class Panel : IBus.PanelService {
         if (engine_names == null || engine_names.length == 0)
             engine_names = {"xkb:us::eng"};
 
+        m_bus.set_ibus_property("DefaultEngineName",
+                                engine_names[0]);
+
         string[] order_names =
             (var_order != null) ? var_order.dup_strv() : null;
 

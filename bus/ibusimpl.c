@@ -1177,112 +1177,6 @@ _ibus_set_use_global_engine (BusIBusImpl           *ibus,
 }
 
 /**
- * _ibus_get_current_engine:
- *
- * Implement the "GetActiveEngine" method call of the org.freedesktop.IBus interface.
- */
-static void
-_ibus_get_current_engine (BusIBusImpl           *ibus,
-                          GVariant              *parameters,
-                          GDBusMethodInvocation *invocation)
-{
-    IBusEngineDesc *desc = NULL;
-
-    BusInputContext *context = ibus->focused_context;
-    if (context != NULL) {
-        desc = bus_input_context_get_engine_desc (context);
-    }
-
-    if (desc == NULL) {
-        desc = bus_ibus_impl_get_engine_desc (ibus, DEFAULT_ENGINE);
-    }
-
-    GVariant *variant = ibus_serializable_serialize ((IBusSerializable *) desc);
-    g_dbus_method_invocation_return_value (invocation,
-                                           g_variant_new ("(v)", variant));
-}
-
-typedef struct {
-    BusIBusImpl *ibus;
-    GDBusMethodInvocation *invocation;
-} SetActiveEngineData;
-
-static void
-_ibus_set_current_engine_ready_cb (BusInputContext       *context,
-                                   GAsyncResult          *res,
-                                   SetActiveEngineData   *data)
-{
-    BusIBusImpl *ibus = data->ibus;
-
-    GError *error = NULL;
-    if (!bus_input_context_set_engine_by_desc_finish (context, res, &error)) {
-        g_error_free (error);
-        g_dbus_method_invocation_return_error (data->invocation,
-                                               G_DBUS_ERROR,
-                                               G_DBUS_ERROR_FAILED,
-                                               "Set current engine failed.");
-
-    }
-    else {
-        g_dbus_method_invocation_return_value (data->invocation, NULL);
-    }
-
-    g_object_unref (ibus);
-    g_slice_free (SetActiveEngineData, data);
-}
-
-
-/**
- * _ibus_set_current_engine:
- *
- * Implement the "SetActiveEngine" method call of the org.freedesktop.IBus interface.
- */
-static void
-_ibus_set_current_engine (BusIBusImpl           *ibus,
-                          GVariant              *parameters,
-                          GDBusMethodInvocation *invocation)
-{
-    BusInputContext *context = ibus->focused_context;
-    if (context == NULL && ibus->use_global_engine)
-        context = ibus->fake_context;
-
-    /* best effect, try last not null context */
-    if (context == NULL)
-        context = ibus->last_present_context;
-
-    if (context == NULL) {
-        g_dbus_method_invocation_return_error (invocation,
-                                               G_DBUS_ERROR,
-                                               G_DBUS_ERROR_FAILED,
-                                               "No focused context.");
-        return;
-    }
-
-    const gchar *engine_name = NULL;
-    g_variant_get (parameters, "(&s)", &engine_name);
-
-    IBusEngineDesc *desc = bus_ibus_impl_get_engine_desc(ibus, engine_name);
-    if (desc == NULL) {
-        g_dbus_method_invocation_return_error (invocation,
-                                               G_DBUS_ERROR,
-                                               G_DBUS_ERROR_FAILED,
-                                               "Can not find engine %s.",
-                                               engine_name);
-        return;
-    }
-
-    SetActiveEngineData *data = g_slice_new0 (SetActiveEngineData);
-    data->ibus = g_object_ref (ibus);
-    data->invocation = invocation;
-    bus_input_context_set_engine_by_desc (context,
-                                          desc,
-                                          g_gdbus_timeout, /* timeout in msec. */
-                                          NULL, /* we do not cancel the call. */
-                                          (GAsyncReadyCallback) _ibus_set_current_engine_ready_cb,
-                                          data);
-}
-
-/**
  * _ibus_get_global_engine:
  *
  * Implement the "GetGlobalEngine" method call of the org.freedesktop.IBus interface.
@@ -1313,8 +1207,8 @@ _ibus_get_global_engine (BusIBusImpl           *ibus,
     } while (0);
 
     g_dbus_method_invocation_return_error (invocation,
-                    G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
-                    "No global engine.");
+                                           G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
+                                           "No global engine.");
 }
 
 struct _SetGlobalEngineData {
@@ -1436,6 +1330,117 @@ _ibus_is_global_engine_enabled (BusIBusImpl           *ibus,
 
     g_dbus_method_invocation_return_value (invocation,
                     g_variant_new ("(b)", enabled));
+}
+
+/**
+ * _ibus_get_current_engine:
+ *
+ * Implement the "GetActiveEngine" method call of the org.freedesktop.IBus interface.
+ */
+static void
+_ibus_get_current_engine (BusIBusImpl           *ibus,
+                          GVariant              *parameters,
+                          GDBusMethodInvocation *invocation)
+{
+    IBusEngineDesc *desc = NULL;
+
+    BusInputContext *context = ibus->focused_context;
+    if (context != NULL) {
+        desc = bus_input_context_get_engine_desc (context);
+    }
+
+    if (desc == NULL) {
+        desc = bus_ibus_impl_get_engine_desc (ibus, DEFAULT_ENGINE);
+    }
+
+    GVariant *variant = ibus_serializable_serialize ((IBusSerializable *) desc);
+    g_dbus_method_invocation_return_value (invocation,
+                                           g_variant_new ("(v)", variant));
+}
+
+typedef struct {
+    BusIBusImpl *ibus;
+    GDBusMethodInvocation *invocation;
+} SetActiveEngineData;
+
+static void
+_ibus_set_current_engine_ready_cb (BusInputContext       *context,
+                                   GAsyncResult          *res,
+                                   SetActiveEngineData   *data)
+{
+    BusIBusImpl *ibus = data->ibus;
+
+    GError *error = NULL;
+    if (!bus_input_context_set_engine_by_desc_finish (context, res, &error)) {
+        g_error_free (error);
+        g_dbus_method_invocation_return_error (data->invocation,
+                                               G_DBUS_ERROR,
+                                               G_DBUS_ERROR_FAILED,
+                                               "Set current engine failed.");
+
+    }
+    else {
+        g_dbus_method_invocation_return_value (data->invocation, NULL);
+    }
+
+    g_object_unref (ibus);
+    g_slice_free (SetActiveEngineData, data);
+}
+
+/**
+ * _ibus_set_current_engine:
+ *
+ * Implement the "SetActiveEngine" method call of the org.freedesktop.IBus interface.
+ */
+static void
+_ibus_set_current_engine (BusIBusImpl           *ibus,
+                          GVariant              *parameters,
+                          GDBusMethodInvocation *invocation)
+{
+    if (ibus->use_global_engine) {
+        _ibus_set_global_engine (ibus,
+                                 parameters,
+                                 invocation);
+        return;
+    }
+
+    BusInputContext *context = ibus->focused_context;
+
+    /* curreng engine is meaningless without a context. try last not null context,
+     * workarounds focus stolen by some special window, for example, the switcher. */
+    if (context == NULL)
+        context = ibus->last_present_context;
+
+    if (context == NULL) {
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_DBUS_ERROR,
+                                               G_DBUS_ERROR_FAILED,
+                                               "No focused context.");
+        return;
+    }
+
+    const gchar *engine_name = NULL;
+    g_variant_get (parameters, "(&s)", &engine_name);
+
+    IBusEngineDesc *desc = bus_ibus_impl_get_engine_desc(ibus, engine_name);
+    if (desc == NULL) {
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_DBUS_ERROR,
+                                               G_DBUS_ERROR_FAILED,
+                                               "Can not find engine %s.",
+                                               engine_name);
+        return;
+    }
+
+    SetActiveEngineData *data = g_slice_new0 (SetActiveEngineData);
+    data->ibus = g_object_ref (ibus);
+    data->invocation = invocation;
+    bus_input_context_set_engine_by_desc (context,
+                                          desc,
+                                          g_gdbus_timeout, /* timeout in msec. */
+                                          NULL, /* we do not cancel the call. */
+                                          (GAsyncReadyCallback) _ibus_set_current_engine_ready_cb,
+                                          data);
 }
 
 /**

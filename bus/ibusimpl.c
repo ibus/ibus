@@ -159,6 +159,7 @@ static const gchar introspection_xml[] =
     "<node>\n"
     "  <interface name='org.freedesktop.IBus'>\n"
     "    <property name='EmbedPreeditText' type='b' access='readwrite' />\n"
+    "    <property name='UseGlobalEngine'  type='b' access='readwrite' />\n"
     "    <method name='GetAddress'>\n"
     "      <arg direction='out' type='s' name='address' />\n"
     "    </method>\n"
@@ -340,10 +341,9 @@ _dbus_name_owner_changed_cb (BusDBusImpl   *dbus,
     bus_registry_name_owner_changed (ibus->registry, name, old_name, new_name);
 }
 
-
 static gboolean
-_get_boolean_env(const gchar *name,
-                 gboolean     defval)
+_get_boolean_env (const gchar *name,
+                  gboolean     defval)
 {
     const gchar *value = g_getenv (name);
 
@@ -403,9 +403,9 @@ bus_ibus_impl_init (BusIBusImpl *ibus)
 
     ibus->keymap = ibus_keymap_get ("us");
 
-    ibus->use_sys_layout = _get_boolean_env("IBUS_USE_SYS_LAYOUT", TRUE);
-    ibus->embed_preedit_text = _get_boolean_env("IBUS_EMBED_PREEDIT_TEXT", TRUE);
-    ibus->use_global_engine = _get_boolean_env("IBUS_USE_GLOBAL_ENGINE", TRUE);
+    ibus->use_sys_layout = _get_boolean_env ("IBUS_USE_SYS_LAYOUT", TRUE);
+    ibus->embed_preedit_text = _get_boolean_env ("IBUS_EMBED_PREEDIT_TEXT", TRUE);
+    ibus->use_global_engine = _get_boolean_env ("IBUS_USE_GLOBAL_ENGINE", TRUE);
     ibus->global_engine_name = NULL;
     ibus->global_previous_engine_name = NULL;
 
@@ -1169,6 +1169,7 @@ _ibus_set_use_global_engine (BusIBusImpl           *ibus,
         if (ibus->panel && ibus->focused_context == NULL) {
             bus_panel_proxy_focus_out (ibus->panel, ibus->fake_context);
         }
+
         /* remove engine in fake context */
         bus_input_context_set_engine (ibus->fake_context, NULL);
     }
@@ -1256,7 +1257,6 @@ _ibus_set_global_engine_ready_cb (BusInputContext       *context,
     g_object_unref (ibus);
     g_slice_free (SetGlobalEngineData, data);
 }
-
 
 /**
  * _ibus_set_global_engine:
@@ -1508,15 +1508,15 @@ _ibus_preload_engines (BusIBusImpl           *ibus,
 }
 
 /**
- * _ibus_get_embed_preedit_text:
+ * _ibus_get_property_embed_preedit_text:
  *
- * Implement the "EmbedPreeditText" method call of
+ * Implement the "EmbedPreeditText" property getter of
  * the org.freedesktop.IBus interface.
  */
 static GVariant *
-_ibus_get_embed_preedit_text (BusIBusImpl     *ibus,
-                              GDBusConnection *connection,
-                              GError         **error)
+_ibus_get_property_embed_preedit_text (BusIBusImpl     *ibus,
+                                       GDBusConnection *connection,
+                                       GError         **error)
 {
     if (error) {
         *error = NULL;
@@ -1526,22 +1526,84 @@ _ibus_get_embed_preedit_text (BusIBusImpl     *ibus,
 }
 
 /**
- * _ibus_set_embed_preedit_text:
+ * _ibus_set_property_embed_preedit_text:
  *
- * Implement the "EmbedPreeditText" method call of
+ * Implement the "EmbedPreeditText" property setter of
  * the org.freedesktop.IBus interface.
  */
 static gboolean
-_ibus_set_embed_preedit_text (BusIBusImpl     *ibus,
-                              GDBusConnection *connection,
-                              GVariant        *value,
-                              GError         **error)
+_ibus_set_property_embed_preedit_text (BusIBusImpl     *ibus,
+                                       GDBusConnection *connection,
+                                       GVariant        *value,
+                                       GError         **error)
 {
     if (error) {
         *error = NULL;
     }
 
     ibus->embed_preedit_text = g_variant_get_boolean (value);
+
+    return TRUE;
+}
+
+/**
+ * _ibus_get_property_use_global_engine:
+ *
+ * Implement the "UseGlobalEngine" property getter of
+ * the org.freedesktop.IBus interface.
+ */
+static GVariant *
+_ibus_get_property_use_global_engine (BusIBusImpl     *ibus,
+                                      GDBusConnection *connection,
+                                      GError         **error)
+{
+    if (error) {
+        *error = NULL;
+    }
+
+    return g_variant_new_boolean (ibus->use_global_engine);
+}
+
+/**
+ * _ibus_set_property_use_global_engine:
+ *
+ * Implement the "UseGlobalEngine" property setter of
+ * the org.freedesktop.IBus interface.
+ */
+static gboolean
+_ibus_set_property_use_global_engine (BusIBusImpl     *ibus,
+                                      GDBusConnection *connection,
+                                      GVariant        *value,
+                                      GError         **error)
+{
+    if (error) {
+        *error = NULL;
+    }
+
+    gboolean new_value = g_variant_get_boolean (value);
+
+    if (ibus->use_global_engine == new_value) {
+        ;
+    }
+    else if (new_value) {
+        /* turn on use_global_engine option */
+        ibus->use_global_engine = TRUE;
+        if (ibus->panel && ibus->focused_context == NULL) {
+            bus_panel_proxy_focus_in (ibus->panel, ibus->fake_context);
+        }
+    }
+    else {
+        /* turn off use_global_engine option */
+        ibus->use_global_engine = FALSE;
+
+        /* if fake context has the focus, we should focus out it */
+        if (ibus->panel && ibus->focused_context == NULL) {
+            bus_panel_proxy_focus_out (ibus->panel, ibus->fake_context);
+        }
+
+        /* remove engine in fake context */
+        bus_input_context_set_engine (ibus->fake_context, NULL);
+    }
 
     return TRUE;
 }
@@ -1632,7 +1694,8 @@ bus_ibus_impl_service_get_property (IBusService     *service,
                                         GDBusConnection *,
                                         GError **);
     } methods [] =  {
-        { "EmbedPreeditText",      _ibus_get_embed_preedit_text },
+        { "EmbedPreeditText",      _ibus_get_property_embed_preedit_text },
+        { "UseGlobalEngine",       _ibus_get_property_use_global_engine  },
     };
 
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_IBUS) != 0) {
@@ -1723,7 +1786,8 @@ bus_ibus_impl_service_set_property (IBusService     *service,
                                       GVariant *,
                                       GError **);
     } methods [] =  {
-        { "EmbedPreeditText",      _ibus_set_embed_preedit_text },
+        { "EmbedPreeditText",      _ibus_set_property_embed_preedit_text },
+        { "UseGlobalEngine",       _ibus_set_property_use_global_engine  },
     };
 
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_IBUS) != 0) {

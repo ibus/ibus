@@ -72,6 +72,7 @@ struct _BusIBusImpl {
     IBusKeymap      *keymap;
 
     gboolean use_global_engine;
+    gchar *default_engine_name;
     gchar *global_engine_name;
     gchar *global_previous_engine_name;
 };
@@ -158,8 +159,9 @@ static void     _context_engine_changed_cb
 static const gchar introspection_xml[] =
     "<node>\n"
     "  <interface name='org.freedesktop.IBus'>\n"
-    "    <property name='EmbedPreeditText' type='b' access='readwrite' />\n"
-    "    <property name='UseGlobalEngine'  type='b' access='readwrite' />\n"
+    "    <property name='EmbedPreeditText'  type='b' access='readwrite' />\n"
+    "    <property name='UseGlobalEngine'   type='b' access='readwrite' />\n"
+    "    <property name='DefaultEngineName' type='s' access='readwrite' />\n"
     "    <method name='GetAddress'>\n"
     "      <arg direction='out' type='s' name='address' />\n"
     "    </method>\n"
@@ -406,6 +408,7 @@ bus_ibus_impl_init (BusIBusImpl *ibus)
     ibus->use_sys_layout = _get_boolean_env ("IBUS_USE_SYS_LAYOUT", TRUE);
     ibus->embed_preedit_text = _get_boolean_env ("IBUS_EMBED_PREEDIT_TEXT", TRUE);
     ibus->use_global_engine = _get_boolean_env ("IBUS_USE_GLOBAL_ENGINE", TRUE);
+    ibus->default_engine_name = NULL;
     ibus->global_engine_name = NULL;
     ibus->global_previous_engine_name = NULL;
 
@@ -479,6 +482,13 @@ bus_ibus_impl_destroy (BusIBusImpl *ibus)
     g_free (ibus->global_engine_name);
     ibus->global_engine_name = NULL;
 
+    /* DEFAULT_ENGINE can not be freed */
+    if (ibus->default_engine_name == (const gchar *) DEFAULT_ENGINE) 
+        ibus->default_engine_name = NULL;
+
+    g_free (ibus->default_engine_name);
+    ibus->default_engine_name = NULL;
+
     g_free (ibus->global_previous_engine_name);
     ibus->global_previous_engine_name = NULL;
 
@@ -537,6 +547,9 @@ _context_request_engine_cb (BusInputContext *context,
                             BusIBusImpl     *ibus)
 {
     if (engine_name == NULL || engine_name[0] == '\0')
+        engine_name = ibus->default_engine_name;
+
+    if (engine_name == NULL)
         engine_name = DEFAULT_ENGINE;
 
     return bus_ibus_impl_get_engine_desc (ibus, engine_name);
@@ -618,7 +631,22 @@ bus_ibus_impl_set_focused_context (BusIBusImpl     *ibus,
 
     if (context) {
         ibus->focused_context = (BusInputContext *) g_object_ref (context);
-        /* attach engine to the focused context */
+
+        /* attach default engine to the focused context */
+        if (engine == NULL && ibus->default_engine_name != NULL
+                && bus_input_context_get_engine (context) == NULL) {
+
+            IBusEngineDesc *desc;
+            desc = bus_ibus_impl_get_engine_desc (ibus, 
+                                                  ibus->default_engine_name);
+            if (desc != NULL) {
+                bus_ibus_impl_set_context_engine_from_desc (ibus,
+                                                            context,
+                                                            desc);
+            }
+        }
+
+        /* attach previously detached global engine to the focused context */
         if (engine != NULL) {
             bus_input_context_set_engine (context, engine);
             bus_input_context_enable (context);
@@ -1526,6 +1554,49 @@ _ibus_get_property_embed_preedit_text (BusIBusImpl     *ibus,
 }
 
 /**
+ * _ibus_get_property_use_global_engine:
+ *
+ * Implement the "UseGlobalEngine" property getter of
+ * the org.freedesktop.IBus interface.
+ */
+static GVariant *
+_ibus_get_property_use_global_engine (BusIBusImpl     *ibus,
+                                      GDBusConnection *connection,
+                                      GError         **error)
+{
+    if (error) {
+        *error = NULL;
+    }
+
+    return g_variant_new_boolean (ibus->use_global_engine);
+}
+
+/**
+ * _ibus_get_property_default_engine_name:
+ *
+ * Implement the "DefaultEngineName" property getter of
+ * the org.freedesktop.IBus interface.
+ */
+static GVariant *
+_ibus_get_property_default_engine_name (BusIBusImpl     *ibus,
+                                        GDBusConnection *connection,
+                                        GError         **error)
+{
+    if (error) {
+        *error = NULL;
+    }
+
+    gchar *name = ibus->default_engine_name;
+
+    if (name == NULL) {
+        name = DEFAULT_ENGINE;
+    }
+
+    return g_variant_new_string (name);
+}
+
+
+/**
  * _ibus_set_property_embed_preedit_text:
  *
  * Implement the "EmbedPreeditText" property setter of
@@ -1547,21 +1618,31 @@ _ibus_set_property_embed_preedit_text (BusIBusImpl     *ibus,
 }
 
 /**
- * _ibus_get_property_use_global_engine:
+ * _ibus_set_property_default_engine_name:
  *
- * Implement the "UseGlobalEngine" property getter of
+ * Implement the "DefaultEngineName" property setter of
  * the org.freedesktop.IBus interface.
  */
-static GVariant *
-_ibus_get_property_use_global_engine (BusIBusImpl     *ibus,
-                                      GDBusConnection *connection,
-                                      GError         **error)
+static gboolean
+_ibus_set_property_default_engine_name (BusIBusImpl     *ibus,
+                                        GDBusConnection *connection,
+                                        GVariant        *value,
+                                        GError         **error)
 {
     if (error) {
         *error = NULL;
     }
 
-    return g_variant_new_boolean (ibus->use_global_engine);
+    const gchar *name = g_variant_get_string (value, NULL);
+
+    if (ibus->default_engine_name 
+            && ibus->default_engine_name != (const gchar* ) DEFAULT_ENGINE) {
+        g_free (ibus->default_engine_name);
+    }
+
+    ibus->default_engine_name = g_strdup (name);
+
+    return TRUE;
 }
 
 /**
@@ -1694,8 +1775,9 @@ bus_ibus_impl_service_get_property (IBusService     *service,
                                         GDBusConnection *,
                                         GError **);
     } methods [] =  {
-        { "EmbedPreeditText",      _ibus_get_property_embed_preedit_text },
-        { "UseGlobalEngine",       _ibus_get_property_use_global_engine  },
+        { "EmbedPreeditText",      _ibus_get_property_embed_preedit_text  },
+        { "UseGlobalEngine",       _ibus_get_property_use_global_engine   },
+        { "DefaultEngineName",     _ibus_get_property_default_engine_name },
     };
 
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_IBUS) != 0) {
@@ -1786,8 +1868,9 @@ bus_ibus_impl_service_set_property (IBusService     *service,
                                       GVariant *,
                                       GError **);
     } methods [] =  {
-        { "EmbedPreeditText",      _ibus_set_property_embed_preedit_text },
-        { "UseGlobalEngine",       _ibus_set_property_use_global_engine  },
+        { "EmbedPreeditText",      _ibus_set_property_embed_preedit_text  },
+        { "UseGlobalEngine",       _ibus_set_property_use_global_engine   },
+        { "DefaultEngineName",     _ibus_set_property_default_engine_name },
     };
 
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_IBUS) != 0) {

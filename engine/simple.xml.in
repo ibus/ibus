@@ -248,6 +248,18 @@
 			<rank>99</rank>
 		</engine>
 		<engine>
+			<name>xkb:fr:oss:fra</name>
+			<language>fra</language>
+			<license>GPL</license>
+			<author>Julien Humbert &lt;julroy67@gmail.com&gt;</author>
+			<layout>fr</layout>
+			<layout_variant>oss</layout_variant>
+			<longname>French (Alternative)</longname>
+			<description>French (Alternative layout)</description>
+			<icon>ibus-keyboard</icon>
+			<rank>99</rank>
+		</engine>
+		<engine>
 			<name>xkb:fr:bepo:fra</name>
 			<language>fra</language>
 			<license>GPL</license>
@@ -257,7 +269,7 @@
 			<longname>French (Bepo, ergonomic, Dvorak way)</longname>
 			<description>French (Bepo, ergonomic, Dvorak way)</description>
                         <icon>ibus-keyboard</icon>
-			<rank>1</rank>
+			<rank>99</rank>
 		</engine>
 		<engine>
 			<name>xkb:fr:dvorak:fra</name>
@@ -269,7 +281,7 @@
 			<longname>French (Dvorak)</longname>
 			<description>French (Dvorak)</description>
                         <icon>ibus-keyboard</icon>
-			<rank>99</rank>
+			<rank>1</rank>
 		</engine>
 		<engine>
 			<name>xkb:de::ger</name>

@@ -531,6 +531,18 @@
                         <icon>ibus-keyboard</icon>
 			<rank>99</rank>
 		</engine>
+                <engine>
+                        <name>xkb:sk:qwerty:slo</name>
+                        <language>slo</language>
+                        <license>GPL</license>
+                        <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+                        <layout>sk</layout>
+                        <layout_variant>qwerty</layout_variant>
+                        <longname>Slovak (qwerty)</longname>
+                        <description>Slovak (qwerty)</description>
+                        <icon>ibus-keyboard</icon>
+                        <rank>99</rank>
+                </engine>
 		<engine>
 			<name>xkb:es::spa</name>
 			<language>spa</language>

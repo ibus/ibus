@@ -5,24 +5,24 @@
 #
 # Translators:
 # Charles-Antoine Couret <cacouret@wanadoo.fr>, 2009
+# Sam Friedmann <sam.friedmann@redhat.com>, 2010
 # dominique bribanick <chepioq@gmail.com>, 2011
 # Jérôme Fenal <jfenal@gmail.com>, 2012-2013
-# Jérôme Fenal <jfenal@gmail.com>, 2012
-# Julien Humbert <julroy67@gmail.com>, 2009, 2010, 2011, 2012, 2013
-# Sam Friedmann <sam.friedmann@redhat.com>, 2010
+# Julien Humbert <julroy67@gmail.com>, 2009-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/list\n"
 "POT-Creation-Date: 2014-02-18 13:46+0900\n"
-"PO-Revision-Date: 2014-02-18 05:46+0000\n"
-"Last-Translator: Jérôme Fenal <jfenal@gmail.com>\n"
+"PO-Revision-Date: 2014-02-20 10:23+0100\n"
+"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
 "Language-Team: French <trans-fr@lists.fedoraproject.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #: ../setup/setup.ui.h:1
 msgid "Horizontal"
@@ -54,11 +54,11 @@ msgstr "Personnalisée"
 
 #: ../setup/setup.ui.h:8
 msgid "Do not show"
-msgstr ""
+msgstr "Ne pas afficher"
 
 #: ../setup/setup.ui.h:9
 msgid "Hide automatically"
-msgstr ""
+msgstr "Cacher automatiquement"
 
 #: ../setup/setup.ui.h:10
 msgid "Always"
@@ -70,7 +70,8 @@ msgstr "Préférences de IBus"
 
 #: ../setup/setup.ui.h:12
 msgid "The shortcut keys for switching to next input method in the list"
-msgstr "Raccourci clavier pour passer à la méthode d'entrée suivante de la liste"
+msgstr ""
+"Raccourci clavier pour passer à la méthode d'entrée suivante de la liste"
 
 #: ../setup/setup.ui.h:13
 msgid "Next input method:"
@@ -78,7 +79,8 @@ msgstr "Méthode d'entrée suivante :"
 
 #: ../setup/setup.ui.h:14
 msgid "The shortcut keys for switching to previous input method in the list"
-msgstr "Raccourci clavier pour revenir à la méthode d'entrée précédente de la liste"
+msgstr ""
+"Raccourci clavier pour revenir à la méthode d'entrée précédente de la liste"
 
 #: ../setup/setup.ui.h:15
 msgid "Previous input method:"
@@ -90,7 +92,9 @@ msgstr "…"
 
 #: ../setup/setup.ui.h:17 ../data/ibus.schemas.in.h:10
 msgid "The shortcut keys for turning input method on or off"
-msgstr "Sélection des raccourcis claviers pour activer ou désactiver les méthodes d'entrées"
+msgstr ""
+"Sélection des raccourcis claviers pour activer ou désactiver les méthodes "
+"d'entrées"
 
 #: ../setup/setup.ui.h:18
 msgid "Enable or disable:"
@@ -122,7 +126,7 @@ msgstr "Permet de choisir l'affichage de la barre de langue d'ibus"
 
 #: ../setup/setup.ui.h:25
 msgid "Show property panel:"
-msgstr ""
+msgstr "Afficher le panneau de propriété :"
 
 #: ../setup/setup.ui.h:26
 msgid "Language panel position:"
@@ -138,7 +142,9 @@ msgstr "Afficher le nom de la méthode d'entrée sur la barre de langue"
 
 #: ../setup/setup.ui.h:29
 msgid "Show input method's name on language bar when check the checkbox"
-msgstr "Afficher le nom de la méthode d'entrée sur la barre de langue lorsque la case est cochée"
+msgstr ""
+"Afficher le nom de la méthode d'entrée sur la barre de langue lorsque la "
+"case est cochée"
 
 #: ../setup/setup.ui.h:30
 msgid "Embed preedit text in application window"
@@ -146,7 +152,9 @@ msgstr "Insérer le texte en cours d'édition dans la fenêtre de l'application"
 
 #: ../setup/setup.ui.h:31
 msgid "Embed the preedit text of input method in the application window"
-msgstr "Insérer le texte en cours d'édition par la méthode d'entrée dans la fenêtre de l'application"
+msgstr ""
+"Insérer le texte en cours d'édition par la méthode d'entrée dans la fenêtre "
+"de l'application"
 
 #: ../setup/setup.ui.h:32
 msgid "Use custom font:"
@@ -175,7 +183,8 @@ msgstr "_Enlever"
 
 #: ../setup/setup.ui.h:38
 msgid "Remove the selected input method from the enabled input methods"
-msgstr "Supprimer la méthode d'entrée sélectionnée des méthodes d'entrées actives"
+msgstr ""
+"Supprimer la méthode d'entrée sélectionnée des méthodes d'entrées actives"
 
 #: ../setup/setup.ui.h:39
 msgid "_Up"
@@ -183,7 +192,9 @@ msgstr "_Monter"
 
 #: ../setup/setup.ui.h:40
 msgid "Move up the selected input method in the enabled input methods list"
-msgstr "Déplacer vers le haut la méthode d'entrée sélectionnée dans la liste des méthodes d'entrée actives"
+msgstr ""
+"Déplacer vers le haut la méthode d'entrée sélectionnée dans la liste des "
+"méthodes d'entrée actives"
 
 #: ../setup/setup.ui.h:41
 msgid "_Down"
@@ -191,7 +202,9 @@ msgstr "_Descendre"
 
 #: ../setup/setup.ui.h:42
 msgid "Move down the selected input method in the enabled input methods"
-msgstr "Déplacer vers le bas la méthode d'entrée sélectionnée dans la liste des méthodes d'entrée actives"
+msgstr ""
+"Déplacer vers le bas la méthode d'entrée sélectionnée dans la liste des "
+"méthodes d'entrée actives"
 
 #: ../setup/setup.ui.h:43
 msgid "_About"
@@ -214,7 +227,10 @@ msgid ""
 "<small><i>The active input method can be switched around from the selected "
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
 "the panel icon.</i></small>"
-msgstr "<small><i>La méthode de saisie active peut être modifiée vers l'une des méthodes pré-sélectionnées dans la liste ci-dessous en tapant le raccourci clavier ou en cliquant sur l'icône du panneau.</i></small>"
+msgstr ""
+"<small><i>La méthode de saisie active peut être modifiée vers l'une des "
+"méthodes pré-sélectionnées dans la liste ci-dessous en tapant le raccourci "
+"clavier ou en cliquant sur l'icône du panneau.</i></small>"
 
 #. create im name & icon column
 #: ../setup/setup.ui.h:48 ../setup/enginetreeview.py:66
@@ -253,7 +269,13 @@ msgid ""
 "\n"
 "\n"
 "\n"
-msgstr "<big><b>IBus</b></big>\n<small>The intelligent input bus</small>\nPage d'accueil : http://code.google.com/p/ibus\n\n\n\n"
+msgstr ""
+"<big><b>IBus</b></big>\n"
+"<small>The intelligent input bus</small>\n"
+"Page d'accueil : http://code.google.com/p/ibus\n"
+"\n"
+"\n"
+"\n"
 
 #: ../setup/setup.ui.h:62
 msgid "Start ibus on login"
@@ -289,14 +311,20 @@ msgstr "L'ordre des moteurs enregistrés dans la liste des méthodes d'entrées"
 
 #: ../data/ibus.schemas.in.h:5
 msgid "Popup delay milliseconds for IME switcher window"
-msgstr "Délai en millisecondes d'affichage de la fenêtre du commutateur de méthode d'entrée"
+msgstr ""
+"Délai en millisecondes d'affichage de la fenêtre du commutateur de méthode "
+"d'entrée"
 
 #: ../data/ibus.schemas.in.h:6
 msgid ""
 "Set popup delay milliseconds to show IME switcher window. The default is "
 "400. 0 = Show the window immediately. 0 &lt; Delay milliseconds. 0 &gt; Do "
 "not show the window and switch prev/next engines."
-msgstr "Définit le délai en millisecondes d'affichage de la fenêtre du commutateur de méthode d'entrée. La valeur par défaut est de 400. 0 = montrer immédiatement la fenêtre. 0 &lt; délai en millisecondes. 0 &gt; ne pas afficher la fenêtre et permuter avec le moteur précédent ou suivant."
+msgstr ""
+"Définit le délai en millisecondes d'affichage de la fenêtre du commutateur "
+"de méthode d'entrée. La valeur par défaut est de 400. 0 = montrer "
+"immédiatement la fenêtre. 0 &lt; délai en millisecondes. 0 &gt; ne pas "
+"afficher la fenêtre et permuter avec le moteur précédent ou suivant."
 
 #: ../data/ibus.schemas.in.h:7
 msgid "Saved version number"
@@ -306,7 +334,9 @@ msgstr "Numéro de version enregistré"
 msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
-msgstr "Le numéro de version enregistré sera utilisé pour vérifier la différence entre la version d'une installation précédente de ibus et l'actuelle."
+msgstr ""
+"Le numéro de version enregistré sera utilisé pour vérifier la différence "
+"entre la version d'une installation précédente de ibus et l'actuelle."
 
 #: ../data/ibus.schemas.in.h:9
 msgid "Trigger shortcut keys"
@@ -338,7 +368,8 @@ msgstr "Raccourci clavier pour passer au moteur suivant"
 
 #: ../data/ibus.schemas.in.h:17
 msgid "The shortcut keys for switching to the next input method in the list"
-msgstr "Raccourci clavier pour passer à la méthode d'entrée suivante de la liste"
+msgstr ""
+"Raccourci clavier pour passer à la méthode d'entrée suivante de la liste"
 
 #: ../data/ibus.schemas.in.h:18
 msgid "Prev engine shortcut keys"
@@ -357,6 +388,8 @@ msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
 msgstr ""
+"Comportement du panneau de propriété. 0 = Ne pas afficher, 1 = Cacher "
+"automatiquement, 2 = Toujours afficher"
 
 #: ../data/ibus.schemas.in.h:22
 msgid "Language panel position"
@@ -366,27 +399,34 @@ msgstr "Position de la barre"
 msgid ""
 "The position of the language panel. 0 = Top left corner, 1 = Top right "
 "corner, 2 = Bottom left corner, 3 = Bottom right corner, 4 = Custom"
-msgstr "Position de la barre de langue. 0 = Coin supérieur gauche, 1 = Coin supérieur droit, 2 = Coin inférieur gauche, 3 = Coin inférieur droit, 4 = Personnalisé"
+msgstr ""
+"Position de la barre de langue. 0 = Coin supérieur gauche, 1 = Coin "
+"supérieur droit, 2 = Coin inférieur gauche, 3 = Coin inférieur droit, 4 = "
+"Personnalisé"
 
 #: ../data/ibus.schemas.in.h:24
 msgid "Follow the input cursor in case the panel is always shown"
-msgstr ""
+msgstr "Suivre le curseur d'insertion lorsque le panneau est toujours affiché"
 
 #: ../data/ibus.schemas.in.h:25
 msgid ""
 "If true, the panel follows the input cursor in case the panel is always "
 "shown. If false, the panel is shown at a fixed location."
 msgstr ""
+"Si activé, le panneau suit le curseur d'insertion lorsque le panneau est "
+"toujours affiché. Sinon, le panneau est affiché à une position fixe."
 
 #: ../data/ibus.schemas.in.h:26
 msgid "The milliseconds to show property panel"
-msgstr ""
+msgstr "Millisecondes pour afficher le panneau de propriété"
 
 #: ../data/ibus.schemas.in.h:27
 msgid ""
 "The milliseconds to show property panel after focus-in or properties are "
 "changed."
 msgstr ""
+"Millisecondes pour afficher le panneau de propriété après prise du focus ou "
+"changement des propriétés."
 
 #: ../data/ibus.schemas.in.h:28
 msgid "Orientation of lookup table"
@@ -434,7 +474,8 @@ msgstr "Par défaut, activer la méthode d'entrée"
 
 #: ../data/ibus.schemas.in.h:44
 msgid "Enable input method by default when the application gets input focus"
-msgstr "Par défaut, activer la méthode d'entrée lorsque l'application reçoit le focus"
+msgstr ""
+"Par défaut, activer la méthode d'entrée lorsque l'application reçoit le focus"
 
 #: ../data/ibus.schemas.in.h:45
 msgid "DConf preserve name prefixes"
@@ -448,7 +489,9 @@ msgstr "Préfixes des clés DConf pour arrêter la conversion de nom"
 msgid ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
-msgstr "Copyright (c) 2007-2010 Peng Huang\nCopyright (c) 2007-2010 Red Hat, Inc."
+msgstr ""
+"Copyright (c) 2007-2010 Peng Huang\n"
+"Copyright (c) 2007-2010 Red Hat, Inc."
 
 #: ../ibus/lang.py:41 ../src/ibusutil.c:150 ../src/ibusutil.c:152
 msgid "Other"
@@ -511,7 +554,9 @@ msgstr "_Supprimer"
 msgid ""
 "Please press a key (or a key combination).\n"
 "The dialog will be closed when the key is released."
-msgstr "Veuillez appuyer sur une touche (ou une combinaison de touches).\nLa boîte de dialogue se fermera lorsque la touche sera relâchée."
+msgstr ""
+"Veuillez appuyer sur une touche (ou une combinaison de touches).\n"
+"La boîte de dialogue se fermera lorsque la touche sera relâchée."
 
 #: ../setup/keyboardshortcut.py:256
 msgid "Please press a key (or a key combination)"
@@ -527,7 +572,8 @@ msgstr "_Valider"
 
 #: ../setup/main.py:102 ../setup/main.py:395
 msgid "Use shortcut with shift to switch to the previous input method"
-msgstr "Utiliser le raccourci clavier pour revenir à la méthode d'entrée précédente"
+msgstr ""
+"Utiliser le raccourci clavier pour revenir à la méthode d'entrée précédente"
 
 #: ../setup/main.py:329
 msgid "The IBus daemon is not running. Do you wish to start it?"
@@ -535,11 +581,18 @@ msgstr "Le démon IBus n'est pas démarré. Souhaitez-vous le démarrer ?"
 
 #: ../setup/main.py:350
 msgid ""
-"IBus has been started! If you cannot use IBus, add the following lines to your $HOME/.bashrc; then relog into your desktop.\n"
+"IBus has been started! If you cannot use IBus, add the following lines to "
+"your $HOME/.bashrc; then relog into your desktop.\n"
 "  export GTK_IM_MODULE=ibus\n"
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
-msgstr "IBus a été démarré ! Si vous ne pouvez pas utiliser IBus, veuillez ajouter les lignes suivantes dans le fichier « $HOME/.bashrc », et veuillez vous reconnecter.\n  export GTK_IM_MODULE=ibus\n  export XMODIFIERS=@im=ibus\n  export QT_IM_MODULE=ibus"
+msgstr ""
+"IBus a été démarré ! Si vous ne pouvez pas utiliser IBus, veuillez ajouter "
+"les lignes suivantes dans le fichier « $HOME/.bashrc », et veuillez vous "
+"reconnecter.\n"
+"  export GTK_IM_MODULE=ibus\n"
+"  export XMODIFIERS=@im=ibus\n"
+"  export QT_IM_MODULE=ibus"
 
 #. Translators: %d == 5 currently
 #: ../setup/main.py:364
@@ -651,7 +704,9 @@ msgstr "Afficher cette information"
 msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
 "\n"
-msgstr "Utilisation : %s COMMANDE [OPTION…]\n\n"
+msgstr ""
+"Utilisation : %s COMMANDE [OPTION…]\n"
+"\n"
 
 #: ../tools/main.vala:309
 #, c-format

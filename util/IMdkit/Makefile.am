@@ -29,6 +29,7 @@ libIMdkit_la_SOURCES = \
 	i18nIc.c \
 	i18nIMProto.c \
 	i18nMethod.c \
+	i18nOffsetCache.c \
 	i18nPtHdr.c \
 	i18nUtil.c \
 	i18nX.c \

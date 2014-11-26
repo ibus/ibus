@@ -29,6 +29,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  
 ******************************************************************/
 
+#include <stddef.h>
 #include <limits.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -41,6 +42,8 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 extern Xi18nClient *_Xi18nFindClient(Xi18n, CARD16);
 extern Xi18nClient *_Xi18nNewClient(Xi18n);
 extern void _Xi18nDeleteClient(Xi18n, CARD16);
+extern unsigned long _Xi18nLookupPropertyOffset(Xi18nOffsetCache *, Atom);
+extern void _Xi18nSetPropertyOffset(Xi18nOffsetCache *, Atom, unsigned long);
 static Bool WaitXConnectMessage(Display*, Window,
                                 XEvent*, XPointer);
 static Bool WaitXIMProtocol(Display*, Window, XEvent*, XPointer);
@@ -129,7 +132,6 @@ static unsigned char *ReadXIMMessage (XIMS ims,
     else if (ev->format == 32) {
         /* ClientMessage and WindowProperty */
         unsigned long length = (unsigned long) ev->data.l[0];
-        unsigned long get_length;
         Atom atom = (Atom) ev->data.l[1];
         int return_code;
         Atom actual_type_ret;
@@ -137,21 +139,28 @@ static unsigned char *ReadXIMMessage (XIMS ims,
         unsigned long bytes_after_ret;
         unsigned char *prop;
         unsigned long nitems;
+        Xi18nOffsetCache *offset_cache = &client->offset_cache;
+        unsigned long offset;
+        unsigned long end;
+        unsigned long long_begin;
+        unsigned long long_end;
 
-        /* Round up length to next 4 byte value. */
-        get_length = length + 3;
-        if (get_length > LONG_MAX)
-            get_length = LONG_MAX;
-        get_length /= 4;
-        if (get_length == 0) {
-            fprintf(stderr, "%s: invalid length 0\n", __func__);
+        if (length == 0) {
+            fprintf (stderr, "%s: invalid length 0\n", __func__);
             return NULL;
         }
+
+        offset = _Xi18nLookupPropertyOffset (offset_cache, atom);
+        end = offset + length;
+
+        /* The property data is retrieved in 32-bit chunks */
+        long_begin = offset / 4;
+        long_end = (end + 3) / 4;
         return_code = XGetWindowProperty (i18n_core->address.dpy,
                                           x_client->accept_win,
                                           atom,
-                                          client->property_offset / 4,
-                                          get_length,
+                                          long_begin,
+                                          long_end - long_begin,
                                           True,
                                           AnyPropertyType,
                                           &actual_type_ret,
@@ -162,32 +171,22 @@ static unsigned char *ReadXIMMessage (XIMS ims,
         if (return_code != Success || actual_format_ret == 0 || nitems == 0) {
             if (return_code == Success)
                 XFree (prop);
-            client->property_offset = 0;
+            fprintf (stderr,
+                    "(XIM-IMdkit) ERROR: XGetWindowProperty failed.\n"
+                    "Protocol data is likely to be inconsistent.\n");
+            _Xi18nSetPropertyOffset (offset_cache, atom, 0);
             return (unsigned char *) NULL;
         }
         /* Update the offset to read next time as needed */
         if (bytes_after_ret > 0)
-            client->property_offset += length;
+            _Xi18nSetPropertyOffset (offset_cache, atom, offset + length);
         else
-            client->property_offset = 0;
-        switch (actual_format_ret) {
-        case 8:
-        case 16:
-        case 32:
-            length = nitems * actual_format_ret / 8;
-            break;
-        default:
-            fprintf(stderr, "%s: unknown property return format: %d\n",
-                        __func__, actual_format_ret);
-            XFree(prop);
-            client->property_offset = 0;
-            return NULL;
-        }
+            _Xi18nSetPropertyOffset (offset_cache, atom, 0);
         /* if hit, it might be an error */
         if ((p = (unsigned char *) malloc (length)) == NULL)
             return (unsigned char *) NULL;
 
-        memmove (p, prop, length);
+        memcpy (p, prop + (offset % 4), length);
         XFree (prop);
     }
     return (unsigned char *) p;

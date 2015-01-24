@@ -91,6 +91,8 @@ static IBusInputContext *_fake_context = NULL;
 static GdkWindow *_input_window = NULL;
 static GtkWidget *_input_widget = NULL;
 
+static gboolean _commit_preedit_text_before_resetting_im = FALSE;
+
 /* functions prototype */
 static void     ibus_im_context_class_init  (IBusIMContextClass    *class);
 static void     ibus_im_context_class_fini  (IBusIMContextClass    *class);
@@ -132,6 +134,17 @@ static gboolean _set_cursor_location_internal
 
 static void     _bus_connected_cb           (IBusBus            *bus,
                                              IBusIMContext      *context);
+static void     _ibus_context_commit_text_cb
+                                            (IBusInputContext *ibuscontext,
+                                             IBusText         *text,
+                                             IBusIMContext    *ibusimcontext);
+static void     _ibus_context_update_preedit_text_cb
+                                            (IBusInputContext *ibuscontext,
+                                             IBusText         *text,
+                                             gint              cursor_pos,
+                                             gboolean          visible,
+                                             IBusIMContext    *ibusimcontext);
+
 /* callback functions for slave context */
 static void     _slave_commit_cb            (GtkIMContext       *slave,
                                              gchar              *string,
@@ -715,6 +728,13 @@ ibus_im_context_init (GObject *obj)
                       ibusimcontext);
 
     if (ibus_bus_is_connected (_bus)) {
+        GVariant *value = NULL;
+        value = ibus_bus_get_ibus_property (_bus, "CommitPreeditTextBeforeResettingIM");
+        if (value) {
+              _commit_preedit_text_before_resetting_im = g_variant_get_boolean (value);
+              g_variant_unref (value);
+        }
+
         _create_input_context (ibusimcontext);
     }
 
@@ -931,6 +951,25 @@ ibus_im_context_reset (GtkIMContext *context)
     IBusIMContext *ibusimcontext = IBUS_IM_CONTEXT (context);
 
     if (ibusimcontext->ibuscontext) {
+        if (_commit_preedit_text_before_resetting_im &&
+            ibusimcontext->preedit_string &&
+            g_strcmp0 (ibusimcontext->preedit_string, ""))
+        {
+            IBusText *text_to_commit = ibus_text_new_from_string (g_strdup (ibusimcontext->preedit_string));
+            /* clear and update preedit text */
+            IBusText *empty_text = ibus_text_new_from_static_string ("");
+            _ibus_context_update_preedit_text_cb (ibusimcontext->ibuscontext,
+                                                  empty_text,
+                                                  0,
+                                                  ibusimcontext->preedit_visible,
+                                                  ibusimcontext);
+            g_object_unref (empty_text);
+            /* commit text */
+            _ibus_context_commit_text_cb (ibusimcontext->ibuscontext,
+                                          text_to_commit,
+                                          ibusimcontext);
+            g_object_unref (text_to_commit);
+        }
         ibus_input_context_reset (ibusimcontext->ibuscontext);
     }
     gtk_im_context_reset (ibusimcontext->slave);
@@ -1173,8 +1212,17 @@ _bus_connected_cb (IBusBus          *bus,
                    IBusIMContext    *ibusimcontext)
 {
     IDEBUG ("%s", __FUNCTION__);
-    if (ibusimcontext)
+
+    if (ibusimcontext) {
+        GVariant *value = NULL;
+        value = ibus_bus_get_ibus_property (bus, "CommitPreeditTextBeforeResettingIM");
+        if (value) {
+            _commit_preedit_text_before_resetting_im = g_variant_get_boolean (value);
+            g_variant_unref (value);
+        }
+
         _create_input_context (ibusimcontext);
+    }
     else
         _create_fake_input_context ();
 }

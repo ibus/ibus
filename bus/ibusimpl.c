@@ -61,6 +61,8 @@ struct _BusIBusImpl {
 
     gboolean embed_preedit_text;
 
+    gboolean commit_preedit_text_before_resetting_im;
+
     IBusRegistry    *registry;
 
     /* a list of BusComponent objects that are created from component XML
@@ -190,6 +192,11 @@ static const gchar introspection_xml[] =
     "          value='true' />\n"
     "    </property>\n"
     "    <property name='EmbedPreeditText' type='b' access='readwrite'>\n"
+    "      <annotation\n"
+    "          name='org.freedesktop.DBus.Property.EmitsChangedSignal'\n"
+    "          value='true' />\n"
+    "    </property>\n"
+    "    <property name='CommitPreeditTextBeforeResettingIM' type='b' access='readwrite'>\n"
     "      <annotation\n"
     "          name='org.freedesktop.DBus.Property.EmitsChangedSignal'\n"
     "          value='true' />\n"
@@ -408,6 +415,7 @@ bus_ibus_impl_init (BusIBusImpl *ibus)
 
     ibus->use_sys_layout = TRUE;
     ibus->embed_preedit_text = TRUE;
+    ibus->commit_preedit_text_before_resetting_im = TRUE;
     ibus->use_global_engine = TRUE;
     ibus->global_engine_name = NULL;
     ibus->global_previous_engine_name = NULL;
@@ -1641,6 +1649,49 @@ _ibus_set_embed_preedit_text (BusIBusImpl     *ibus,
 }
 
 /**
+ * _ibus_get_commit_preedit_text_before_resetting_im:
+ *
+ * Implement the "CommitPreeditTextBeforeResettingIM" method call of the
+ * org.freedesktop.IBus interface.
+ */
+static GVariant *
+_ibus_get_commit_preedit_text_before_resetting_im (BusIBusImpl     *ibus,
+                                                   GDBusConnection *connection,
+                                                   GError         **error)
+{
+    if (error) {
+        *error = NULL;
+    }
+
+    return g_variant_new_boolean (ibus->commit_preedit_text_before_resetting_im);
+}
+
+/**
+ * _ibus_set_commit_preedit_text_before_resetting_im:
+ *
+ * Implement the "CommitPreeditTextBeforeResettingIM" method call of
+ * the org.freedesktop.IBus interface.
+ */
+static gboolean
+_ibus_set_commit_preedit_text_before_resetting_im (BusIBusImpl      *ibus,
+                                                   GDBusConnection  *connection,
+                                                   GVariant         *value,
+                                                   GError          **error)
+{
+    if (error) {
+        *error = NULL;
+    }
+
+    gboolean commit_preedit_text_before_resetting_im = g_variant_get_boolean (value);
+    if (commit_preedit_text_before_resetting_im != ibus->commit_preedit_text_before_resetting_im) {
+        ibus->commit_preedit_text_before_resetting_im = commit_preedit_text_before_resetting_im;
+        bus_ibus_impl_property_changed (ibus, "CommitPreeditTextBeforeResettingIM", value);
+    }
+
+    return TRUE;
+}
+
+/**
  * bus_ibus_impl_service_method_call:
  *
  * Handle a D-Bus method call whose destination and interface name are
@@ -1732,6 +1783,8 @@ bus_ibus_impl_service_get_property (IBusService     *service,
         { "ActiveEngines",         _ibus_get_active_engines },
         { "GlobalEngine",          _ibus_get_global_engine },
         { "EmbedPreeditText",      _ibus_get_embed_preedit_text },
+        { "CommitPreeditTextBeforeResettingIM",
+                                   _ibus_get_commit_preedit_text_before_resetting_im },
     };
 
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_IBUS) != 0) {
@@ -1781,6 +1834,8 @@ bus_ibus_impl_service_set_property (IBusService     *service,
     } methods [] =  {
         { "PreloadEngines",        _ibus_set_preload_engines },
         { "EmbedPreeditText",      _ibus_set_embed_preedit_text },
+        { "CommitPreeditTextBeforeResettingIM",
+                                   _ibus_set_commit_preedit_text_before_resetting_im },
     };
 
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_IBUS) != 0) {
@@ -2096,6 +2151,14 @@ bus_ibus_impl_is_embed_preedit_text (BusIBusImpl *ibus)
     g_assert (BUS_IS_IBUS_IMPL (ibus));
 
     return ibus->embed_preedit_text;
+}
+
+gboolean
+bus_ibus_impl_is_commit_preedit_text_before_resetting_im (BusIBusImpl *ibus)
+{
+    g_assert (BUS_IS_IBUS_IMPL (ibus));
+
+    return ibus->commit_preedit_text_before_resetting_im;
 }
 
 BusInputContext *

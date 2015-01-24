@@ -143,6 +143,10 @@ class Panel : IBus.PanelService {
                 set_embed_preedit_text();
         });
 
+        m_settings_general.changed["commit-preedit-text-before-resetting-im"].connect((key) => {
+                set_commit_preedit_text_before_resetting_im();
+        });
+
         m_settings_general.changed["use-global-engine"].connect((key) => {
                 set_use_global_engine();
         });
@@ -492,6 +496,17 @@ class Panel : IBus.PanelService {
         m_bus.set_ibus_property("EmbedPreeditText", variant);
     }
 
+    private void set_commit_preedit_text_before_resetting_im() {
+        Variant variant =
+                    m_settings_general.get_value("commit-preedit-text-before-resetting-im");
+
+        if (variant == null) {
+            return;
+        }
+
+        m_bus.set_ibus_property("CommitPreeditTextBeforeResettingIM", variant);
+    }
+
     private void set_use_global_engine() {
         m_use_global_engine =
                 m_settings_general.get_boolean("use-global-engine");
@@ -661,6 +676,7 @@ class Panel : IBus.PanelService {
         set_use_system_keyboard_layout();
         set_use_global_engine();
         set_use_xmodmap();
+        set_commit_preedit_text_before_resetting_im();
         update_engines(m_settings_general.get_strv("preload-engines"),
                        m_settings_general.get_strv("engines-order"));
         unbind_switch_shortcut();

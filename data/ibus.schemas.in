@@ -359,7 +359,17 @@
 	    <long>Share the same input method among all applications</long>
       </locale>
     </schema>
-
+    <schema>
+      <key>/schemas/desktop/ibus/general/commit_preedit_text_before_resetting_im</key>
+      <applyto>/desktop/ibus/general/commit_preedit_text_before_resetting_im</applyto>
+      <owner>ibus</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Commit preedit text before resetting input method</short>
+        <long>Commit preedit text before resetting input method</long>
+      </locale>
+    </schema>
     <schema>
       <key>/schemas/desktop/ibus/general/enable_by_default</key>
       <applyto>/desktop/ibus/general/enable_by_default</applyto>

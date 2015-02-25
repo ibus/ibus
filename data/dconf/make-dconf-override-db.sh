@@ -2,6 +2,10 @@
 
 set -e
 
+# gnome-continuous doesn't have a machine-id set, which
+# breaks dbus-launch.  There's dbus-run-session which is
+# better, but not everyone has it yet.
+export DBUS_FATAL_WARNINGS=0
 export TMPDIR=$(mktemp -d --tmpdir="$PWD")
 export XDG_CONFIG_HOME="$TMPDIR/config"
 export XDG_CACHE_HOME="$TMPDIR/cache"

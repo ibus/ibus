@@ -57,7 +57,7 @@ noinst_HEADERS = \
 	locales.h \
 	$(NULL)
 
-$(IMdkit):
+$(libIMdkit):
 	(cd $(top_builddir)/util/IMdkit; make)
 
 $(libibus):

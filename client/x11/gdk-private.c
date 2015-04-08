@@ -52,7 +52,11 @@ translate_key_event (GdkDisplay *display,
 
   event->key.hardware_keycode = xevent->xkey.keycode;
 
+#ifdef ENABLE_GTK3
+  event->key.keyval = GDK_KEY_VoidSymbol;
+#else
   event->key.keyval = GDK_VoidSymbol;
+#endif
 
   gdk_keymap_translate_keyboard_state (keymap,
 				       event->key.hardware_keycode,

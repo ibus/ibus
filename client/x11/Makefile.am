@@ -26,6 +26,16 @@ libibus = $(top_builddir)/src/libibus-@IBUS_API_VERSION@.la
 
 libexec_PROGRAMS = ibus-x11
 
+if ENABLE_GTK2
+GTK_CFLAGS = @GTK2_CFLAGS@
+GTK_LIBS = @GTK2_LIBS@
+endif
+
+if ENABLE_GTK3
+GTK_CFLAGS = @GTK3_CFLAGS@ -DENABLE_GTK3
+GTK_LIBS = @GTK3_LIBS@
+endif
+
 ibus_x11_SOURCES = \
 	main.c \
 	gdk-private.c \
@@ -40,12 +50,12 @@ ibus_x11_LDADD = \
 	$(libIMdkit) \
 	$(libibus) \
 	@X11_LIBS@ \
-	@GTK2_LIBS@ \
+	$(GTK_LIBS) \
 	$(NULL)
 
 ibus_x11_CFLAGS = \
 	@X11_CFLAGS@ \
-	@GTK2_CFLAGS@ \
+	$(GTK_CFLAGS) \
 	@DBUS_CFLAGS@ \
 	-I$(top_srcdir)/util/IMdkit \
 	-I$(top_srcdir)/src \

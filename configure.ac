@@ -215,27 +215,24 @@ AC_ARG_ENABLE(appindicator,
 )
 AM_CONDITIONAL([ENABLE_APPINDICATOR], [test x"$enable_appindicator" = x"yes"])
 
-if test x"$enable_gtk2" = x"yes" -o x"$enable_xim" = x"yes" ; then
+have_gtk=no
+
+if test x"$enable_gtk2" = x"yes"; then
     # check for gtk2
     PKG_CHECK_MODULES(GTK2, [
         gtk+-2.0
     ])
-fi
 
-if test x"$enable_gtk2" = x"yes"; then
-    # check for gdk2
     gtk2_binary_version=`$PKG_CONFIG --variable=gtk_binary_version gtk+-2.0`
     GTK2_IM_MODULEDIR="$libdir"/gtk-2.0/$gtk2_binary_version/immodules
 
-    PKG_CHECK_MODULES(GDK2, [
-        gdk-2.0
-    ])
+    have_gtk=yes
 else
     enable_gtk2="no (disabled, use --enable-gtk2 to enable)"
 fi
 
 if test x"$enable_gtk3" = x"yes"; then
-    # check for gtk3, gdk3
+    # check for gtk3
     PKG_CHECK_MODULES(GTK3, [
         gtk+-3.0
     ])
@@ -243,9 +240,7 @@ if test x"$enable_gtk3" = x"yes"; then
     gtk3_binary_version=`$PKG_CONFIG --variable=gtk_binary_version gtk+-3.0`
     GTK3_IM_MODULEDIR="$libdir"/gtk-3.0/$gtk3_binary_version/immodules
 
-    PKG_CHECK_MODULES(GDK3, [
-        gdk-3.0
-    ])
+    have_gtk=yes
 else
     enable_gtk3="no (disabled, use --enable-gtk3 to enable)"
 fi
@@ -256,6 +251,14 @@ if test x"$enable_xim" = x"yes"; then
         x11
     ])
     AC_CHECK_HEADERS([X11/XKBlib.h])
+
+    # if we don't have gtk2 nor gtk3 yet, check for gtk2
+    if test x"$have_gtk" = x"no"; then
+        # check for gtk2
+        PKG_CHECK_MODULES(GTK2, [
+            gtk+-2.0
+        ])
+    fi
 else
     enable_xim="no (disabled, use --enable-xim to enable)"
 fi

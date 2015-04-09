@@ -1071,7 +1071,11 @@ _xim_init_IMdkit ()
 
     _xims = IMOpenIM(GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
         IMModifiers, "Xi18n",
+#ifdef ENABLE_GTK3
+        IMServerWindow, GDK_WINDOW_XID(win),
+#else
         IMServerWindow, GDK_WINDOW_XWINDOW(win),
+#endif
         IMServerName, _server_name != NULL ? _server_name : "ibus",
         IMLocale, _locale != NULL ? _locale : LOCALES_STRING,
         IMServerTransport, "X/",

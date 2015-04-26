@@ -60,7 +60,7 @@ extern "C" {
 #define I18N_INPUT_STYLES	0x0010 /* IMInputStyles */
 #define I18N_ON_KEYS		0x0020 /* IMOnKeysList */
 #define I18N_OFF_KEYS		0x0040 /* IMOffKeysList */
-#define I18N_IM_HANDLER		0x0080 /* IMProtocolHander */
+#define I18N_IM_HANDLER		0x0080 /* IMProtocolHandler */
 #define I18N_ENCODINGS		0x0100 /* IMEncodingList */
 #define I18N_FILTERMASK		0x0200 /* IMFilterEventMask */
 #define I18N_PROTO_DEPEND	0x0400 /* IMProtoDepend */

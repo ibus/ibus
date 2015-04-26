@@ -475,7 +475,7 @@ typedef struct _Xi18nAddressRec
     XIMTriggerKeys on_keys;	/* IMOnKeysList */
     XIMTriggerKeys off_keys;	/* IMOffKeysList */
     XIMEncodings encoding_list; /* IMEncodingList */
-    IMProtoHandler improto;	/* IMProtocolHander */
+    IMProtoHandler improto;	/* IMProtocolHandler */
     long	filterevent_mask; /* IMFilterEventMask */
     /* XIM_SERVERS target Atoms */
     Atom	selection;

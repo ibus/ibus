@@ -79,6 +79,8 @@ BusComponent    *bus_ibus_impl_lookup_component_by_name
 gboolean         bus_ibus_impl_is_use_sys_layout    (BusIBusImpl        *ibus);
 gboolean         bus_ibus_impl_is_embed_preedit_text
                                                     (BusIBusImpl        *ibus);
+gboolean         bus_ibus_impl_is_commit_preedit_text_before_resetting_im
+                                                    (BusIBusImpl        *ibus);
 BusInputContext *bus_ibus_impl_get_focused_input_context
                                                     (BusIBusImpl        *ibus);
 

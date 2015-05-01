@@ -202,6 +202,14 @@ class Setup(object):
                                     'active',
                                     Gio.SettingsBindFlags.DEFAULT)
 
+        # commit preedit text before resetting im
+        self.__commit_preedit_text_before_resetting_im = self.__builder.get_object(
+                "checkbutton_commit_preedit_text_before_resetting_im")
+        self.__settings_general.bind('commit-preedit-text-before-resetting-im',
+                                    self.__commit_preedit_text_before_resetting_im,
+                                    'active',
+                                    Gio.SettingsBindFlags.DEFAULT)
+
         # init engine page
         self.__engines = self.__bus.list_engines()
         self.__combobox = self.__builder.get_object("combobox_engines")

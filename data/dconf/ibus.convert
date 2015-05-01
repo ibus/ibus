@@ -1,5 +1,6 @@
 [org.freedesktop.ibus.general]
 embed-preedit-text = /desktop/ibus/general/embed_preedit_text
+commit-preedit-text-before-resetting-im = /desktop/ibus/general/commit_preedit_text_before_resetting_im
 enable-by-default = /desktop/ibus/general/enable_by_default
 preload-engines = /desktop/ibus/general/preload_engines
 use-global-engine = /desktop/ibus/general/use_global_engine

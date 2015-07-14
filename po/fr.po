@@ -5,17 +5,17 @@
 #
 # Translators:
 # Charles-Antoine Couret <cacouret@wanadoo.fr>, 2009
-# dominique bribanick <chepioq@gmail.com>, 2011,2014
-# Jérôme Fenal <jfenal@gmail.com>, 2012-2013
-# Julien Humbert <julroy67@gmail.com>, 2009-2014
 # Sam Friedmann <sam.friedmann@redhat.com>, 2010
+# Jérôme Fenal <jfenal@gmail.com>, 2012-2013
+# dominique bribanick <chepioq@gmail.com>, 2011,2014
+# Julien Humbert <julroy67@gmail.com>, 2009-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/list\n"
 "POT-Creation-Date: 2014-07-08 12:15+0900\n"
-"PO-Revision-Date: 2014-07-08 03:29+0000\n"
-"Last-Translator: dominique bribanick <chepioq@gmail.com>\n"
+"PO-Revision-Date: 2015-07-10 22:29+0900\n"
+"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
 "Language-Team: French <trans-fr@lists.fedoraproject.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -97,11 +97,11 @@ msgstr "Activer / désactiver :"
 
 #: ../setup/setup.ui.h:19
 msgid "Enable:"
-msgstr "Activer :"
+msgstr "Activer :"
 
 #: ../setup/setup.ui.h:20
 msgid "Disable:"
-msgstr "Désactiver :"
+msgstr "Désactiver :"
 
 #: ../setup/setup.ui.h:21
 msgid "<b>Keyboard Shortcuts</b>"
@@ -121,7 +121,7 @@ msgstr "Permet de choisir l'affichage de la barre de langue d'ibus"
 
 #: ../setup/setup.ui.h:25
 msgid "Show property panel:"
-msgstr "Afficher le panneau de propriété :"
+msgstr "Afficher le panneau de propriété :"
 
 #: ../setup/setup.ui.h:26
 msgid "Language panel position:"
@@ -252,7 +252,7 @@ msgid ""
 "\n"
 "\n"
 "\n"
-msgstr "<big><b>IBus</b></big>\n<small>The intelligent input bus</small>\nPage d'accueil : http://code.google.com/p/ibus\n\n\n\n"
+msgstr "<big><b>IBus</b></big>\n<small>The intelligent input bus</small>\nPage d'accueil : http://code.google.com/p/ibus\n\n\n\n"
 
 #: ../setup/setup.ui.h:62
 msgid "Start ibus on login"
@@ -311,20 +311,20 @@ msgstr "Le numéro de version enregistré sera utilisé pour vérifier la diffé
 
 #: ../data/ibus.schemas.in.h:11
 msgid "Latin layouts which have no ASCII"
-msgstr ""
+msgstr "Dispositions latines ne disposant pas d'ASCII"
 
 #: ../data/ibus.schemas.in.h:12
 msgid "US layout is appended to the latin layouts. variant can be omitted."
-msgstr ""
+msgstr "La disposition US est ajoutée aux dispositions latines. Les variantes peuvent être omises."
 
 #: ../data/ibus.schemas.in.h:13
 msgid "Use xmodmap"
-msgstr ""
+msgstr "Utiliser xmodmap"
 
 #: ../data/ibus.schemas.in.h:14
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
-msgstr ""
+msgstr "Lancer xmodmap si le fichier .xmodmap ou .Xmodmap existe lors d'un basculement de moteur ibus"
 
 #: ../data/ibus.schemas.in.h:15
 msgid "Trigger shortcut keys"
@@ -432,7 +432,7 @@ msgid ""
 "'rgba(r,g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 "
 "to 255 or precentage values in the range 0% to 100%, and 'a' is a floating "
 "point value in the range 0 to 1 of the alpha."
-msgstr ""
+msgstr "L'icône XKB affiche la chaîne de caractère de la disposition et cette chaîne de caractère est affichée par sa valeur RGBA. Cette valeur RGBA peut être 1. le nom d'une couleur X11, 2. une valeur héxadécimale sous la forme '#rrggbb' où 'r', 'g', et 'b' sont des chiffres héxadécimaux correspondant respectivement au rouge, vert et bleu, 3. une couleur RGB sous la forme 'rgb(r,g,b)' ou 4. une couleur RGBA sous la forme 'rgba(r,g,b,a)' où 'r', 'g' et 'b' sont soit des entiers compris entre 0 et 255, soit un pourcentage compris entre 0 et 100 %, et 'a', la valeur alpha, étant un nombre à virgule flottante compris entre 0 et 1."
 
 #: ../data/ibus.schemas.in.h:44
 msgid "Use custom font"
@@ -638,11 +638,11 @@ msgstr "Enregistrer le fichier FILE du cache du registre."
 
 #: ../tools/main.vala:304
 msgid "Resetting…"
-msgstr ""
+msgstr "Réinitialisation…"
 
 #: ../tools/main.vala:318
 msgid "Done"
-msgstr ""
+msgstr "Effectuée"
 
 #: ../tools/main.vala:337
 msgid "Set or get engine"
@@ -658,7 +658,7 @@ msgstr "Afficher les moteurs disponibles"
 
 #: ../tools/main.vala:340
 msgid "(Not implemented)"
-msgstr "(Non développé)"
+msgstr "(Non implémenté)"
 
 #: ../tools/main.vala:341
 msgid "Restart ibus-daemon"
@@ -682,11 +682,11 @@ msgstr "Afficher l'adresse D-Bus de ibus-daemon"
 
 #: ../tools/main.vala:346
 msgid "Show the configuration values"
-msgstr ""
+msgstr "Afficher les valeurs de configuration"
 
 #: ../tools/main.vala:347
 msgid "Reset the configuration values"
-msgstr ""
+msgstr "Réinitialiser les valeurs de configuration"
 
 #: ../tools/main.vala:348
 msgid "Show this information"

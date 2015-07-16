@@ -273,7 +273,6 @@ _xim_store_ic_values (X11IC *x11ic, IMChangeICStruct *call_data)
     XICAttribute *sts_attr = call_data->status_attr;
 
     gint i;
-    guint32 attrs = 1;
 
     g_return_val_if_fail (x11ic != NULL, 0);
     for (i = 0; i < (int)call_data->ic_attr_num; ++i, ++ic_attr) {
@@ -306,7 +305,7 @@ _xim_store_ic_values (X11IC *x11ic, IMChangeICStruct *call_data)
         LOG (1, "Unknown status attribute: %s", sts_attr->name);
     }
 
-    return attrs;
+    return 1;
 }
 
 

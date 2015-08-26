@@ -555,6 +555,10 @@ AC_ARG_ENABLE(ui,
 )
 AM_CONDITIONAL([ENABLE_UI], [test x"$enable_ui" = x"yes"])
 if test x"$enable_ui" = x"yes"; then
+    # Check for x11
+    PKG_CHECK_MODULES(X11, [
+        x11
+    ])
     enable_ui="yes (enabled, use --disable-ui to disable)"
 fi
 

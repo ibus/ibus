@@ -21,13 +21,10 @@
 # USA
 
 SUBDIRS = \
+	dconf \
 	icons \
 	keymaps \
 	$(NULL)
-
-if ENABLE_DCONF
-SUBDIRS += dconf
-endif
 
 schemasdir = $(GCONF_SCHEMA_FILE_DIR)
 schemas_in_files = ibus.schemas.in

@@ -487,15 +487,19 @@ class CandidatePanel(gtk.VBox):
         window_right = cursor_right + self.__toplevel.allocation.width
         window_bottom = cursor_bottom + self.__toplevel.allocation.height
 
-        root_window = gdk.get_default_root_window()
-        sx, sy = root_window.get_size()
+        screen = gdk.screen_get_default()
+        monitor_num = screen.get_monitor_at_point(cursor_right, cursor_bottom)
+        monitor_area = screen.get_monitor_geometry(monitor_num)
 
-        if window_right > sx:
-            x = sx - self.__toplevel.allocation.width
+        monitor_right = monitor_area.x + monitor_area.width
+        monitor_bottom = monitor_area.y + monitor_area.height
+
+        if window_right > monitor_right:
+            x = monitor_right - self.__toplevel.allocation.width
         else:
             x = cursor_right
 
-        if window_bottom > sy:
+        if window_bottom > monitor_bottom:
             # move the window just above the cursor so the window and a preedit string do not overlap.
             y = cursor_location[1] - self.__toplevel.allocation.height
         else:

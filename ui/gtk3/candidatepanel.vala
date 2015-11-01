@@ -306,19 +306,23 @@ public class CandidatePanel : Gtk.Box{
             cursor_right_bottom.y + allocation.height
         };
 
-        Gdk.Window root = Gdk.get_default_root_window();
-        int root_width = root.get_width();
-        int root_height = root.get_height();
+        Gdk.Screen screen = Gdk.Screen.get_default();
+        int monitor_num = screen.get_monitor_at_point(m_cursor_location.x,
+                                                      m_cursor_location.y);
+        Gdk.Rectangle monitor_area;
+        screen.get_monitor_geometry(monitor_num, out monitor_area);
+        int monitor_right = monitor_area.x + monitor_area.width;
+        int monitor_bottom = monitor_area.y + monitor_area.height;
 
         int x, y;
-        if (window_right_bottom.x > root_width)
-            x = root_width - allocation.width;
+        if (window_right_bottom.x > monitor_right)
+            x = monitor_right - allocation.width;
         else
             x = cursor_right_bottom.x;
         if (x < 0)
             x = 0;
 
-        if (window_right_bottom.y > root_height)
+        if (window_right_bottom.y > monitor_bottom)
             y = m_cursor_location.y - allocation.height;
         else
             y = cursor_right_bottom.y;
@@ -352,31 +356,35 @@ public class CandidatePanel : Gtk.Box{
             m_cursor_location.y + allocation.height
         };
 
-        Gdk.Window root = Gdk.get_default_root_window();
-        int root_width = root.get_width();
-        int root_height = root.get_height();
+        Gdk.Screen screen = Gdk.Screen.get_default();
+        int monitor_num = screen.get_monitor_at_point(m_cursor_location.x,
+                                                      m_cursor_location.y);
+        Gdk.Rectangle monitor_area;
+        screen.get_monitor_geometry(monitor_num, out monitor_area);
+        int monitor_right = monitor_area.x + monitor_area.width;
+        int monitor_bottom = monitor_area.y + monitor_area.height;
 
         int x, y;
         if (!m_candidate_area.get_vertical()) {
-            if (hwindow_right_bottom.x > root_width)
-                x = root_width - allocation.width;
+            if (hwindow_right_bottom.x > monitor_right)
+                x = monitor_right - allocation.width;
             else
                 x = m_cursor_location.x;
 
-            if (hwindow_right_bottom.y > root_height)
+            if (hwindow_right_bottom.y > monitor_bottom)
                 y = m_cursor_location.y - allocation.height;
             else
                 y = cursor_right_bottom.y;
         } else {
-            if (vwindow_left_bottom.x > root_width)
-                x = root_width - allocation.width;
+            if (vwindow_left_bottom.x > monitor_right)
+                x = monitor_right - allocation.width;
             else if (vwindow_left_bottom.x < 0)
                 x = cursor_right_bottom.x;
             else
                 x = vwindow_left_bottom.x;
 
-            if (vwindow_left_bottom.y > root_height)
-                y = root_height - allocation.height;
+            if (vwindow_left_bottom.y > monitor_bottom)
+                y = monitor_bottom - allocation.height;
             else
                 y = m_cursor_location.y;
         }

@@ -309,7 +309,8 @@ public class CandidatePanel : Gtk.Box{
         Gdk.Screen screen = Gdk.Screen.get_default();
         int monitor_num = screen.get_monitor_at_point(m_cursor_location.x,
                                                       m_cursor_location.y);
-        Gdk.Rectangle monitor_area = screen.get_monitor_workarea(monitor_num);
+        Gdk.Rectangle monitor_area;
+        screen.get_monitor_geometry(monitor_num, out monitor_area);
         int monitor_right = monitor_area.x + monitor_area.width;
         int monitor_bottom = monitor_area.y + monitor_area.height;
 
@@ -358,7 +359,8 @@ public class CandidatePanel : Gtk.Box{
         Gdk.Screen screen = Gdk.Screen.get_default();
         int monitor_num = screen.get_monitor_at_point(m_cursor_location.x,
                                                       m_cursor_location.y);
-        Gdk.Rectangle monitor_area = screen.get_monitor_workarea(monitor_num);
+        Gdk.Rectangle monitor_area;
+        screen.get_monitor_geometry(monitor_num, out monitor_area);
         int monitor_right = monitor_area.x + monitor_area.width;
         int monitor_bottom = monitor_area.y + monitor_area.height;
 

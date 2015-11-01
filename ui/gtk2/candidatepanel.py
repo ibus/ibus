@@ -488,7 +488,8 @@ class CandidatePanel(gtk.VBox):
         window_bottom = cursor_bottom + self.__toplevel.allocation.height
 
         screen = gdk.screen_get_default()
-        monitor_num = screen.get_monitor_at_point(cursor_right, cursor_bottom)
+        monitor_num = screen.get_monitor_at_point(cursor_location[0],
+                                                  cursor_location[1])
         monitor_area = screen.get_monitor_geometry(monitor_num)
 
         monitor_right = monitor_area.x + monitor_area.width

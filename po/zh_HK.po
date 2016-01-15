@@ -1,20 +1,19 @@
-# translation of zh_TW.po to Traditional Chinese
-# Traditional Chinese translation for ibus.
+# Traditional Chinese (Hong Kong) translation for ibus.
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
 # This file is distributed under the same license as the ibus package.
 #
 # Translators:
 # Cheng-Chia Tseng <pswo10680@gmail.com>, 2010
 # Peng Huang <shawn.p.huang@gmail.com>, 2008
-# Peng Huang <shawn.p.huang@gmail.com>, 2008
-# Terry Chuang <tchuang@redhat.com>, 2010
+# Terry Chuang <tchuang@redhat.com>, 2014
+# tomoe_musashi <hkg.musashi@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2014-02-18 13:46+0900\n"
-"PO-Revision-Date: 2014-02-18 05:50+0000\n"
-"Last-Translator: Terry Chuang <tchuang@redhat.com>\n"
+"POT-Creation-Date: 2015-11-09 13:46+0900\n"
+"PO-Revision-Date: 2015-11-09 05:50+0000\n"
+"Last-Translator: tomoe_musashi <hkg.musashi@gmail.com>\n"
 "Language-Team: Traditional Chinese <zh@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -52,11 +51,11 @@ msgstr "自訂"
 
 #: ../setup/setup.ui.h:8
 msgid "Do not show"
-msgstr ""
+msgstr "不要顯示"
 
 #: ../setup/setup.ui.h:9
 msgid "Hide automatically"
-msgstr ""
+msgstr "自動隱藏"
 
 #: ../setup/setup.ui.h:10
 msgid "Always"
@@ -96,11 +95,11 @@ msgstr "啟用或停用："
 
 #: ../setup/setup.ui.h:19
 msgid "Enable:"
-msgstr ""
+msgstr "啟用："
 
 #: ../setup/setup.ui.h:20
 msgid "Disable:"
-msgstr ""
+msgstr "停用："
 
 #: ../setup/setup.ui.h:21
 msgid "<b>Keyboard Shortcuts</b>"
@@ -108,7 +107,7 @@ msgstr "<b>鍵盤快捷鍵</b>"
 
 #: ../setup/setup.ui.h:22
 msgid "Set the orientation of candidates in lookup table"
-msgstr "設置查詢表單內候選字詞的排列方向"
+msgstr "設定查詢表單內候選字詞的排列方向"
 
 #: ../setup/setup.ui.h:23
 msgid "Candidates orientation:"
@@ -116,11 +115,11 @@ msgstr "候選詞排列方向："
 
 #: ../setup/setup.ui.h:24
 msgid "Set the behavior of ibus how to show or hide language bar"
-msgstr "設置 ibus 如何顯示或隱藏語言列的行為"
+msgstr "設定 ibus 如何顯示或隱藏語言列的行為"
 
 #: ../setup/setup.ui.h:25
 msgid "Show property panel:"
-msgstr ""
+msgstr "顯示屬性面板："
 
 #: ../setup/setup.ui.h:26
 msgid "Language panel position:"
@@ -161,11 +160,11 @@ msgstr "通用"
 #. add button
 #: ../setup/setup.ui.h:35 ../setup/keyboardshortcut.py:127
 msgid "_Add"
-msgstr "加入(_A)"
+msgstr "新增(_A)"
 
 #: ../setup/setup.ui.h:36
 msgid "Add the selected input method into the enabled input methods"
-msgstr "加入選取的輸入法到已啟用的輸入法內"
+msgstr "新增選取的輸入法到已啟用的輸入法內"
 
 #: ../setup/setup.ui.h:37
 msgid "_Remove"
@@ -205,14 +204,14 @@ msgstr "偏好設定(_P)"
 
 #: ../setup/setup.ui.h:46
 msgid "Show setup of the selected input method"
-msgstr ""
+msgstr "顯示所選輸入法的設置"
 
 #: ../setup/setup.ui.h:47
 msgid ""
 "<small><i>The active input method can be switched around from the selected "
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
 "the panel icon.</i></small>"
-msgstr ""
+msgstr "<small><i>你可以透過按下鍵盤快捷鍵，或是點按面板圖示的方式，來從上列清單中選取的輸入法之中切換使用中的輸入法。</i></small>"
 
 #. create im name & icon column
 #: ../setup/setup.ui.h:48 ../setup/enginetreeview.py:66
@@ -279,32 +278,32 @@ msgstr "當 ibus 啟動時預先載入引擎"
 
 #: ../data/ibus.schemas.in.h:3
 msgid "Engines order"
-msgstr ""
+msgstr "引擎順序"
 
 #: ../data/ibus.schemas.in.h:4
 msgid "Saved engines order in input method list"
-msgstr ""
+msgstr "輸入法清單中儲存的引擎順序"
 
 #: ../data/ibus.schemas.in.h:5
 msgid "Popup delay milliseconds for IME switcher window"
-msgstr ""
+msgstr "IME 切換器視窗彈出延遲的毫秒數"
 
 #: ../data/ibus.schemas.in.h:6
 msgid ""
 "Set popup delay milliseconds to show IME switcher window. The default is "
 "400. 0 = Show the window immediately. 0 &lt; Delay milliseconds. 0 &gt; Do "
 "not show the window and switch prev/next engines."
-msgstr ""
+msgstr "設定 IME 切換器視窗的彈出顯示毫秒數。預設為 400。0 = 立即顯示視窗。0 &lt; 延遲毫秒。0 &gt; 不要顯示視窗直接向前/向後切換引擎。"
 
 #: ../data/ibus.schemas.in.h:7
 msgid "Saved version number"
-msgstr ""
+msgstr "儲存的版本號碼"
 
 #: ../data/ibus.schemas.in.h:8
 msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
-msgstr ""
+msgstr "儲存的版本號碼可以用來查看上次安裝的 ibus 版本與目前安裝的 ibus 版本之間的差異。"
 
 #: ../data/ibus.schemas.in.h:9
 msgid "Trigger shortcut keys"
@@ -312,23 +311,23 @@ msgstr "觸發用快捷鍵"
 
 #: ../data/ibus.schemas.in.h:11
 msgid "Trigger shortcut keys for gtk_accelerator_parse"
-msgstr ""
+msgstr "gtk_accelerator_parse 的觸發用快捷鍵"
 
 #: ../data/ibus.schemas.in.h:12
 msgid "Enable shortcut keys"
-msgstr ""
+msgstr "啟用快捷鍵"
 
 #: ../data/ibus.schemas.in.h:13
 msgid "The shortcut keys for turning input method on"
-msgstr ""
+msgstr "開啟輸入法的快捷鍵"
 
 #: ../data/ibus.schemas.in.h:14
 msgid "Disable shortcut keys"
-msgstr ""
+msgstr "停用快捷鍵"
 
 #: ../data/ibus.schemas.in.h:15
 msgid "The shortcut keys for turning input method off"
-msgstr ""
+msgstr "關閉輸入法的快捷鍵"
 
 #: ../data/ibus.schemas.in.h:16
 msgid "Next engine shortcut keys"
@@ -336,7 +335,7 @@ msgstr "「下一個引擎」快捷鍵"
 
 #: ../data/ibus.schemas.in.h:17
 msgid "The shortcut keys for switching to the next input method in the list"
-msgstr ""
+msgstr "用來切換到清單內下一個輸入法的快捷鍵"
 
 #: ../data/ibus.schemas.in.h:18
 msgid "Prev engine shortcut keys"
@@ -344,7 +343,7 @@ msgstr "「上一個引擎」快捷鍵"
 
 #: ../data/ibus.schemas.in.h:19
 msgid "The shortcut keys for switching to the previous input method"
-msgstr ""
+msgstr "用來切換到清單內上一個輸入法的快捷鍵"
 
 #: ../data/ibus.schemas.in.h:20
 msgid "Auto hide"
@@ -354,7 +353,7 @@ msgstr "自動隱藏"
 msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
-msgstr ""
+msgstr "屬性面板的行為。0 = 不要顯示，1 = 自動隱藏，2 = 總是顯示"
 
 #: ../data/ibus.schemas.in.h:22
 msgid "Language panel position"
@@ -368,23 +367,23 @@ msgstr "語言列的位置。0 = 左上角, 1 = 右上角, 2 = 左下角, 3 = �
 
 #: ../data/ibus.schemas.in.h:24
 msgid "Follow the input cursor in case the panel is always shown"
-msgstr ""
+msgstr "在面板總是顯示的情況下跟隨輸入游標"
 
 #: ../data/ibus.schemas.in.h:25
 msgid ""
 "If true, the panel follows the input cursor in case the panel is always "
 "shown. If false, the panel is shown at a fixed location."
-msgstr ""
+msgstr "若為真，面板會在總是顯示的情況下跟隨輸入游標。若為假，面板則會顯示在固定位置上。"
 
 #: ../data/ibus.schemas.in.h:26
 msgid "The milliseconds to show property panel"
-msgstr ""
+msgstr "顯示屬性面板的毫秒數"
 
 #: ../data/ibus.schemas.in.h:27
 msgid ""
 "The milliseconds to show property panel after focus-in or properties are "
 "changed."
-msgstr ""
+msgstr "當焦點落在屬性面板內，或屬性變更時屬性面板的顯示毫秒數。"
 
 #: ../data/ibus.schemas.in.h:28
 msgid "Orientation of lookup table"
@@ -428,19 +427,19 @@ msgstr "使用全域輸入法"
 
 #: ../data/ibus.schemas.in.h:43
 msgid "Enable input method by default"
-msgstr ""
+msgstr "預設啟用輸入法"
 
 #: ../data/ibus.schemas.in.h:44
 msgid "Enable input method by default when the application gets input focus"
-msgstr ""
+msgstr "當應用程式取得輸入焦點時，預設將輸入法啟用"
 
 #: ../data/ibus.schemas.in.h:45
 msgid "DConf preserve name prefixes"
-msgstr ""
+msgstr "DConf 保留名稱前綴"
 
 #: ../data/ibus.schemas.in.h:46
 msgid "Prefixes of DConf keys to stop name conversion"
-msgstr ""
+msgstr "DConf 用來停止名稱轉換的鍵其前綴"
 
 #: ../ibus/_config.py.in:41
 msgid ""
@@ -450,7 +449,7 @@ msgstr "版權所有 (c) 2007-2010 黃鵬\n版權所有 (c) 2007-2010 Red Hat, I
 
 #: ../ibus/lang.py:41 ../src/ibusutil.c:150 ../src/ibusutil.c:152
 msgid "Other"
-msgstr "其它"
+msgstr "其他"
 
 #: ../setup/engineabout.py:68
 #, python-format
@@ -481,7 +480,7 @@ msgstr "鍵盤"
 
 #: ../setup/ibus-setup.desktop.in.h:2
 msgid "Set IBus Preferences"
-msgstr ""
+msgstr "設定 IBus 偏好設定"
 
 #: ../setup/keyboardshortcut.py:55
 msgid "Keyboard shortcuts"
@@ -525,11 +524,11 @@ msgstr "確定(_O)"
 
 #: ../setup/main.py:102 ../setup/main.py:395
 msgid "Use shortcut with shift to switch to the previous input method"
-msgstr ""
+msgstr "使用含 Shift 鍵之快捷鍵來切換至上一個輸入法"
 
 #: ../setup/main.py:329
 msgid "The IBus daemon is not running. Do you wish to start it?"
-msgstr ""
+msgstr "鍵盤輸入法 (IBus 背景程式) 並未執行。是否啟動？"
 
 #: ../setup/main.py:350
 msgid ""
@@ -537,13 +536,13 @@ msgid ""
 "  export GTK_IM_MODULE=ibus\n"
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
-msgstr ""
+msgstr "IBus 已經啟動了！如果你無法使用IBus，請將下列文字行列新增到你的 $HOME/.bashrc 中；接着重新登入到你的桌面。\nexport GTK_IM_MODULE=ibus\nexport XMODIFIERS=@im=ibus\nexport QT_IM_MODULE=ibus"
 
 #. Translators: %d == 5 currently
 #: ../setup/main.py:364
 #, python-format
 msgid "IBus daemon could not be started in %d seconds"
-msgstr ""
+msgstr "IBus 背景程式無法在 %d 秒後啟動"
 
 #: ../setup/main.py:376
 #, python-format
@@ -552,97 +551,97 @@ msgstr "為 %s 選取鍵盤快捷鍵"
 
 #: ../setup/main.py:377
 msgid "switching input methods"
-msgstr ""
+msgstr "切換輸入法"
 
 #: ../tools/main.vala:42
 msgid "List engine name only"
-msgstr ""
+msgstr "只列出引擎名稱"
 
 #: ../tools/main.vala:58 ../tools/main.vala:179 ../tools/main.vala:189
 #, c-format
 msgid "Can't connect to IBus.\n"
-msgstr ""
+msgstr "無法連接至 IBus。\n"
 
 #: ../tools/main.vala:84
 #, c-format
 msgid "language: %s\n"
-msgstr ""
+msgstr "語言：%s\n"
 
 #: ../tools/main.vala:152
 #, c-format
 msgid "No engine is set.\n"
-msgstr ""
+msgstr "尚未設定引擎。\n"
 
 #: ../tools/main.vala:160
 #, c-format
 msgid "Set global engine failed.\n"
-msgstr ""
+msgstr "無法設定全域引擎。\n"
 
 #: ../tools/main.vala:165
 #, c-format
 msgid "Get global engine failed.\n"
-msgstr ""
+msgstr "無法取得全域引擎。\n"
 
 #: ../tools/main.vala:204
 msgid "Read the system registry cache."
-msgstr ""
+msgstr "讀取系統註冊快取。"
 
 #: ../tools/main.vala:206
 msgid "Read the registry cache FILE."
-msgstr ""
+msgstr "讀取註冊快取 FILE。"
 
 #: ../tools/main.vala:224 ../tools/main.vala:229
 #, c-format
 msgid "The registry cache is invalid.\n"
-msgstr ""
+msgstr "註冊快取無效。\n"
 
 #: ../tools/main.vala:244
 msgid "Write the system registry cache."
-msgstr ""
+msgstr "寫入系統註冊快取。"
 
 #: ../tools/main.vala:246
 msgid "Write the registry cache FILE."
-msgstr ""
+msgstr "寫入註冊快取 FILE。"
 
 #: ../tools/main.vala:293
 msgid "Set or get engine"
-msgstr ""
+msgstr "設定或取得引擎"
 
 #: ../tools/main.vala:294
 msgid "Exit ibus-daemon"
-msgstr ""
+msgstr "離開 ibus-daemon"
 
 #: ../tools/main.vala:295
 msgid "Show available engines"
-msgstr ""
+msgstr "顯示可用的引擎"
 
 #: ../tools/main.vala:296
 msgid "(Not implemented)"
-msgstr ""
+msgstr "(尚未實作)"
 
 #: ../tools/main.vala:297
 msgid "Restart ibus-daemon"
-msgstr ""
+msgstr "重新啟動 ibus-daemon"
 
 #: ../tools/main.vala:298
 msgid "Show version"
-msgstr ""
+msgstr "顯示版本"
 
 #: ../tools/main.vala:299
 msgid "Show the content of registry cache"
-msgstr ""
+msgstr "顯示註冊快取的內容"
 
 #: ../tools/main.vala:300
 msgid "Create registry cache"
-msgstr ""
+msgstr "建立註冊快取"
 
 #: ../tools/main.vala:301
 msgid "Print the D-Bus address of ibus-daemon"
-msgstr ""
+msgstr "列印 ibus-daemon 的 D-Bus 位址"
 
 #: ../tools/main.vala:302
 msgid "Show this information"
-msgstr ""
+msgstr "顯示此資訊"
 
 #: ../tools/main.vala:308
 #, c-format
@@ -650,24 +649,26 @@ msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
 "\n"
 msgstr ""
+"用法：%s COMMAND [OPTION...]\n"
+"\n"
 
 #: ../tools/main.vala:309
 #, c-format
 msgid "Commands:\n"
-msgstr ""
+msgstr "指令：\n"
 
 #: ../tools/main.vala:338
 #, c-format
 msgid "%s is unknown command!\n"
-msgstr ""
+msgstr "%s 為未知指令！\n"
 
 #: ../ui/gtk3/panel.vala:425
 msgid "IBus Update"
-msgstr ""
+msgstr "IBus 更新"
 
 #: ../ui/gtk3/panel.vala:426 ../ui/gtk3/panel.vala:437
 msgid "Super+space is now the default hotkey."
-msgstr ""
+msgstr "超級鍵+空白鍵為現在的預設熱鍵。"
 
 #: ../ui/gtk3/panel.vala:707
 msgid "IBus is an intelligent input bus for Linux/Unix."
@@ -675,7 +676,7 @@ msgstr "IBus 為 Linux/Unix 上的智慧型輸入法框架。"
 
 #: ../ui/gtk3/panel.vala:711
 msgid "translator-credits"
-msgstr "Ding-Yi Chen 陳定彞 <dchen@redhat.com>, 2009\nCheng-Chia Tseng <pswo10680@gmail.com>, 2010"
+msgstr "Ding-Yi Chen 陳定彞 <dchen@redhat.com>, 2009\nCheng-Chia Tseng <pswo10680@gmail.com>, 2010\nTerry Chuang <tchuang@redhat.com>, 2014\ntomoe_musashi <hkg.musashi@gmail.com>, 2015"
 
 #: ../ui/gtk3/panel.vala:732
 msgid "Preferences"

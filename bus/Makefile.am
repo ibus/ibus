@@ -174,4 +174,15 @@ man_onedir = $(mandir)/man1
 %.1.gz: %.1
 	$(AM_V_GEN) gzip -c $< > $@.tmp && mv $@.tmp $@
 
+
+dbusservice_in_files = org.freedesktop.IBus.service.in
+dbusservice_DATA = $(dbusservice_in_files:.service.in=.service)
+dbusservicedir=${datadir}/dbus-1/services
+
+org.freedesktop.IBus.service: org.freedesktop.IBus.service.in
+	$(AM_V_GEN) sed -e "s|\@bindir\@|$(bindir)|" $< > $@.tmp && mv $@.tmp $@
+
+EXTRA_DIST += $(dbusservice_in_files)
+CLEANFILES += $(dbusservice_DATA)
+
 -include $(top_srcdir)/git.mk

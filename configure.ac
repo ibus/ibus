@@ -603,7 +603,7 @@ fi
 PKG_CHECK_MODULES(ISOCODES, [
     iso-codes
 ])
-ISOCODES_PREFIX=`pkg-config iso-codes --variable=prefix`
+ISOCODES_PREFIX=`$PKG_CONFIG iso-codes --variable=prefix`
 AC_SUBST(ISOCODES_PREFIX)
 
 # OUTPUT files

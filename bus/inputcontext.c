@@ -673,8 +673,10 @@ bus_input_context_send_signal (BusInputContext *context,
                                GVariant        *parameters,
                                GError         **error)
 {
-    if (context->connection == NULL)
+    if (context->connection == NULL) {
+        g_variant_unref (parameters);
         return TRUE;
+    }
 
     GDBusMessage *message = g_dbus_message_new_signal (ibus_service_get_object_path ((IBusService *)context),
                                                        interface_name,
@@ -704,8 +706,10 @@ bus_input_context_emit_signal (BusInputContext *context,
                                GVariant        *parameters,
                                GError         **error)
 {
-    if (context->connection == NULL)
+    if (context->connection == NULL) {
+        g_variant_unref (parameters);
         return TRUE;
+    }
 
     return bus_input_context_send_signal (context,
                                           "org.freedesktop.IBus.InputContext",

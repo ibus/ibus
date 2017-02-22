@@ -188,7 +188,7 @@ dbusservice_DATA = $(dbusservice_in_files:.service.in=.service)
 dbusservicedir=${datadir}/dbus-1/services
 
 org.freedesktop.IBus.service: org.freedesktop.IBus.service.in
-	$(AM_V_GEN) sed -e "s|\@bindir\@|$(bindir)|" $< > $@.tmp && mv $@.tmp $@
+	$(AM_V_GEN) sed -e "s|\@bindir\@|$(bindir)|" -e "s|\@xim_cli_arg\@|$(XIM_CLI_ARG)|" $< > $@.tmp && mv $@.tmp $@
 
 EXTRA_DIST += $(dbusservice_in_files)
 CLEANFILES += $(dbusservice_DATA)

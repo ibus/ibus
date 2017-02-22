@@ -198,6 +198,10 @@ AC_ARG_ENABLE(xim,
 )
 AM_CONDITIONAL([ENABLE_XIM], [test x"$enable_xim" = x"yes"])
 
+if test x"$enable_xim" = x"yes"; then
+    AC_SUBST([XIM_CLI_ARG], [--xim])
+fi
+
 # --enable-wayland option.
 AC_ARG_ENABLE(wayland,
     AS_HELP_STRING([--enable-wayland],

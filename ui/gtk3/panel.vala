@@ -1419,12 +1419,6 @@ class Panel : IBus.PanelService {
 
         var engine = m_bus.get_global_engine();
         if (engine != null) {
-            /*
-            get_global_engine() returns a new object with a reference count of 1. Vala 
-            adds another reference because "new IBus.EngineDesc()" isn't used. Remove the 
-            additional reference so the engine is eventually freed.
-            */
-            engine.unref();
             icon_name = engine.get_icon();
             m_icon_prop_key = engine.get_icon_prop_key();
         } else {

@@ -977,7 +977,7 @@ gboolean     ibus_bus_is_global_engine_enabled_async_finish
  *
  * Get the description of current global engine synchronously.
  *
- * Returns: (transfer none): The description of current global engine,
+ * Returns: (transfer full): The description of current global engine,
  * or %NULL if there is no global engine.
  */
 IBusEngineDesc *

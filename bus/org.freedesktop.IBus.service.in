@@ -1,3 +1,4 @@
 [D-BUS Service]
 Name=org.freedesktop.IBus
 Exec=@bindir@/ibus-daemon --replace --panel disable @xim_cli_arg@
+SystemdService=ibus.service

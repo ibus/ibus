@@ -1,0 +1,9 @@
+[Unit]
+Description=ibus daemon
+Documentation=man:ibus-daemon(1)
+
+[Service]
+Type=dbus
+BusName=org.freedesktop.IBus
+Environment=IBUS_SOCK=%t/ibus.socket
+ExecStart=@bindir@/ibus-daemon --replace @xim_cli_arg@ --panel disable -a unix:tmpdir=$IBUS_SOCK

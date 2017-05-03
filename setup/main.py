@@ -547,7 +547,7 @@ class Setup(object):
     def __is_auto_start(self):
         link_file = path.join(GLib.get_user_config_dir(),
                               "autostart/ibus.desktop")
-        ibus_desktop = path.join(os.getenv("IBUS_PREFIX"),
+        ibus_desktop = path.join(os.getenv("IBUS_PREFIX", ""),
                                  "share/applications/ibus.desktop")
 
         if not path.exists(link_file):
@@ -565,7 +565,7 @@ class Setup(object):
 
         link_file = path.join(GLib.get_user_config_dir(),
                               "autostart/ibus.desktop")
-        ibus_desktop = path.join(os.getenv("IBUS_PREFIX"),
+        ibus_desktop = path.join(os.getenv("IBUS_PREFIX", ""),
                                  "share/applications/ibus.desktop")
         # unlink file
         try:

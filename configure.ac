@@ -727,7 +727,7 @@ Build options:
   Enable surrounding-text       $enable_surrounding_text
   Enable libnotify              $enable_libnotify
   Enable Emoji dict             $enable_emoji_dict
-  Uicode Emoji directory        $UNICODE_EMOJI_DIR
+  Unicode Emoji directory       $UNICODE_EMOJI_DIR
   CLDR annotation directory     $EMOJI_ANNOTATION_DIR
   Run test cases                $enable_tests
 ])

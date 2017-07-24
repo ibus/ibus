@@ -354,6 +354,17 @@
       </locale>
     </schema>
     <schema>
+      <key>/schemas/desktop/ibus/panel/use_custom_icon_color</key>
+      <applyto>/desktop/ibus/panel/use_custom_icon_color</applyto>
+      <owner>ibus</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Use custom tray icon color</short>
+	    <long>Use custom color in the system tray icon</long>
+      </locale>
+    </schema>
+    <schema>
       <key>/schemas/desktop/ibus/panel/emoji/hotkey</key>
       <applyto>/desktop/ibus/panel/emoji/hotkey</applyto>
       <owner>ibus</owner>

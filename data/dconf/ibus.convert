@@ -21,5 +21,6 @@ show = /desktop/ibus/general/show
 show-icon-on-systray = /desktop/ibus/general/show_icon_on_systray
 show-im-name = /desktop/ibus/general/show_im_name
 use-custom-font = /desktop/ibus/general/use_custom_font
+use-custom-icon-color = /desktop/ibus/general/use_custom_icon_color
 x = /desktop/ibus/general/x
 y = /desktop/ibus/general/y

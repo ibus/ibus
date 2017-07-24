@@ -57,6 +57,7 @@ from enginedialog import EngineDialog
 from enginetreeview import EngineTreeView
 from engineabout import EngineAbout
 from i18n import DOMAINNAME, _, N_
+from colorbutton import IBusSetupColorButton
 
 (
     COLUMN_NAME,
@@ -111,7 +112,7 @@ class Setup(object):
         gtk_builder_file = path.join(path.dirname(__file__), "./setup.ui")
         self.__builder = Gtk.Builder()
         self.__builder.set_translation_domain(DOMAINNAME)
-        self.__builder.add_from_file(gtk_builder_file);
+        self.__builder.add_from_file(gtk_builder_file)
         self.__init_ui()
 
     def __init_hotkeys(self):
@@ -195,6 +196,27 @@ class Setup(object):
                                    self.__checkbutton_show_icon_on_systray,
                                    'active',
                                    Gio.SettingsBindFlags.DEFAULT)
+
+        # use custom icon color on system tray
+        self.__checkbutton_custom_icon_color = self.__builder.get_object(
+                "checkbutton_custom_icon_color")
+        self.__settings_panel.bind('use-custom-icon-color',
+                                   self.__checkbutton_custom_icon_color,
+                                   'active',
+                                   Gio.SettingsBindFlags.DEFAULT)
+
+        # icon color button
+        self.__colorbutton_custom_icon_color = self.__builder.get_object(
+                "colorbutton_custom_icon_color")
+        self.__colorbutton_custom_icon_color.set_custom_checkbutton(self.__checkbutton_custom_icon_color)
+        self.__settings_panel.bind('xkb-icon-rgba',
+                                   self.__colorbutton_custom_icon_color,
+                                   'rgba-string',
+                                   Gio.SettingsBindFlags.DEFAULT)
+        self.__settings_panel.bind('use-custom-icon-color',
+                                    self.__colorbutton_custom_icon_color,
+                                   'sensitive',
+                                   Gio.SettingsBindFlags.GET)
 
         # show ime name
         self.__checkbutton_show_im_name = self.__builder.get_object(

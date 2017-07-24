@@ -22,6 +22,7 @@
 # USA
 
 ibussetup_PYTHON = \
+	colorbutton.py \
     emojilang.py \
     enginecombobox.py \
     enginedialog.py \

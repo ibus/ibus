@@ -1002,14 +1002,17 @@ ibus_im_context_set_client_window (GtkIMContext *context, GdkWindow *client)
 static gboolean
 _set_cursor_location_internal (IBusIMContext *ibusimcontext)
 {
-    GdkRectangle area;
-
     if(ibusimcontext->client_window == NULL ||
        ibusimcontext->ibuscontext == NULL) {
         return FALSE;
     }
 
-    area = ibusimcontext->cursor_area;
+    int scale_factor = 1;
+#if GTK_CHECK_VERSION (3, 10, 0)
+    scale_factor = gdk_window_get_scale_factor (ibusimcontext->client_window);
+#endif
+
+    GdkRectangle area = ibusimcontext->cursor_area;
 
 #ifdef GDK_WINDOWING_WAYLAND
     if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ())) {
@@ -1023,6 +1026,11 @@ _set_cursor_location_internal (IBusIMContext *ibusimcontext)
             area.y = py;
             window = parent;
         }
+
+        area.x *= scale_factor;
+        area.y *= scale_factor;
+        area.width *= scale_factor;
+        area.height *= scale_factor;
 
         ibus_input_context_set_cursor_location_relative (
             ibusimcontext->ibuscontext,
@@ -1049,6 +1057,12 @@ _set_cursor_location_internal (IBusIMContext *ibusimcontext)
     gdk_window_get_root_coords (ibusimcontext->client_window,
                                 area.x, area.y,
                                 &area.x, &area.y);
+
+    area.x *= scale_factor;
+    area.y *= scale_factor;
+    area.width *= scale_factor;
+    area.height *= scale_factor;
+
     ibus_input_context_set_cursor_location (ibusimcontext->ibuscontext,
                                             area.x,
                                             area.y,

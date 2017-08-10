@@ -15,7 +15,7 @@
 .SH "DESCRIPTION"
 
 .PP
-IBus Emojier provides a GUI to select an emoji by typing an emoji annotaion
+IBus Emojier provides a GUI to select an emoji by typing an emoji annotation
 or choosing a character with mouse click and it's designed to work as
 an extended IBus lookup window using Space, Enter, and Arrow keys.
 The text entry accepts an emoji annotation or Unicode points.

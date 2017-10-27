@@ -755,6 +755,7 @@ _async_finish_object_path (GTask   *task,
     g_variant_get (result, "(v)", &variant);
     path = g_variant_dup_string (variant, NULL);
     g_variant_unref (variant);
+    g_variant_unref (result);
     return path;
 }
 
@@ -772,6 +773,7 @@ _async_finish_string (GTask   *task,
     }
     g_return_val_if_fail (variant != NULL, NULL);
     g_variant_get (variant, "(&s)", &s);
+    g_variant_unref (variant);
     return s;
 }
 
@@ -789,6 +791,7 @@ _async_finish_gboolean (GTask   *task,
     }
     g_return_val_if_fail (variant != NULL, FALSE);
     g_variant_get (variant, "(b)", &retval);
+    g_variant_unref (variant);
     return retval;
 }
 
@@ -807,6 +810,7 @@ _async_finish_guint (GTask   *task,
     }
     g_return_val_if_fail (variant != NULL, bad_id);
     g_variant_get (variant, "(u)", &id);
+    g_variant_unref (variant);
     return id;
 }
 
@@ -1864,6 +1868,7 @@ ibus_bus_list_engines_async_finish (IBusBus      *bus,
     }
     g_variant_iter_free (iter);
     g_variant_unref (variant);
+    g_variant_unref (result);
     return retval;
 }
 
@@ -2243,6 +2248,7 @@ ibus_bus_get_global_engine_async_finish (IBusBus      *bus,
         g_variant_unref (obj);
         g_variant_unref (variant);
     }
+    g_variant_unref (result);
     return engine;
 }
 
@@ -2461,6 +2467,7 @@ ibus_bus_get_ibus_property_async_finish (IBusBus      *bus,
     g_return_val_if_fail (result != NULL, NULL);
     GVariant *retval = NULL;
     g_variant_get (result, "(v)", &retval);
+    g_variant_unref (result);
 
     return retval;
 }

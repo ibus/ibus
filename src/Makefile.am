@@ -316,6 +316,7 @@ emoji_parser_CFLAGS =           \
 emoji_parser_LDADD =            \
     $(GLIB2_LIBS)               \
     $(libibus)                  \
+    $(GOBJECT2_LIBS)                  \
     $(NULL)
 
 clean-local:

@@ -1075,6 +1075,7 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
         have_hex_mods = (modifiers & (HEX_MOD_MASK)) == HEX_MOD_MASK;
     }
 
+    is_hex_start = keyval == IBUS_KEY_U;
     is_hex_end = (keyval == IBUS_KEY_space ||
                   keyval == IBUS_KEY_KP_Space ||
                   keyval == IBUS_KEY_Return ||

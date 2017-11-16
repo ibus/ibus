@@ -80,6 +80,7 @@ struct _IBusEngineSimplePrivate {
     gchar              *tentative_emoji;
     gint                tentative_match_len;
 
+    guint               hex_mode_enabled : 1;
     guint               in_hex_sequence : 1;
     guint               in_emoji_sequence : 1;
     guint               modifiers_dropped : 1;
@@ -150,6 +151,8 @@ static void
 ibus_engine_simple_init (IBusEngineSimple *simple)
 {
     simple->priv = IBUS_ENGINE_SIMPLE_GET_PRIVATE (simple);
+    simple->priv->hex_mode_enabled =
+        g_getenv("IBUS_ENABLE_CTRL_SHIFT_U") != NULL;
 }
 
 
@@ -1075,6 +1078,7 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
         have_hex_mods = (modifiers & (HEX_MOD_MASK)) == HEX_MOD_MASK;
     }
 
+    is_hex_start = (keyval == IBUS_KEY_U) && priv->hex_mode_enabled;
     is_hex_end = (keyval == IBUS_KEY_space ||
                   keyval == IBUS_KEY_KP_Space ||
                   keyval == IBUS_KEY_Return ||

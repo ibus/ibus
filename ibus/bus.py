@@ -28,7 +28,7 @@ import dbus
 import dbus.lowlevel
 import dbus.connection
 import dbus.mainloop.glib
-import gobject
+from gi.repository import GObject as gobject
 import common
 import object
 import serializable

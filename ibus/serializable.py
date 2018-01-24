@@ -28,7 +28,8 @@ __all__ = (
 
 from object import Object
 import dbus
-import gobject
+from gi.repository import GObject as gobject
+from gi.types import GObjectMeta
 
 __serializable_name_dict = dict()
 
@@ -55,7 +56,7 @@ def deserialize_object(v):
         return o
     return v
 
-class SerializableMeta(gobject.GObjectMeta):
+class SerializableMeta(GObjectMeta):
     def __init__(cls, name, bases, dict_):
         super(SerializableMeta, cls).__init__(name, bases, dict_)
         if "__NAME__" in cls.__dict__:

@@ -29,7 +29,7 @@ __all__ = (
 IBUS_SERVICE_CONFIG = "org.freedesktop.IBus.Config"
 IBUS_PATH_CONFIG = "/org/freedesktop/IBus/Config"
 
-import gobject
+from gi.repository import GObject as gobject
 import object
 import interface
 import dbus

@@ -25,7 +25,7 @@ __all__ = (
     )
 
 import sys
-import gobject
+from gi.repository import GObject as gobject
 import dbus
 import dbus.lowlevel
 import object

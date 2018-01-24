@@ -24,7 +24,7 @@ __all__ = (
         "Object",
     )
 
-import gobject
+from gi.repository import GObject as gobject
 
 class Object(gobject.GObject):
     __gtype_name__ = "PYIBusObject"

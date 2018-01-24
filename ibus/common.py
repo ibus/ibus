@@ -176,7 +176,7 @@ __mainloop = None
 def __init_main_loop():
     global __mainloop
     if __mainloop == None:
-        import gobject
+        from gi.repository import GObject as gobject
         __mainloop = gobject.MainLoop()
 
 def main():

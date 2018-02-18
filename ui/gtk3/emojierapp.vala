@@ -94,7 +94,7 @@ public class EmojiApplication : Application {
               /* TRANSLATORS: "FONT" should be capital and translatable.
                * It's used for an argument command --font=FONT
                */
-              N_("\"FONT\" for emoji chracters on emoji dialog"),
+              N_("\"FONT\" for emoji characters on emoji dialog"),
               N_("FONT") },
             { "lang", 0, 0, OptionArg.STRING, out annotation_lang,
               /* TRANSLATORS: "LANG" should be capital and translatable.

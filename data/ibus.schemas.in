@@ -64,7 +64,7 @@
       <default>[ara,bg,cz,dev,gr,gur,in,jp(kana),mal,mkd,ru,ua]</default>
       <locale name="C">
         <short>Latin layouts which have no ASCII</short>
-           <long>US layout is appended to the latin layouts. variant can be
+           <long>US layout is appended to the Latin layouts. variant can be
                  omitted.
            </long>
       </locale>
@@ -299,7 +299,7 @@
                   and blue, 3. a RGB color in form 'rgb(r,g,b)' or
                   4. a RGBA color in form 'rgba(r,g,b,a)' where 'r',
                   'g', and 'b' are either integers in the range 0 to 255
-                  or precentage values in the range 0% to 100%, and
+                  or percentage values in the range 0% to 100%, and
                   'a' is a floating point value in the range 0 to 1
                   of the alpha.</long>
       </locale>
@@ -373,7 +373,7 @@
       <default>Monospace 16</default>
       <locale name="C">
         <short>Custom font</short>
-	    <long>Custom font name for emoji chracters on emoji dialog</long>
+	    <long>Custom font name for emoji characters on emoji dialog</long>
       </locale>
     </schema>
     <schema>

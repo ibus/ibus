@@ -666,7 +666,7 @@ AC_ARG_WITH(ucd-dir,
     AS_HELP_STRING([--with-ucd-dir[=DIR]],
         [Set the directory of UCD (Unicode Character Database) files.
          (default: "/usr/share/unicode/ucd")]),
-    UCD_DIR=$with_emoji_annotation_dir,
+    UCD_DIR=$with_ucd_dir,
     UCD_DIR="/usr/share/unicode/ucd"
 )
 AC_SUBST(UCD_DIR)

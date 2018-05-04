@@ -5,13 +5,14 @@
 #
 # Translators:
 # Lê Quốc Tuấn <mr.lequoctuan@gmail.com>, 2009
+# Đoàn Hoà Khiêm <doankhiem.crazy@gmail.com>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2014-02-18 13:46+0900\n"
 "PO-Revision-Date: 2014-02-18 05:49+0000\n"
-"Last-Translator: Lê Quốc Tuấn <mr.lequoctuan@gmail.com>\n"
+"Last-Translator: Đoàn Hoà Khiêm <doankhiem.crazy@gmail.com>\n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,11 +50,11 @@ msgstr "Tùy biến"
 
 #: ../setup/setup.ui.h:8
 msgid "Do not show"
-msgstr ""
+msgstr "Không hiển thị"
 
 #: ../setup/setup.ui.h:9
 msgid "Hide automatically"
-msgstr ""
+msgstr "Tự động ẩn"
 
 #: ../setup/setup.ui.h:10
 msgid "Always"
@@ -93,11 +94,11 @@ msgstr "Bật hoặc tắt:"
 
 #: ../setup/setup.ui.h:19
 msgid "Enable:"
-msgstr ""
+msgstr "Bật:"
 
 #: ../setup/setup.ui.h:20
 msgid "Disable:"
-msgstr ""
+msgstr "Tắt:"
 
 #: ../setup/setup.ui.h:21
 msgid "<b>Keyboard Shortcuts</b>"
@@ -117,7 +118,7 @@ msgstr "Thiết lập việc ẩn hay hiển thị thanh ngôn ngữ"
 
 #: ../setup/setup.ui.h:25
 msgid "Show property panel:"
-msgstr ""
+msgstr "Hiển thị bảng thuộc tính:"
 
 #: ../setup/setup.ui.h:26
 msgid "Language panel position:"
@@ -202,7 +203,7 @@ msgstr "Tù_y thích"
 
 #: ../setup/setup.ui.h:46
 msgid "Show setup of the selected input method"
-msgstr ""
+msgstr "Hiển thị thiết lập cho kiểu gõ đã chọn"
 
 #: ../setup/setup.ui.h:47
 msgid ""
@@ -313,19 +314,19 @@ msgstr ""
 
 #: ../data/ibus.schemas.in.h:12
 msgid "Enable shortcut keys"
-msgstr ""
+msgstr "Bật các phím tắt"
 
 #: ../data/ibus.schemas.in.h:13
 msgid "The shortcut keys for turning input method on"
-msgstr ""
+msgstr "Phím tắt để bật kiểu gõ"
 
 #: ../data/ibus.schemas.in.h:14
 msgid "Disable shortcut keys"
-msgstr ""
+msgstr "Tắt các phím tắt"
 
 #: ../data/ibus.schemas.in.h:15
 msgid "The shortcut keys for turning input method off"
-msgstr ""
+msgstr "Phím tắt để tắt kiểu gõ"
 
 #: ../data/ibus.schemas.in.h:16
 msgid "Next engine shortcut keys"
@@ -341,7 +342,7 @@ msgstr "Phím tắt cho kiểu gõ trước"
 
 #: ../data/ibus.schemas.in.h:19
 msgid "The shortcut keys for switching to the previous input method"
-msgstr ""
+msgstr "Phím tắt để chuyển sang kiểu gõ trước"
 
 #: ../data/ibus.schemas.in.h:20
 msgid "Auto hide"
@@ -425,7 +426,7 @@ msgstr "Dùng chung kiểu gõ cho toàn hệ thống"
 
 #: ../data/ibus.schemas.in.h:43
 msgid "Enable input method by default"
-msgstr ""
+msgstr "Bật kiểu gõ theo mặc định"
 
 #: ../data/ibus.schemas.in.h:44
 msgid "Enable input method by default when the application gets input focus"
@@ -478,7 +479,7 @@ msgstr "Kbd"
 
 #: ../setup/ibus-setup.desktop.in.h:2
 msgid "Set IBus Preferences"
-msgstr ""
+msgstr "Thiết lập các tuỳ chọn IBus"
 
 #: ../setup/keyboardshortcut.py:55
 msgid "Keyboard shortcuts"
@@ -526,7 +527,7 @@ msgstr ""
 
 #: ../setup/main.py:329
 msgid "The IBus daemon is not running. Do you wish to start it?"
-msgstr ""
+msgstr "Ibus daemon đang không chạy. Bạn có muốn khởi động nó không?"
 
 #: ../setup/main.py:350
 msgid ""
@@ -535,12 +536,18 @@ msgid ""
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
 msgstr ""
+"IBus không thể khởi động! Nếu bạn không thể sử dụng IBus, hãy thêm các dòng "
+"dưới đây vào tệp tin $HOME/.bashrc của bạn; sau đó hãy đăng nhập lại vào màn "
+"hình làm việc.\n"
+"  export GTK_IM_MODULE=ibus\n"
+"  export XMODIFIERS=@im=ibus\n"
+"  export QT_IM_MODULE=ibus"
 
 #. Translators: %d == 5 currently
 #: ../setup/main.py:364
 #, python-format
 msgid "IBus daemon could not be started in %d seconds"
-msgstr ""
+msgstr "Ibus daemon không thể khởi động trong %s giây"
 
 #: ../setup/main.py:376
 #, python-format
@@ -549,7 +556,7 @@ msgstr "Chọn phím tắt để %s"
 
 #: ../setup/main.py:377
 msgid "switching input methods"
-msgstr ""
+msgstr "chuyển các kiểu gõ"
 
 #: ../tools/main.vala:42
 msgid "List engine name only"
@@ -558,12 +565,12 @@ msgstr ""
 #: ../tools/main.vala:58 ../tools/main.vala:179 ../tools/main.vala:189
 #, c-format
 msgid "Can't connect to IBus.\n"
-msgstr ""
+msgstr "Không thể kết nối với IBus.\n"
 
 #: ../tools/main.vala:84
 #, c-format
 msgid "language: %s\n"
-msgstr ""
+msgstr "ngôn ngữ: %s\n"
 
 #: ../tools/main.vala:152
 #, c-format
@@ -607,7 +614,7 @@ msgstr ""
 
 #: ../tools/main.vala:294
 msgid "Exit ibus-daemon"
-msgstr ""
+msgstr "Thoát ibus-daemon"
 
 #: ../tools/main.vala:295
 msgid "Show available engines"
@@ -619,11 +626,11 @@ msgstr ""
 
 #: ../tools/main.vala:297
 msgid "Restart ibus-daemon"
-msgstr ""
+msgstr "Khởi động lại ibus-daemon"
 
 #: ../tools/main.vala:298
 msgid "Show version"
-msgstr ""
+msgstr "Hiển thị phiên bản"
 
 #: ../tools/main.vala:299
 msgid "Show the content of registry cache"
@@ -639,7 +646,7 @@ msgstr ""
 
 #: ../tools/main.vala:302
 msgid "Show this information"
-msgstr ""
+msgstr "Hiển thị thông tin này"
 
 #: ../tools/main.vala:308
 #, c-format
@@ -647,11 +654,13 @@ msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
 "\n"
 msgstr ""
+"Sử dụng: %s LỆNH [TUỲ CHỌN...]\n"
+"\n"
 
 #: ../tools/main.vala:309
 #, c-format
 msgid "Commands:\n"
-msgstr ""
+msgstr "Lệnh:\n"
 
 #: ../tools/main.vala:338
 #, c-format
@@ -660,11 +669,11 @@ msgstr ""
 
 #: ../ui/gtk3/panel.vala:425
 msgid "IBus Update"
-msgstr ""
+msgstr "Cập nhật IBus"
 
 #: ../ui/gtk3/panel.vala:426 ../ui/gtk3/panel.vala:437
 msgid "Super+space is now the default hotkey."
-msgstr ""
+msgstr "Super + space bây giờ là phím nóng mặc định."
 
 #: ../ui/gtk3/panel.vala:707
 msgid "IBus is an intelligent input bus for Linux/Unix."
@@ -672,7 +681,9 @@ msgstr "IBus là một bộ gõ thông minh cho Linux/Unix."
 
 #: ../ui/gtk3/panel.vala:711
 msgid "translator-credits"
-msgstr "Lê Quốc Tuấn <mr.lequoctuan@gmail.com>"
+msgstr ""
+"Lê Quốc Tuấn <mr.lequoctuan@gmail.com>, 2009\n"
+"Đoàn Hoà Khiêm <doankhiem.crazy@gmail.com>, 2018"
 
 #: ../ui/gtk3/panel.vala:732
 msgid "Preferences"

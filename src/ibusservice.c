@@ -144,7 +144,7 @@ ibus_service_get_type (void)
         (GBaseInitFunc)     ibus_service_base_init,
         (GBaseFinalizeFunc) ibus_service_base_fini,
         (GClassInitFunc)    ibus_service_class_init,
-        NULL,               /* class finialize */
+        NULL,               /* class finalize */
         NULL,               /* class data */
         sizeof (IBusService),
         0,

@@ -970,7 +970,7 @@ ibus_bus_create_input_context_async (IBusBus            *bus,
     task = g_task_new (bus, cancellable, callback, user_data);
     g_task_set_source_tag (task, ibus_bus_create_input_context_async);
 
-    /* do not use ibus_bus_call_async, instread use g_dbus_connection_call
+    /* do not use ibus_bus_call_async, instead use g_dbus_connection_call
      * directly, because we need two async steps for create an IBusInputContext.
      * 1. Call CreateInputContext to request ibus-daemon create a remote IC.
      * 2. New local IBusInputContext proxy of the remote IC

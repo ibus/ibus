@@ -61,7 +61,7 @@ ibus_serializable_get_type (void)
         (GBaseInitFunc)     ibus_serializable_base_init,
         (GBaseFinalizeFunc) ibus_serializable_base_fini,
         (GClassInitFunc)    ibus_serializable_class_init,
-        NULL,               /* class finialize */
+        NULL,               /* class finalize */
         NULL,               /* class data */
         sizeof (IBusSerializable),
         0,

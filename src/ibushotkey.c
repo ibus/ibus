@@ -151,7 +151,7 @@ ibus_hotkey_profile_get_type (void)
         (GBaseInitFunc)     NULL,
         (GBaseFinalizeFunc) NULL,
         (GClassInitFunc)    ibus_hotkey_profile_class_init,
-        NULL,               /* class finialize */
+        NULL,               /* class finalize */
         NULL,               /* class data */
         sizeof (IBusHotkeyProfile),
         0,

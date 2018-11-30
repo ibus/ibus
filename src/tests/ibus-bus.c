@@ -310,7 +310,7 @@ test_create_input_context_async (void)
     g_main_loop_run (loop);
     g_main_loop_unref (loop);
 
-    /* ceate four IC, and cancel two */
+    /* create four IC, and cancel two */
     create_input_context_count = 4;
     loop = g_main_loop_new (NULL, TRUE);
     cancellable = g_cancellable_new ();

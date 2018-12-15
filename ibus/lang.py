@@ -36,7 +36,7 @@ def get_language_name(_locale):
     lang = lang.lower()
     if lang in __languages_dict:
         lang = __languages_dict[lang]
-        lang = gettext.dgettext("iso_639", lang)
+        lang = gettext.dgettext("iso_639-3", lang)
     else:
         lang = _(u"Other")
         lang = gettext.dgettext("ibus", lang)
@@ -46,7 +46,7 @@ def __start_element(name, attrs):
     global __languages_dict
     try:
         name = attrs[u"name"]
-        for attr_name in (u"iso_639_2B_code", u"iso_639_2T_code", u"iso_639_1_code"):
+        for attr_name in (u"id", u"part1_code", u"part2_code"):
             if attr_name in attrs:
                 attr_value = attrs[attr_name]
                 __languages_dict[attr_value] = name
@@ -62,12 +62,12 @@ def __char_data(data):
 def __load_lang():
     import os
     import _config
-    iso_639_xml = os.path.join(_config.ISOCODES_PREFIX, "share/xml/iso-codes/iso_639.xml")
+    iso_639_3_xml = os.path.join(_config.ISOCODES_PREFIX, "share/xml/iso-codes/iso_639-3.xml")
     p = xml.parsers.expat.ParserCreate()
     p.StartElementHandler = __start_element
     p.EndElementHandler = __end_element
     p.CharacterDataHandler = __char_data
-    p.ParseFile(file(iso_639_xml))
+    p.ParseFile(file(iso_639_3_xml))
 
 __load_lang()
 

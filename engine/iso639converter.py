@@ -63,27 +63,27 @@ Options:
 
 class ISO639XML(XMLFilterBase):
     def __init__(self, parser=None):
-        self.__code2to1 = {}
+        self.__code2to3 = {}
         self.__codetoname = {}
         XMLFilterBase.__init__(self, parser)
     def startElement(self, name, attrs):
-        if name != 'iso_639_entry':
+        if name != 'iso_639_3_entry':
             return
         n = attrs.get('name')
-        iso639_1 = attrs.get('iso_639_1_code')
-        iso639_2b = attrs.get('iso_639_2B_code')
-        iso639_2t = attrs.get('iso_639_2T_code')
-        if iso639_1 != None:
-            self.__codetoname[iso639_1] = n
+        iso639_3 = attrs.get('id')
+        iso639_2b = attrs.get('part1_code')
+        iso639_2t = attrs.get('part2_code')
+        if iso639_3 != None:
+            self.__codetoname[iso639_3] = n
             if iso639_2b != None:
-                self.__code2to1[iso639_2b] = iso639_1
+                self.__code2to3[iso639_2b] = iso639_3
                 self.__codetoname[iso639_2b] = n
             if iso639_2t != None and iso639_2b != iso639_2t:
-                self.__code2to1[iso639_2t] = iso639_1
+                self.__code2to3[iso639_2t] = iso639_3
                 self.__codetoname[iso639_2t] = n
-    def code2to1(self, iso639_2):
+    def code2to3(self, iso639_2):
         try:
-            return self.__code2to1[iso639_2]
+            return self.__code2to3[iso639_2]
         except KeyError:
             return None
 
@@ -113,9 +113,9 @@ class IBusComponentXML(XMLFilterBase):
     def characters(self, text):
         if self.__is_language:
             if self.__iso639:
-                iso639_1 = self.__iso639.code2to1(text)
-                if iso639_1 != None:
-                    text = iso639_1
+                iso639_3 = self.__iso639.code2to3(text)
+                if iso639_3 != None:
+                    text = iso639_3
         if self.__downstream:
             self.__downstream.characters(text)
 
@@ -192,6 +192,6 @@ if __name__ == '__main__':
         elif opt in ('-o', '--output'):
             output = arg
 
-    iso639 = parse_iso639('/usr/share/xml/iso-codes/iso_639.xml')
+    iso639 = parse_iso639('/usr/share/xml/iso-codes/iso_639-3.xml')
     xml = ConvertEngineXML(input, iso639)
     xml.write(output)

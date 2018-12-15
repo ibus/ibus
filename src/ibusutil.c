@@ -45,7 +45,7 @@ _iso_codes_parse_xml_node (XMLNode          *node)
     GList *p;
     g_assert (node);
 
-    if (G_UNLIKELY (g_strcmp0 (node->name, "iso_639_entries") != 0)) {
+    if (G_UNLIKELY (g_strcmp0 (node->name, "iso_639_3_entries") != 0)) {
         return FALSE;
     }
 
@@ -57,9 +57,9 @@ _iso_codes_parse_xml_node (XMLNode          *node)
             const gchar *key;
             gchar *value;
         } entries[] = {
-            { "iso_639_2B_code", NULL },
-            { "iso_639_2T_code", NULL },
-            { "iso_639_1_code", NULL },
+            { "id", NULL },
+            { "part1_code", NULL },
+            { "part2_code", NULL },
         };
 
         if (sub_node->attributes == NULL) {
@@ -99,14 +99,14 @@ _load_lang()
     struct stat buf;
 
 #ifdef ENABLE_NLS
-    bindtextdomain ("iso_639", LOCALEDIR);
-    bind_textdomain_codeset ("iso_639", "UTF-8");
+    bindtextdomain ("iso_639-3", LOCALEDIR);
+    bind_textdomain_codeset ("iso_639-3", "UTF-8");
 #endif
 
     __languages_dict = g_hash_table_new_full (g_str_hash,
             g_str_equal, g_free, g_free);
     filename = g_build_filename (ISOCODES_PREFIX,
-                                 "share/xml/iso-codes/iso_639.xml",
+                                 "share/xml/iso-codes/iso_639-3.xml",
                                  NULL);
     if (g_stat (filename, &buf) != 0) {
         g_warning ("Can not get stat of file %s", filename);
@@ -157,7 +157,7 @@ ibus_get_language_name (const gchar *_locale)
     if (g_strcmp0 (retval, "Other") == 0)
         return dgettext (GETTEXT_PACKAGE, N_("Other"));
     else
-        return dgettext ("iso_639", retval);
+        return dgettext ("iso_639-3", retval);
 #else
     return retval;
 #endif

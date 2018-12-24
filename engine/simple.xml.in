@@ -680,6 +680,30 @@
 			<longname>Ukrainian</longname>
 			<description>Ukrainian</description>
                         <icon>ibus-keyboard</icon>
+			            <rank>99</rank>
+		</engine>
+		<engine>
+			<name>xkb:uz:cyrillic:uzb</name>
+			<language>uz</language>
+			<license>GPL</license>
+			<author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+			<layout>uz</layout>
+			<layout_variant>cyrillic</layout_variant>
+			<longname>Uzbek Cyrillic (Ўзбекча)</longname>
+			<description>Uzbek Cyrillic (Ўзбекча)</description>
+			<icon>ibus-keyboard</icon>
+			<rank>99</rank>
+		</engine>
+		<engine>
+			<name>xkb:uz:latin:uzb</name>
+			<language>uz</language>
+			<license>GPL</license>
+			<author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+			<layout>uz</layout>
+			<layout_variant>latin</layout_variant>
+			<longname>Uzbek Latin (Oʻzbekcha)</longname>
+			<description>Uzbek Latin (Oʻzbekcha)</description>
+			<icon>ibus-keyboard</icon>
 			<rank>99</rank>
 		</engine>
 		<engine>

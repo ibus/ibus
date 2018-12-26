@@ -315,7 +315,7 @@ GOBJECT_INTROSPECTION_CHECK([0.6.8])
 
 IBUS_GIR_SCANNERFLAGS=
 if test x"$found_introspection" = x"yes" ; then
-    IBUS_GIR_SCANNERFLAGS="--warn-all --identifier-prefix=IBus --symbol-prefix=ibus"
+    IBUS_GIR_SCANNERFLAGS="--warn-all --identifier-prefix=IBus --symbol-prefix=ibus --c-include=ibus.h"
     PKG_CHECK_EXISTS([gobject-introspection-1.0 >= 0.9.6],
                      [gir_symbol_prefix=yes],
                      [gir_symbol_prefix=no])

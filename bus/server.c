@@ -144,9 +144,10 @@ bus_server_init (void)
     /* init server */
     GDBusServerFlags flags = G_DBUS_SERVER_FLAGS_AUTHENTICATION_ALLOW_ANONYMOUS;
     gchar *guid = g_dbus_generate_guid ();
-    if (!g_str_has_prefix (g_address, "unix:tmpdir=")) {
-        g_error ("Your socket address does not have the format unix:tmpdir=$DIR; %s",
-                 g_address);
+    if (!g_str_has_prefix (g_address, "unix:tmpdir=") &&
+        !g_str_has_prefix (g_address, "unix:path=")) {
+        g_error ("Your socket address does not have the format unix:tmpdir=$DIR "
+                 "or unix:path=$FILE; %s", g_address);
     }
     server =  g_dbus_server_new_sync (
                     g_address, /* the place where the socket file lives, e.g. /tmp, abstract namespace, etc. */

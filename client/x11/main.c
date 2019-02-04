@@ -1114,7 +1114,7 @@ _print_usage (FILE *fp, gchar *name)
     fprintf (fp,
         "Usage:\n"
         " %s --help               Show this message\n"
-        "    --server-name= -n    Setup xim sevrer name\n"
+        "    --server-name= -n    Setup xim server name\n"
         "    --locale= -l         Setup support locales\n"
         "    --locale-append= -a  Append locales into the default support locales\n"
         "    --kill-daemon -k     Kill ibus daemon when exit\n"

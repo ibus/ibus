@@ -27,5 +27,5 @@ export IBUS_PREFIX=@prefix@
 export IBUS_DATAROOTDIR=@datarootdir@
 export IBUS_LOCALEDIR=@localedir@
 
-exec @PYTHON@ @prefix@/share/ibus/ui/gtk/main.py $@
+exec @PYTHON@ @datarootdir@/ibus/ui/gtk/main.py $@
 

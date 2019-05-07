@@ -24,7 +24,7 @@
 #include "global.h"
 
 gchar **g_argv = NULL;
-gchar *g_address = "unix:tmpdir=/tmp";
+gchar *g_address = "unix:tmpdir=/tmp/ibus";
 gchar *g_cache = "auto";
 gboolean g_mempro = FALSE;
 gboolean g_verbose = FALSE;

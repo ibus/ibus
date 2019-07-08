@@ -143,7 +143,11 @@ ibus_get_untranslated_raw_language_name (const gchar *_locale)
     retval = (const gchar *) g_hash_table_lookup (__languages_dict, lang);
     g_free (lang);
     if (retval != NULL)
-        return retval;
+        if (g_strcmp0 (retval, "Bengali") == 0)
+            /* use common_name "Bangla" if lang is "bn" */
+            return "Bangla";
+        else
+            return retval;
     else
         return "Other";
 }

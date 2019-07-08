@@ -67,6 +67,31 @@ _iso_codes_parse_xml_node (XMLNode          *node)
         }
 
         attributes = sub_node->attributes;
+
+        gboolean is_common_name = FALSE;
+        for (i = 0; attributes[i]; i += 2) {
+            if (g_strcmp0 (attributes[i], "common_name") == 0) {
+                is_common_name = TRUE;
+                for (j = 0; j < G_N_ELEMENTS (entries); j++) {
+                    if (entries[j].value == NULL)
+                        continue;
+                    g_hash_table_insert (__languages_dict,
+                                         (gpointer) g_strdup (entries[j].value),
+                                         (gpointer) g_strdup (attributes[i + 1]));
+                    entries[j].value = NULL;
+                }
+            } else {
+                for (j = 0; j < G_N_ELEMENTS (entries); j++) {
+                    if (g_strcmp0 (attributes[i], entries[j].key) == 0 &&
+                        attributes[i + 1] != NULL) {
+                        entries[j].value = attributes[i + 1];
+                    }
+                }
+            }
+        }
+        if (is_common_name)
+            continue;
+
         for (i = 0; attributes[i]; i += 2) {
             if (g_strcmp0 (attributes[i], "name") == 0) {
                 for (j = 0; j < G_N_ELEMENTS (entries); j++) {
@@ -143,11 +168,7 @@ ibus_get_untranslated_raw_language_name (const gchar *_locale)
     retval = (const gchar *) g_hash_table_lookup (__languages_dict, lang);
     g_free (lang);
     if (retval != NULL)
-        if (g_strcmp0 (retval, "Bengali") == 0)
-            /* use common_name "Bangla" if lang is "bn" */
-            return "Bangla";
-        else
-            return retval;
+        return retval;
     else
         return "Other";
 }

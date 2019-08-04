@@ -105,7 +105,7 @@ option. Can choose a language of emoji annotations with
 option. If LANG="en", IBus Emojier loads /usr/share/ibus/dicts/emoji-en.dict .
 .B \-\-partial\-match
 option enables to match annotations with a partial string. These settings
-are avaiable with
+are available with
 .B ibus\-setup (1)
 utility.
 

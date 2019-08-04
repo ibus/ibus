@@ -247,7 +247,7 @@ ibus_observed_path_parse_xml_node (IBusObservedPath *path,
     }
 
     if (node->text[0] == '~' && node->text[1] != G_DIR_SEPARATOR) {
-        g_warning ("invalide path \"%s\"", node->text);
+        g_warning ("invalid path \"%s\"", node->text);
         return FALSE;
     }
 

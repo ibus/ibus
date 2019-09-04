@@ -251,7 +251,11 @@ ibus_write_address (const gchar *address)
     g_return_if_fail (pf != NULL);
 
     fprintf (pf,
-        "# This file is created by ibus-daemon, please do not modify it\n"
+        "# This file is created by ibus-daemon, please do not modify it.\n"
+        "# This file allows processes on the machine to find the\n"
+        "# ibus session bus with the below address.\n"
+        "# If the IBUS_ADDRESS environment variable is set, it will\n"
+        "# be used rather than this file.\n"
         "IBUS_ADDRESS=%s\n"
         "IBUS_DAEMON_PID=%ld\n",
         address, (glong) getpid ());

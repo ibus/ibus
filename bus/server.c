@@ -26,6 +26,9 @@
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <errno.h>
 #include <string.h>
 
 #include "dbusimpl.h"
@@ -45,6 +48,10 @@ _restart_server (void)
 {
     gchar *exe;
     gint fd;
+    ssize_t r;
+    int MAXSIZE = 0xFFF;
+    char proclnk[MAXSIZE];
+    char filename[MAXSIZE];
 
     exe = g_strdup_printf ("/proc/%d/exe", getpid ());
     exe = g_file_read_link (exe, NULL);
@@ -54,7 +61,21 @@ _restart_server (void)
 
     /* close all fds except stdin, stdout, stderr */
     for (fd = 3; fd <= sysconf (_SC_OPEN_MAX); fd ++) {
-        close (fd);
+        errno = 0;
+        /* only close valid fds */
+        if (fcntl(fd, F_GETFD) != -1 || errno != EBADF) {
+            sprintf(proclnk, "/proc/self/fd/%d", fd);
+            r = readlink(proclnk, filename, MAXSIZE);
+            if (r < 0) {
+                continue;
+            }
+            filename[r] = '\0';
+
+            /* Do not close 'anon_inode:inotify' fds, that may crash in glib */
+            if (strcmp(filename, "anon_inode:inotify") != 0) {
+                close (fd);
+            }
+        }
     }
 
     _restart = FALSE;

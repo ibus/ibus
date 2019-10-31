@@ -26,7 +26,7 @@
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 #include <stdlib.h>
-#include <stdio.h>
+#include <glib/gstdio.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
@@ -53,26 +53,25 @@ _restart_server (void)
     char proclnk[MAXSIZE];
     char filename[MAXSIZE];
 
-    exe = g_strdup_printf ("/proc/%d/exe", getpid ());
-    exe = g_file_read_link (exe, NULL);
+    exe = g_file_read_link ("/proc/self/exe", NULL);
 
     if (exe == NULL)
-        exe = BINDIR "/ibus-daemon";
+        exe = g_strdup (BINDIR "/ibus-daemon");
 
     /* close all fds except stdin, stdout, stderr */
     for (fd = 3; fd <= sysconf (_SC_OPEN_MAX); fd ++) {
         errno = 0;
         /* only close valid fds */
-        if (fcntl(fd, F_GETFD) != -1 || errno != EBADF) {
-            sprintf(proclnk, "/proc/self/fd/%d", fd);
-            r = readlink(proclnk, filename, MAXSIZE);
+        if (fcntl (fd, F_GETFD) != -1 || errno != EBADF) {
+            g_sprintf (proclnk, "/proc/self/fd/%d", fd);
+            r = readlink (proclnk, filename, MAXSIZE);
             if (r < 0) {
                 continue;
             }
             filename[r] = '\0';
 
             /* Do not close 'anon_inode:inotify' fds, that may crash in glib */
-            if (strcmp(filename, "anon_inode:inotify") != 0) {
+            if (g_strcmp0 (filename, "anon_inode:inotify") != 0) {
                 close (fd);
             }
         }
@@ -90,6 +89,7 @@ _restart_server (void)
         execv (exe, g_argv);
     }
     g_warning ("execv %s failed!", g_argv[0]);
+    g_free (exe);
     exit (-1);
 }
 

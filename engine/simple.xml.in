@@ -284,6 +284,18 @@
                         <rank>1</rank>
                 </engine>
                 <engine>
+                        <name>xkb:fr:bepo_afnor:fra</name>
+                        <language>fr</language>
+                        <license>GPL</license>
+                        <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+                        <layout>fr</layout>
+                        <layout_variant>bepo_afnor</layout_variant>
+                        <longname>French (Bepo, ergonomic, Dvorak way, AFNOR)</longname>
+                        <description>French (Bepo, ergonomic, Dvorak way, AFNOR)</description>
+                        <icon>ibus-keyboard</icon>
+                        <rank>1</rank>
+                </engine>
+                <engine>
                         <name>xkb:fr:dvorak:fra</name>
                         <language>fr</language>
                         <license>GPL</license>

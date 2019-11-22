@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2019-11-22 21:23+0800\n"
-"PO-Revision-Date: 2019-11-22 21:37+0800\n"
+"PO-Revision-Date: 2019-11-22 21:41+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <chinese-l10n@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -480,7 +480,7 @@ msgstr "iBus 偏好設定"
 
 #: setup/ibus-setup.desktop:4
 msgid "Set IBus Preferences"
-msgstr "設置 iBus 偏好設定"
+msgstr "設定 iBus 偏好設定"
 
 #: setup/keyboardshortcut.py:55
 msgid "Keyboard shortcuts"
@@ -633,7 +633,7 @@ msgstr "<b>鍵盤快捷鍵</b>"
 
 #: setup/setup.ui:374
 msgid "Set the orientation of candidates in lookup table"
-msgstr "設置查詢表單內候選字詞的排列方向"
+msgstr "設定查詢表單內候選字詞的排列方向"
 
 #: setup/setup.ui:376
 msgid "Candidates orientation:"
@@ -641,7 +641,7 @@ msgstr "候選詞排列方向："
 
 #: setup/setup.ui:407
 msgid "Set the behavior of ibus how to show or hide language bar"
-msgstr "設置 iBus 如何顯示或隱藏語言列的行為"
+msgstr "設定 iBus 如何顯示或隱藏語言列的行為"
 
 #: setup/setup.ui:409
 msgid "Show property panel:"
@@ -717,7 +717,7 @@ msgstr "偏好設定(_P)"
 
 #: setup/setup.ui:761
 msgid "Show setup of the selected input method"
-msgstr "顯示選取輸入法的設置"
+msgstr "顯示選取輸入法的設定"
 
 #: setup/setup.ui:812
 msgid ""
@@ -731,11 +731,11 @@ msgstr ""
 #: setup/setup.ui:873
 msgid ""
 "The shortcut keys to enable conversions of emoji annotations or Unicode names"
-msgstr "啟用 Emoji 符號或 Unicode 名稱轉換的快捷鍵"
+msgstr "啟用繪文字符號或 Unicode 名稱轉換的快捷鍵"
 
 #: setup/setup.ui:875
 msgid "Emoji annotation:"
-msgstr "Emoji 符號："
+msgstr "繪文字符號："
 
 #: setup/setup.ui:927
 msgid "The shortcut keys to enable Unicode code point conversions"
@@ -747,7 +747,7 @@ msgstr "Unicode 碼位："
 
 #: setup/setup.ui:1013
 msgid "Set a font of Unicode candidates on the emoji dialog"
-msgstr "設定 Emoji 對話框上的 Unicode 候選字型"
+msgstr "設定繪文字對話框上的 Unicode 候選字型"
 
 #: setup/setup.ui:1015
 msgid "Unicode font:"
@@ -3187,8 +3187,8 @@ msgid ""
 "application. E.g. Press Esc key several times to release the emoji typing "
 "mode, click your desktop and click your text application again."
 msgstr ""
-"無法取得目前的文字應用程式，請重新取回您應用程式的焦點。例如按幾次 Esc 退出 "
-"Emoji 輸入模式後，按一下桌面再重按您的文字應用程式一次。"
+"無法取得目前的文字應用程式，請重新取回您應用程式的焦點。例如按幾次 Esc 退出"
+"繪文字輸入模式後，按一下桌面再重按您的文字應用程式一次。"
 
 #: ui/gtk3/emojierapp.vala:47
 msgid "Canceled to choose an emoji."

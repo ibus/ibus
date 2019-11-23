@@ -564,7 +564,7 @@ class Indicator : IBus.Service
      * unregister_connection:
      *
      * "Destroy" dbus method is not called for the indicator's connection
-     * when panel's connection is disconneted because the dbus connection
+     * when panel's connection is disconnected because the dbus connection
      * is a shared session bus so need to call
      * g_dbus_connection_unregister_object() by manual here
      * so that g_object_unref(m_panel) will be called later with an idle method,

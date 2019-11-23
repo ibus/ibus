@@ -24,7 +24,7 @@ import cgi
 import urllib2
 from xml.dom import minidom
 
-def simplfy_dom(node):
+def simplify_dom(node):
     name = node.nodeName
     children = {}
     if len(node.childNodes) == 1 and node.childNodes[0].nodeType == node.TEXT_NODE:
@@ -32,7 +32,7 @@ def simplfy_dom(node):
     for child in node.childNodes:
         if child.nodeType != node.ELEMENT_NODE:
             continue
-        child_name, child_value = simplfy_dom(child)
+        child_name, child_value = simplify_dom(child)
         if child_name not in children:
             children[child_name] = []
         children[child_name].append(child_value)
@@ -41,7 +41,7 @@ def simplfy_dom(node):
 def parse_xml():
     filename = "/usr/share/X11/xkb/rules/evdev.xml"
     dom = minidom.parse(file(filename))
-    name, root = simplfy_dom(dom)
+    name, root = simplify_dom(dom)
 
     layouts = root['xkbConfigRegistry'][0]['layoutList'][0]['layout']
     for layout in layouts:

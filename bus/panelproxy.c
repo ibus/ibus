@@ -747,7 +747,7 @@ _context_update_preedit_text_cb (BusInputContext *context,
      * the callback is not called for extensions and panel
      * extensions are always calls by
      * bus_panel_proxy_update_preedit_text() directly
-     * because panel extensions foward UpdatePreeditText to
+     * because panel extensions forward UpdatePreeditText to
      * UpdatePreeditTextReceived and it can be an infinite
      * loop.
      */
@@ -870,7 +870,7 @@ _context_set_content_type_cb (BusInputContext *context,
          * the callback is not called for extensions and panel  \
          * extensions are always calls by                       \
          * bus_panel_proxy_update_preedit_text() directly       \
-         * because panel extensions foward UpdatePreeditText to \
+         * because panel extensions forward UpdatePreeditText to \
          * UpdatePreeditTextReceived and it can be an infinite  \
          * loop.                                                \
          */                                                     \

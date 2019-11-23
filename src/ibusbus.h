@@ -493,7 +493,7 @@ gchar       *ibus_bus_get_name_owner_async_finish
  *
  * Exit or restart ibus-daemon synchronously.
  *
- * Returns: %TRUE if the "Exit" call is suceeded, %FALSE otherwise.
+ * Returns: %TRUE if the "Exit" call is successful, %FALSE otherwise.
  */
 gboolean     ibus_bus_exit              (IBusBus        *bus,
                                          gboolean        restart);
@@ -527,7 +527,7 @@ void        ibus_bus_exit_async         (IBusBus        *bus,
  *
  * Finishes an operation started with ibus_bus_exit_async().
  *
- * Returns: %TRUE if the "Exit" call is suceeded, %FALSE otherwise.
+ * Returns: %TRUE if the "Exit" call is successful, %FALSE otherwise.
  */
 gboolean    ibus_bus_exit_async_finish  (IBusBus        *bus,
                                          GAsyncResult   *res,
@@ -537,11 +537,11 @@ gboolean    ibus_bus_exit_async_finish  (IBusBus        *bus,
  * ibus_bus_create_input_context:
  * @bus: An #IBusBus.
  * @client_name: Name of client.
- *      "CreateInputContext" call is suceeded, %NULL otherwise.
  *
  * Create an input context for client synchronously.
  *
- * Returns: (transfer full): An newly allocated #IBusInputContext if the
+ * Returns: (transfer full): A newly allocated #IBusInputContext if the
+ *      "CreateInputContext" call is succeeded, %NULL otherwise.
  */
 IBusInputContext *
             ibus_bus_create_input_context
@@ -578,8 +578,8 @@ void        ibus_bus_create_input_context_async
  *
  * Finishes an operation started with ibus_bus_create_input_context_async().
  *
- * Returns: (transfer full): An newly allocated #IBusInputContext if the
- *      "CreateInputContext" call is suceeded, %NULL otherwise.
+ * Returns: (transfer full): A newly allocated #IBusInputContext if the
+ *      "CreateInputContext" call is succeeded, %NULL otherwise.
  */
 IBusInputContext *
              ibus_bus_create_input_context_async_finish
@@ -593,8 +593,8 @@ IBusInputContext *
  *
  * Get the current focused input context synchronously.
  *
- * Returns: The named of currently focued #IBusInputContext if the
- *          "CurrentInputContext" call suceeded, %NULL otherwise. The return
+ * Returns: Name of the currently focused #IBusInputContext if the
+ *          "CurrentInputContext" call succeeded, %NULL otherwise. The return
  *          value must be freed with g_free().
  */
 gchar       *ibus_bus_current_input_context
@@ -628,8 +628,8 @@ void         ibus_bus_current_input_context_async
  *
  * Finishes an operation started with ibus_bus_current_input_context_async().
  *
- * Returns: The named of currently focued IBusInputContext if the
- *          "CurrentInputContext" call suceeded, %NULL otherwise. The return
+ * Returns: Name of the currently focused IBusInputContext if the
+ *          "CurrentInputContext" call succeeded, %NULL otherwise. The return
  *          value must be freed with g_free().
  */
 gchar       *ibus_bus_current_input_context_async_finish
@@ -642,9 +642,9 @@ gchar       *ibus_bus_current_input_context_async_finish
  * @bus: An #IBusBus.
  * @component: A input engine component.
  *
- * Register a componet to an #IBusBus synchronously.
+ * Register a component to an #IBusBus synchronously.
  *
- * Returns: %TRUE if the "RegisterComponent" call is suceeded, %FALSE otherwise.
+ * Returns: %TRUE if the "RegisterComponent" call is successful, %FALSE otherwise.
  */
 gboolean     ibus_bus_register_component
                                         (IBusBus        *bus,
@@ -660,7 +660,7 @@ gboolean     ibus_bus_register_component
  *      or %NULL if you don't care about the result of the method invocation.
  * @user_data: The data to pass to callback.
  *
- * Register a componet to an #IBusBus asynchronously.
+ * Register a component to an #IBusBus asynchronously.
  */
 void         ibus_bus_register_component_async
                                         (IBusBus        *bus,
@@ -680,7 +680,7 @@ void         ibus_bus_register_component_async
  *
  * Finishes an operation started with ibus_bus_register_component_async().
  *
- * Returns: %TRUE if the "RegisterComponent" call is suceeded, %FALSE otherwise.
+ * Returns: %TRUE if the "RegisterComponent" call is successful, %FALSE otherwise.
  */
 gboolean     ibus_bus_register_component_async_finish
                                         (IBusBus        *bus,

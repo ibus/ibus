@@ -4,7 +4,7 @@ valac --pkg gtk+-2.0 --pkg x11 --pkg gdk-x11-2.0 --pkg gee-1.0 keybinding-manage
 
 /**
  * This class is in charge to grab keybindings on the X11 display
- * and filter X11-events and passing on such events to the registed
+ * and filter X11-events and passing on such events to the registered
  * handler methods.
  *
  * @author Oliver Sauder <os@esite.ch>

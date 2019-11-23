@@ -927,7 +927,7 @@ _create_input_context_async_step_one_done (GDBusConnection *connection,
 
     if (g_dbus_connection_is_closed (connection)) {
         /*
-         * The connection is closed, can not contine next steps, so complete
+         * The connection is closed, can not continue next steps, so complete
          * the asynchronous request with error.
          */
         g_variant_unref(variant);

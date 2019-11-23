@@ -181,9 +181,9 @@ void          ibus_emojier_set_partial_match      (gboolean  has_partial_match);
 
 /**
  * ibus_emojier_set_partial_match_length:
- * @length: minimum lenght to match partially.
+ * @length: minimum length to match partially.
  *
- * Set the minimum lenght to match partially.
+ * Set the minimum length to match partially.
  */
 void          ibus_emojier_set_partial_match_length
                                                   (gint         length);

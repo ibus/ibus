@@ -2543,7 +2543,7 @@ new_engine_cb (GObject             *obj,
     }
     else {
         if (data->context->data != data) {
-            /* Request has been overriden or cancelled */
+            /* Request has been overridden or cancelled */
             g_object_unref (engine);
             g_task_return_new_error (data->task,
                                      G_IO_ERROR,

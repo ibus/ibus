@@ -237,7 +237,7 @@ void         ibus_engine_update_preedit_text
  * the behavior on focus out when the pre-edit buffer is visible.
  *
  * If @mode is IBUS_ENGINE_PREEDIT_COMMIT, contents of the pre-edit buffer
- * will be comitted and cleared.
+ * will be committed and cleared.
  * If @mode is IBUS_ENGINE_PREEDIT_CLEAR, contents of the pre-edit buffer
  * will be cleared only.
  *

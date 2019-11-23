@@ -371,7 +371,7 @@ void             ibus_property_set_sub_props(IBusProperty   *prop,
  * #IBusProperty @prop_update can either be sub-property of @prop,
  * or holds new values for @prop.
  *
- * Returns: TRUE for update suceeded; FALSE otherwise.
+ * Returns: TRUE if update succeeded; FALSE otherwise.
  */
 
 gboolean         ibus_property_update       (IBusProperty   *prop,

@@ -2126,7 +2126,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
     public string get_current_candidate() {
         // If category_list mode, do not show the category name on preedit.
         // If candidate_panel mode, the first space key does not show the
-        // lookup table but the first candidate is avaiable on preedit.
+        // lookup table but the first candidate is available on preedit.
         if (!m_candidate_panel_mode)
             return "";
         uint cursor = m_lookup_table.get_cursor_pos();

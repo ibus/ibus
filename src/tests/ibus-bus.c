@@ -245,7 +245,7 @@ start_remove_match_async (void)
 
 static int create_input_context_count = 0;
 static void
-finish_create_input_context_async_sucess (GObject      *source_object,
+finish_create_input_context_async_success (GObject      *source_object,
                                           GAsyncResult *res,
                                           gpointer      user_data)
 {
@@ -290,7 +290,7 @@ test_create_input_context_async (void)
             "test-async",
             -1, /* timeout */
             NULL, /* cancellable */
-            finish_create_input_context_async_sucess,
+            finish_create_input_context_async_success,
             loop); /* user_data */
     g_main_loop_run (loop);
     g_main_loop_unref (loop);
@@ -324,13 +324,13 @@ test_create_input_context_async (void)
             "test-async",
             -1, /* timeout */
             NULL, /* cancellable */
-            finish_create_input_context_async_sucess,
+            finish_create_input_context_async_success,
             loop); /* user_data */
     ibus_bus_create_input_context_async (bus,
             "test-async",
             -1, /* timeout */
             NULL, /* cancellable */
-            finish_create_input_context_async_sucess,
+            finish_create_input_context_async_success,
             loop); /* user_data */
     ibus_bus_create_input_context_async (bus,
             "test-async",

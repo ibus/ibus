@@ -7,3 +7,6 @@ Terminal=false
 Type=Application
 StartupNotify=true
 Categories=Settings;
+# GNOME uses its own "input source" settings instead
+NotShowIn=GNOME;Unity;
+Keywords=keyboard;input;

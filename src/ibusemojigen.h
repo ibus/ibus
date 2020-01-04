@@ -34,7 +34,7 @@ const static char *unicode_emoji_categories[] = {
     N_("Food & Drink"),
     N_("Objects"),
     N_("People & Body"),
-    N_("Smileys & Emotion"),
+    N_("Smileys & Emoticon"),
     N_("Symbols"),
     N_("Travel & Places"),
 };

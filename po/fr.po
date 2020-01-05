@@ -10,25 +10,25 @@
 # Sam Friedmann <sam.friedmann@redhat.com>, 2010
 # Julien Humbert <julroy67@gmail.com>, 2009-2015, 2020.
 # fujiwara <takao.fujiwara1@gmail.com>, 2015. #zanata
-# Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2016. #zanata
+# Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2016. #zanata, 2020.
 # José Fournier <jaaf64@zoraldia.com>, 2016. #zanata
 # Edouard Duliege <edouard.duliege@gmail.com>, 2017. #zanata
 # Emmanuel Nedelec <nednet@wanadoo.fr>, 2017. #zanata
-# Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2017. #zanata
+# Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2017. #zanata, 2020.
 # José Fournier <jaaf64@zoraldia.com>, 2017. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2017. #zanata
-# Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2018. #zanata
+# Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2018. #zanata, 2020.
 # elmerys <contact@zle.fr>, 2018. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
-# Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2019. #zanata
+# Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2019. #zanata, 2020.
 # fujiwara <takao.fujiwara1@gmail.com>, 2019. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2019-04-16 17:33+0900\n"
-"PO-Revision-Date: 2020-01-01 12:23+0000\n"
-"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
+"PO-Revision-Date: 2020-01-03 13:37+0000\n"
+"Last-Translator: Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>\n"
 "Language-Team: French <https://translate.stg.fedoraproject.org/projects/ibus/"
 "ibus/fr/>\n"
 "Language: fr\n"
@@ -732,7 +732,7 @@ msgstr "<b>Police et Style</b>"
 
 #: setup/setup.ui:579
 msgid "General"
-msgstr "Général"
+msgstr "Paramètres généraux"
 
 #: setup/setup.ui:671
 msgid "Add the selected input method into the enabled input methods"

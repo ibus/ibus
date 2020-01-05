@@ -2,32 +2,32 @@
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
 # Copyright (C) 2015-2019 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # This file is distributed under the same license as the ibus package.
-#
 # Translators:
-# Piotr Drąg <piotrdrag@gmail.com>, 2011-2014
-# Piotr Drąg <piotrdrag@gmail.com>, 2015. #zanata
+# Piotr Drąg <piotrdrag@gmail.com>, 2011-2014, 2020.
+# Piotr Drąg <piotrdrag@gmail.com>, 2015. #zanata, 2020.
 # fujiwara <takao.fujiwara1@gmail.com>, 2015. #zanata
-# Piotr Drąg <piotrdrag@gmail.com>, 2016. #zanata
-# Piotr Drąg <piotrdrag@gmail.com>, 2017. #zanata
+# Piotr Drąg <piotrdrag@gmail.com>, 2016. #zanata, 2020.
+# Piotr Drąg <piotrdrag@gmail.com>, 2017. #zanata, 2020.
 # fujiwara <takao.fujiwara1@gmail.com>, 2017. #zanata
-# Piotr Drąg <piotrdrag@gmail.com>, 2018. #zanata
+# Piotr Drąg <piotrdrag@gmail.com>, 2018. #zanata, 2020.
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
-# Piotr Drąg <piotrdrag@gmail.com>, 2019. #zanata
+# Piotr Drąg <piotrdrag@gmail.com>, 2019. #zanata, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2019-04-16 17:33+0900\n"
+"PO-Revision-Date: 2020-01-03 17:09+0000\n"
+"Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
+"Language-Team: Polish <https://translate.stg.fedoraproject.org/projects/ibus/"
+"ibus/pl/>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-04-18 05:34+0000\n"
-"Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
-"Language-Team: Polish <trans-pl@lists.fedoraproject.org>\n"
-"Language: pl\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Zanata 4.6.2\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.9.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3285,7 +3285,7 @@ msgstr ""
 
 #: ui/gtk3/panel.vala:1099
 msgid "translator-credits"
-msgstr "Piotr Drąg <piotrdrag@gmail.com>, 2009-2018"
+msgstr "Piotr Drąg <piotrdrag@gmail.com>, 2009-2020"
 
 #: ui/gtk3/panel.vala:1118
 msgid "Preferences"

@@ -2,7 +2,6 @@
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
 # Copyright (C) 2015-2019 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # This file is distributed under the same license as the ibus package.
-#
 # Translators:
 # kelemeng <kelemeng@gnome.hu>, 2011
 # kelemeng <kelemeng@gnome.hu>, 2011
@@ -11,20 +10,22 @@
 # Meskó Balázs <meskobalazs@gmail.com>, 2017. #zanata
 # Meskó Balázs <meskobalazs@gmail.com>, 2018. #zanata
 # Meskó Balázs <meskobalazs@gmail.com>, 2019. #zanata
+# Balázs Meskó <meskobalazs@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2019-04-16 17:33+0900\n"
+"PO-Revision-Date: 2020-01-05 18:49+0000\n"
+"Last-Translator: Balázs Meskó <meskobalazs@gmail.com>\n"
+"Language-Team: Hungarian <https://translate.stg.fedoraproject.org/projects/"
+"ibus/ibus/hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-04-27 11:04+0000\n"
-"Last-Translator: Meskó Balázs <meskobalazs@gmail.com>\n"
-"Language-Team: Hungarian <trans-hu@lists.fedoraproject.org>\n"
-"Language: hu\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Zanata 4.6.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.9.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -342,7 +343,7 @@ msgid ""
 "You can show the favorite emojis on emoji list if this list has any "
 "characters."
 msgstr ""
-"Megjelenítheti a kedvenc emodzsijait a listában, ha vannak ilyen karakterek"
+"Megjelenítheti a kedvenc emodzsijait a listában, ha vannak ilyen karakterek."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:198
 msgid "favorite emoji annotation list on emoji dialog"
@@ -362,7 +363,7 @@ msgid ""
 "the exact match or not."
 msgstr ""
 "Illeszthetőek-e részleges karakterláncokra az emodzsi annotációk, a pontos "
-"egyezés helyett"
+"egyezés helyett."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:208
 msgid "Match emoji annotations with the specified length"
@@ -374,7 +375,7 @@ msgid ""
 "characters instead of the exact match."
 msgstr ""
 "Az emodzsi annotációk részleges illesztése, a pontos egyezés helyett, ha "
-"több mint ennyi karakter lett megadva"
+"több mint ennyi karakter lett megadva."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:213
 msgid "Choose a condition to match emoji annotations partially"
@@ -438,7 +439,7 @@ msgstr "Válasszon nyelvet"
 #: setup/emojilang.py:70 setup/enginedialog.py:60 setup/keyboardshortcut.py:339
 #: setup/main.py:560
 msgid "_Cancel"
-msgstr "Mé_gse"
+msgstr "_Mégse"
 
 #: setup/emojilang.py:71 setup/keyboardshortcut.py:340 setup/main.py:561
 msgid "_OK"
@@ -533,7 +534,7 @@ msgstr ""
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
-msgstr "Nyomjon meg egy billentyűt (vagy billentyűkombinációt)."
+msgstr "Nyomjon meg egy billentyűt (vagy billentyűkombinációt)"
 
 #: setup/main.py:121 setup/main.py:588
 msgid "Use shortcut with shift to switch to the previous input method"
@@ -563,7 +564,7 @@ msgstr ""
 #: setup/main.py:550
 #, python-format
 msgid "IBus daemon could not be started in %d seconds"
-msgstr "Az IBus démon nem indítható el %d másodpercen belül."
+msgstr "Az IBus démon nem indítható el %d másodpercen belül"
 
 #: setup/main.py:562
 #, python-format
@@ -1031,7 +1032,7 @@ msgstr "NKo"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:101
 msgid "Samaritan"
-msgstr "Szamaritánus "
+msgstr "Szamaritánus"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2522,7 +2523,7 @@ msgstr "Zanabazar-féle négyzet"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:953
 msgid "Soyombo"
-msgstr "Soyombo"
+msgstr "Szojombo"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2704,7 +2705,7 @@ msgstr "Kis kana bővítés"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1057
 msgid "Nushu"
-msgstr "Nushu"
+msgstr "Nü-su"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3114,7 +3115,7 @@ msgstr "A beállítási értékek visszaállítása"
 
 #: tools/main.vala:456
 msgid "Save emoji on dialog to clipboard "
-msgstr "A párbeszédablakon lévő emodzsi vágólapra mentése"
+msgstr "A párbeszédablakon lévő emodzsi vágólapra mentése "
 
 #: tools/main.vala:458
 msgid "Show this information"
@@ -3174,7 +3175,7 @@ msgstr "Menü"
 
 #: ui/gtk3/emojier.vala:1128
 msgid "Click to view a warning message"
-msgstr "Kattintson a figyelmeztető üzenet megtekintéséhez."
+msgstr "Kattintson a figyelmeztető üzenet megtekintéséhez"
 
 #: ui/gtk3/emojier.vala:1172
 msgid "Loading a Unicode dictionary:"

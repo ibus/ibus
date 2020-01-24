@@ -331,8 +331,9 @@ ibus_keyval_convert_case (guint symbol,
         xupper -= (IBUS_KEY_Greek_alphaaccent - IBUS_KEY_Greek_ALPHAaccent);
       else if (symbol >= IBUS_KEY_Greek_ALPHA && symbol <= IBUS_KEY_Greek_OMEGA)
         xlower += (IBUS_KEY_Greek_alpha - IBUS_KEY_Greek_ALPHA);
-      else if (symbol >= IBUS_KEY_Greek_alpha && symbol <= IBUS_KEY_Greek_omega &&
-               symbol != IBUS_KEY_Greek_finalsmallsigma)
+      else if (symbol == IBUS_KEY_Greek_finalsmallsigma)
+        xupper = IBUS_KEY_Greek_SIGMA;
+      else if (symbol >= IBUS_KEY_Greek_alpha && symbol <= IBUS_KEY_Greek_omega)
         xupper -= (IBUS_KEY_Greek_alpha - IBUS_KEY_Greek_ALPHA);
       break;
     }

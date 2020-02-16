@@ -2,23 +2,25 @@
 # Persian translation of ibus.
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
 # This file is distributed under the same license as the ibus package.
-#
 # Translators:
 # Daniyal Yousefi <da.yousefi@gmail.com>, 2011
 # Mostafa Daneshvar <lashar@fedoraproject.org>, 2011
+# Ahmad Haghighi <haghighi.ahmad@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2014-02-18 13:46+0900\n"
-"PO-Revision-Date: 2014-02-18 05:46+0000\n"
-"Last-Translator: danialyousefi <da.yousefi@gmail.com>\n"
-"Language-Team: Persian <trans-fa@lists.fedoraproject.org>\n"
+"PO-Revision-Date: 2020-01-08 03:55+0000\n"
+"Last-Translator: Ahmad Haghighi <haghighi.ahmad@gmail.com>\n"
+"Language-Team: Persian <https://translate.stg.fedoraproject.org/projects/"
+"ibus/ibus/fa/>\n"
+"Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fa\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 3.9.1\n"
 
 #: ../setup/setup.ui.h:1
 msgid "Horizontal"
@@ -50,7 +52,7 @@ msgstr "انتخابی"
 
 #: ../setup/setup.ui.h:8
 msgid "Do not show"
-msgstr ""
+msgstr "نمایش نده"
 
 #: ../setup/setup.ui.h:9
 msgid "Hide automatically"

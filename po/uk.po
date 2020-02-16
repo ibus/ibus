@@ -2,7 +2,6 @@
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
 # Copyright (C) 2015-2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # This file is distributed under the same license as the ibus package.
-#
 # Translators:
 # Yuri Chornoivan <yurchor@ukr.net>, 2011-2014, 2020.
 # Yuri Chornoivan <yurchor@ukr.net>, 2013, 2020.
@@ -17,7 +16,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2020-01-05 18:49+0000\n"
+"PO-Revision-Date: 2020-01-08 10:24+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.stg.fedoraproject.org/projects/"
 "ibus/ibus/uk/>\n"
@@ -25,8 +24,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
+"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 3.9.1\n"
 
 #. Translators: Here “Preload” is a verb
@@ -715,7 +714,7 @@ msgstr ""
 
 #: setup/setup.ui:682
 msgid "_Remove"
-msgstr "В_илучити"
+msgstr "Ви_лучити"
 
 #: setup/setup.ui:689
 msgid "Remove the selected input method from the enabled input methods"

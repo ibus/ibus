@@ -2,7 +2,7 @@
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
 # Copyright (C) 2015-2017 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # This file is distributed under the same license as the ibus package.
-#
+# 
 # Translators:
 # fvalen <fvalen@redhat.com>, 2012-2013
 # fvalen <fvalen@redhat.com>, 2013
@@ -16,7 +16,7 @@
 # Alessio Ciregia <alciregi@gmail.com>, 2017. #zanata
 # Andrea Masala <andrea.masala87@gmail.com>, 2017. #zanata
 # Luca Ciavatta <luca.ciavatta@gmail.com>, 2017. #zanata
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2017. #zanata
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2017. #zanata, 2020.
 # fujiwara <takao.fujiwara1@gmail.com>, 2017. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
 msgid ""
@@ -24,15 +24,16 @@ msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2018-02-20 04:22-0500\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: <it@li.org>\n"
+"PO-Revision-Date: 2020-02-16 14:38+0000\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/ibus/"
+"ibus/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Zanata 3.9.6\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -329,10 +330,8 @@ msgid "Custom font name for language panel"
 msgstr "Nome del tipo di carattere personalizzato per il pannello della lingua"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:173
-#, fuzzy
-#| msgid "Trigger shortcut keys for gtk_accelerator_parse"
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
-msgstr "Attiva i tasti scorciatoia per gtk_accelerator_parse"
+msgstr "Tasti scorciatoia Unicode per gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:174
 #, fuzzy
@@ -794,9 +793,8 @@ msgstr ""
 "Emoji"
 
 #: setup/setup.ui:875
-#, fuzzy
 msgid "Emoji annotation:"
-msgstr "Lingua di annotazione emoji:"
+msgstr "Annotazione emoji:"
 
 #: setup/setup.ui:927
 #, fuzzy
@@ -816,10 +814,8 @@ msgid "Set a font of Unicode candidates on the emoji dialog"
 msgstr "Impostare un font di candidati emoji nella finestra di emoji"
 
 #: setup/setup.ui:1015
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Unicode font:"
-msgstr "Usare carattere personalizzato:"
+msgstr "Carattere Unicode:"
 
 #: setup/setup.ui:1038
 #, fuzzy
@@ -856,8 +852,9 @@ msgid "Containing match"
 msgstr ""
 
 #: setup/setup.ui:1176
+#, fuzzy
 msgid "Emoji"
-msgstr ""
+msgstr "Emoji"
 
 #: setup/setup.ui:1230
 msgid "<b>Keyboard Layout</b>"

@@ -22,14 +22,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2019-10-24 19:18+0900\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-01-08 12:40+0900\n"
 "PO-Revision-Date: 2019-10-24 10:31+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Zanata 4.6.2\n"
 
@@ -57,12 +57,13 @@ msgstr "IME 스위치 창의 팝업 밀리초 단위의 지연"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
 msgid ""
-"Set popup delay milliseconds to show IME switcher window. The default is 400."
-" 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not show "
-"the window and switch prev/next engines."
+"Set popup delay milliseconds to show IME switcher window. The default is "
+"400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
+"show the window and switch prev/next engines."
 msgstr ""
-"IME 스위치 창을 표시할 때 밀리초 단위의 지연을 지정합니다. 기본값은 400입니다. 0 = 창을 즉시 표시합니다. 0보다 크면 밀리초 "
-"단위로 지연합니다. 0보다 작으면 창을 표시하지 않고 이전/다음 엔진으로 전환합니다."
+"IME 스위치 창을 표시할 때 밀리초 단위의 지연을 지정합니다. 기본값은 400입니"
+"다. 0 = 창을 즉시 표시합니다. 0보다 크면 밀리초 단위로 지연합니다. 0보다 작으"
+"면 창을 표시하지 않고 이전/다음 엔진으로 전환합니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"
@@ -72,7 +73,9 @@ msgstr "저장된 버전 번호"
 msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
-msgstr "저장된 버전 번호는 이전에 설치된 Ibus 입력기와의 다른점을 비교하는 데 사용됩니다."
+msgstr ""
+"저장된 버전 번호는 이전에 설치된 Ibus 입력기와의 다른점을 비교하는 데 사용됩"
+"니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:32
 msgid "Latin layouts which have no ASCII"
@@ -80,7 +83,9 @@ msgstr "ASCII가 없는 라틴어 레이아웃"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:33
 msgid "US layout is appended to the Latin layouts. variant can be omitted."
-msgstr "US 레이아웃이 라틴어 레인아웃에 추가되었습니다. 변형된 것은 생략될 수 있습니다."
+msgstr ""
+"US 레이아웃이 라틴어 레인아웃에 추가되었습니다. 변형된 것은 생략될 수 있습니"
+"다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:37
 msgid "Use xmodmap"
@@ -89,7 +94,8 @@ msgstr "xmodmap 사용"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:38
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
-msgstr "ibus 엔진을 전환할 때 .xmodmap 또는 .Xmodmap이 있으면 xmodmap 실행합니다."
+msgstr ""
+"ibus 엔진을 전환할 때 .xmodmap 또는 .Xmodmap이 있으면 xmodmap 실행합니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:42 setup/setup.ui:1208
 msgid "Use system keyboard layout"
@@ -203,7 +209,9 @@ msgstr "패널을 항상 표시할 경우 입력 커서를 따라감"
 msgid ""
 "If true, the panel follows the input cursor in case the panel is always "
 "shown. If false, the panel is shown at a fixed location."
-msgstr "참이면, 패널을 항상 표시할 때 패널이 입력 커서를 따라갑니다. 거짓이면, 고정된 위치에서 패널이 나타납니다."
+msgstr ""
+"참이면, 패널을 항상 표시할 때 패널이 입력 커서를 따라갑니다. 거짓이면, 고정"
+"된 위치에서 패널이 나타납니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:130
 msgid "The milliseconds to show property panel"
@@ -213,7 +221,9 @@ msgstr "속성 패널을 표시할 밀리세컨드 단위 시간"
 msgid ""
 "The milliseconds to show property panel after focus-in or properties are "
 "changed."
-msgstr "포커스 인 상태 또는 속성 값을 바꾸었을 경우 속성 패널을 표시할 밀리세컨드 단위 시간입니다."
+msgstr ""
+"포커스 인 상태 또는 속성 값을 바꾸었을 경우 속성 패널을 표시할 밀리세컨드 단"
+"위 시간입니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:135
 msgid "Orientation of lookup table"
@@ -246,15 +256,17 @@ msgid ""
 "XKB icon shows the layout string and the string is rendered with the RGBA "
 "value. The RGBA value can be 1. a color name from X11, 2. a hex value in "
 "form '#rrggbb' where 'r', 'g' and 'b' are hex digits of the red, green, and "
-"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form "
-"'rgba(r,g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 "
-"to 255 or percentage values in the range 0% to 100%, and 'a' is a floating "
-"point value in the range 0 to 1 of the alpha."
+"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form 'rgba(r,"
+"g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 to 255 or "
+"percentage values in the range 0% to 100%, and 'a' is a floating point value "
+"in the range 0 to 1 of the alpha."
 msgstr ""
-"XKB 아이콘은 배치 문자열을 보여주며 RGBA 값을 통해 표현합니다. RGBA 값은 1. X11의 색상 이름, 2. 'r' 'g' "
-"'b' 자리에 적, 녹, 청의 16진수 값이 들어가는 '#rrggbb' 형식의 16진수 값이며, 3. 'r', 'g', 'b' 자리에 "
-"0부터 255까지의 값 또는 0%부터 100%까지의 백분율 값이 들어가는 'rgb(r,g,b)' 형식의 RGB 색상 값 또는, 4. "
-"여기에  'a'는 0부터 1까지의 실수 알파 값이 들어가는 'rgba(r,g,b,a)' 값이 될 수 있습니다."
+"XKB 아이콘은 배치 문자열을 보여주며 RGBA 값을 통해 표현합니다. RGBA 값은 1. "
+"X11의 색상 이름, 2. 'r' 'g' 'b' 자리에 적, 녹, 청의 16진수 값이 들어가는 "
+"'#rrggbb' 형식의 16진수 값이며, 3. 'r', 'g', 'b' 자리에 0부터 255까지의 값 또"
+"는 0%부터 100%까지의 백분율 값이 들어가는 'rgb(r,g,b)' 형식의 RGB 색상 값 또"
+"는, 4. 여기에  'a'는 0부터 1까지의 실수 알파 값이 들어가는 'rgba(r,g,b,a)' 값"
+"이 될 수 있습니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:155
 msgid "The milliseconds to show the panel icon for a property"
@@ -267,8 +279,9 @@ msgid ""
 "of icon-prop-key in IBusEngineDesc. If the value is 0, no delay time and the "
 "property icon is shown immediately."
 msgstr ""
-"엔진을 전환할 때 IBusEngineDesc에서 icon-prop-key 값을 통해 속성이 지정되었을 때, 패널 아이콘을 엔진 아이콘에서 "
-"속성 아이콘으로 표시하는 시간 (밀리초 단위). 이 값이 0이면 지연 시간이 없고 속성 아이콘을 즉시 표시합니다."
+"엔진을 전환할 때 IBusEngineDesc에서 icon-prop-key 값을 통해 속성이 지정되었"
+"을 때, 패널 아이콘을 엔진 아이콘에서 속성 아이콘으로 표시하는 시간 (밀리초 단"
+"위). 이 값이 0이면 지연 시간이 없고 속성 아이콘을 즉시 표시합니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:160
 msgid "Use custom font"
@@ -316,8 +329,8 @@ msgid ""
 "Choose a default language of emoji dictionaries on the emoji dialog. The "
 "value $lang is applied to /usr/share/ibus/dicts/emoji-$lang.dict"
 msgstr ""
-"에모지 대화창의 에모지 사전의 기본 언어를 선택합니다. $lang 값이면 /usr/share/ibus/dicts/emoji-$lang."
-"dict 사전을 사용합니다."
+"에모지 대화창의 에모지 사전의 기본 언어를 선택합니다. $lang 값이면 /usr/"
+"share/ibus/dicts/emoji-$lang.dict 사전을 사용합니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:193
 msgid "favorite emoji list on emoji dialog"
@@ -327,7 +340,9 @@ msgstr "에모지 대화 창의 자주 사용하는 에모지 목록"
 msgid ""
 "You can show the favorite emojis on emoji list if this list has any "
 "characters."
-msgstr "이 목록에 문자가 들어 있으면 에모지 목록에서 자주 사용하는 에모지를 표시합니다."
+msgstr ""
+"이 목록에 문자가 들어 있으면 에모지 목록에서 자주 사용하는 에모지를 표시합니"
+"다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:198
 msgid "favorite emoji annotation list on emoji dialog"
@@ -345,7 +360,9 @@ msgstr "에모지 주석을 일부분 일치할지 여부"
 msgid ""
 "Whether emoji annotations can be matched with a partial string instead of "
 "the exact match or not."
-msgstr "에모지 주석 전체가 일치할 경우가 아니더라도 문자열 일부분만 일치해도 찾을지 여부."
+msgstr ""
+"에모지 주석 전체가 일치할 경우가 아니더라도 문자열 일부분만 일치해도 찾을지 "
+"여부."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:208
 msgid "Match emoji annotations with the specified length"
@@ -355,7 +372,9 @@ msgstr "지정한 길이의 에모지 주석 일치"
 msgid ""
 "Match emoji annotations partially with more than the specified number of "
 "characters instead of the exact match."
-msgstr "에모지 주석 전체가 일치할 경우가 아니더라도 지정한 개수의 문자보다 많이 일치하면 찾습니다."
+msgstr ""
+"에모지 주석 전체가 일치할 경우가 아니더라도 지정한 개수의 문자보다 많이 일치"
+"하면 찾습니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:213
 msgid "Choose a condition to match emoji annotations partially"
@@ -365,7 +384,9 @@ msgstr "에모지 주석을 부분 일치하는 조건 선택"
 msgid ""
 "Choose one of the following conditions to match emoji annotations partially: "
 "0 == Prefix match, 1 == Suffix match, 2 == Containing match"
-msgstr "에모지 주석을 부분 일치하는 다음 조건 중의 하나를 고르십시오: 0 = 시작 일치, 1 == 끝 일치, 2 == 포함 일치"
+msgstr ""
+"에모지 주석을 부분 일치하는 다음 조건 중의 하나를 고르십시오: 0 = 시작 일치, "
+"1 == 끝 일치, 2 == 포함 일치"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
 msgid "Load the emoji data at the time of startup"
@@ -377,8 +398,9 @@ msgid ""
 "needed to load the data. Load the emoji data when open the emoji dialog at "
 "the beginning if false."
 msgstr ""
-"참이면 시작할 때 에모지 데이터를 읽어들입니다. 이 데이터를 읽어들이려면 약 10MB의 메모리가 필요합니다. 거짓이면 에모지 대화창을 "
-"처음 열 때 에모지 데이터를 읽어들입니다."
+"참이면 시작할 때 에모지 데이터를 읽어들입니다. 이 데이터를 읽어들이려면 약 "
+"10MB의 메모리가 필요합니다. 거짓이면 에모지 대화창을 처음 열 때 에모지 데이터"
+"를 읽어들입니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
 msgid "Load the Unicode data at the time of startup"
@@ -391,8 +413,10 @@ msgid ""
 "the beginning if false. The Unicode data is always loaded after the emoji "
 "data is loaded even if true."
 msgstr ""
-"참이면 시작할 때 유니코드 데이터를 읽어들입니다. 이 데이터를 읽어들이려면 약 15MB의 메모리가 필요합니다. 거짓이면 에모지 대화창을 "
-"처음 열 때 유니코드 데이터를 읽어들입니다. 참이더라도 에모지 데이터를 읽어들인 뒤에는 유니코드 데이터를 항상 읽어들입니다."
+"참이면 시작할 때 유니코드 데이터를 읽어들입니다. 이 데이터를 읽어들이려면 약 "
+"15MB의 메모리가 필요합니다. 거짓이면 에모지 대화창을 처음 열 때 유니코드 데이"
+"터를 읽어들입니다. 참이더라도 에모지 데이터를 읽어들인 뒤에는 유니코드 데이터"
+"를 항상 읽어들입니다."
 
 #: ibus/_config.py.in:41
 msgid ""
@@ -502,7 +526,8 @@ msgstr "삭제(_D)"
 msgid ""
 "Please press a key (or a key combination).\n"
 "The dialog will be closed when the key is released."
-msgstr "키 또는 키 조합을 입력하십시오.\n"
+msgstr ""
+"키 또는 키 조합을 입력하십시오.\n"
 "키를 입력하면 대화 상자가 닫히게 됩니다."
 
 #: setup/keyboardshortcut.py:255
@@ -525,8 +550,8 @@ msgid ""
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
 msgstr ""
-"IBus를 시작했습니다! IBus를 사용할 수 없는 경우 다음과 같은 행을 $HOME/.bashrc;에 추가하고 바탕 화면으로 다시 "
-"로그인합니다.\n"
+"IBus를 시작했습니다! IBus를 사용할 수 없는 경우 다음과 같은 행을 $HOME/."
+"bashrc;에 추가하고 바탕 화면으로 다시 로그인합니다.\n"
 "  export GTK_IM_MODULE=ibus\n"
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
@@ -718,13 +743,12 @@ msgid ""
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
 "the panel icon.</i></small>"
 msgstr ""
-"<small><i>활성화된 입력 방식 목록에서 키보드 바로 가기 키를 누르거나 패널 아이콘을 눌러 선택한 활성 입력 방식을 전환할 수 "
-"있습니다.</i></small>"
+"<small><i>활성화된 입력 방식 목록에서 키보드 바로 가기 키를 누르거나 패널 아"
+"이콘을 눌러 선택한 활성 입력 방식을 전환할 수 있습니다.</i></small>"
 
 #: setup/setup.ui:873
 msgid ""
-"The shortcut keys to enable conversions of emoji annotations or Unicode "
-"names"
+"The shortcut keys to enable conversions of emoji annotations or Unicode names"
 msgstr "에모지 주석 또는 유니코드 이름을 변환하는 바로 가기 키 목록"
 
 #: setup/setup.ui:875
@@ -3117,9 +3141,11 @@ msgstr "이 정보 표시"
 
 #: tools/main.vala:464
 #, c-format
-msgid "Usage: %s COMMAND [OPTION...]\n"
+msgid ""
+"Usage: %s COMMAND [OPTION...]\n"
 "\n"
-msgstr "사용법: %s <명령> [옵션...]\n"
+msgstr ""
+"사용법: %s <명령> [옵션...]\n"
 "\n"
 
 #: tools/main.vala:465
@@ -3219,12 +3245,13 @@ msgstr "유니코드 선택"
 
 #: ui/gtk3/emojier.vala:2429
 msgid ""
-"Failed to get the current text application. Please re-focus your application."
-" E.g. Press Esc key several times to release the emoji typing mode, click "
-"your desktop and click your text application again."
+"Failed to get the current text application. Please re-focus your "
+"application. E.g. Press Esc key several times to release the emoji typing "
+"mode, click your desktop and click your text application again."
 msgstr ""
-"현재 텍스트 응용 프로그램을 알아낼 수 없습니다. 응용 프로그램의 포커스를 다시 맞춰 보십시오. 예를 들어 Esc 키를 여러번 눌러 "
-"에모지 입력 모드를 벗어나거나, 바탕 화면을 누르고 텍스트 응용 프로그램을 다시 눌러 보십시오."
+"현재 텍스트 응용 프로그램을 알아낼 수 없습니다. 응용 프로그램의 포커스를 다"
+"시 맞춰 보십시오. 예를 들어 Esc 키를 여러번 눌러 에모지 입력 모드를 벗어나거"
+"나, 바탕 화면을 누르고 텍스트 응용 프로그램을 다시 눌러 보십시오."
 
 #: ui/gtk3/emojierapp.vala:58
 msgid "Canceled to choose an emoji."
@@ -3236,7 +3263,7 @@ msgstr "에모지를 클립보드에 복사."
 
 #. TRANSLATORS: "FONT" should be capital and translatable.
 #. * It's used for an argument command --font=FONT
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:114
 msgid "\"FONT\" for emoji characters on emoji dialog"
 msgstr "\"<글꼴>\"을 에모지 대화창의 에모지 문자에 사용합니다"
@@ -3247,7 +3274,7 @@ msgstr "<글꼴>"
 
 #. TRANSLATORS: "LANG" should be capital and translatable.
 #. * It's used for an argument command --lang=LANG
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:120
 msgid "\"LANG\" for annotations on emoji dialog. E.g. \"en\""
 msgstr "\"<언어>\"를 에모지 대화창 주석에 사용합니다 (예: \"en\")"
@@ -3278,7 +3305,8 @@ msgstr "IBus는 리눅스/유닉스를 위한 지능형 입력 버스입니다."
 
 #: ui/gtk3/panel.vala:1099
 msgid "translator-credits"
-msgstr "김은주 <eukim@redhat.com>\n"
+msgstr ""
+"김은주 <eukim@redhat.com>\n"
 "류창우 <cwryu@debian.org>"
 
 #: ui/gtk3/panel.vala:1118

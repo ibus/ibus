@@ -20,14 +20,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2019-04-16 17:33+0900\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-01-08 12:40+0900\n"
 "PO-Revision-Date: 2019-07-24 03:07+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Japanese <trans-ja@lists.fedoraproject.org>\n"
 "Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Zanata 4.6.2\n"
 
@@ -55,13 +55,14 @@ msgstr "IME 切り替えウィンドウのポップアップ遅延時間 (ミリ
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
 msgid ""
-"Set popup delay milliseconds to show IME switcher window. The default is 400."
-" 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not show "
-"the window and switch prev/next engines."
+"Set popup delay milliseconds to show IME switcher window. The default is "
+"400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
+"show the window and switch prev/next engines."
 msgstr ""
-"IME 切り替えウィンドウのポップアップ表示を遅延させるミリ秒数を指定します。デフォルトは 400 ミリ秒です。「0 ="
-"」ならウィンドウが直ちに表示されます。「0 <」にすると指定したミリ秒数遅延します。「0 "
-">」の場合はウィンドウは表示されず前のエンジンまたは次のエンジンに切り替わります。"
+"IME 切り替えウィンドウのポップアップ表示を遅延させるミリ秒数を指定します。デ"
+"フォルトは 400 ミリ秒です。「0 =」ならウィンドウが直ちに表示されます。「0 <」"
+"にすると指定したミリ秒数遅延します。「0 >」の場合はウィンドウは表示されず前の"
+"エンジンまたは次のエンジンに切り替わります。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"
@@ -72,7 +73,8 @@ msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
 msgstr ""
-"保存されているバージョン番号は、以前インストールした ibus のバージョンと現在の ibus のバージョンの違いをチェックする場合に使用されます。"
+"保存されているバージョン番号は、以前インストールした ibus のバージョンと現在"
+"の ibus のバージョンの違いをチェックする場合に使用されます。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:32
 msgid "Latin layouts which have no ASCII"
@@ -80,7 +82,8 @@ msgstr "ASCII を持たないラテンレイアウト"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:33
 msgid "US layout is appended to the Latin layouts. variant can be omitted."
-msgstr "US レイアウトはラテンレイアウトに追加されます。variant は省略可能です。"
+msgstr ""
+"US レイアウトはラテンレイアウトに追加されます。variant は省略可能です。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:37
 msgid "Use xmodmap"
@@ -89,7 +92,9 @@ msgstr "xmodmap を使用する"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:38
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
-msgstr "ibus エンジンが切り替えられたときに .xmodmap もしくは .Xmodmap が存在すれば xmodmap を実行します。"
+msgstr ""
+"ibus エンジンが切り替えられたときに .xmodmap もしくは .Xmodmap が存在すれば "
+"xmodmap を実行します。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:42 setup/setup.ui:1208
 msgid "Use system keyboard layout"
@@ -121,7 +126,9 @@ msgstr "デフォルトで入力メソッドを有効にする"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:58
 msgid "Enable input method by default when the application gets input focus"
-msgstr "アプリケーションで入力が必要とされる場合にはデフォルトで入力メソッドを有効にします"
+msgstr ""
+"アプリケーションで入力が必要とされる場合にはデフォルトで入力メソッドを有効に"
+"します"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:62
 msgid "DConf preserve name prefixes"
@@ -188,7 +195,8 @@ msgstr "自動的に隠す"
 msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
-msgstr "プロパティーパネルの挙動。 0 = 表示しない、1 = 自動的に隠す、2 = 常に表示する"
+msgstr ""
+"プロパティーパネルの挙動。 0 = 表示しない、1 = 自動的に隠す、2 = 常に表示する"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:117
 #: data/dconf/org.freedesktop.ibus.gschema.xml:121
@@ -203,7 +211,9 @@ msgstr "パネルが常に表示されている場合に入力カーソルに従
 msgid ""
 "If true, the panel follows the input cursor in case the panel is always "
 "shown. If false, the panel is shown at a fixed location."
-msgstr "true ならば、パネルが常に表示されている場合にパネルは入力カーソルに従います。false ならば、パネルは固定位置に表示されます。"
+msgstr ""
+"true ならば、パネルが常に表示されている場合にパネルは入力カーソルに従います。"
+"false ならば、パネルは固定位置に表示されます。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:130
 msgid "The milliseconds to show property panel"
@@ -213,7 +223,9 @@ msgstr "プロパティーパネルを表示するミリ秒"
 msgid ""
 "The milliseconds to show property panel after focus-in or properties are "
 "changed."
-msgstr "フォーカスインまたはプロパティが変更された後でプロパティーパネルを表示するミリ秒。"
+msgstr ""
+"フォーカスインまたはプロパティが変更された後でプロパティーパネルを表示するミ"
+"リ秒。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:135
 msgid "Orientation of lookup table"
@@ -246,16 +258,18 @@ msgid ""
 "XKB icon shows the layout string and the string is rendered with the RGBA "
 "value. The RGBA value can be 1. a color name from X11, 2. a hex value in "
 "form '#rrggbb' where 'r', 'g' and 'b' are hex digits of the red, green, and "
-"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form "
-"'rgba(r,g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 "
-"to 255 or percentage values in the range 0% to 100%, and 'a' is a floating "
-"point value in the range 0 to 1 of the alpha."
+"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form 'rgba(r,"
+"g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 to 255 or "
+"percentage values in the range 0% to 100%, and 'a' is a floating point value "
+"in the range 0 to 1 of the alpha."
 msgstr ""
-"XKB アイコンはレイアウト文字列を表示してその文字列は RGBA 値で描画されます。RGBA 値は次のいずれかを選ぶことができます。1. X11 "
-"からの色彩名、2. 書式 '#rrggbb' の16進数値で、その 'r', 'g', 'b' は赤、緑、青の16進数の数字のこと、3. 書式 "
-"'rgb(r,g,b)' の RGB カラー、4. 書式 'rgba(r,g,b,a)' の RGBA カラーで、その 'r', 'g', 'b' は "
-"0 から 255 までの範囲内の整数値か 0% から 100% までの範囲内のパーセンテージのことで、'a' はアルファ値の 0 から 1 "
-"までの範囲内の浮動小数値のこと。"
+"XKB アイコンはレイアウト文字列を表示してその文字列は RGBA 値で描画されます。"
+"RGBA 値は次のいずれかを選ぶことができます。1. X11 からの色彩名、2. 書式 "
+"'#rrggbb' の16進数値で、その 'r', 'g', 'b' は赤、緑、青の16進数の数字のこと、"
+"3. 書式 'rgb(r,g,b)' の RGB カラー、4. 書式 'rgba(r,g,b,a)' の RGBA カラー"
+"で、その 'r', 'g', 'b' は 0 から 255 までの範囲内の整数値か 0% から 100% まで"
+"の範囲内のパーセンテージのことで、'a' はアルファ値の 0 から 1 までの範囲内の"
+"浮動小数値のこと。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:155
 msgid "The milliseconds to show the panel icon for a property"
@@ -268,9 +282,10 @@ msgid ""
 "of icon-prop-key in IBusEngineDesc. If the value is 0, no delay time and the "
 "property icon is shown immediately."
 msgstr ""
-"あるプロパティーが IBusEngineDesc の icon-prop-key "
-"の値に指定されている場合、エンジンが切り替えられたときはいつでも、エンジンアイコンを表示の後にそのプロパティーをパネルアイコンを表示するためのミリ秒単位の遅延時間。値が "
-"0 の場合、遅延無くプロパティーアイコンが即時に表示される。"
+"あるプロパティーが IBusEngineDesc の icon-prop-key の値に指定されている場合、"
+"エンジンが切り替えられたときはいつでも、エンジンアイコンを表示の後にそのプロ"
+"パティーをパネルアイコンを表示するためのミリ秒単位の遅延時間。値が 0 の場合、"
+"遅延無くプロパティーアイコンが即時に表示される。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:160
 msgid "Use custom font"
@@ -318,8 +333,8 @@ msgid ""
 "Choose a default language of emoji dictionaries on the emoji dialog. The "
 "value $lang is applied to /usr/share/ibus/dicts/emoji-$lang.dict"
 msgstr ""
-"絵文字ダイアログ上の絵文字辞書のデフォルトの言語を選択します。その値 $lang は、/usr/share/ibus/dicts/emoji-$lang."
-"dict に適用されます。"
+"絵文字ダイアログ上の絵文字辞書のデフォルトの言語を選択します。その値 $lang "
+"は、/usr/share/ibus/dicts/emoji-$lang.dict に適用されます。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:193
 msgid "favorite emoji list on emoji dialog"
@@ -329,7 +344,9 @@ msgstr "絵文字ダイアログ上のお気に入り絵文字リスト"
 msgid ""
 "You can show the favorite emojis on emoji list if this list has any "
 "characters."
-msgstr "このリストが文字を含む場合、絵文字リスト上にお気に入りの絵文字を表示することができます。"
+msgstr ""
+"このリストが文字を含む場合、絵文字リスト上にお気に入りの絵文字を表示すること"
+"ができます。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:198
 msgid "favorite emoji annotation list on emoji dialog"
@@ -347,7 +364,8 @@ msgstr "絵文字ルビを部分一致させることを可能にするか否か
 msgid ""
 "Whether emoji annotations can be matched with a partial string instead of "
 "the exact match or not."
-msgstr "絵文字ルビを完全一致ではなく部分文字列で一致させることを可能にするか否か。"
+msgstr ""
+"絵文字ルビを完全一致ではなく部分文字列で一致させることを可能にするか否か。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:208
 msgid "Match emoji annotations with the specified length"
@@ -367,7 +385,9 @@ msgstr "絵文字ルビを部分一致させる条件を選ぶ"
 msgid ""
 "Choose one of the following conditions to match emoji annotations partially: "
 "0 == Prefix match, 1 == Suffix match, 2 == Containing match"
-msgstr "絵文字ルビを部分一致させる次の条件のうちの１つを選ぶ: 0 == 文頭一致、1 == 文末一致、2 == 文中一致"
+msgstr ""
+"絵文字ルビを部分一致させる次の条件のうちの１つを選ぶ: 0 == 文頭一致、1 == 文"
+"末一致、2 == 文中一致"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
 msgid "Load the emoji data at the time of startup"
@@ -379,8 +399,9 @@ msgid ""
 "needed to load the data. Load the emoji data when open the emoji dialog at "
 "the beginning if false."
 msgstr ""
-"true の場合、起動時に絵文字データを読み込みます。約 10 MBメモリーがデータを読み込むために必要になります。false "
-"の場合、初めて絵文字ダイアログを開く時に絵文字データを読み込みます。"
+"true の場合、起動時に絵文字データを読み込みます。約 10 MBメモリーがデータを読"
+"み込むために必要になります。false の場合、初めて絵文字ダイアログを開く時に絵"
+"文字データを読み込みます。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
 msgid "Load the Unicode data at the time of startup"
@@ -393,9 +414,10 @@ msgid ""
 "the beginning if false. The Unicode data is always loaded after the emoji "
 "data is loaded even if true."
 msgstr ""
-"true の場合、起動時に Unicode データを読み込みます。約 15 MB メモリーがデータを読み込むために必要になります。false "
-"の場合、初めて絵文字ダイアログを開く時に Unicode データを読み込みます。true の場合、常に絵文字データが読み込まれた後で、Unicode "
-"データが読み込まれます。"
+"true の場合、起動時に Unicode データを読み込みます。約 15 MB メモリーがデータ"
+"を読み込むために必要になります。false の場合、初めて絵文字ダイアログを開く時"
+"に Unicode データを読み込みます。true の場合、常に絵文字データが読み込まれた"
+"後で、Unicode データが読み込まれます。"
 
 #: ibus/_config.py.in:41
 msgid ""
@@ -405,7 +427,7 @@ msgstr ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
 
-#: ibus/lang.py:41 src/ibusutil.c:198
+#: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
 msgstr "その他"
 
@@ -505,7 +527,8 @@ msgstr "削除(_D)"
 msgid ""
 "Please press a key (or a key combination).\n"
 "The dialog will be closed when the key is released."
-msgstr "キーもしくはキーの組み合わせを入力してください。\n"
+msgstr ""
+"キーもしくはキーの組み合わせを入力してください。\n"
 "キーを離すとダイアログを閉じます。"
 
 #: setup/keyboardshortcut.py:255
@@ -514,7 +537,9 @@ msgstr "キーもしくはキーの組み合わせを入力してください"
 
 #: setup/main.py:121 setup/main.py:588
 msgid "Use shortcut with shift to switch to the previous input method"
-msgstr "以前の入力メソッドに切り替えるにはショートカットにシフトキーを付けて使用します"
+msgstr ""
+"以前の入力メソッドに切り替えるにはショートカットにシフトキーを付けて使用しま"
+"す"
 
 #: setup/main.py:515
 msgid "The IBus daemon is not running. Do you wish to start it?"
@@ -528,8 +553,8 @@ msgid ""
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
 msgstr ""
-"IBus は起動されています。IBus が使用できない場合は、次の行を $HOME/.bashrc "
-"に追記し、デスクトップにログインし直してみてください。\n"
+"IBus は起動されています。IBus が使用できない場合は、次の行を $HOME/.bashrc に"
+"追記し、デスクトップにログインし直してみてください。\n"
 "  export GTK_IM_MODULE=ibus\n"
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
@@ -649,7 +674,8 @@ msgstr "言語パネルの位置"
 
 #: setup/setup.ui:494
 msgid "Show input method's name on language bar when check the checkbox"
-msgstr "チェックボックスにチェック付けると、言語バーに入力メソッド名が表示されます"
+msgstr ""
+"チェックボックスにチェック付けると、言語バーに入力メソッド名が表示されます"
 
 #: setup/setup.ui:508
 msgid "Embed preedit text in application window"
@@ -657,7 +683,9 @@ msgstr "アプリケーションウィンドウに前編集テキストを組み
 
 #: setup/setup.ui:513
 msgid "Embed the preedit text of input method in the application window"
-msgstr "アプリケーションウィンドウに入力メソッドのプリエディットテキストを組み込みます"
+msgstr ""
+"アプリケーションウィンドウに入力メソッドのプリエディットテキストを組み込みま"
+"す"
 
 #: setup/setup.ui:527
 msgid "Use custom font:"
@@ -721,13 +749,13 @@ msgid ""
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
 "the panel icon.</i></small>"
 msgstr ""
-"<small><i>アクティブなインプットメソッドは、キーボードショートカットキーを押すかパネルアイコンをクリックすることによってリストされている中から１つのインプットメソッドを選択することで切り替えることが可能です。</"
-"i></small>"
+"<small><i>アクティブなインプットメソッドは、キーボードショートカットキーを押"
+"すかパネルアイコンをクリックすることによってリストされている中から１つのイン"
+"プットメソッドを選択することで切り替えることが可能です。</i></small>"
 
 #: setup/setup.ui:873
 msgid ""
-"The shortcut keys to enable conversions of emoji annotations or Unicode "
-"names"
+"The shortcut keys to enable conversions of emoji annotations or Unicode names"
 msgstr "絵文字ルビまたは Unicode 名の変換を可能にするショートカットキー"
 
 #: setup/setup.ui:875
@@ -3015,7 +3043,9 @@ msgstr "レジストリーキャッシュ FILE を書き込みます。"
 msgid ""
 "Use engine schema paths instead of ibus core, which can be comma-separated "
 "values."
-msgstr "ibus コアの代わりにエンジンのスキーマパスを使用し、コンマで区切られた値が可能です。"
+msgstr ""
+"ibus コアの代わりにエンジンのスキーマパスを使用し、コンマで区切られた値が可能"
+"です。"
 
 #: tools/main.vala:381
 msgid "Resetting…"
@@ -3079,9 +3109,11 @@ msgstr "この情報を表示する"
 
 #: tools/main.vala:464
 #, c-format
-msgid "Usage: %s COMMAND [OPTION...]\n"
+msgid ""
+"Usage: %s COMMAND [OPTION...]\n"
 "\n"
-msgstr "使い方: %s コマンド [オプション...]\n"
+msgstr ""
+"使い方: %s コマンド [オプション...]\n"
 "\n"
 
 #: tools/main.vala:465
@@ -3181,12 +3213,14 @@ msgstr "Unicode の選択"
 
 #: ui/gtk3/emojier.vala:2429
 msgid ""
-"Failed to get the current text application. Please re-focus your application."
-" E.g. Press Esc key several times to release the emoji typing mode, click "
-"your desktop and click your text application again."
+"Failed to get the current text application. Please re-focus your "
+"application. E.g. Press Esc key several times to release the emoji typing "
+"mode, click your desktop and click your text application again."
 msgstr ""
-"現在のテキストアプリケーションを取得するのに失敗しました。アプリケーションを再フォーカスさせてください。例えば、Esc "
-"キーを数回入力して絵文字入力モードを開放し、デスクトップをクリックして、テキストアプリケーションを再度クリックしてください。"
+"現在のテキストアプリケーションを取得するのに失敗しました。アプリケーションを"
+"再フォーカスさせてください。例えば、Esc キーを数回入力して絵文字入力モードを"
+"開放し、デスクトップをクリックして、テキストアプリケーションを再度クリックし"
+"てください。"
 
 #: ui/gtk3/emojierapp.vala:58
 msgid "Canceled to choose an emoji."
@@ -3198,7 +3232,7 @@ msgstr "クリップボードに絵文字をコピーしました。"
 
 #. TRANSLATORS: "FONT" should be capital and translatable.
 #. * It's used for an argument command --font=FONT
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:114
 msgid "\"FONT\" for emoji characters on emoji dialog"
 msgstr "絵文字ダイアログ上の絵文字用の「フォント」"
@@ -3209,7 +3243,7 @@ msgstr "フォント"
 
 #. TRANSLATORS: "LANG" should be capital and translatable.
 #. * It's used for an argument command --lang=LANG
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:120
 msgid "\"LANG\" for annotations on emoji dialog. E.g. \"en\""
 msgstr "絵文字ダイアログ上のルビ用の「言語」。例「en」"

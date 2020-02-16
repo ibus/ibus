@@ -22,14 +22,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2019-04-16 17:33+0900\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-01-08 12:40+0900\n"
 "PO-Revision-Date: 2019-07-26 04:03+0000\n"
 "Last-Translator: Tian Shixiong <tiansworld@fedoraproject.org>\n"
 "Language-Team: Chinese (China) <trans-zh_cn@lists.fedoraproject.org>\n"
 "Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Zanata 4.6.2\n"
 
@@ -57,9 +57,9 @@ msgstr "输入法切换窗口弹出延时微秒数"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
 msgid ""
-"Set popup delay milliseconds to show IME switcher window. The default is 400."
-" 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not show "
-"the window and switch prev/next engines."
+"Set popup delay milliseconds to show IME switcher window. The default is "
+"400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
+"show the window and switch prev/next engines."
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
@@ -202,7 +202,9 @@ msgstr "在始终显示的情况下面板跟随输入光标"
 msgid ""
 "If true, the panel follows the input cursor in case the panel is always "
 "shown. If false, the panel is shown at a fixed location."
-msgstr "若为真，当面板设为始终显示时面板将跟随输入光标。若为假，面板将在固定位置显示。"
+msgstr ""
+"若为真，当面板设为始终显示时面板将跟随输入光标。若为假，面板将在固定位置显"
+"示。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:130
 msgid "The milliseconds to show property panel"
@@ -245,14 +247,15 @@ msgid ""
 "XKB icon shows the layout string and the string is rendered with the RGBA "
 "value. The RGBA value can be 1. a color name from X11, 2. a hex value in "
 "form '#rrggbb' where 'r', 'g' and 'b' are hex digits of the red, green, and "
-"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form "
-"'rgba(r,g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 "
-"to 255 or percentage values in the range 0% to 100%, and 'a' is a floating "
-"point value in the range 0 to 1 of the alpha."
+"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form 'rgba(r,"
+"g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 to 255 or "
+"percentage values in the range 0% to 100%, and 'a' is a floating point value "
+"in the range 0 to 1 of the alpha."
 msgstr ""
-"XKB 图标显示键盘布局字符串并依据 RGBA 值进行渲染。RGBA 值可以是 1. X11 中的颜色名；2. '#rrggbb' "
-"形式的十六进制数，其中 'r', 'g' 和 'b' 分别代表十六进制数字的红、绿和蓝；3. 'rgb(r,g,b)' 形式的 RGB 颜色；或者 4. "
-"'rgba(r,g,b,a)' 形式的 RGBA 颜色，其中 'r', 'g' 和 'b' 分别为 0 到 255 之间的整数值，或者 0% 到 "
+"XKB 图标显示键盘布局字符串并依据 RGBA 值进行渲染。RGBA 值可以是 1. X11 中的颜"
+"色名；2. '#rrggbb' 形式的十六进制数，其中 'r', 'g' 和 'b' 分别代表十六进制数"
+"字的红、绿和蓝；3. 'rgb(r,g,b)' 形式的 RGB 颜色；或者 4. 'rgba(r,g,b,a)' 形式"
+"的 RGBA 颜色，其中 'r', 'g' 和 'b' 分别为 0 到 255 之间的整数值，或者 0% 到 "
 "100% 之间的百分比值，而 'a' 为 0 到 1 之间的浮点透明度。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:155
@@ -314,7 +317,8 @@ msgid ""
 "Choose a default language of emoji dictionaries on the emoji dialog. The "
 "value $lang is applied to /usr/share/ibus/dicts/emoji-$lang.dict"
 msgstr ""
-"在表情输入对话框中选择默认表情输入语言。设定值 $lang 会应用于 /usr/share/ibus/dicts/emoji-$lang.dict"
+"在表情输入对话框中选择默认表情输入语言。设定值 $lang 会应用于 /usr/share/"
+"ibus/dicts/emoji-$lang.dict"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:193
 msgid "favorite emoji list on emoji dialog"
@@ -362,7 +366,8 @@ msgstr "选择一种条件来部分匹配表情注释"
 msgid ""
 "Choose one of the following conditions to match emoji annotations partially: "
 "0 == Prefix match, 1 == Suffix match, 2 == Containing match"
-msgstr "选择以下条件来部分匹配表情注释：0 == 字首匹配, 1 == 字尾匹配, 2 == 包含匹配"
+msgstr ""
+"选择以下条件来部分匹配表情注释：0 == 字首匹配, 1 == 字尾匹配, 2 == 包含匹配"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
 msgid "Load the emoji data at the time of startup"
@@ -374,7 +379,8 @@ msgid ""
 "needed to load the data. Load the emoji data when open the emoji dialog at "
 "the beginning if false."
 msgstr ""
-"如果设定为真 (True)，则在启动时载入表情数据。大概需要 10MB 内存来载入数据。如果设定为假 (False)，则在打开表情对话框时加载表情数据。"
+"如果设定为真 (True)，则在启动时载入表情数据。大概需要 10MB 内存来载入数据。如"
+"果设定为假 (False)，则在打开表情对话框时加载表情数据。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
 msgid "Load the Unicode data at the time of startup"
@@ -387,17 +393,19 @@ msgid ""
 "the beginning if false. The Unicode data is always loaded after the emoji "
 "data is loaded even if true."
 msgstr ""
-"如果设为“True”，则在启动时加载 Unicode 数据。加载数据大约需要 15MB 内存。如果设为“False”，则当打开表情符号对话框时加载 "
-"Unicode 数据。Unicode 数据总是会在表情符号数据加载之后加载，即使设置为“True”也是如此。"
+"如果设为“True”，则在启动时加载 Unicode 数据。加载数据大约需要 15MB 内存。如果"
+"设为“False”，则当打开表情符号对话框时加载 Unicode 数据。Unicode 数据总是会在"
+"表情符号数据加载之后加载，即使设置为“True”也是如此。"
 
 #: ibus/_config.py.in:41
 msgid ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
-msgstr "版权所有 (c) 2007-2010 黄鹏\n"
+msgstr ""
+"版权所有 (c) 2007-2010 黄鹏\n"
 "版权所有 (c) 2007-2010 Red Hat, Inc."
 
-#: ibus/lang.py:41 src/ibusutil.c:198
+#: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
 msgstr "其他"
 
@@ -497,7 +505,8 @@ msgstr "删除(_D)"
 msgid ""
 "Please press a key (or a key combination).\n"
 "The dialog will be closed when the key is released."
-msgstr "请按一个键盘按键（或者一个组合按键）\n"
+msgstr ""
+"请按一个键盘按键（或者一个组合按键）\n"
 "当您松开任意按键时，对话框会自动关闭。"
 
 #: setup/keyboardshortcut.py:255
@@ -520,7 +529,8 @@ msgid ""
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
 msgstr ""
-"IBus 已经启动！如果您无法使用 IBus，添加以下行至 $HOME/.bashrc；然后请重新登录您的桌面。\n"
+"IBus 已经启动！如果您无法使用 IBus，添加以下行至 $HOME/.bashrc；然后请重新登"
+"录您的桌面。\n"
 "  export GTK_IM_MODULE=ibus\n"
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
@@ -711,13 +721,14 @@ msgid ""
 "<small><i>The active input method can be switched around from the selected "
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
 "the panel icon.</i></small>"
-msgstr "<small><i>可以通过敲击键盘快捷键或者点击面板图标来在上述列表中切换选中的输入法</i></small>"
+msgstr ""
+"<small><i>可以通过敲击键盘快捷键或者点击面板图标来在上述列表中切换选中的输入"
+"法</i></small>"
 
 #: setup/setup.ui:873
 #, fuzzy
 msgid ""
-"The shortcut keys to enable conversions of emoji annotations or Unicode "
-"names"
+"The shortcut keys to enable conversions of emoji annotations or Unicode names"
 msgstr "启用在表情符号注释或 Unicode 名称间转换的快捷键"
 
 #: setup/setup.ui:875
@@ -3065,9 +3076,11 @@ msgstr "显示本信息"
 
 #: tools/main.vala:464
 #, c-format
-msgid "Usage: %s COMMAND [OPTION...]\n"
+msgid ""
+"Usage: %s COMMAND [OPTION...]\n"
 "\n"
-msgstr "用法：%s 命令 [选项...]\n"
+msgstr ""
+"用法：%s 命令 [选项...]\n"
 "\n"
 
 #: tools/main.vala:465
@@ -3167,10 +3180,12 @@ msgstr ""
 
 #: ui/gtk3/emojier.vala:2429
 msgid ""
-"Failed to get the current text application. Please re-focus your application."
-" E.g. Press Esc key several times to release the emoji typing mode, click "
-"your desktop and click your text application again."
-msgstr "无法捕捉当前文字应用程序。请重新让该应用程序获得焦点。比如多次按 Esc 键来释放表情输入模式，点击桌面然后再点击该文字应用程序。"
+"Failed to get the current text application. Please re-focus your "
+"application. E.g. Press Esc key several times to release the emoji typing "
+"mode, click your desktop and click your text application again."
+msgstr ""
+"无法捕捉当前文字应用程序。请重新让该应用程序获得焦点。比如多次按 Esc 键来释放"
+"表情输入模式，点击桌面然后再点击该文字应用程序。"
 
 #: ui/gtk3/emojierapp.vala:58
 msgid "Canceled to choose an emoji."
@@ -3182,7 +3197,7 @@ msgstr "已将 emoji 复制到你的剪贴板"
 
 #. TRANSLATORS: "FONT" should be capital and translatable.
 #. * It's used for an argument command --font=FONT
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:114
 #, fuzzy
 msgid "\"FONT\" for emoji characters on emoji dialog"
@@ -3194,7 +3209,7 @@ msgstr "字体"
 
 #. TRANSLATORS: "LANG" should be capital and translatable.
 #. * It's used for an argument command --lang=LANG
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:120
 msgid "\"LANG\" for annotations on emoji dialog. E.g. \"en\""
 msgstr ""

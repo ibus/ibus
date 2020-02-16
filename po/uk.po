@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2019-04-16 17:33+0900\n"
+"POT-Creation-Date: 2020-01-08 12:40+0900\n"
 "PO-Revision-Date: 2020-01-05 18:49+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.stg.fedoraproject.org/projects/"
@@ -25,8 +25,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
-"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 3.9.1\n"
 
 #. Translators: Here “Preload” is a verb
@@ -53,9 +53,9 @@ msgstr "Затримка появи контекстного вікна для �
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
 msgid ""
-"Set popup delay milliseconds to show IME switcher window. The default is 400."
-" 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not show "
-"the window and switch prev/next engines."
+"Set popup delay milliseconds to show IME switcher window. The default is "
+"400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
+"show the window and switch prev/next engines."
 msgstr ""
 "Встановити затримку появи контекстного вікна перемикача способів введення у "
 "мілісекундах. Типовою є 400. 0 = показувати вікно негайно. 0 < — затримка у "
@@ -125,8 +125,7 @@ msgstr "Типово увімкнути спосіб введення"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:58
 msgid "Enable input method by default when the application gets input focus"
-msgstr ""
-"Типово увімкнути спосіб введення, коли програма отримує фокус введення"
+msgstr "Типово увімкнути спосіб введення, коли програма отримує фокус введення"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:62
 msgid "DConf preserve name prefixes"
@@ -195,8 +194,8 @@ msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
 msgstr ""
-"Поведінка панелі властивостей. 0 = не показувати, 1 = автоматично ховати, 2 ="
-" завжди показувати"
+"Поведінка панелі властивостей. 0 = не показувати, 1 = автоматично ховати, 2 "
+"= завжди показувати"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:117
 #: data/dconf/org.freedesktop.ibus.gschema.xml:121
@@ -259,10 +258,10 @@ msgid ""
 "XKB icon shows the layout string and the string is rendered with the RGBA "
 "value. The RGBA value can be 1. a color name from X11, 2. a hex value in "
 "form '#rrggbb' where 'r', 'g' and 'b' are hex digits of the red, green, and "
-"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form "
-"'rgba(r,g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 "
-"to 255 or percentage values in the range 0% to 100%, and 'a' is a floating "
-"point value in the range 0 to 1 of the alpha."
+"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form 'rgba(r,"
+"g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 to 255 or "
+"percentage values in the range 0% to 100%, and 'a' is a floating point value "
+"in the range 0 to 1 of the alpha."
 msgstr ""
 "На піктограмі XKB буде показано рядок розкладки. Для показу цього рядка буде "
 "використано вказане значення RGBA. Значенням RGBA може бути: 1. назва "
@@ -432,10 +431,11 @@ msgstr ""
 msgid ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
-msgstr "© Peng Huang, 2007–2010\n"
+msgstr ""
+"© Peng Huang, 2007–2010\n"
 "© Red Hat, Inc., 2007–2010"
 
-#: ibus/lang.py:41 src/ibusutil.c:198
+#: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
 msgstr "Інше"
 
@@ -636,8 +636,7 @@ msgstr "Наступний спосіб введення:"
 #: setup/setup.ui:127
 msgid "The shortcut keys for switching to previous input method in the list"
 msgstr ""
-"Клавіатурне скорочення для перемикання на попередній спосіб введення у "
-"списку"
+"Клавіатурне скорочення для перемикання на попередній спосіб введення у списку"
 
 #: setup/setup.ui:129
 msgid "Previous input method:"
@@ -695,8 +694,7 @@ msgstr "Вбудувати попередньо створений текст у
 
 #: setup/setup.ui:513
 msgid "Embed the preedit text of input method in the application window"
-msgstr ""
-"Вбудувати попередньо створений текст способу введення у вікно програми"
+msgstr "Вбудувати попередньо створений текст способу введення у вікно програми"
 
 #: setup/setup.ui:527
 msgid "Use custom font:"
@@ -772,8 +770,7 @@ msgstr ""
 
 #: setup/setup.ui:873
 msgid ""
-"The shortcut keys to enable conversions of emoji annotations or Unicode "
-"names"
+"The shortcut keys to enable conversions of emoji annotations or Unicode names"
 msgstr ""
 "Клавіатурне скорочення для вмикання перетворень анотацій емодзі або назв "
 "символів Unicode"
@@ -3130,9 +3127,11 @@ msgstr "Показати цю довідкову інформацію"
 
 #: tools/main.vala:464
 #, c-format
-msgid "Usage: %s COMMAND [OPTION...]\n"
+msgid ""
+"Usage: %s COMMAND [OPTION...]\n"
 "\n"
-msgstr "Користування: %s КОМАНДА [ПАРАМЕТР...]\n"
+msgstr ""
+"Користування: %s КОМАНДА [ПАРАМЕТР...]\n"
 "\n"
 
 #: tools/main.vala:465
@@ -3232,9 +3231,9 @@ msgstr "Вибір Unicode"
 
 #: ui/gtk3/emojier.vala:2429
 msgid ""
-"Failed to get the current text application. Please re-focus your application."
-" E.g. Press Esc key several times to release the emoji typing mode, click "
-"your desktop and click your text application again."
+"Failed to get the current text application. Please re-focus your "
+"application. E.g. Press Esc key several times to release the emoji typing "
+"mode, click your desktop and click your text application again."
 msgstr ""
 "Не вдалося отримати дані поточної програми для роботи з текстом. Будь ласка, "
 "повторно встановіть фокус на вікно програми. Наприклад, натисніть клавішу "
@@ -3251,7 +3250,7 @@ msgstr "Скопійовано емодзі до вашого буфера об�
 
 #. TRANSLATORS: "FONT" should be capital and translatable.
 #. * It's used for an argument command --font=FONT
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:114
 msgid "\"FONT\" for emoji characters on emoji dialog"
 msgstr "«ШРИФТ» для символів емодзі у діалоговому вікні емодзі"
@@ -3262,7 +3261,7 @@ msgstr "ШРИФТ"
 
 #. TRANSLATORS: "LANG" should be capital and translatable.
 #. * It's used for an argument command --lang=LANG
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:120
 msgid "\"LANG\" for annotations on emoji dialog. E.g. \"en\""
 msgstr "«МОВА» для анотацій у діалоговому вікні емодзі. Приклад: en"
@@ -3273,8 +3272,7 @@ msgstr "МОВА"
 
 #: ui/gtk3/emojierapp.vala:123
 msgid "Emoji annotations can be match partially"
-msgstr ""
-"Встановлення відповідності за анотаціями до емодзі може бути частковим"
+msgstr "Встановлення відповідності за анотаціями до емодзі може бути частковим"
 
 #: ui/gtk3/emojierapp.vala:127
 msgid "Match with the length of the specified integer"

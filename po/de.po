@@ -2,7 +2,7 @@
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
 # Copyright (C) 2015-2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # This file is distributed under the same license as the ibus package.
-#
+# 
 # Translators:
 # Fabian Affolter <fab@fedoraproject.org>, 2009
 # hpeters <hpeters@redhat.com>, 2009
@@ -24,16 +24,16 @@ msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2020-01-05 18:49+0000\n"
+"PO-Revision-Date: 2020-01-30 13:16+0000\n"
 "Last-Translator: Mike FABIAN <mfabian@redhat.com>\n"
-"Language-Team: German <https://translate.stg.fedoraproject.org/projects/ibus/"
+"Language-Team: German <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.9.1\n"
+"X-Generator: Weblate 3.10.3\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -58,19 +58,14 @@ msgid "Popup delay milliseconds for IME switcher window"
 msgstr "Popup-Verzögerung für IME-Wechsel-Fenster in Millisekunden"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
-#, fuzzy
-#| msgid ""
-#| "Set popup delay milliseconds to show IME switcher window. The default is "
-#| "400. 0 = Show the window immediately. 0 &lt; Delay milliseconds. 0 &gt; "
-#| "Do not show the window and switch prev/next engines."
 msgid ""
 "Set popup delay milliseconds to show IME switcher window. The default is "
 "400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
 "show the window and switch prev/next engines."
 msgstr ""
 "Popup-Verzögerung für IME-Wechsel-Fenster setzen. Standardmäßig ist der Wert "
-"von 400 gesetzt. 0 = Fenster sofort anzeigen. 0 &lt; Verzögerung in "
-"Millisekunden. 0 &gt; Fenster nicht anzeigen und zur vorhergehenden/ "
+"von 400 gesetzt. 0 = Fenster sofort anzeigen. 0 < Verzögerung in "
+"Millisekunden. 0 > Fenster nicht anzeigen und zur vorhergehenden/ "
 "nachfolgenden Engine wechseln."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
@@ -277,7 +272,7 @@ msgid ""
 "in the range 0 to 1 of the alpha."
 msgstr ""
 "Das XKB Icon zeigt den Layout-String und der String wird mit dem RGBA Wert "
-"gerendert. Der RGBA Wert kann sein  1. eine X11-Farbe , 2. ein Hex-Wert in "
+"gerendert. Der RGBA Wert kann sein 1. eine X11-Farbe , 2. ein Hex-Wert in "
 "der Form '#rrggbb' wobei 'r', 'g' und 'b' HEX-Werte für Rot, Grün und Blau "
 "sind, 3. eine RGB-Farbe in der Form 'rgb(r,g,b)' oder 4. eine RGBA-Farbe in "
 "der Form 'rgba(r,g,b,a)' wobei 'r', 'g', und 'b' entweder Integer im Bereich "
@@ -319,16 +314,12 @@ msgid "Custom font name for language panel"
 msgstr "Name der benutzerdefinierten Schriftart für Sprach-Panel"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:173
-#, fuzzy
-#| msgid "Trigger shortcut keys for gtk_accelerator_parse"
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
-msgstr "Tastenkombinationen auslösen für gtk_accelerator_parse"
+msgstr "Unicode-Tastenkombinationen für gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:174
-#, fuzzy
-#| msgid "The shortcut keys for turning emoji typing on or off"
 msgid "The shortcut keys for turning Unicode typing on or off"
-msgstr "Tastenkombination zum Ein- und Ausschalten der Emoji-Eingabe"
+msgstr "Die Tastenkombinationen zum Ein- und Ausschalten der Unicode-Eingabe"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:178
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
@@ -417,7 +408,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
 msgid "Load the emoji data at the time of startup"
-msgstr ""
+msgstr "Emojidaten beim Starten laden"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:219
 msgid ""
@@ -425,10 +416,14 @@ msgid ""
 "needed to load the data. Load the emoji data when open the emoji dialog at "
 "the beginning if false."
 msgstr ""
+"Wenn \"true\", dann werden die Emojidaten beim Starten geladen. Ungefähr "
+"10MB werden benötigt um diese Daten zu laden. Wenn \"false\", dann werden "
+"die Emojidaten erst geladen, wenn der Emojidialog zum ersten Mal geöffnet "
+"wird."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
 msgid "Load the Unicode data at the time of startup"
-msgstr ""
+msgstr "Unicodedaten beim Starten laden"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:224
 msgid ""
@@ -437,6 +432,11 @@ msgid ""
 "the beginning if false. The Unicode data is always loaded after the emoji "
 "data is loaded even if true."
 msgstr ""
+"Wenn \"true\", dann werden die Unicodedaten beim Starten geladen. Ungefähr "
+"15MB Speicher werden benötigt um die Daten zu laden. Wenn \"false\", dann "
+"werden die Unicodedaten erst geladen wenn der Emojidialog zum ersten Mal "
+"geöffnet wird. Die Unicodedaten werden immer nach den Emojidaten geladen, "
+"auch wenn diese Option \"true\" ist."
 
 #: ibus/_config.py.in:41
 msgid ""
@@ -783,41 +783,31 @@ msgstr ""
 "small>"
 
 #: setup/setup.ui:873
-#, fuzzy
-#| msgid "The shortcut keys for turning emoji typing on or off"
 msgid ""
 "The shortcut keys to enable conversions of emoji annotations or Unicode names"
-msgstr "Tastenkombination zum Ein- und Ausschalten der Emoji-Eingabe"
+msgstr ""
+"Die Tastenkombinationen um Konvertierungen von Emoji- oder Unicodenamen "
+"einzuschalten"
 
 #: setup/setup.ui:875
-#, fuzzy
-#| msgid "Emoji annotation language:"
 msgid "Emoji annotation:"
-msgstr "Emojianmerkungssprache:"
+msgstr "Emojianmerkungen:"
 
 #: setup/setup.ui:927
-#, fuzzy
-#| msgid "The shortcut keys for turning input method on or off"
 msgid "The shortcut keys to enable Unicode code point conversions"
-msgstr "Tastenkombination zum An- oder Ausschalten der Eingabemethode"
+msgstr "Tastenkombinationen zum Einschalten der Unicode Codepoint Konvertierung"
 
 #: setup/setup.ui:929
-#, fuzzy
-#| msgid "Code point: %s"
 msgid "Unicode code point:"
-msgstr "Codepoint: %s"
+msgstr "Unicode Codepoint:"
 
 #: setup/setup.ui:1013
-#, fuzzy
-#| msgid "Set a font of emoji candidates on the emoji dialog"
 msgid "Set a font of Unicode candidates on the emoji dialog"
-msgstr "Font von Emoji-Kandidaten im Emoji-Dialog einstellen"
+msgstr "Font für Unicode-Kandidaten im Emoji-Dialog einstellen"
 
 #: setup/setup.ui:1015
-#, fuzzy
-#| msgid "Unicode Choice"
 msgid "Unicode font:"
-msgstr "Unicodeauswahl"
+msgstr "Unicodefont:"
 
 #: setup/setup.ui:1038
 msgid "Set a language of emoji annotations on the emoji dialog"
@@ -904,10 +894,8 @@ msgid "Animals & Nature"
 msgstr "Tiere & Natur"
 
 #: src/ibusemojigen.h:32
-#, fuzzy
-#| msgid "Tangut Components"
 msgid "Component"
-msgstr "Xixia-Komponenten"
+msgstr "Komponente"
 
 #: src/ibusemojigen.h:33
 msgid "Flags"
@@ -923,13 +911,11 @@ msgstr "Objekte"
 
 #: src/ibusemojigen.h:36
 msgid "People & Body"
-msgstr ""
+msgstr "Personen und Körper"
 
 #: src/ibusemojigen.h:37
-#, fuzzy
-#| msgid "Smileys & People"
 msgid "Smileys & Emotion"
-msgstr "Smileys & Leute"
+msgstr "Smileys und Emotionen"
 
 #: src/ibusemojigen.h:38
 msgid "Symbols"
@@ -1384,10 +1370,8 @@ msgstr "Kyrillisch, erweitert-C"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:285
-#, fuzzy
-#| msgid "Geometric Shapes Extended"
 msgid "Georgian Extended"
-msgstr "Geometrische Formen, erweitert"
+msgstr "Georgisch, erweitert"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2367,7 +2351,7 @@ msgstr "Altungarisch"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:845
 msgid "Hanifi Rohingya"
-msgstr ""
+msgstr "Hanifi Rohingya"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2380,26 +2364,22 @@ msgstr "Rumi-Ziffern"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:853
-#, fuzzy
-#| msgid "Old Hungarian"
 msgid "Old Sogdian"
-msgstr "Altungarisch"
+msgstr "Altsogdisch"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:857
-#, fuzzy
-#| msgid "Lydian"
 msgid "Sogdian"
-msgstr "Lydisch"
+msgstr "Sogdisch"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:861
 msgid "Elymaic"
-msgstr ""
+msgstr "Elymaisch"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2532,7 +2512,7 @@ msgstr "Ahom"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:937
 msgid "Dogra"
-msgstr ""
+msgstr "Dogra"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2545,10 +2525,8 @@ msgstr "Varang Kshiti"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:945
-#, fuzzy
-#| msgid "Devanagari"
 msgid "Nandinagari"
-msgstr "Devanagari"
+msgstr "Nandinagari"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2596,26 +2574,22 @@ msgstr "Masaram Gondi"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:973
-#, fuzzy
-#| msgid "Masaram Gondi"
 msgid "Gunjala Gondi"
-msgstr "Masaram Gondi"
+msgstr "Gunjala Gondi"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:977
 msgid "Makasar"
-msgstr ""
+msgstr "Makassar"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:981
-#, fuzzy
-#| msgid "Bamum Supplement"
 msgid "Tamil Supplement"
-msgstr "Bamum, Ergänzung"
+msgstr "Tamilisch, Ergänzung"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2649,10 +2623,8 @@ msgstr "Ägyptische Hieroglyphen"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1001
-#, fuzzy
-#| msgid "Egyptian Hieroglyphs"
 msgid "Egyptian Hieroglyph Format Controls"
-msgstr "Ägyptische Hieroglyphen"
+msgstr "Ägyptische Hieroglyphen-Steuerzeichen"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2694,7 +2666,7 @@ msgstr "Pahawh Hmong"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1025
 msgid "Medefaidrin"
-msgstr ""
+msgstr "Medefaidrin"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2743,7 +2715,7 @@ msgstr "Kana, erweitert-A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1053
 msgid "Small Kana Extension"
-msgstr ""
+msgstr "Kleine Kana, erweitert"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2791,10 +2763,8 @@ msgstr "Altgriechische Notenschriftzeichen"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1081
-#, fuzzy
-#| msgid "Aegean Numbers"
 msgid "Mayan Numerals"
-msgstr "Ägäische Zahlzeichen"
+msgstr "Maya-Zahlzeichen"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2836,14 +2806,14 @@ msgstr "Glagolitisch, Ergänzung"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1105
 msgid "Nyiakeng Puachue Hmong"
-msgstr ""
+msgstr "Nyiakeng Puachue Hmong"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1109
 msgid "Wancho"
-msgstr ""
+msgstr "Wancho"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2863,17 +2833,15 @@ msgstr "Adlam"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1121
-#, fuzzy
-#| msgid "Coptic Epact Numbers"
 msgid "Indic Siyaq Numbers"
-msgstr "Koptische Zahlzeichen"
+msgstr "Indische Siyaq-Zahlzeichen"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1125
 msgid "Ottoman Siyaq Numbers"
-msgstr ""
+msgstr "Osmanische Siyaq-Zahlzeichen"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2977,19 +2945,15 @@ msgstr "Zusätzliche piktografische Symbole"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1185
-#, fuzzy
-#| msgid "Khmer Symbols"
 msgid "Chess Symbols"
-msgstr "Khmer-Symbole"
+msgstr "Schachsymbole"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1189
-#, fuzzy
-#| msgid "Supplemental Symbols and Pictographs"
 msgid "Symbols and Pictographs Extended-A"
-msgstr "Zusätzliche piktografische Symbole"
+msgstr "Piktografische Symbole, erweitert-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3113,6 +3077,8 @@ msgid ""
 "Use engine schema paths instead of ibus core, which can be comma-separated "
 "values."
 msgstr ""
+"Schemapfade des Engines anstelle von ibus core verwenden, das können durch "
+"Komma getrennte Werte sein."
 
 #: tools/main.vala:381
 msgid "Resetting…"
@@ -3221,10 +3187,8 @@ msgid "Show emoji variants"
 msgstr "Emoji-Varianten anzeigen"
 
 #: ui/gtk3/emojier.vala:1111
-#, fuzzy
-#| msgid "_Close"
 msgid "Close"
-msgstr "S_chließen"
+msgstr "Schließen"
 
 #: ui/gtk3/emojier.vala:1117
 msgid "Menu"
@@ -3232,7 +3196,7 @@ msgstr "Menü"
 
 #: ui/gtk3/emojier.vala:1128
 msgid "Click to view a warning message"
-msgstr ""
+msgstr "Klicken um eine Warnmeldung anzusehen"
 
 #: ui/gtk3/emojier.vala:1172
 msgid "Loading a Unicode dictionary:"
@@ -3286,6 +3250,10 @@ msgid ""
 "application. E.g. Press Esc key several times to release the emoji typing "
 "mode, click your desktop and click your text application again."
 msgstr ""
+"Konnte die aktuelle Textapplikation nicht finden. Bitte fokussieren Sie die "
+"Applikation erneut. Zum Beispiel tippen sie mehrere Male die Esc-Taste um "
+"den Emojieingabemodus zu verlassen, klicken Sie mit der Maus auf den Desktop "
+"und klicken sie dann wieder auf Ihre Textapplikation."
 
 #: ui/gtk3/emojierapp.vala:58
 msgid "Canceled to choose an emoji."

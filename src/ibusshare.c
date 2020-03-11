@@ -100,6 +100,7 @@ ibus_get_socket_path (void)
         gchar *display;
         gchar *displaynumber = "0";
         /* gchar *screennumber = "0"; */
+        gboolean is_wayland = FALSE;
         gchar *p;
 
         path = g_strdup (g_getenv ("IBUS_ADDRESS_FILE"));
@@ -108,13 +109,19 @@ ibus_get_socket_path (void)
         }
 
         if (_display == NULL) {
-            display = g_strdup (g_getenv ("DISPLAY"));
+            display = g_strdup (g_getenv ("WAYLAND_DISPLAY"));
+            if (display)
+                is_wayland = TRUE;
+            else
+                display = g_strdup (g_getenv ("DISPLAY"));
         }
         else {
             display = g_strdup (_display);
         }
 
-        if (display) {
+        if (is_wayland) {
+            displaynumber = display;
+        } else if (display) {
             p = display;
             hostname = display;
             for (; *p != ':' && *p != '\0'; p++);

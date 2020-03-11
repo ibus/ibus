@@ -300,25 +300,26 @@ else
     AC_SUBST(wayland_scanner_rules)
 fi
 
-enable_appindicator_engine_icon="no"
 if test x"$enable_appindicator" = x"yes"; then
     enable_appindicator="yes (enabled, use --disable-appindicator to disable)"
 
-    # Need qt5-qtbase-devel package
-    # There is no way to check the version of KStatusNotifierItem and
-    # check the version of qtbase here.
-    AC_MSG_CHECKING([for KDE5 appindicator engine icon])
-    PKG_CHECK_EXISTS([Qt5Gui >= 5.4],
-        enable_appindicator_engine_icon="yes"
-    )
-    AC_MSG_RESULT([$enable_appindicator_engine_icon])
+    # --enable-appindicator-engine-icon option.
+    AC_ARG_ENABLE(appindicator_engine_icon,
+       AS_HELP_STRING([--enable-appindicator_engine_icon],
+                       [Build appindicator engine icon support]),
+       [enable_appindicator_engine_icon=$enableval],
+       [enable_appindicator_engine_icon=yes]
+   )
+else
+    enable_appindicator_engine_icon="no (disabled since appindicator is disabled)"
+fi
 
-fi
-if test x"$enable_appindicator_engine_icon" != x"yes" ; then
-    enable_appindicator_engine_icon="no (disabled, need qtbase-devel 5.4 or later)"
-fi
 AM_CONDITIONAL([ENABLE_APPINDICATOR_ENGINE_ICON],
                [test x"$enable_appindicator_engine_icon" = x"yes"])
+
+if test x"$enable_appindicator_engine_icon" = x"yes"; then
+    enable_appindicator_engine_icon="yes (enabled, use --disable-appindicator-engine-icon to disable)"
+fi
 
 # GObject introspection
 GOBJECT_INTROSPECTION_CHECK([0.6.8])

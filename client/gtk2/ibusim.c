@@ -41,9 +41,7 @@ static const GtkIMContextInfo *info_list[] = {
 G_MODULE_EXPORT const gchar*
 g_module_check_init (GModule *module)
 {
-    return glib_check_version (GLIB_MAJOR_VERSION,
-                               GLIB_MINOR_VERSION,
-                               0);
+    return null;
 }
 
 G_MODULE_EXPORT void

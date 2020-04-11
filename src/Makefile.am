@@ -246,42 +246,41 @@ if ENABLE_EMOJI_DICT
 AM_CPPFLAGS += -DENABLE_EMOJI_DICT
 
 dictdir = $(pkgdatadir)/dicts
-dict_DATA = dicts/emoji-en.dict
 LANG_FILES = $(basename $(notdir $(wildcard $(EMOJI_ANNOTATION_DIR)/*.xml)))
+EMOJI_DICT_FILES = $(patsubst %,dicts/emoji-%.dict,$(LANG_FILES))
+dict_DATA = $(EMOJI_DICT_FILES)
 
 noinst_PROGRAMS += emoji-parser
 
-dicts/emoji-en.dict: emoji-parser
+dicts/emoji-%.dict: emoji-parser
 	$(AM_V_at)if test x"$(LANG_FILES)" = x ; then \
 	    echo "WARNING: Not found $(EMOJI_ANNOTATION_DIR)/en.xml" 1>&2; \
 	fi; \
-	for f in $(LANG_FILES) ; do \
-	    if test -f dicts/emoji-$$f.dict; then \
-	        echo "Already exists dicts/emoji-$$f.dict"; \
-	        continue; \
-	    fi; \
-	    if test -f \
-	    "$(EMOJI_ANNOTATION_DIR)/../annotationsDerived/$$f.xml" ; then \
-	        xml_derived_option="--xml-derived $(EMOJI_ANNOTATION_DIR)/../annotationsDerived/$$f.xml"; \
+	if test -f $@; then \
+	    echo "Already exists $@"; \
+	    exit 0; \
+	fi; \
+	if test -f \
+	    "$(EMOJI_ANNOTATION_DIR)/../annotationsDerived/$*.xml" ; then \
+	        xml_derived_option="--xml-derived $(EMOJI_ANNOTATION_DIR)/../annotationsDerived/$*.xml"; \
 	        plus_comment="derived"; \
-	    fi; \
-	    if test x"$$f" = xen ; then \
-	        $(builddir)/emoji-parser \
-	            --unicode-emoji-dir $(UNICODE_EMOJI_DIR) \
-	            --xml $(EMOJI_ANNOTATION_DIR)/$$f.xml \
-	            $$xml_derived_option \
-	            --xml-ascii $(top_srcdir)/data/annotations/en_ascii.xml \
-	            --out-category ibusemojigen.h \
-	            --out $@; \
-	    else \
-	        $(builddir)/emoji-parser \
-	            --unicode-emoji-dir $(UNICODE_EMOJI_DIR) \
-	            --xml $(EMOJI_ANNOTATION_DIR)/$$f.xml \
-	            $$xml_derived_option \
-	            --out dicts/emoji-$$f.dict; \
-	    fi; \
-	    echo "Generated $$plus_comment dicts/emoji-$$f.dict"; \
-	done
+	fi; \
+	if test x"$*" = xen ; then \
+	    $(builddir)/emoji-parser \
+	        --unicode-emoji-dir $(UNICODE_EMOJI_DIR) \
+	        --xml $(EMOJI_ANNOTATION_DIR)/$*.xml \
+	        $$xml_derived_option \
+	        --xml-ascii $(top_srcdir)/data/annotations/en_ascii.xml \
+	        --out-category ibusemojigen.h \
+	        --out $@; \
+	else \
+	    $(builddir)/emoji-parser \
+	        --unicode-emoji-dir $(UNICODE_EMOJI_DIR) \
+	        --xml $(EMOJI_ANNOTATION_DIR)/$*.xml \
+	        $$xml_derived_option \
+	        --out $@; \
+	fi; \
+	echo "Generated $$plus_comment $@"
 
 ibusemojigen.h: dicts/emoji-en.dict
 	$(NULL)

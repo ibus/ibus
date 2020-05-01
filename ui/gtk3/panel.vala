@@ -357,6 +357,13 @@ class Panel : IBus.PanelService {
     }
 
     private void bind_switch_shortcut() {
+        string desktop_string = Environment.get_variable("XDG_CURRENT_DESKTOP");
+        if (desktop_string != null) {
+            string[] desktops = desktop_string.split (":");
+            if ("GNOME" in desktops || "Unity7" in desktops)
+                return;
+        }
+
         string[] accelerators = m_settings_hotkey.get_strv("triggers");
 
         var keybinding_manager = KeybindingManager.get_instance();

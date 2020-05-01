@@ -108,7 +108,17 @@ class Setup(object):
         # Gtk.ListBox has been available since gtk 3.10
         self.__has_list_box = hasattr(Gtk, 'ListBox')
 
-        gtk_builder_file = path.join(path.dirname(__file__), "./setup.ui")
+        is_no_switch_shortcut = False
+        desktop_string = os.environ.get('XDG_CURRENT_DESKTOP')
+        if desktop_string:
+            desktops = desktop_string.split(':')
+            if 'GNOME' in desktops or 'Unity7' in desktops:
+                is_no_switch_shortcut = True
+        if is_no_switch_shortcut:
+            gtk_builder_file = path.join(path.dirname(__file__), "./setup-no_switch_shortcut.ui")
+        else:
+            gtk_builder_file = path.join(path.dirname(__file__), "./setup.ui")
+
         self.__builder = Gtk.Builder()
         self.__builder.set_translation_domain(DOMAINNAME)
         self.__builder.add_from_file(gtk_builder_file);

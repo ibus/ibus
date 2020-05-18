@@ -1338,7 +1338,7 @@ Homepage: https://github.com/ibus/ibus/wiki
                     <property name="shadow_type">none</property>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton_auto_start">
-                        <property name="label" translatable="yes">Start ibus on login</property>
+                        <property name="label" translatable="yes">Start IBus upon login</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>

@@ -216,8 +216,12 @@ parse_compose_sequence (IBusComposeData *compose_data,
             compose_data->sequence[n] = codepoint;
         }
 
-        if (codepoint == IBUS_KEY_VoidSymbol)
-            g_warning ("Could not get code point of keysym %s", match);
+        if (codepoint == IBUS_KEY_VoidSymbol) {
+            g_warning ("Could not get code point of keysym %s: %s",
+                       match, line);
+            g_free (match);
+            goto fail;
+        }
         g_free (match);
         n++;
     }

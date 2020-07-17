@@ -822,6 +822,8 @@ class Panel : IBus.PanelService {
         if (!m_use_system_keyboard_layout)
             m_xkblayout.set_layout(engine);
 
+        m_candidate_panel.set_language(new Pango.AttrLanguage(Pango.Language.from_string(engine.get_language())));
+
         engine_contexts_insert(engine);
     }
 

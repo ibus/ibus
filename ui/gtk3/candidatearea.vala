@@ -32,6 +32,8 @@ class CandidateArea : Gtk.Box {
     private bool m_show_cursor;
     private ThemedRGBA m_rgba;
 
+    private Pango.Attribute m_language_attribute;
+
     private const string LABELS[] = {
         "1.", "2.", "3.", "4.", "5.", "6.", "7.", "8.",
         "9.", "0.", "a.", "b.", "c.", "d.", "e.", "f."
@@ -102,6 +104,10 @@ class CandidateArea : Gtk.Box {
             m_labels[i].set_text(LABELS[i]);
     }
 
+    public void set_language(Pango.Attribute language_attribute) {
+        m_language_attribute = language_attribute.copy();
+    }
+
     public void set_candidates(IBus.Text[] candidates,
                                uint focus_candidate = 0,
                                bool show_cursor = true) {
@@ -115,6 +121,7 @@ class CandidateArea : Gtk.Box {
             bool visible = false;
             if (i < candidates.length) {
                 Pango.AttrList attrs = get_pango_attr_list_from_ibus_text(candidates[i]);
+                attrs.change(m_language_attribute.copy());
                 if (i == focus_candidate && show_cursor) {
                     Pango.Attribute pango_attr = Pango.attr_foreground_new(
                             (uint16)(m_rgba.selected_fg.red * uint16.MAX),

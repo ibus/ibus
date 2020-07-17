@@ -34,6 +34,8 @@ public class CandidatePanel : Gtk.Box{
 
     private Gdk.Rectangle m_cursor_location;
 
+    private Pango.Attribute m_language_attribute;
+
     public signal void cursor_up();
     public signal void cursor_down();
     public signal void page_up();
@@ -112,8 +114,14 @@ public class CandidatePanel : Gtk.Box{
         m_candidate_area.set_labels(labels);
     }
 
+    public void set_language(Pango.Attribute language_attribute) {
+        m_candidate_area.set_language(language_attribute);
+        m_language_attribute = language_attribute.copy();
+    }
+
     private void set_attributes(Gtk.Label label, IBus.Text text) {
         Pango.AttrList attrs = get_pango_attr_list_from_ibus_text(text);
+        attrs.change(m_language_attribute.copy());
 
         Gtk.StyleContext context = label.get_style_context();
         Gdk.RGBA color;
@@ -154,6 +162,7 @@ public class CandidatePanel : Gtk.Box{
         if (text != null) {
             m_aux_label.set_text(text.get_text());
             Pango.AttrList attrs = get_pango_attr_list_from_ibus_text(text);
+            attrs.change(m_language_attribute.copy());
             m_aux_label.set_attributes(attrs);
             m_aux_label.show();
         } else {

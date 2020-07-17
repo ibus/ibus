@@ -28,6 +28,8 @@ libexec_PROGRAMS = ibus-wayland
 protocol_sources = \
     input-method-unstable-v1-client-protocol.h \
     input-method-unstable-v1-protocol.c \
+    input-method-unstable-v2-client-protocol.h \
+    input-method-unstable-v2-protocol.c \
     $(NULL)
 
 ibus_wayland_SOURCES = \

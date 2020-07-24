@@ -202,7 +202,6 @@ _from_gconf_value (const GConfValue *gv)
                 g_variant_builder_init (&builder, G_VARIANT_TYPE("ad")); break;
             case GCONF_VALUE_BOOL:
                 g_variant_builder_init (&builder, G_VARIANT_TYPE("ab")); break;
-                break;
             default:
                 g_assert_not_reached ();
             }

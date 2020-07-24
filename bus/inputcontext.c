@@ -2846,7 +2846,7 @@ bus_input_context_update_preedit_text (BusInputContext *context,
         context->preedit_visible = visible;
     if (use_extension)
         context->preedit_mode = mode;
-    extension_visible = context->preedit_visible |
+    extension_visible = context->preedit_visible ||
                         (context->emoji_extension != NULL);
 
     if (use_extension && context->emoji_extension) {

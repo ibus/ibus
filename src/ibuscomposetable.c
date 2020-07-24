@@ -382,7 +382,7 @@ ibus_compose_list_check_duplicated (GList *compose_list,
             
             if (n_outputs == unichar_length (output_chars)) {
                 int j = 0;
-                while (compose_data->values[j] && j < n_outputs) {
+                while (j < n_outputs && compose_data->values[j]) {
                     if (compose_data->values[j] != output_chars[j])
                         break;
                     ++j;

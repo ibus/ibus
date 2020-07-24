@@ -148,7 +148,7 @@ _is_space (const gchar *text,
 {
     gsize i = 0;
 
-    for (i = 0; text[i] != '\0' && i < text_len; i++) {
+    for (i = 0; i < text_len && text[i] != '\0'; i++) {
         switch (text[i]) {
         case '\t':
         case ' ':

@@ -5,24 +5,25 @@
 #
 # Translators:
 # Kris Thomsen <lakristho@gmail.com>, 2009,2011
-# scootergrisen <scootergrisen@gmail.com>, 2017. #zanata
+# scootergrisen <scootergrisen@gmail.com>, 2017. #zanata, 2020.
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
-# scootergrisen <scootergrisen@gmail.com>, 2018. #zanata
-# scootergrisen <scootergrisen@gmail.com>, 2019. #zanata
+# scootergrisen <scootergrisen@gmail.com>, 2018. #zanata, 2020.
+# scootergrisen <scootergrisen@gmail.com>, 2019. #zanata, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2019-06-22 05:37+0000\n"
+"PO-Revision-Date: 2020-07-21 19:28+0000\n"
 "Last-Translator: scootergrisen <scootergrisen@gmail.com>\n"
-"Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
+"Language-Team: Danish <https://translate.fedoraproject.org/projects/ibus/"
+"ibus/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Zanata 4.6.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.1.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3273,9 +3274,11 @@ msgstr "IBus er en intelligent indtastningsbus til Linux/Unix."
 msgid "translator-credits"
 msgstr ""
 "Kris Thomsen\n"
+"scootergrisen\n"
 "\n"
-"Dansk-gruppen <dansk@dansk-gruppen.dk>\n"
-"Mere info: http://www.dansk-gruppen.dk"
+"Dansk-gruppen\n"
+"Websted http://dansk-gruppen.dk\n"
+"E-mail <dansk@dansk-gruppen.dk>"
 
 #: ui/gtk3/panel.vala:1118
 msgid "Preferences"

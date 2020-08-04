@@ -12,21 +12,22 @@
 # Meskó Balázs <meskobalazs@gmail.com>, 2018. #zanata
 # Meskó Balázs <meskobalazs@gmail.com>, 2019. #zanata
 # Balázs Meskó <meskobalazs@gmail.com>, 2020.
+# Balázs Meskó <meskobalazs@mailbox.org>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2020-01-05 18:49+0000\n"
-"Last-Translator: Balázs Meskó <meskobalazs@gmail.com>\n"
-"Language-Team: Hungarian <https://translate.stg.fedoraproject.org/projects/"
-"ibus/ibus/hu/>\n"
+"PO-Revision-Date: 2020-07-21 19:28+0000\n"
+"Last-Translator: Balázs Meskó <meskobalazs@mailbox.org>\n"
+"Language-Team: Hungarian <https://translate.fedoraproject.org/projects/ibus/"
+"ibus/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.9.1\n"
+"X-Generator: Weblate 4.1.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -36,7 +37,7 @@ msgstr "Alrendszerek előtöltése"
 #. Translators: Tooltip for the button “Preload Engines”
 #: data/dconf/org.freedesktop.ibus.gschema.xml:13
 msgid "Preload engines during ibus starts up"
-msgstr "Alrendszerek előtöltése  az ibus indításakor"
+msgstr "Alrendszerek előtöltése az ibus indításakor"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:17
 msgid "Engines order"
@@ -57,7 +58,7 @@ msgid ""
 "show the window and switch prev/next engines."
 msgstr ""
 "Beállítja a felugró ablak késleltetését az IME váltóablaknál. Az "
-"alapértelmezett 400.0  =  Ablak azonnali megjelenítése.  0 < Késleltetés "
+"alapértelmezett 400.0 = Ablak azonnali megjelenítése. 0 < Késleltetés "
 "ezredmásodpercben. 0 > Nem jeleníti meg az ablakot, és átvált a következő/"
 "előző alrendszerre."
 
@@ -145,7 +146,7 @@ msgstr "Gyorsbillentyűk a beviteli mód ki- vagy bekapcsolásához"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:75
 msgid "Trigger shortcut keys for gtk_accelerator_parse"
-msgstr "Aktiválja a gyorsbillentyűket a  gtk_accelerator_parse részére"
+msgstr "Aktiválja a gyorsbillentyűket a gtk_accelerator_parse részére"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:80
 msgid "Enable shortcut keys"
@@ -260,7 +261,7 @@ msgid ""
 "percentage values in the range 0% to 100%, and 'a' is a floating point value "
 "in the range 0 to 1 of the alpha."
 msgstr ""
-"Az XKB ikon a kiosztási karakterláncot mutatja, és a karakterlánc  RGBA "
+"Az XKB ikon a kiosztási karakterláncot mutatja, és a karakterlánc RGBA "
 "értékként jelenik meg. Az RGA érték a következők egyike lehet. 1. egy X11 "
 "színnév, 2. egy hexadecimális érték „#rrggbb” formában, ahol az „r”, „g” és "
 "„b” a vörös, zöld és kék színek értékei hexadecimális számjegyekkel, 3. egy "
@@ -303,7 +304,7 @@ msgstr "Egyéni betűkészlet neve a nyelv panelhez"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:173
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
-msgstr "Unicode gyorsbillentyű a  gtk_accelerator_parse részére"
+msgstr "Unicode gyorsbillentyű a gtk_accelerator_parse részére"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:174
 msgid "The shortcut keys for turning Unicode typing on or off"
@@ -311,7 +312,7 @@ msgstr "Gyorsbillentyű az Unicode bevitel ki- vagy bekapcsolásához"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:178
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
-msgstr "Emodzsi gyorsbillentyűket a  gtk_accelerator_parse részére"
+msgstr "Emodzsi gyorsbillentyűket a gtk_accelerator_parse részére"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:179
 msgid "The shortcut keys for turning emoji typing on or off"
@@ -3257,7 +3258,7 @@ msgstr "BETŰKÉSZLET"
 #.
 #: ui/gtk3/emojierapp.vala:120
 msgid "\"LANG\" for annotations on emoji dialog. E.g. \"en\""
-msgstr "„NYELV”  az emodzsi párbeszédablak annotációhoz. Például „en”"
+msgstr "„NYELV” az emodzsi párbeszédablak annotációhoz. Például „en”"
 
 #: ui/gtk3/emojierapp.vala:121
 msgid "LANG"
@@ -3287,15 +3288,7 @@ msgstr "Az IBus egy intelligens beviteli busz Linux/Unix rendszerekhez."
 msgid "translator-credits"
 msgstr ""
 "Zoltan Hoppar <zoltanh721@fedoraproject.org>, 2012.\n"
-"Meskó Balázs <meskobalazs@fedoraproject.org>, 2017.\n"
-"\n"
-"Launchpad Contributions:\n"
-"  Gabor Kelemen https://launchpad.net/~kelemeng\n"
-"  Muszela Balázs https://launchpad.net/~bazsi86-deactivatedaccount\n"
-"  Ocsovszki Dorián https://launchpad.net/~gorkhaan\n"
-"  Robert Roth https://launchpad.net/~evfool\n"
-"  Token https://launchpad.net/~kozmad\n"
-"  fergekolferol https://launchpad.net/~ferge-kolferol"
+"Meskó Balázs <meskobalazs@fedoraproject.org>, 2017,2020."
 
 #: ui/gtk3/panel.vala:1118
 msgid "Preferences"

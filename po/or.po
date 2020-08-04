@@ -2,23 +2,26 @@
 # Oriya translation of ibus.
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
 # This file is distributed under the same license as the ibus package.
-#
+# 
 # Translators:
 # Manoj Kumar Giri <mgiri@redhat.com>, 2009,2011-2013
 # Manoj Kumar Giri <mgiri@redhat.com>, 2013
+# Ankit Behera <proneon267@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2014-02-18 05:48+0000\n"
-"Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
-"Language-Team: Oriya <Translation-team-or@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2020-04-13 22:40+0000\n"
+"Last-Translator: Ankit Behera <proneon267@gmail.com>\n"
+"Language-Team: Odia <https://translate.fedoraproject.org/projects/ibus/ibus/"
+"or/>\n"
 "Language: or\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.11.3\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -185,6 +188,8 @@ msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
 msgstr ""
+"ଗୁଣଧର୍ମ ତାଲିକାର ଆଚରଣ। 0 = ଦେଖାନ୍ତୁ ନାହିଁ, 1 = ସ୍ୱୟଂଚାଳିତ ଭାବରେ ଲୁଚାନ୍ତୁ , 2 ="
+" ସର୍ବଦା ଦେଖାନ୍ତୁ"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:117
 #: data/dconf/org.freedesktop.ibus.gschema.xml:121
@@ -203,7 +208,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:130
 msgid "The milliseconds to show property panel"
-msgstr ""
+msgstr "ଗୁଣଧର୍ମ ତାଲିକାକୁ ଦେଖାଇବା ପାଇଁ ମିଲି ସେକେଣ୍ଡସ୍‌"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:131
 msgid ""
@@ -574,11 +579,11 @@ msgstr "ଇଚ୍ଛାରୂପୀ"
 
 #: setup/setup.ui:48
 msgid "Do not show"
-msgstr ""
+msgstr "ଦେଖାଅ ନାହିଁ"
 
 #: setup/setup.ui:51
 msgid "Hide automatically"
-msgstr ""
+msgstr "ସ୍ୱୟଂଚାଳିତ ଭାବରେ ଲୁଚେଇ ଦିଅ"
 
 #: setup/setup.ui:54
 msgid "Always"
@@ -635,7 +640,7 @@ msgstr "ଭାଷା ସୂଚକକୁ ଦର୍ଶାଇବା ଅଥବା �
 
 #: setup/setup.ui:409
 msgid "Show property panel:"
-msgstr ""
+msgstr "ଗୁଣଧର୍ମ ତାଲିକା ଦେଖନ୍ତୁ:"
 
 #: setup/setup.ui:423
 msgid "Language panel position:"
@@ -715,6 +720,9 @@ msgid ""
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
 "the panel icon.</i></small>"
 msgstr ""
+"<small><i>ସକ୍ରିୟ ନିବେଶ ପଦ୍ଧତିକୁ ପରିବର୍ତ୍ତନ କରାଯାଇପାରିବ ଉପର ତାଲିକାରୁ ବଛିତ "
+"ମାନଙ୍କ ମଧ୍ଯରୁ, କୀବୋର୍ଡ଼ shortcut କୀ ଦବେଇବା ଦ୍ୱାରା କିମ୍ବା ତାଲିକା ଚିତ୍ରସଙ୍କେତକୁ"
+" ଦବେଇବା ଦ୍ୱାରା<</i></small>"
 
 #: setup/setup.ui:873
 msgid ""

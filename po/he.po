@@ -11,16 +11,16 @@ msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2020-01-05 18:49+0000\n"
+"PO-Revision-Date: 2020-08-04 15:29+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://translate.stg.fedoraproject.org/projects/ibus/"
+"Language-Team: Hebrew <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 3.9.1\n"
+"X-Generator: Weblate 4.1.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -45,19 +45,14 @@ msgid "Popup delay milliseconds for IME switcher window"
 msgstr "השהיית חלונית קופצת במילישניות לחלון בורר IME"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
-#, fuzzy
-#| msgid ""
-#| "Set popup delay milliseconds to show IME switcher window. The default is "
-#| "400. 0 = Show the window immediately. 0 &lt; Delay milliseconds. 0 &gt; "
-#| "Do not show the window and switch prev/next engines."
 msgid ""
 "Set popup delay milliseconds to show IME switcher window. The default is "
 "400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
 "show the window and switch prev/next engines."
 msgstr ""
 "הגדרת השהיית חלונית קופצת במילישניות כדי להציג חלון בורר IME. בררת המחדל היא "
-"400. 0 = להציג את החלון מיידית. 0 &lt; ההשהיה במילישניות. 0 &gt; לא להצין את "
-"החלון ולהחליף למנוע הקודם/הבא."
+"400. 0 = להציג את החלון מיידית. 0 < ההשהיה במילישניות. 0 > לא להציג את החלון "
+"ולהחליף למנוע הקודם/הבא."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"
@@ -73,20 +68,20 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:32
 msgid "Latin layouts which have no ASCII"
-msgstr ""
+msgstr "פריסות לטיניות שאין להן ASCII"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:33
 msgid "US layout is appended to the Latin layouts. variant can be omitted."
-msgstr ""
+msgstr "פריסת ארה״ב נוספת לסוף הפריסות הלטיניות. אפשר להשמיט את ההגוון."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:37
 msgid "Use xmodmap"
-msgstr ""
+msgstr "להשתמש ב־xmodmap"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:38
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
-msgstr ""
+msgstr "להריץ את xmodmap אם קיימים ‎.xmodmap או ‎.Xmodmap בעת החלפת מנועי ibus."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:42 setup/setup.ui:1208
 msgid "Use system keyboard layout"
@@ -239,7 +234,7 @@ msgstr "הצגת שם שיטת הקלט בסרגל השפה"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:150
 msgid "RGBA value of XKB icon"
-msgstr ""
+msgstr "ערך RGBA של סמל XKB"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:151
 msgid ""
@@ -3156,10 +3151,9 @@ msgid "Has emoji variants"
 msgstr ""
 
 #: ui/gtk3/emojier.vala:1591 ui/gtk3/emojier.vala:1604
-#, fuzzy, c-format
-#| msgid "Description:\n"
+#, c-format
 msgid "Description: %s"
-msgstr "תיאור:\n"
+msgstr "תיאור: %s"
 
 #: ui/gtk3/emojier.vala:1591
 msgid "None"
@@ -3239,10 +3233,8 @@ msgid "Match with the condition of the specified integer"
 msgstr ""
 
 #: ui/gtk3/panel.vala:282 ui/gtk3/panel.vala:313
-#, fuzzy
-#| msgid "IBus Update"
 msgid "IBus Panel"
-msgstr "עדכון IBus"
+msgstr "לוח IBus"
 
 #: ui/gtk3/panel.vala:1095
 msgid "IBus is an intelligent input bus for Linux/Unix."

@@ -2,7 +2,7 @@
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
 # Copyright (C) 2015-2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # This file is distributed under the same license as the ibus package.
-#
+# 
 # Serdar Sağlam <teknomobil@msn.com>, 2019. #zanata
 # Oğuz Ersen <oguzersen@protonmail.com>, 2019, 2020.
 msgid ""
@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2020-01-03 13:37+0000\n"
+"PO-Revision-Date: 2020-04-21 19:40+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://translate.stg.fedoraproject.org/projects/"
-"ibus/ibus/tr/>\n"
+"Language-Team: Turkish <https://translate.fedoraproject.org/projects/ibus/"
+"ibus/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
-"X-Generator: Weblate 3.9.1\n"
+"X-Generator: Weblate 4.0.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -50,21 +50,21 @@ msgid ""
 "show the window and switch prev/next engines."
 msgstr ""
 "IME değiştirici penceresini gösterecek açılır pencere gecikmesini milisaniye "
-"olarak ayarlayın. Varsayılan değer 400'dür. 0 = Pencereyi hemen göster. 0 < "
+"olarak ayarlayın. Öntanımlı değer 400'dür. 0 = Pencereyi hemen göster. 0 < "
 "Milisaniye cinsinden gecikme. 0 > Pencereyi gösterme ve önceki/sonraki "
 "motorlara geçiş yap."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"
-msgstr "Kaydedilen versiyon numarası"
+msgstr "Kaydedilen sürüm numarası"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:28
 msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
 msgstr ""
-"Kaydedilen versiyon numarası, daha önce kurulmuş olan ibus ile mevcut "
-"ibus'un biri arasındaki farkı kontrol etmek için kullanılacaktır."
+"Kaydedilen sürüm numarası, daha önce kurulmuş olan ibus ile mevcut ibus'un "
+"biri arasındaki farkı denetlemek için kullanılacaktır."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:32
 msgid "Latin layouts which have no ASCII"
@@ -111,12 +111,12 @@ msgstr "Tüm uygulamalar ile aynı giriş yöntemini paylaş"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:57
 msgid "Enable input method by default"
-msgstr "Giriş yöntemini varsayılan olarak etkinleştir"
+msgstr "Öntanımlı olarak giriş yöntemini etkinleştir"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:58
 msgid "Enable input method by default when the application gets input focus"
 msgstr ""
-"Uygulama giriş odağı aldığında varsayılan olarak giriş yöntemini etkinleştir"
+"Uygulama giriş odağı aldığında öntanımlı olarak giriş yöntemini etkinleştir"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:62
 msgid "DConf preserve name prefixes"
@@ -252,11 +252,11 @@ msgid ""
 "percentage values in the range 0% to 100%, and 'a' is a floating point value "
 "in the range 0 to 1 of the alpha."
 msgstr ""
-"XKB simgesi yerleşim stringini gösterir ve string RGBA değeri ile "
+"XKB simgesi yerleşim dizgesini gösterir ve dizge RGBA değeri ile "
 "oluşturulur. RGBA değeri; 1. X11'den bir renk adı, 2. 'r', 'g' ve 'b' "
 "kırmızı, yeşil ve mavinin onaltılık basamakları olmak üzere '#rrggbb' "
 "şeklinde bir onaltılık değer, 3. 'rgb(r,g,b)' biçimindeki bir RGB rengi veya "
-"4. 'r', 'g' ve 'b' 0 ila 255 aralığındaki tamsayılar veya %0 ile %100 "
+"4. 'r', 'g' ve 'b' 0 ila 255 aralığındaki tam sayılar veya %0 ile %100 "
 "aralığındaki yüzde değerleri ve 'a', alfa'nın 0 ile 1 aralığındaki bir "
 "ondalık sayı değeri olmak üzere 'rgba(r,g,b,a)' biçimindeki bir RGBA rengi "
 "olabilir."
@@ -316,15 +316,15 @@ msgstr "Emoji iletişim kutusundaki emoji karakterleri için özel yazı tipi ad
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:188
 msgid "Default language for emoji dictionary"
-msgstr "Emoji sözlüğü için varsayılan dil"
+msgstr "Emoji sözlüğü için öntanımlı dil"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:189
 msgid ""
 "Choose a default language of emoji dictionaries on the emoji dialog. The "
 "value $lang is applied to /usr/share/ibus/dicts/emoji-$lang.dict"
 msgstr ""
-"Emoji iletişim kutusunda varsayılan bir emoji sözlük dili seçin. $lang "
-"değeri /usr/share/ibus/dicts/emoji-$lang.dict ögesine uygulanır"
+"Emoji iletişim kutusunda öntanımlı bir emoji sözlük dili seçin. $lang değeri "
+"/usr/share/ibus/dicts/emoji-$lang.dict ögesine uygulanır"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:193
 msgid "favorite emoji list on emoji dialog"
@@ -355,7 +355,7 @@ msgid ""
 "Whether emoji annotations can be matched with a partial string instead of "
 "the exact match or not."
 msgstr ""
-"Emoji ek açıklamalarının tam eşleme yerine kısmi bir string ile eşleşip "
+"Emoji ek açıklamalarının tam eşleme yerine kısmi bir dizge ile eşleşip "
 "eşleşemeyeceği."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:208
@@ -417,8 +417,8 @@ msgid ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
 msgstr ""
-"Copyright (c) 2007-2010 Peng Huang\n"
-"Copyright (c) 2007-2010 Red Hat, Inc."
+"Telif Hakkı (c) 2007-2010 Peng Huang\n"
+"Telif Hakkı (c) 2007-2010 Red Hat, Inc."
 
 #: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
@@ -521,12 +521,12 @@ msgid ""
 "Please press a key (or a key combination).\n"
 "The dialog will be closed when the key is released."
 msgstr ""
-"Lütfen bir tuşa (veya tuş kombinasyonuna) basın.\n"
+"Lütfen bir tuşa (veya tuş dizisine) basın.\n"
 "Tuş serbest bırakıldığında iletişim kutusu kapatılacaktır."
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
-msgstr "Lütfen bir tuşa (veya bir tuş kombinasyonuna) basın"
+msgstr "Lütfen bir tuşa (veya bir tuş dizisine) basın"
 
 #: setup/main.py:121 setup/main.py:588
 msgid "Use shortcut with shift to switch to the previous input method"
@@ -789,7 +789,7 @@ msgid ""
 "If emoji annotations can be matched with a partial string instead of the "
 "exact match"
 msgstr ""
-"Emoji ek açıklamalarının tam eşleşme yerine kısmi bir string ile eşleşip "
+"Emoji ek açıklamalarının tam eşleşme yerine kısmi bir dizge ile eşleşip "
 "eşleşemeyeceği"
 
 #: setup/setup.ui:1101
@@ -1106,7 +1106,7 @@ msgstr "Sinhala"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:157
 msgid "Thai"
-msgstr "Taylandlı"
+msgstr "Tayland"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1421,7 +1421,7 @@ msgstr "Harf Benzeri Semboller"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:337
 msgid "Number Forms"
-msgstr "Sayı Formları"
+msgstr "Sayı Biçimleri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1449,7 +1449,7 @@ msgstr "Çeşitli Teknik"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:353
 msgid "Control Pictures"
-msgstr "Kontrol Resimleri"
+msgstr "Denetim Resimleri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1792,7 +1792,7 @@ msgstr "Syloti Nagri"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:549
 msgid "Common Indic Number Forms"
-msgstr "Ortak Hint Sayı Formları"
+msgstr "Ortak Hint Sayı Biçimleri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1960,14 +1960,14 @@ msgstr "CJK Uyumluluk İdeografları"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:645
 msgid "Alphabetic Presentation Forms"
-msgstr "Alfabetik Sunum Formları"
+msgstr "Alfabetik Sunum Biçimleri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:649
 msgid "Arabic Presentation Forms-A"
-msgstr "Arapça Sunum Formları-A"
+msgstr "Arapça Sunum Biçimleri-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1981,7 +1981,7 @@ msgstr "Varyasyon Seçiciler"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:657
 msgid "Vertical Forms"
-msgstr "Dikey Formlar"
+msgstr "Dikey Biçimler"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1995,28 +1995,28 @@ msgstr "Birleşik Yarım İşaretler"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:665
 msgid "CJK Compatibility Forms"
-msgstr "CJK Uyumluluk Formları"
+msgstr "CJK Uyumluluk Biçimleri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:669
 msgid "Small Form Variants"
-msgstr "Küçük Form Varyantları"
+msgstr "Küçük Biçimli Çeşitleri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:673
 msgid "Arabic Presentation Forms-B"
-msgstr "Arapça Sunum Formları-B"
+msgstr "Arapça Sunum Biçimleri-B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:677
 msgid "Halfwidth and Fullwidth Forms"
-msgstr "Yarım ve Tam Genişlik Formları"
+msgstr "Yarım ve Tam Genişlik Biçimleri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2583,7 +2583,7 @@ msgstr "Mısır Hiyeroglifleri"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1001
 msgid "Egyptian Hieroglyph Format Controls"
-msgstr "Mısır Hiyeroglif Format Kontrolleri"
+msgstr "Mısır Hiyeroglif Biçim Denetimleri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2695,21 +2695,21 @@ msgstr "Duployan"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1065
 msgid "Shorthand Format Controls"
-msgstr "Kestirme Format Kontrolleri"
+msgstr "Steno Biçim Denetimleri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1069
 msgid "Byzantine Musical Symbols"
-msgstr "Bizans Müzikal Semboller"
+msgstr "Bizans Müzik Sembolleri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1073
 msgid "Musical Symbols"
-msgstr "Müzikal Semboller"
+msgstr "Müzik Sembolleri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2986,7 +2986,7 @@ msgstr "İlave Özel Kullanım Alanı-B"
 
 #: tools/main.vala:51
 msgid "List engine name only"
-msgstr "Yalnızca motor adını listele"
+msgstr "Sadece motor adını listele"
 
 #: tools/main.vala:67 tools/main.vala:192 tools/main.vala:202
 msgid "Can't connect to IBus.\n"
@@ -3055,7 +3055,7 @@ msgstr "ibus-daemon'dan çık"
 
 #: tools/main.vala:446
 msgid "Show available engines"
-msgstr "Mevcut motorları göster"
+msgstr "Kullanılabilir motorları göster"
 
 #: tools/main.vala:447
 msgid "(Not implemented)"
@@ -3067,7 +3067,7 @@ msgstr "ibus-daemon'u yeniden başlat"
 
 #: tools/main.vala:449
 msgid "Show version"
-msgstr "Versiyonu göster"
+msgstr "Sürümü göster"
 
 #: tools/main.vala:450
 msgid "Show the content of registry cache"
@@ -3264,8 +3264,8 @@ msgstr "IBus, Linux/Unix için akıllı bir giriş veri yoludur."
 #: ui/gtk3/panel.vala:1099
 msgid "translator-credits"
 msgstr ""
-"Serdar Sağlam <teknomobil@yandex.com>, 2019.\n"
-"Oğuz Ersen <oguzersen@protonmail.com>, 2019"
+"Serdar Sağlam <teknomobil@yandex.com>\n"
+"Oğuz Ersen <oguzersen@protonmail.com>"
 
 #: ui/gtk3/panel.vala:1118
 msgid "Preferences"
@@ -3283,4 +3283,4 @@ msgstr "Çık"
 #. * Otherwise the msgstr is "default:LTR".
 #: ui/gtk3/propertypanel.vala:368 ui/gtk3/propertypanel.vala:376
 msgid "default:LTR"
-msgstr "varsayılan:LTR (soldan sağa)"
+msgstr "öntanımlı olarak:LTR (soldan sağa)"

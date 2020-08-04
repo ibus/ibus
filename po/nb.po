@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2020-05-18 04:53+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2020-05-24 12:40+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/nb_NO/>\n"
 "Language: nb\n"
@@ -269,7 +269,7 @@ msgstr "Bruk egendefinert skrift"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:161
 msgid "Use custom font name for language panel"
-msgstr "Egendefinert skriftnavn for språkpanelet"
+msgstr "Egendefinert skriftnavn i språkpanelet"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:165
 #: data/dconf/org.freedesktop.ibus.gschema.xml:183
@@ -282,7 +282,7 @@ msgstr "Egendefinert skriftnavn for språkpanelet"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:173
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
-msgstr ""
+msgstr "Unicode-snarveistaster for gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:174
 msgid "The shortcut keys for turning Unicode typing on or off"
@@ -304,7 +304,7 @@ msgstr "Egendefinert skriftnavn for språkpanelet"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:188
 msgid "Default language for emoji dictionary"
-msgstr ""
+msgstr "Forvalgt språk for emoji-ordbok"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:189
 msgid ""
@@ -412,7 +412,7 @@ msgstr "_OK"
 
 #: setup/emojilang.py:235 setup/enginedialog.py:205
 msgid "More…"
-msgstr ""
+msgstr "Mer…"
 
 #: setup/engineabout.py:37 setup/setup.ui:1378 ui/gtk3/panel.vala:1138
 msgid "About"
@@ -503,7 +503,7 @@ msgstr "Trykk en tast (eller en tastekombinasjon)"
 
 #: setup/main.py:121 setup/main.py:588
 msgid "Use shortcut with shift to switch to the previous input method"
-msgstr ""
+msgstr "Bruk snarvei med shift for å bytte til forrige inndatametode"
 
 #: setup/main.py:515
 msgid "The IBus daemon is not running. Do you wish to start it?"
@@ -564,11 +564,11 @@ msgstr "Egendefinert"
 
 #: setup/setup.ui:48
 msgid "Do not show"
-msgstr ""
+msgstr "Ikke vis"
 
 #: setup/setup.ui:51
 msgid "Hide automatically"
-msgstr ""
+msgstr "Skjul automatisk"
 
 #: setup/setup.ui:54
 msgid "Always"
@@ -593,7 +593,7 @@ msgstr "Forrige inndatametode:"
 #: setup/setup.ui:157 setup/setup.ui:199 setup/setup.ui:266 setup/setup.ui:319
 #: setup/setup.ui:903 setup/setup.ui:957
 msgid "..."
-msgstr ""
+msgstr "…"
 
 #: setup/setup.ui:226
 msgid "Enable or disable:"
@@ -625,7 +625,7 @@ msgstr ""
 
 #: setup/setup.ui:409
 msgid "Show property panel:"
-msgstr ""
+msgstr "Vis egenskapspanel:"
 
 #: setup/setup.ui:423
 msgid "Language panel position:"
@@ -767,7 +767,7 @@ msgstr ""
 
 #: setup/setup.ui:1176
 msgid "Emoji"
-msgstr ""
+msgstr "Emoji"
 
 #: setup/setup.ui:1230
 msgid "<b>Keyboard Layout</b>"
@@ -790,6 +790,12 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"<big><b>IBus</b></big>\n"
+"<small>Den intelligente inndatabussen</small>\n"
+"Hjemmeside: https://github.com/ibus/ibus/wiki\n"
+"\n"
+"\n"
+"\n"
 
 #: setup/setup.ui:1341
 msgid "Start ibus on login"
@@ -801,78 +807,78 @@ msgstr "<b>Oppstart</b>"
 
 #: src/ibusemojigen.h:30
 msgid "Activities"
-msgstr ""
+msgstr "Aktiviteter"
 
 #: src/ibusemojigen.h:31
 msgid "Animals & Nature"
-msgstr ""
+msgstr "Dyr og natur"
 
 #: src/ibusemojigen.h:32
 msgid "Component"
-msgstr ""
+msgstr "Komponent"
 
 #: src/ibusemojigen.h:33
 msgid "Flags"
-msgstr ""
+msgstr "Flagg"
 
 #: src/ibusemojigen.h:34
 msgid "Food & Drink"
-msgstr ""
+msgstr "Mat og drikke"
 
 #: src/ibusemojigen.h:35
 msgid "Objects"
-msgstr ""
+msgstr "Objekter"
 
 #: src/ibusemojigen.h:36
 msgid "People & Body"
-msgstr ""
+msgstr "Folk og kropp"
 
 #: src/ibusemojigen.h:37
 msgid "Smileys & Emotion"
-msgstr ""
+msgstr "Smilefjes og føleri"
 
 #: src/ibusemojigen.h:38
 msgid "Symbols"
-msgstr ""
+msgstr "Symboler"
 
 #: src/ibusemojigen.h:39
 msgid "Travel & Places"
-msgstr ""
+msgstr "Reiser og plasser"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:33
 msgid "Basic Latin"
-msgstr ""
+msgstr "Grunnleggende latinsk"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:37
 msgid "Latin-1 Supplement"
-msgstr ""
+msgstr "Latinsk-1-tillegg"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:41
 msgid "Latin Extended-A"
-msgstr ""
+msgstr "Latinsk"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:45
 msgid "Latin Extended-B"
-msgstr ""
+msgstr "Latinsk utvividet-B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:49
 msgid "IPA Extensions"
-msgstr ""
+msgstr "IPA-utvidelser"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -900,21 +906,21 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:65
 msgid "Cyrillic"
-msgstr ""
+msgstr "Kyrillisk"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:69
 msgid "Cyrillic Supplement"
-msgstr ""
+msgstr "Kyrillisk-utvidelse"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:73
 msgid "Armenian"
-msgstr ""
+msgstr "Armensk"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -928,7 +934,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:81
 msgid "Arabic"
-msgstr ""
+msgstr "Arabisk"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1369,49 +1375,49 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:333
 msgid "Letterlike Symbols"
-msgstr ""
+msgstr "Bokstavlignende symboler"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:337
 msgid "Number Forms"
-msgstr ""
+msgstr "Tallformer"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:341
 msgid "Arrows"
-msgstr ""
+msgstr "Piler"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:345
 msgid "Mathematical Operators"
-msgstr ""
+msgstr "Matematiske operatorer"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:349
 msgid "Miscellaneous Technical"
-msgstr ""
+msgstr "Ymse teknisk"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:353
 msgid "Control Pictures"
-msgstr ""
+msgstr "Kontrollbilder"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:357
 msgid "Optical Character Recognition"
-msgstr ""
+msgstr "Optisk tegngjenkjennelse"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1439,14 +1445,14 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:373
 msgid "Geometric Shapes"
-msgstr ""
+msgstr "Geometriske former"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:377
 msgid "Miscellaneous Symbols"
-msgstr ""
+msgstr "Ymse symboler"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1980,7 +1986,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:681
 msgid "Specials"
-msgstr ""
+msgstr "Spesialtegn"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2947,16 +2953,16 @@ msgstr ""
 
 #: tools/main.vala:67 tools/main.vala:192 tools/main.vala:202
 msgid "Can't connect to IBus.\n"
-msgstr ""
+msgstr "Kan ikke koble til IBus.\n"
 
 #: tools/main.vala:93
 #, c-format
 msgid "language: %s\n"
-msgstr ""
+msgstr "språk: %s\n"
 
 #: tools/main.vala:161
 msgid "No engine is set.\n"
-msgstr ""
+msgstr "Ingen motor er angitt.\n"
 
 #: tools/main.vala:169
 msgid "Set global engine failed.\n"
@@ -2994,11 +3000,11 @@ msgstr ""
 
 #: tools/main.vala:381
 msgid "Resetting…"
-msgstr ""
+msgstr "Nullstiller…"
 
 #: tools/main.vala:399
 msgid "Done"
-msgstr ""
+msgstr "Ferdig"
 
 #: tools/main.vala:444
 msgid "Set or get engine"
@@ -3010,11 +3016,11 @@ msgstr ""
 
 #: tools/main.vala:446
 msgid "Show available engines"
-msgstr ""
+msgstr "Vis tilgjengelige motorer"
 
 #: tools/main.vala:447
 msgid "(Not implemented)"
-msgstr ""
+msgstr "(Ikke implementert)"
 
 #: tools/main.vala:448
 msgid "Restart ibus-daemon"
@@ -3022,7 +3028,7 @@ msgstr ""
 
 #: tools/main.vala:449
 msgid "Show version"
-msgstr ""
+msgstr "Vis versjon"
 
 #: tools/main.vala:450
 msgid "Show the content of registry cache"
@@ -3050,7 +3056,7 @@ msgstr ""
 
 #: tools/main.vala:458
 msgid "Show this information"
-msgstr ""
+msgstr "Vis denne informasjonen"
 
 #: tools/main.vala:464
 #, c-format
@@ -3058,19 +3064,21 @@ msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
 "\n"
 msgstr ""
+"Bruk: %s KOMMANDO [KOMMANDOVALG…]\n"
+"\n"
 
 #: tools/main.vala:465
 msgid "Commands:\n"
-msgstr ""
+msgstr "Kommandoer:\n"
 
 #: tools/main.vala:494
 #, c-format
 msgid "%s is unknown command!\n"
-msgstr ""
+msgstr "%s er en ukjent kommando!\n"
 
 #: ui/gtk3/emojier.vala:233
 msgid "Favorites"
-msgstr ""
+msgstr "Favoritter"
 
 #: ui/gtk3/emojier.vala:234
 #, fuzzy
@@ -3106,7 +3114,7 @@ msgstr "_Lukk"
 
 #: ui/gtk3/emojier.vala:1117
 msgid "Menu"
-msgstr ""
+msgstr "Meny"
 
 #: ui/gtk3/emojier.vala:1128
 msgid "Click to view a warning message"
@@ -3143,7 +3151,7 @@ msgstr ""
 #: ui/gtk3/emojier.vala:1641
 #, c-format
 msgid "Name: %s"
-msgstr ""
+msgstr "Navn: %s"
 
 #: ui/gtk3/emojier.vala:1649
 #, c-format
@@ -3183,7 +3191,7 @@ msgstr ""
 
 #: ui/gtk3/emojierapp.vala:115
 msgid "FONT"
-msgstr ""
+msgstr "SKRIFT"
 
 #. TRANSLATORS: "LANG" should be capital and translatable.
 #. * It's used for an argument command --lang=LANG
@@ -3194,7 +3202,7 @@ msgstr ""
 
 #: ui/gtk3/emojierapp.vala:121
 msgid "LANG"
-msgstr ""
+msgstr "SPRÅK"
 
 #: ui/gtk3/emojierapp.vala:123
 msgid "Emoji annotations can be match partially"

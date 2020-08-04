@@ -2,7 +2,7 @@
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
 # Copyright (C) 2015-2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # This file is distributed under the same license as the ibus package.
-# 
+#
 # Serdar Sağlam <teknomobil@msn.com>, 2019. #zanata
 # Oğuz Ersen <oguzersen@protonmail.com>, 2019, 2020.
 msgid ""
@@ -323,8 +323,8 @@ msgid ""
 "Choose a default language of emoji dictionaries on the emoji dialog. The "
 "value $lang is applied to /usr/share/ibus/dicts/emoji-$lang.dict"
 msgstr ""
-"Emoji iletişim kutusunda öntanımlı bir emoji sözlük dili seçin. $lang değeri "
-"/usr/share/ibus/dicts/emoji-$lang.dict ögesine uygulanır"
+"Emoji iletişim kutusunda öntanımlı bir emoji sözlük dili seçin. $lang "
+"değeri /usr/share/ibus/dicts/emoji-$lang.dict ögesine uygulanır"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:193
 msgid "favorite emoji list on emoji dialog"

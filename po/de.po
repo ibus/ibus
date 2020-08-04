@@ -795,7 +795,8 @@ msgstr "Emojianmerkungen:"
 
 #: setup/setup.ui:927
 msgid "The shortcut keys to enable Unicode code point conversions"
-msgstr "Tastenkombinationen zum Einschalten der Unicode Codepoint Konvertierung"
+msgstr ""
+"Tastenkombinationen zum Einschalten der Unicode Codepoint Konvertierung"
 
 #: setup/setup.ui:929
 msgid "Unicode code point:"

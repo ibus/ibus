@@ -65,8 +65,8 @@ msgid ""
 msgstr ""
 "Imposta ritardo del popup in millisecondi per mostrare la finestra del "
 "selettore IME. Il valore predefinito è 400. 0 = Mostra la finestra "
-"immediatamente. 0 < Ritardo in millisecondi. 0 > Non mostrare la "
-"finestra e passa ai motori prec/succ."
+"immediatamente. 0 < Ritardo in millisecondi. 0 > Non mostrare la finestra e "
+"passa ai motori prec/succ."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"
@@ -3272,4 +3272,3 @@ msgstr "Esci"
 #: ui/gtk3/propertypanel.vala:368 ui/gtk3/propertypanel.vala:376
 msgid "default:LTR"
 msgstr "default:LTR"
-

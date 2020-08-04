@@ -2,7 +2,7 @@
 # Oriya translation of ibus.
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
 # This file is distributed under the same license as the ibus package.
-# 
+#
 # Translators:
 # Manoj Kumar Giri <mgiri@redhat.com>, 2009,2011-2013
 # Manoj Kumar Giri <mgiri@redhat.com>, 2013
@@ -188,8 +188,8 @@ msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
 msgstr ""
-"ଗୁଣଧର୍ମ ତାଲିକାର ଆଚରଣ। 0 = ଦେଖାନ୍ତୁ ନାହିଁ, 1 = ସ୍ୱୟଂଚାଳିତ ଭାବରେ ଲୁଚାନ୍ତୁ , 2 ="
-" ସର୍ବଦା ଦେଖାନ୍ତୁ"
+"ଗୁଣଧର୍ମ ତାଲିକାର ଆଚରଣ। 0 = ଦେଖାନ୍ତୁ ନାହିଁ, 1 = ସ୍ୱୟଂଚାଳିତ ଭାବରେ ଲୁଚାନ୍ତୁ , 2 = ସର୍ବଦା "
+"ଦେଖାନ୍ତୁ"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:117
 #: data/dconf/org.freedesktop.ibus.gschema.xml:121
@@ -720,9 +720,9 @@ msgid ""
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
 "the panel icon.</i></small>"
 msgstr ""
-"<small><i>ସକ୍ରିୟ ନିବେଶ ପଦ୍ଧତିକୁ ପରିବର୍ତ୍ତନ କରାଯାଇପାରିବ ଉପର ତାଲିକାରୁ ବଛିତ "
-"ମାନଙ୍କ ମଧ୍ଯରୁ, କୀବୋର୍ଡ଼ shortcut କୀ ଦବେଇବା ଦ୍ୱାରା କିମ୍ବା ତାଲିକା ଚିତ୍ରସଙ୍କେତକୁ"
-" ଦବେଇବା ଦ୍ୱାରା<</i></small>"
+"<small><i>ସକ୍ରିୟ ନିବେଶ ପଦ୍ଧତିକୁ ପରିବର୍ତ୍ତନ କରାଯାଇପାରିବ ଉପର ତାଲିକାରୁ ବଛିତ ମାନଙ୍କ ମଧ୍ଯରୁ, "
+"କୀବୋର୍ଡ଼ shortcut କୀ ଦବେଇବା ଦ୍ୱାରା କିମ୍ବା ତାଲିକା ଚିତ୍ରସଙ୍କେତକୁ ଦବେଇବା ଦ୍ୱାରା<</i></"
+"small>"
 
 #: setup/setup.ui:873
 msgid ""

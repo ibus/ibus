@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2019-04-16 17:33+0900\n"
+"POT-Creation-Date: 2020-01-08 12:40+0900\n"
 "PO-Revision-Date: 2020-01-03 17:09+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <https://translate.stg.fedoraproject.org/projects/ibus/"
@@ -54,9 +54,9 @@ msgstr "Opóźnienie wyświetlenia okna przełącznika IME w milisekundach"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
 msgid ""
-"Set popup delay milliseconds to show IME switcher window. The default is 400."
-" 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not show "
-"the window and switch prev/next engines."
+"Set popup delay milliseconds to show IME switcher window. The default is "
+"400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
+"show the window and switch prev/next engines."
 msgstr ""
 "Ustawia opóźnienie wyświetlenia okna przełącznika IME w milisekundach. "
 "Domyślnie wynosi 400. 0 = natychmiastowe wyświetlanie okna. 0 < Milisekundy "
@@ -262,10 +262,10 @@ msgid ""
 "XKB icon shows the layout string and the string is rendered with the RGBA "
 "value. The RGBA value can be 1. a color name from X11, 2. a hex value in "
 "form '#rrggbb' where 'r', 'g' and 'b' are hex digits of the red, green, and "
-"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form "
-"'rgba(r,g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 "
-"to 255 or percentage values in the range 0% to 100%, and 'a' is a floating "
-"point value in the range 0 to 1 of the alpha."
+"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form 'rgba(r,"
+"g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 to 255 or "
+"percentage values in the range 0% to 100%, and 'a' is a floating point value "
+"in the range 0 to 1 of the alpha."
 msgstr ""
 "Ikona XKB wyświetla ciąg układu, który jest wyświetlany za pomocą wartości "
 "RGBA. Wartość RGBA może wynosić 1. nazwę kolory z X11, 2. wartość "
@@ -432,10 +432,11 @@ msgstr ""
 msgid ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
-msgstr "Copyright © 2007-2010 Peng Huang\n"
+msgstr ""
+"Copyright © 2007-2010 Peng Huang\n"
 "Copyright © 2007-2010 Red Hat, Inc."
 
-#: ibus/lang.py:41 src/ibusutil.c:198
+#: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
 msgstr "Inne"
 
@@ -768,8 +769,7 @@ msgstr ""
 
 #: setup/setup.ui:873
 msgid ""
-"The shortcut keys to enable conversions of emoji annotations or Unicode "
-"names"
+"The shortcut keys to enable conversions of emoji annotations or Unicode names"
 msgstr "Klawisze skrótów do włączania konwersji uwag emoji lub nazw unikodu"
 
 #: setup/setup.ui:875
@@ -3123,9 +3123,11 @@ msgstr "Wyświetla tę informację"
 
 #: tools/main.vala:464
 #, c-format
-msgid "Usage: %s COMMAND [OPTION...]\n"
+msgid ""
+"Usage: %s COMMAND [OPTION...]\n"
 "\n"
-msgstr "Użycie: %s POLECENIE [OPCJA…]\n"
+msgstr ""
+"Użycie: %s POLECENIE [OPCJA…]\n"
 "\n"
 
 #: tools/main.vala:465
@@ -3225,9 +3227,9 @@ msgstr "Wybór unikodu"
 
 #: ui/gtk3/emojier.vala:2429
 msgid ""
-"Failed to get the current text application. Please re-focus your application."
-" E.g. Press Esc key several times to release the emoji typing mode, click "
-"your desktop and click your text application again."
+"Failed to get the current text application. Please re-focus your "
+"application. E.g. Press Esc key several times to release the emoji typing "
+"mode, click your desktop and click your text application again."
 msgstr ""
 "Uzyskanie obecnej aplikacji tekstowej się nie powiodło. Proszę ponownie ją "
 "aktywować. Można np. nacisnąć klawisz Esc kilka razy, aby zwolnić tryb "
@@ -3243,7 +3245,7 @@ msgstr "Skopiowano emoji do schowka."
 
 #. TRANSLATORS: "FONT" should be capital and translatable.
 #. * It's used for an argument command --font=FONT
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:114
 msgid "\"FONT\" for emoji characters on emoji dialog"
 msgstr "„CZCIONKA” dla znaków emoji w oknie emoji"
@@ -3254,7 +3256,7 @@ msgstr "CZCIONKA"
 
 #. TRANSLATORS: "LANG" should be capital and translatable.
 #. * It's used for an argument command --lang=LANG
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:120
 msgid "\"LANG\" for annotations on emoji dialog. E.g. \"en\""
 msgstr "„JĘZYK” uwag w oknie emoji, np. „pl”"
@@ -3281,8 +3283,7 @@ msgstr "Panel IBus"
 
 #: ui/gtk3/panel.vala:1095
 msgid "IBus is an intelligent input bus for Linux/Unix."
-msgstr ""
-"IBus jest inteligentną magistralą wprowadzania dla systemu Linux/UNIX."
+msgstr "IBus jest inteligentną magistralą wprowadzania dla systemu Linux/UNIX."
 
 #: ui/gtk3/panel.vala:1099
 msgid "translator-credits"

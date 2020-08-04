@@ -19,14 +19,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-10-24 19:18+0900\n"
+"POT-Creation-Date: 2020-01-08 12:40+0900\n"
 "PO-Revision-Date: 2019-11-25 09:53+0000\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <chinese-l10n@googlegroups.com>\n"
 "Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Zanata 4.6.2\n"
 
@@ -54,11 +54,12 @@ msgstr "IME 切換器視窗彈出延遲的毫秒數"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
 msgid ""
-"Set popup delay milliseconds to show IME switcher window. The default is 400."
-" 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not show "
-"the window and switch prev/next engines."
+"Set popup delay milliseconds to show IME switcher window. The default is "
+"400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
+"show the window and switch prev/next engines."
 msgstr ""
-"設定用來顯示 IME 切換器視窗的彈出視窗延遲毫秒。預設值是 400。0 = 永遠顯示視窗。0 < 延遲毫秒。0 > 不顯示視窗及切換上下引擎。"
+"設定用來顯示 IME 切換器視窗的彈出視窗延遲毫秒。預設值是 400。0 = 永遠顯示視"
+"窗。0 < 延遲毫秒。0 > 不顯示視窗及切換上下引擎。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"
@@ -68,7 +69,9 @@ msgstr "儲存的版本號碼"
 msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
-msgstr "儲存的版本號碼可以用來查看前次安裝的 ibus 版本與目前安裝的 ibus 版本之間的差異。"
+msgstr ""
+"儲存的版本號碼可以用來查看前次安裝的 ibus 版本與目前安裝的 ibus 版本之間的差"
+"異。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:32
 msgid "Latin layouts which have no ASCII"
@@ -85,7 +88,8 @@ msgstr "使用 xmodmap"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:38
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
-msgstr "當 ibus 引擎切換之時，若 .xmodmap 或 .Xmodmap 存在的話，則執行 xmodmap。 "
+msgstr ""
+"當 ibus 引擎切換之時，若 .xmodmap 或 .Xmodmap 存在的話，則執行 xmodmap。 "
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:42 setup/setup.ui:1208
 msgid "Use system keyboard layout"
@@ -199,7 +203,9 @@ msgstr "在面板總是顯示的情況下跟隨輸入游標"
 msgid ""
 "If true, the panel follows the input cursor in case the panel is always "
 "shown. If false, the panel is shown at a fixed location."
-msgstr "若為真，則面板會在總是顯示的情況下跟隨輸入游標。若為假，則面板會顯示在固定位置上。"
+msgstr ""
+"若為真，則面板會在總是顯示的情況下跟隨輸入游標。若為假，則面板會顯示在固定位"
+"置上。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:130
 msgid "The milliseconds to show property panel"
@@ -242,15 +248,16 @@ msgid ""
 "XKB icon shows the layout string and the string is rendered with the RGBA "
 "value. The RGBA value can be 1. a color name from X11, 2. a hex value in "
 "form '#rrggbb' where 'r', 'g' and 'b' are hex digits of the red, green, and "
-"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form "
-"'rgba(r,g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 "
-"to 255 or percentage values in the range 0% to 100%, and 'a' is a floating "
-"point value in the range 0 to 1 of the alpha."
+"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form 'rgba(r,"
+"g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 to 255 or "
+"percentage values in the range 0% to 100%, and 'a' is a floating point value "
+"in the range 0 to 1 of the alpha."
 msgstr ""
-"XKB 圖示會顯示鍵盤配置的字串，且該字串會以 RGBA 值繪製。RGBA 值可以是 1. X11 定義的顏色，2."
-"「#rrggbb」格式的十六進位值，其中 r、g、b 分別是紅色、綠色與藍色，3. 「rgb(r,g,b)」格式的 RGB 色彩，4."
-"「rgba(r,g,b,a)」格式的 RGBA 採，其中的 r、g、b 為 0 至 255 之間的整數值，或 0% 至 100% 之間的百分比，而 a "
-"則是 0 至 1 之間的浮點 alpha 值。"
+"XKB 圖示會顯示鍵盤配置的字串，且該字串會以 RGBA 值繪製。RGBA 值可以是 1. X11 "
+"定義的顏色，2.「#rrggbb」格式的十六進位值，其中 r、g、b 分別是紅色、綠色與藍"
+"色，3. 「rgb(r,g,b)」格式的 RGB 色彩，4.「rgba(r,g,b,a)」格式的 RGBA 採，其中"
+"的 r、g、b 為 0 至 255 之間的整數值，或 0% 至 100% 之間的百分比，而 a 則是 0 "
+"至 1 之間的浮點 alpha 值。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:155
 msgid "The milliseconds to show the panel icon for a property"
@@ -263,8 +270,9 @@ msgid ""
 "of icon-prop-key in IBusEngineDesc. If the value is 0, no delay time and the "
 "property icon is shown immediately."
 msgstr ""
-"當切換引擎時將面板的引擎圖示改顯示為屬性圖示的毫秒數，若 IBusEngineDesc 中該屬性的 icon-prop-key 值有指定的話。如果值為 "
-"0，則沒有延遲時間，該屬性圖示將立即顯示。"
+"當切換引擎時將面板的引擎圖示改顯示為屬性圖示的毫秒數，若 IBusEngineDesc 中該"
+"屬性的 icon-prop-key 值有指定的話。如果值為 0，則沒有延遲時間，該屬性圖示將立"
+"即顯示。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:160
 msgid "Use custom font"
@@ -312,7 +320,8 @@ msgid ""
 "Choose a default language of emoji dictionaries on the emoji dialog. The "
 "value $lang is applied to /usr/share/ibus/dicts/emoji-$lang.dict"
 msgstr ""
-"請在繪文字對話窗當中選擇繪文字字典語言。$lang 的值會套用到 /usr/share/ibus/dicts/emoji-$lang.dict"
+"請在繪文字對話窗當中選擇繪文字字典語言。$lang 的值會套用到 /usr/share/ibus/"
+"dicts/emoji-$lang.dict"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:193
 msgid "favorite emoji list on emoji dialog"
@@ -360,7 +369,9 @@ msgstr "選擇部分符合繪文字註解的條件"
 msgid ""
 "Choose one of the following conditions to match emoji annotations partially: "
 "0 == Prefix match, 1 == Suffix match, 2 == Containing match"
-msgstr "選擇下列部分符合繪文字註解的條件之一：0 == 前綴符合，1 == 後綴符合, 2 == 內含符合"
+msgstr ""
+"選擇下列部分符合繪文字註解的條件之一：0 == 前綴符合，1 == 後綴符合, 2 == 內含"
+"符合"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
 msgid "Load the emoji data at the time of startup"
@@ -372,8 +383,8 @@ msgid ""
 "needed to load the data. Load the emoji data when open the emoji dialog at "
 "the beginning if false."
 msgstr ""
-"如果為 True 則在每次開啟時載入 Emoji 資料，載入資料大約需要 10MB 的記憶體大小。當設定為 False 時則在第一次開啟 Emoji "
-"對話框時載入 Emoji 資料。"
+"如果為 True 則在每次開啟時載入 Emoji 資料，載入資料大約需要 10MB 的記憶體大"
+"小。當設定為 False 時則在第一次開啟 Emoji 對話框時載入 Emoji 資料。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
 msgid "Load the Unicode data at the time of startup"
@@ -386,14 +397,16 @@ msgid ""
 "the beginning if false. The Unicode data is always loaded after the emoji "
 "data is loaded even if true."
 msgstr ""
-"如果為 True 則在每次開啟時載入 Unicode 資料。載入資料需要大約 15MB 大小的記憶體。如果設定為 False 則在第一次開啟 Emoji "
-"對話框時載入 Unicode 資料，就算設定為 True，Unicode 資料永遠都會在 Emoji 資料載入後才載入。"
+"如果為 True 則在每次開啟時載入 Unicode 資料。載入資料需要大約 15MB 大小的記憶"
+"體。如果設定為 False 則在第一次開啟 Emoji 對話框時載入 Unicode 資料，就算設定"
+"為 True，Unicode 資料永遠都會在 Emoji 資料載入後才載入。"
 
 #: ibus/_config.py.in:41
 msgid ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
-msgstr "著作權所有 (c) 2007-2010 黃鵬\n"
+msgstr ""
+"著作權所有 (c) 2007-2010 黃鵬\n"
 "著作權所有 (c) 2007-2010 Red Hat, Inc."
 
 #: ibus/lang.py:41 src/ibusutil.c:209
@@ -496,7 +509,8 @@ msgstr "刪除(_D)"
 msgid ""
 "Please press a key (or a key combination).\n"
 "The dialog will be closed when the key is released."
-msgstr "請按鍵盤按鍵 (或是按鍵組合)\n"
+msgstr ""
+"請按鍵盤按鍵 (或是按鍵組合)\n"
 "當您放開按鍵時，對話框會自動關閉。"
 
 #: setup/keyboardshortcut.py:255
@@ -519,7 +533,8 @@ msgid ""
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
 msgstr ""
-"IBus 已經啟動！若您無法使用 IBus，請將下列文字加入您的 $HOME/.bashrc 中；接著重新登入桌面。\n"
+"IBus 已經啟動！若您無法使用 IBus，請將下列文字加入您的 $HOME/.bashrc 中；接著"
+"重新登入桌面。\n"
 "export GTK_IM_MODULE=ibus\n"
 "export XMODIFIERS=@im=ibus\n"
 "export QT_IM_MODULE=ibus"
@@ -711,12 +726,12 @@ msgid ""
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
 "the panel icon.</i></small>"
 msgstr ""
-"<small><i>您可以透過按下鍵盤快捷鍵，或是點按面板圖示的方式，來從上列清單中選取的輸入法之中切換使用中的輸入法。</i></small>"
+"<small><i>您可以透過按下鍵盤快捷鍵，或是點按面板圖示的方式，來從上列清單中選"
+"取的輸入法之中切換使用中的輸入法。</i></small>"
 
 #: setup/setup.ui:873
 msgid ""
-"The shortcut keys to enable conversions of emoji annotations or Unicode "
-"names"
+"The shortcut keys to enable conversions of emoji annotations or Unicode names"
 msgstr "啟用繪文字符號或 Unicode 名稱轉換的快捷鍵"
 
 #: setup/setup.ui:875
@@ -3065,9 +3080,11 @@ msgstr "顯示此資訊"
 
 #: tools/main.vala:464
 #, c-format
-msgid "Usage: %s COMMAND [OPTION...]\n"
+msgid ""
+"Usage: %s COMMAND [OPTION...]\n"
 "\n"
-msgstr "用法：%s COMMAND [OPTION...]\n"
+msgstr ""
+"用法：%s COMMAND [OPTION...]\n"
 "\n"
 
 #: tools/main.vala:465
@@ -3167,10 +3184,12 @@ msgstr "Unicode 選擇"
 
 #: ui/gtk3/emojier.vala:2429
 msgid ""
-"Failed to get the current text application. Please re-focus your application."
-" E.g. Press Esc key several times to release the emoji typing mode, click "
-"your desktop and click your text application again."
-msgstr "無法取得目前的文字應用程式，請重新取回您應用程式的焦點。例如按幾次 Esc 退出繪文字輸入模式後，按一下桌面再重按您的文字應用程式一次。"
+"Failed to get the current text application. Please re-focus your "
+"application. E.g. Press Esc key several times to release the emoji typing "
+"mode, click your desktop and click your text application again."
+msgstr ""
+"無法取得目前的文字應用程式，請重新取回您應用程式的焦點。例如按幾次 Esc 退出繪"
+"文字輸入模式後，按一下桌面再重按您的文字應用程式一次。"
 
 #: ui/gtk3/emojierapp.vala:58
 msgid "Canceled to choose an emoji."
@@ -3182,7 +3201,7 @@ msgstr "已將繪文字複製到您的剪貼簿。"
 
 #. TRANSLATORS: "FONT" should be capital and translatable.
 #. * It's used for an argument command --font=FONT
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:114
 msgid "\"FONT\" for emoji characters on emoji dialog"
 msgstr "繪文字對話盒之繪文字字元用「FONT」字型"
@@ -3193,7 +3212,7 @@ msgstr "FONT"
 
 #. TRANSLATORS: "LANG" should be capital and translatable.
 #. * It's used for an argument command --lang=LANG
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:120
 msgid "\"LANG\" for annotations on emoji dialog. E.g. \"en\""
 msgstr "繪文字對話盒的「LANG」語言註解。例：「en」"

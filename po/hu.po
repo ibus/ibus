@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2019-04-16 17:33+0900\n"
+"POT-Creation-Date: 2020-01-08 12:40+0900\n"
 "PO-Revision-Date: 2020-01-05 18:49+0000\n"
 "Last-Translator: Balázs Meskó <meskobalazs@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.stg.fedoraproject.org/projects/"
@@ -52,9 +52,9 @@ msgstr "Felugró ablak késleltetése az IME váltóablaknál"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
 msgid ""
-"Set popup delay milliseconds to show IME switcher window. The default is 400."
-" 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not show "
-"the window and switch prev/next engines."
+"Set popup delay milliseconds to show IME switcher window. The default is "
+"400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
+"show the window and switch prev/next engines."
 msgstr ""
 "Beállítja a felugró ablak késleltetését az IME váltóablaknál. Az "
 "alapértelmezett 400.0  =  Ablak azonnali megjelenítése.  0 < Késleltetés "
@@ -132,8 +132,7 @@ msgstr "A DConf megőrzi a név előtagokat"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:63
 msgid "Prefixes of DConf keys to stop name conversion"
-msgstr ""
-"A DConf előtaggal látja el a kulcsokat, hogy ne legyenek névkonverziók"
+msgstr "A DConf előtaggal látja el a kulcsokat, hogy ne legyenek névkonverziók"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:70
 msgid "Trigger shortcut keys"
@@ -256,10 +255,10 @@ msgid ""
 "XKB icon shows the layout string and the string is rendered with the RGBA "
 "value. The RGBA value can be 1. a color name from X11, 2. a hex value in "
 "form '#rrggbb' where 'r', 'g' and 'b' are hex digits of the red, green, and "
-"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form "
-"'rgba(r,g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 "
-"to 255 or percentage values in the range 0% to 100%, and 'a' is a floating "
-"point value in the range 0 to 1 of the alpha."
+"blue, 3. a RGB color in form 'rgb(r,g,b)' or 4. a RGBA color in form 'rgba(r,"
+"g,b,a)' where 'r', 'g', and 'b' are either integers in the range 0 to 255 or "
+"percentage values in the range 0% to 100%, and 'a' is a floating point value "
+"in the range 0 to 1 of the alpha."
 msgstr ""
 "Az XKB ikon a kiosztási karakterláncot mutatja, és a karakterlánc  RGBA "
 "értékként jelenik meg. Az RGA érték a következők egyike lehet. 1. egy X11 "
@@ -429,7 +428,7 @@ msgstr ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
 
-#: ibus/lang.py:41 src/ibusutil.c:198
+#: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
 msgstr "Egyéb"
 
@@ -540,8 +539,7 @@ msgstr "Nyomjon meg egy billentyűt (vagy billentyűkombinációt)"
 #: setup/main.py:121 setup/main.py:588
 msgid "Use shortcut with shift to switch to the previous input method"
 msgstr ""
-"Használja a Shift billentyűt a gyors visszaváltáshoz a korábbi beviteli "
-"módra"
+"Használja a Shift billentyűt a gyors visszaváltáshoz a korábbi beviteli módra"
 
 #: setup/main.py:515
 msgid "The IBus daemon is not running. Do you wish to start it?"
@@ -766,8 +764,7 @@ msgstr ""
 
 #: setup/setup.ui:873
 msgid ""
-"The shortcut keys to enable conversions of emoji annotations or Unicode "
-"names"
+"The shortcut keys to enable conversions of emoji annotations or Unicode names"
 msgstr ""
 "Gyorsbillentyű az emodzsi annotációk vagy a Unicode nevek átalakításának "
 "engedélyezéséhez"
@@ -3124,9 +3121,11 @@ msgstr "Ezen információk megjelenítése"
 
 #: tools/main.vala:464
 #, c-format
-msgid "Usage: %s COMMAND [OPTION...]\n"
+msgid ""
+"Usage: %s COMMAND [OPTION...]\n"
 "\n"
-msgstr "Használat: %s PARANCS [KAPCSOLÓK…]\n"
+msgstr ""
+"Használat: %s PARANCS [KAPCSOLÓK…]\n"
 "\n"
 
 #: tools/main.vala:465
@@ -3226,14 +3225,13 @@ msgstr "Unicode választás"
 
 #: ui/gtk3/emojier.vala:2429
 msgid ""
-"Failed to get the current text application. Please re-focus your application."
-" E.g. Press Esc key several times to release the emoji typing mode, click "
-"your desktop and click your text application again."
+"Failed to get the current text application. Please re-focus your "
+"application. E.g. Press Esc key several times to release the emoji typing "
+"mode, click your desktop and click your text application again."
 msgstr ""
 "Nem sikerült lekérni a jelenlegi szöveges alkalmazást. Hozza újra fókuszba "
 "az alkalmazást. Például nyomja meg többször az Esc gombot az emodzsi beírási "
 "módból kilépéshez, kattintson az asztalra, majd újra a szöveges alkalmazásra."
-""
 
 #: ui/gtk3/emojierapp.vala:58
 msgid "Canceled to choose an emoji."
@@ -3245,7 +3243,7 @@ msgstr "Emodzsi vágólapra másolva."
 
 #. TRANSLATORS: "FONT" should be capital and translatable.
 #. * It's used for an argument command --font=FONT
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:114
 msgid "\"FONT\" for emoji characters on emoji dialog"
 msgstr "„BETŰKÉSZLET” az emodzsiválasztó párbeszédablakon"
@@ -3256,7 +3254,7 @@ msgstr "BETŰKÉSZLET"
 
 #. TRANSLATORS: "LANG" should be capital and translatable.
 #. * It's used for an argument command --lang=LANG
-#. 
+#.
 #: ui/gtk3/emojierapp.vala:120
 msgid "\"LANG\" for annotations on emoji dialog. E.g. \"en\""
 msgstr "„NYELV”  az emodzsi párbeszédablak annotációhoz. Például „en”"

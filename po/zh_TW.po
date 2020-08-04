@@ -15,20 +15,22 @@
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
 # Peter Pan <pan93412@gmail.com>, 2019. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2019. #zanata
+# Yi-Jyun Pan <pan93412@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2019-11-25 09:53+0000\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
-"Language-Team: Chinese <chinese-l10n@googlegroups.com>\n"
+"PO-Revision-Date: 2020-05-24 12:40+0000\n"
+"Last-Translator: Yi-Jyun Pan <pan93412@gmail.com>\n"
+"Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
+"projects/ibus/ibus/zh_TW/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Zanata 4.6.2\n"
+"X-Generator: Weblate 4.0.4\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -88,8 +90,7 @@ msgstr "使用 xmodmap"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:38
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
-msgstr ""
-"當 ibus 引擎切換之時，若 .xmodmap 或 .Xmodmap 存在的話，則執行 xmodmap。 "
+msgstr "當 ibus 引擎切換之時，若 .xmodmap 或 .Xmodmap 存在的話，則執行 xmodmap。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:42 setup/setup.ui:1208
 msgid "Use system keyboard layout"
@@ -3072,7 +3073,7 @@ msgstr "重設組態值"
 
 #: tools/main.vala:456
 msgid "Save emoji on dialog to clipboard "
-msgstr "將對話窗中的繪文字儲存到剪貼簿"
+msgstr "將對話窗中的繪文字儲存到剪貼簿 "
 
 #: tools/main.vala:458
 msgid "Show this information"
@@ -3245,7 +3246,8 @@ msgstr "IBus 為 Linux/Unix 上的智慧型輸入法框架。"
 msgid "translator-credits"
 msgstr ""
 "Ding-Yi Chen 陳定彞 <dchen@redhat.com>, 2009.\n"
-"Cheng-Chia Tseng <pswo10680@gmail.com>, 2010-17."
+"Cheng-Chia Tseng <pswo10680@gmail.com>, 2010-17.\n"
+"Yi-Jyun Pan <pan93412@gmail.com>, 2019-20."
 
 #: ui/gtk3/panel.vala:1118
 msgid "Preferences"

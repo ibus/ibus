@@ -4,29 +4,32 @@
 # This file is distributed under the same license as the ibus package.
 #
 # Translators:
+# Shehroz Kaleem <shehrozkhawajachk@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2014-02-12 07:40+0000\n"
-"Last-Translator: fujiwara <tfujiwar@redhat.com>\n"
-"Language-Team: Urdu <trans-ur@lists.fedoraproject.org>\n"
+"PO-Revision-Date: 2020-06-30 11:40+0000\n"
+"Last-Translator: Shehroz Kaleem <shehrozkhawajachk@gmail.com>\n"
+"Language-Team: Urdu <https://translate.fedoraproject.org/projects/ibus/ibus/"
+"ur/>\n"
 "Language: ur\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.1.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
 msgid "Preload engines"
-msgstr ""
+msgstr "پہلے سے موجود"
 
 #. Translators: Tooltip for the button “Preload Engines”
 #: data/dconf/org.freedesktop.ibus.gschema.xml:13
 msgid "Preload engines during ibus starts up"
-msgstr ""
+msgstr "پہلے سے موجود"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:17
 msgid "Engines order"

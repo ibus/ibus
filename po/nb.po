@@ -5,91 +5,105 @@
 #
 # Translators:
 # Kjartan Maraas <kmaraas@gnome.org>, 2012
+# Allan Nordhøy <epost@anotheragency.no>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2014-02-18 05:48+0000\n"
-"Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
-"Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
+"PO-Revision-Date: 2020-05-18 04:52+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"Language-Team: Norwegian Bokmål <https://translate.fedoraproject.org/"
+"projects/ibus/ibus/nb_NO/>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.0.4\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
 msgid "Preload engines"
-msgstr ""
+msgstr "Forhåndsinnlast motorer"
 
 #. Translators: Tooltip for the button “Preload Engines”
 #: data/dconf/org.freedesktop.ibus.gschema.xml:13
 msgid "Preload engines during ibus starts up"
-msgstr ""
+msgstr "Forhåndsinnlast motorer under IBus-oppstart"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:17
 msgid "Engines order"
-msgstr ""
+msgstr "Motorrekkefølge"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:18
 msgid "Saved engines order in input method list"
-msgstr ""
+msgstr "Lagret motorrekkefølge i listen over inndatametoder"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:22
 msgid "Popup delay milliseconds for IME switcher window"
 msgstr ""
+"Antall millisekunder oppstartsforsinkelse for oppsprettsvindu der man kan "
+"bytte IME"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
+#, fuzzy
 msgid ""
 "Set popup delay milliseconds to show IME switcher window. The default is "
 "400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
 "show the window and switch prev/next engines."
 msgstr ""
+"Sett oppsettsforsinkelse i millisekunder for å vise IME-vekslervindu. "
+"Forvalget er 400. 0 = Vis vinduet umiddelvbart. 0 <  forsinkelse "
+"millisekunder. 0 > Ikke vis vinduet og bytt til forrige/neste motor."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"
-msgstr ""
+msgstr "Lagret versjonsnummer"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:28
+#, fuzzy
 msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
 msgstr ""
+"Lagret versjonsnummer brukes til å sjekke forskjellen mellom versjonen av "
+"tidligere installert IBus, og nåværende IBus."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:32
+#, fuzzy
 msgid "Latin layouts which have no ASCII"
-msgstr ""
+msgstr "Latinsk oppsett som ikke har ASCII"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:33
 msgid "US layout is appended to the Latin layouts. variant can be omitted."
-msgstr ""
+msgstr "Amerikansk oppsett som legges til den latinske. Variant kan utelates."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:37
 msgid "Use xmodmap"
-msgstr ""
+msgstr "Bruk xmodmap"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:38
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
 msgstr ""
+"Kjøre xmodmap hvis .xmodmap eller .Xmodmap finnes når IBus-motorer byttes."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:42 setup/setup.ui:1208
 msgid "Use system keyboard layout"
-msgstr ""
+msgstr "Bruk systemets tastaturoppsett"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:43 setup/setup.ui:1213
 msgid "Use system keyboard (XKB) layout"
-msgstr ""
+msgstr "Bruk systemtastatur (XKB)-oppsett"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:47
 msgid "Embed Preedit Text"
-msgstr ""
+msgstr "Bygg inn forhåndsredigert tekst"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:48
 msgid "Embed Preedit Text in Application Window"
-msgstr ""
+msgstr "Bygg inn forhåndsredigert tekst i programvindu"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:52
 msgid "Use global input method"
@@ -97,7 +111,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:53 setup/setup.ui:1257
 msgid "Share the same input method among all applications"
-msgstr ""
+msgstr "Del samme inndatametode mellom alle programmer"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:57
 msgid "Enable input method by default"
@@ -138,7 +152,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:85
 msgid "Disable shortcut keys"
-msgstr "Slå av snarveitaster"
+msgstr "Slå av snarveistaster"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:86
 msgid "The shortcut keys for turning input method off"
@@ -446,11 +460,11 @@ msgstr "Tastatur"
 
 #: setup/ibus-setup.desktop:3 setup/setup.ui:69
 msgid "IBus Preferences"
-msgstr "Brukervalg for IBus"
+msgstr "Innstillinger for IBus"
 
 #: setup/ibus-setup.desktop:4
 msgid "Set IBus Preferences"
-msgstr "Sett brukervalg for IBus"
+msgstr "Sett innstillinger for IBus"
 
 #: setup/keyboardshortcut.py:55
 msgid "Keyboard shortcuts"
@@ -479,12 +493,12 @@ msgid ""
 "Please press a key (or a key combination).\n"
 "The dialog will be closed when the key is released."
 msgstr ""
-"Vennligst trykk en tast (eller en tastekombinasjon)\n"
+"Trykk en tast (eller en tastekombinasjon)\n"
 "Dialogen vil lukkes når tasten slippes."
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
-msgstr "Vennligst trykk en tast (eller en tastekombinasjon)"
+msgstr "Trykk en tast (eller en tastekombinasjon)"
 
 #: setup/main.py:121 setup/main.py:588
 msgid "Use shortcut with shift to switch to the previous input method"
@@ -521,11 +535,11 @@ msgstr ""
 
 #: setup/setup.ui:11
 msgid "Horizontal"
-msgstr "Horisontal"
+msgstr "Vannrett"
 
 #: setup/setup.ui:14
 msgid "Vertical"
-msgstr "Vertikal"
+msgstr "Loddrett"
 
 #: setup/setup.ui:25
 msgid "Top left corner"
@@ -674,11 +688,11 @@ msgstr "_Om"
 
 #: setup/setup.ui:743
 msgid "Show information of the selected input method"
-msgstr "Vis informasjon om valgt inndatametode"
+msgstr "Vis info om valgt inndatametode"
 
 #: setup/setup.ui:754
 msgid "_Preferences"
-msgstr "_Brukervalg"
+msgstr "_Innstillinger"
 
 #: setup/setup.ui:761
 msgid "Show setup of the selected input method"

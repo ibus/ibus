@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2020-05-18 04:52+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2020-05-18 04:53+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/nb_NO/>\n"
 "Language: nb\n"
@@ -265,7 +265,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:160
 msgid "Use custom font"
-msgstr "Bruk egendefinert skrift:"
+msgstr "Bruk egendefinert skrift"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:161
 msgid "Use custom font name for language panel"

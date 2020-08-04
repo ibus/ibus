@@ -413,8 +413,8 @@ msgid ""
 "Choose one of the following conditions to match emoji annotations partially: "
 "0 == Prefix match, 1 == Suffix match, 2 == Containing match"
 msgstr ""
-"Choisissez une des conditions suivantes pour la correspondance partielle d’"
-"annotations d’émoticônes : 0 == correspondance de préfixe, 1 == "
+"Choisissez une des conditions suivantes pour la correspondance partielle "
+"d’annotations d’émoticônes : 0 == correspondance de préfixe, 1 == "
 "correspondance de suffixe, 2 == correspondance de contenu"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218

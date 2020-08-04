@@ -90,7 +90,8 @@ msgstr "使用 xmodmap"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:38
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
-msgstr "當 ibus 引擎切換之時，若 .xmodmap 或 .Xmodmap 存在的話，則執行 xmodmap。"
+msgstr ""
+"當 ibus 引擎切換之時，若 .xmodmap 或 .Xmodmap 存在的話，則執行 xmodmap。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:42 setup/setup.ui:1208
 msgid "Use system keyboard layout"

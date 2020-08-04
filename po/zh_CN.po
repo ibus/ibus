@@ -64,8 +64,8 @@ msgid ""
 "400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
 "show the window and switch prev/next engines."
 msgstr ""
-"设置弹出显示输入法引擎切换窗口的延迟时间，单位为毫秒。默认为 400。0 = 立即显示窗口。 0 <延迟毫秒数. 0> "
-"不显示窗口并切换到之前或之后的引擎。"
+"设置弹出显示输入法引擎切换窗口的延迟时间，单位为毫秒。默认为 400。0 = 立即显"
+"示窗口。 0 <延迟毫秒数. 0> 不显示窗口并切换到之前或之后的引擎。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"

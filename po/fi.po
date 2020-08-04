@@ -2,24 +2,25 @@
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
 # Copyright (C) 2015-2017 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # This file is distributed under the same license as the ibus package.
-#
+# 
 # Translators:
-# Jiri Grönroos <jiri.gronroos@iki.fi>, 2017. #zanata
+# Jiri Grönroos <jiri.gronroos@iki.fi>, 2017. #zanata, 2020.
 # Toni Rantala <trantalafilo@gmail.com>, 2017. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2017-04-18 11:47+0900\n"
+"PO-Revision-Date: 2020-03-19 09:38+0000\n"
+"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/ibus/"
+"ibus/fi/>\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-04-17 12:26-0400\n"
-"Last-Translator: Toni Rantala <trantalafilo@gmail.com>\n"
-"Language-Team: Finnish\n"
-"Language: fi\n"
-"X-Generator: Zanata 3.9.6\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.11.3\n"
 
 #: ../setup/setup.ui.h:1
 msgid "Horizontal"
@@ -71,7 +72,7 @@ msgstr ""
 
 #: ../setup/setup.ui.h:13
 msgid "Next input method:"
-msgstr ""
+msgstr "Seuraava syötetapa:"
 
 #: ../setup/setup.ui.h:14
 msgid "The shortcut keys for switching to previous input method in the list"
@@ -79,7 +80,7 @@ msgstr ""
 
 #: ../setup/setup.ui.h:15
 msgid "Previous input method:"
-msgstr ""
+msgstr "Edellinen syötetapa:"
 
 #: ../setup/setup.ui.h:16
 msgid "The shortcut keys for showing emoji dialog"
@@ -87,7 +88,7 @@ msgstr ""
 
 #: ../setup/setup.ui.h:17
 msgid "Emoji dialog:"
-msgstr ""
+msgstr "Emoji-ikkuna:"
 
 #: ../setup/setup.ui.h:18
 msgid "..."
@@ -448,7 +449,7 @@ msgstr ""
 
 #: ../data/ibus.schemas.in.h:37
 msgid "Show input method name"
-msgstr ""
+msgstr "Näytä syötetavan nimi"
 
 #: ../data/ibus.schemas.in.h:39
 msgid "RGBA value of XKB icon"
@@ -540,7 +541,7 @@ msgstr ""
 
 #: ../data/ibus.schemas.in.h:61
 msgid "Enable input method by default"
-msgstr ""
+msgstr "Käytä syötetapaa oletuksena"
 
 #: ../data/ibus.schemas.in.h:62
 msgid "Enable input method by default when the application gets input focus"
@@ -568,7 +569,7 @@ msgstr "Muu"
 
 #: ../setup/emojilang.py:67
 msgid "Select a language"
-msgstr ""
+msgstr "Valitse kieli"
 
 #: ../setup/emojilang.py:70 ../setup/enginedialog.py:60
 #: ../setup/keyboardshortcut.py:339 ../setup/main.py:457
@@ -748,7 +749,7 @@ msgstr ""
 
 #: ../tools/main.vala:368
 msgid "Show available engines"
-msgstr ""
+msgstr "Näytä saatavilla olevat moottorit"
 
 #: ../tools/main.vala:369
 msgid "(Not implemented)"
@@ -807,7 +808,7 @@ msgstr "%s on tuntematon komento!\n"
 
 #: ../ui/gtk3/emojier.vala:289 ../ui/gtk3/panel.vala:1224
 msgid "Emoji Dialog"
-msgstr ""
+msgstr "Emoji-ikkuna"
 
 #: ../ui/gtk3/emojier.vala:293
 msgid "Type annotation or choose emoji"
@@ -890,7 +891,7 @@ msgstr ""
 
 #: ../ui/gtk3/emojierapp.vala:52
 msgid "Copied an emoji to your clipboard."
-msgstr ""
+msgstr "Kopioitiin emoji leikepöydälle."
 
 #. TRANSLATORS: "FONT" should be capital and translatable.
 #. * It's used for an argument command --font=FONT

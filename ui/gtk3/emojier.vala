@@ -494,7 +494,8 @@ public class IBusEmojier : Gtk.ApplicationWindow {
     private static void update_annotation_to_emojis_dict(IBus.EmojiData data) {
         string emoji = data.get_emoji();
         unowned GLib.SList<string> annotations = data.get_annotations();
-        foreach (string annotation in annotations) {
+        foreach (string annotation_with_space in annotations) {
+            string annotation = annotation_with_space.replace(" ", "");
             bool has_emoji = false;
             GLib.SList<string> hits =
                     m_annotation_to_emojis_dict.lookup(annotation).copy_deep(
@@ -733,7 +734,8 @@ public class IBusEmojier : Gtk.ApplicationWindow {
     private static void update_name_to_unicodes_dict(IBus.UnicodeData data) {
         unichar code = data.get_code();
         string[] names = {data.get_name().down(), data.get_alias().down()};
-        foreach (unowned string name in names) {
+        foreach (unowned string name_with_space in names) {
+            string name = name_with_space.replace(" ", "");
             if (name == "")
                 continue;
             bool has_code = false;

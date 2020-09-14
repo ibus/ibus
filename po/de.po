@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2020-01-30 13:16+0000\n"
+"PO-Revision-Date: 2020-08-28 17:07+0000\n"
 "Last-Translator: Mike FABIAN <mfabian@redhat.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/de/>\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.2.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -364,13 +364,12 @@ msgstr "Anmerkungsliste für bevorzugte Emoji im Emojidialog"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:199
 msgid "You can assign an annotation for a favorite emoji in this list."
 msgstr ""
-"In dieser Liste kann man eine Anmerkung für  bevorzugte Emoji definieren."
+"In dieser Liste kann man eine Anmerkung für bevorzugte Emoji definieren."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:203
 msgid "Whether emoji annotations can be match partially or not"
 msgstr ""
-"Ob in Emojianmerkungen mit  teilweiser  Übereinstimmung gesucht wird oder  "
-"nicht"
+"Ob in Emojianmerkungen mit teilweiser Übereinstimmung gesucht wird oder nicht"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:204
 msgid ""
@@ -404,7 +403,7 @@ msgid ""
 "0 == Prefix match, 1 == Suffix match, 2 == Containing match"
 msgstr ""
 "Wähle eine der folgenden Bedingungen um nach teilweisen Übereinstimmungen in "
-"Emojianmerkungen zu suchen: 0 == Präfix, 1  == Suffix, 2  == Mittendrin"
+"Emojianmerkungen zu suchen: 0 == Präfix, 1 == Suffix, 2 == Mittendrin"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
 msgid "Load the emoji data at the time of startup"
@@ -3040,9 +3039,7 @@ msgstr "Sprache: %s\n"
 
 #: tools/main.vala:161
 msgid "No engine is set.\n"
-msgstr ""
-"Keine Engine gesetzt.\n"
-"\n"
+msgstr "Keine Engine gesetzt.\n"
 
 #: tools/main.vala:169
 msgid "Set global engine failed.\n"
@@ -3291,7 +3288,7 @@ msgstr "Emojianmerkungen finden mit teilweiser Übereinstimmung"
 
 #: ui/gtk3/emojierapp.vala:127
 msgid "Match with the length of the specified integer"
-msgstr "Übereinstimmung  mit Länge  der angegebenen ganzen Zahl"
+msgstr "Übereinstimmung mit Länge der angegebenen ganzen Zahl"
 
 #: ui/gtk3/emojierapp.vala:131
 msgid "Match with the condition of the specified integer"

@@ -20,13 +20,14 @@
 # Tian Shixiong <tiansworld@fedoraproject.org>, 2019. #zanata
 # Tian Shixiong <tiansworld@gmail.com>, 2020.
 # Boyuan Yang <073plan@gmail.com>, 2020.
+# Whired Planck <fungdaat31@outlook.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2020-08-28 06:29+0000\n"
-"Last-Translator: Tian Shixiong <tiansworld@gmail.com>\n"
+"PO-Revision-Date: 2020-08-31 03:29+0000\n"
+"Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -92,7 +93,7 @@ msgstr "使用 xmodmap"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:38
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
-msgstr "若 .xmodmap 或者 .Xmodmap 存在则当 ibus 框架启动时执行 xmodmap"
+msgstr "若 .xmodmap 或者 .Xmodmap 存在则当 ibus 框架启动时执行 xmodmap。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:42 setup/setup.ui:1208
 msgid "Use system keyboard layout"
@@ -218,7 +219,7 @@ msgstr "以毫秒为单位显示属性面板的时间"
 msgid ""
 "The milliseconds to show property panel after focus-in or properties are "
 "changed."
-msgstr "在离开焦点或属性变更后，以毫秒为单位显示属性面板的时间"
+msgstr "在离开焦点或属性变更后，以毫秒为单位显示属性面板的时间。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:135
 msgid "Orientation of lookup table"
@@ -427,7 +428,7 @@ msgstr "确定(_O)"
 
 #: setup/emojilang.py:235 setup/enginedialog.py:205
 msgid "More…"
-msgstr "更多..."
+msgstr "更多…"
 
 #: setup/engineabout.py:37 setup/setup.ui:1378 ui/gtk3/panel.vala:1138
 msgid "About"
@@ -514,7 +515,7 @@ msgstr ""
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
-msgstr "请按一个键盘按键（或者一个组合按键）"
+msgstr "请按一个键盘按键（或者组合按键）"
 
 #: setup/main.py:121 setup/main.py:588
 msgid "Use shortcut with shift to switch to the previous input method"

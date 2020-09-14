@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-09-03 21:21+0900\n"
-"PO-Revision-Date: 2020-08-28 17:07+0000\n"
+"PO-Revision-Date: 2020-09-07 13:29+0000\n"
 "Last-Translator: Mike FABIAN <mfabian@redhat.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/de/>\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.2.1\n"
+"X-Generator: Weblate 4.2.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -315,7 +315,7 @@ msgstr "Name der benutzerdefinierten Schriftart für Sprach-Panel"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:170 setup/setup.ui:1305
 msgid "Choose glyphs with input method's language on candidate window"
-msgstr ""
+msgstr "Wähle Glyphen in der Sprache der Eingabemethode im Kandidatenfenster"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:171
 msgid ""
@@ -324,6 +324,10 @@ msgid ""
 "language if the value is true and choose them from the desktop locale if the "
 "value is false."
 msgstr ""
+"Zu manchen Unicodenummern gibt es unterschiedliche Glyphen je nach Sprache "
+"und Pango bestimmt die korrekten Glyphen anhand des Sprachattributs. Pango "
+"wählt Glyphen passend zur Sprache des IBus engines wenn dieser Wert true ist "
+"und von der Lokale des Desktops wenn dieser Wert false ist."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:182
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -874,12 +878,12 @@ msgid ""
 "Choose glyphs with the input method's language on the candidate window for "
 "the duplicated code points"
 msgstr ""
+"Wähle Glyphen passend zur Sprache der Inputmethode im Kandidatenfenster für "
+"duplizierte Unicodenummern"
 
 #: setup/setup.ui:1327
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Fonts</b>"
-msgstr "<b>Schriftart und Stil</b>"
+msgstr "<b>Schriftarten</b>"
 
 #: setup/setup.ui:1347
 msgid "Advanced"
@@ -2365,7 +2369,7 @@ msgstr "Rumi-Ziffern"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:853
 msgid "Yezidi"
-msgstr ""
+msgstr "Jesidisch"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2386,7 +2390,7 @@ msgstr "Sogdisch"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:865
 msgid "Chorasmian"
-msgstr ""
+msgstr "Chorasmian"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2540,7 +2544,7 @@ msgstr "Varang Kshiti"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:953
 msgid "Dives Akuru"
-msgstr ""
+msgstr "Dives Akuru"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2609,10 +2613,8 @@ msgstr "Makassar"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:993
-#, fuzzy
-#| msgid "Latin-1 Supplement"
 msgid "Lisu Supplement"
-msgstr "Lateinisch-1, Ergänzung"
+msgstr "Lisu, Ergänzung"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2731,16 +2733,14 @@ msgstr "Xixia-Komponenten"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1061
 msgid "Khitan Small Script"
-msgstr ""
+msgstr "Kleine Kitan-Schrift"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1065
-#, fuzzy
-#| msgid "Kana Supplement"
 msgid "Tangut Supplement"
-msgstr "Kana, Ergänzung"
+msgstr "Xixia, Ergänzung"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3006,7 +3006,7 @@ msgstr "Piktografische Symbole, erweitert-A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1217
 msgid "Symbols for Legacy Computing"
-msgstr ""
+msgstr "Symbole für Retrocomputer"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3054,10 +3054,8 @@ msgstr "CJK-Ideogramme, Kompatibilität, Ergänzung"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1245
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension G"
-msgstr "Vereinheitlichte CJK-Ideogramme, Erweiterung A"
+msgstr "Vereinheitlichte CJK-Ideogramme, Erweiterung G"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

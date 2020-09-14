@@ -17,17 +17,17 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-09-03 21:21+0900\n"
-"PO-Revision-Date: 2020-01-08 10:24+0000\n"
+"PO-Revision-Date: 2020-09-07 13:29+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <https://translate.stg.fedoraproject.org/projects/"
-"ibus/ibus/uk/>\n"
+"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/ibus/"
+"ibus/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.9.1\n"
+"X-Generator: Weblate 4.2.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -308,7 +308,7 @@ msgstr "Назва нетипового шрифту для мовної пан�
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:170 setup/setup.ui:1305
 msgid "Choose glyphs with input method's language on candidate window"
-msgstr ""
+msgstr "Вибирати гліфи з мови способу введення у вікні варіантів"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:171
 msgid ""
@@ -317,6 +317,10 @@ msgid ""
 "language if the value is true and choose them from the desktop locale if the "
 "value is false."
 msgstr ""
+"Для деяких позицій у кодуванні існують різні гліфи, і Pango визначає гліф на "
+"основі атрибута мови. Pango вибирає гліфи з мови рушія IBus, якщо цей "
+"параметр має значення «true», і вибирає їх з локалі стільничного середовища, "
+"якщо цей параметр має значення «false»."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:182
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -861,12 +865,12 @@ msgid ""
 "Choose glyphs with the input method's language on the candidate window for "
 "the duplicated code points"
 msgstr ""
+"Вибирати гліфи з мови способу введення у вікні варіантів для дублювання "
+"гліфів у позиції кодування"
 
 #: setup/setup.ui:1327
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Fonts</b>"
-msgstr "<b>Шрифт і стиль</b>"
+msgstr "<b>Шрифти</b>"
 
 #: setup/setup.ui:1347
 msgid "Advanced"
@@ -2352,7 +2356,7 @@ msgstr "Числові символи румі"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:853
 msgid "Yezidi"
-msgstr ""
+msgstr "Єзидська"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2373,7 +2377,7 @@ msgstr "Согдійська"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:865
 msgid "Chorasmian"
-msgstr ""
+msgstr "хорезмійська"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2527,7 +2531,7 @@ msgstr "Варанг-кшиті"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:953
 msgid "Dives Akuru"
-msgstr ""
+msgstr "Дайвс-акуру"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2596,10 +2600,8 @@ msgstr "Макасар"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:993
-#, fuzzy
-#| msgid "Latin-1 Supplement"
 msgid "Lisu Supplement"
-msgstr "Додаткові Latin-1"
+msgstr "Лісу, доповнення Latin-1"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2718,16 +2720,14 @@ msgstr "Компоненти тангутської"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1061
 msgid "Khitan Small Script"
-msgstr ""
+msgstr "Киданська мала писемність"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1065
-#, fuzzy
-#| msgid "Kana Supplement"
 msgid "Tangut Supplement"
-msgstr "Додаткова кана"
+msgstr "Тангутська, доповнення"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2993,7 +2993,7 @@ msgstr "Символи і піктографи, розширення A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1217
 msgid "Symbols for Legacy Computing"
-msgstr ""
+msgstr "Застарілі символи комп'ютерних наук"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3041,10 +3041,8 @@ msgstr "Додаткові ієрогліфічні ідеограми для с
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1245
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension G"
-msgstr "Ієрогліфічні ідеограми, додаток A"
+msgstr "Універсальні ідеографічні ієрогліфи, додаток G"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

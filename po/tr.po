@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-09-03 21:21+0900\n"
-"PO-Revision-Date: 2020-09-04 02:00+0000\n"
+"PO-Revision-Date: 2020-09-07 13:29+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/tr/>\n"
@@ -296,7 +296,7 @@ msgstr "Dil paneli için özel yazı tipi ismi"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:170 setup/setup.ui:1305
 msgid "Choose glyphs with input method's language on candidate window"
-msgstr ""
+msgstr "Aday penceresinde glifleri giriş yönteminin dilinde seçin"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:171
 msgid ""
@@ -305,6 +305,9 @@ msgid ""
 "language if the value is true and choose them from the desktop locale if the "
 "value is false."
 msgstr ""
+"Bazı karakter kodlarının farklı glifleri vardır ve Pango glifleri dil "
+"özelliğinden belirlemektedir. Pango, bu değer doğruysa IBus motorunun "
+"dilinden, yanlışsa masaüstü yerel ayarından glifleri seçer."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:182
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -833,12 +836,12 @@ msgid ""
 "Choose glyphs with the input method's language on the candidate window for "
 "the duplicated code points"
 msgstr ""
+"Yinelenen karakter kodları için aday penceresinde glifleri giriş yönteminin "
+"dilinde seçin"
 
 #: setup/setup.ui:1327
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Fonts</b>"
-msgstr "<b>Yazı Tipi ve Stil</b>"
+msgstr "<b>Yazı Tipleri</b>"
 
 #: setup/setup.ui:1347
 msgid "Advanced"
@@ -2324,7 +2327,7 @@ msgstr "Rumi Sayısal Semboller"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:853
 msgid "Yezidi"
-msgstr ""
+msgstr "Yezidi"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2345,7 +2348,7 @@ msgstr "Soğd"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:865
 msgid "Chorasmian"
-msgstr ""
+msgstr "Harezmce"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2499,7 +2502,7 @@ msgstr "Warang Citi"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:953
 msgid "Dives Akuru"
-msgstr ""
+msgstr "Dives Akuru"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2568,10 +2571,8 @@ msgstr "Makasar"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:993
-#, fuzzy
-#| msgid "Latin-1 Supplement"
 msgid "Lisu Supplement"
-msgstr "Latin-1 İlave"
+msgstr "Lisu İlave"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2690,16 +2691,14 @@ msgstr "Tangut Bileşenler"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1061
 msgid "Khitan Small Script"
-msgstr ""
+msgstr "Küçük Hitay Alfabesi"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1065
-#, fuzzy
-#| msgid "Kana Supplement"
 msgid "Tangut Supplement"
-msgstr "Kana İlave"
+msgstr "Tangut İlave"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2965,7 +2964,7 @@ msgstr "Semboller ve Piktograflar Genişletilmiş-A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1217
 msgid "Symbols for Legacy Computing"
-msgstr ""
+msgstr "Eski Bilgisayarlar için Semboller"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3013,10 +3012,8 @@ msgstr "CJK Uyumluluk İdeografları İlave"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1245
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension G"
-msgstr "CJK Birleşik İdeograflar Uzantı A"
+msgstr "CJK Birleşik İdeograflar Uzantı G"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

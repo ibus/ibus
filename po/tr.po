@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2020-04-21 19:40+0000\n"
+"PO-Revision-Date: 2020-09-04 02:00+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/tr/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
-"X-Generator: Weblate 4.0.1\n"
+"X-Generator: Weblate 4.2.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -681,7 +681,7 @@ msgstr "Özel yazı tipi kullan:"
 
 #: setup/setup.ui:562 setup/setup.ui:1156
 msgid "<b>Font and Style</b>"
-msgstr "<b>Yazı Tipi ve Stili</b>"
+msgstr "<b>Yazı Tipi ve Stil</b>"
 
 #: setup/setup.ui:579
 msgid "General"

@@ -4,19 +4,19 @@
 # This file is distributed under the same license as the ibus package.
 #
 # Translators:
-# Göran Uddeborg <goeran@uddeborg.se>, 2017. #zanata
+# Göran Uddeborg <goeran@uddeborg.se>, 2017. #zanata, 2020.
 # fujiwara <takao.fujiwara1@gmail.com>, 2017. #zanata
-# Göran Uddeborg <goeran@uddeborg.se>, 2018. #zanata
+# Göran Uddeborg <goeran@uddeborg.se>, 2018. #zanata, 2020.
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
-# Göran Uddeborg <goeran@uddeborg.se>, 2019. #zanata
+# Göran Uddeborg <goeran@uddeborg.se>, 2019. #zanata, 2020.
 # Allan Nordhøy <epost@anotheragency.no>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-09-03 21:21+0900\n"
-"PO-Revision-Date: 2020-05-24 12:40+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2020-09-08 15:29+0000\n"
+"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/sv/>\n"
 "Language: sv\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.0.4\n"
+"X-Generator: Weblate 4.2.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -55,7 +55,7 @@ msgid ""
 "show the window and switch prev/next engines."
 msgstr ""
 "Ange fördröjningen i millisekunder för att visa pop-up-fönstret för IME-"
-"byte.  Standard är 400.  0 = Visa fönstret omedelbart. 0 < Vänta "
+"byte. Standard är 400. 0 = Visa fönstret omedelbart. 0 < Vänta "
 "millisekunder. 0 > Visa inte fönstret och byt till föregående/nästa maskin."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
@@ -187,8 +187,8 @@ msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
 msgstr ""
-"Beteendet hos egenskapspanelen.  0 = Visa inte, 1 = Dölj automatiskt 2 = "
-"Visa alltid"
+"Beteendet hos egenskapspanelen. 0 = Visa inte, 1 = Dölj automatiskt 2 = Visa "
+"alltid"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:117
 #: data/dconf/org.freedesktop.ibus.gschema.xml:121
@@ -204,8 +204,8 @@ msgid ""
 "If true, the panel follows the input cursor in case the panel is always "
 "shown. If false, the panel is shown at a fixed location."
 msgstr ""
-"Om sant följer panelen inmatningsmarkören i fallet när panelen alltid "
-"visas.  Om falskt visas panelen på en bestämd plats."
+"Om sant följer panelen inmatningsmarkören i fallet när panelen alltid visas. "
+"Om falskt visas panelen på en bestämd plats."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:130
 msgid "The milliseconds to show property panel"
@@ -225,8 +225,7 @@ msgstr "Orienteringen på uppslagningstabellen"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:136
 msgid "Orientation of lookup table. 0 = Horizontal, 1 = Vertical"
-msgstr ""
-"Orienteringen på uppslagningstabellen.  0 = horisontellt, 1 = vertikalt"
+msgstr "Orienteringen på uppslagningstabellen. 0 = horisontellt, 1 = vertikalt"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:140
 #: data/dconf/org.freedesktop.ibus.gschema.xml:141 setup/setup.ui:470
@@ -256,7 +255,7 @@ msgid ""
 "percentage values in the range 0% to 100%, and 'a' is a floating point value "
 "in the range 0 to 1 of the alpha."
 msgstr ""
-"XKB-ikonen visar layout-strängen och strängen visas med RGBA-värdet.  RGBA-"
+"XKB-ikonen visar layout-strängen och strängen visas med RGBA-värdet. RGBA-"
 "värdet kan vara 1. ett färgnamn från X11, 2. ett hexadecimalt värde på "
 "formen ”#rrggbb” där ”r”, ”g” och ”b” är hexadecimala siffror för rött, "
 "grönt och blått, 3. en RGB-färg på formen ”rgb(r,g,b)” eller 4. en RGBA-färg "
@@ -277,7 +276,7 @@ msgid ""
 msgstr ""
 "Antalet millisekunder att visa panelikonen från maskinikonen för en "
 "egenskapsikon när maskinen byts om egenskapen anges av värdet på icon-prop-"
-"key i IBusEngineDesc.  Om värdet är 0, ingen fördröjning och egenskapsikonen "
+"key i IBusEngineDesc. Om värdet är 0, ingen fördröjning och egenskapsikonen "
 "visas omedelbart."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:160
@@ -299,7 +298,7 @@ msgstr "Anpassat typsnittsnamn till språkpanelen"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:170 setup/setup.ui:1305
 msgid "Choose glyphs with input method's language on candidate window"
-msgstr ""
+msgstr "Välj glyfer med inmatningsmetodens språk på kandidatfönstret"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:171
 msgid ""
@@ -308,6 +307,9 @@ msgid ""
 "language if the value is true and choose them from the desktop locale if the "
 "value is false."
 msgstr ""
+"Några kodpunkter har andra glyfer och Pango väljer glyfen från "
+"språkattributet. Pango väljer glyfer från IBus-motorns språk om värdet är "
+"sant och väljer dem från skrivbordslokalen om värdet är falskt."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:182
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -338,7 +340,7 @@ msgid ""
 "Choose a default language of emoji dictionaries on the emoji dialog. The "
 "value $lang is applied to /usr/share/ibus/dicts/emoji-$lang.dict ."
 msgstr ""
-"Välj ett standardspråk med emoji-ordlistor i emoji-dialogen.  Värdet $lang "
+"Välj ett standardspråk med emoji-ordlistor i emoji-dialogen. Värdet $lang "
 "används i /usr/share/ibus/dicts/emoji-$lang.dict ."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:202
@@ -407,8 +409,8 @@ msgid ""
 "needed to load the data. Load the emoji data when open the emoji dialog at "
 "the beginning if false."
 msgstr ""
-"Läs in emoji-data vid uppstartstillfället om sant.  Ungefär 10 MB minne "
-"behövs för att läsa in datan.  Läs emoji-datan när emoji-dialogen öppnas i "
+"Läs in emoji-data vid uppstartstillfället om sant. Ungefär 10 MB minne "
+"behövs för att läsa in datan. Läs emoji-datan när emoji-dialogen öppnas i "
 "början om falskt."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:232
@@ -422,9 +424,9 @@ msgid ""
 "the beginning if false. The Unicode data is always loaded after the emoji "
 "data is loaded even if true."
 msgstr ""
-"Läs in Unicode-data vid uppstartstillfället om sant.  Ungefär 15 MB minne "
-"behövs för att läsa in datan.  Läs Unicode-datan när emoji-dialogen öppnas i "
-"början om falskt.  Unicode-datan läses alltid in efter emoji-datan läses in "
+"Läs in Unicode-data vid uppstartstillfället om sant. Ungefär 15 MB minne "
+"behövs för att läsa in datan. Läs Unicode-datan när emoji-dialogen öppnas i "
+"början om falskt. Unicode-datan läses alltid in efter emoji-datan läses in "
 "även om sant."
 
 #: ibus/_config.py.in:41
@@ -840,12 +842,12 @@ msgid ""
 "Choose glyphs with the input method's language on the candidate window for "
 "the duplicated code points"
 msgstr ""
+"Välj glyfer med inmatningsmetodens språk på kandidatfönstret för de "
+"dubblerade kodpunkterna"
 
 #: setup/setup.ui:1327
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Fonts</b>"
-msgstr "<b>Typsnitt och stil</b>"
+msgstr "<b>Typsnitt</b>"
 
 #: setup/setup.ui:1347
 msgid "Advanced"
@@ -1008,7 +1010,7 @@ msgstr "Thaana"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:97
 msgid "NKo"
-msgstr "NKo"
+msgstr "N'Ko"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2331,7 +2333,7 @@ msgstr "Numeriska Rumi-symboler"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:853
 msgid "Yezidi"
-msgstr ""
+msgstr "Ezdiki"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2352,7 +2354,7 @@ msgstr "Sogdiska"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:865
 msgid "Chorasmian"
-msgstr ""
+msgstr "Khwarezmiska"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2506,7 +2508,7 @@ msgstr "Warang Citi"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:953
 msgid "Dives Akuru"
-msgstr ""
+msgstr "Dhives Akuruiska"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2575,10 +2577,8 @@ msgstr "Makassariska"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:993
-#, fuzzy
-#| msgid "Latin-1 Supplement"
 msgid "Lisu Supplement"
-msgstr "Latin-1-tillägg"
+msgstr "Lisu-tillägg"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2697,16 +2697,14 @@ msgstr "Tangut-komponenter"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1061
 msgid "Khitan Small Script"
-msgstr ""
+msgstr "Khitansk liten skrift"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1065
-#, fuzzy
-#| msgid "Kana Supplement"
 msgid "Tangut Supplement"
-msgstr "Kana-tillägg"
+msgstr "Tangut-tillägg"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2972,7 +2970,7 @@ msgstr "Symboler och piktogram tillägg-A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1217
 msgid "Symbols for Legacy Computing"
-msgstr ""
+msgstr "Symboler för föråldrade databeräkningar"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3020,10 +3018,8 @@ msgstr "CJK-kompatibilitetideografstillägg"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1245
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension G"
-msgstr "Enhetliga CJK-ideograftillägg A"
+msgstr "Enhetliga CJK-ideograftillägg G"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3226,7 +3222,7 @@ msgstr "Klicka för att visa ett varningsmeddelande"
 
 #: ui/gtk3/emojier.vala:1173
 msgid "Loading a Unicode dictionary:"
-msgstr "Laddar en Unicode-ordbok"
+msgstr "Laddar en Unicode-ordbok:"
 
 #: ui/gtk3/emojier.vala:1419
 #, c-format
@@ -3276,7 +3272,7 @@ msgid ""
 "application. E.g. Press Esc key several times to release the emoji typing "
 "mode, click your desktop and click your text application again."
 msgstr ""
-"Misslyckades att få det aktuella textprogrammet.  Fokusera om ditt program.  "
+"Misslyckades att få det aktuella textprogrammet. Fokusera om ditt program. "
 "T.ex. tryck Esc-tangenten flera gånger för att släppa emoji-"
 "inskrivningsläget, klicka på ditt skrivbord och klicka på ditt textprogram "
 "igen."
@@ -3305,7 +3301,7 @@ msgstr "TYPSNITT"
 #.
 #: ui/gtk3/emojierapp.vala:132
 msgid "\"LANG\" for annotations on emoji dialog. E.g. \"en\""
-msgstr "”SPRÅK” för annotationer i emoji-dialogen.  T.ex. ”sv”"
+msgstr "”SPRÅK” för annotationer i emoji-dialogen. T.ex. ”sv”"
 
 #: ui/gtk3/emojierapp.vala:133
 msgid "LANG"

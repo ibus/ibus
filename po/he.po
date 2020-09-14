@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-09-03 21:21+0900\n"
-"PO-Revision-Date: 2020-08-04 15:29+0000\n"
+"PO-Revision-Date: 2020-09-07 13:29+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/he/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.1.1\n"
+"X-Generator: Weblate 4.2.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -247,10 +247,8 @@ msgid ""
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:155
-#, fuzzy
-#| msgid "The milliseconds to show property panel"
 msgid "The milliseconds to show the panel icon for a property"
-msgstr "המילישניות להצגת חלונית המאפיינים"
+msgstr "המילישניות להצגת סמל חלונית למאפיין"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:156
 msgid ""
@@ -290,38 +288,28 @@ msgid ""
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:182
-#, fuzzy
-#| msgid "Trigger shortcut keys for gtk_accelerator_parse"
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
-msgstr "מקשי קיצור להקפצה של gtk_accelerator_parse"
+msgstr "מקשי קיצור יוניקוד של gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:183
-#, fuzzy
-#| msgid "The shortcut keys for turning input method on or off"
 msgid "The shortcut keys for turning Unicode typing on or off"
-msgstr "מקשי הקיצור להפעלה או השבתה של שיטת קלט"
+msgstr "מקשי הקיצור להפעלה או השבתה של הקלדת יוניקוד"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:187
-#, fuzzy
-#| msgid "Trigger shortcut keys for gtk_accelerator_parse"
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
-msgstr "מקשי קיצור להקפצה של gtk_accelerator_parse"
+msgstr "מקשי קיצור לאמוג׳י של gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:188
-#, fuzzy
-#| msgid "The shortcut keys for turning input method on or off"
 msgid "The shortcut keys for turning emoji typing on or off"
-msgstr "מקשי הקיצור להפעלה או השבתה של שיטת קלט"
+msgstr "מקשי הקיצור להפעלה או השבתה של הקלדת אמוג׳י"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:193
-#, fuzzy
-#| msgid "Custom font name for language panel"
 msgid "Custom font name for emoji characters on emoji dialog"
-msgstr "שם גופן בהתאמה אישית לחלונית גופן"
+msgstr "שם גופן בהתאמה אישית לתווי אמוג׳י בחלונית אמוג׳י"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:197
 msgid "Default language for emoji dictionary"
-msgstr ""
+msgstr "שפת בררת מחדל ליומן אמוג׳י"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:198
 msgid ""
@@ -413,10 +401,8 @@ msgid "Other"
 msgstr "אחר"
 
 #: setup/emojilang.py:67
-#, fuzzy
-#| msgid "Select an input method"
 msgid "Select a language"
-msgstr "נא לבחור שיטת קלט"
+msgstr "נא לבחור שפה"
 
 #: setup/emojilang.py:70 setup/enginedialog.py:60 setup/keyboardshortcut.py:339
 #: setup/main.py:560
@@ -740,10 +726,8 @@ msgid "Emoji annotation:"
 msgstr ""
 
 #: setup/setup.ui:927
-#, fuzzy
-#| msgid "The shortcut keys for turning input method on or off"
 msgid "The shortcut keys to enable Unicode code point conversions"
-msgstr "מקשי הקיצור להפעלה או השבתה של שיטת קלט"
+msgstr "מקשי הקיצור להפעלת המרת נקודות קוד של יוניקוד"
 
 #: setup/setup.ui:929
 msgid "Unicode code point:"
@@ -754,10 +738,8 @@ msgid "Set a font of Unicode candidates on the emoji dialog"
 msgstr ""
 
 #: setup/setup.ui:1015
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Unicode font:"
-msgstr "להשתמש בגופן בהתאמה אישית:"
+msgstr "גופן יוניקוד:"
 
 #: setup/setup.ui:1038
 msgid "Set a language of emoji annotations on the emoji dialog"
@@ -810,10 +792,8 @@ msgid ""
 msgstr ""
 
 #: setup/setup.ui:1327
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Fonts</b>"
-msgstr "<b>גופן וסגנון</b>"
+msgstr "<b>גופנים</b>"
 
 #: setup/setup.ui:1347
 msgid "Advanced"
@@ -1955,10 +1935,8 @@ msgstr ""
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:657
-#, fuzzy
-#| msgid "Vertical"
 msgid "Vertical Forms"
-msgstr "אנכי"
+msgstr "צורות אנכיות"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3067,14 +3045,16 @@ msgid ""
 "Use engine schema paths instead of ibus core, which can be comma-separated "
 "values."
 msgstr ""
+"Use engine schema paths instead of ibus core, which can be comma-separated "
+"values."
 
 #: tools/main.vala:381
 msgid "Resetting…"
-msgstr ""
+msgstr "Resetting…"
 
 #: tools/main.vala:399
 msgid "Done"
-msgstr ""
+msgstr "Done"
 
 #: tools/main.vala:444
 msgid "Set or get engine"
@@ -3113,18 +3093,16 @@ msgid "Print the D-Bus address of ibus-daemon"
 msgstr "Print the D-Bus address of ibus-daemon"
 
 #: tools/main.vala:453
-#, fuzzy
-#| msgid "Show this information"
 msgid "Show the configuration values"
-msgstr "Show this information"
+msgstr "Show the configuration values"
 
 #: tools/main.vala:454
 msgid "Reset the configuration values"
-msgstr ""
+msgstr "Reset the configuration values"
 
 #: tools/main.vala:456
 msgid "Save emoji on dialog to clipboard"
-msgstr ""
+msgstr "Save emoji on dialog to clipboard"
 
 #: tools/main.vala:458
 msgid "Show this information"
@@ -3150,13 +3128,11 @@ msgstr "%s is unknown command!\n"
 
 #: ui/gtk3/emojier.vala:233
 msgid "Favorites"
-msgstr ""
+msgstr "מועדפים"
 
 #: ui/gtk3/emojier.vala:234
-#, fuzzy
-#| msgid "Other"
 msgid "Others"
-msgstr "אחר"
+msgstr "אחרים"
 
 #: ui/gtk3/emojier.vala:235
 msgid "Open Unicode choice"
@@ -3179,10 +3155,8 @@ msgid "Show emoji variants"
 msgstr ""
 
 #: ui/gtk3/emojier.vala:1112
-#, fuzzy
-#| msgid "_Close"
 msgid "Close"
-msgstr "_סגירה"
+msgstr "סגירה"
 
 #: ui/gtk3/emojier.vala:1118
 msgid "Menu"

@@ -3,7 +3,7 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2015 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2015-2019 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2015-2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # Copyright (c) 2007-2017 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
@@ -248,6 +248,7 @@ AM_CPPFLAGS += -DENABLE_EMOJI_DICT
 dictdir = $(pkgdatadir)/dicts
 LANG_FILES = $(basename $(notdir $(wildcard $(EMOJI_ANNOTATION_DIR)/*.xml)))
 EMOJI_DICT_FILES = $(patsubst %,dicts/emoji-%.dict,$(LANG_FILES))
+# emoji-root.dict, emoji-sr_Cyrl.dict have no contents.
 dict_DATA = $(EMOJI_DICT_FILES)
 
 noinst_PROGRAMS += emoji-parser
@@ -265,6 +266,7 @@ dicts/emoji-%.dict: emoji-parser
 	        xml_derived_option="--xml-derived $(EMOJI_ANNOTATION_DIR)/../annotationsDerived/$*.xml"; \
 	        plus_comment="derived"; \
 	fi; \
+	is_skip=0; \
 	if test x"$*" = xen ; then \
 	    $(builddir)/emoji-parser \
 	        --unicode-emoji-dir $(UNICODE_EMOJI_DIR) \
@@ -279,47 +281,42 @@ dicts/emoji-%.dict: emoji-parser
 	        --xml $(EMOJI_ANNOTATION_DIR)/$*.xml \
 	        $$xml_derived_option \
 	        --out $@; \
+	    retval=$$?; \
+	    if test $$retval -eq 99 ; then \
+	        is_skip=1; \
+	        touch $@; \
+	    elif test $$retval -ne 0 ; then \
+	        echo "Fail to generate $@"; \
+	        abrt; \
+	    fi; \
 	fi; \
-	echo "Generated $$plus_comment $@"
+	if test $$is_skip -eq 0 ; then \
+	    echo "Generated $$plus_comment $@"; \
+	else \
+	    echo "Skip $$plus_comment $@"; \
+	fi;
 
 ibusemojigen.h: dicts/emoji-en.dict
 	$(NULL)
 
-install-data-hook: $(dict_DATA)
-	@$(NORMAL_INSTALL)
+# We put dicts/emoji-%.dict as the make target for the parallel build
+# and the make target has to be genarated even if the file size is zero.
+# But we don't want to install the zero size files and delete them
+# in install-data-hook.
+install-data-hook:
 	$(AM_V_at)list='$(wildcard dicts/*.dict)'; \
         test -n "$(dictdir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(dictdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(dictdir)" || exit 1; \
-	fi; \
 	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
+	    if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	    if test -s  "$$d$$p"; then continue; fi;  \
+	    basename "$$p"; \
 	done | \
-	while read files; do \
-	  if [ x$(AM_DEFAULT_VERBOSITY) = x1 ] ; then \
-	      echo "$(INSTALL_DATA) $$files '$(DESTDIR)$(dictdir)'"; \
-	  else \
-	      echo "Installing $$files"; \
-	  fi; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(dictdir)" || exit $$?; \
+	while read file; do \
+	    if test -f "$(DESTDIR)$(dictdir)/$$file"; then \
+	        echo "Delete $(DESTDIR)$(dictdir)/$$file"; \
+	        rm "$(DESTDIR)$(dictdir)/$$file" || exit $$?; \
+	    fi; \
 	done
-
-dict__uninstall_files_from_dir = { \
-    test -z "$$files" \
-        || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
-        || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
-             cd "$$dir" && rm -f $$files; }; \
-    }
-
-# for make dist
-uninstall-hook:
-	@$(NORMAL_UNINSTALL)
-	$(AM_V_at)list='$(wildcard dicts/*.dict)'; \
-	test -n "$(dictdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(dictdir)'; $(dict__uninstall_files_from_dir)
 
 emoji_parser_SOURCES =          \
     emoji-parser.c              \

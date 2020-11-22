@@ -27,7 +27,7 @@ m4_define([ibus_released], [1])
 
 m4_define([ibus_major_version], [1])
 m4_define([ibus_minor_version], [5])
-m4_define([ibus_micro_version], [22])
+m4_define([ibus_micro_version], [23])
 m4_define([ibus_abi_current], [5])
 m4_define([ibus_abi_revision],
           [m4_eval(100 * ibus_minor_version + ibus_micro_version)])
@@ -300,25 +300,9 @@ else
     AC_SUBST(wayland_scanner_rules)
 fi
 
-enable_appindicator_engine_icon="no"
 if test x"$enable_appindicator" = x"yes"; then
     enable_appindicator="yes (enabled, use --disable-appindicator to disable)"
-
-    # Need qt5-qtbase-devel package
-    # There is no way to check the version of KStatusNotifierItem and
-    # check the version of qtbase here.
-    AC_MSG_CHECKING([for KDE5 appindicator engine icon])
-    PKG_CHECK_EXISTS([Qt5Gui >= 5.4],
-        enable_appindicator_engine_icon="yes"
-    )
-    AC_MSG_RESULT([$enable_appindicator_engine_icon])
-
 fi
-if test x"$enable_appindicator_engine_icon" != x"yes" ; then
-    enable_appindicator_engine_icon="no (disabled, need qtbase-devel 5.4 or later)"
-fi
-AM_CONDITIONAL([ENABLE_APPINDICATOR_ENGINE_ICON],
-               [test x"$enable_appindicator_engine_icon" = x"yes"])
 
 # GObject introspection
 GOBJECT_INTROSPECTION_CHECK([0.6.8])
@@ -801,7 +785,6 @@ Build options:
   Build wayland support         $enable_wayland
   Build gdk3 wayland support    $enable_gdk3_wayland
   Build appindicator support    $enable_appindicator
-  Build appindicator engine icon $enable_appindicator_engine_icon
   Build python library          $enable_python_library
   Build memconf modules         $enable_memconf
   Build dconf modules           $enable_dconf

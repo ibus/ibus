@@ -11,7 +11,7 @@ src/ibusemojigen.h
 src/ibusunicodegen.h
 "
 FEDORA_PKG1='autoconf automake libtool gettext-devel'
-FEDORA_PKG2='glib2-devel gtk2-devel gtk3-devel qt5-qtbase-devel
+FEDORA_PKG2='glib2-devel gtk2-devel gtk3-devel
  wayland-devel'
 FEDORA_PKG3='cldr-emoji-annotation iso-codes-devel unicode-emoji unicode-ucd'
 

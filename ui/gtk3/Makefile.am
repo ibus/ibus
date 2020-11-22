@@ -3,8 +3,8 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2015 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2015-2019 Takao Fujwiara <takao.fujiwara1@gmail.com>
-# Copyright (c) 2007-2019 Red Hat, Inc.
+# Copyright (c) 2015-2020 Takao Fujwiara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2007-2020 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -83,10 +83,6 @@ AM_VALAFLAGS = \
 
 if ENABLE_APPINDICATOR
 AM_VALAFLAGS += --define=INDICATOR
-endif
-
-if ENABLE_APPINDICATOR_ENGINE_ICON
-AM_VALAFLAGS += --define=INDICATOR_ENGINE_ICON
 endif
 
 if ENABLE_GDK3_WAYLAND

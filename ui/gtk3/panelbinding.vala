@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2018 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2018 Takao Fujwiara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2018-2020 Takao Fujwiara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -190,7 +190,7 @@ class Preedit : Gtk.Window {
 
     public IBus.Text get_commit_text() {
         string extension_text = m_extension_preedit_emoji.get_text();
-        if (extension_text.length == 0)
+        if (extension_text.length == 0 && m_prefix != "u")
             extension_text = m_extension_preedit_text.get_text();
         return new IBus.Text.from_string(extension_text);
     }
@@ -556,8 +556,10 @@ class PanelBinding : IBus.PanelService {
 
     private bool key_press_keyval(uint keyval) {
         unichar ch = IBus.keyval_to_unicode(keyval);
+        if (m_extension_name == "unicode" && !ch.isxdigit())
+            return false;
         if (ch.iscntrl())
-                return false;
+            return false;
         string str = ch.to_string();
         m_preedit.append_text(str);
         string annotation = m_preedit.get_text();

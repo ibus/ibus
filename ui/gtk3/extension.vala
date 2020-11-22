@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2018 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2018 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2018-2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -67,22 +67,22 @@ class ExtensionGtk : Gtk.Application {
 
 
     private void bus_name_acquired_cb(DBusConnection connection,
-                                      string sender_name,
-                                      string object_path,
-                                      string interface_name,
-                                      string signal_name,
-                                      Variant parameters) {
+                                      string?        sender_name,
+                                      string         object_path,
+                                      string         interface_name,
+                                      string         signal_name,
+                                      Variant        parameters) {
         debug("signal_name = %s", signal_name);
         m_panel = new PanelBinding(m_bus, this);
         m_panel.load_settings();
     }
 
     private void bus_name_lost_cb(DBusConnection connection,
-                                  string sender_name,
-                                  string object_path,
-                                  string interface_name,
-                                  string signal_name,
-                                  Variant parameters) {
+                                  string?        sender_name,
+                                  string         object_path,
+                                  string         interface_name,
+                                  string         signal_name,
+                                  Variant        parameters) {
         // "Destroy" dbus method was called before this callback is called.
         // "Destroy" dbus method -> ibus_service_destroy()
         // -> g_dbus_connection_unregister_object()

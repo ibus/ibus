@@ -3,7 +3,7 @@
     <name>org.freedesktop.IBus.Simple</name>
     <description>A table based simple engine</description>
     <exec>@libexecdir@/ibus-engine-simple</exec>
-    <version>1.5.22.20200827</version>
+    <version>1.5.22.20200909</version>
     <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
     <license>GPL</license>
     <homepage>https://github.com/ibus/ibus/wiki</homepage>
@@ -45,8 +45,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:euro:haw</name>
-            <language>haw</language>
+            <name>xkb:us:euro:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -57,8 +57,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:intl:haw</name>
-            <language>haw</language>
+            <name>xkb:us:intl:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -69,8 +69,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:alt-intl:haw</name>
-            <language>haw</language>
+            <name>xkb:us:alt-intl:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -81,8 +81,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:colemak:haw</name>
-            <language>haw</language>
+            <name>xkb:us:colemak:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -93,8 +93,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:dvorak:haw</name>
-            <language>haw</language>
+            <name>xkb:us:dvorak:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -105,8 +105,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:dvorak-intl:haw</name>
-            <language>haw</language>
+            <name>xkb:us:dvorak-intl:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -117,8 +117,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:dvorak-alt-intl:haw</name>
-            <language>haw</language>
+            <name>xkb:us:dvorak-alt-intl:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -129,8 +129,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:dvorak-l:haw</name>
-            <language>haw</language>
+            <name>xkb:us:dvorak-l:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -141,8 +141,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:dvorak-r:haw</name>
-            <language>haw</language>
+            <name>xkb:us:dvorak-r:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -153,8 +153,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:dvorak-classic:haw</name>
-            <language>haw</language>
+            <name>xkb:us:dvorak-classic:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -165,8 +165,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:dvp:haw</name>
-            <language>haw</language>
+            <name>xkb:us:dvp:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -189,8 +189,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:mac:rus</name>
-            <language>ru</language>
+            <name>xkb:us:mac:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -239,30 +239,6 @@
         <engine>
             <name>xkb:us:olpc2:eng</name>
             <language>en</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>olpc2</layout_variant>
-            <longname>English (the divide/multiply toggle the layout)</longname>
-            <description>English (the divide/multiply toggle the layout)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:us:olpc2:fra</name>
-            <language>fr</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>olpc2</layout_variant>
-            <longname>English (the divide/multiply toggle the layout)</longname>
-            <description>English (the divide/multiply toggle the layout)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:us:olpc2:deu</name>
-            <language>de</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -345,54 +321,6 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:norman:bos</name>
-            <language>bs</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>norman</layout_variant>
-            <longname>English (Norman)</longname>
-            <description>English (Norman)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:us:norman:hbs</name>
-            <language>hbs</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>norman</layout_variant>
-            <longname>English (Norman)</longname>
-            <description>English (Norman)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:us:norman:hrv</name>
-            <language>hr</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>norman</layout_variant>
-            <longname>English (Norman)</longname>
-            <description>English (Norman)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:us:norman:srp</name>
-            <language>sr</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>norman</layout_variant>
-            <longname>English (Norman)</longname>
-            <description>English (Norman)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
             <name>xkb:us:workman:eng</name>
             <language>en</language>
             <license>GPL</license>
@@ -405,104 +333,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:us:workman:bos</name>
-            <language>bs</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>workman</layout_variant>
-            <longname>English (Workman)</longname>
-            <description>English (Workman)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:us:workman:hbs</name>
-            <language>hbs</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>workman</layout_variant>
-            <longname>English (Workman)</longname>
-            <description>English (Workman)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:us:workman:hrv</name>
-            <language>hr</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>workman</layout_variant>
-            <longname>English (Workman)</longname>
-            <description>English (Workman)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:us:workman:srp</name>
-            <language>sr</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>workman</layout_variant>
-            <longname>English (Workman)</longname>
-            <description>English (Workman)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
             <name>xkb:us:workman-intl:eng</name>
             <language>en</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>workman-intl</layout_variant>
-            <longname>English (Workman, intl., with dead keys)</longname>
-            <description>English (Workman, intl., with dead keys)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:us:workman-intl:bos</name>
-            <language>bs</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>workman-intl</layout_variant>
-            <longname>English (Workman, intl., with dead keys)</longname>
-            <description>English (Workman, intl., with dead keys)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:us:workman-intl:hbs</name>
-            <language>hbs</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>workman-intl</layout_variant>
-            <longname>English (Workman, intl., with dead keys)</longname>
-            <description>English (Workman, intl., with dead keys)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:us:workman-intl:hrv</name>
-            <language>hr</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>us</layout>
-            <layout_variant>workman-intl</layout_variant>
-            <longname>English (Workman, intl., with dead keys)</longname>
-            <description>English (Workman, intl., with dead keys)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:us:workman-intl:srp</name>
-            <language>sr</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
@@ -545,18 +377,6 @@
             <layout_variant>olpc-ps</layout_variant>
             <longname>Pashto (Afghanistan, OLPC)</longname>
             <description>Pashto (Afghanistan, OLPC)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:af:fa-olpc:pus</name>
-            <language>ps</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>af</layout>
-            <layout_variant>fa-olpc</layout_variant>
-            <longname>Persian (Afghanistan, Dari OLPC)</longname>
-            <description>Persian (Afghanistan, Dari OLPC)</description>
             <icon>ibus-keyboard</icon>
             <rank>1</rank>
         </engine>
@@ -1641,18 +1461,6 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:in:tel-kagapa:tel</name>
-            <language>te</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>in</layout>
-            <layout_variant>tel-kagapa</layout_variant>
-            <longname>Telugu (KaGaPa, phonetic)</longname>
-            <description>Telugu (KaGaPa, phonetic)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
             <name>xkb:in:urd-phonetic:urd</name>
             <language>ur</language>
             <license>GPL</license>
@@ -1915,8 +1723,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:br:thinkpad:epo</name>
-            <language>eo</language>
+            <name>xkb:br:thinkpad:por</name>
+            <language>pt</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>br</layout>
@@ -2825,8 +2633,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:cm:dvorak:fra</name>
-            <language>fr</language>
+            <name>xkb:cm:dvorak:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>cm</layout>
@@ -2837,680 +2645,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:cm:dvorak:bas</name>
-            <language>bas</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:nmg</name>
-            <language>nmg</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:fub</name>
-            <language>fub</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:ewo</name>
-            <language>ewo</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:xmd</name>
-            <language>xmd</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:mfh</name>
-            <language>mfh</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:bkm</name>
-            <language>bkm</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:ozm</name>
-            <language>ozm</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:lns</name>
-            <language>lns</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:sox</name>
-            <language>sox</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:pny</name>
-            <language>pny</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:wes</name>
-            <language>wes</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:lem</name>
-            <language>lem</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:nyj</name>
-            <language>nyj</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:mfk</name>
-            <language>mfk</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:mcp</name>
-            <language>mcp</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:ass</name>
-            <language>ass</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:xed</name>
-            <language>xed</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:dua</name>
-            <language>dua</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:anv</name>
-            <language>anv</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:bum</name>
-            <language>bum</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:btb</name>
-            <language>btb</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:bfd</name>
-            <language>bfd</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:azo</name>
-            <language>azo</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:ken</name>
-            <language>ken</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:yam</name>
-            <language>yam</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:yat</name>
-            <language>yat</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:dvorak:yas</name>
-            <language>yas</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>dvorak</layout_variant>
-            <longname>Cameroon (Dvorak, intl.)</longname>
-            <description>Cameroon (Dvorak, intl.)</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:fra</name>
-            <language>fr</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:bas</name>
-            <language>bas</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:nmg</name>
-            <language>nmg</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:fub</name>
-            <language>fub</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:ewo</name>
-            <language>ewo</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:xmd</name>
-            <language>xmd</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:mfh</name>
-            <language>mfh</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:bkm</name>
-            <language>bkm</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:ozm</name>
-            <language>ozm</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:lns</name>
-            <language>lns</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:sox</name>
-            <language>sox</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:pny</name>
-            <language>pny</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:wes</name>
-            <language>wes</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:lem</name>
-            <language>lem</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:nyj</name>
-            <language>nyj</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:mfk</name>
-            <language>mfk</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:mcp</name>
-            <language>mcp</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:ass</name>
-            <language>ass</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:xed</name>
-            <language>xed</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:dua</name>
-            <language>dua</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:anv</name>
-            <language>anv</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:bum</name>
-            <language>bum</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:btb</name>
-            <language>btb</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:bfd</name>
-            <language>bfd</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:azo</name>
-            <language>azo</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:ken</name>
-            <language>ken</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:yam</name>
-            <language>yam</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:yat</name>
-            <language>yat</language>
-            <license>GPL</license>
-            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-            <layout>cm</layout>
-            <layout_variant>mmuock</layout_variant>
-            <longname>Mmuock</longname>
-            <description>Mmuock</description>
-            <icon>ibus-keyboard</icon>
-            <rank>1</rank>
-        </engine>
-        <engine>
-            <name>xkb:cm:mmuock:yas</name>
-            <language>yas</language>
+            <name>xkb:cm:mmuock:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>cm</layout>
@@ -4203,8 +3339,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:fi:mac:sme</name>
-            <language>se</language>
+            <name>xkb:fi:mac:fin</name>
+            <language>fi</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>fi</layout>
@@ -4454,8 +3590,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:fr:us:kat</name>
-            <language>ka</language>
+            <name>xkb:fr:us:fra</name>
+            <language>fr</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>fr</layout>
@@ -4561,8 +3697,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:gh:gillbt:avn</name>
-            <language>avn</language>
+            <name>xkb:gh:gillbt:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>gh</layout>
@@ -4726,8 +3862,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:de:dvorak:ron</name>
-            <language>ro</language>
+            <name>xkb:de:dvorak:deu</name>
+            <language>de</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>de</layout>
@@ -4738,8 +3874,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:de:sundeadkeys:ron</name>
-            <language>ro</language>
+            <name>xkb:de:sundeadkeys:deu</name>
+            <language>de</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>de</layout>
@@ -4750,8 +3886,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:de:neo:ron</name>
-            <language>ro</language>
+            <name>xkb:de:neo:deu</name>
+            <language>de</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>de</layout>
@@ -4762,8 +3898,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:de:mac:ron</name>
-            <language>ro</language>
+            <name>xkb:de:mac:deu</name>
+            <language>de</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>de</layout>
@@ -4774,8 +3910,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:de:mac_nodeadkeys:ron</name>
-            <language>ro</language>
+            <name>xkb:de:mac_nodeadkeys:deu</name>
+            <language>de</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>de</layout>
@@ -4810,8 +3946,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:de:qwerty:dsb</name>
-            <language>dsb</language>
+            <name>xkb:de:qwerty:deu</name>
+            <language>de</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>de</layout>
@@ -4846,8 +3982,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:de:deadtilde:rus</name>
-            <language>ru</language>
+            <name>xkb:de:deadtilde:deu</name>
+            <language>de</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>de</layout>
@@ -5345,8 +4481,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:it:ibm:kat</name>
-            <language>ka</language>
+            <name>xkb:it:ibm:ita</name>
+            <language>it</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>it</layout>
@@ -6218,8 +5354,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:no:mac:sme</name>
-            <language>se</language>
+            <name>xkb:no:mac:nor</name>
+            <language>no</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>no</layout>
@@ -6230,8 +5366,32 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:no:mac_nodeadkeys:sme</name>
-            <language>se</language>
+            <name>xkb:no:mac:nob</name>
+            <language>nb</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>no</layout>
+            <layout_variant>mac</layout_variant>
+            <longname>Norwegian (Macintosh)</longname>
+            <description>Norwegian (Macintosh)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
+            <name>xkb:no:mac:nno</name>
+            <language>nn</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>no</layout>
+            <layout_variant>mac</layout_variant>
+            <longname>Norwegian (Macintosh)</longname>
+            <description>Norwegian (Macintosh)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
+            <name>xkb:no:mac_nodeadkeys:nor</name>
+            <language>no</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>no</layout>
@@ -6242,8 +5402,56 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:no:colemak:sme</name>
-            <language>se</language>
+            <name>xkb:no:mac_nodeadkeys:nob</name>
+            <language>nb</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>no</layout>
+            <layout_variant>mac_nodeadkeys</layout_variant>
+            <longname>Norwegian (Macintosh, no dead keys)</longname>
+            <description>Norwegian (Macintosh, no dead keys)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
+            <name>xkb:no:mac_nodeadkeys:nno</name>
+            <language>nn</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>no</layout>
+            <layout_variant>mac_nodeadkeys</layout_variant>
+            <longname>Norwegian (Macintosh, no dead keys)</longname>
+            <description>Norwegian (Macintosh, no dead keys)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
+            <name>xkb:no:colemak:nor</name>
+            <language>no</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>no</layout>
+            <layout_variant>colemak</layout_variant>
+            <longname>Norwegian (Colemak)</longname>
+            <description>Norwegian (Colemak)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
+            <name>xkb:no:colemak:nob</name>
+            <language>nb</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>no</layout>
+            <layout_variant>colemak</layout_variant>
+            <longname>Norwegian (Colemak)</longname>
+            <description>Norwegian (Colemak)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
+            <name>xkb:no:colemak:nno</name>
+            <language>nn</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>no</layout>
@@ -6361,8 +5569,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:pl:dvp:rus</name>
-            <language>ru</language>
+            <name>xkb:pl:dvp:pol</name>
+            <language>pl</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>pl</layout>
@@ -6730,8 +5938,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:ru:dos:xal</name>
-            <language>xal</language>
+            <name>xkb:ru:dos:rus</name>
+            <language>ru</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>ru</layout>
@@ -6742,8 +5950,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:ru:mac:xal</name>
-            <language>xal</language>
+            <name>xkb:ru:mac:rus</name>
+            <language>ru</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>ru</layout>
@@ -6802,8 +6010,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:ru:phonetic_azerty:chm</name>
-            <language>chm</language>
+            <name>xkb:ru:phonetic_azerty:rus</name>
+            <language>ru</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>ru</layout>
@@ -6814,8 +6022,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:ru:phonetic_dvorak:chm</name>
-            <language>chm</language>
+            <name>xkb:ru:phonetic_dvorak:rus</name>
+            <language>ru</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>ru</layout>
@@ -6826,8 +6034,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:ru:phonetic_fr:chm</name>
-            <language>chm</language>
+            <name>xkb:ru:phonetic_fr:rus</name>
+            <language>ru</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>ru</layout>
@@ -7122,8 +6330,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:es:mac:cat</name>
-            <language>ca</language>
+            <name>xkb:es:mac:spa</name>
+            <language>es</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>es</layout>
@@ -7205,8 +6413,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:se:mac:sme</name>
-            <language>se</language>
+            <name>xkb:se:mac:swe</name>
+            <language>sv</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>se</layout>
@@ -7217,8 +6425,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:se:svdvorak:sme</name>
-            <language>se</language>
+            <name>xkb:se:svdvorak:swe</name>
+            <language>sv</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>se</layout>
@@ -7229,8 +6437,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:se:us_dvorak:sme</name>
-            <language>se</language>
+            <name>xkb:se:us_dvorak:swe</name>
+            <language>sv</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>se</layout>
@@ -7241,8 +6449,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:se:us:sme</name>
-            <language>se</language>
+            <name>xkb:se:us:swe</name>
+            <language>sv</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>se</layout>
@@ -7407,8 +6615,20 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:ch:de_mac:fra</name>
-            <language>fr</language>
+            <name>xkb:ch:de_mac:deu</name>
+            <language>de</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>ch</layout>
+            <layout_variant>de_mac</layout_variant>
+            <longname>German (Switzerland, Macintosh)</longname>
+            <description>German (Switzerland, Macintosh)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
+            <name>xkb:ch:de_mac:gsw</name>
+            <language>gsw</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>ch</layout>
@@ -7548,8 +6768,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:lk:us:tam</name>
-            <language>ta</language>
+            <name>xkb:lk:us:sin</name>
+            <language>si</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>lk</layout>
@@ -7678,8 +6898,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:tr:intl:kur</name>
-            <language>ku</language>
+            <name>xkb:tr:intl:tur</name>
+            <language>tr</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>tr</layout>
@@ -8247,8 +7467,8 @@
             <rank>1</rank>
         </engine>
         <engine>
-            <name>xkb:ie:UnicodeExpert:gle</name>
-            <language>ga</language>
+            <name>xkb:ie:UnicodeExpert:eng</name>
+            <language>en</language>
             <license>GPL</license>
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>ie</layout>
@@ -9032,6 +8252,18 @@
             <rank>1</rank>
         </engine>
         <engine>
+            <name>xkb:ph:capewell-dvorak:eng</name>
+            <language>en</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>ph</layout>
+            <layout_variant>capewell-dvorak</layout_variant>
+            <longname>Filipino (Capewell-Dvorak, Latin)</longname>
+            <description>Filipino (Capewell-Dvorak, Latin)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
             <name>xkb:ph:capewell-dvorak:bik</name>
             <language>bik</language>
             <license>GPL</license>
@@ -9268,6 +8500,18 @@
             <layout_variant>capewell-dvorak-bay</layout_variant>
             <longname>Filipino (Capewell-Dvorak, Baybayin)</longname>
             <description>Filipino (Capewell-Dvorak, Baybayin)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
+            <name>xkb:ph:capewell-qwerf2k6:eng</name>
+            <language>en</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>ph</layout>
+            <layout_variant>capewell-qwerf2k6</layout_variant>
+            <longname>Filipino (Capewell-QWERF 2006, Latin)</longname>
+            <description>Filipino (Capewell-QWERF 2006, Latin)</description>
             <icon>ibus-keyboard</icon>
             <rank>1</rank>
         </engine>
@@ -9512,6 +8756,18 @@
             <rank>1</rank>
         </engine>
         <engine>
+            <name>xkb:ph:colemak:eng</name>
+            <language>en</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>ph</layout>
+            <layout_variant>colemak</layout_variant>
+            <longname>Filipino (Colemak, Latin)</longname>
+            <description>Filipino (Colemak, Latin)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
             <name>xkb:ph:colemak:bik</name>
             <language>bik</language>
             <license>GPL</license>
@@ -9748,6 +9004,18 @@
             <layout_variant>colemak-bay</layout_variant>
             <longname>Filipino (Colemak, Baybayin)</longname>
             <description>Filipino (Colemak, Baybayin)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
+            <name>xkb:ph:dvorak:eng</name>
+            <language>en</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>ph</layout>
+            <layout_variant>dvorak</layout_variant>
+            <longname>Filipino (Dvorak, Latin)</longname>
+            <description>Filipino (Dvorak, Latin)</description>
             <icon>ibus-keyboard</icon>
             <rank>1</rank>
         </engine>

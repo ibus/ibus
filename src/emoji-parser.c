@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
- * Copyright (C) 2016-2018 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2016-2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -238,7 +238,7 @@ find_emoji_data_list (IBusEmojiData *a,
         else if (strcmp_novariant (a_str, b->emoji, 0xfe0f, 0) == 0)
             return 0;
         else
-            return g_strcmp0 (a_str, b->emoji);
+            return -1;
         break;
     case EMOJI_NOVARIANT:
         if (strcmp_novariant (a_str, b->emoji, 0, 0xfe0e) == 0)
@@ -246,7 +246,7 @@ find_emoji_data_list (IBusEmojiData *a,
         else if (strcmp_novariant (a_str, b->emoji, 0, 0xfe0f) == 0)
             return 0;
         else
-            return g_strcmp0 (a_str, b->emoji);
+            return -1;
         break;
     default:;
     }
@@ -305,6 +305,7 @@ update_emoji_list (EmojiData *data,
                    gboolean   base_update)
 {
     GSList *list;
+    gboolean has_strict = FALSE;
     data->search_type = EMOJI_STRICT;
     list = g_slist_find_custom (
             data->list,
@@ -312,7 +313,7 @@ update_emoji_list (EmojiData *data,
             (GCompareFunc) find_emoji_data_list);
     if (list) {
         emoji_data_update_object (data, list->data);
-        return;
+        has_strict = TRUE;
     } else if (base_update) {
         emoji_data_new_object (data);
         return;
@@ -339,7 +340,8 @@ update_emoji_list (EmojiData *data,
             return;
         }
     }
-    emoji_data_new_object (data);
+    if (!has_strict)
+        emoji_data_new_object (data);
 }
 
 static void
@@ -1292,6 +1294,8 @@ main (int argc, char *argv[])
         category_file_save (output_category, list);
     if (list)
         g_slist_free (list);
+    else
+        return 99;
 
     return 0;
 }

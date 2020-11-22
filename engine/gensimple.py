@@ -90,6 +90,7 @@ class EvdevXML(XMLFilterBase):
         self.__description = ''
         self.__variant = ''
         self.__list_iso639 = []
+        self.__list_iso639_for_variant = []
     def startDocument(self):
         if self.__downstream:
             self.__downstream.startDocument()
@@ -106,7 +107,10 @@ class EvdevXML(XMLFilterBase):
         elif name == 'configItem':
             self.__is_config_item = True
         elif name == 'languageList':
-            self.__list_iso639 = []
+            if self.__is_variant and self.__is_config_item:
+                self.__list_iso639_for_variant = []
+            elif self.__is_layout and self.__is_config_item:
+                self.__list_iso639 = []
         elif name == 'iso639Id':
             self.__is_iso639 = True
         elif name == 'variant':
@@ -129,6 +133,7 @@ class EvdevXML(XMLFilterBase):
             self.__is_iso639 = False
         elif name == 'variant':
             self.__is_variant = False
+            self.__list_iso639_for_variant = []
         elif name == 'name':
             self.__is_name = False
     def characters(self, text):
@@ -140,11 +145,21 @@ class EvdevXML(XMLFilterBase):
             elif self.__is_layout and self.__is_config_item:
                 self.__layout = text
         elif self.__is_iso639:
+            if self.__is_variant and self.__is_config_item:
+                self.__list_iso639_for_variant.append(text)
+            elif self.__is_layout and self.__is_config_item:
                 self.__list_iso639.append(text)
     def save(self):
         if not self.__downstream:
             return
-        for iso in self.__list_iso639:
+        list_iso639 = []
+        if self.__is_variant and self.__is_config_item:
+            list_iso639 = self.__list_iso639_for_variant
+            if len(list_iso639) == 0:
+                list_iso639 = self.__list_iso639
+        elif self.__is_layout and self.__is_config_item:
+            list_iso639 = self.__list_iso639
+        for iso in list_iso639:
             do_deny = False
             for [xkb, layout, variant, lang] in self.__denylist:
                 if xkb == 'xkb' \

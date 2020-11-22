@@ -3,8 +3,8 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2015 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2007-2015 Red Hat, Inc.
-# Copyright (c) 2015 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2007-2020 Red Hat, Inc.
+# Copyright (c) 2015-2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -147,6 +147,6 @@ tmpl-build.stamp: trim-build.stamp  $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DO
 # clean-local:
 # 	rm -rf tmpl ${DOC_MODULE)
 
-CLEANFILES+= *.stamp
+CLEANFILES+= *actions *.stamp
 
 -include $(top_srcdir)/git.mk

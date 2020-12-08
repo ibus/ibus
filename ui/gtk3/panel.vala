@@ -966,21 +966,27 @@ class Panel : IBus.PanelService {
         /* Fedora internal patch could save engines not in simple.xml
          * likes 'xkb:cn::chi'.
          */
-        if (engines.length == 0) {
-            names =  {"xkb:us::eng"};
-            m_settings_general.set_strv("preload-engines", names);
-            engines = m_bus.get_engines_by_names(names);
-            var message = _("Your input method %s does not exist in IBus " +
-                    "input methods so \"US\" layout was configured instead " +
-                    "of your input method. Please run `ibus-setup` command, " +
-                    "open \"Input Method\" tab, and configure your input " +
-                    "methods again.").printf(names[0]);
+        if (engines.length < names.length) {
+            var message1 = "";
+            if (engines.length == 0) {
+                string[] fallback_names = {"xkb:us::eng"};
+                m_settings_general.set_strv("preload-engines", fallback_names);
+                engines = m_bus.get_engines_by_names(fallback_names);
+                message1 = _("Your input method %s does not exist in IBus " +
+                        "input methods so \"US\" layout was configured instead " +
+                        "of your input method.").printf(names[0]);
+            } else {
+                message1 = _("At least one of your configured input methods " +
+                        "does not exist in IBus input methods.");
+            }
+            var message2 = _("Please run `ibus-setup` command, open \"Input " +
+                    "Method\" tab, and configure your input methods again.");
             var dialog = new Gtk.MessageDialog(
                     null,
                     Gtk.DialogFlags.DESTROY_WITH_PARENT,
                     Gtk.MessageType.WARNING,
                     Gtk.ButtonsType.CLOSE,
-                    message);
+                    message1 + " " + message2);
             dialog.response.connect((id) => {
                     dialog.destroy();
             });

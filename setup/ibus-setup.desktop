@@ -9,4 +9,5 @@ StartupNotify=true
 Categories=Settings;
 # GNOME uses its own "input source" settings instead
 NotShowIn=GNOME;Unity;
+X-AppStream-Ignore=true
 Keywords=keyboard;input;

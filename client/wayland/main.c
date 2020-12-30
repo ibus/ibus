@@ -48,6 +48,10 @@ struct _IBusWaylandIM
     uint32_t pending_cursor;
     uint32_t pending_anchor;
 
+    gboolean active;
+    gboolean pending_activate;
+    gboolean pending_deactivate;
+
     IBusInputContext *ibuscontext;
     IBusText *preedit_text;
     guint preedit_cursor_pos;
@@ -102,8 +106,7 @@ static IBusBus *_bus = NULL;
 
 static gboolean _use_sync_mode = FALSE;
 
-static gboolean
-_get_boolean_env (const gchar *name,
+static gboolean _get_boolean_env (const gchar *name,
                   gboolean     defval)
 {
     const gchar *value = g_getenv (name);
@@ -290,6 +293,11 @@ _input_method_v2_set_preedit_string_cb (IBusInputContext *context,
     wlim->preedit_text = g_object_ref_sink (text);
     wlim->preedit_cursor_pos = cursor_pos;
 
+    // wlhangul calls this when processing the input key but that's when
+    // this cb should be triggered ...
+    zwp_input_method_v2_set_preedit_string(wlim->input_method_v2,
+        ibus_text_get_text(wlim->preedit_text), 0,
+        ibus_text_get_length(wlim->preedit_text));
 }
 
 static void
@@ -412,40 +420,6 @@ static const struct zwp_input_method_context_v1_listener context_listener = {
     handle_commit_state,
     handle_preferred_language
 };
-
-// TODO: this should apply all pending state
-//
-// For some reason, as long as the input method is active, the serial
-// increases so done must be called at one point in a loop (when the
-// example/text-input is running)...
-static void
-input_method_handle_done_v2 (void                       *data,
-                             struct zwp_input_method_v2 *input_method)
-{
-    IBusWaylandIM *wlim = data;
-    uint32_t cursor_pos = wlim->pending_cursor;
-    const char* text;
-
-    wlim->serial++;
-
-    if (wlim->preedit_text) {
-      text = ibus_text_get_text (wlim->preedit_text);
-    } else {
-      text = "";
-    }
-
-    size_t text_len = strlen (text);
-    zwp_input_method_v2_set_preedit_string (wlim->input_method_v2,
-        text,
-        cursor_pos,
-        cursor_pos + text_len);
-
-    zwp_input_method_v2_commit_string (wlim->input_method_v2, "_Commit_");
-    // Calling this function seems to result in an endless
-    // loop...
-    //
-    zwp_input_method_v2_commit (input_method, wlim->serial);
-}
 
 static void
 input_method_handle_unavailable_v2 (void                       *data,
@@ -618,7 +592,7 @@ _process_key_event_done (GObject      *object,
 
 static void
 _process_keyboard_grab_key_event (GObject      *object,
-                                 GAsyncResult *res,
+                                 GAsyncResult  *res,
                                  gpointer      user_data)
 {
     IBusInputContext *context = (IBusInputContext *)object;
@@ -736,6 +710,8 @@ input_method_keyboard_grab_key (void               *data,
     if (state == WL_KEYBOARD_KEY_STATE_RELEASED)
         modifiers |= IBUS_RELEASE_MASK;
 
+    printf("input_method_keyboard_grab_key called!!!\n");
+
     if (_use_sync_mode) {
         gboolean retval =
             ibus_input_context_process_key_event (wlim->ibuscontext,
@@ -756,10 +732,33 @@ input_method_keyboard_grab_key (void               *data,
                                                     modifiers,
                                                     -1,
                                                     NULL,
-                                                    // TODO: not sure this will work
+                                                    // TODO: not sure
+                                                    // this will work but
+                                                    // arguments seem correct
                                                     _process_keyboard_grab_key_event,
                                                     event);
     }
+
+    // TODO:
+    //
+    // That's what wlhangul is doing in this function
+    //
+    // const ucschar *commit_ucsstr =
+    //   hangul_ic_get_commit_string(seat->input_context);
+    // if (commit_ucsstr[0] != 0) {
+    //   char *commit_str = ucsstr_to_str(commit_ucsstr);
+    //   zwp_input_method_v2_commit_string(seat->input_method, commit_str);
+    //   free(commit_str);
+    // }
+    //
+    // const ucschar *preedit_ucsstr =
+    //   hangul_ic_get_preedit_string(seat->input_context);
+    // char *preedit_str = ucsstr_to_str(preedit_ucsstr);
+    // zwp_input_method_v2_set_preedit_string(seat->input_method,
+    //   preedit_str, 0, strlen(preedit_str));
+    // free(preedit_str);
+    //
+    // zwp_input_method_v2_commit(seat->input_method, seat->serial);
 }
 
 static void
@@ -853,11 +852,12 @@ input_method_keyboard_grab_modifiers (void               *data,
         wlim->modifiers |= IBUS_META_MASK;
 }
 
+// TODO?
 static void
 input_method_keyboard_grab_repeat_info (void               *data,
-                                      struct zwp_input_method_keyboard_grab_v2 *keyboard,
-                                      uint32_t            rate,
-                                      uint32_t            delay)
+                                        struct zwp_input_method_keyboard_grab_v2 *keyboard,
+                                        int32_t            rate,
+                                        int32_t            delay)
 {
     IBusWaylandIM *wlim = data;
 }
@@ -877,6 +877,143 @@ static const struct zwp_input_method_keyboard_grab_v2_listener keyboard_grab_lis
     input_method_keyboard_grab_modifiers,
     input_method_keyboard_grab_repeat_info
 };
+
+static void
+_create_input_method_v2_done (GObject      *object,
+                              GAsyncResult   *res,
+                              gpointer      user_data)
+{
+    IBusWaylandIM *wlim = (IBusWaylandIM *) user_data;
+
+    GError *error = NULL;
+    IBusInputContext *context = ibus_bus_create_input_context_async_finish (
+            _bus, res, &error);
+
+    if (wlim->cancellable != NULL) {
+        g_object_unref (wlim->cancellable);
+        wlim->cancellable = NULL;
+    }
+
+    if (context == NULL) {
+        g_warning ("Create input context failed: %s.", error->message);
+        g_error_free (error);
+        return;
+    }
+
+    wlim->ibuscontext = context;
+
+    // TODO: all of those should use the v2 interface. It almost
+    // looks like they should not be used at all though since
+    // everything should be committed on the done event. Then, where
+    // is the data from ibus coming from though...
+    //
+    // Most likely these handle the ibus side and on done we send
+    // the prepared strings to the text-input client?
+    g_signal_connect (wlim->ibuscontext, "update-preedit-text",
+                      G_CALLBACK (_input_method_v2_set_preedit_string_cb),
+                      wlim);
+    g_signal_connect (wlim->ibuscontext, "commit-text",
+                      G_CALLBACK (_input_method_v2_commit_string_cb),
+                      wlim);
+
+#ifdef ENABLE_SURROUNDING
+    ibus_input_context_set_capabilities (wlim->ibuscontext,
+                                         IBUS_CAP_FOCUS |
+                                         IBUS_CAP_PREEDIT_TEXT |
+                                         IBUS_CAP_SURROUNDING_TEXT);
+#else
+    ibus_input_context_set_capabilities (wlim->ibuscontext,
+                                         IBUS_CAP_FOCUS |
+                                         IBUS_CAP_PREEDIT_TEXT);
+#endif
+
+    ibus_input_context_focus_in (wlim->ibuscontext);
+}
+
+
+// TODO: this should apply all pending state
+//
+// For some reason, as long as the input method is active, the serial
+// increases so done must be called at one point in a loop (when the
+// example/text-input is running)...
+static void
+input_method_handle_done_v2 (void                       *data,
+                             struct zwp_input_method_v2 *input_method)
+{
+    IBusWaylandIM *wlim = data;
+    wlim->serial++;
+
+    printf("pending_activate: %d active: %d\npending_deactivate: %d", wlim->pending_activate,
+        wlim->active, wlim->pending_deactivate);
+
+    if (wlim->pending_activate && !wlim->active) {
+
+        printf("grabbing keyboard!!!\n");
+
+        wlim->keyboard_grab = zwp_input_method_v2_grab_keyboard (input_method);
+        zwp_input_method_keyboard_grab_v2_add_listener (wlim->keyboard_grab,
+                                  &keyboard_grab_listener,
+                                  wlim);
+        wlim->active = TRUE;
+
+        if (wlim->ibuscontext) {
+            g_object_unref (wlim->ibuscontext);
+            wlim->ibuscontext = NULL;
+        }
+
+        wlim->cancellable = g_cancellable_new ();
+        ibus_bus_create_input_context_async (_bus,
+                                             "wayland",
+                                             -1,
+                                             wlim->cancellable,
+                                             _create_input_method_v2_done,
+                                             wlim);
+    } else if (wlim->pending_deactivate && wlim->active) {
+      if (wlim->keyboard_grab) {
+          zwp_input_method_keyboard_grab_v2_release (wlim->keyboard_grab);
+          wlim->keyboard_grab = NULL;
+      }
+
+      wlim->active = FALSE;
+    }
+
+    wlim->pending_activate = FALSE;
+    wlim->pending_deactivate = FALSE;
+
+    // wlhangul does this here:
+    //
+    // if (seat->pending_activate && !seat->active) {
+    //   seat->keyboard_grab = zwp_input_method_v2_grab_keyboard(input_method);
+    //   zwp_input_method_keyboard_grab_v2_add_listener(seat->keyboard_grab,
+    //     &keyboard_grab_listener, seat);
+    //   seat->active = true;
+    // } else if (seat->pending_deactivate && seat->active) {
+    //   zwp_input_method_keyboard_grab_v2_release(seat->keyboard_grab);
+    //   hangul_ic_reset(seat->input_context);
+    //   memset(seat->pressed, 0, sizeof(seat->pressed));
+    //   seat->keyboard_grab = NULL;
+    //   seat->active = false;
+    // }
+    //
+    // seat->pending_activate = false;
+    // seat->pending_deactivate = false;
+
+
+    // This is handeled in input method grab key in the wlhangul case
+    //
+    // size_t text_len = strlen (text);
+    // zwp_input_method_v2_set_preedit_string (wlim->input_method_v2,
+    //     text,
+    //     cursor_pos,
+    //     cursor_pos + text_len);
+
+    // zwp_input_method_v2_commit_string (wlim->input_method_v2, "_Commit_");
+    // Calling this function seems to result in an endless
+    // loop... wlhangul calls this in the key processing function
+    //
+    // zwp_input_method_v2_commit (input_method, wlim->serial);
+}
+
 
 static void
 _create_input_context_done (GObject      *object,
@@ -916,58 +1053,6 @@ _create_input_context_done (GObject      *object,
                           wlim);
         g_signal_connect (wlim->ibuscontext, "hide-preedit-text",
                           G_CALLBACK (_context_hide_preedit_text_cb),
-                          wlim);
-
-#ifdef ENABLE_SURROUNDING
-        ibus_input_context_set_capabilities (wlim->ibuscontext,
-                                             IBUS_CAP_FOCUS |
-                                             IBUS_CAP_PREEDIT_TEXT |
-                                             IBUS_CAP_SURROUNDING_TEXT);
-#else
-        ibus_input_context_set_capabilities (wlim->ibuscontext,
-                                             IBUS_CAP_FOCUS |
-                                             IBUS_CAP_PREEDIT_TEXT);
-#endif
-
-        ibus_input_context_focus_in (wlim->ibuscontext);
-    }
-}
-
-static void
-_create_input_method_v2_done (GObject      *object,
-                            GAsyncResult *res,
-                            gpointer      user_data)
-{
-    IBusWaylandIM *wlim = (IBusWaylandIM *) user_data;
-
-    GError *error = NULL;
-    IBusInputContext *context = ibus_bus_create_input_context_async_finish (
-            _bus, res, &error);
-
-    if (wlim->cancellable != NULL) {
-        g_object_unref (wlim->cancellable);
-        wlim->cancellable = NULL;
-    }
-
-    if (context == NULL) {
-        g_warning ("Create input context failed: %s.", error->message);
-        g_error_free (error);
-    }
-    else {
-        wlim->ibuscontext = context;
-
-        // TODO: all of those should use the v2 interface. It almost
-        // looks like they should not be used at all though since
-        // everything should be committed on the done event. Then, where
-        // is the data from ibus coming from though...
-        //
-        // Most likely these handle the ibus side and on done we send
-        // the prepared strings to the text-input client?
-        g_signal_connect (wlim->ibuscontext, "update-preedit-text",
-                          G_CALLBACK (_input_method_v2_set_preedit_string_cb),
-                          wlim);
-        g_signal_connect (wlim->ibuscontext, "commit-text",
-                          G_CALLBACK (_input_method_v2_commit_string_cb),
                           wlim);
 
 #ifdef ENABLE_SURROUNDING
@@ -1057,29 +1142,9 @@ input_method_activate_v2 (void                               *data,
                           struct zwp_input_method_v2         *input_method)
 {
     IBusWaylandIM *wlim = data;
-    wlim->serial = 0;
-
-    wlim->keyboard_grab = zwp_input_method_v2_grab_keyboard (input_method);
-    zwp_input_method_keyboard_grab_v2_add_listener (wlim->keyboard_grab,
-                              &keyboard_grab_listener,
-                              wlim);
-
-    if (wlim->ibuscontext) {
-        g_object_unref (wlim->ibuscontext);
-        wlim->ibuscontext = NULL;
-    }
-
-    wlim->cancellable = g_cancellable_new ();
-
-    ibus_bus_create_input_context_async (_bus,
-                                         "wayland",
-                                         -1,
-                                         wlim->cancellable,
-                                         _create_input_method_v2_done,
-                                         wlim);
+    wlim->pending_activate = TRUE;
 }
 
-// TODO
 static void
 input_method_deactivate_v2 (void                               *data,
                             struct zwp_input_method_v2         *input_method)
@@ -1103,6 +1168,13 @@ input_method_deactivate_v2 (void                               *data,
         g_object_unref (wlim->preedit_text);
         wlim->preedit_text = NULL;
     }
+
+    if (wlim->keyboard_grab) {
+        zwp_input_method_keyboard_grab_v2_release (wlim->keyboard_grab);
+        wlim->keyboard_grab = NULL;
+    }
+
+    wlim->pending_deactivate = TRUE;
 }
 
 

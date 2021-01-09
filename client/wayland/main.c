@@ -27,11 +27,13 @@
 #include <ibus.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/mman.h>
 #include <wayland-client.h>
 #include <xkbcommon/xkbcommon.h>
 
 #include "input-method-unstable-v1-client-protocol.h"
 #include "input-method-unstable-v2-client-protocol.h"
+#include "virtual-keyboard-unstable-v1-client-protocol.h"
 
 struct _IBusWaylandIM
 {
@@ -43,6 +45,8 @@ struct _IBusWaylandIM
     struct zwp_input_method_manager_v2 * input_method_manager_v2;
     struct zwp_input_method_v2 *input_method_v2;
     struct zwp_input_method_keyboard_grab_v2 *keyboard_grab;
+    struct zwp_virtual_keyboard_manager_v1 *virtual_keyboard_manager;
+    struct zwp_virtual_keyboard_v1 *virtual_keyboard;
     char *pending_surrounding_text;
     char *commit_text;
     uint32_t pending_cursor;
@@ -505,6 +509,8 @@ input_method_keyboard_grab_keymap (void               *data,
     GMappedFile *map;
     GError *error;
 
+    zwp_virtual_keyboard_v1_keymap(wlim->virtual_keyboard, format, fd, size);
+
     if (format != WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1) {
         close(fd);
         return;
@@ -515,6 +521,13 @@ input_method_keyboard_grab_keymap (void               *data,
     if (map == NULL) {
         close (fd);
         return;
+    }
+
+    // TODO: sigsegv because wlim->keymap is NULL?
+    if (wlim->keymap && !strcmp(wlim->keymap, map)) {
+      g_mapped_file_unref (map);
+      close(fd);
+      return;
     }
 
     wlim->keymap =
@@ -759,6 +772,11 @@ input_method_keyboard_grab_key (void               *data,
     // free(preedit_str);
     //
     // zwp_input_method_v2_commit(seat->input_method, seat->serial);
+
+    // TODO: this should probably only be sent if the IM doesn't handle it
+    // if (!handled) {
+    zwp_virtual_keyboard_v1_key(wlim->virtual_keyboard, time, key, state);
+    // }
 }
 
 static void
@@ -850,6 +868,9 @@ input_method_keyboard_grab_modifiers (void               *data,
         wlim->modifiers |= IBUS_HYPER_MASK;
     if (mask & wlim->meta_mask)
         wlim->modifiers |= IBUS_META_MASK;
+
+    zwp_virtual_keyboard_v1_modifiers(wlim->virtual_keyboard,
+      mods_depressed, mods_latched, mods_locked, group);
 }
 
 // TODO?
@@ -943,7 +964,7 @@ input_method_handle_done_v2 (void                       *data,
     IBusWaylandIM *wlim = data;
     wlim->serial++;
 
-    printf("pending_activate: %d active: %d\npending_deactivate: %d", wlim->pending_activate,
+    printf("pending_activate: %d active: %d\npending_deactivate: %d\n", wlim->pending_activate,
         wlim->active, wlim->pending_deactivate);
 
     if (wlim->pending_activate && !wlim->active) {
@@ -1218,6 +1239,9 @@ registry_handle_global (void               *data,
                                           &input_method_listener, wlim);
     } else if (!g_strcmp0 (interface, wl_seat_interface.name)) {
       _seat = wl_registry_bind (registry, name, &wl_seat_interface, version);
+    } else if (!g_strcmp0 (interface, zwp_virtual_keyboard_manager_v1_interface.name)) {
+      wlim->virtual_keyboard_manager = wl_registry_bind(registry, name,
+      &zwp_virtual_keyboard_manager_v1_interface, 1);
     }
 }
 
@@ -1274,6 +1298,9 @@ main (gint    argc,
           wlim.input_method_manager_v2, _seat);
         zwp_input_method_v2_add_listener (wlim.input_method_v2,
                                           &input_method_listener_v2, &wlim);
+        wlim.virtual_keyboard =
+          zwp_virtual_keyboard_manager_v1_create_virtual_keyboard(
+          wlim.virtual_keyboard_manager, _seat);
     }
 
     if (wlim.input_method == NULL && wlim.input_method_v2 == NULL) {

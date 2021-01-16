@@ -775,6 +775,10 @@ input_method_keyboard_grab_key (void               *data,
     //
     // zwp_input_method_v2_commit(seat->input_method, seat->serial);
 
+    // This actually now let's the client-side text-input send the
+    // surrounding text on each key stroke!!
+    zwp_input_method_v2_commit (wlim->input_method_v2, wlim->serial);
+
     // TODO: this should probably only be sent if the IM doesn't handle it
     // if (!handled) {
     zwp_virtual_keyboard_v1_key(wlim->virtual_keyboard, time, key, state);

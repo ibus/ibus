@@ -346,18 +346,18 @@ input_method_handle_surrounding_text_v2 (void                               *dat
     // const char* text = wlim->pending_surrounding_text;
     // uint32_t cursor = wlim->pending_cursor;
     // uint32_t anchor = wlim->pending_anchor;
-    // if (wlim->ibuscontext != NULL &&
-    //     ibus_input_context_needs_surrounding_text (wlim->ibuscontext)) {
-    //     /* CURSOR_POS and ANCHOR_POS are character offsets. */
-    //     guint cursor_pos = g_utf8_pointer_to_offset (text, text + cursor);
-    //     guint anchor_pos = g_utf8_pointer_to_offset (text, text + anchor);
-    //     IBusText *ibustext = ibus_text_new_from_string (text);
+    if (wlim->ibuscontext != NULL &&
+        ibus_input_context_needs_surrounding_text (wlim->ibuscontext)) {
+        /* CURSOR_POS and ANCHOR_POS are character offsets. */
+        guint cursor_pos = g_utf8_pointer_to_offset (text, text + cursor);
+        guint anchor_pos = g_utf8_pointer_to_offset (text, text + anchor);
+        IBusText *ibustext = ibus_text_new_from_string (text);
 
-    //     ibus_input_context_set_surrounding_text (wlim->ibuscontext,
-    //                                              ibustext,
-    //                                              cursor_pos,
-    //                                              anchor_pos);
-    // }
+        ibus_input_context_set_surrounding_text (wlim->ibuscontext,
+                                                 ibustext,
+                                                 cursor_pos,
+                                                 anchor_pos);
+    }
 
 #endif
 }

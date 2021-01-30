@@ -705,6 +705,7 @@ input_method_keyboard_grab_key (void               *data,
                                 uint32_t            state)
 {
     IBusWaylandIM *wlim = data;
+    gboolean handled = FALSE;
     uint32_t code;
     uint32_t num_syms;
     const xkb_keysym_t *syms;
@@ -725,34 +726,14 @@ input_method_keyboard_grab_key (void               *data,
     if (state == WL_KEYBOARD_KEY_STATE_RELEASED)
         modifiers |= IBUS_RELEASE_MASK;
 
-    printf("input_method_keyboard_grab_key called!!!\n");
+    handled =
+        ibus_input_context_process_key_event (wlim->ibuscontext,
+                                              sym,
+                                              code,
+                                              modifiers);
 
-    if (_use_sync_mode) {
-        gboolean retval =
-            ibus_input_context_process_key_event (wlim->ibuscontext,
-                                                  sym,
-                                                  code,
-                                                  modifiers);
-        if (!retval)
-           printf("no retval from ibus\n");
-    } else {
-        IBusWaylandKeyEvent *event = g_new (IBusWaylandKeyEvent, 1);
-        event->serial = serial;
-        event->time = time;
-        event->key = key;
-        event->state = state;
-        ibus_input_context_process_key_event_async (wlim->ibuscontext,
-                                                    sym,
-                                                    code,
-                                                    modifiers,
-                                                    -1,
-                                                    NULL,
-                                                    // TODO: not sure
-                                                    // this will work but
-                                                    // arguments seem correct
-                                                    _process_keyboard_grab_key_event,
-                                                    event);
-    }
+    if (!handled)
+       printf("not handled by ibus\n");
 
     // TODO:
     //
@@ -779,10 +760,9 @@ input_method_keyboard_grab_key (void               *data,
     // surrounding text on each key stroke!!
     zwp_input_method_v2_commit (wlim->input_method_v2, wlim->serial);
 
-    // TODO: this should probably only be sent if the IM doesn't handle it
-    // if (!handled) {
-    zwp_virtual_keyboard_v1_key(wlim->virtual_keyboard, time, key, state);
-    // }
+    if (!handled) {
+        zwp_virtual_keyboard_v1_key(wlim->virtual_keyboard, time, key, state);
+    }
 }
 
 static void
@@ -931,11 +911,6 @@ input_method_handle_done_v2 (void                       *data,
                                 wlim);
       wlim->active = TRUE;
 
-      if (wlim->ibuscontext) {
-          g_object_unref (wlim->ibuscontext);
-          wlim->ibuscontext = NULL;
-      }
-
       context = ibus_bus_create_input_context (_bus, "wayland_input_method_v2");
       if (context == NULL) {
           g_warning ("Create input context failed.");
@@ -975,6 +950,13 @@ input_method_handle_done_v2 (void                       *data,
       if (wlim->keyboard_grab) {
           zwp_input_method_keyboard_grab_v2_release (wlim->keyboard_grab);
           wlim->keyboard_grab = NULL;
+      }
+
+      if (wlim->ibuscontext) {
+          // TODO: this results in an assertion error. Not sure why
+          // ibus_input_context_focus_out (wlim->ibuscontext);
+          g_object_unref (wlim->ibuscontext);
+          wlim->ibuscontext = NULL;
       }
 
       wlim->active = FALSE;

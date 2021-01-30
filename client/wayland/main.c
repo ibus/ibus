@@ -343,9 +343,6 @@ input_method_handle_surrounding_text_v2 (void                               *dat
     wlim->pending_cursor = cursor;
     wlim->pending_anchor = anchor;
 
-    // const char* text = wlim->pending_surrounding_text;
-    // uint32_t cursor = wlim->pending_cursor;
-    // uint32_t anchor = wlim->pending_anchor;
     if (wlim->ibuscontext != NULL &&
         ibus_input_context_needs_surrounding_text (wlim->ibuscontext)) {
         /* CURSOR_POS and ANCHOR_POS are character offsets. */
@@ -903,8 +900,6 @@ input_method_handle_done_v2 (void                       *data,
         wlim->active, wlim->pending_deactivate);
 
     if (wlim->pending_activate && !wlim->active) {
-      printf("grabbing keyboard!!!\n");
-
       wlim->keyboard_grab = zwp_input_method_v2_grab_keyboard (input_method);
       zwp_input_method_keyboard_grab_v2_add_listener (wlim->keyboard_grab,
                                 &keyboard_grab_listener,
@@ -1145,8 +1140,6 @@ static const struct zwp_input_method_v2_listener input_method_listener_v2 = {
     input_method_handle_surrounding_text_v2,
     input_method_handle_text_change_cause_v2,
     input_method_handle_content_type_v2,
-    // if this one is not called, no endless loop happens (not that
-    // surprising)
     input_method_handle_done_v2,
     input_method_handle_unavailable_v2
 };

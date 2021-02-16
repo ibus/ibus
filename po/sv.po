@@ -10,13 +10,14 @@
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
 # Göran Uddeborg <goeran@uddeborg.se>, 2019. #zanata, 2020.
 # Allan Nordhøy <epost@anotheragency.no>, 2020.
+# Sebastian Rasmussen <sebras@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-12-11 16:21+0900\n"
-"PO-Revision-Date: 2020-09-08 15:29+0000\n"
-"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
+"PO-Revision-Date: 2021-01-23 01:37+0000\n"
+"Last-Translator: Sebastian Rasmussen <sebras@gmail.com>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/sv/>\n"
 "Language: sv\n"
@@ -24,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.2.2\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3324,18 +3325,25 @@ msgid ""
 "Your configured input method %s does not exist in IBus input methods so \"US"
 "\" layout was configured instead of your input method."
 msgstr ""
+"Din konfigurerade inmatningsmetod %s existerar inte bland IBus "
+"inmatningsbetoder så ”US”-layouten konfigurerades istället för din "
+"inmatningsmetod."
 
 #: ui/gtk3/panel.vala:980
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
 msgstr ""
+"Åtminstone en av dina konfigurerade inmatningsmetode existerar inte bland "
+"IBus inmatningsmetoder."
 
 #: ui/gtk3/panel.vala:983
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
 msgstr ""
+"Kör kommandot ”ibus-setup”, öppna fliken ”Inmatningsmetod” och konfigurera "
+"dina inmatningsmetoder igen."
 
 #: ui/gtk3/panel.vala:1141
 msgid "IBus is an intelligent input bus for Linux/Unix."

@@ -12,20 +12,22 @@
 # Runa Bhattacharjee <runab@fedoraproject.org>, 2009
 # runab <runab@redhat.com>, 2009, 2010
 # runab <runab@redhat.com>, 2009-2010
+# Tawsif Hossain Shafi <tenshou170@outlook.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2015-07-13 19:48+0900\n"
-"PO-Revision-Date: 2014-02-18 12:45-0500\n"
-"Last-Translator: Ayesha Akhtar <ayesha@ankur.org.bd>\n"
-"Language-Team: Bengali <trans-bn@lists.fedoraproject.org>\n"
+"PO-Revision-Date: 2020-10-22 17:25+0000\n"
+"Last-Translator: Tawsif Hossain Shafi <tenshou170@outlook.com>\n"
+"Language-Team: Bengali <https://translate.fedoraproject.org/projects/ibus/"
+"ibus/bn/>\n"
 "Language: bn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Zanata 3.7.3\n"
+"X-Generator: Weblate 4.3.1\n"
 
 #: ../setup/setup.ui.h:1
 msgid "Horizontal"
@@ -57,11 +59,11 @@ msgstr "স্বনির্ধারিত"
 
 #: ../setup/setup.ui.h:8
 msgid "Do not show"
-msgstr ""
+msgstr "দেখাবেন না"
 
 #: ../setup/setup.ui.h:9
 msgid "Hide automatically"
-msgstr ""
+msgstr "স্বয়ংক্রিয়ভাবে লুকান"
 
 #: ../setup/setup.ui.h:10
 msgid "Always"
@@ -129,7 +131,7 @@ msgstr "ভাষার বার প্রদর্শন ও আড়াল ক�
 
 #: ../setup/setup.ui.h:25
 msgid "Show property panel:"
-msgstr ""
+msgstr "প্রপার্টি প্যানেল প্রদর্শন করুন:"
 
 #: ../setup/setup.ui.h:26
 msgid "Language panel position:"
@@ -230,6 +232,9 @@ msgid ""
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
 "the panel icon.</i></small>"
 msgstr ""
+"<small><i>সক্রিয় ইনপুট পদ্ধতিটি উপরের তালিকার নির্বাচিতগুলি থেকে কীবোর্ড "
+"শর্টকাট কীগুলি চেপে বা প্যানেল আইকনে ক্লিক করে পরিবর্তন করা যেতে "
+"পারে।</i></small>"
 
 #. create im name & icon column
 #: ../setup/setup.ui.h:48 ../setup/enginetreeview.py:68
@@ -269,6 +274,12 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"<big><b>IBus</b></big>\n"
+"<small>একটি ইনটেলিজেন্ট ইনপুট বাস</small>\n"
+"হোমপেজঃ https://github.com/ibus/ibus/wiki\n"
+"\n"
+"\n"
+"\n"
 
 #: ../setup/setup.ui.h:62
 msgid "Start ibus on login"
@@ -299,40 +310,48 @@ msgstr "ibus আরম্ভের সময় ইঞ্জিনগুলি প�
 
 #: ../data/ibus.schemas.in.h:5
 msgid "Engines order"
-msgstr ""
+msgstr "ইঞ্জিনের অর্ডার"
 
 #: ../data/ibus.schemas.in.h:6
 msgid "Saved engines order in input method list"
-msgstr ""
+msgstr "ইনপুট পদ্ধতি তালিকায় সংরক্ষিত ইঞ্জিনগুলো অর্ডার"
 
 #: ../data/ibus.schemas.in.h:7
 msgid "Popup delay milliseconds for IME switcher window"
-msgstr ""
+msgstr "আইএমই সুইচ পপআপের বিলম্ব (মিলিসেকেন্ড এ)"
 
 #: ../data/ibus.schemas.in.h:8
+#, fuzzy
 msgid ""
 "Set popup delay milliseconds to show IME switcher window. The default is 400."
 " 0 = Show the window immediately. 0 &lt; Delay milliseconds. 0 &gt; Do not "
 "show the window and switch prev/next engines."
 msgstr ""
+"আইএমই স্যুইচার উইন্ডোটি দেখানোর জন্য পপআপ বিলম্ব মিলিসেকেন্ড এ সেট করুন। "
+"ডিফল্টে হচ্ছে 400.0 =তাত্ক্ষণিকভাবে উইন্ডোটি দেখান। ০ &lt; মিলিসেকেন্ডে "
+"বিলম্ব। ০ &gt; উইন্ডোটি প্রদর্শন করবেন না এবং পূর্ববর্তী / পরবর্তী "
+"ইঞ্জিনগুলোতে স্যুইচ করবেন না।"
 
 #: ../data/ibus.schemas.in.h:9
 msgid "Saved version number"
-msgstr ""
+msgstr "সংরক্ষিত ভার্সন নাম্বার"
 
 #: ../data/ibus.schemas.in.h:10
 msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
 msgstr ""
+"সংরক্ষিত ভার্সন নাম্বারটি পূর্ববর্তী ইন্সটল করা আইবাস এবং বর্তমানে আইবাসের "
+"একটির সাথে পার্থক্য দেখার জন্য ব্যবহৃত করা হবে।"
 
 #: ../data/ibus.schemas.in.h:11
 msgid "Latin layouts which have no ASCII"
-msgstr ""
+msgstr "ASCII নেই যেসব ল্যাটিন লেআউটগুলো"
 
 #: ../data/ibus.schemas.in.h:12
 msgid "US layout is appended to the latin layouts. variant can be omitted."
 msgstr ""
+"US লেআউটটি ল্যাটিন লেআউটে সংযুক্ত করা হয়েছে। বৈকল্পিক বাদ দেওয়া যেতে পারে।"
 
 #: ../data/ibus.schemas.in.h:13
 msgid "Use xmodmap"
@@ -494,21 +513,21 @@ msgstr "অ্যাপ্লিকেশন উইন্ডোর মধ্য�
 
 #: ../data/ibus.schemas.in.h:52
 msgid "Use global input method"
-msgstr "সার্বজনীন ইনপুট পদ্ধতি "
+msgstr "গ্লোবাল ইনপুট পদ্ধতি ব্যবহার করুন"
 
 #: ../data/ibus.schemas.in.h:54
 msgid "Enable input method by default"
-msgstr "ডিফল্ট অবস্থায় ইনপুট পদ্ধতি সক্রিয় করা হবে"
+msgstr "ডিফল্ট ভাবে ইনপুট পদ্ধতি সক্রিয় করুন"
 
 #: ../data/ibus.schemas.in.h:55
+#, fuzzy
 msgid "Enable input method by default when the application gets input focus"
-msgstr ""
-"ইনপুট প্রাপ্ত করার উদ্দেশ্যে অ্যাপ্লিকেশনে ফোকাস করা হলে, ডিফল্ট রূপে ইনপুট "
-"পদ্ধতি সক্রিয় করা হবে"
+msgstr "অ্যাপ্লিকেশনটি ইনপুট ফোকাস পেলে ডিফল্ট ভাবে ইনপুট পদ্ধতি সক্রিয় করুন"
 
 #: ../data/ibus.schemas.in.h:56
+#, fuzzy
 msgid "DConf preserve name prefixes"
-msgstr ""
+msgstr "DConf নাম উপসর্গ সংরক্ষণ করে"
 
 #: ../data/ibus.schemas.in.h:57
 msgid "Prefixes of DConf keys to stop name conversion"
@@ -556,7 +575,7 @@ msgstr "বাতিল (_C)"
 
 #: ../setup/enginedialog.py:205
 msgid "More…"
-msgstr ""
+msgstr "আরও…"
 
 #: ../setup/enginetreeview.py:96
 msgid "Kbd"
@@ -648,7 +667,7 @@ msgstr ""
 #: ../tools/main.vala:90
 #, c-format
 msgid "language: %s\n"
-msgstr ""
+msgstr "ভাষা: %s\n"
 
 #: ../tools/main.vala:158
 msgid "No engine is set.\n"

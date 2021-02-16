@@ -16,21 +16,23 @@
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
 # Cássio Rodrigo Honorato Rodrigues <cassiorhr@outlook.com>, 2019. #zanata
 # Rafael Fontenelle <rafaelff@gnome.org>, 2020.
+# Henrique Roberto Gattermann Mittelstaedt <henrique.roberto97@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2019-04-16 17:33+0900\n"
-"PO-Revision-Date: 2020-01-05 18:49+0000\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
-"Language-Team: Portuguese (Brazil) <https://translate.stg.fedoraproject.org/"
+"PO-Revision-Date: 2020-11-30 11:35+0000\n"
+"Last-Translator: Henrique Roberto Gattermann Mittelstaedt <henrique."
+"roberto97@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.9.1\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -198,8 +200,8 @@ msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
 msgstr ""
-"O comportamento do painel de propriedades. 0 = Não mostrar, 1 =  Ocultar "
-"automaticamente,  2 = Sempre mostrar"
+"O comportamento do painel de propriedades. 0 = Não mostrar, 1 = Ocultar "
+"automaticamente, 2 = Sempre mostrar"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:117
 #: data/dconf/org.freedesktop.ibus.gschema.xml:121
@@ -3260,7 +3262,7 @@ msgstr "Emoji copiado para a sua área de transferência."
 #. 
 #: ui/gtk3/emojierapp.vala:114
 msgid "\"FONT\" for emoji characters on emoji dialog"
-msgstr "\"FONTE\" para caracteres  no diálogo emoji"
+msgstr "\"FONTE\" para caracteres no diálogo emoji"
 
 #: ui/gtk3/emojierapp.vala:115
 msgid "FONT"

@@ -4,13 +4,13 @@
 # This file is distributed under the same license as the ibus package.
 #
 # Serdar Sağlam <teknomobil@msn.com>, 2019. #zanata
-# Oğuz Ersen <oguzersen@protonmail.com>, 2019, 2020.
+# Oğuz Ersen <oguzersen@protonmail.com>, 2019, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-12-11 16:21+0900\n"
-"PO-Revision-Date: 2020-09-07 13:29+0000\n"
+"PO-Revision-Date: 2021-01-17 12:37+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/tr/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
-"X-Generator: Weblate 4.2.2\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3318,18 +3318,24 @@ msgid ""
 "Your configured input method %s does not exist in IBus input methods so \"US"
 "\" layout was configured instead of your input method."
 msgstr ""
+"Yapılandırılan giriş yönteminiz %s IBus giriş yöntemlerinde mevcut değil, bu "
+"nedenle giriş yönteminiz yerine \"US\" düzeni yapılandırıldı."
 
 #: ui/gtk3/panel.vala:980
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
 msgstr ""
+"Yapılandırılan giriş yöntemlerinizden en az biri IBus giriş yöntemlerinde "
+"mevcut değil."
 
 #: ui/gtk3/panel.vala:983
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
 msgstr ""
+"Lütfen `ibus-setup` komutunu çalıştırın, \"Giriş Yöntemi\" sekmesini açın ve "
+"giriş yöntemlerinizi yeniden yapılandırın."
 
 #: ui/gtk3/panel.vala:1141
 msgid "IBus is an intelligent input bus for Linux/Unix."

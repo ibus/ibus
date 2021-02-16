@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2020-09-03 21:21+0900\n"
+"POT-Creation-Date: 2020-12-11 16:21+0900\n"
 "PO-Revision-Date: 2020-09-16 08:13+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
@@ -310,7 +310,11 @@ msgid ""
 "from the language attribute. Pango chooses glyphs from the IBus engine's "
 "language if the value is true and choose them from the desktop locale if the "
 "value is false."
-msgstr "일부 코드 포인트는 여러 개의 글리프를 사용할 수 있어서 Pango에서 언어 속성에 따라 글리프를 결정합니다. 이 값이 참이면 Pango에서는 아이버스 엔진의 언어에 따라 글리프를 결정합니다. 이 값이 거짓이면 데스크톱 로캘에 따라 글리프를 결정합니다."
+msgstr ""
+"일부 코드 포인트는 여러 개의 글리프를 사용할 수 있어서 Pango에서 언어 속성에 "
+"따라 글리프를 결정합니다. 이 값이 참이면 Pango에서는 아이버스 엔진의 언어에 "
+"따라 글리프를 결정합니다. 이 값이 거짓이면 데스크톱 로캘에 따라 글리프를 결정"
+"합니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:182
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -459,7 +463,7 @@ msgstr "확인(_O)"
 msgid "More…"
 msgstr "더 보기…"
 
-#: setup/engineabout.py:37 setup/setup.ui:1368 ui/gtk3/panel.vala:1162
+#: setup/engineabout.py:37 setup/setup.ui:1368 ui/gtk3/panel.vala:1184
 msgid "About"
 msgstr "정보"
 
@@ -840,7 +844,8 @@ msgstr "<b>전체 공통 입력 방식 설정</b>"
 msgid ""
 "Choose glyphs with the input method's language on the candidate window for "
 "the duplicated code points"
-msgstr "중복된 코드 포인트의 후보 창에서 입력기의 언어에 따라 글리프를 선택합니다"
+msgstr ""
+"중복된 코드 포인트의 후보 창에서 입력기의 언어에 따라 글리프를 선택합니다"
 
 #: setup/setup.ui:1327
 msgid "<b>Fonts</b>"
@@ -3299,7 +3304,7 @@ msgid "Alias: %s"
 msgstr "다른 이름: %s"
 
 #: ui/gtk3/emojier.vala:2140 ui/gtk3/ibus-extension-gtk3.desktop.in:3
-#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1147
+#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1169
 msgid "Emoji Choice"
 msgstr "에모지 선택"
 
@@ -3363,25 +3368,44 @@ msgstr "지정한 정수 값의 조건에 맞게 일치"
 msgid "IBus Panel"
 msgstr "IBus 패널"
 
-#: ui/gtk3/panel.vala:1119
+#: ui/gtk3/panel.vala:975
+#, c-format
+msgid ""
+"Your configured input method %s does not exist in IBus input methods so \"US"
+"\" layout was configured instead of your input method."
+msgstr ""
+
+#: ui/gtk3/panel.vala:980
+msgid ""
+"At least one of your configured input methods does not exist in IBus input "
+"methods."
+msgstr ""
+
+#: ui/gtk3/panel.vala:983
+msgid ""
+"Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
+"your input methods again."
+msgstr ""
+
+#: ui/gtk3/panel.vala:1141
 msgid "IBus is an intelligent input bus for Linux/Unix."
 msgstr "IBus는 리눅스/유닉스를 위한 지능형 입력 버스입니다."
 
-#: ui/gtk3/panel.vala:1123
+#: ui/gtk3/panel.vala:1145
 msgid "translator-credits"
 msgstr ""
 "김은주 <eukim@redhat.com>\n"
 "류창우 <cwryu@debian.org>"
 
-#: ui/gtk3/panel.vala:1142
+#: ui/gtk3/panel.vala:1164
 msgid "Preferences"
 msgstr "기본 설정"
 
-#: ui/gtk3/panel.vala:1168
+#: ui/gtk3/panel.vala:1190
 msgid "Restart"
 msgstr "다시 시작"
 
-#: ui/gtk3/panel.vala:1172
+#: ui/gtk3/panel.vala:1194
 msgid "Quit"
 msgstr "끝내기"
 

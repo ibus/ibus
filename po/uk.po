@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2020-09-03 21:21+0900\n"
+"POT-Creation-Date: 2020-12-11 16:21+0900\n"
 "PO-Revision-Date: 2020-09-07 13:29+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/ibus/"
@@ -472,7 +472,7 @@ msgstr "_Гаразд"
 msgid "More…"
 msgstr "Більше…"
 
-#: setup/engineabout.py:37 setup/setup.ui:1368 ui/gtk3/panel.vala:1162
+#: setup/engineabout.py:37 setup/setup.ui:1368 ui/gtk3/panel.vala:1184
 msgid "About"
 msgstr "Інформація"
 
@@ -3277,7 +3277,7 @@ msgid "Alias: %s"
 msgstr "Альтернативна назва: %s"
 
 #: ui/gtk3/emojier.vala:2140 ui/gtk3/ibus-extension-gtk3.desktop.in:3
-#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1147
+#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1169
 msgid "Emoji Choice"
 msgstr "Вибір емодзі"
 
@@ -3342,23 +3342,42 @@ msgstr "Відповідність з умовою на вказану довж�
 msgid "IBus Panel"
 msgstr "Панель IBus"
 
-#: ui/gtk3/panel.vala:1119
+#: ui/gtk3/panel.vala:975
+#, c-format
+msgid ""
+"Your configured input method %s does not exist in IBus input methods so \"US"
+"\" layout was configured instead of your input method."
+msgstr ""
+
+#: ui/gtk3/panel.vala:980
+msgid ""
+"At least one of your configured input methods does not exist in IBus input "
+"methods."
+msgstr ""
+
+#: ui/gtk3/panel.vala:983
+msgid ""
+"Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
+"your input methods again."
+msgstr ""
+
+#: ui/gtk3/panel.vala:1141
 msgid "IBus is an intelligent input bus for Linux/Unix."
 msgstr "IBus — інтелектуальний канал введення даних у Linux/Unix."
 
-#: ui/gtk3/panel.vala:1123
+#: ui/gtk3/panel.vala:1145
 msgid "translator-credits"
 msgstr "Юрій Чорноіван <yurchor@ukr.net>"
 
-#: ui/gtk3/panel.vala:1142
+#: ui/gtk3/panel.vala:1164
 msgid "Preferences"
 msgstr "Параметри"
 
-#: ui/gtk3/panel.vala:1168
+#: ui/gtk3/panel.vala:1190
 msgid "Restart"
 msgstr "Перезапустити"
 
-#: ui/gtk3/panel.vala:1172
+#: ui/gtk3/panel.vala:1194
 msgid "Quit"
 msgstr "Вийти"
 

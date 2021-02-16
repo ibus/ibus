@@ -24,13 +24,14 @@
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
 # Máximo Castañeda Riloba <mcrcctm@gmail.com>, 2019. #zanata
 # Emilio Herrera <ehespinosa57@gmail.com>, 2020.
+# Adolfo Jayme Barrientos <fitoschido@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-09-03 21:21+0900\n"
-"PO-Revision-Date: 2020-09-07 13:29+0000\n"
-"Last-Translator: Emilio Herrera <ehespinosa57@gmail.com>\n"
+"PO-Revision-Date: 2020-10-18 00:04+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitoschido@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/es/>\n"
 "Language: es\n"
@@ -38,7 +39,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.2.2\n"
+"X-Generator: Weblate 4.3\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -304,24 +305,25 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:160
 msgid "Use custom font"
-msgstr "Usar fuente personalizada"
+msgstr "Utilizar tipo de letra personalizado"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:161
 msgid "Use custom font name for language panel"
-msgstr "Usar nombre de fuente personalizado para el panel de idioma"
+msgstr "Utilizar tipo de letra personalizado para el panel de idiomas"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:165
 #: data/dconf/org.freedesktop.ibus.gschema.xml:192
 msgid "Custom font"
-msgstr "Fuente personalizada"
+msgstr "Tipo de letra personalizado"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:166
 msgid "Custom font name for language panel"
-msgstr "Nombre de fuente personalizado para el panel de idioma"
+msgstr "Tipo de letra personalizado para el panel de idiomas"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:170 setup/setup.ui:1305
 msgid "Choose glyphs with input method's language on candidate window"
-msgstr "Elegir glyphs con el idioma del método de entrada en la ventana"
+msgstr ""
+"Elegir glifos en el idioma del método de entrada en la ventana de candidatos"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:171
 msgid ""
@@ -350,7 +352,7 @@ msgstr "Los atajos de teclado para activar y desactivar la escritura de emoji"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:193
 msgid "Custom font name for emoji characters on emoji dialog"
 msgstr ""
-"Nombre de fuente personalizada para caracteres emoji en el diálogo de emoji"
+"Tipo de letra personalizado para caracteres emoyi en el diálogo de emoyis"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:197
 msgid "Default language for emoji dictionary"
@@ -723,11 +725,11 @@ msgstr ""
 
 #: setup/setup.ui:527
 msgid "Use custom font:"
-msgstr "Usar fuente personalizada:"
+msgstr "Utilizar tipo de letra personalizado:"
 
 #: setup/setup.ui:562 setup/setup.ui:1156
 msgid "<b>Font and Style</b>"
-msgstr "<b>Fuente y Estilo</b>"
+msgstr "<b>Tipo de letra y estilo</b>"
 
 #: setup/setup.ui:579
 msgid "General"
@@ -817,11 +819,12 @@ msgstr "Código Unicode:"
 
 #: setup/setup.ui:1013
 msgid "Set a font of Unicode candidates on the emoji dialog"
-msgstr "Fuente a usar para los candidatos Unicode en el cuadro de emoji."
+msgstr ""
+"Establecer el tipo de letra de los candidatos Unicode en el diálogo de emoyis"
 
 #: setup/setup.ui:1015
 msgid "Unicode font:"
-msgstr "Fuente Unicode:"
+msgstr "Tipo de letra Unicode:"
 
 #: setup/setup.ui:1038
 msgid "Set a language of emoji annotations on the emoji dialog"
@@ -878,10 +881,8 @@ msgid ""
 msgstr ""
 
 #: setup/setup.ui:1327
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Fonts</b>"
-msgstr "<b>Fuente y Estilo</b>"
+msgstr "<b>Tipos de letra</b>"
 
 #: setup/setup.ui:1347
 msgid "Advanced"
@@ -3327,11 +3328,11 @@ msgstr "Se copió un emoji al portapapeles."
 #.
 #: ui/gtk3/emojierapp.vala:126
 msgid "\"FONT\" for emoji characters on emoji dialog"
-msgstr "FUENTE para los emoji en el cuadro de diálogo de emoji"
+msgstr "«TIPODELETRA» para los emoyis en el diálogo de emoyis"
 
 #: ui/gtk3/emojierapp.vala:127
 msgid "FONT"
-msgstr "FUENTE"
+msgstr "TIPODELETRA"
 
 #. TRANSLATORS: "LANG" should be capital and translatable.
 #. * It's used for an argument command --lang=LANG

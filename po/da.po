@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-09-03 21:21+0900\n"
-"PO-Revision-Date: 2020-09-28 14:29+0000\n"
+"PO-Revision-Date: 2020-10-01 11:30+0000\n"
 "Last-Translator: scootergrisen <scootergrisen@gmail.com>\n"
 "Language-Team: Danish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/da/>\n"
@@ -307,6 +307,9 @@ msgid ""
 "language if the value is true and choose them from the desktop locale if the "
 "value is false."
 msgstr ""
+"Nogle kodepunkter beslutter glyffer for de forskellige glyffer og Pango fra "
+"sprogattributten. Pango vælger glyffer fra IBus-motorens sprog hvis værdien "
+"er sand og vælger dem fra skrivebordets lokalitet hvis værdien er falsk."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:182
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -2965,7 +2968,7 @@ msgstr "Symboler og piktogrammer udvidet-A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1217
 msgid "Symbols for Legacy Computing"
-msgstr ""
+msgstr "Symboler for udgået computer"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

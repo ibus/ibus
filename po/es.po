@@ -30,8 +30,8 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-09-03 21:21+0900\n"
-"PO-Revision-Date: 2020-10-18 00:04+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitoschido@gmail.com>\n"
+"PO-Revision-Date: 2020-10-22 17:25+0000\n"
+"Last-Translator: Emilio Herrera <ehespinosa57@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/es/>\n"
 "Language: es\n"
@@ -39,7 +39,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3\n"
+"X-Generator: Weblate 4.3.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -566,7 +566,7 @@ msgstr ""
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
-msgstr "Por favor, presione una tecla (o combinación de teclas)"
+msgstr "Por favor, presione una tecla (o una combinación de teclas)"
 
 #: setup/main.py:121 setup/main.py:588
 msgid "Use shortcut with shift to switch to the previous input method"
@@ -763,7 +763,7 @@ msgstr ""
 
 #: setup/setup.ui:718
 msgid "_Down"
-msgstr "_Bajar"
+msgstr "_Abajo"
 
 #: setup/setup.ui:725
 msgid "Move down the selected input method in the enabled input methods"

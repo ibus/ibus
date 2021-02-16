@@ -4,21 +4,21 @@
 # This file is distributed under the same license as the ibus package.
 #
 # Translators:
-# Piotr Drąg <piotrdrag@gmail.com>, 2011-2014, 2020.
-# Piotr Drąg <piotrdrag@gmail.com>, 2015. #zanata, 2020.
+# Piotr Drąg <piotrdrag@gmail.com>, 2011-2014, 2020, 2021.
+# Piotr Drąg <piotrdrag@gmail.com>, 2015. #zanata, 2020, 2021.
 # fujiwara <takao.fujiwara1@gmail.com>, 2015. #zanata
-# Piotr Drąg <piotrdrag@gmail.com>, 2016. #zanata, 2020.
-# Piotr Drąg <piotrdrag@gmail.com>, 2017. #zanata, 2020.
+# Piotr Drąg <piotrdrag@gmail.com>, 2016. #zanata, 2020, 2021.
+# Piotr Drąg <piotrdrag@gmail.com>, 2017. #zanata, 2020, 2021.
 # fujiwara <takao.fujiwara1@gmail.com>, 2017. #zanata
-# Piotr Drąg <piotrdrag@gmail.com>, 2018. #zanata, 2020.
+# Piotr Drąg <piotrdrag@gmail.com>, 2018. #zanata, 2020, 2021.
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
-# Piotr Drąg <piotrdrag@gmail.com>, 2019. #zanata, 2020.
+# Piotr Drąg <piotrdrag@gmail.com>, 2019. #zanata, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-12-11 16:21+0900\n"
-"PO-Revision-Date: 2020-09-05 07:53+0000\n"
+"PO-Revision-Date: 2021-01-16 12:24+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/pl/>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.2.2\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3343,18 +3343,24 @@ msgid ""
 "Your configured input method %s does not exist in IBus input methods so \"US"
 "\" layout was configured instead of your input method."
 msgstr ""
+"Skonfigurowana metoda wprowadzania %s nie istnieje w metodach wprowadzania "
+"usługi IBus, więc zamiast niej skonfigurowano układ „US”."
 
 #: ui/gtk3/panel.vala:980
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
 msgstr ""
+"Co najmniej jedna ze skonfigurowanych metod wprowadzania nie istnieje w "
+"metodach wprowadzania usługi IBus."
 
 #: ui/gtk3/panel.vala:983
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
 msgstr ""
+"Proszę wykonać polecenie „ibus-setup”, otworzyć kartę „Metoda wprowadzania” "
+"i ponownie skonfigurować metody wprowadzania."
 
 #: ui/gtk3/panel.vala:1141
 msgid "IBus is an intelligent input bus for Linux/Unix."
@@ -3362,7 +3368,7 @@ msgstr "IBus jest inteligentną magistralą wprowadzania dla systemu Linux/UNIX.
 
 #: ui/gtk3/panel.vala:1145
 msgid "translator-credits"
-msgstr "Piotr Drąg <piotrdrag@gmail.com>, 2009-2020"
+msgstr "Piotr Drąg <piotrdrag@gmail.com>, 2009-2021"
 
 #: ui/gtk3/panel.vala:1164
 msgid "Preferences"

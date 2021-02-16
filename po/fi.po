@@ -7,13 +7,14 @@
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2017. #zanata, 2020.
 # Toni Rantala <trantalafilo@gmail.com>, 2017. #zanata
 # Jan Kuparinen <copper_fin@hotmail.com>, 2021.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-12-11 16:21+0900\n"
-"PO-Revision-Date: 2021-01-28 17:40+0000\n"
-"Last-Translator: Jan Kuparinen <copper_fin@hotmail.com>\n"
+"PO-Revision-Date: 2021-02-12 12:40+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/fi/>\n"
 "Language: fi\n"
@@ -798,7 +799,7 @@ msgstr ""
 
 #: src/ibusemojigen.h:32
 msgid "Component"
-msgstr ""
+msgstr "Komponentti"
 
 #: src/ibusemojigen.h:33
 msgid "Flags"
@@ -3181,7 +3182,7 @@ msgstr ""
 #: ui/gtk3/emojier.vala:1642
 #, c-format
 msgid "Name: %s"
-msgstr ""
+msgstr "Nimi: %s"
 
 #: ui/gtk3/emojier.vala:1650
 #, c-format

@@ -7,9 +7,9 @@
 # Charles-Antoine Couret <cacouret@wanadoo.fr>, 2009
 # dominique bribanick <chepioq@gmail.com>, 2011,2014
 # Jérôme Fenal <jfenal@gmail.com>, 2012-2013
-# Julien Humbert <julroy67@gmail.com>, 2009-2014, 2020.
+# Julien Humbert <julroy67@gmail.com>, 2009-2014, 2020, 2021.
 # Sam Friedmann <sam.friedmann@redhat.com>, 2010
-# Julien Humbert <julroy67@gmail.com>, 2009-2015, 2020.
+# Julien Humbert <julroy67@gmail.com>, 2009-2015, 2020, 2021.
 # fujiwara <takao.fujiwara1@gmail.com>, 2015. #zanata
 # Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2016. #zanata, 2020.
 # José Fournier <jaaf64@zoraldia.com>, 2016. #zanata
@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-12-11 16:21+0900\n"
-"PO-Revision-Date: 2020-10-18 00:04+0000\n"
+"PO-Revision-Date: 2021-02-16 10:40+0000\n"
 "Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/fr/>\n"
@@ -37,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -322,6 +322,8 @@ msgstr "Police personnalisée pour la barre de langues"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:170 setup/setup.ui:1305
 msgid "Choose glyphs with input method's language on candidate window"
 msgstr ""
+"Choisissez les glyphes avec la langue de la méthode de saisie dans la "
+"fenêtre de candidats"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:171
 msgid ""
@@ -330,6 +332,10 @@ msgid ""
 "language if the value is true and choose them from the desktop locale if the "
 "value is false."
 msgstr ""
+"Certains points de code ont des glyphes différents et Pango détermine les "
+"glyphes à partir de l’attribut de langue. Pango choisit les glyphes à partir "
+"de la langue du moteur IBus si la valeur est vraie et les choisit à partir "
+"de la locale du bureau si la valeur est fausse."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:182
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -883,12 +889,12 @@ msgid ""
 "Choose glyphs with the input method's language on the candidate window for "
 "the duplicated code points"
 msgstr ""
+"Choisissez les glyphes avec la langue de la méthode de saisie dans la "
+"fenêtre de candidats pour les points de code dupliqués"
 
 #: setup/setup.ui:1327
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Fonts</b>"
-msgstr "<b>Police et Style</b>"
+msgstr "<b>Polices</b>"
 
 #: setup/setup.ui:1347
 msgid "Advanced"
@@ -2374,7 +2380,7 @@ msgstr "Symboles numériques Rûmî"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:853
 msgid "Yezidi"
-msgstr ""
+msgstr "Yézidi"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2395,7 +2401,7 @@ msgstr "Sogdiane"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:865
 msgid "Chorasmian"
-msgstr ""
+msgstr "Chorasmien"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2549,7 +2555,7 @@ msgstr "Warang Citi"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:953
 msgid "Dives Akuru"
-msgstr ""
+msgstr "Dives akuru"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2618,10 +2624,8 @@ msgstr "Maka"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:993
-#, fuzzy
-#| msgid "Latin-1 Supplement"
 msgid "Lisu Supplement"
-msgstr "Supplément Latin-1"
+msgstr "Supplément Lisu"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2740,16 +2744,14 @@ msgstr "Composants tangoute"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1061
 msgid "Khitan Small Script"
-msgstr ""
+msgstr "Petite écriture khitan"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1065
-#, fuzzy
-#| msgid "Kana Supplement"
 msgid "Tangut Supplement"
-msgstr "Supplément Kana"
+msgstr "Supplément tangoute"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3015,7 +3017,7 @@ msgstr "Symboles et pictogrammes étendus-A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1217
 msgid "Symbols for Legacy Computing"
-msgstr ""
+msgstr "Symboles pour informatique ancienne"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3063,10 +3065,8 @@ msgstr "Idéographes de compatibilité CJK supplémentaires"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1245
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension G"
-msgstr "Idéographes unifiés CJC Extension A"
+msgstr "Idéographes unifiés CJC Extension G"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3378,18 +3378,25 @@ msgid ""
 "Your configured input method %s does not exist in IBus input methods so \"US"
 "\" layout was configured instead of your input method."
 msgstr ""
+"Votre méthode d’entrée configurée %s n’existe pas dans les méthodes d’entrée "
+"IBus, la disposition « US » sera utilisée à la place de votre méthode "
+"d’entrée."
 
 #: ui/gtk3/panel.vala:980
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
 msgstr ""
+"Au moins une de vos méthodes d’entrée configurées n’existe pas dans les "
+"méthodes d’entrée IBus."
 
 #: ui/gtk3/panel.vala:983
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
 msgstr ""
+"Veuillez exécuter la commande `ibus-setup`, ouvrir l’onglet « Méthodes d’"
+"entrée », et configurer à nouveau vos méthodes d’entrée."
 
 #: ui/gtk3/panel.vala:1141
 msgid "IBus is an intelligent input bus for Linux/Unix."

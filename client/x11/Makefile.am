@@ -49,11 +49,13 @@ ibus_x11_LDADD = \
 	$(libibus) \
 	@X11_LIBS@ \
 	$(GTK_LIBS) \
+	$(XFIXES_LIBS) \
 	$(NULL)
 
 ibus_x11_CFLAGS = \
 	@X11_CFLAGS@ \
 	$(GTK_CFLAGS) \
+	$(XFIXES_CFLAGS) \
 	@DBUS_CFLAGS@ \
 	-I$(top_srcdir)/util/IMdkit \
 	-I$(top_srcdir)/src \

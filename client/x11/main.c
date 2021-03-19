@@ -24,10 +24,15 @@
  */
 #define _GNU_SOURCE
 
+#include "config.h"
+
 #include <X11/Xproto.h>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
+#ifdef HAVE_XFIXES
+#include <X11/extensions/Xfixes.h>
+#endif
 #include <XimProto.h>
 #include <IMdkit.h>
 #include <Xi18n.h>
@@ -1161,6 +1166,11 @@ main (int argc, char **argv)
     gtk_init (&argc, &argv);
     XSetErrorHandler (_xerror_handler);
     XSetIOErrorHandler (_xerror_io_handler);
+
+#ifdef HAVE_XFIXES
+    XFixesSetClientDisconnectMode(GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
+                                  XFixesClientDisconnectFlagTerminate);
+#endif
 
     while (1) {
         static struct option long_options [] = {

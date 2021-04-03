@@ -528,7 +528,7 @@ class Setup(object):
         GLib.timeout_add_seconds(timeout, lambda *args: main_loop.quit())
         self.__bus.connect("connected", lambda *args: main_loop.quit())
 
-        os.spawnlp(os.P_NOWAIT, "ibus-daemon", "ibus-daemon", "--xim")
+        os.spawnlp(os.P_NOWAIT, "ibus-daemon", "ibus-daemon", "--xim", "--daemonize")
 
         main_loop.run()
 

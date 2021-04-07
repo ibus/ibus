@@ -1298,8 +1298,6 @@ main (int argc, char *argv[])
         category_file_save (output_category, list);
     if (list)
         g_slist_free (list);
-    else
-        return 99;
 
     return 0;
 }

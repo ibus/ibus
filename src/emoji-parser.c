@@ -1331,12 +1331,8 @@ main (int argc, char *argv[])
         ibus_emoji_data_save (output, list);
     if (list != NULL && output_category)
         category_file_save (output_category, list);
-    if (list) {
+    if (list)
         g_slist_free_full (list, g_object_unref);
-    } else {
-        finit ();
-        return 99;
-    }
 
     finit ();
     return EXIT_SUCCESS;

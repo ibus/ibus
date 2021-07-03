@@ -126,6 +126,13 @@ class BindingCommon {
     public static void
     unbind_switch_shortcut(KeyEventFuncType      ftype,
                            GLib.List<Keybinding> keybindings) {
+        string desktop_string = Environment.get_variable("XDG_CURRENT_DESKTOP");
+        if (desktop_string != null) {
+            string[] desktops = desktop_string.split (":");
+            if ("GNOME" in desktops || "Unity7" in desktops)
+                return;
+        }
+
         var keybinding_manager = KeybindingManager.get_instance();
 
         while (keybindings != null) {

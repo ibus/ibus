@@ -35,6 +35,7 @@ ibussetup_PYTHON = \
 
 ibussetup_DATA = \
     setup.ui \
+    setup-no_switch_shortcut.ui \
     $(NULL)
 
 bin_SCRIPTS = ibus-setup
@@ -79,6 +80,7 @@ EXTRA_DIST = \
     $(man_one_in_files) \
     ibus-setup.in \
     setup.ui \
+    setup-no_switch_shortcut.ui \
     $(NULL)
 
 test:

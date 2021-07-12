@@ -55,6 +55,17 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="model_custom_theme">
+    <columns>
+      <!-- column-name gchararray -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Follow System</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkAdjustment" id="adjustment_emoji_partial_match">
     <property name="value">3.0</property>
     <property name="lower">1.0</property>
@@ -551,6 +562,42 @@
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">6</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="checkbutton_custom_theme">
+                            <property name="label" translatable="yes">Use custom theme:</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="halign">start</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="hexpand">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">7</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="combobox_custom_theme">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="model">model_custom_theme</property>
+                            <property name="hexpand">True</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer4"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">7</property>
                           </packing>
                         </child>
                       </object>

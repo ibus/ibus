@@ -203,6 +203,11 @@ class Setup(object):
                 "model_custom_theme")
         for name in theme_name_list:
             self.__model_custom_theme.append([name])
+        current_theme = self.__settings_panel.get_string('custom-theme')
+        try:
+            current_theme_number = theme_name_list.index(current_theme) + 1
+        except ValueError:
+            current_theme_number = 0
 
         self.__checkbutton_custom_theme = self.__builder.get_object(
                 "checkbutton_custom_theme")
@@ -213,6 +218,7 @@ class Setup(object):
 
         self.__combobox_custom_theme = self.__builder.get_object(
                 "combobox_custom_theme")
+        self.__combobox_custom_theme.set_active(current_theme_number)
         self.__settings_panel.bind('use-custom-theme',
                                    self.__combobox_custom_theme,
                                    'sensitive',
@@ -631,7 +637,7 @@ class Setup(object):
 
         return theme_name_list
 
-    def __on_combobox_custom_theme_changed(self):
+    def __on_combobox_custom_theme_changed(self, combobox):
         tree_iter = self.__combobox_custom_theme.get_active_iter()
         if tree_iter is not None:
             model = self.__combobox_custom_theme.get_model()

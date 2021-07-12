@@ -315,7 +315,7 @@ class Panel(ibus.PanelBase):
         custom_theme =  self.__config.get_value("panel", "custom_theme", "")
         theme_name = unicode(custom_theme, "utf-8")
         settings = gtk.settings_get_default()
-        if use_custom_theme:
+        if use_custom_theme and theme_name:
             settings.set_string_property('gtk-theme-name', theme_name, '')
         else:
             gtk.rc_reparse_all_for_settings(settings, False)

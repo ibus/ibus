@@ -271,13 +271,11 @@ class PanelBinding : IBus.PanelService {
         });
 
         m_settings_panel.changed["custom-theme"].connect((key) => {
-            BindingCommon.set_custom_theme(m_settings_panel,
-                                          ref m_css_provider);
+            BindingCommon.set_custom_theme(m_settings_panel);
         });
 
         m_settings_panel.changed["use-custom-theme"].connect((key) => {
-                BindingCommon.set_custom_theme(m_settings_panel,
-                                            ref m_css_provider);
+                BindingCommon.set_custom_theme(m_settings_panel);
         });
 
         m_settings_emoji.changed["unicode-hotkey"].connect((key) => {
@@ -432,8 +430,7 @@ class PanelBinding : IBus.PanelService {
         BindingCommon.set_custom_font(m_settings_panel,
                                       m_settings_emoji,
                                       ref m_css_provider);
-        BindingCommon.set_custom_theme(m_settings_panel,
-                                       ref m_css_provider);
+        BindingCommon.set_custom_theme(m_settings_panel);
         set_emoji_favorites();
         if (m_load_emoji_at_startup && !m_loaded_emoji)
             set_emoji_lang();

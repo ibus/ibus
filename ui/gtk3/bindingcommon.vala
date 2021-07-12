@@ -212,4 +212,55 @@ class BindingCommon {
                 css_provider,
                 Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
+
+    public static void
+    set_custom_theme(GLib.Settings?       settings_panel,
+                     ref Gtk.CssProvider? css_provider) {
+        Gdk.Display display = Gdk.Display.get_default();
+        Gdk.Screen screen = (display != null) ?
+                display.get_default_screen() : null;
+
+        if (screen == null) {
+            warning("Could not open display.");
+            return;
+        }
+
+        if (settings_panel == null)
+            return;
+
+        bool use_custom_theme = settings_panel.get_boolean("use-custom-theme");
+
+        if (css_provider != null) {
+            Gtk.StyleContext.remove_provider_for_screen(screen,
+                                                        css_provider);
+            css_provider = null;
+        }
+
+        if (use_custom_theme == false) {
+            return;
+        }
+
+        string custom_theme = settings_panel.get_string("custom-theme");
+        if (custom_theme == null || custom_theme == "") {
+            warning("No config panel:custom-theme.");
+            return;
+        }
+
+        Gtk.Settings.get_default().set_property('gtk-theme-name', custom_theme);
+
+        css_provider = new Gtk.CssProvider();
+
+        try {
+            css_provider.load_from_data(data, -1);
+        } catch (GLib.Error e) {
+            warning("Failed css_provider_from_data: %s: %s", custom_theme,
+                                                             e.message);
+            return;
+        }
+
+        Gtk.StyleContext.add_provider_for_screen(
+                screen,
+                css_provider,
+                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
 }

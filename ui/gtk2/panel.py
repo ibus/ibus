@@ -127,6 +127,7 @@ class Panel(ibus.PanelBase):
         self.__config_load_show()
         self.__config_load_position()
         self.__config_load_custom_font()
+        self.__config_load_custom_theme()
         # Hide icon until bus get the name owner.
         #self.__config_load_show_icon_on_systray()
         self.__config_load_show_im_name()
@@ -309,6 +310,16 @@ class Panel(ibus.PanelBase):
         settings = gtk.settings_get_default()
         gtk.rc_reset_styles(settings)
 
+    def __config_load_custom_theme(self):
+        use_custom_theme = self.__config.get_value("panel", "use_custom_theme", False)
+        custom_theme =  self.__config.get_value("panel", "custom_theme", "")
+        theme_name = unicode(custom_theme, "utf-8")
+        settings = gtk.settings_get_default()
+        if use_custom_theme:
+            settings.set_string_property('gtk-theme-name', theme_name, '')
+        else:
+            gtk.rc_reparse_all_for_settings(settings, False)
+
     def __config_load_show_icon_on_systray(self):
         value = self.__config.get_value("panel", "show_icon_on_systray", True)
         self.__status_icon.set_visible(True if value else False)
@@ -326,6 +337,8 @@ class Panel(ibus.PanelBase):
             self.__config_load_show()
         elif name == "use_custom_font" or name == "custom_font":
             self.__config_load_custom_font()
+        elif name == "use_custom_theme" or name == "custom_theme":
+            self.__config_load_custom_theme()
         elif name == "show_icon_on_systray":
             self.__config_load_show_icon_on_systray()
         elif name == "show_im_name":

@@ -29,6 +29,7 @@ import os
 import signal
 import sys
 import time
+import glob
 
 from gi import require_version as gi_require_version
 gi_require_version('GLib', '2.0')
@@ -195,6 +196,29 @@ class Setup(object):
                                     self.__fontbutton_custom_font,
                                    'sensitive',
                                    Gio.SettingsBindFlags.GET)
+
+        # custom theme
+        theme_name_list = self.__init_available_gtk_themes()
+        self.__model_custom_theme = self.__builder.get_object(
+                "model_custom_theme")
+        for name in theme_name_list:
+            self.__model_custom_theme.append([name])
+
+        self.__checkbutton_custom_theme = self.__builder.get_object(
+                "checkbutton_custom_theme")
+        self.__settings_panel.bind('use-custom-theme',
+                                   self.__checkbutton_custom_theme,
+                                   'active',
+                                   Gio.SettingsBindFlags.DEFAULT)
+
+        self.__combobox_custom_theme = self.__builder.get_object(
+                "combobox_custom_theme")
+        self.__settings_panel.bind('use-custom-theme',
+                                   self.__combobox_custom_theme,
+                                   'sensitive',
+                                   Gio.SettingsBindFlags.DEFAULT)
+        self.__combobox_custom_theme.connect("changed",
+                                   self.__on_combobox_custom_theme_changed)
 
         # show icon on system tray
         self.__checkbutton_show_icon_on_systray = self.__builder.get_object(
@@ -587,6 +611,32 @@ class Setup(object):
         tooltip += "\n" + \
             _("Use shortcut with shift to switch to the previous input method") 
         entry.set_tooltip_text(tooltip)
+
+    def __init_available_gtk_themes(self):
+        path_list = []
+        path_list.append(os.path.join(GLib.get_home_dir(), ".themes"))
+        path_list.append(os.path.join(GLib.get_user_data_dir(), "themes"))
+        path_list.extend(list(map(lambda x: os.path.join(
+            x, "themes"), GLib.get_system_data_dirs())))
+        theme_name_list = []
+        gtk_theme_path = []
+        for path in path_list:
+            gtk_theme_path.extend(glob.glob(path + "/*/*/gtk.css"))
+        for path in gtk_theme_path:
+            theme_name_list.append(os.path.basename(
+                os.path.dirname(os.path.dirname(path))))
+        
+        theme_name_list = list(set(theme_name_list))
+        theme_name_list.sort()
+
+        return theme_name_list
+
+    def __on_combobox_custom_theme_changed(self):
+        tree_iter = self.__combobox_custom_theme.get_active_iter()
+        if tree_iter is not None:
+            model = self.__combobox_custom_theme.get_model()
+            theme_name = model[tree_iter][0]
+            self.__settings_panel.set_string('custom-theme', theme_name)
 
     def __item_started_column_toggled_cb(self, cell, path_str, model):
 

@@ -271,7 +271,7 @@ class PanelBinding : IBus.PanelService {
         });
 
         m_settings_panel.changed["custom-theme"].connect((key) => {
-            BindingCommon.set_custom_theme(m_settings_panel);
+                BindingCommon.set_custom_theme(m_settings_panel);
         });
 
         m_settings_panel.changed["use-custom-theme"].connect((key) => {

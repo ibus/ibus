@@ -354,6 +354,28 @@
       </locale>
     </schema>
     <schema>
+      <key>/schemas/desktop/ibus/panel/use_custom_theme</key>
+      <applyto>/desktop/ibus/panel/use_custom_theme</applyto>
+      <owner>ibus</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Use custom theme</short>
+	    <long>Use custom theme name for language panel</long>
+      </locale>
+    </schema>
+    <schema>
+      <key>/schemas/desktop/ibus/panel/custom_theme</key>
+      <applyto>/desktop/ibus/panel/custom_theme</applyto>
+      <owner>ibus</owner>
+      <type>string</type>
+      <default></default>
+      <locale name="C">
+        <short>Custom theme</short>
+	    <long>Custom theme name for language panel</long>
+      </locale>
+    </schema>
+    <schema>
       <key>/schemas/desktop/ibus/panel/emoji/unicode-hotkey</key>
       <applyto>/desktop/ibus/panel/emoji/unicode-hotkey</applyto>
       <owner>ibus</owner>

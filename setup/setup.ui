@@ -62,7 +62,7 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Follow System</col>
+        <col id="0" translatable="yes"></col>
       </row>
     </data>
   </object>

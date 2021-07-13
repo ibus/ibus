@@ -316,6 +316,8 @@ class Panel(ibus.PanelBase):
         theme_name = unicode(custom_theme, "utf-8")
         settings = gtk.settings_get_default()
         if use_custom_theme and theme_name:
+            # directly use the theme name since GTK2 doesn't support dark variant.
+            theme_name = theme_name.split(":")[0]
             settings.set_string_property('gtk-theme-name', theme_name, '')
         else:
             gtk.rc_reparse_all_for_settings(settings, False)

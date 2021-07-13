@@ -628,9 +628,14 @@ class Setup(object):
         gtk_theme_path = []
         for path in path_list:
             gtk_theme_path.extend(glob.glob(path + "/*/*/gtk.css"))
+            gtk_theme_path.extend(glob.glob(path + "/*/*/gtk-dark.css"))
         for path in gtk_theme_path:
+            filename = os.path.basename(path)
+            appendix = ""
+            if filename == "gtk-dark.css":
+                appendix = ":dark"
             theme_name_list.append(os.path.basename(
-                os.path.dirname(os.path.dirname(path))))
+                os.path.dirname(os.path.dirname(path))) + appendix)
         
         theme_name_list = list(set(theme_name_list))
         theme_name_list.sort()

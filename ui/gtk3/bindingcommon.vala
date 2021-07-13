@@ -232,12 +232,11 @@ class BindingCommon {
             gtk_settings.reset_property("gtk-application-prefer-dark-theme");
         } else {
             string[] custom_theme_splitted = custom_theme.split(":");
-            if (custom_theme_splitted.length == 1) {
-                gtk_settings.gtk_theme_name = custom_theme_splitted[0];
-                gtk_settings.gtk_application_prefer_dark_theme = false;
-            } else {
-                gtk_settings.gtk_theme_name = custom_theme_splitted[0];
+            gtk_settings.gtk_theme_name = custom_theme_splitted[0];
+            if (custom_theme_splitted.length == 2 && custom_theme_splitted[1] == "dark") {
                 gtk_settings.gtk_application_prefer_dark_theme = true;
+            } else {
+                gtk_settings.gtk_application_prefer_dark_theme = false;
             }
         }
     }

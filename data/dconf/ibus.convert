@@ -16,10 +16,12 @@ trigger = /desktop/ibus/general/trigger
 
 [org.freedesktop.ibus.panel]
 custom-font = /desktop/ibus/general/custom_font
+custom-theme = /desktop/ibus/general/custom_theme
 lookup-table-orientation = /desktop/ibus/general/lookup_table_orientation
 show = /desktop/ibus/general/show
 show-icon-on-systray = /desktop/ibus/general/show_icon_on_systray
 show-im-name = /desktop/ibus/general/show_im_name
 use-custom-font = /desktop/ibus/general/use_custom_font
+use-custom-theme = /desktop/ibus/general/use_custom_theme
 x = /desktop/ibus/general/x
 y = /desktop/ibus/general/y

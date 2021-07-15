@@ -165,6 +165,16 @@
       <summary>Custom font</summary>
       <description>Custom font name for language panel</description>
     </key>
+    <key name="use-custom-theme" type="b">
+      <default>false</default>
+      <summary>Use custom theme</summary>
+      <description>Use custom theme name for language panel</description>
+    </key>
+    <key name="custom-theme" type="s">
+      <default>''</default>
+      <summary>Custom theme</summary>
+      <description>Custom theme name for language panel</description>
+    </key>
     <key name="use-glyph-from-engine-lang" type="b">
       <default>true</default>
       <summary>Choose glyphs with input method's language on candidate window</summary>

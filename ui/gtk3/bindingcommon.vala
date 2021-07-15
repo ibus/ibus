@@ -212,4 +212,32 @@ class BindingCommon {
                 css_provider,
                 Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
+
+    public static void
+    set_custom_theme(GLib.Settings?       settings_panel) {
+        if (settings_panel == null)
+            return;
+
+        bool use_custom_theme = settings_panel.get_boolean("use-custom-theme");
+        string custom_theme = settings_panel.get_string("custom-theme");
+
+        Gtk.Settings gtk_settings = Gtk.Settings.get_default();
+
+        if (use_custom_theme == false) {
+            custom_theme = "";
+        }
+
+        if (custom_theme == null || custom_theme == "") {
+            gtk_settings.reset_property("gtk-theme-name");
+            gtk_settings.reset_property("gtk-application-prefer-dark-theme");
+        } else {
+            string[] custom_theme_splitted = custom_theme.split(":");
+            gtk_settings.gtk_theme_name = custom_theme_splitted[0];
+            if (custom_theme_splitted.length == 2 && custom_theme_splitted[1] == "dark") {
+                gtk_settings.gtk_application_prefer_dark_theme = true;
+            } else {
+                gtk_settings.gtk_application_prefer_dark_theme = false;
+            }
+        }
+    }
 }

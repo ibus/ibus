@@ -618,6 +618,12 @@ PKG_CHECK_MODULES(XTEST,
 )
 AM_CONDITIONAL([ENABLE_XTEST], [test x"$enable_xtest" = x"yes"])
 
+PKG_CHECK_MODULES(XFIXES,
+    [x11 xfixes >= 6],
+    AC_DEFINE([HAVE_XFIXES], [1], [Define to enable XFixes]),
+    []
+)
+
 # --enable-install-tests
 AC_ARG_ENABLE(install-tests,
     AS_HELP_STRING([--enable-install-tests],

@@ -27,16 +27,34 @@
 #include <ibus.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/mman.h>
 #include <wayland-client.h>
 #include <xkbcommon/xkbcommon.h>
 
 #include "input-method-unstable-v1-client-protocol.h"
+#include "input-method-unstable-v2-client-protocol.h"
+#include "virtual-keyboard-unstable-v1-client-protocol.h"
 
 struct _IBusWaylandIM
 {
     struct zwp_input_method_v1 *input_method;
     struct zwp_input_method_context_v1 *context;
     struct wl_keyboard *keyboard;
+
+
+    struct zwp_input_method_manager_v2 * input_method_manager_v2;
+    struct zwp_input_method_v2 *input_method_v2;
+    struct zwp_input_method_keyboard_grab_v2 *keyboard_grab;
+    struct zwp_virtual_keyboard_manager_v1 *virtual_keyboard_manager;
+    struct zwp_virtual_keyboard_v1 *virtual_keyboard;
+    char *pending_surrounding_text;
+    char *commit_text;
+    uint32_t pending_cursor;
+    uint32_t pending_anchor;
+
+    gboolean active;
+    gboolean pending_activate;
+    gboolean pending_deactivate;
 
     IBusInputContext *ibuscontext;
     IBusText *preedit_text;
@@ -87,12 +105,12 @@ typedef struct _IBusWaylandSource IBusWaylandSource;
 
 struct wl_display *_display = NULL;
 struct wl_registry *_registry = NULL;
+static struct wl_seat *_seat = NULL;
 static IBusBus *_bus = NULL;
 
 static gboolean _use_sync_mode = FALSE;
 
-static gboolean
-_get_boolean_env (const gchar *name,
+static gboolean _get_boolean_env (const gchar *name,
                   gboolean     defval)
 {
     const gchar *value = g_getenv (name);
@@ -190,6 +208,15 @@ _context_commit_text_cb (IBusInputContext *context,
 }
 
 static void
+_input_method_v2_commit_string_cb (IBusInputContext *context,
+                         IBusText         *text,
+                         IBusWaylandIM    *wlim)
+{
+    zwp_input_method_v2_commit_string (wlim->input_method_v2,
+                                               text->text);
+}
+
+static void
 _context_forward_key_event_cb (IBusInputContext *context,
                                guint             keyval,
                                guint             keycode,
@@ -257,6 +284,26 @@ _context_update_preedit_text_cb (IBusInputContext *context,
         _context_hide_preedit_text_cb (context, wlim);
 }
 
+// TODO: check the arguments and that we get the right ones here from IBUS...
+static void
+_input_method_v2_set_preedit_string_cb (IBusInputContext *context,
+                                 IBusText         *text,
+                                 gint              cursor_pos,
+                                 gboolean          visible,
+                                 IBusWaylandIM    *wlim)
+{
+    if (wlim->preedit_text)
+        g_object_unref (wlim->preedit_text);
+    wlim->preedit_text = g_object_ref_sink (text);
+    wlim->preedit_cursor_pos = cursor_pos;
+
+    // wlhangul calls this when processing the input key but that's when
+    // this cb should be triggered ...
+    zwp_input_method_v2_set_preedit_string(wlim->input_method_v2,
+        ibus_text_get_text(wlim->preedit_text), 0,
+        ibus_text_get_length(wlim->preedit_text));
+}
+
 static void
 handle_surrounding_text (void                               *data,
                          struct zwp_input_method_context_v1 *context,
@@ -280,6 +327,51 @@ handle_surrounding_text (void                               *data,
                                                  anchor_pos);
     }
 #endif
+}
+
+static void
+input_method_handle_surrounding_text_v2 (void                               *data,
+                                         struct zwp_input_method_v2 *input_method,
+                                         const char                         *text,
+                                         uint32_t                           cursor,
+                                         uint32_t                           anchor)
+{
+#if ENABLE_SURROUNDING
+    IBusWaylandIM *wlim = data;
+
+    wlim->pending_surrounding_text = (char*)text;
+    wlim->pending_cursor = cursor;
+    wlim->pending_anchor = anchor;
+
+    if (wlim->ibuscontext != NULL &&
+        ibus_input_context_needs_surrounding_text (wlim->ibuscontext)) {
+        /* CURSOR_POS and ANCHOR_POS are character offsets. */
+        guint cursor_pos = g_utf8_pointer_to_offset (text, text + cursor);
+        guint anchor_pos = g_utf8_pointer_to_offset (text, text + anchor);
+        IBusText *ibustext = ibus_text_new_from_string (text);
+
+        ibus_input_context_set_surrounding_text (wlim->ibuscontext,
+                                                 ibustext,
+                                                 cursor_pos,
+                                                 anchor_pos);
+    }
+
+#endif
+}
+
+static void
+input_method_handle_text_change_cause_v2 (void                                       *data,
+                                          struct zwp_input_method_v2  *zwp_input_method_v2,
+                                          uint32_t                                   cause)
+{
+}
+
+static void
+input_method_handle_content_type_v2 (void                                       *data,
+                                     struct zwp_input_method_v2  *zwp_input_method_v2,
+                                     uint32_t                                    hint,
+                                     uint32_t                                 purpose)
+{
 }
 
 static void
@@ -331,6 +423,13 @@ static const struct zwp_input_method_context_v1_listener context_listener = {
 };
 
 static void
+input_method_handle_unavailable_v2 (void                       *data,
+                                    struct zwp_input_method_v2 *input_method)
+{
+    IBusWaylandIM *wlim = data;
+}
+
+static void
 input_method_keyboard_keymap (void               *data,
                               struct wl_keyboard *wl_keyboard,
                               uint32_t            format,
@@ -354,6 +453,83 @@ input_method_keyboard_keymap (void               *data,
         }
         close (fd);
         return;
+    }
+
+    wlim->keymap =
+        xkb_map_new_from_string (wlim->xkb_context,
+                                 g_mapped_file_get_contents (map),
+                                 XKB_KEYMAP_FORMAT_TEXT_V1,
+                                 0);
+
+    g_mapped_file_unref (map);
+    close(fd);
+
+    if (!wlim->keymap) {
+        return;
+    }
+
+    wlim->state = xkb_state_new (wlim->keymap);
+    if (!wlim->state) {
+        xkb_map_unref (wlim->keymap);
+        return;
+    }
+
+    wlim->shift_mask =
+        1 << xkb_map_mod_get_index (wlim->keymap, "Shift");
+    wlim->lock_mask =
+        1 << xkb_map_mod_get_index (wlim->keymap, "Lock");
+    wlim->control_mask =
+        1 << xkb_map_mod_get_index (wlim->keymap, "Control");
+    wlim->mod1_mask =
+        1 << xkb_map_mod_get_index (wlim->keymap, "Mod1");
+    wlim->mod2_mask =
+        1 << xkb_map_mod_get_index (wlim->keymap, "Mod2");
+    wlim->mod3_mask =
+        1 << xkb_map_mod_get_index (wlim->keymap, "Mod3");
+    wlim->mod4_mask =
+        1 << xkb_map_mod_get_index (wlim->keymap, "Mod4");
+    wlim->mod5_mask =
+        1 << xkb_map_mod_get_index (wlim->keymap, "Mod5");
+    wlim->super_mask =
+        1 << xkb_map_mod_get_index (wlim->keymap, "Super");
+    wlim->hyper_mask =
+        1 << xkb_map_mod_get_index (wlim->keymap, "Hyper");
+    wlim->meta_mask =
+        1 << xkb_map_mod_get_index (wlim->keymap, "Meta");
+}
+
+static void
+input_method_keyboard_grab_keymap (void               *data,
+                                   struct zwp_input_method_keyboard_grab_v2 *keyboard,
+                                   uint32_t            format,
+                                   int32_t             fd,
+                                   uint32_t            size)
+{
+    IBusWaylandIM *wlim = data;
+    GMappedFile *map;
+    GError *error;
+
+    zwp_virtual_keyboard_v1_keymap(wlim->virtual_keyboard, format, fd, size);
+
+    if (format != WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1) {
+        close(fd);
+        return;
+    }
+
+    error = NULL;
+    map = g_mapped_file_new_from_fd (fd, FALSE, &error);
+    if (map == NULL) {
+        close (fd);
+        return;
+    }
+
+    // TODO: this is supposed to fix
+    // https://github.com/swaywm/sway/pull/4932#issuecomment-731777724
+    // but it's not working
+    if (wlim->keymap && !strcmp(wlim->keymap, map)) {
+      g_mapped_file_unref (map);
+      close(fd);
+      return;
     }
 
     wlim->keymap =
@@ -430,6 +606,28 @@ _process_key_event_done (GObject      *object,
 }
 
 static void
+_process_keyboard_grab_key_event (GObject      *object,
+                                 GAsyncResult  *res,
+                                 gpointer      user_data)
+{
+    IBusInputContext *context = (IBusInputContext *)object;
+    IBusWaylandKeyEvent *event = (IBusWaylandKeyEvent *) user_data;
+
+    GError *error = NULL;
+    gboolean retval = ibus_input_context_process_key_event_async_finish (
+            context,
+            res,
+            &error);
+
+    if (error != NULL) {
+        g_warning ("Process Key Event failed: %s.", error->message);
+        g_error_free (error);
+    }
+
+    g_free (event);
+}
+
+static void
 input_method_keyboard_key (void               *data,
                            struct wl_keyboard *wl_keyboard,
                            uint32_t            serial,
@@ -499,6 +697,75 @@ input_method_keyboard_key (void               *data,
 }
 
 static void
+input_method_keyboard_grab_key (void               *data,
+                                struct zwp_input_method_keyboard_grab_v2 *keyboard,
+                                uint32_t            serial,
+                                uint32_t            time,
+                                uint32_t            key,
+                                uint32_t            state)
+{
+    IBusWaylandIM *wlim = data;
+    gboolean handled = FALSE;
+    uint32_t code;
+    uint32_t num_syms;
+    const xkb_keysym_t *syms;
+    xkb_keysym_t sym;
+    guint32 modifiers;
+
+    if (!wlim->state)
+        return;
+
+    code = key + 8;
+    num_syms = xkb_key_get_syms (wlim->state, code, &syms);
+
+    sym = XKB_KEY_NoSymbol;
+    if (num_syms == 1)
+        sym = syms[0];
+
+    modifiers = wlim->modifiers;
+    if (state == WL_KEYBOARD_KEY_STATE_RELEASED)
+        modifiers |= IBUS_RELEASE_MASK;
+
+    handled =
+        ibus_input_context_process_key_event (wlim->ibuscontext,
+                                              sym,
+                                              code,
+                                              modifiers);
+
+    if (!handled)
+       printf("not handled by ibus\n");
+
+    // TODO:
+    //
+    // That's what wlhangul is doing in this function
+    //
+    // const ucschar *commit_ucsstr =
+    //   hangul_ic_get_commit_string(seat->input_context);
+    // if (commit_ucsstr[0] != 0) {
+    //   char *commit_str = ucsstr_to_str(commit_ucsstr);
+    //   zwp_input_method_v2_commit_string(seat->input_method, commit_str);
+    //   free(commit_str);
+    // }
+    //
+    // const ucschar *preedit_ucsstr =
+    //   hangul_ic_get_preedit_string(seat->input_context);
+    // char *preedit_str = ucsstr_to_str(preedit_ucsstr);
+    // zwp_input_method_v2_set_preedit_string(seat->input_method,
+    //   preedit_str, 0, strlen(preedit_str));
+    // free(preedit_str);
+    //
+    // zwp_input_method_v2_commit(seat->input_method, seat->serial);
+
+    // This actually now let's the client-side text-input send the
+    // surrounding text on each key stroke!!
+    zwp_input_method_v2_commit (wlim->input_method_v2, wlim->serial);
+
+    if (!handled) {
+        zwp_virtual_keyboard_v1_key(wlim->virtual_keyboard, time, key, state);
+    }
+}
+
+static void
 input_method_keyboard_modifiers (void               *data,
                                  struct wl_keyboard *wl_keyboard,
                                  uint32_t            serial,
@@ -546,6 +813,63 @@ input_method_keyboard_modifiers (void               *data,
                                            mods_locked, group);
 }
 
+static void
+input_method_keyboard_grab_modifiers (void               *data,
+                                      struct zwp_input_method_keyboard_grab_v2 *keyboard,
+                                      uint32_t            serial,
+                                      uint32_t            mods_depressed,
+                                      uint32_t            mods_latched,
+                                      uint32_t            mods_locked,
+                                      uint32_t            group)
+{
+    IBusWaylandIM *wlim = data;
+    xkb_mod_mask_t mask;
+
+    xkb_state_update_mask (wlim->state, mods_depressed,
+                           mods_latched, mods_locked, 0, 0, group);
+    mask = xkb_state_serialize_mods (wlim->state,
+                                     XKB_STATE_DEPRESSED |
+                                     XKB_STATE_LATCHED);
+
+    wlim->modifiers = 0;
+    if (mask & wlim->shift_mask)
+        wlim->modifiers |= IBUS_SHIFT_MASK;
+    if (mask & wlim->lock_mask)
+        wlim->modifiers |= IBUS_LOCK_MASK;
+    if (mask & wlim->control_mask)
+        wlim->modifiers |= IBUS_CONTROL_MASK;
+    if (mask & wlim->mod1_mask)
+        wlim->modifiers |= IBUS_MOD1_MASK;
+    if (mask & wlim->mod2_mask)
+        wlim->modifiers |= IBUS_MOD2_MASK;
+    if (mask & wlim->mod3_mask)
+        wlim->modifiers |= IBUS_MOD3_MASK;
+    if (mask & wlim->mod4_mask)
+        wlim->modifiers |= IBUS_MOD4_MASK;
+    if (mask & wlim->mod5_mask)
+        wlim->modifiers |= IBUS_MOD5_MASK;
+    if (mask & wlim->super_mask)
+        wlim->modifiers |= IBUS_SUPER_MASK;
+    if (mask & wlim->hyper_mask)
+        wlim->modifiers |= IBUS_HYPER_MASK;
+    if (mask & wlim->meta_mask)
+        wlim->modifiers |= IBUS_META_MASK;
+
+    zwp_virtual_keyboard_v1_modifiers(wlim->virtual_keyboard,
+      mods_depressed, mods_latched, mods_locked, group);
+}
+
+// TODO?
+static void
+input_method_keyboard_grab_repeat_info (void               *data,
+                                        struct zwp_input_method_keyboard_grab_v2 *keyboard,
+                                        int32_t            rate,
+                                        int32_t            delay)
+{
+    IBusWaylandIM *wlim = data;
+}
+
+
 static const struct wl_keyboard_listener keyboard_listener = {
     input_method_keyboard_keymap,
     NULL, /* enter */
@@ -553,6 +877,93 @@ static const struct wl_keyboard_listener keyboard_listener = {
     input_method_keyboard_key,
     input_method_keyboard_modifiers
 };
+
+static const struct zwp_input_method_keyboard_grab_v2_listener keyboard_grab_listener = {
+    input_method_keyboard_grab_keymap,
+    input_method_keyboard_grab_key,
+    input_method_keyboard_grab_modifiers,
+    input_method_keyboard_grab_repeat_info
+};
+
+// TODO: this should apply all pending state
+//
+// For some reason, as long as the input method is active, the serial
+// increases so done must be called at one point in a loop (when the
+// example/text-input is running)...
+static void
+input_method_handle_done_v2 (void                       *data,
+                             struct zwp_input_method_v2 *input_method)
+{
+    IBusInputContext * context;
+    IBusWaylandIM *wlim = data;
+
+    wlim->serial++;
+
+    printf("pending_activate: %d active: %d\npending_deactivate: %d\n", wlim->pending_activate,
+        wlim->active, wlim->pending_deactivate);
+
+    if (wlim->pending_activate && !wlim->active) {
+      wlim->keyboard_grab = zwp_input_method_v2_grab_keyboard (input_method);
+      zwp_input_method_keyboard_grab_v2_add_listener (wlim->keyboard_grab,
+                                &keyboard_grab_listener,
+                                wlim);
+      wlim->active = TRUE;
+
+      context = ibus_bus_create_input_context (_bus, "wayland_input_method_v2");
+      if (context == NULL) {
+          g_warning ("Create input context failed.");
+          return;
+      }
+
+      wlim->ibuscontext = context;
+
+      // TODO: all of those should use the v2 interface. It almost
+      // looks like they should not be used at all though since
+      // everything should be committed on the done event. Then, where
+      // is the data from ibus coming from though...
+      //
+      // Most likely these handle the ibus side and on done we send
+      // the prepared strings to the text-input client?
+      g_signal_connect (wlim->ibuscontext, "update-preedit-text",
+                        G_CALLBACK (_input_method_v2_set_preedit_string_cb),
+                        wlim);
+      g_signal_connect (wlim->ibuscontext, "commit-text",
+                        G_CALLBACK (_input_method_v2_commit_string_cb),
+                        wlim);
+
+#ifdef ENABLE_SURROUNDING
+      ibus_input_context_set_capabilities (wlim->ibuscontext,
+                                           IBUS_CAP_FOCUS |
+                                           IBUS_CAP_PREEDIT_TEXT |
+                                           IBUS_CAP_SURROUNDING_TEXT);
+#else
+      ibus_input_context_set_capabilities (wlim->ibuscontext,
+                                           IBUS_CAP_FOCUS |
+                                           IBUS_CAP_PREEDIT_TEXT);
+#endif
+
+      ibus_input_context_focus_in (wlim->ibuscontext);
+
+    } else if (wlim->pending_deactivate && wlim->active) {
+      if (wlim->keyboard_grab) {
+          zwp_input_method_keyboard_grab_v2_release (wlim->keyboard_grab);
+          wlim->keyboard_grab = NULL;
+      }
+
+      if (wlim->ibuscontext) {
+          // TODO: this results in an assertion error. Not sure why
+          // ibus_input_context_focus_out (wlim->ibuscontext);
+          g_object_unref (wlim->ibuscontext);
+          wlim->ibuscontext = NULL;
+      }
+
+      wlim->active = FALSE;
+    }
+
+    wlim->pending_activate = FALSE;
+    wlim->pending_deactivate = FALSE;
+}
+
 
 static void
 _create_input_context_done (GObject      *object,
@@ -593,7 +1004,7 @@ _create_input_context_done (GObject      *object,
         g_signal_connect (wlim->ibuscontext, "hide-preedit-text",
                           G_CALLBACK (_context_hide_preedit_text_cb),
                           wlim);
-    
+
 #ifdef ENABLE_SURROUNDING
         ibus_input_context_set_capabilities (wlim->ibuscontext,
                                              IBUS_CAP_FOCUS |
@@ -608,6 +1019,7 @@ _create_input_context_done (GObject      *object,
         ibus_input_context_focus_in (wlim->ibuscontext);
     }
 }
+
 
 static void
 input_method_activate (void                               *data,
@@ -675,9 +1087,64 @@ input_method_deactivate (void                               *data,
     }
 }
 
+static void
+input_method_activate_v2 (void                               *data,
+                          struct zwp_input_method_v2         *input_method)
+{
+    IBusWaylandIM *wlim = data;
+    wlim->pending_activate = TRUE;
+}
+
+static void
+input_method_deactivate_v2 (void                               *data,
+                            struct zwp_input_method_v2         *input_method)
+{
+    IBusWaylandIM *wlim = data;
+
+    if (wlim->cancellable) {
+        /* Cancel any ongoing create input context request.  */
+        g_cancellable_cancel (wlim->cancellable);
+        g_object_unref (wlim->cancellable);
+        wlim->cancellable = NULL;
+    }
+
+    if (wlim->ibuscontext) {
+        ibus_input_context_focus_out (wlim->ibuscontext);
+        g_object_unref (wlim->ibuscontext);
+        wlim->ibuscontext = NULL;
+    }
+
+    if (wlim->preedit_text) {
+        g_object_unref (wlim->preedit_text);
+        wlim->preedit_text = NULL;
+    }
+
+    if (wlim->keyboard_grab) {
+        zwp_input_method_keyboard_grab_v2_release (wlim->keyboard_grab);
+        wlim->keyboard_grab = NULL;
+    }
+
+    wlim->pending_deactivate = TRUE;
+}
+
+
+
 static const struct zwp_input_method_v1_listener input_method_listener = {
     input_method_activate,
     input_method_deactivate
+};
+
+
+// TODO: check that we are handling the state similarly to the wlroots
+// example
+static const struct zwp_input_method_v2_listener input_method_listener_v2 = {
+    input_method_activate_v2,
+    input_method_deactivate_v2,
+    input_method_handle_surrounding_text_v2,
+    input_method_handle_text_change_cause_v2,
+    input_method_handle_content_type_v2,
+    input_method_handle_done_v2,
+    input_method_handle_unavailable_v2
 };
 
 static void
@@ -688,13 +1155,20 @@ registry_handle_global (void               *data,
                         uint32_t            version)
 {
     IBusWaylandIM *wlim = data;
-
-    if (!g_strcmp0 (interface, "zwp_input_method_v1")) {
+    if (!g_strcmp0 (interface, "zwp_input_method_manager_v2")) {
+        wlim->input_method_manager_v2 = wl_registry_bind (registry, name,
+              &zwp_input_method_manager_v2_interface, 1);
+    } else if (!g_strcmp0 (interface, "zwp_input_method_v1")) {
         wlim->input_method =
             wl_registry_bind (registry, name,
                               &zwp_input_method_v1_interface, 1);
         zwp_input_method_v1_add_listener (wlim->input_method,
                                           &input_method_listener, wlim);
+    } else if (!g_strcmp0 (interface, wl_seat_interface.name)) {
+      _seat = wl_registry_bind (registry, name, &wl_seat_interface, version);
+    } else if (!g_strcmp0 (interface, zwp_virtual_keyboard_manager_v1_interface.name)) {
+      wlim->virtual_keyboard_manager = wl_registry_bind(registry, name,
+      &zwp_virtual_keyboard_manager_v1_interface, 1);
     }
 }
 
@@ -745,7 +1219,18 @@ main (gint    argc,
     memset (&wlim, 0, sizeof (wlim));
     wl_registry_add_listener (_registry, &registry_listener, &wlim);
     wl_display_roundtrip (_display);
-    if (wlim.input_method == NULL) {
+
+    if (wlim.input_method_manager_v2) {
+        wlim.input_method_v2 = zwp_input_method_manager_v2_get_input_method (
+          wlim.input_method_manager_v2, _seat);
+        zwp_input_method_v2_add_listener (wlim.input_method_v2,
+                                          &input_method_listener_v2, &wlim);
+        wlim.virtual_keyboard =
+          zwp_virtual_keyboard_manager_v1_create_virtual_keyboard(
+          wlim.virtual_keyboard_manager, _seat);
+    }
+
+    if (wlim.input_method == NULL && wlim.input_method_v2 == NULL) {
         g_printerr ("No input_method global\n");
         return EXIT_FAILURE;
     }

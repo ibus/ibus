@@ -18,30 +18,32 @@
 # Changwoo Ryu <cwryu@debian.org>, 2007-2015. (gucharmap)
 # DaeHyun Sung <sungdh86@gmail.com>, 2016-2019. (gucharmap)
 # Changwoo Ryu <cwryu@debian.org>, 2019-2020.
+# simmon <simmon@nplob.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-09-03 21:21+0900\n"
-"PO-Revision-Date: 2020-09-16 08:13+0900\n"
-"Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
-"Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
+"PO-Revision-Date: 2021-04-21 03:02+0000\n"
+"Last-Translator: simmon <simmon@nplob.com>\n"
+"Language-Team: Korean <https://translate.fedoraproject.org/projects/ibus/"
+"ibus/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Zanata 4.6.2\n"
+"X-Generator: Weblate 4.6\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
 msgid "Preload engines"
-msgstr "엔진 미리로드"
+msgstr "사전 탑재된 엔진"
 
 #. Translators: Tooltip for the button “Preload Engines”
 #: data/dconf/org.freedesktop.ibus.gschema.xml:13
 msgid "Preload engines during ibus starts up"
-msgstr "ibus 시작할 때 엔진을 미리 읽어들입니다"
+msgstr "ibus 시작 할 때에 엔진을 미리 탑재합니다"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:17
 msgid "Engines order"
@@ -53,7 +55,7 @@ msgstr "입력 방식 목록에 저장된 엔진 순서"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:22
 msgid "Popup delay milliseconds for IME switcher window"
-msgstr "IME 전환 창의 팝업 지연 시간, 밀리초 단위"
+msgstr "IME 전환 창의 팝업 지연 시간 밀리 초"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
 msgid ""
@@ -73,9 +75,7 @@ msgstr "저장된 버전 번호"
 msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
-msgstr ""
-"저장된 버전 번호는 이전에 설치되었던 ibus 입력기와 현재 버저ibus 버전을 비교"
-"하는 데 사용됩니다."
+msgstr "저장된 버전은 이전에 설치되었던 ibus 입력기와 현재 ibus를 비교하는 데 사용됩니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:32
 msgid "Latin layouts which have no ASCII"
@@ -83,9 +83,7 @@ msgstr "ASCII가 없는 라틴 문자 키보드 배치"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:33
 msgid "US layout is appended to the Latin layouts. variant can be omitted."
-msgstr ""
-"US 키보드 배치가 라틴 문자 키보드 배치에 추가되었습니다. 변형 버전은 생략될 "
-"수 있습니다."
+msgstr "US 키보드 배치가 라틴 문자 키보드 배치에 추가되었습니다. 변형 버전은 생략 될 수 있습니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:37
 msgid "Use xmodmap"
@@ -107,11 +105,11 @@ msgstr "시스템 키보드 배치 (XKB) 사용"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:47
 msgid "Embed Preedit Text"
-msgstr "프리에디트 텍스트 포함"
+msgstr "사전편집 텍스트 포함"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:48
 msgid "Embed Preedit Text in Application Window"
-msgstr "응용 프로그램 창에 프리에디트 텍스트를 포함"
+msgstr "응용 프로그램 창에 사전편집 텍스트를 포함"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:52
 msgid "Use global input method"
@@ -131,11 +129,11 @@ msgstr "프로그램의 입력창에 포커스가 가면 기본값으로 입력�
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:62
 msgid "DConf preserve name prefixes"
-msgstr "DConf는 이름 접두사를 보존합니다"
+msgstr "DConf는 이름 프리픽스를 보존합니다"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:63
 msgid "Prefixes of DConf keys to stop name conversion"
-msgstr "DConf 키 접두사는 이름 변환을 중지합니다"
+msgstr "DConf 키 프리픽스는 이름 변환을 중지합니다"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:70
 msgid "Trigger shortcut keys"
@@ -261,12 +259,10 @@ msgid ""
 "percentage values in the range 0% to 100%, and 'a' is a floating point value "
 "in the range 0 to 1 of the alpha."
 msgstr ""
-"XKB 아이콘은 배치 문자열을 보여주며 RGBA 값을 통해 표현합니다. RGBA 값은 1. "
-"X11의 색상 이름, 2. 'r' 'g' 'b' 자리에 적, 녹, 청의 16진수 값이 들어가는 "
-"'#rrggbb' 형식의 16진수 값이며, 3. 'r', 'g', 'b' 자리에 0부터 255까지의 값 또"
-"는 0%부터 100%까지의 백분율 값이 들어가는 'rgb(r,g,b)' 형식의 RGB 색상 값 또"
-"는, 4. 여기에  'a'는 0부터 1까지의 실수 알파 값이 들어가는 'rgba(r,g,b,a)' 값"
-"이 될 수 있습니다."
+"XKB 아이콘은 배치 문자열을 보여주며 RGBA 값을 통해 표현합니다. RGBA 값은 1. X11의 색상 이름, 2. 'r' 'g' "
+"'b' 자리에 적, 녹, 청의 16진수 값이 들어가는 '#rrggbb' 형식의 16진수 값이며, 3. 'r', 'g', 'b' 자리에 "
+"0부터 255까지의 값 또는 0%부터 100%까지의 백분율 값이 들어가는 'rgb(r,g,b)' 형식의 RGB 색상 값 또는, 4. "
+"여기에 'a'는 0부터 1까지의 실수 알파 값이 들어가는 'rgba(r,g,b,a)' 값이 될 수 있습니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:155
 msgid "The milliseconds to show the panel icon for a property"
@@ -435,8 +431,8 @@ msgid ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
 msgstr ""
-"Copyright (c) 2007-2010 Peng Huang\n"
-"Copyright (c) 2007-2010 Red Hat, Inc."
+"저작권 (c) 2007-2010 Peng Huang\n"
+"저작권 (c) 2007-2010 Red Hat, Inc."
 
 #: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
@@ -449,11 +445,11 @@ msgstr "언어를 선택하십시오"
 #: setup/emojilang.py:70 setup/enginedialog.py:60 setup/keyboardshortcut.py:339
 #: setup/main.py:560
 msgid "_Cancel"
-msgstr "취소(_C)"
+msgstr "_취소"
 
 #: setup/emojilang.py:71 setup/keyboardshortcut.py:340 setup/main.py:561
 msgid "_OK"
-msgstr "확인(_O)"
+msgstr "_오케이"
 
 #: setup/emojilang.py:235 setup/enginedialog.py:205
 msgid "More…"
@@ -461,11 +457,11 @@ msgstr "더 보기…"
 
 #: setup/engineabout.py:37 setup/setup.ui:1368 ui/gtk3/panel.vala:1162
 msgid "About"
-msgstr "정보"
+msgstr "대하여"
 
 #: setup/engineabout.py:40 setup/setup.ui:1391
 msgid "_Close"
-msgstr "닫기(_C)"
+msgstr "_닫기"
 
 #: setup/engineabout.py:72
 #, python-format
@@ -493,7 +489,7 @@ msgstr "입력 방식을 선택합니다"
 #. add button
 #: setup/enginedialog.py:61 setup/keyboardshortcut.py:124 setup/setup.ui:664
 msgid "_Add"
-msgstr "추가(_A)"
+msgstr "_추가"
 
 #. create im name & icon column
 #: setup/enginetreeview.py:69 setup/setup.ui:838
@@ -528,7 +524,7 @@ msgstr "적용(_A)"
 #. delete button
 #: setup/keyboardshortcut.py:136
 msgid "_Delete"
-msgstr "삭제(_D)"
+msgstr "_삭제"
 
 #: setup/keyboardshortcut.py:252
 msgid ""
@@ -540,7 +536,7 @@ msgstr ""
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
-msgstr "키 또는 키 조합을 입력하십시오"
+msgstr "키 (또는 키 조합)를 누르세요"
 
 #: setup/main.py:121 setup/main.py:588
 msgid "Use shortcut with shift to switch to the previous input method"
@@ -713,7 +709,7 @@ msgstr "활성화된 입력 방식 목록에 선택한 입력 방식을 추가�
 
 #: setup/setup.ui:682
 msgid "_Remove"
-msgstr "제거(_R)"
+msgstr "_제거"
 
 # tooltip
 #: setup/setup.ui:689
@@ -722,7 +718,7 @@ msgstr "활성화된 입력 방식 목록에서 선택한 입력 방식을 제�
 
 #: setup/setup.ui:700
 msgid "_Up"
-msgstr "위로(_U)"
+msgstr "_위"
 
 # tooltip
 #: setup/setup.ui:707
@@ -731,7 +727,7 @@ msgstr "활성화된 입력 방식 목록에서 선택한 입력 방식을 위�
 
 #: setup/setup.ui:718
 msgid "_Down"
-msgstr "아래로(_D)"
+msgstr "_아래"
 
 # tooltip
 #: setup/setup.ui:725
@@ -740,7 +736,7 @@ msgstr "활성화된 입력 방식 목록에서 선택한 입력 방식을 아�
 
 #: setup/setup.ui:736
 msgid "_About"
-msgstr "정보(_A)"
+msgstr "_정보"
 
 #: setup/setup.ui:743
 msgid "Show information of the selected input method"
@@ -748,7 +744,7 @@ msgstr "선택한 입력 방식의 정보를 표시합니다"
 
 #: setup/setup.ui:754
 msgid "_Preferences"
-msgstr "기본 설정(_P)"
+msgstr "_기본 설정"
 
 #: setup/setup.ui:761
 msgid "Show setup of the selected input method"
@@ -826,7 +822,7 @@ msgstr "포함 일치"
 
 #: setup/setup.ui:1176
 msgid "Emoji"
-msgstr "에모지"
+msgstr "이모지"
 
 #: setup/setup.ui:1230
 msgid "<b>Keyboard Layout</b>"
@@ -1331,7 +1327,7 @@ msgstr "올 치키 문자"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:281
 msgid "Cyrillic Extended-C"
-msgstr "키릴 문자 확장영역 C"
+msgstr "키릴 문자 확장영역-C"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1352,7 +1348,7 @@ msgstr "순다 문자 추가영역"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:293
 msgid "Vedic Extensions"
-msgstr "베다 확장영역"
+msgstr "베다 확장"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1654,7 +1650,7 @@ msgstr "히라가나"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:465
 msgid "Katakana"
-msgstr "카타카나"
+msgstr "카다카나"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3301,7 +3297,7 @@ msgstr "다른 이름: %s"
 #: ui/gtk3/emojier.vala:2140 ui/gtk3/ibus-extension-gtk3.desktop.in:3
 #: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1147
 msgid "Emoji Choice"
-msgstr "에모지 선택"
+msgstr "이모지 선택"
 
 #: ui/gtk3/emojier.vala:2142
 msgid "Unicode Choice"
@@ -3334,18 +3330,18 @@ msgstr "\"<글꼴>\"을 에모지 대화창의 에모지 문자에 사용합니�
 
 #: ui/gtk3/emojierapp.vala:127
 msgid "FONT"
-msgstr "<글꼴>"
+msgstr "글꼴"
 
 #. TRANSLATORS: "LANG" should be capital and translatable.
 #. * It's used for an argument command --lang=LANG
 #.
 #: ui/gtk3/emojierapp.vala:132
 msgid "\"LANG\" for annotations on emoji dialog. E.g. \"en\""
-msgstr "\"<언어>\"를 에모지 대화창 주석에 사용합니다 (예: \"en\")"
+msgstr "\"언어\"를 에모지 대화창 주석에 사용합니다. 예: \"en\""
 
 #: ui/gtk3/emojierapp.vala:133
 msgid "LANG"
-msgstr "<언어>"
+msgstr "언어"
 
 #: ui/gtk3/emojierapp.vala:135
 msgid "Emoji annotations can be match partially"
@@ -3369,9 +3365,7 @@ msgstr "IBus는 리눅스/유닉스를 위한 지능형 입력 버스입니다."
 
 #: ui/gtk3/panel.vala:1123
 msgid "translator-credits"
-msgstr ""
-"김은주 <eukim@redhat.com>\n"
-"류창우 <cwryu@debian.org>"
+msgstr "simmon <simmon@nplob.com>"
 
 #: ui/gtk3/panel.vala:1142
 msgid "Preferences"

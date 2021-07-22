@@ -13,13 +13,14 @@
 # runab <runab@redhat.com>, 2009, 2010
 # runab <runab@redhat.com>, 2009-2010
 # Tawsif Hossain Shafi <tenshou170@outlook.com>, 2020.
+# Abu Huraira <abuhuraira@tutamail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2015-07-13 19:48+0900\n"
-"PO-Revision-Date: 2020-10-22 17:25+0000\n"
-"Last-Translator: Tawsif Hossain Shafi <tenshou170@outlook.com>\n"
+"PO-Revision-Date: 2021-03-19 18:01+0000\n"
+"Last-Translator: Abu Huraira <abuhuraira@tutamail.com>\n"
 "Language-Team: Bengali <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/bn/>\n"
 "Language: bn\n"
@@ -27,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.3.1\n"
+"X-Generator: Weblate 4.5.1\n"
 
 #: ../setup/setup.ui.h:1
 msgid "Horizontal"
@@ -355,20 +356,24 @@ msgstr ""
 
 #: ../data/ibus.schemas.in.h:13
 msgid "Use xmodmap"
-msgstr ""
+msgstr "xmodmap ব্যবহার করুন"
 
 #: ../data/ibus.schemas.in.h:14
+#, fuzzy
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
 msgstr ""
+"যদি .xmodmap অথবা .Xmodmap বিদ্যমান থাকে তাহলে xmodmap রান করুন, যখন আইবাস "
+"ইনজিনসমূহ সুইচ করা হয়।"
 
 #: ../data/ibus.schemas.in.h:15
 msgid "Trigger shortcut keys"
 msgstr "ট্রিগারের শর্টকাট-কি"
 
 #: ../data/ibus.schemas.in.h:17
+#, fuzzy
 msgid "Trigger shortcut keys for gtk_accelerator_parse"
-msgstr ""
+msgstr "gtk_accelerator_parse এর জন্য শর্টকাট কী সেট করুন"
 
 #: ../data/ibus.schemas.in.h:18
 msgid "Enable shortcut keys"
@@ -414,6 +419,8 @@ msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
 msgstr ""
+"প্রপার্টি প্যানেলের আচরণ। 0 = দেখাবেন না, 1 = স্বয়ংক্রিয় লুকান, 2 = সবসময় "
+"দেখান"
 
 #: ../data/ibus.schemas.in.h:28
 msgid "Language panel position"
@@ -428,8 +435,9 @@ msgstr ""
 "= নীচে বাঁদিকের কোণায়, 3 = নীচে ডানদিকের কোণায়, 4 = স্বনির্ধারিত"
 
 #: ../data/ibus.schemas.in.h:30
+#, fuzzy
 msgid "Follow the input cursor in case the panel is always shown"
-msgstr ""
+msgstr "প্যানেল যখন সবসময় দৃশ্যমান, সেক্ষেত্রে ইনপুট কার্সরকে অনুসরণ করুন"
 
 #: ../data/ibus.schemas.in.h:31
 msgid ""

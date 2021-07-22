@@ -23,14 +23,14 @@
 # Máximo Castañeda Riloba <mcrcctm@gmail.com>, 2018. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
 # Máximo Castañeda Riloba <mcrcctm@gmail.com>, 2019. #zanata
-# Emilio Herrera <ehespinosa57@gmail.com>, 2020.
+# Emilio Herrera <ehespinosa57@gmail.com>, 2020, 2021.
 # Adolfo Jayme Barrientos <fitoschido@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-09-03 21:21+0900\n"
-"PO-Revision-Date: 2020-10-22 17:25+0000\n"
+"PO-Revision-Date: 2021-02-22 17:40+0000\n"
 "Last-Translator: Emilio Herrera <ehespinosa57@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/es/>\n"
@@ -39,7 +39,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.1\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -332,6 +332,10 @@ msgid ""
 "language if the value is true and choose them from the desktop locale if the "
 "value is false."
 msgstr ""
+"Algunos puntos del código tiene diferentes glifos y Pango determina los "
+"glifos desde el atributo idioma. Pango elige los glifos desde el idioma del "
+"la máquina IBus si el valor es cierto y los eliges desde el valor regional "
+"del sobremesa si el valor es falso."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:182
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -879,6 +883,8 @@ msgid ""
 "Choose glyphs with the input method's language on the candidate window for "
 "the duplicated code points"
 msgstr ""
+"Elige glifos con el idioma del método de entrada en la ventana candidato "
+"para los puntos de código duplicados"
 
 #: setup/setup.ui:1327
 msgid "<b>Fonts</b>"
@@ -2368,7 +2374,7 @@ msgstr "Numerales rumi"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:853
 msgid "Yezidi"
-msgstr ""
+msgstr "Yezidi"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2389,14 +2395,14 @@ msgstr "Sogdiano"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:865
 msgid "Chorasmian"
-msgstr ""
+msgstr "Chorasmian"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:869
 msgid "Elymaic"
-msgstr ""
+msgstr "Elymaic"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

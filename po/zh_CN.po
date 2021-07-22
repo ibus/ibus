@@ -20,13 +20,14 @@
 # Boyuan Yang <073plan@gmail.com>, 2020.
 # Whired Planck <fungdaat31@outlook.com>, 2020.
 # Dingzhong Chen <wsxy162@gmail.com>, 2021.
+# Liu Tao <lyuutau@outlook.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-12-11 16:21+0900\n"
-"PO-Revision-Date: 2021-01-28 17:40+0000\n"
-"Last-Translator: Dingzhong Chen <wsxy162@gmail.com>\n"
+"PO-Revision-Date: 2021-06-16 11:04+0000\n"
+"Last-Translator: Liu Tao <lyuutau@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -34,7 +35,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.6.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -520,7 +521,7 @@ msgstr ""
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
-msgstr "请按下一个键盘按键（或者按键组合）"
+msgstr "请按一个键盘按键（或者一个组合按键）"
 
 #: setup/main.py:121 setup/main.py:588
 msgid "Use shortcut with shift to switch to the previous input method"

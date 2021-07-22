@@ -10,7 +10,7 @@
 # Hyunsok Oh <hoh@redhat.com>, 2010
 # lego37yoon <lego37yoon@outlook.com>, 2014
 # Michelle Kim <mkim33@gmail.com>, 2012-2014
-# Seong-ho Cho <darkcircle.0426@gmail.com>, 2014
+# Seong-ho Cho <darkcircle.0426@gmail.com>, 2014, 2021.
 # fujiwara <takao.fujiwara1@gmail.com>, 2015. #zanata
 # Michelle Kim <mkim33@gmail.com>, 2017. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-09-03 21:21+0900\n"
-"PO-Revision-Date: 2021-04-21 03:02+0000\n"
-"Last-Translator: simmon <simmon@nplob.com>\n"
+"PO-Revision-Date: 2021-07-22 07:04+0000\n"
+"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ko/>\n"
 "Language: ko\n"
@@ -33,17 +33,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.7.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
 msgid "Preload engines"
-msgstr "사전 탑재된 엔진"
+msgstr "엔진 미리 불러오기"
 
 #. Translators: Tooltip for the button “Preload Engines”
 #: data/dconf/org.freedesktop.ibus.gschema.xml:13
 msgid "Preload engines during ibus starts up"
-msgstr "ibus 시작 할 때에 엔진을 미리 탑재합니다"
+msgstr "ibus 시작 할 때에 엔진을 미리 불러옵니다"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:17
 msgid "Engines order"
@@ -69,13 +69,13 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"
-msgstr "저장된 버전 번호"
+msgstr "저장한 버전 번호"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:28
 msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
-msgstr "저장된 버전은 이전에 설치되었던 ibus 입력기와 현재 ibus를 비교하는 데 사용됩니다."
+msgstr "저장한 버전은 이전에 설치한 ibus 입력기와 현재 ibus 입력기 비교에 활용합니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:32
 msgid "Latin layouts which have no ASCII"
@@ -105,11 +105,11 @@ msgstr "시스템 키보드 배치 (XKB) 사용"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:47
 msgid "Embed Preedit Text"
-msgstr "사전편집 텍스트 포함"
+msgstr "사전 편집 텍스트 포함"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:48
 msgid "Embed Preedit Text in Application Window"
-msgstr "응용 프로그램 창에 사전편집 텍스트를 포함"
+msgstr "응용 프로그램 창에 사전 편집 텍스트를 포함"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:52
 msgid "Use global input method"
@@ -192,7 +192,7 @@ msgstr "자동 숨기기"
 msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
-msgstr "속성 패널 돌작입니다. 0 = 보여주지 않음, 1 = 자동 숨김, 2 = 항상 표시"
+msgstr "속성 패널 동작입니다. 0 = 보여주지 않음, 1 = 자동 숨김, 2 = 항상 표시"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:117
 #: data/dconf/org.freedesktop.ibus.gschema.xml:121
@@ -285,7 +285,7 @@ msgstr "사용자 정의 글꼴 사용"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:161
 msgid "Use custom font name for language panel"
-msgstr "언어 패널 용 사용자 정의 글꼴 이름 사용"
+msgstr "언어 패널용 사용자 정의 글꼴 이름 사용"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:165
 #: data/dconf/org.freedesktop.ibus.gschema.xml:192
@@ -294,7 +294,7 @@ msgstr "사용자 정의 글꼴"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:166
 msgid "Custom font name for language panel"
-msgstr "언어 패널에 사용할 사용자 정의 글꼴 이름"
+msgstr "언어 패널용 사용자 정의 글꼴 이름"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:170 setup/setup.ui:1305
 msgid "Choose glyphs with input method's language on candidate window"

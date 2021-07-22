@@ -10,21 +10,23 @@
 # Yulia <yulia.poyarkova@redhat.com>, 2013-2014
 # yuliya <ypoyarko@redhat.com>, 2015. #zanata
 # Igor Gorbounov <igor.gorbounov@gmail.com>, 2017. #zanata
+# Alexey Rubtsov <rushills@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2017-04-18 11:47+0900\n"
+"PO-Revision-Date: 2021-07-06 15:04+0000\n"
+"Last-Translator: Alexey Rubtsov <rushills@gmail.com>\n"
+"Language-Team: Russian <https://translate.fedoraproject.org/projects/ibus/"
+"ibus/ru/>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-04-16 03:37-0400\n"
-"Last-Translator: Igor Gorbounov <igor.gorbounov@gmail.com>\n"
-"Language-Team: Russian <trans-ru@lists.fedoraproject.org>\n"
-"Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Zanata 3.9.6\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.7.1\n"
 
 #: ../setup/setup.ui.h:1
 msgid "Horizontal"
@@ -72,7 +74,7 @@ msgstr "Параметры IBus"
 
 #: ../setup/setup.ui.h:12
 msgid "The shortcut keys for switching to next input method in the list"
-msgstr "Горячие клавиши для переключения на следующий метод ввода в списке:"
+msgstr "Горячие клавиши для переключения на следующий метод ввода в списке"
 
 #: ../setup/setup.ui.h:13
 msgid "Next input method:"
@@ -80,7 +82,7 @@ msgstr "Следующий метод ввода:"
 
 #: ../setup/setup.ui.h:14
 msgid "The shortcut keys for switching to previous input method in the list"
-msgstr "Горячие клавиши для переключения на предыдущий метод ввода в списке:"
+msgstr "Горячие клавиши для переключения на предыдущий метод ввода в списке"
 
 #: ../setup/setup.ui.h:15
 msgid "Previous input method:"
@@ -88,11 +90,11 @@ msgstr "Предыдущий метод ввода:"
 
 #: ../setup/setup.ui.h:16
 msgid "The shortcut keys for showing emoji dialog"
-msgstr ""
+msgstr "Сочетание клавиш для вызова диалога с Емодзи"
 
 #: ../setup/setup.ui.h:17
 msgid "Emoji dialog:"
-msgstr ""
+msgstr "Диалог Емодзи:"
 
 #: ../setup/setup.ui.h:18
 msgid "..."
@@ -165,19 +167,19 @@ msgstr "Выбрать шрифт:"
 
 #: ../setup/setup.ui.h:35
 msgid "Set a font of emoji candidates on the emoji dialog"
-msgstr ""
+msgstr "Установить шрифт с вариантами емодзи в диалоге емодзи"
 
 #: ../setup/setup.ui.h:36
 msgid "Emoji font:"
-msgstr ""
+msgstr "Шрифт емодзи:"
 
 #: ../setup/setup.ui.h:37
 msgid "Set a language of emoji annotations on the emoji dialog"
-msgstr ""
+msgstr "Установить язык для аннотаций емодзи в диалоге емодзи"
 
 #: ../setup/setup.ui.h:38
 msgid "Emoji annotation language:"
-msgstr ""
+msgstr "Язык аннотаций емодзи:"
 
 #: ../setup/setup.ui.h:39
 msgid "<b>Font and Style</b>"
@@ -294,7 +296,7 @@ msgstr ""
 
 #: ../setup/setup.ui.h:68
 msgid "Start ibus on login"
-msgstr "Запускать iBus при входе в систему:"
+msgstr "Запускать iBus при входе в систему"
 
 #: ../setup/setup.ui.h:69
 msgid "<b>Startup</b>"
@@ -369,6 +371,8 @@ msgstr "Использовать xmodmap"
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
 msgstr ""
+"Запускать xmodmap при переключении систем ibus, если существует файл ."
+"xmodmap или .Xmodmap."
 
 #: ../data/ibus.schemas.in.h:15
 msgid "Trigger shortcut keys"
@@ -376,7 +380,7 @@ msgstr "Сочетание клавиш для включения/выключе
 
 #: ../data/ibus.schemas.in.h:17
 msgid "Trigger shortcut keys for gtk_accelerator_parse"
-msgstr "Сочетание клавиш для  gtk_accelerator_parse"
+msgstr "Сочетание клавиш для gtk_accelerator_parse"
 
 #: ../data/ibus.schemas.in.h:18
 msgid "Enable shortcut keys"
@@ -400,7 +404,7 @@ msgstr "Клавиши для следующего метода ввода"
 
 #: ../data/ibus.schemas.in.h:23
 msgid "The shortcut keys for switching to the next input method in the list"
-msgstr "Сочетание клавиш для переключения на следующий метод ввода в списке:"
+msgstr "Сочетание клавиш для переключения на следующий метод ввода в списке"
 
 #: ../data/ibus.schemas.in.h:24
 msgid "Prev engine shortcut keys"
@@ -408,7 +412,7 @@ msgstr "Клавиши для предыдущего метода ввода"
 
 #: ../data/ibus.schemas.in.h:25
 msgid "The shortcut keys for switching to the previous input method"
-msgstr "Сочетание клавиш для переключения на предыдущий метод ввода в списке:"
+msgstr "Сочетание клавиш для переключения на предыдущий метод ввода в списке"
 
 #: ../data/ibus.schemas.in.h:26
 msgid "Auto hide"
@@ -464,7 +468,7 @@ msgstr "Ориентация таблицы поиска"
 
 #: ../data/ibus.schemas.in.h:35
 msgid "Orientation of lookup table. 0 = Horizontal, 1 = Vertical"
-msgstr "Ориентация таблицы: 0 = горизонтально, 1 = вертикально."
+msgstr "Ориентация таблицы: 0 = горизонтально, 1 = вертикально"
 
 #: ../data/ibus.schemas.in.h:37
 msgid "Show input method name"
@@ -485,10 +489,17 @@ msgid ""
 "to 255 or precentage values in the range 0% to 100%, and 'a' is a floating "
 "point value in the range 0 to 1 of the alpha."
 msgstr ""
+"Значок XKB показывает строку раскладки и она отрисована с тоном RGBA. Тон "
+"RGBA может быть 1. именем цвета из X11, 2. шестнадцатеричным значением "
+"формата «#rrggbb» где «r», «g» и «b» - шестнадцатеричные цифры для красного, "
+"зелёного и синего, 3. цвет RGB в формате «rgb(r,g,b)» иои 4. цвет RGBA в "
+"формате «rgba(r,g,b,a)», где «r», «g», и «b» - или целые в границах от 0 до "
+"255 или процентные значения от 0% до 100%, и 'a - это число с плавающей "
+"запятой в значении от 0 до 1, устанавливающее прозрачность."
 
 #: ../data/ibus.schemas.in.h:42
 msgid "The milliseconds to show the panel icon for a property"
-msgstr ""
+msgstr "Количество миллисекунд для показа иконки панели для свойства"
 
 #: ../data/ibus.schemas.in.h:43
 msgid ""
@@ -516,35 +527,39 @@ msgstr "Свой шрифт для языковой панели"
 
 #: ../data/ibus.schemas.in.h:50
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
-msgstr ""
+msgstr "Сочетание клавиш емодзи для gtk_accelerator_parse"
 
 #: ../data/ibus.schemas.in.h:51
 msgid "The shortcut keys for turning emoji typing on or off"
-msgstr ""
+msgstr "Сочетание клавиш для включения/выключения ввода емодзи"
 
 #: ../data/ibus.schemas.in.h:52
 msgid "Custom font name for emoji chracters on emoji dialog"
-msgstr ""
+msgstr "Имя пользовательского шрифта емодзи в диалоге"
 
 #: ../data/ibus.schemas.in.h:53
 msgid "Default language for emoji dictionary"
-msgstr ""
+msgstr "Язык по-умолчанию в словаре емодзи"
 
 #: ../data/ibus.schemas.in.h:54
 msgid ""
 "Choose a default language of emoji dictionaries on the emoji dialog. The "
 "value $lang is applied to /usr/share/ibus/dicts/emoji-$lang.dict"
 msgstr ""
+"Выбрать словарь по-умолчанию для емодзи на диалоге емодзи. Значение $lang "
+"применяется к /usr/share/ibus/dicts/emoji-$lang.dict"
 
 #: ../data/ibus.schemas.in.h:55
 msgid "favorite emoji list on emoji dialog"
-msgstr ""
+msgstr "список избранных емодзи в диалоге емодзи"
 
 #: ../data/ibus.schemas.in.h:56
 msgid ""
 "You can show the favorite emojis on emoji list if this list has any "
 "characters."
 msgstr ""
+"Вы можете вывести избранные емодзи в списке, если в этом списке содержит "
+"какие-либо символы."
 
 #: ../data/ibus.schemas.in.h:57
 msgid "Embed Preedit Text"
@@ -569,7 +584,7 @@ msgstr ""
 
 #: ../data/ibus.schemas.in.h:63
 msgid "DConf preserve name prefixes"
-msgstr "DConf сохраняет префиксы имен."
+msgstr "DConf сохраняет префиксы имен"
 
 #: ../data/ibus.schemas.in.h:64
 msgid "Prefixes of DConf keys to stop name conversion"
@@ -588,7 +603,7 @@ msgstr "Другие"
 
 #: ../setup/emojilang.py:67
 msgid "Select a language"
-msgstr ""
+msgstr "Выберите язык"
 
 #: ../setup/emojilang.py:70 ../setup/enginedialog.py:60
 #: ../setup/keyboardshortcut.py:339 ../setup/main.py:457
@@ -602,7 +617,7 @@ msgstr "_OK"
 
 #: ../setup/emojilang.py:235 ../setup/enginedialog.py:205
 msgid "More…"
-msgstr ""
+msgstr "Больше…"
 
 #: ../setup/engineabout.py:72
 #, python-format
@@ -754,31 +769,31 @@ msgstr "Запись в файл кэша реестра."
 
 #: ../tools/main.vala:307
 msgid "Resetting…"
-msgstr ""
+msgstr "Сбрасываю…"
 
 #: ../tools/main.vala:321
 msgid "Done"
-msgstr ""
+msgstr "Готово"
 
 #: ../tools/main.vala:366
 msgid "Set or get engine"
-msgstr ""
+msgstr "Установка или получение глобального модуля"
 
 #: ../tools/main.vala:367
 msgid "Exit ibus-daemon"
-msgstr ""
+msgstr "Остановить ibus-daemon"
 
 #: ../tools/main.vala:368
 msgid "Show available engines"
-msgstr ""
+msgstr "Показать доступные глобальные модули"
 
 #: ../tools/main.vala:369
 msgid "(Not implemented)"
-msgstr ""
+msgstr "(не реализовано)"
 
 #: ../tools/main.vala:370
 msgid "Restart ibus-daemon"
-msgstr ""
+msgstr "Перезапустить ibus-daemon"
 
 #: ../tools/main.vala:371
 msgid "Show version"
@@ -786,31 +801,31 @@ msgstr "Показать версию"
 
 #: ../tools/main.vala:372
 msgid "Show the content of registry cache"
-msgstr ""
+msgstr "Показать содержимое кеша реестра"
 
 #: ../tools/main.vala:373
 msgid "Create registry cache"
-msgstr ""
+msgstr "Создать кеш реестра"
 
 #: ../tools/main.vala:374
 msgid "Print the D-Bus address of ibus-daemon"
-msgstr ""
+msgstr "Вывести адрес D-Bus сервиса ibus-daemon"
 
 #: ../tools/main.vala:375
 msgid "Show the configuration values"
-msgstr ""
+msgstr "Показать значения параметров настройки"
 
 #: ../tools/main.vala:376
 msgid "Reset the configuration values"
-msgstr ""
+msgstr "Сбросить значения параметров настройки"
 
 #: ../tools/main.vala:378
 msgid "Save emoji on dialog to clipboard "
-msgstr ""
+msgstr "Сохранить емодзи с диалога в буфер обмена "
 
 #: ../tools/main.vala:380
 msgid "Show this information"
-msgstr ""
+msgstr "Показать эту информацию"
 
 #: ../tools/main.vala:386
 #, c-format
@@ -830,48 +845,48 @@ msgstr "Неизвестная команда: %s\n"
 
 #: ../ui/gtk3/emojier.vala:289 ../ui/gtk3/panel.vala:1224
 msgid "Emoji Dialog"
-msgstr ""
+msgstr "Диалог Емодзи"
 
 #: ../ui/gtk3/emojier.vala:293
 msgid "Type annotation or choose emoji"
-msgstr ""
+msgstr "Введите аннотацию, чтобы выбрать емодзи"
 
 #: ../ui/gtk3/emojier.vala:564 ../ui/gtk3/emojier.vala:603
 msgid "Favorites"
-msgstr ""
+msgstr "Избранные"
 
 #: ../ui/gtk3/emojier.vala:628
 msgid "Page Down"
-msgstr ""
+msgstr "Стр. вниз"
 
 #: ../ui/gtk3/emojier.vala:639
 msgid "Page Up"
-msgstr ""
+msgstr "Стр. вверх"
 
 #. TODO: Provide a custom description and annotation for
 #. the favorite emojis.
 #: ../ui/gtk3/emojier.vala:813 ../ui/gtk3/emojier.vala:827
 #, c-format
 msgid "Description: %s"
-msgstr ""
+msgstr "Описание: %s"
 
 #: ../ui/gtk3/emojier.vala:813
 msgid "None"
-msgstr ""
+msgstr "Нет"
 
 #: ../ui/gtk3/emojier.vala:818 ../ui/gtk3/emojier.vala:857
 #, c-format
 msgid "Code point: %s"
-msgstr ""
+msgstr "Точка кода: %s"
 
 #: ../ui/gtk3/emojier.vala:838
 #, c-format
 msgid "Annotations: %s"
-msgstr ""
+msgstr "Аннотации: %s"
 
 #: ../ui/gtk3/panel.vala:271 ../ui/gtk3/panel.vala:302
 msgid "IBus Panel"
-msgstr ""
+msgstr "Панель IBus"
 
 #: ../ui/gtk3/panel.vala:823
 msgid "IBus Update"
@@ -879,7 +894,7 @@ msgstr "Обновление IBus"
 
 #: ../ui/gtk3/panel.vala:824 ../ui/gtk3/panel.vala:835
 msgid "Super+space is now the default hotkey."
-msgstr ""
+msgstr "Теперь горячей кнопкой служит Super+пробел."
 
 #: ../ui/gtk3/panel.vala:1196
 msgid "IBus is an intelligent input bus for Linux/Unix."
@@ -888,8 +903,9 @@ msgstr "IBus &mdash; интеллектуальная система ввода 
 #: ../ui/gtk3/panel.vala:1200
 msgid "translator-credits"
 msgstr ""
-"Alexey Kotlyarov <koterpillar@gmail.com>, 2009.\n"
-"Yulia <ypoyarko@redhat.com>, 2010."
+"Alexey Kotlyarov <koterpillar@gmail.com>, 2009\n"
+"Yulia <ypoyarko@redhat.com>, 2010\n"
+"Alexey Rubtsov <rushills@gmail.com>, 2021"
 
 #: ../ui/gtk3/panel.vala:1219
 msgid "Preferences"
@@ -911,11 +927,11 @@ msgstr "default:LTR"
 
 #: ../ui/gtk3/emojierapp.vala:45
 msgid "Canceled to choose an emoji."
-msgstr ""
+msgstr "Выбор емодзи отменён."
 
 #: ../ui/gtk3/emojierapp.vala:52
 msgid "Copied an emoji to your clipboard."
-msgstr ""
+msgstr "Емодзи скопировано в буфер обмена."
 
 #. TRANSLATORS: "FONT" should be capital and translatable.
 #. * It's used for an argument command --font=FONT
@@ -926,7 +942,7 @@ msgstr ""
 
 #: ../ui/gtk3/emojierapp.vala:83
 msgid "FONT"
-msgstr ""
+msgstr "ШРИФТ"
 
 #. TRANSLATORS: "LANG" should be capital and translatable.
 #. * It's used for an argument command --lang=LANG
@@ -937,4 +953,4 @@ msgstr ""
 
 #: ../ui/gtk3/emojierapp.vala:89
 msgid "LANG"
-msgstr ""
+msgstr "ЯЗЫК"

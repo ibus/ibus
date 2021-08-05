@@ -121,7 +121,7 @@ GType   ibus_engine_simple_get_type       (void);
  * @simple: An IBusEngineSimple.
  * @data: (element-type guint16) (array): The table which must be available
  *      during the whole life of the simple engine.
- * @max_seq_len: Maximum length of a swquence in the table (cannot be greater
+ * @max_seq_len: Maximum length of a sequence in the table (cannot be greater
  *      than %IBUS_MAX_COMPOSE_LEN)
  * @n_seqs: number of sequences in the table
  *

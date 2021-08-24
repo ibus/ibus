@@ -1497,7 +1497,10 @@ _set_cursor_location_internal (IBusIMContext *ibusimcontext)
 
 #if GTK_CHECK_VERSION (3, 98, 4)
 #elif GTK_CHECK_VERSION (2, 91, 0)
-    area.y += gdk_window_get_height (ibusimcontext->client_window);
+    if (area.x == -1 && area.y == -1 && area.width == 0 && area.height == 0) {
+        area.x = 0;
+        area.y += gdk_window_get_height (ibusimcontext->client_window);
+    }
 #else
     if (area.x == -1 && area.y == -1 && area.width == 0 && area.height == 0) {
         gint w, h;

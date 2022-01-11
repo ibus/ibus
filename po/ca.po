@@ -910,7 +910,6 @@ msgstr ""
 
 #: src/ibusemojigen.h:37
 #, fuzzy
-#| msgid "Smileys & People"
 msgid "Smileys & Emotion"
 msgstr "Emoticones i gent"
 
@@ -2362,7 +2361,6 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:853
 #, fuzzy
-#| msgid "Old South Arabian"
 msgid "Old Sogdian"
 msgstr "Àrab del sud antic"
 
@@ -2371,7 +2369,6 @@ msgstr "Àrab del sud antic"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:857
 #, fuzzy
-#| msgid "Lydian"
 msgid "Sogdian"
 msgstr "Lidi"
 
@@ -2590,7 +2587,6 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:981
 #, fuzzy
-#| msgid "Variation Selectors Supplement"
 msgid "Tamil Supplement"
 msgstr "Suplement de selectors de variació"
 
@@ -2627,7 +2623,6 @@ msgstr "Jeroglífics egipcis"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1001
 #, fuzzy
-#| msgid "Egyptian Hieroglyphs"
 msgid "Egyptian Hieroglyph Format Controls"
 msgstr "Jeroglífics egipcis"
 
@@ -2769,7 +2764,6 @@ msgstr "Notació musical en grec antic"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1081
 #, fuzzy
-#| msgid "Aegean Numbers"
 msgid "Mayan Numerals"
 msgstr "Nombres egeus"
 
@@ -2953,7 +2947,6 @@ msgstr "Símbols i pictogrames suplementaris"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1185
 #, fuzzy
-#| msgid "Symbols"
 msgid "Chess Symbols"
 msgstr "Símbols"
 

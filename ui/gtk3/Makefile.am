@@ -257,15 +257,12 @@ panelbinding.o: $(srcdir)/panelbinding.c
 
 MAINTAINERCLEANFILES += extension.c panelbinding.c
 
-man_seven_files = $(man_seven_in_files:.7.in=.7)
-man_seven_DATA =$(man_seven_files:.7=.7.gz)
+man_seven_DATA = $(man_seven_in_files:.7.in=.7)
 man_sevendir = $(mandir)/man7
 %.7: %.7.in
 	$(AM_V_GEN) sed \
 	    -e 's|@VERSION[@]|$(VERSION)|g' $< > $@.tmp && \
 	    mv $@.tmp $@
-%.7.gz: %.7
-	$(AM_V_GEN) gzip -c $< > $@.tmp && mv $@.tmp $@
 
 desktop_in_files = \
     ibus-ui-emojier.desktop.in \
@@ -293,7 +290,6 @@ CLEANFILES += \
     $(desktop_DATA) \
     $(desktop_notrans_files) \
     $(man_seven_DATA) \
-    $(man_seven_files) \
     $(NULL)
 
 endif

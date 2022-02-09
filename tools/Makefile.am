@@ -113,15 +113,12 @@ libibusimmodule_la_LDFLAGS = \
     $(NULL)
 
 man_one_in_files = ibus.1.in
-man_one_files = $(man_one_in_files:.1.in=.1)
-man_one_DATA =$(man_one_files:.1=.1.gz)
+man_one_DATA = $(man_one_in_files:.1.in=.1)
 man_onedir = $(mandir)/man1
 %.1: %.1.in
 	$(AM_V_GEN) sed \
 		-e 's|@VERSION[@]|$(VERSION)|g' $< > $@.tmp && \
 		mv $@.tmp $@
-%.1.gz: %.1
-	$(AM_V_GEN) gzip -c $< > $@.tmp && mv $@.tmp $@
 
 EXTRA_DIST = \
     $(ibus_immodule_vapi) \
@@ -133,7 +130,6 @@ EXTRA_DIST = \
 
 CLEANFILES = \
     $(man_one_DATA) \
-    $(man_one_files) \
     $(NULL)
 
 if ENABLE_EMOJI_DICT

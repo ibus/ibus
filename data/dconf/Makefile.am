@@ -38,15 +38,12 @@ dconfdb_DATA = 00-upstream-settings
 		{ rc=$$?; $(RM) -rf $@; exit $$rc; }
 
 man_5_in_files = 00-upstream-settings.5.in ibus.5.in
-man_5_files = $(man_5_in_files:.5.in=.5)
-man_5_DATA =$(man_5_files:.5=.5.gz)
+man_5_DATA = $(man_5_in_files:.5.in=.5)
 man_5dir = $(mandir)/man5
 %.5: %.5.in
 	$(AM_V_GEN) sed \
 	    -e 's|@VERSION[@]|$(VERSION)|g' $< > $@.tmp && \
 	    mv $@.tmp $@
-%.5.gz: %.5
-	$(AM_V_GEN) gzip -c $< > $@.tmp && mv $@.tmp $@
 
 install-data-hook:
 	if test -z "$(DESTDIR)"; then \
@@ -63,7 +60,6 @@ EXTRA_DIST = \
 
 CLEANFILES = \
     $(man_5_DATA) \
-    $(man_5_files) \
     $(NULL)
 
 MAINTAINERCLEANFILES = \

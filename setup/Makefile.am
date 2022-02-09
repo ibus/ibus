@@ -56,20 +56,16 @@ org.freedesktop.IBus.Setup.desktop: ibus-setup.desktop
 	$(AM_V_GEN) $(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@
 
 man_one_in_files = ibus-setup.1.in
-man_one_files = $(man_one_in_files:.1.in=.1)
-man_one_DATA =$(man_one_files:.1=.1.gz) 
+man_one_DATA = $(man_one_in_files:.1.in=.1)
 man_onedir = $(mandir)/man1
 %.1: %.1.in
 	$(AM_V_GEN) sed \
 		-e 's|@VERSION[@]|$(VERSION)|g' $< > $@.tmp && \
 		mv $@.tmp $@
-%.1.gz: %.1
-	$(AM_V_GEN) gzip -c $< > $@.tmp && mv $@.tmp $@
 
 CLEANFILES = \
     $(desktop_DATA) \
     $(man_one_DATA) \
-    $(man_one_files) \
     *.pyc \
     ibus-setup \
     $(NULL)

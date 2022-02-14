@@ -1945,7 +1945,9 @@ _ibus_context_forward_key_event_cb (IBusInputContext  *ibuscontext,
 #if GTK_CHECK_VERSION (3, 98, 4)
     int group = 0;
     g_return_if_fail (GTK_IS_IM_CONTEXT (ibusimcontext));
-    if (keycode == 0 && ibusimcontext->client_window) {
+    if (keycode != 0) {
+        keycode += 8; // to GTK keycode
+    } else if (ibusimcontext->client_window) {
         GdkDisplay *display =
                 gtk_widget_get_display (ibusimcontext->client_window);
         GdkKeymapKey *keys = NULL;

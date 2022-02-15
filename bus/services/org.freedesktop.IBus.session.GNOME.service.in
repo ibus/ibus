@@ -1,5 +1,5 @@
 [Unit]
-Description=IBus Daemon
+Description=IBus Daemon for GNOME
 CollectMode=inactive-or-failed
 
 # Require GNOME session and specify startup ordering

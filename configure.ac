@@ -3,8 +3,8 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2016 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2015-2021 Takao Fujiwara <takao.fujiwara1@gmail.com>
-# Copyright (c) 2007-2021 Red Hat, Inc.
+# Copyright (c) 2015-2022 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2007-2022 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -791,24 +791,22 @@ AC_SUBST(XKBCONFIG_BASE)
 AC_SUBST([GDBUS_CODEGEN], [`$PKG_CONFIG --variable gdbus_codegen gio-2.0`])
 
 # OUTPUT files
-AC_CONFIG_FILES([ po/Makefile.in
-Makefile
-ibus-1.0.pc
-ibus.spec
+AC_CONFIG_FILES([
+po/Makefile.in
+bindings/Makefile
+bindings/pygobject/Makefile
+bindings/vala/Makefile
+bus/Makefile
+bus/services/Makefile
 client/Makefile
 client/gtk2/Makefile
 client/gtk3/Makefile
 client/gtk4/Makefile
 client/x11/Makefile
 client/wayland/Makefile
-src/Makefile
-src/ibusversion.h
-src/tests/Makefile
-bus/Makefile
-portal/Makefile
-engine/Makefile
-util/Makefile
-util/IMdkit/Makefile
+conf/Makefile
+conf/dconf/Makefile
+conf/memconf/Makefile
 data/Makefile
 data/annotations/Makefile
 data/icons/Makefile
@@ -819,20 +817,24 @@ docs/Makefile
 docs/reference/Makefile
 docs/reference/ibus/ibus-docs.sgml
 docs/reference/ibus/Makefile
-m4/Makefile
+engine/Makefile
 ibus/_config.py
 ibus/Makefile
 ibus/interface/Makefile
+m4/Makefile
+portal/Makefile
+setup/Makefile
+src/Makefile
+src/ibusversion.h
+src/tests/Makefile
+tools/Makefile
 ui/Makefile
 ui/gtk3/Makefile
-setup/Makefile
-bindings/Makefile
-bindings/pygobject/Makefile
-bindings/vala/Makefile
-conf/Makefile
-conf/dconf/Makefile
-conf/memconf/Makefile
-tools/Makefile
+util/Makefile
+util/IMdkit/Makefile
+Makefile
+ibus-1.0.pc
+ibus.spec
 ])
 
 AC_OUTPUT

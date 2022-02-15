@@ -317,11 +317,6 @@ install-data-hook:
 	        rm "$(DESTDIR)$(dictdir)/$$file" || exit $$?; \
 	    fi; \
 	done
-	$(MKDIR_P) "$(DESTDIR)$(SYSTEMD_USER_UNIT_DIR)/gnome-session.target.wants/"
-	( \
-		cd "$(DESTDIR)$(SYSTEMD_USER_UNIT_DIR)/gnome-session.target.wants" ; \
-		$(LN_S) -f "../org.freedesktop.IBus.session.GNOME.service" .; \
-	)
 
 emoji_parser_SOURCES =          \
     emoji-parser.c              \
@@ -388,17 +383,7 @@ clean-local:
 	$(NULL)
 endif
 
-if ENABLE_SYSTEMD
-systemdservice_in_files = org.freedesktop.IBus.session.GNOME.service.in
-systemdservice_DATA = $(systemdservice_in_files:.service.in=.service)
-systemdservicedir=$(SYSTEMD_USER_UNIT_DIR)
-
-org.freedesktop.IBus.session.GNOME.service: org.freedesktop.IBus.session.GNOME.service.in
-	$(AM_V_GEN) sed -e "s|\@bindir\@|$(bindir)|"  $< > $@.tmp && mv $@.tmp $@
-endif
-
 EXTRA_DIST =                    \
-    org.freedesktop.IBus.session.GNOME.service.in \
     emoji-parser.c              \
     ibusversion.h.in            \
     ibusmarshalers.list         \
@@ -408,7 +393,6 @@ EXTRA_DIST =                    \
     $(NULL)
 
 CLEANFILES +=                   \
-    $(systemdservice_DATA)      \
     $(BUILT_SOURCES)            \
     stamp-ibusmarshalers.h      \
     stamp-ibusenumtypes.h       \

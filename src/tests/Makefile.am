@@ -3,7 +3,7 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2015 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2015-2021 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2015-2022 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # Copyright (c) 2007-2018 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
@@ -117,11 +117,11 @@ org.freedesktop.IBus.Desktop.Testing.desktop: ibus-desktop-testing.desktop.in
 	mv $@.tmp $@
 endif
 
-$(test_metas): $(test_metas_in) $(test_programs)
+$(test_metas): $(test_metas_in)
 	f=`echo $@ | sed -e 's/\.test//'`; \
 	TEST_EXEC=$(test_execsdir)/$$f; \
-	sed -e "s|@TEST_EXEC[@]|$$TEST_EXEC|g" $(test_metas_in) > $@.tmp; \
-	mv $@.tmp $@; \
+	sed -e "s|@TEST_EXEC[@]|$$TEST_EXEC|g" $(srcdir)/$(test_metas_in) \
+	    > $@.tmp && mv $@.tmp $@; \
 	$(NULL)
 
 ibus-compose-locales: ibus-compose-locales.in

@@ -29,6 +29,8 @@ pwd
 pstree -asp $$
 gsettings list-recursively org.gnome.shell
 rpm -q gnome-shell-extension-no-overview gnome-shell gnome-session
+ps -ef | grep ibus | grep -v grep
+ibus address
 '
 
 if [ $# -gt 0 ] ; then

@@ -2,7 +2,7 @@
 Name=IBus Desktop Testing Runner
 GenericName=Input Method Desktop Testing Runner
 Comment=Test plugin for IBus Desktop Testing
-Exec=@ibexecdir@/ibus-desktop-testing-autostart /var/tmp/ibus-ci-autostart.log
+Exec=@libexecdir@/ibus-desktop-testing-autostart /var/tmp/ibus-ci-autostart.log
 Terminal=false
 Type=Application
 Encoding=UTF-8

@@ -405,7 +405,7 @@ if test x"$enable_systemd" = x"yes"; then
     PKG_CHECK_MODULES(SYSTEMD, [
         systemd >= 0.7.5
     ])
-    AC_SUBST([SYSTEMD_USER_UNIT_DIR], [`$PKG_CONFIG --variable systemduserunitdir systemd`])
+    AC_SUBST([SYSTEMD_USER_UNIT_DIR], [`$PKG_CONFIG --define-variable prefix='${prefix}' --variable systemduserunitdir systemd`])
     enable_systemd="yes (enabled, use --disable-systemd-services to disable)"
 fi
 

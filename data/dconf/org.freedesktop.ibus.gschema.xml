@@ -28,7 +28,52 @@
       <description>The saved version number will be used to check the difference between the version of the previous installed ibus and one of the current ibus.</description>
     </key>
     <key name="xkb-latin-layouts" type="as">
-      <default>[ 'ara', 'bg', 'cz', 'dev', 'gr', 'gur', 'in', 'jp(kana)', 'mal', 'mkd', 'ru', 'ua' ]</default>
+      <default>
+        [ 'af', 'af(fa-olpc)', 'af(ps-olpc)', 'af(ps)', 'af(uz)',
+        'af(uz-olpc)', 'am', 'am(eastern)', 'am(eastern-alt)',
+        'am(phonetic)', 'am(phonetic-alt)', 'am(western)', 'ara',
+        'ara(azerty)', 'ara(azerty_digits)', 'ara(buckwalter)',
+        'ara(digits)', 'ara(qwerty)', 'ara(qwerty_digits)',
+        'az(cyrillic)', 'bd', 'bd(probhat)', 'bg', 'bg(bas_phonetic)',
+        'bg(phonetic)', 'brai', 'brai(left_hand)', 'brai(right_hand)',
+        'bt', 'by', 'by(legacy)', 'ca(ike)', 'ca(multi-2gr)',
+        'cn(tib)', 'cn(tib_asciinum)', 'cn(ug)', 'cz', 'cz(ucw)',
+        'de(ru)', 'dev', 'et', 'fr(geo)', 'ge', 'ge(os)', 'gr',
+        'gr(extended)', 'gr(nodeadkeys)', 'gr(polytonic)',
+        'gr(simple)', 'gur', 'il', 'il(biblical)', 'il(lyx)',
+        'il(phonetic)', 'in', 'in(ben)', 'in(ben_baishakhi)',
+        'in(ben_bornona)', 'in(ben_gitanjali)', 'in(ben_inscript)',
+        'in(ben_probhat)', 'in(bolnagri)', 'in(deva)', 'in(guj)',
+        'in(guru)', 'in(hin-kagapa)', 'in(hin-wx)', 'in(jhelum)',
+        'in(kan)', 'in(kan-kagapa)', 'in(mal)', 'in(mal_enhanced)',
+        'in(mal_lalitha)', 'in(mar-kagapa)', 'in(ori)',
+        'in(san-kagapa)', 'in(tam)', 'in(tam_tamilnet)',
+        'in(tam_tamilnet_TAB)', 'in(tam_tamilnet_TSCII)',
+        'in(tam_tamilnet_with_tam_nums)', 'in(tel)', 'in(tel-kagapa)',
+        'in(urd-phonetic)', 'in(urd-phonetic3)', 'in(urd-winkeys)',
+        'iq', 'ir', 'ir(pes_keypad)', 'jp(kana)', 'jp(mac)', 'kg',
+        'kg(phonetic)', 'kh', 'kz', 'kz(kazrus)', 'kz(ruskaz)', 'la',
+        'la(stea)', 'lk', 'lk(tam_TAB)', 'lk(tam_unicode)', 'ma',
+        'ma(tifinagh)', 'ma(tifinagh-alt)',
+        'ma(tifinagh-alt-phonetic)', 'ma(tifinagh-extended)',
+        'ma(tifinagh-extended-phonetic)', 'ma(tifinagh-phonetic)',
+        'me(cyrillic)', 'me(cyrillicalternatequotes)',
+        'me(cyrillicyz)', 'mk', 'mk(nodeadkeys)', 'mm', 'mn', 'mv',
+        'np', 'ph(capewell-dvorak-bay)', 'ph(capewell-qwerf2k6-bay)',
+        'ph(colemak-bay)', 'ph(dvorak-bay)', 'ph(qwerty-bay)', 'pk',
+        'pk(ara)', 'pk(snd)', 'pk(urd-crulp)', 'pk(urd-nla)',
+        'pl(ru_phonetic_dvorak)', 'rs', 'rs(alternatequotes)',
+        'rs(rue)', 'rs(yz)', 'ru', 'ru(bak)', 'ru(chm)', 'ru(cv)',
+        'ru(dos)', 'ru(kom)', 'ru(legacy)', 'ru(mac)',
+        'ru(os_legacy)', 'ru(os_winkeys)', 'ru(phonetic)',
+        'ru(phonetic_winkeys)', 'ru(sah)', 'ru(srp)', 'ru(tt)',
+        'ru(typewriter)', 'ru(typewriter-legacy)', 'ru(udm)',
+        'ru(xal)', 'se(rus)', 'se(rus_nodeadkeys)', 'se(swl)', 'sy',
+        'sy(syc)', 'sy(syc_phonetic)', 'th', 'th(pat)', 'th(tis)',
+        'tj', 'tj(legacy)', 'tz', 'ua', 'ua(homophonic)',
+        'ua(legacy)', 'ua(phonetic)', 'ua(rstu)', 'ua(rstu_ru)',
+        'ua(typewriter)', 'ua(winkeys)', 'us(chr)', 'us(rus)', 'uz' ]
+      </default>
       <summary>Latin layouts which have no ASCII</summary>
       <description>US layout is appended to the Latin layouts. variant can be omitted.</description>
     </key>

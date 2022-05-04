@@ -15,20 +15,22 @@
 # A S Alam <aalam@fedoraproject.org>, 2015. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2015. #zanata
 # A S Alam <aalam@fedoraproject.org>, 2019. #zanata
+# A S Alam <amanpreet.alam@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2019-04-16 17:33+0900\n"
+"PO-Revision-Date: 2022-04-18 16:17+0000\n"
+"Last-Translator: A S Alam <amanpreet.alam@gmail.com>\n"
+"Language-Team: Punjabi <https://translate.fedoraproject.org/projects/ibus/"
+"ibus/pa/>\n"
+"Language: pa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-05-23 03:58+0000\n"
-"Last-Translator: A S Alam <aalam@fedoraproject.org>\n"
-"Language-Team: Panjabi (Punjabi) <punjabi-users@lists.sf.net>\n"
-"Language: pa\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Zanata 4.6.2\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -280,15 +282,15 @@ msgstr "ਭਾਸ਼ਾ ਪੈਨਲ ਲਈ ਮਨਪਸੰਦ ਫੋਂਟ ਨ�
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:173
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
-msgstr ""
+msgstr "gtk_accelerator_parse ਲਈ ਸ਼ਾਰਟਕੱਟ ਕੁੰਜੀਆਂ ਟਰਿੱਗਰ ਕਰੋ"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:174
 msgid "The shortcut keys for turning Unicode typing on or off"
-msgstr ""
+msgstr "ਯੂਨੀਕੋਡ ਲਿਖਣ ਨੂੰ ਚਾਲੂ ਜਾਂ ਬੰਦ ਕਰਨ ਵਾਸਤੇ ਸ਼ਾਰਟਕੱਟ ਸਵਿੱਚਾਂ"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:178
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
-msgstr ""
+msgstr "gtk_accelerator_parse ਲਈ ਸ਼ਾਰਟਕੱਟ ਕੁੰਜੀਆਂ ਟਰਿੱਗਰ ਕਰੋ"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:179
 msgid "The shortcut keys for turning emoji typing on or off"
@@ -2996,7 +2998,7 @@ msgstr ""
 
 #: tools/main.vala:381
 msgid "Resetting…"
-msgstr "...ਮੁੜ-ਸੈਟ ਕਰ ਰਿਹਾ ਹੈ"
+msgstr "...ਮੁੜ-ਸੈਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
 #: tools/main.vala:399
 msgid "Done"
@@ -3032,7 +3034,7 @@ msgstr "ਰਜਿਸਟਰੀ ਕੈਚੇ ਦੇ ਅੰਸ਼ ਵਿਖਾਓ"
 
 #: tools/main.vala:451
 msgid "Create registry cache"
-msgstr "ਰਜਿਸਟਰੀ ਕੈਚੇ ਬਣਾਓ।"
+msgstr "ਰਜਿਸਟਰੀ ਕੈਸ਼ ਬਣਾਓ"
 
 #: tools/main.vala:452
 msgid "Print the D-Bus address of ibus-daemon"
@@ -3216,9 +3218,9 @@ msgstr "IBus ਲੀਨਕਸ/ਯੂਨੈਕਸ ਲਈ ਮਾਹਰ ਇੰਪੁ
 #: ui/gtk3/panel.vala:1099
 msgid "translator-credits"
 msgstr ""
-"ਅਮਨਪਰੀਤ ਸਿੰਘ ਆਲਮ <aalam@users.sf.net> ੨੦੦੮-੨੦੧੨\n"
+"ਅਮਨਪਰੀਤ ਸਿੰਘ ਆਲਮ <aalam@users.sf.net> ੨੦੦੮-੨੦੨੨\n"
 "ਜਸਵਿੰਦਰ ਸਿੰਘ <j.phulewala@gmail.com>\n"
-"http://www.satluj.com/"
+"http://satluj.org"
 
 #: ui/gtk3/panel.vala:1118
 msgid "Preferences"

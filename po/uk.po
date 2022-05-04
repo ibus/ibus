@@ -4,14 +4,14 @@
 # This file is distributed under the same license as the ibus package.
 #
 # Translators:
-# Yuri Chornoivan <yurchor@ukr.net>, 2011-2015, 2017-2020, 2021.
+# Yuri Chornoivan <yurchor@ukr.net>, 2011-2015, 2017-2020, 2021, 2022.
 # fujiwara <takao.fujiwara1@gmail.com>, 2015, 2017. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2022-04-29 18:05+0900\n"
-"PO-Revision-Date: 2021-01-17 12:37+0000\n"
+"PO-Revision-Date: 2022-05-04 11:02+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/uk/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.12.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -1050,10 +1050,8 @@ msgstr "Додаткові сирійські"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:113
-#, fuzzy
-#| msgid "Arabic Extended-A"
 msgid "Arabic Extended-B"
-msgstr "Арабська розширена-A"
+msgstr "Арабська розширена-B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2201,7 +2199,7 @@ msgstr "Кавказька албанська"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:769
 msgid "Vithkuqi"
-msgstr ""
+msgstr "Віткукі"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2214,10 +2212,8 @@ msgstr "Лінійна писемність A"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:777
-#, fuzzy
-#| msgid "Latin Extended-A"
 msgid "Latin Extended-F"
-msgstr "Латинь розширена-A"
+msgstr "Латинь розширена-F"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2391,10 +2387,8 @@ msgstr "Согдійська"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:877
-#, fuzzy
-#| msgid "Old Turkic"
 msgid "Old Uyghur"
-msgstr "Давня турецька"
+msgstr "Давня уйгурська"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2582,10 +2576,8 @@ msgstr "Сойомбо"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:985
-#, fuzzy
-#| msgid "Unified Canadian Aboriginal Syllabics Extended"
 msgid "Unified Canadian Aboriginal Syllabics Extended-A"
-msgstr "Уніфіковані силабічні канадських аборигенів (додаткові)"
+msgstr "Уніфіковані силабічні канадських аборигенів (додаткові) A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2669,7 +2661,7 @@ msgstr "Клинопис ранньої династії"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1033
 msgid "Cypro-Minoan"
-msgstr ""
+msgstr "Кіпро-мінойська"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2710,10 +2702,8 @@ msgstr "Мро"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1057
-#, fuzzy
-#| msgid "Tangut"
 msgid "Tangsa"
-msgstr "Тангутська"
+msgstr "Тангса"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2782,10 +2772,8 @@ msgstr "Тангутська, доповнення"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1097
-#, fuzzy
-#| msgid "Kana Extended-A"
 msgid "Kana Extended-B"
-msgstr "Кана розширена-A"
+msgstr "Кана розширена-B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2833,10 +2821,8 @@ msgstr "Керування форматами скоропису"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1125
-#, fuzzy
-#| msgid "Ancient Greek Musical Notation"
 msgid "Znamenny Musical Notation"
-msgstr "Давньогрецькі символи запису музики"
+msgstr "Символи запису музики знаменного співу"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2898,10 +2884,8 @@ msgstr "Жестова писемність Саттон"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1161
-#, fuzzy
-#| msgid "Latin Extended-A"
 msgid "Latin Extended-G"
-msgstr "Латинь розширена-A"
+msgstr "Латинь розширена-G"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2922,7 +2906,7 @@ msgstr "Ньякензька пахау-хмонг"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1173
 msgid "Toto"
-msgstr ""
+msgstr "Тото"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2935,10 +2919,8 @@ msgstr "Ванчо"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1181
-#, fuzzy
-#| msgid "Ethiopic Extended-A"
 msgid "Ethiopic Extended-B"
-msgstr "Ефіопська розширена-A"
+msgstr "Ефіопська розширена-B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3440,13 +3422,15 @@ msgstr "Панель IBus"
 
 #: ui/gtk3/panel.vala:756
 msgid "IBus Notification"
-msgstr ""
+msgstr "Сповіщення IBus"
 
 #: ui/gtk3/panel.vala:757 ui/gtk3/panel.vala:766 ui/gtk3/panel.vala:770
 msgid ""
 "Keymap changes do not work in Plasma Wayland at present. Please use "
 "systemsettings5 instead."
 msgstr ""
+"У Плазмі для Wayland зміна розкладок у цій програмі поки не працює. Будь "
+"ласка, скористайтеся для внесення змін systemsettings5."
 
 #: ui/gtk3/panel.vala:1045
 #, c-format

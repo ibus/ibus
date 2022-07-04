@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2022-06-20 20:30+0900\n"
-"PO-Revision-Date: 2022-05-04 11:02+0000\n"
+"PO-Revision-Date: 2022-07-04 10:18+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/uk/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.13\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -301,48 +301,38 @@ msgid "Custom font name for language panel"
 msgstr "Назва нетипового шрифту для мовної панелі"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:215
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom theme"
-msgstr "Використовувати нетиповий шрифт"
+msgstr "Використовувати нетипову тему"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:216
-#, fuzzy
-#| msgid "Use custom font name for language panel"
 msgid "Use custom theme name for language panel"
-msgstr "Використовувати нетиповий шрифт для мовної панелі"
+msgstr "Використовувати нетипову тему для мовної панелі"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:220
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom theme"
-msgstr "Нетиповий шрифт"
+msgstr "Нетипова тема"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:221
-#, fuzzy
-#| msgid "Custom font name for language panel"
 msgid "Custom theme name for language panel"
-msgstr "Назва нетипового шрифту для мовної панелі"
+msgstr "Назва нетипової теми для мовної панелі"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:225
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom icon"
-msgstr "Використовувати нетиповий шрифт"
+msgstr "Використовувати нетипову піктограму"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:226
 msgid "Use custom icon name for arrow buttons on candidate window"
 msgstr ""
+"Використовувати нетипову назву піктограми для кнопок стрілок у вікні "
+"варіантів"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:230
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom icon"
-msgstr "Нетиповий шрифт"
+msgstr "Нетипова піктограма"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:231
 msgid "Custom icon name for arrow buttons on candidate window"
-msgstr ""
+msgstr "Нетипова назва піктограми для кнопок стрілок у вікні варіантів"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:235 setup/setup.ui:1317
 msgid "Choose glyphs with input method's language on candidate window"
@@ -903,34 +893,24 @@ msgstr ""
 "гліфів у позиції кодування"
 
 #: setup/setup.ui:1341
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom theme:"
-msgstr "Нетиповий шрифт:"
+msgstr "Нетипова тема:"
 
 #: setup/setup.ui:1342
-#, fuzzy
-#| msgid "Choose glyphs with input method's language on candidate window"
 msgid "Choose a theme of the candidate window"
-msgstr "Вибирати гліфи з мови способу введення у вікні варіантів"
+msgstr "Вибирати тему для вікна варіантів"
 
 #: setup/setup.ui:1378
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom icon:"
-msgstr "Нетиповий шрифт:"
+msgstr "Нетипова піктограма:"
 
 #: setup/setup.ui:1379
-#, fuzzy
-#| msgid "Choose glyphs with input method's language on candidate window"
 msgid "Choose a theme of the arrow buttons on the candidate window"
-msgstr "Вибирати гліфи з мови способу введення у вікні варіантів"
+msgstr "Вибирати тему кнопок зі стрілками у вікні варіантів"
 
 #: setup/setup.ui:1424
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Font and Theme</b>"
-msgstr "<b>Шрифт і стиль</b>"
+msgstr "<b>Шрифт і тема</b>"
 
 #: setup/setup.ui:1444
 msgid "Advanced"
@@ -3549,10 +3529,8 @@ msgid "Quit"
 msgstr "Вийти"
 
 #: ui/gtk3/panel.vala:1324
-#, fuzzy
-#| msgid "Next input method:"
 msgid "No input method"
-msgstr "Наступний спосіб введення:"
+msgstr "Немає способу введення"
 
 #. Translators: If your locale is RTL, the msgstr is "default:RTL".
 #. * Otherwise the msgstr is "default:LTR".

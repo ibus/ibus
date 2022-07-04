@@ -17,13 +17,13 @@
 # Roman Spirgi <bigant@fedoraproject.org>, 2017. #zanata
 # Thomas Eichhorn <tomislav@posteo.de>, 2017. #zanata
 # Tobias Weise <tobias.weise@web.de>, 2017. #zanata
-# Mike FABIAN <mfabian@redhat.com>, 2020, 2021.
+# Mike FABIAN <mfabian@redhat.com>, 2020, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2022-06-20 20:30+0900\n"
-"PO-Revision-Date: 2021-01-28 17:40+0000\n"
+"PO-Revision-Date: 2022-07-04 10:18+0000\n"
 "Last-Translator: Mike FABIAN <mfabian@redhat.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/de/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.13\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -313,48 +313,38 @@ msgid "Custom font name for language panel"
 msgstr "Name der benutzerdefinierten Schriftart für Sprach-Panel"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:215
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom theme"
-msgstr "Benutzerdefinierte Schriftart verwenden"
+msgstr "Benutzerdefiniertes Thema verwenden"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:216
-#, fuzzy
-#| msgid "Use custom font name for language panel"
 msgid "Use custom theme name for language panel"
-msgstr "Benutzerdefinierte Schriftart für Sprach-Panel verwenden"
+msgstr "Benutzerdefinierten Themanamen für Sprach-Panel verwenden"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:220
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom theme"
-msgstr "Benutzerdefinierte Schriftart"
+msgstr "Benutzerdefiniertes Thema"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:221
-#, fuzzy
-#| msgid "Custom font name for language panel"
 msgid "Custom theme name for language panel"
-msgstr "Name der benutzerdefinierten Schriftart für Sprach-Panel"
+msgstr "Name des benutzerdefinierten Themas für das Sprach-Panel"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:225
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom icon"
-msgstr "Benutzerdefinierte Schriftart verwenden"
+msgstr "Benutzerdefiniertes Icon verwenden"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:226
 msgid "Use custom icon name for arrow buttons on candidate window"
 msgstr ""
+"Benutzerdefinierten Iconnamen für die Pfeilknöpfe im Kandidatenfenster "
+"verwenden"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:230
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom icon"
-msgstr "Benutzerdefinierte Schriftart"
+msgstr "Benutzerdefiniertes Icon"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:231
 msgid "Custom icon name for arrow buttons on candidate window"
-msgstr ""
+msgstr "Benutzerdefinierter Iconname für die Pfeilknöpfe im Kandidatenfenster"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:235 setup/setup.ui:1317
 msgid "Choose glyphs with input method's language on candidate window"
@@ -921,34 +911,24 @@ msgstr ""
 "duplizierte Unicodenummern"
 
 #: setup/setup.ui:1341
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom theme:"
-msgstr "Benutzerdefinierte Schriftart verwenden:"
+msgstr "Benutzerdefiniertes Thema verwenden:"
 
 #: setup/setup.ui:1342
-#, fuzzy
-#| msgid "Choose glyphs with input method's language on candidate window"
 msgid "Choose a theme of the candidate window"
-msgstr "Wähle Glyphen in der Sprache der Eingabemethode im Kandidatenfenster"
+msgstr "Thema für das Kandidatenfenster wählen"
 
 #: setup/setup.ui:1378
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom icon:"
-msgstr "Benutzerdefinierte Schriftart verwenden:"
+msgstr "Benutzerdefiniertes Icon verwenden:"
 
 #: setup/setup.ui:1379
-#, fuzzy
-#| msgid "Choose glyphs with input method's language on candidate window"
 msgid "Choose a theme of the arrow buttons on the candidate window"
-msgstr "Wähle Glyphen in der Sprache der Eingabemethode im Kandidatenfenster"
+msgstr "Wähle Thema für die Pfeilknöpfe im Kandidatenfenster"
 
 #: setup/setup.ui:1424
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Font and Theme</b>"
-msgstr "<b>Schriftart und Stil</b>"
+msgstr "<b>Schriftart und Thema</b>"
 
 #: setup/setup.ui:1444
 msgid "Advanced"
@@ -1138,10 +1118,8 @@ msgstr "Syrisch, Ergänzung"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:113
-#, fuzzy
-#| msgid "Arabic Extended-A"
 msgid "Arabic Extended-B"
-msgstr "Arabisch, Erweiterung A"
+msgstr "Arabisch, Erweiterung B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2289,7 +2267,7 @@ msgstr "Alwanisch"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:769
 msgid "Vithkuqi"
-msgstr ""
+msgstr "Vithkuqi"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2302,10 +2280,8 @@ msgstr "Linear A"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:777
-#, fuzzy
-#| msgid "Latin Extended-A"
 msgid "Latin Extended-F"
-msgstr "Lateinisch, erweitert-A"
+msgstr "Lateinisch, erweitert-F"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2479,10 +2455,8 @@ msgstr "Sogdisch"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:877
-#, fuzzy
-#| msgid "Old Turkic"
 msgid "Old Uyghur"
-msgstr "Alttürkisch (Orchon-Runen)"
+msgstr "Alt-Uigurisch"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2670,10 +2644,8 @@ msgstr "Sojombo"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:985
-#, fuzzy
-#| msgid "Unified Canadian Aboriginal Syllabics Extended"
 msgid "Unified Canadian Aboriginal Syllabics Extended-A"
-msgstr "Vereinheitlichte Silbenzeichen kanadischer Ureinwohner, erweitert"
+msgstr "Vereinheitlichte Silbenzeichen kanadischer Ureinwohner, erweitert A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2757,7 +2729,7 @@ msgstr "Frühe Keilschrift"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1033
 msgid "Cypro-Minoan"
-msgstr ""
+msgstr "Zypern-Minoisch"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2798,10 +2770,8 @@ msgstr "Mro"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1057
-#, fuzzy
-#| msgid "Tangut"
 msgid "Tangsa"
-msgstr "Xixia"
+msgstr "Tangsa"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2870,10 +2840,8 @@ msgstr "Xixia, Ergänzung"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1097
-#, fuzzy
-#| msgid "Kana Extended-A"
 msgid "Kana Extended-B"
-msgstr "Kana, erweitert-A"
+msgstr "Kana, erweitert-B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2921,10 +2889,8 @@ msgstr "Kurzschrift-Steuerzeichen"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1125
-#, fuzzy
-#| msgid "Ancient Greek Musical Notation"
 msgid "Znamenny Musical Notation"
-msgstr "Altgriechische Notenschriftzeichen"
+msgstr "Znamenny musikalische Symbole"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2986,10 +2952,8 @@ msgstr "Sutton-SignWriting"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1161
-#, fuzzy
-#| msgid "Latin Extended-A"
 msgid "Latin Extended-G"
-msgstr "Lateinisch, erweitert-A"
+msgstr "Lateinisch, erweitert-G"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3010,7 +2974,7 @@ msgstr "Nyiakeng Puachue Hmong"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1173
 msgid "Toto"
-msgstr ""
+msgstr "Toto"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3023,10 +2987,8 @@ msgstr "Wancho"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1181
-#, fuzzy
-#| msgid "Ethiopic Extended-A"
 msgid "Ethiopic Extended-B"
-msgstr "Äthiopisch, erweitert-A"
+msgstr "Äthiopisch, erweitert-B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3531,10 +3493,12 @@ msgid ""
 "Keymap changes do not work in Plasma Wayland at present. Please use "
 "systemsettings5 instead."
 msgstr ""
+"Ändern der Tastaturbelegung funktioniert im Moment nicht in Plasma Wayland. "
+"Bitte benutze stattdessen systemsettings5."
 
 #: ui/gtk3/panel.vala:775
 msgid "IBus Notification"
-msgstr ""
+msgstr "IBus Benachrichtigung"
 
 #: ui/gtk3/panel.vala:1068
 #, c-format
@@ -3586,10 +3550,8 @@ msgid "Quit"
 msgstr "Beenden"
 
 #: ui/gtk3/panel.vala:1324
-#, fuzzy
-#| msgid "Next input method:"
 msgid "No input method"
-msgstr "Nächste Eingabemethode:"
+msgstr "Keine Eingabemethode"
 
 #. Translators: If your locale is RTL, the msgstr is "default:RTL".
 #. * Otherwise the msgstr is "default:LTR".

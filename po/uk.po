@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2022-04-29 18:05+0900\n"
+"POT-Creation-Date: 2022-06-20 20:30+0900\n"
 "PO-Revision-Date: 2022-05-04 11:02+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/ibus/"
@@ -68,122 +68,122 @@ msgstr ""
 "Збережений номер версії буде використано для визначення відмінностей між "
 "попередньою встановленою версією ibus та поточною версією ibus."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:32
+#: data/dconf/org.freedesktop.ibus.gschema.xml:77
 msgid "Latin layouts which have no ASCII"
 msgstr "Розкладки латиниці, у яких немає символів ASCII"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:33
+#: data/dconf/org.freedesktop.ibus.gschema.xml:78
 msgid "US layout is appended to the Latin layouts. variant can be omitted."
 msgstr ""
 "Американська розкладка додається до латинських розкладок, варіант можна "
 "пропустити."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:37
+#: data/dconf/org.freedesktop.ibus.gschema.xml:82
 msgid "Use xmodmap"
 msgstr "Використовувати xmodmap"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:38
+#: data/dconf/org.freedesktop.ibus.gschema.xml:83
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
 msgstr ""
 "Запускати xmodmap, якщо є .xmodmap або .Xmodmap під час перемикання рушіїв "
 "ibus."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:42 setup/setup.ui:1208
+#: data/dconf/org.freedesktop.ibus.gschema.xml:87 setup/setup.ui:1220
 msgid "Use system keyboard layout"
 msgstr "Використовувати розкладку клавіатури системи"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:43 setup/setup.ui:1213
+#: data/dconf/org.freedesktop.ibus.gschema.xml:88 setup/setup.ui:1225
 msgid "Use system keyboard (XKB) layout"
 msgstr "Використовувати розкладку клавіатури системи (XKB)"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:47
+#: data/dconf/org.freedesktop.ibus.gschema.xml:92
 msgid "Embed Preedit Text"
 msgstr "Вбудувати попередньо створений текст"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:48
+#: data/dconf/org.freedesktop.ibus.gschema.xml:93
 msgid "Embed Preedit Text in Application Window"
 msgstr "Вбудувати попередньо створений текст у вікно програми"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:52
+#: data/dconf/org.freedesktop.ibus.gschema.xml:97
 msgid "Use global input method"
 msgstr "Використовувати загальний спосіб введення"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:53 setup/setup.ui:1257
+#: data/dconf/org.freedesktop.ibus.gschema.xml:98 setup/setup.ui:1269
 msgid "Share the same input method among all applications"
 msgstr "Використовувати один спосіб введення для всіх програм"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:57
+#: data/dconf/org.freedesktop.ibus.gschema.xml:102
 msgid "Enable input method by default"
 msgstr "Типово увімкнути спосіб введення"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:58
+#: data/dconf/org.freedesktop.ibus.gschema.xml:103
 msgid "Enable input method by default when the application gets input focus"
 msgstr "Типово увімкнути спосіб введення, коли програма отримує фокус введення"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:62
+#: data/dconf/org.freedesktop.ibus.gschema.xml:107
 msgid "DConf preserve name prefixes"
 msgstr "Збереження DConf префіксів назв"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:63
+#: data/dconf/org.freedesktop.ibus.gschema.xml:108
 msgid "Prefixes of DConf keys to stop name conversion"
 msgstr "Префікси ключів DConf для припинення перетворення назв"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:70
+#: data/dconf/org.freedesktop.ibus.gschema.xml:115
 msgid "Trigger shortcut keys"
 msgstr "Клавіатурні скорочення-перемикачі"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:71
-#: data/dconf/org.freedesktop.ibus.gschema.xml:76 setup/setup.ui:224
+#: data/dconf/org.freedesktop.ibus.gschema.xml:116
+#: data/dconf/org.freedesktop.ibus.gschema.xml:121 setup/setup.ui:236
 msgid "The shortcut keys for turning input method on or off"
 msgstr "Клавіатурне скорочення для вмикання і вимикання способів введення"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:75
+#: data/dconf/org.freedesktop.ibus.gschema.xml:120
 msgid "Trigger shortcut keys for gtk_accelerator_parse"
 msgstr "Комбінації клавіш для перемикання gtk_accelerator_parse"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:80
+#: data/dconf/org.freedesktop.ibus.gschema.xml:125
 msgid "Enable shortcut keys"
 msgstr "Увімкнути клавіатурні скорочення"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:81
+#: data/dconf/org.freedesktop.ibus.gschema.xml:126
 msgid "The shortcut keys for turning input method on"
 msgstr "Клавіатурне скорочення для вмикання способів введення"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:85
+#: data/dconf/org.freedesktop.ibus.gschema.xml:130
 msgid "Disable shortcut keys"
 msgstr "Вимкнути клавіатурні скорочення"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:86
+#: data/dconf/org.freedesktop.ibus.gschema.xml:131
 msgid "The shortcut keys for turning input method off"
 msgstr "Клавіатурне скорочення для вимикання способів введення"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:90
-#: data/dconf/org.freedesktop.ibus.gschema.xml:95
+#: data/dconf/org.freedesktop.ibus.gschema.xml:135
+#: data/dconf/org.freedesktop.ibus.gschema.xml:140
 msgid "Next engine shortcut keys"
 msgstr "Скорочення для наступного рушія"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:91
-#: data/dconf/org.freedesktop.ibus.gschema.xml:96
+#: data/dconf/org.freedesktop.ibus.gschema.xml:136
+#: data/dconf/org.freedesktop.ibus.gschema.xml:141
 msgid "The shortcut keys for switching to the next input method in the list"
 msgstr ""
 "Клавіатурні скорочення для перемикання на наступний спосіб введення у списку"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:100
-#: data/dconf/org.freedesktop.ibus.gschema.xml:105
+#: data/dconf/org.freedesktop.ibus.gschema.xml:145
+#: data/dconf/org.freedesktop.ibus.gschema.xml:150
 msgid "Prev engine shortcut keys"
 msgstr "Скорочення для попереднього рушія"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:101
-#: data/dconf/org.freedesktop.ibus.gschema.xml:106
+#: data/dconf/org.freedesktop.ibus.gschema.xml:146
+#: data/dconf/org.freedesktop.ibus.gschema.xml:151
 msgid "The shortcut keys for switching to the previous input method"
 msgstr "Клавіатурне скорочення для перемикання на попередній спосіб введення"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:112
+#: data/dconf/org.freedesktop.ibus.gschema.xml:157
 msgid "Auto hide"
 msgstr "Автоматично ховати"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:113
+#: data/dconf/org.freedesktop.ibus.gschema.xml:158
 msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
@@ -191,16 +191,16 @@ msgstr ""
 "Поведінка панелі властивостей. 0 = не показувати, 1 = автоматично ховати, 2 "
 "= завжди показувати"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:117
-#: data/dconf/org.freedesktop.ibus.gschema.xml:121
+#: data/dconf/org.freedesktop.ibus.gschema.xml:162
+#: data/dconf/org.freedesktop.ibus.gschema.xml:166
 msgid "Language panel position"
 msgstr "Розташування мовної панелі"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:125
+#: data/dconf/org.freedesktop.ibus.gschema.xml:170
 msgid "Follow the input cursor in case the panel is always shown"
 msgstr "Слідувати за курсором введення, якщо панель показано завжди"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:126
+#: data/dconf/org.freedesktop.ibus.gschema.xml:171
 msgid ""
 "If true, the panel follows the input cursor in case the panel is always "
 "shown. If false, the panel is shown at a fixed location."
@@ -209,11 +209,11 @@ msgstr ""
 "панель працює у режимі безумовного показу. Якщо має значення «false», панель "
 "буде показано у фіксованій позиції."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:130
+#: data/dconf/org.freedesktop.ibus.gschema.xml:175
 msgid "The milliseconds to show property panel"
 msgstr "Тривалість показу панелі властивостей у мілісекундах"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:131
+#: data/dconf/org.freedesktop.ibus.gschema.xml:176
 msgid ""
 "The milliseconds to show property panel after focus-in or properties are "
 "changed."
@@ -221,33 +221,33 @@ msgstr ""
 "Тривалість показу панелі властивостей (у мілісекундах) після фокусування або "
 "зміни властивостей."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:135
+#: data/dconf/org.freedesktop.ibus.gschema.xml:180
 msgid "Orientation of lookup table"
 msgstr "Орієнтація таблиці пошуку"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:136
+#: data/dconf/org.freedesktop.ibus.gschema.xml:181
 msgid "Orientation of lookup table. 0 = Horizontal, 1 = Vertical"
 msgstr "Орієнтація таблиці пошуку. 0 = горизонтально, 1 = вертикально"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:140
-#: data/dconf/org.freedesktop.ibus.gschema.xml:141 setup/setup.ui:470
-#: setup/setup.ui:475
+#: data/dconf/org.freedesktop.ibus.gschema.xml:185
+#: data/dconf/org.freedesktop.ibus.gschema.xml:186 setup/setup.ui:482
+#: setup/setup.ui:487
 msgid "Show icon on system tray"
 msgstr "Показувати піктограму у системному лотку"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:145
+#: data/dconf/org.freedesktop.ibus.gschema.xml:190
 msgid "Show input method name"
 msgstr "Показувати назву способу введення"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:146 setup/setup.ui:489
+#: data/dconf/org.freedesktop.ibus.gschema.xml:191 setup/setup.ui:501
 msgid "Show input method name on language bar"
 msgstr "Показувати назву способу введення на мовній панелі"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:150
+#: data/dconf/org.freedesktop.ibus.gschema.xml:195
 msgid "RGBA value of XKB icon"
 msgstr "Значення RGBA для піктограми XKB"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:151
+#: data/dconf/org.freedesktop.ibus.gschema.xml:196
 msgid ""
 "XKB icon shows the layout string and the string is rendered with the RGBA "
 "value. The RGBA value can be 1. a color name from X11, 2. a hex value in "
@@ -266,12 +266,12 @@ msgstr ""
 "значеннями від 0% до 100%, а «п» є значенням з рухомою крапкою для "
 "прозорості у діапазоні від 0 до 1."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:155
+#: data/dconf/org.freedesktop.ibus.gschema.xml:200
 msgid "The milliseconds to show the panel icon for a property"
 msgstr ""
 "Час у мілісекундах для приготування показу піктограми панелі для властивості"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:156
+#: data/dconf/org.freedesktop.ibus.gschema.xml:201
 msgid ""
 "The milliseconds to show the panel icon from the engine icon to a property "
 "icon whenever engines are switched if the property is specified by the value "
@@ -283,28 +283,72 @@ msgstr ""
 "властивість задається значенням icon-prop-key у IBusEngineDesc. Якщо вказано "
 "значення 0, затримки не буде і піктограму властивості буде показано негайно."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:160
+#: data/dconf/org.freedesktop.ibus.gschema.xml:205
 msgid "Use custom font"
 msgstr "Використовувати нетиповий шрифт"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:161
+#: data/dconf/org.freedesktop.ibus.gschema.xml:206
 msgid "Use custom font name for language panel"
 msgstr "Використовувати нетиповий шрифт для мовної панелі"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:165
-#: data/dconf/org.freedesktop.ibus.gschema.xml:192
+#: data/dconf/org.freedesktop.ibus.gschema.xml:210
+#: data/dconf/org.freedesktop.ibus.gschema.xml:257
 msgid "Custom font"
 msgstr "Нетиповий шрифт"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:166
+#: data/dconf/org.freedesktop.ibus.gschema.xml:211
 msgid "Custom font name for language panel"
 msgstr "Назва нетипового шрифту для мовної панелі"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:170 setup/setup.ui:1305
+#: data/dconf/org.freedesktop.ibus.gschema.xml:215
+#, fuzzy
+#| msgid "Use custom font"
+msgid "Use custom theme"
+msgstr "Використовувати нетиповий шрифт"
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:216
+#, fuzzy
+#| msgid "Use custom font name for language panel"
+msgid "Use custom theme name for language panel"
+msgstr "Використовувати нетиповий шрифт для мовної панелі"
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:220
+#, fuzzy
+#| msgid "Custom font"
+msgid "Custom theme"
+msgstr "Нетиповий шрифт"
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:221
+#, fuzzy
+#| msgid "Custom font name for language panel"
+msgid "Custom theme name for language panel"
+msgstr "Назва нетипового шрифту для мовної панелі"
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:225
+#, fuzzy
+#| msgid "Use custom font"
+msgid "Use custom icon"
+msgstr "Використовувати нетиповий шрифт"
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:226
+msgid "Use custom icon name for arrow buttons on candidate window"
+msgstr ""
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:230
+#, fuzzy
+#| msgid "Custom font"
+msgid "Custom icon"
+msgstr "Нетиповий шрифт"
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:231
+msgid "Custom icon name for arrow buttons on candidate window"
+msgstr ""
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:235 setup/setup.ui:1317
 msgid "Choose glyphs with input method's language on candidate window"
 msgstr "Вибирати гліфи з мови способу введення у вікні варіантів"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:171
+#: data/dconf/org.freedesktop.ibus.gschema.xml:236
 msgid ""
 "Some code points have the different glyphs and Pango determines the glyphs "
 "from the language attribute. Pango chooses glyphs from the IBus engine's "
@@ -316,32 +360,32 @@ msgstr ""
 "параметр має значення «true», і вибирає їх з локалі стільничного середовища, "
 "якщо цей параметр має значення «false»."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:182
+#: data/dconf/org.freedesktop.ibus.gschema.xml:247
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
 msgstr "Клавіатурне скорочення Unicode для gtk_accelerator_parse"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:183
+#: data/dconf/org.freedesktop.ibus.gschema.xml:248
 msgid "The shortcut keys for turning Unicode typing on or off"
 msgstr ""
 "Клавіатурне скорочення для вмикання і вимикання введення символів Unicode"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:187
+#: data/dconf/org.freedesktop.ibus.gschema.xml:252
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
 msgstr "Клавіатурне скорочення емодзі для gtk_accelerator_parse"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:188
+#: data/dconf/org.freedesktop.ibus.gschema.xml:253
 msgid "The shortcut keys for turning emoji typing on or off"
 msgstr "Клавіатурне скорочення для вмикання і вимикання введення емодзі"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:193
+#: data/dconf/org.freedesktop.ibus.gschema.xml:258
 msgid "Custom font name for emoji characters on emoji dialog"
 msgstr "Назва нетипового шрифту для символів емодзі у вікні емодзі"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:197
+#: data/dconf/org.freedesktop.ibus.gschema.xml:262
 msgid "Default language for emoji dictionary"
 msgstr "Типова мова словника емодзі"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:198
+#: data/dconf/org.freedesktop.ibus.gschema.xml:263
 msgid ""
 "Choose a default language of emoji dictionaries on the emoji dialog. The "
 "value $lang is applied to /usr/share/ibus/dicts/emoji-$lang.dict ."
@@ -349,11 +393,11 @@ msgstr ""
 "Виберіть типову мову словників емодзі у вікні емодзі. Значення $lang "
 "застосовується до /usr/share/ibus/dicts/emoji-$lang.dict ."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:202
+#: data/dconf/org.freedesktop.ibus.gschema.xml:267
 msgid "favorite emoji list on emoji dialog"
 msgstr "Список улюблених емодзі у вікні емодзі"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:203
+#: data/dconf/org.freedesktop.ibus.gschema.xml:268
 msgid ""
 "You can show the favorite emojis on emoji list if this list has any "
 "characters."
@@ -361,19 +405,19 @@ msgstr ""
 "Ви зможете переглянути улюблені емодзі у списку емодзі, якщо у цьому списку "
 "є якісь символи."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:207
+#: data/dconf/org.freedesktop.ibus.gschema.xml:272
 msgid "favorite emoji annotation list on emoji dialog"
 msgstr "список анотацій до улюблених емодзі у вікні емодзі"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:208
+#: data/dconf/org.freedesktop.ibus.gschema.xml:273
 msgid "You can assign an annotation for a favorite emoji in this list."
 msgstr "Ви можете додавати анотації до улюблених емодзі у цьому списку."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:212
+#: data/dconf/org.freedesktop.ibus.gschema.xml:277
 msgid "Whether emoji annotations can be match partially or not"
 msgstr "Визначає, чи може бути встановлено часткову відповідність"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:213
+#: data/dconf/org.freedesktop.ibus.gschema.xml:278
 msgid ""
 "Whether emoji annotations can be matched with a partial string instead of "
 "the exact match or not."
@@ -381,11 +425,11 @@ msgstr ""
 "Визначає, чи може бути встановлено відповідність емодзі за частиною рядка, а "
 "не повним збігом."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:217
+#: data/dconf/org.freedesktop.ibus.gschema.xml:282
 msgid "Match emoji annotations with the specified length"
 msgstr "Відповідність анотацій до емодзі за вказаною довжиною рядка"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:218
+#: data/dconf/org.freedesktop.ibus.gschema.xml:283
 msgid ""
 "Match emoji annotations partially with more than the specified number of "
 "characters instead of the exact match."
@@ -393,11 +437,11 @@ msgstr ""
 "Встановлювати часткову відповідність анотацій до емодзі, якщо збігається "
 "вказана кількість символів, але відповідність не є повною."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:222
+#: data/dconf/org.freedesktop.ibus.gschema.xml:287
 msgid "Choose a condition to match emoji annotations partially"
 msgstr "Вибрати умову часткової відповідності анотацій до емодзі"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:223
+#: data/dconf/org.freedesktop.ibus.gschema.xml:288
 msgid ""
 "Choose one of the following conditions to match emoji annotations partially: "
 "0 == Prefix match, 1 == Suffix match, 2 == Containing match"
@@ -406,11 +450,11 @@ msgstr ""
 "анотаціями до емодзі: 0 == відповідність за префіксом, 1 == відповідність за "
 "суфіксом, 2 == відповідність за вмістом"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:227
+#: data/dconf/org.freedesktop.ibus.gschema.xml:292
 msgid "Load the emoji data at the time of startup"
 msgstr "Завантажувати дані емодзі під час запуску програми"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:228
+#: data/dconf/org.freedesktop.ibus.gschema.xml:293
 msgid ""
 "Load the emoji data at the time of startup if true. About 10MB memory is "
 "needed to load the data. Load the emoji data when open the emoji dialog at "
@@ -420,11 +464,11 @@ msgstr ""
 "завантаження даних потрібно приблизно 10 МБ пам'яті. Якщо false, дані емодзі "
 "буде завантажено під час відкриття діалогового вікна емодзі на початку."
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:232
+#: data/dconf/org.freedesktop.ibus.gschema.xml:297
 msgid "Load the Unicode data at the time of startup"
 msgstr "Завантажувати дані Unicode під час запуску"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:233
+#: data/dconf/org.freedesktop.ibus.gschema.xml:298
 msgid ""
 "Load the Unicode data at the time of startup if true. About 15MB memory is "
 "needed to load the data. Load the Unicode data when open the emoji dialog at "
@@ -445,7 +489,7 @@ msgstr ""
 "© Peng Huang, 2007–2010\n"
 "© Red Hat, Inc., 2007–2010"
 
-#: ibus/lang.py:41 src/ibusutil.c:209
+#: ibus/lang.py:41 src/ibusutil.c:209 ui/gtk3/panel.vala:1323
 msgid "Other"
 msgstr "Інше"
 
@@ -454,11 +498,11 @@ msgid "Select a language"
 msgstr "Виберіть мову"
 
 #: setup/emojilang.py:70 setup/enginedialog.py:60 setup/keyboardshortcut.py:339
-#: setup/main.py:560
+#: setup/main.py:634
 msgid "_Cancel"
 msgstr "_Скасувати"
 
-#: setup/emojilang.py:71 setup/keyboardshortcut.py:340 setup/main.py:561
+#: setup/emojilang.py:71 setup/keyboardshortcut.py:340 setup/main.py:635
 msgid "_OK"
 msgstr "_Гаразд"
 
@@ -466,11 +510,11 @@ msgstr "_Гаразд"
 msgid "More…"
 msgstr "Більше…"
 
-#: setup/engineabout.py:37 setup/setup.ui:1368 ui/gtk3/panel.vala:1259
+#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1288
 msgid "About"
 msgstr "Інформація"
 
-#: setup/engineabout.py:40 setup/setup.ui:1391
+#: setup/engineabout.py:40 setup/setup.ui:1488
 msgid "_Close"
 msgstr "_Закрити"
 
@@ -498,16 +542,16 @@ msgid "Select an input method"
 msgstr "Виберіть спосіб введення"
 
 #. add button
-#: setup/enginedialog.py:61 setup/keyboardshortcut.py:124 setup/setup.ui:664
+#: setup/enginedialog.py:61 setup/keyboardshortcut.py:124 setup/setup.ui:676
 msgid "_Add"
 msgstr "_Додати"
 
 #. create im name & icon column
-#: setup/enginetreeview.py:69 setup/setup.ui:838
+#: setup/enginetreeview.py:69 setup/setup.ui:850
 msgid "Input Method"
 msgstr "Спосіб введення"
 
-#: setup/ibus-setup.desktop:3 setup/setup.ui:69
+#: setup/ibus-setup.desktop:3 setup/setup.ui:81
 msgid "IBus Preferences"
 msgstr "Налаштування IBus"
 
@@ -549,17 +593,17 @@ msgstr ""
 msgid "Please press a key (or a key combination)"
 msgstr "Будь ласка, натисніть клавішу (або комбінацію клавіш)"
 
-#: setup/main.py:121 setup/main.py:588
+#: setup/main.py:122 setup/main.py:662
 msgid "Use shortcut with shift to switch to the previous input method"
 msgstr ""
 "Використовувати комбінацію з Shift для перемикання на попередній спосіб "
 "введення"
 
-#: setup/main.py:515
+#: setup/main.py:589
 msgid "The IBus daemon is not running. Do you wish to start it?"
 msgstr "Фонову службу IBus не запущено. Хочете її запустити?"
 
-#: setup/main.py:536
+#: setup/main.py:610
 msgid ""
 "IBus has been started! If you cannot use IBus, add the following lines to "
 "your $HOME/.bashrc; then relog into your desktop.\n"
@@ -575,18 +619,18 @@ msgstr ""
 "  export QT_IM_MODULE=ibus"
 
 #. Translators: %d == 5 currently
-#: setup/main.py:550
+#: setup/main.py:624
 #, python-format
 msgid "IBus daemon could not be started in %d seconds."
 msgstr "Не вдалося запустити фонову службу IBus протягом %d секунд."
 
-#: setup/main.py:562
+#: setup/main.py:636
 #, python-format
 msgid "Select keyboard shortcut for %s"
 msgstr "Виберіть клавіатурне скорочення для дії %s"
 
 #. Translators: Title of the window
-#: setup/main.py:564
+#: setup/main.py:638
 msgid "switching input methods"
 msgstr "перемикання способів введення"
 
@@ -630,141 +674,141 @@ msgstr "Автоматично ховати"
 msgid "Always"
 msgstr "Завжди"
 
-#: setup/setup.ui:113
+#: setup/setup.ui:125
 msgid "The shortcut keys for switching to next input method in the list"
 msgstr ""
 "Клавіатурні скорочення для перемикання на наступний спосіб введення у списку"
 
-#: setup/setup.ui:115
+#: setup/setup.ui:127
 msgid "Next input method:"
 msgstr "Наступний спосіб введення:"
 
-#: setup/setup.ui:127
+#: setup/setup.ui:139
 msgid "The shortcut keys for switching to previous input method in the list"
 msgstr ""
 "Клавіатурне скорочення для перемикання на попередній спосіб введення у списку"
 
-#: setup/setup.ui:129
+#: setup/setup.ui:141
 msgid "Previous input method:"
 msgstr "Попередній спосіб введення:"
 
-#: setup/setup.ui:157 setup/setup.ui:199 setup/setup.ui:266 setup/setup.ui:319
-#: setup/setup.ui:903 setup/setup.ui:957
+#: setup/setup.ui:169 setup/setup.ui:211 setup/setup.ui:278 setup/setup.ui:331
+#: setup/setup.ui:915 setup/setup.ui:969
 msgid "..."
 msgstr "…"
 
-#: setup/setup.ui:226
+#: setup/setup.ui:238
 msgid "Enable or disable:"
 msgstr "Увімкнення або вимикання:"
 
-#: setup/setup.ui:238
+#: setup/setup.ui:250
 msgid "Enable:"
 msgstr "Увімкнути:"
 
-#: setup/setup.ui:291
+#: setup/setup.ui:303
 msgid "Disable:"
 msgstr "Вимкнути:"
 
-#: setup/setup.ui:345 setup/setup.ui:983
+#: setup/setup.ui:357 setup/setup.ui:995
 msgid "<b>Keyboard Shortcuts</b>"
 msgstr "<b>Клавіатурні скорочення</b>"
 
-#: setup/setup.ui:374
+#: setup/setup.ui:386
 msgid "Set the orientation of candidates in lookup table"
 msgstr "Встановити орієнтацію варіантів у таблиці пошуку"
 
-#: setup/setup.ui:376
+#: setup/setup.ui:388
 msgid "Candidates orientation:"
 msgstr "Орієнтація варіантів:"
 
-#: setup/setup.ui:407
+#: setup/setup.ui:419
 msgid "Set the behavior of ibus how to show or hide language bar"
 msgstr "Визначає поведінку ibus: спосіб показу або приховування мовної панелі"
 
-#: setup/setup.ui:409
+#: setup/setup.ui:421
 msgid "Show property panel:"
 msgstr "Показ панелі властивостей:"
 
-#: setup/setup.ui:423
+#: setup/setup.ui:435
 msgid "Language panel position:"
 msgstr "Розташування мовної панелі:"
 
-#: setup/setup.ui:494
+#: setup/setup.ui:506
 msgid "Show input method's name on language bar when check the checkbox"
 msgstr ""
 "Показати назву способу введення на мовній панелі, якщо позначено цей пункт"
 
-#: setup/setup.ui:508
+#: setup/setup.ui:520
 msgid "Embed preedit text in application window"
 msgstr "Вбудувати попередньо створений текст у вікно програми"
 
-#: setup/setup.ui:513
+#: setup/setup.ui:525
 msgid "Embed the preedit text of input method in the application window"
 msgstr "Вбудувати попередньо створений текст способу введення у вікно програми"
 
-#: setup/setup.ui:527
+#: setup/setup.ui:539
 msgid "Use custom font:"
 msgstr "Нетиповий шрифт:"
 
-#: setup/setup.ui:562 setup/setup.ui:1156
+#: setup/setup.ui:574 setup/setup.ui:1168
 msgid "<b>Font and Style</b>"
 msgstr "<b>Шрифт і стиль</b>"
 
-#: setup/setup.ui:579
+#: setup/setup.ui:591
 msgid "General"
 msgstr "Загальне"
 
-#: setup/setup.ui:671
+#: setup/setup.ui:683
 msgid "Add the selected input method into the enabled input methods"
 msgstr ""
 "Додати позначений спосіб введення до списку увімкнених способів введення"
 
-#: setup/setup.ui:682
+#: setup/setup.ui:694
 msgid "_Remove"
 msgstr "Ви_лучити"
 
-#: setup/setup.ui:689
+#: setup/setup.ui:701
 msgid "Remove the selected input method from the enabled input methods"
 msgstr ""
 "Вилучити позначений спосіб введення зі списку увімкнених способів введення"
 
-#: setup/setup.ui:700
+#: setup/setup.ui:712
 msgid "_Up"
 msgstr "В_гору"
 
-#: setup/setup.ui:707
+#: setup/setup.ui:719
 msgid "Move up the selected input method in the enabled input methods list"
 msgstr ""
 "Пересунути вгору позначений спосіб введення у списку увімкнених способів "
 "введення"
 
-#: setup/setup.ui:718
+#: setup/setup.ui:730
 msgid "_Down"
 msgstr "В_низ"
 
-#: setup/setup.ui:725
+#: setup/setup.ui:737
 msgid "Move down the selected input method in the enabled input methods"
 msgstr ""
 "Пересунути нижче позначений спосіб введення у списку увімкнених способів "
 "введення"
 
-#: setup/setup.ui:736
+#: setup/setup.ui:748
 msgid "_About"
 msgstr "_Про програму"
 
-#: setup/setup.ui:743
+#: setup/setup.ui:755
 msgid "Show information of the selected input method"
 msgstr "Показати відомості щодо вибраного способу введення"
 
-#: setup/setup.ui:754
+#: setup/setup.ui:766
 msgid "_Preferences"
 msgstr "_Параметри"
 
-#: setup/setup.ui:761
+#: setup/setup.ui:773
 msgid "Show setup of the selected input method"
 msgstr "Показати панель налаштовування позначеного способу введення"
 
-#: setup/setup.ui:812
+#: setup/setup.ui:824
 msgid ""
 "<small><i>The active input method can be switched around from the selected "
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
@@ -774,43 +818,43 @@ msgstr ""
 "списку натисканням клавіатурного скорочення або піктограми на панелі.</i></"
 "small>"
 
-#: setup/setup.ui:873
+#: setup/setup.ui:885
 msgid ""
 "The shortcut keys to enable conversions of emoji annotations or Unicode names"
 msgstr ""
 "Клавіатурне скорочення для вмикання перетворень анотацій емодзі або назв "
 "символів Unicode"
 
-#: setup/setup.ui:875
+#: setup/setup.ui:887
 msgid "Emoji annotation:"
 msgstr "Анотація емодзі:"
 
-#: setup/setup.ui:927
+#: setup/setup.ui:939
 msgid "The shortcut keys to enable Unicode code point conversions"
 msgstr ""
 "Клавіатурне скорочення для вмикання перетворень позицій у таблиці Unicode"
 
-#: setup/setup.ui:929
+#: setup/setup.ui:941
 msgid "Unicode code point:"
 msgstr "Позиція у таблиці Unicode:"
 
-#: setup/setup.ui:1013
+#: setup/setup.ui:1025
 msgid "Set a font of Unicode candidates on the emoji dialog"
 msgstr "Встановити шрифт варіантів емодзі у Unicode у вікні емодзі"
 
-#: setup/setup.ui:1015
+#: setup/setup.ui:1027
 msgid "Unicode font:"
 msgstr "Шрифт Unicode:"
 
-#: setup/setup.ui:1038
+#: setup/setup.ui:1050
 msgid "Set a language of emoji annotations on the emoji dialog"
 msgstr "Встановити мову анотацій емодзі у вікні емодзі"
 
-#: setup/setup.ui:1040
+#: setup/setup.ui:1052
 msgid "Emoji annotation language:"
 msgstr "Мова анотацій емодзі:"
 
-#: setup/setup.ui:1062
+#: setup/setup.ui:1074
 msgid ""
 "Match emoji annotations partially with the following condition and more than "
 "the number of characters:"
@@ -818,7 +862,7 @@ msgstr ""
 "Встановлювати відповідність емодзі за анотаціями з вказаною умовою та збігом "
 "понад таку кількість символів:"
 
-#: setup/setup.ui:1067
+#: setup/setup.ui:1079
 msgid ""
 "If emoji annotations can be matched with a partial string instead of the "
 "exact match"
@@ -826,31 +870,31 @@ msgstr ""
 "Визначає, чи може бути встановлено відповідність емодзі за частиною рядка, а "
 "не повним збігом"
 
-#: setup/setup.ui:1101
+#: setup/setup.ui:1113
 msgid "Prefix match"
 msgstr "Відповідність за префіксом"
 
-#: setup/setup.ui:1115
+#: setup/setup.ui:1127
 msgid "Suffix match"
 msgstr "Відповідність за суфіксом"
 
-#: setup/setup.ui:1130
+#: setup/setup.ui:1142
 msgid "Containing match"
 msgstr "Відповідність за вмістом"
 
-#: setup/setup.ui:1176
+#: setup/setup.ui:1188
 msgid "Emoji"
 msgstr "Емодзі"
 
-#: setup/setup.ui:1230
+#: setup/setup.ui:1242
 msgid "<b>Keyboard Layout</b>"
 msgstr "<b>Розкладка клавіатури</b>"
 
-#: setup/setup.ui:1278
+#: setup/setup.ui:1290
 msgid "<b>Global input method settings</b>"
 msgstr "<b>Загальні параметри способів введення</b>"
 
-#: setup/setup.ui:1310
+#: setup/setup.ui:1322
 msgid ""
 "Choose glyphs with the input method's language on the candidate window for "
 "the duplicated code points"
@@ -858,11 +902,37 @@ msgstr ""
 "Вибирати гліфи з мови способу введення у вікні варіантів для дублювання "
 "гліфів у позиції кодування"
 
-#: setup/setup.ui:1327
-msgid "<b>Fonts</b>"
-msgstr "<b>Шрифти</b>"
+#: setup/setup.ui:1341
+#, fuzzy
+#| msgid "Use custom font:"
+msgid "Use custom theme:"
+msgstr "Нетиповий шрифт:"
 
-#: setup/setup.ui:1347
+#: setup/setup.ui:1342
+#, fuzzy
+#| msgid "Choose glyphs with input method's language on candidate window"
+msgid "Choose a theme of the candidate window"
+msgstr "Вибирати гліфи з мови способу введення у вікні варіантів"
+
+#: setup/setup.ui:1378
+#, fuzzy
+#| msgid "Use custom font:"
+msgid "Use custom icon:"
+msgstr "Нетиповий шрифт:"
+
+#: setup/setup.ui:1379
+#, fuzzy
+#| msgid "Choose glyphs with input method's language on candidate window"
+msgid "Choose a theme of the arrow buttons on the candidate window"
+msgstr "Вибирати гліфи з мови способу введення у вікні варіантів"
+
+#: setup/setup.ui:1424
+#, fuzzy
+#| msgid "<b>Font and Style</b>"
+msgid "<b>Font and Theme</b>"
+msgstr "<b>Шрифт і стиль</b>"
+
+#: setup/setup.ui:1444
 msgid "Advanced"
 msgstr "Додатково"
 
@@ -3355,7 +3425,7 @@ msgid "Alias: %s"
 msgstr "Альтернативна назва: %s"
 
 #: ui/gtk3/emojier.vala:2180 ui/gtk3/ibus-extension-gtk3.desktop.in:3
-#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1244
+#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1273
 msgid "Emoji Choice"
 msgstr "Вибір емодзі"
 
@@ -3416,15 +3486,11 @@ msgstr "Відповідність за вказаною довжиною ряд
 msgid "Match with the condition of the specified integer"
 msgstr "Відповідність з умовою на вказану довжину рядка"
 
-#: ui/gtk3/panel.vala:320 ui/gtk3/panel.vala:351
+#: ui/gtk3/panel.vala:337 ui/gtk3/panel.vala:368
 msgid "IBus Panel"
 msgstr "Панель IBus"
 
-#: ui/gtk3/panel.vala:756
-msgid "IBus Notification"
-msgstr "Сповіщення IBus"
-
-#: ui/gtk3/panel.vala:757 ui/gtk3/panel.vala:766 ui/gtk3/panel.vala:770
+#: ui/gtk3/panel.vala:767
 msgid ""
 "Keymap changes do not work in Plasma Wayland at present. Please use "
 "systemsettings5 instead."
@@ -3432,7 +3498,11 @@ msgstr ""
 "У Плазмі для Wayland зміна розкладок у цій програмі поки не працює. Будь "
 "ласка, скористайтеся для внесення змін systemsettings5."
 
-#: ui/gtk3/panel.vala:1045
+#: ui/gtk3/panel.vala:775
+msgid "IBus Notification"
+msgstr "Сповіщення IBus"
+
+#: ui/gtk3/panel.vala:1068
 #, c-format
 msgid ""
 "Your configured input method %s does not exist in IBus input methods so \"US"
@@ -3442,7 +3512,7 @@ msgstr ""
 "Через це, замість вибраного вами способу введення, буде використано "
 "розкладку «US»."
 
-#: ui/gtk3/panel.vala:1050
+#: ui/gtk3/panel.vala:1073
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
@@ -3450,7 +3520,7 @@ msgstr ""
 "Серед способів введення IBus немає принаймні одного із налаштованих способів "
 "введення."
 
-#: ui/gtk3/panel.vala:1053
+#: ui/gtk3/panel.vala:1076
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
@@ -3458,31 +3528,40 @@ msgstr ""
 "Будь ласка, віддайте команду «ibus-setup», відкрийте вкладку «Способи "
 "введення» і налаштуйте ваші способи введення ще раз."
 
-#: ui/gtk3/panel.vala:1216
+#: ui/gtk3/panel.vala:1245
 msgid "IBus is an intelligent input bus for Linux/Unix."
 msgstr "IBus — інтелектуальний канал введення даних у Linux/Unix."
 
-#: ui/gtk3/panel.vala:1220
+#: ui/gtk3/panel.vala:1249
 msgid "translator-credits"
 msgstr "Юрій Чорноіван <yurchor@ukr.net>"
 
-#: ui/gtk3/panel.vala:1239
+#: ui/gtk3/panel.vala:1268
 msgid "Preferences"
 msgstr "Параметри"
 
-#: ui/gtk3/panel.vala:1265
+#: ui/gtk3/panel.vala:1294
 msgid "Restart"
 msgstr "Перезапустити"
 
-#: ui/gtk3/panel.vala:1269
+#: ui/gtk3/panel.vala:1298
 msgid "Quit"
 msgstr "Вийти"
+
+#: ui/gtk3/panel.vala:1324
+#, fuzzy
+#| msgid "Next input method:"
+msgid "No input method"
+msgstr "Наступний спосіб введення:"
 
 #. Translators: If your locale is RTL, the msgstr is "default:RTL".
 #. * Otherwise the msgstr is "default:LTR".
 #: ui/gtk3/propertypanel.vala:368 ui/gtk3/propertypanel.vala:376
 msgid "default:LTR"
 msgstr "default:LTR"
+
+#~ msgid "<b>Fonts</b>"
+#~ msgstr "<b>Шрифти</b>"
 
 #~ msgid ""
 #~ "<big><b>IBus</b></big>\n"

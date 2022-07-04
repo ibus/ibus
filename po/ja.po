@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2022-04-29 18:05+0900\n"
+"POT-Creation-Date: 2022-06-20 20:30+0900\n"
 "PO-Revision-Date: 2021-06-20 19:04+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/ibus/"
@@ -75,138 +75,138 @@ msgstr ""
 "保存されているバージョン番号は、以前インストールした ibus のバージョンと現在"
 "の ibus のバージョンの違いをチェックする場合に使用されます。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:32
+#: data/dconf/org.freedesktop.ibus.gschema.xml:77
 msgid "Latin layouts which have no ASCII"
 msgstr "ASCII を持たないラテンレイアウト"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:33
+#: data/dconf/org.freedesktop.ibus.gschema.xml:78
 msgid "US layout is appended to the Latin layouts. variant can be omitted."
 msgstr ""
 "US レイアウトはラテンレイアウトに追加されます。variant は省略可能です。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:37
+#: data/dconf/org.freedesktop.ibus.gschema.xml:82
 msgid "Use xmodmap"
 msgstr "xmodmap を使用する"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:38
+#: data/dconf/org.freedesktop.ibus.gschema.xml:83
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
 msgstr ""
 "ibus エンジンが切り替えられたときに .xmodmap もしくは .Xmodmap が存在すれば "
 "xmodmap を実行します。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:42 setup/setup.ui:1208
+#: data/dconf/org.freedesktop.ibus.gschema.xml:87 setup/setup.ui:1220
 msgid "Use system keyboard layout"
 msgstr "システムのキーボードレイアウトを使用する"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:43 setup/setup.ui:1213
+#: data/dconf/org.freedesktop.ibus.gschema.xml:88 setup/setup.ui:1225
 msgid "Use system keyboard (XKB) layout"
 msgstr "システムのキーボード (XKB) レイアウトを使用する"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:47
+#: data/dconf/org.freedesktop.ibus.gschema.xml:92
 msgid "Embed Preedit Text"
 msgstr "前編集テキストを組み込む"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:48
+#: data/dconf/org.freedesktop.ibus.gschema.xml:93
 msgid "Embed Preedit Text in Application Window"
 msgstr "アプリケーションウィンドウに前編集テキストを組み込みます"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:52
+#: data/dconf/org.freedesktop.ibus.gschema.xml:97
 msgid "Use global input method"
 msgstr "グローバル入力メソッドを使用する"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:53 setup/setup.ui:1257
+#: data/dconf/org.freedesktop.ibus.gschema.xml:98 setup/setup.ui:1269
 msgid "Share the same input method among all applications"
 msgstr "すべてのアプリケーション間で同じ入力メソッドを共有する"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:57
+#: data/dconf/org.freedesktop.ibus.gschema.xml:102
 msgid "Enable input method by default"
 msgstr "デフォルトで入力メソッドを有効にする"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:58
+#: data/dconf/org.freedesktop.ibus.gschema.xml:103
 msgid "Enable input method by default when the application gets input focus"
 msgstr ""
 "アプリケーションで入力が必要とされる場合にはデフォルトで入力メソッドを有効に"
 "します"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:62
+#: data/dconf/org.freedesktop.ibus.gschema.xml:107
 msgid "DConf preserve name prefixes"
 msgstr "DConf により名前のプレフィックスを維持する"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:63
+#: data/dconf/org.freedesktop.ibus.gschema.xml:108
 msgid "Prefixes of DConf keys to stop name conversion"
 msgstr "名前の変換を阻止する DConf キーのプレフィックスです"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:70
+#: data/dconf/org.freedesktop.ibus.gschema.xml:115
 msgid "Trigger shortcut keys"
 msgstr "トリガーショートカットキー"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:71
-#: data/dconf/org.freedesktop.ibus.gschema.xml:76 setup/setup.ui:224
+#: data/dconf/org.freedesktop.ibus.gschema.xml:116
+#: data/dconf/org.freedesktop.ibus.gschema.xml:121 setup/setup.ui:236
 msgid "The shortcut keys for turning input method on or off"
 msgstr "入力メソッドをオンまたはオフするためのショートカットキー"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:75
+#: data/dconf/org.freedesktop.ibus.gschema.xml:120
 msgid "Trigger shortcut keys for gtk_accelerator_parse"
 msgstr "gtk_accelerator_parse のためのトリガーショートカットキー"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:80
+#: data/dconf/org.freedesktop.ibus.gschema.xml:125
 msgid "Enable shortcut keys"
 msgstr "ショートカットキーを有効にする"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:81
+#: data/dconf/org.freedesktop.ibus.gschema.xml:126
 msgid "The shortcut keys for turning input method on"
 msgstr "入力メソッドをオンに切り替えるためのショートカットキー"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:85
+#: data/dconf/org.freedesktop.ibus.gschema.xml:130
 msgid "Disable shortcut keys"
 msgstr "ショートカットキーを無効にする"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:86
+#: data/dconf/org.freedesktop.ibus.gschema.xml:131
 msgid "The shortcut keys for turning input method off"
 msgstr "入力メソッドをオフに切り替えるためのショートカットキー"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:90
-#: data/dconf/org.freedesktop.ibus.gschema.xml:95
+#: data/dconf/org.freedesktop.ibus.gschema.xml:135
+#: data/dconf/org.freedesktop.ibus.gschema.xml:140
 msgid "Next engine shortcut keys"
 msgstr "次のエンジンへのショートカットキー"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:91
-#: data/dconf/org.freedesktop.ibus.gschema.xml:96
+#: data/dconf/org.freedesktop.ibus.gschema.xml:136
+#: data/dconf/org.freedesktop.ibus.gschema.xml:141
 msgid "The shortcut keys for switching to the next input method in the list"
 msgstr "一覧内の次の入力メソッドに切り替えるためのショートカットキー"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:100
-#: data/dconf/org.freedesktop.ibus.gschema.xml:105
+#: data/dconf/org.freedesktop.ibus.gschema.xml:145
+#: data/dconf/org.freedesktop.ibus.gschema.xml:150
 msgid "Prev engine shortcut keys"
 msgstr "前のエンジンへのショートカットキー"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:101
-#: data/dconf/org.freedesktop.ibus.gschema.xml:106
+#: data/dconf/org.freedesktop.ibus.gschema.xml:146
+#: data/dconf/org.freedesktop.ibus.gschema.xml:151
 msgid "The shortcut keys for switching to the previous input method"
 msgstr "一覧内のひとつ前の入力メソッドに切り替えるためのショートカットキー"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:112
+#: data/dconf/org.freedesktop.ibus.gschema.xml:157
 msgid "Auto hide"
 msgstr "自動的に隠す"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:113
+#: data/dconf/org.freedesktop.ibus.gschema.xml:158
 msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
 msgstr ""
 "プロパティーパネルの挙動。 0 = 表示しない、1 = 自動的に隠す、2 = 常に表示する"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:117
-#: data/dconf/org.freedesktop.ibus.gschema.xml:121
+#: data/dconf/org.freedesktop.ibus.gschema.xml:162
+#: data/dconf/org.freedesktop.ibus.gschema.xml:166
 msgid "Language panel position"
 msgstr "言語パネルの位置"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:125
+#: data/dconf/org.freedesktop.ibus.gschema.xml:170
 msgid "Follow the input cursor in case the panel is always shown"
 msgstr "パネルが常に表示されている場合に入力カーソルに従う"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:126
+#: data/dconf/org.freedesktop.ibus.gschema.xml:171
 msgid ""
 "If true, the panel follows the input cursor in case the panel is always "
 "shown. If false, the panel is shown at a fixed location."
@@ -214,11 +214,11 @@ msgstr ""
 "true ならば、パネルが常に表示されている場合にパネルは入力カーソルに従います。"
 "false ならば、パネルは固定位置に表示されます。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:130
+#: data/dconf/org.freedesktop.ibus.gschema.xml:175
 msgid "The milliseconds to show property panel"
 msgstr "プロパティーパネルを表示するミリ秒"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:131
+#: data/dconf/org.freedesktop.ibus.gschema.xml:176
 msgid ""
 "The milliseconds to show property panel after focus-in or properties are "
 "changed."
@@ -226,33 +226,33 @@ msgstr ""
 "フォーカスインまたはプロパティが変更された後でプロパティーパネルを表示するミ"
 "リ秒。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:135
+#: data/dconf/org.freedesktop.ibus.gschema.xml:180
 msgid "Orientation of lookup table"
 msgstr "検索テーブルの向き"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:136
+#: data/dconf/org.freedesktop.ibus.gschema.xml:181
 msgid "Orientation of lookup table. 0 = Horizontal, 1 = Vertical"
 msgstr "検索テーブルの向きです。0 = 横、1 = 縦"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:140
-#: data/dconf/org.freedesktop.ibus.gschema.xml:141 setup/setup.ui:470
-#: setup/setup.ui:475
+#: data/dconf/org.freedesktop.ibus.gschema.xml:185
+#: data/dconf/org.freedesktop.ibus.gschema.xml:186 setup/setup.ui:482
+#: setup/setup.ui:487
 msgid "Show icon on system tray"
 msgstr "システムトレイにアイコンを表示する"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:145
+#: data/dconf/org.freedesktop.ibus.gschema.xml:190
 msgid "Show input method name"
 msgstr "入力メソッド名を表示する"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:146 setup/setup.ui:489
+#: data/dconf/org.freedesktop.ibus.gschema.xml:191 setup/setup.ui:501
 msgid "Show input method name on language bar"
 msgstr "言語バーに入力メソッド名を表示する"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:150
+#: data/dconf/org.freedesktop.ibus.gschema.xml:195
 msgid "RGBA value of XKB icon"
 msgstr "XKB アイコンの RGBA 値"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:151
+#: data/dconf/org.freedesktop.ibus.gschema.xml:196
 msgid ""
 "XKB icon shows the layout string and the string is rendered with the RGBA "
 "value. The RGBA value can be 1. a color name from X11, 2. a hex value in "
@@ -270,11 +270,11 @@ msgstr ""
 "の範囲内のパーセンテージのことで、'a' はアルファ値の 0 から 1 までの範囲内の"
 "浮動小数値のこと。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:155
+#: data/dconf/org.freedesktop.ibus.gschema.xml:200
 msgid "The milliseconds to show the panel icon for a property"
 msgstr "プロパティー用にパネルアイコンを表示する遅延時間 (ミリ秒単位)"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:156
+#: data/dconf/org.freedesktop.ibus.gschema.xml:201
 msgid ""
 "The milliseconds to show the panel icon from the engine icon to a property "
 "icon whenever engines are switched if the property is specified by the value "
@@ -286,28 +286,72 @@ msgstr ""
 "パティーをパネルアイコンを表示するためのミリ秒単位の遅延時間。値が 0 の場合、"
 "遅延無くプロパティーアイコンが即時に表示される。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:160
+#: data/dconf/org.freedesktop.ibus.gschema.xml:205
 msgid "Use custom font"
 msgstr "カスタムフォントを使う"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:161
+#: data/dconf/org.freedesktop.ibus.gschema.xml:206
 msgid "Use custom font name for language panel"
 msgstr "言語パネル用にカスタムフォント名を使用する"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:165
-#: data/dconf/org.freedesktop.ibus.gschema.xml:192
+#: data/dconf/org.freedesktop.ibus.gschema.xml:210
+#: data/dconf/org.freedesktop.ibus.gschema.xml:257
 msgid "Custom font"
 msgstr "カスタムフォント"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:166
+#: data/dconf/org.freedesktop.ibus.gschema.xml:211
 msgid "Custom font name for language panel"
 msgstr "言語パネル用のカスタムフォント名"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:170 setup/setup.ui:1305
+#: data/dconf/org.freedesktop.ibus.gschema.xml:215
+#, fuzzy
+#| msgid "Use custom font"
+msgid "Use custom theme"
+msgstr "カスタムフォントを使う"
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:216
+#, fuzzy
+#| msgid "Use custom font name for language panel"
+msgid "Use custom theme name for language panel"
+msgstr "言語パネル用にカスタムフォント名を使用する"
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:220
+#, fuzzy
+#| msgid "Custom font"
+msgid "Custom theme"
+msgstr "カスタムフォント"
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:221
+#, fuzzy
+#| msgid "Custom font name for language panel"
+msgid "Custom theme name for language panel"
+msgstr "言語パネル用のカスタムフォント名"
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:225
+#, fuzzy
+#| msgid "Use custom font"
+msgid "Use custom icon"
+msgstr "カスタムフォントを使う"
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:226
+msgid "Use custom icon name for arrow buttons on candidate window"
+msgstr ""
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:230
+#, fuzzy
+#| msgid "Custom font"
+msgid "Custom icon"
+msgstr "カスタムフォント"
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:231
+msgid "Custom icon name for arrow buttons on candidate window"
+msgstr ""
+
+#: data/dconf/org.freedesktop.ibus.gschema.xml:235 setup/setup.ui:1317
 msgid "Choose glyphs with input method's language on candidate window"
 msgstr "候補ウィンドウ上でインプットメソッドの言語でグリフを選択する"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:171
+#: data/dconf/org.freedesktop.ibus.gschema.xml:236
 msgid ""
 "Some code points have the different glyphs and Pango determines the glyphs "
 "from the language attribute. Pango chooses glyphs from the IBus engine's "
@@ -318,31 +362,31 @@ msgstr ""
 "定する。値が真の場合、Pango は IBus エンジンの言語からグリフを選択し、値が偽"
 "の場合、デスクトップのロケールから選択する。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:182
+#: data/dconf/org.freedesktop.ibus.gschema.xml:247
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
 msgstr "gtk_accelerator_parse のための Unicode ショートカットキー"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:183
+#: data/dconf/org.freedesktop.ibus.gschema.xml:248
 msgid "The shortcut keys for turning Unicode typing on or off"
 msgstr "Unicode 入力の有効と無効を切り替えるためのショートカットキー"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:187
+#: data/dconf/org.freedesktop.ibus.gschema.xml:252
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
 msgstr "gtk_accelerator_parse のための絵文字ショートカットキー"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:188
+#: data/dconf/org.freedesktop.ibus.gschema.xml:253
 msgid "The shortcut keys for turning emoji typing on or off"
 msgstr "絵文字入力の有効と無効を切り替えるためのショートカットキー"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:193
+#: data/dconf/org.freedesktop.ibus.gschema.xml:258
 msgid "Custom font name for emoji characters on emoji dialog"
 msgstr "絵文字ダイアログ上の絵文字用のカスタムフォント名"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:197
+#: data/dconf/org.freedesktop.ibus.gschema.xml:262
 msgid "Default language for emoji dictionary"
 msgstr "絵文字辞書用のデフォルトの言語"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:198
+#: data/dconf/org.freedesktop.ibus.gschema.xml:263
 msgid ""
 "Choose a default language of emoji dictionaries on the emoji dialog. The "
 "value $lang is applied to /usr/share/ibus/dicts/emoji-$lang.dict ."
@@ -350,11 +394,11 @@ msgstr ""
 "絵文字ダイアログ上の絵文字辞書のデフォルトの言語を選択します。その値 $lang "
 "は、/usr/share/ibus/dicts/emoji-$lang.dict に適用されます。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:202
+#: data/dconf/org.freedesktop.ibus.gschema.xml:267
 msgid "favorite emoji list on emoji dialog"
 msgstr "絵文字ダイアログ上のお気に入り絵文字リスト"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:203
+#: data/dconf/org.freedesktop.ibus.gschema.xml:268
 msgid ""
 "You can show the favorite emojis on emoji list if this list has any "
 "characters."
@@ -362,40 +406,40 @@ msgstr ""
 "このリストが文字を含む場合、絵文字リスト上にお気に入りの絵文字を表示すること"
 "ができます。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:207
+#: data/dconf/org.freedesktop.ibus.gschema.xml:272
 msgid "favorite emoji annotation list on emoji dialog"
 msgstr "絵文字ダイアログ上のお気に入りの絵文字ルビリスト"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:208
+#: data/dconf/org.freedesktop.ibus.gschema.xml:273
 msgid "You can assign an annotation for a favorite emoji in this list."
 msgstr "このリストの中にお気に入りの絵文字用のルビを指定できます。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:212
+#: data/dconf/org.freedesktop.ibus.gschema.xml:277
 msgid "Whether emoji annotations can be match partially or not"
 msgstr "絵文字ルビを部分一致させることを可能にするか否か"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:213
+#: data/dconf/org.freedesktop.ibus.gschema.xml:278
 msgid ""
 "Whether emoji annotations can be matched with a partial string instead of "
 "the exact match or not."
 msgstr ""
 "絵文字ルビを完全一致ではなく部分文字列で一致させることを可能にするか否か。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:217
+#: data/dconf/org.freedesktop.ibus.gschema.xml:282
 msgid "Match emoji annotations with the specified length"
 msgstr "指定した長さで絵文字ルビを一致させる"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:218
+#: data/dconf/org.freedesktop.ibus.gschema.xml:283
 msgid ""
 "Match emoji annotations partially with more than the specified number of "
 "characters instead of the exact match."
 msgstr "絵文字ルビを完全一致ではなく指定した文字数で部分一致させる。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:222
+#: data/dconf/org.freedesktop.ibus.gschema.xml:287
 msgid "Choose a condition to match emoji annotations partially"
 msgstr "絵文字ルビを部分一致させる条件を選ぶ"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:223
+#: data/dconf/org.freedesktop.ibus.gschema.xml:288
 msgid ""
 "Choose one of the following conditions to match emoji annotations partially: "
 "0 == Prefix match, 1 == Suffix match, 2 == Containing match"
@@ -403,11 +447,11 @@ msgstr ""
 "絵文字ルビを部分一致させる次の条件のうちの１つを選ぶ: 0 == 文頭一致、1 == 文"
 "末一致、2 == 文中一致"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:227
+#: data/dconf/org.freedesktop.ibus.gschema.xml:292
 msgid "Load the emoji data at the time of startup"
 msgstr "起動時に絵文字データを読み込む"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:228
+#: data/dconf/org.freedesktop.ibus.gschema.xml:293
 msgid ""
 "Load the emoji data at the time of startup if true. About 10MB memory is "
 "needed to load the data. Load the emoji data when open the emoji dialog at "
@@ -417,11 +461,11 @@ msgstr ""
 "み込むために必要になります。false の場合、初めて絵文字ダイアログを開く時に絵"
 "文字データを読み込みます。"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:232
+#: data/dconf/org.freedesktop.ibus.gschema.xml:297
 msgid "Load the Unicode data at the time of startup"
 msgstr "起動時に Unicode データを読み込む"
 
-#: data/dconf/org.freedesktop.ibus.gschema.xml:233
+#: data/dconf/org.freedesktop.ibus.gschema.xml:298
 msgid ""
 "Load the Unicode data at the time of startup if true. About 15MB memory is "
 "needed to load the data. Load the Unicode data when open the emoji dialog at "
@@ -441,7 +485,7 @@ msgstr ""
 "Copyright © 2007-2010 Peng Huang\n"
 "Copyright © 2007-2010 Red Hat, Inc."
 
-#: ibus/lang.py:41 src/ibusutil.c:209
+#: ibus/lang.py:41 src/ibusutil.c:209 ui/gtk3/panel.vala:1323
 msgid "Other"
 msgstr "その他"
 
@@ -450,11 +494,11 @@ msgid "Select a language"
 msgstr "言語の選択"
 
 #: setup/emojilang.py:70 setup/enginedialog.py:60 setup/keyboardshortcut.py:339
-#: setup/main.py:560
+#: setup/main.py:634
 msgid "_Cancel"
 msgstr "キャンセル(_C)"
 
-#: setup/emojilang.py:71 setup/keyboardshortcut.py:340 setup/main.py:561
+#: setup/emojilang.py:71 setup/keyboardshortcut.py:340 setup/main.py:635
 msgid "_OK"
 msgstr "OK(_O)"
 
@@ -462,11 +506,11 @@ msgstr "OK(_O)"
 msgid "More…"
 msgstr "さらに…"
 
-#: setup/engineabout.py:37 setup/setup.ui:1368 ui/gtk3/panel.vala:1259
+#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1288
 msgid "About"
 msgstr "情報"
 
-#: setup/engineabout.py:40 setup/setup.ui:1391
+#: setup/engineabout.py:40 setup/setup.ui:1488
 msgid "_Close"
 msgstr "閉じる(_C)"
 
@@ -494,16 +538,16 @@ msgid "Select an input method"
 msgstr "入力メソッドの選択"
 
 #. add button
-#: setup/enginedialog.py:61 setup/keyboardshortcut.py:124 setup/setup.ui:664
+#: setup/enginedialog.py:61 setup/keyboardshortcut.py:124 setup/setup.ui:676
 msgid "_Add"
 msgstr "追加(_A)"
 
 #. create im name & icon column
-#: setup/enginetreeview.py:69 setup/setup.ui:838
+#: setup/enginetreeview.py:69 setup/setup.ui:850
 msgid "Input Method"
 msgstr "入力メソッド"
 
-#: setup/ibus-setup.desktop:3 setup/setup.ui:69
+#: setup/ibus-setup.desktop:3 setup/setup.ui:81
 msgid "IBus Preferences"
 msgstr "IBus の設定"
 
@@ -545,17 +589,17 @@ msgstr ""
 msgid "Please press a key (or a key combination)"
 msgstr "キー (もしくはキーの組み合わせ) を入力してください"
 
-#: setup/main.py:121 setup/main.py:588
+#: setup/main.py:122 setup/main.py:662
 msgid "Use shortcut with shift to switch to the previous input method"
 msgstr ""
 "以前の入力メソッドに切り替えるにはショートカットにシフトキーを付けて使用しま"
 "す"
 
-#: setup/main.py:515
+#: setup/main.py:589
 msgid "The IBus daemon is not running. Do you wish to start it?"
 msgstr "IBus デーモンが実行されていません。起動しますか？"
 
-#: setup/main.py:536
+#: setup/main.py:610
 msgid ""
 "IBus has been started! If you cannot use IBus, add the following lines to "
 "your $HOME/.bashrc; then relog into your desktop.\n"
@@ -570,18 +614,18 @@ msgstr ""
 "  export QT_IM_MODULE=ibus"
 
 #. Translators: %d == 5 currently
-#: setup/main.py:550
+#: setup/main.py:624
 #, python-format
 msgid "IBus daemon could not be started in %d seconds."
 msgstr "IBus デーモンを %d 秒以内に開始できませんでした。"
 
-#: setup/main.py:562
+#: setup/main.py:636
 #, python-format
 msgid "Select keyboard shortcut for %s"
 msgstr "%s のキーボードショートカットを選択"
 
 #. Translators: Title of the window
-#: setup/main.py:564
+#: setup/main.py:638
 msgid "switching input methods"
 msgstr "入力メソッドの切り替え中"
 
@@ -625,135 +669,135 @@ msgstr "自動的に隠す"
 msgid "Always"
 msgstr "常に表示する"
 
-#: setup/setup.ui:113
+#: setup/setup.ui:125
 msgid "The shortcut keys for switching to next input method in the list"
 msgstr "一覧内の次の入力メソッドに切り替えるためのショートカットキー"
 
-#: setup/setup.ui:115
+#: setup/setup.ui:127
 msgid "Next input method:"
 msgstr "次の入力メソッド:"
 
-#: setup/setup.ui:127
+#: setup/setup.ui:139
 msgid "The shortcut keys for switching to previous input method in the list"
 msgstr "一覧内のひとつ前の入力メソッドに切り替えるためのショートカットキー"
 
-#: setup/setup.ui:129
+#: setup/setup.ui:141
 msgid "Previous input method:"
 msgstr "ひとつ前の入力メソッド:"
 
-#: setup/setup.ui:157 setup/setup.ui:199 setup/setup.ui:266 setup/setup.ui:319
-#: setup/setup.ui:903 setup/setup.ui:957
+#: setup/setup.ui:169 setup/setup.ui:211 setup/setup.ui:278 setup/setup.ui:331
+#: setup/setup.ui:915 setup/setup.ui:969
 msgid "..."
 msgstr "…"
 
-#: setup/setup.ui:226
+#: setup/setup.ui:238
 msgid "Enable or disable:"
 msgstr "切り替え:"
 
-#: setup/setup.ui:238
+#: setup/setup.ui:250
 msgid "Enable:"
 msgstr "有効:"
 
-#: setup/setup.ui:291
+#: setup/setup.ui:303
 msgid "Disable:"
 msgstr "無効:"
 
-#: setup/setup.ui:345 setup/setup.ui:983
+#: setup/setup.ui:357 setup/setup.ui:995
 msgid "<b>Keyboard Shortcuts</b>"
 msgstr "<b>キーボードショートカット</b>"
 
-#: setup/setup.ui:374
+#: setup/setup.ui:386
 msgid "Set the orientation of candidates in lookup table"
 msgstr "ルックアップテーブルの中で候補ウィンドウの向きを設定します"
 
-#: setup/setup.ui:376
+#: setup/setup.ui:388
 msgid "Candidates orientation:"
 msgstr "候補ウィンドウの向き:"
 
-#: setup/setup.ui:407
+#: setup/setup.ui:419
 msgid "Set the behavior of ibus how to show or hide language bar"
 msgstr "言語バーをどのように表示するもしくは隠すかの ibus の動作を設定します"
 
-#: setup/setup.ui:409
+#: setup/setup.ui:421
 msgid "Show property panel:"
 msgstr "プロパティーパネルを表示する:"
 
-#: setup/setup.ui:423
+#: setup/setup.ui:435
 msgid "Language panel position:"
 msgstr "言語パネルの位置:"
 
-#: setup/setup.ui:494
+#: setup/setup.ui:506
 msgid "Show input method's name on language bar when check the checkbox"
 msgstr ""
 "チェックボックスにチェック付けると、言語バーに入力メソッド名が表示されます"
 
-#: setup/setup.ui:508
+#: setup/setup.ui:520
 msgid "Embed preedit text in application window"
 msgstr "アプリケーションウィンドウに前編集テキストを組み込む"
 
-#: setup/setup.ui:513
+#: setup/setup.ui:525
 msgid "Embed the preedit text of input method in the application window"
 msgstr ""
 "アプリケーションウィンドウに入力メソッドのプリエディットテキストを組み込みま"
 "す"
 
-#: setup/setup.ui:527
+#: setup/setup.ui:539
 msgid "Use custom font:"
 msgstr "カスタムフォントを使う:"
 
-#: setup/setup.ui:562 setup/setup.ui:1156
+#: setup/setup.ui:574 setup/setup.ui:1168
 msgid "<b>Font and Style</b>"
 msgstr "<b>フォントとスタイル</b>"
 
-#: setup/setup.ui:579
+#: setup/setup.ui:591
 msgid "General"
 msgstr "一般"
 
-#: setup/setup.ui:671
+#: setup/setup.ui:683
 msgid "Add the selected input method into the enabled input methods"
 msgstr "選択した入力メソッドを有効な入力メソッドへ追加します"
 
-#: setup/setup.ui:682
+#: setup/setup.ui:694
 msgid "_Remove"
 msgstr "削除(_R)"
 
-#: setup/setup.ui:689
+#: setup/setup.ui:701
 msgid "Remove the selected input method from the enabled input methods"
 msgstr "選択した入力メソッドを有効な入力メソッドから削除します"
 
-#: setup/setup.ui:700
+#: setup/setup.ui:712
 msgid "_Up"
 msgstr "上へ(_U)"
 
-#: setup/setup.ui:707
+#: setup/setup.ui:719
 msgid "Move up the selected input method in the enabled input methods list"
 msgstr "有効な入力メソッド一覧内で選択した入力メソッドを上へ移動させます"
 
-#: setup/setup.ui:718
+#: setup/setup.ui:730
 msgid "_Down"
 msgstr "下へ(_D)"
 
-#: setup/setup.ui:725
+#: setup/setup.ui:737
 msgid "Move down the selected input method in the enabled input methods"
 msgstr "有効な入力メソッド一覧内で選択した入力メソッドを下へ移動させます"
 
-#: setup/setup.ui:736
+#: setup/setup.ui:748
 msgid "_About"
 msgstr "情報(_A)"
 
-#: setup/setup.ui:743
+#: setup/setup.ui:755
 msgid "Show information of the selected input method"
 msgstr "選択した入力メソッドの情報を表示します"
 
-#: setup/setup.ui:754
+#: setup/setup.ui:766
 msgid "_Preferences"
 msgstr "設定(_P)"
 
-#: setup/setup.ui:761
+#: setup/setup.ui:773
 msgid "Show setup of the selected input method"
 msgstr "選択した入力メソッドの設定を表示します"
 
-#: setup/setup.ui:812
+#: setup/setup.ui:824
 msgid ""
 "<small><i>The active input method can be switched around from the selected "
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
@@ -763,76 +807,76 @@ msgstr ""
 "すかパネルアイコンをクリックすることによってリストされている中から１つのイン"
 "プットメソッドを選択することで切り替えることが可能です。</i></small>"
 
-#: setup/setup.ui:873
+#: setup/setup.ui:885
 msgid ""
 "The shortcut keys to enable conversions of emoji annotations or Unicode names"
 msgstr "絵文字ルビまたは Unicode 名の変換を可能にするショートカットキー"
 
-#: setup/setup.ui:875
+#: setup/setup.ui:887
 msgid "Emoji annotation:"
 msgstr "絵文字ルビ:"
 
-#: setup/setup.ui:927
+#: setup/setup.ui:939
 msgid "The shortcut keys to enable Unicode code point conversions"
 msgstr "Unicode コードポイント変換を可能にするショートかっトーキー"
 
-#: setup/setup.ui:929
+#: setup/setup.ui:941
 msgid "Unicode code point:"
 msgstr "Unicode コードポイント:"
 
-#: setup/setup.ui:1013
+#: setup/setup.ui:1025
 msgid "Set a font of Unicode candidates on the emoji dialog"
 msgstr "絵文字ダイアログ上の Unicode 候補のフォントを設定"
 
-#: setup/setup.ui:1015
+#: setup/setup.ui:1027
 msgid "Unicode font:"
 msgstr "Unicode フォント:"
 
-#: setup/setup.ui:1038
+#: setup/setup.ui:1050
 msgid "Set a language of emoji annotations on the emoji dialog"
 msgstr "絵文字ダイアログ上の絵文字ルビの言語を設定します"
 
-#: setup/setup.ui:1040
+#: setup/setup.ui:1052
 msgid "Emoji annotation language:"
 msgstr "絵文字ルビの言語:"
 
-#: setup/setup.ui:1062
+#: setup/setup.ui:1074
 msgid ""
 "Match emoji annotations partially with the following condition and more than "
 "the number of characters:"
 msgstr "絵文字ルビを次の条件と文字数以上で部分一致させる:"
 
-#: setup/setup.ui:1067
+#: setup/setup.ui:1079
 msgid ""
 "If emoji annotations can be matched with a partial string instead of the "
 "exact match"
 msgstr "絵文字ルビを完全一致ではなく部分文字列で一致させることが可能かどうか"
 
-#: setup/setup.ui:1101
+#: setup/setup.ui:1113
 msgid "Prefix match"
 msgstr "文頭一致"
 
-#: setup/setup.ui:1115
+#: setup/setup.ui:1127
 msgid "Suffix match"
 msgstr "文末一致"
 
-#: setup/setup.ui:1130
+#: setup/setup.ui:1142
 msgid "Containing match"
 msgstr "文中一致"
 
-#: setup/setup.ui:1176
+#: setup/setup.ui:1188
 msgid "Emoji"
 msgstr "絵文字"
 
-#: setup/setup.ui:1230
+#: setup/setup.ui:1242
 msgid "<b>Keyboard Layout</b>"
 msgstr "<b>キーボードレイアウト</b>"
 
-#: setup/setup.ui:1278
+#: setup/setup.ui:1290
 msgid "<b>Global input method settings</b>"
 msgstr "<b>グローバル入力メソッドの設定</b>"
 
-#: setup/setup.ui:1310
+#: setup/setup.ui:1322
 msgid ""
 "Choose glyphs with the input method's language on the candidate window for "
 "the duplicated code points"
@@ -840,11 +884,37 @@ msgstr ""
 "重複したコードポイントのために候補ウィンドウ上でインプットメソッドの言語でグ"
 "リフを選択する"
 
-#: setup/setup.ui:1327
-msgid "<b>Fonts</b>"
-msgstr "<b>フォント</b>"
+#: setup/setup.ui:1341
+#, fuzzy
+#| msgid "Use custom font:"
+msgid "Use custom theme:"
+msgstr "カスタムフォントを使う:"
 
-#: setup/setup.ui:1347
+#: setup/setup.ui:1342
+#, fuzzy
+#| msgid "Choose glyphs with input method's language on candidate window"
+msgid "Choose a theme of the candidate window"
+msgstr "候補ウィンドウ上でインプットメソッドの言語でグリフを選択する"
+
+#: setup/setup.ui:1378
+#, fuzzy
+#| msgid "Use custom font:"
+msgid "Use custom icon:"
+msgstr "カスタムフォントを使う:"
+
+#: setup/setup.ui:1379
+#, fuzzy
+#| msgid "Choose glyphs with input method's language on candidate window"
+msgid "Choose a theme of the arrow buttons on the candidate window"
+msgstr "候補ウィンドウ上でインプットメソッドの言語でグリフを選択する"
+
+#: setup/setup.ui:1424
+#, fuzzy
+#| msgid "<b>Font and Style</b>"
+msgid "<b>Font and Theme</b>"
+msgstr "<b>フォントとスタイル</b>"
+
+#: setup/setup.ui:1444
 msgid "Advanced"
 msgstr "詳細"
 
@@ -3342,7 +3412,7 @@ msgid "Alias: %s"
 msgstr "別名: %s"
 
 #: ui/gtk3/emojier.vala:2180 ui/gtk3/ibus-extension-gtk3.desktop.in:3
-#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1244
+#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1273
 msgid "Emoji Choice"
 msgstr "絵文字の選択"
 
@@ -3403,15 +3473,11 @@ msgstr "指定した数字をもつ長さで一致させる"
 msgid "Match with the condition of the specified integer"
 msgstr "指定した数字の条件で一致させる"
 
-#: ui/gtk3/panel.vala:320 ui/gtk3/panel.vala:351
+#: ui/gtk3/panel.vala:337 ui/gtk3/panel.vala:368
 msgid "IBus Panel"
 msgstr "IBus パネル"
 
-#: ui/gtk3/panel.vala:756
-msgid "IBus Notification"
-msgstr "IBus 通知"
-
-#: ui/gtk3/panel.vala:757 ui/gtk3/panel.vala:766 ui/gtk3/panel.vala:770
+#: ui/gtk3/panel.vala:767
 msgid ""
 "Keymap changes do not work in Plasma Wayland at present. Please use "
 "systemsettings5 instead."
@@ -3419,7 +3485,11 @@ msgstr ""
 "キーマップ変更は現在、Plasma Wayland で動作しません。代わりに "
 "systemsettings5 を使って下さい。"
 
-#: ui/gtk3/panel.vala:1045
+#: ui/gtk3/panel.vala:775
+msgid "IBus Notification"
+msgstr "IBus 通知"
+
+#: ui/gtk3/panel.vala:1068
 #, c-format
 msgid ""
 "Your configured input method %s does not exist in IBus input methods so \"US"
@@ -3428,14 +3498,14 @@ msgstr ""
 "構成された入力メソッド %s は IBus 入力メソッドに存在しないので、\"US\" レイア"
 "ウトがあなたの入力メソッドの代わりに構成されました。"
 
-#: ui/gtk3/panel.vala:1050
+#: ui/gtk3/panel.vala:1073
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
 msgstr ""
 "構成された入力メソッドの少なくとも１つが IBus 入力メソッドに存在しません。"
 
-#: ui/gtk3/panel.vala:1053
+#: ui/gtk3/panel.vala:1076
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
@@ -3443,11 +3513,11 @@ msgstr ""
 "`ibus-setup` をコマンドを実行して、\"入力メソッド\" タブを開いて、入力メソッ"
 "ドを再度構成してください。"
 
-#: ui/gtk3/panel.vala:1216
+#: ui/gtk3/panel.vala:1245
 msgid "IBus is an intelligent input bus for Linux/Unix."
 msgstr "IBus は Linux/Unix のためのインテリジェントなインプットバスです。"
 
-#: ui/gtk3/panel.vala:1220
+#: ui/gtk3/panel.vala:1249
 msgid "translator-credits"
 msgstr ""
 "UTUMI Hirosi <utuhiro78@yahoo.co.jp>\n"
@@ -3455,23 +3525,32 @@ msgstr ""
 "日向原 龍一 <hyu_gabaru@yahoo.co.jp>\n"
 "MIZUMOTO, Noriko <noriko@fedoraproject.org>"
 
-#: ui/gtk3/panel.vala:1239
+#: ui/gtk3/panel.vala:1268
 msgid "Preferences"
 msgstr "設定"
 
-#: ui/gtk3/panel.vala:1265
+#: ui/gtk3/panel.vala:1294
 msgid "Restart"
 msgstr "再起動"
 
-#: ui/gtk3/panel.vala:1269
+#: ui/gtk3/panel.vala:1298
 msgid "Quit"
 msgstr "終了"
+
+#: ui/gtk3/panel.vala:1324
+#, fuzzy
+#| msgid "Next input method:"
+msgid "No input method"
+msgstr "次の入力メソッド:"
 
 #. Translators: If your locale is RTL, the msgstr is "default:RTL".
 #. * Otherwise the msgstr is "default:LTR".
 #: ui/gtk3/propertypanel.vala:368 ui/gtk3/propertypanel.vala:376
 msgid "default:LTR"
 msgstr "default:LTR"
+
+#~ msgid "<b>Fonts</b>"
+#~ msgstr "<b>フォント</b>"
 
 #~ msgid "Kbd"
 #~ msgstr "Kbd"

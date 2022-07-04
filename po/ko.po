@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2022-06-20 20:30+0900\n"
-"PO-Revision-Date: 2022-04-10 09:17+0000\n"
+"PO-Revision-Date: 2022-07-04 10:18+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ko/>\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.13\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -304,48 +304,36 @@ msgid "Custom font name for language panel"
 msgstr "언어 패널에 사용할 지정 글꼴 이름"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:215
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom theme"
-msgstr "사용자 지정 글꼴 사용"
+msgstr "사용자 지정 테마 사용"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:216
-#, fuzzy
-#| msgid "Use custom font name for language panel"
 msgid "Use custom theme name for language panel"
-msgstr "언어 패널용 사용자 지정 글꼴 이름 사용"
+msgstr "언어 패널을 위한 사용자 지정 테마 이름 사용"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:220
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom theme"
-msgstr "사용자 지정 글꼴"
+msgstr "사용자 지정 테마"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:221
-#, fuzzy
-#| msgid "Custom font name for language panel"
 msgid "Custom theme name for language panel"
-msgstr "언어 패널에 사용할 지정 글꼴 이름"
+msgstr "언어 패널을 위한 사용자 지정 테마 이름"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:225
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom icon"
-msgstr "사용자 지정 글꼴 사용"
+msgstr "사용자 지정 아이콘 사용"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:226
 msgid "Use custom icon name for arrow buttons on candidate window"
-msgstr ""
+msgstr "후보 창에서 화살표 누름 단추를 위한 사용자 정의 아이콘 이름 사용"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:230
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom icon"
-msgstr "사용자 지정 글꼴"
+msgstr "사용자 지정 아이콘"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:231
 msgid "Custom icon name for arrow buttons on candidate window"
-msgstr ""
+msgstr "후보 창에서 화살표 누름 단추를 위한 사용자 정의 이름"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:235 setup/setup.ui:1317
 msgid "Choose glyphs with input method's language on candidate window"
@@ -895,34 +883,24 @@ msgstr ""
 "중복된 코드 포인트의 후보 창에서 입력기의 언어에 따라 글리프를 선택합니다"
 
 #: setup/setup.ui:1341
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom theme:"
-msgstr "사용자 지정 글꼴 사용:"
+msgstr "사용자 지정 테마:"
 
 #: setup/setup.ui:1342
-#, fuzzy
-#| msgid "Choose glyphs with input method's language on candidate window"
 msgid "Choose a theme of the candidate window"
-msgstr "후보 창에서 입력기의 언어에 따라 글리프 선택"
+msgstr "후보 창의 테마를 선택합니다"
 
 #: setup/setup.ui:1378
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom icon:"
-msgstr "사용자 지정 글꼴 사용:"
+msgstr "사용자 지정 아이콘:"
 
 #: setup/setup.ui:1379
-#, fuzzy
-#| msgid "Choose glyphs with input method's language on candidate window"
 msgid "Choose a theme of the arrow buttons on the candidate window"
-msgstr "후보 창에서 입력기의 언어에 따라 글리프 선택"
+msgstr "후보 창에서 화살표 누름 단추의 테마를 선택합니다"
 
 #: setup/setup.ui:1424
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Font and Theme</b>"
-msgstr "<b>글꼴 및 스타일</b>"
+msgstr "<b>글꼴과 테마</b>"
 
 #: setup/setup.ui:1444
 msgid "Advanced"
@@ -3582,10 +3560,8 @@ msgid "Quit"
 msgstr "끝내기"
 
 #: ui/gtk3/panel.vala:1324
-#, fuzzy
-#| msgid "Next input method:"
 msgid "No input method"
-msgstr "다음 입력기:"
+msgstr "입력 방법이 없음"
 
 #. Translators: If your locale is RTL, the msgstr is "default:RTL".
 #. * Otherwise the msgstr is "default:LTR".

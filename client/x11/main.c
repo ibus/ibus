@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus
  * Copyright (C) 2007-2015 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2021 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2015-2022 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2007-2015 Red Hat, Inc.
  *
  * main.c:
@@ -47,6 +47,8 @@
 #include <stdlib.h>
 
 #include <getopt.h>
+
+#define ESC_SEQUENCE_ISO10646_1 "\033%G"
 
 #define LOG(level, fmt_args...) \
     if (g_debug_level >= (level)) { \
@@ -254,9 +256,17 @@ _xim_preedit_callback_draw (XIMS xims, X11IC *x11ic, const gchar *preedit_string
     text.feedback = feedback;
 
     if (len > 0) {
-        Xutf8TextListToTextProperty (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
-                                     (char **)&preedit_string,
-                                     1, XCompoundTextStyle, &tp);
+        int ret = Xutf8TextListToTextProperty (
+                GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
+                (char **)&preedit_string,
+                1, XCompoundTextStyle, &tp);
+        if (ret == EXIT_FAILURE) {
+            XFree (tp.value);
+            tp.value = (unsigned char *)g_strdup_printf (
+                    "%s%s",
+                    ESC_SEQUENCE_ISO10646_1,
+                    preedit_string);
+        }
         text.encoding_is_wchar = 0;
         text.length = strlen ((char*)tp.value);
         text.string.multi_byte = (char*)tp.value;
@@ -883,9 +893,26 @@ _context_commit_text_cb (IBusInputContext *context,
 
     XTextProperty tp;
     IMCommitStruct cms = {0};
+    int ret;
 
-    Xutf8TextListToTextProperty (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
-        (gchar **)&(text->text), 1, XCompoundTextStyle, &tp);
+    ret = Xutf8TextListToTextProperty (
+            GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
+            (gchar **)&(text->text), 1, XCompoundTextStyle, &tp);
+    /* XCompoundTextStyle uses locale escaped sequence + encoded chars
+     * matched to the specified multibyte characters: text->text, and
+     * libX11.so sorts the encoding sets by locale.
+     * If an encoded string fails to be matched, ibus-x11 specifys the
+     * ISO10641-1 encoding and that escaped sequence is "\033%G":
+     * https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/master/src/xlibi18n/lcCT.c
+     * , and the encoding is UTF-8 with utf8_wctomb():
+     * https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/master/src/xlibi18n/lcUniConv/utf8.h
+     */
+    if (ret == EXIT_FAILURE) {
+        XFree (tp.value);
+        tp.value = (unsigned char *)g_strdup_printf ("%s%s",
+                                                     ESC_SEQUENCE_ISO10646_1,
+                                                     text->text);
+    }
 
     cms.major_code = XIM_COMMIT;
     cms.icid = x11ic->icid;

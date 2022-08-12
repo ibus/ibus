@@ -96,6 +96,12 @@ struct _BusInputContext {
     guint    purpose;
     guint    hints;
 
+    /* cached surrounding text (see also IBusEnginePrivate and
+       IBusInputContextPrivate) */
+    IBusText *surrounding_text;
+    guint     surrounding_cursor_pos;
+    guint     selection_anchor_pos;
+
     BusPanelProxy *emoji_extension;
     gboolean is_extension_lookup_table;
 };
@@ -631,6 +637,7 @@ bus_input_context_init (BusInputContext *context)
     context->auxiliary_text = text_empty;
     g_object_ref_sink (lookup_table_empty);
     context->lookup_table = lookup_table_empty;
+    context->surrounding_text = g_object_ref_sink (text_empty);
     /* other member variables will automatically be zero-cleared. */
 }
 
@@ -672,6 +679,11 @@ bus_input_context_destroy (BusInputContext *context)
     if (context->client) {
         g_free (context->client);
         context->client = NULL;
+    }
+
+    if (context->surrounding_text) {
+        g_object_unref (context->surrounding_text);
+        context->surrounding_text = NULL;
     }
 
     IBUS_OBJECT_CLASS (bus_input_context_parent_class)->destroy (IBUS_OBJECT (context));
@@ -1239,16 +1251,20 @@ _ic_set_surrounding_text (BusInputContext       *context,
     text = IBUS_TEXT (ibus_serializable_deserialize (variant));
     g_variant_unref (variant);
 
-    if ((context->capabilities & IBUS_CAP_SURROUNDING_TEXT) &&
-         context->has_focus && context->engine) {
-        bus_engine_proxy_set_surrounding_text (context->engine,
-                                               text,
-                                               cursor_pos,
-                                               anchor_pos);
-    }
+    if ((context->capabilities & IBUS_CAP_SURROUNDING_TEXT)) {
+        if (context->surrounding_text)
+            g_object_unref (context->surrounding_text);
 
-    if (g_object_is_floating (text))
-        g_object_unref (text);
+        context->surrounding_text = (IBusText *) g_object_ref_sink (text);
+        context->surrounding_cursor_pos = cursor_pos;
+        context->selection_anchor_pos = anchor_pos;
+
+        if (context->has_focus && context->engine)
+            bus_engine_proxy_set_surrounding_text (context->engine,
+                                                   text,
+                                                   cursor_pos,
+                                                   anchor_pos);
+    }
 
     g_dbus_method_invocation_return_value (invocation, NULL);
 }
@@ -2515,6 +2531,11 @@ bus_input_context_set_engine (BusInputContext *context,
             bus_engine_proxy_set_capabilities (context->engine, context->capabilities);
             bus_engine_proxy_set_cursor_location (context->engine, context->x, context->y, context->w, context->h);
             bus_engine_proxy_set_content_type (context->engine, context->purpose, context->hints);
+            if ((context->capabilities & IBUS_CAP_SURROUNDING_TEXT))
+                bus_engine_proxy_set_surrounding_text (context->engine,
+                                                       context->surrounding_text,
+                                                       context->surrounding_cursor_pos,
+                                                       context->selection_anchor_pos);
         }
     }
     g_signal_emit (context,

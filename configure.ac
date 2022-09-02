@@ -147,6 +147,10 @@ AC_CHECK_HEADERS([sys/prctl.h])
 # Check functions.
 AC_CHECK_FUNCS(daemon)
 
+# Check libraries.
+AC_CHECK_LIB(c, dlclose, LIBDL="", [AC_CHECK_LIB(dl, dlclose, LIBDL="-ldl")])
+AC_SUBST(LIBDL)
+
 # Check packages.
 # Check glib2.
 AM_PATH_GLIB_2_0

@@ -63,7 +63,7 @@ AM_LDADD = \
     @GTHREAD2_LIBS@ \
     $(libibus) \
     $(libibusimmodule) \
-    -ldl               \
+    $(LIBDL) \
     $(NULL)
 
 AM_VALAFLAGS = \

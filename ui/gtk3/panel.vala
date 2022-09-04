@@ -766,7 +766,7 @@ class Panel : IBus.PanelService {
     private void update_version_1_5_26() {
         var message = _("Keymap changes do not work in Plasma Wayland at " +
                         "present. Please use systemsettings5 instead.");
-#if ENABLE_LIBNOTIFY
+#if LIBNOTIFY
         if (!Notify.is_initted()) {
             Notify.init ("ibus");
         }

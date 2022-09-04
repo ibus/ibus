@@ -92,7 +92,7 @@ AM_LDADD += \
 
 AM_VALAFLAGS += \
        --pkg=libnotify \
-       -D ENABLE_LIBNOTIFY \
+       --define=LIBNOTIFY \
        $(NULL)
 endif
 

@@ -73,6 +73,7 @@ struct _BusIBusImpl {
     GHashTable *engine_table;
 
     GHashTable *engine_focus_id_table;
+    GHashTable *engine_needs_surrounding_text_table;
 
     BusInputContext *focused_context;
     BusPanelProxy   *panel;
@@ -599,6 +600,7 @@ bus_ibus_impl_init (BusIBusImpl *ibus)
     ibus->global_engine_name = NULL;
     ibus->global_previous_engine_name = NULL;
     ibus->engine_focus_id_table = g_hash_table_new (g_str_hash, g_str_equal);
+    ibus->engine_needs_surrounding_text_table = g_hash_table_new (g_str_hash, g_str_equal);
 
     /* focus the fake_context, if use_global_engine is enabled. */
     if (ibus->use_global_engine)
@@ -680,6 +682,11 @@ bus_ibus_impl_destroy (BusIBusImpl *ibus)
     }
 
     bus_ibus_impl_registry_destroy (ibus);
+
+    if (ibus->factory_dict != NULL) {
+        g_hash_table_destroy (ibus->engine_needs_surrounding_text_table);
+        ibus->engine_needs_surrounding_text_table = NULL;
+    }
 
     IBUS_OBJECT_CLASS (bus_ibus_impl_parent_class)->destroy (IBUS_OBJECT (ibus));
 }
@@ -2397,3 +2404,11 @@ bus_ibus_impl_get_engine_focus_id_table (BusIBusImpl *ibus)
     return ibus->engine_focus_id_table;
 }
 
+GHashTable *
+bus_ibus_impl_get_engine_needs_surrounding_text_table (BusIBusImpl *ibus)
+{
+
+    g_assert (BUS_IS_IBUS_IMPL (ibus));
+
+    return ibus->engine_needs_surrounding_text_table;
+}

@@ -66,6 +66,13 @@ typedef enum
     ENGINE_FOCUS_CATEGORY_HAS_ID
 } EngineFocusCategory;
 
+typedef enum
+{
+    ENGINE_SURROUNDING_TEXT_CATEGORY_NONE = 0,
+    ENGINE_SURROUNDING_TEXT_CATEGORY_NO_NEED,
+    ENGINE_SURROUNDING_TEXT_CATEGORY_HAS_NEED
+} EngineSurroundingTextCategory;
+
 GType            bus_ibus_impl_get_type             (void);
 
 /**
@@ -90,6 +97,8 @@ gboolean         bus_ibus_impl_is_embed_preedit_text
 BusInputContext *bus_ibus_impl_get_focused_input_context
                                                     (BusIBusImpl        *ibus);
 GHashTable      *bus_ibus_impl_get_engine_focus_id_table
+                                                    (BusIBusImpl        *ibus);
+GHashTable      *bus_ibus_impl_get_engine_needs_surrounding_text_table
                                                     (BusIBusImpl        *ibus);
 G_END_DECLS
 #endif

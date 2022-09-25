@@ -60,6 +60,7 @@ struct _BusEngineProxy {
     /* cached properties */
     IBusPropList *prop_list;
     gboolean has_focus_id;
+    gboolean needs_surrounding_text;
 };
 
 struct _BusEngineProxyClass {
@@ -129,6 +130,8 @@ static void     bus_engine_proxy_initable_iface_init
                                                 (GInitableIface
                                                                *initable_iface);
 static void     bus_engine_proxy_get_has_focus_id
+                                                (BusEngineProxy    *engine);
+static void     bus_engine_proxy_get_needs_surrounding_text
                                                 (BusEngineProxy    *engine);
 
 G_DEFINE_TYPE_WITH_CODE (BusEngineProxy, bus_engine_proxy, IBUS_TYPE_PROXY,
@@ -721,9 +724,12 @@ bus_engine_proxy_new_internal (const gchar     *path,
     if (layout != NULL && layout[0] != '\0') {
         engine->keymap = ibus_keymap_get (layout);
     }
-    if (ibus)
-        hash_table = bus_ibus_impl_get_engine_focus_id_table (ibus);
+    if (!ibus)
+        return engine;
+
+    hash_table = bus_ibus_impl_get_engine_focus_id_table (ibus);
     if (hash_table) {
+        EngineFocusCategory category;
         category = (EngineFocusCategory)GPOINTER_TO_INT (
                 g_hash_table_lookup (hash_table,
                                      ibus_engine_desc_get_name (desc)));
@@ -734,6 +740,21 @@ bus_engine_proxy_new_internal (const gchar     *path,
         else
             bus_engine_proxy_get_has_focus_id (engine);
     }
+
+    hash_table = bus_ibus_impl_get_engine_needs_surrounding_text_table (ibus);
+    if (hash_table) {
+        EngineSurroundingTextCategory category;
+        category = (EngineSurroundingTextCategory)GPOINTER_TO_INT (
+                g_hash_table_lookup (hash_table,
+                                     ibus_engine_desc_get_name (desc)));
+        if (category == ENGINE_SURROUNDING_TEXT_CATEGORY_HAS_NEED)
+            engine->needs_surrounding_text = TRUE;
+        else if (category == ENGINE_SURROUNDING_TEXT_CATEGORY_NO_NEED)
+            engine->needs_surrounding_text = FALSE;
+        else
+            bus_engine_proxy_get_needs_surrounding_text (engine);
+    }
+
     return engine;
 }
 
@@ -1264,6 +1285,26 @@ bus_engine_proxy_set_content_type (BusEngineProxy *engine,
 }
 
 static void
+bus_engine_proxy_get_engine_property (BusEngineProxy *engine,
+                                      const gchar    *prop_name,
+                                      GAsyncReadyCallback callback,
+                                      GHashTable *hash_table)
+{
+    g_assert (BUS_IS_ENGINE_PROXY (engine));
+    g_assert (hash_table);
+    g_dbus_proxy_call ((GDBusProxy *) engine,
+                       "org.freedesktop.DBus.Properties.Get",
+                       g_variant_new ("(ss)",
+                                      IBUS_INTERFACE_ENGINE,
+                                      prop_name),
+                       G_DBUS_CALL_FLAGS_NONE,
+                       -1,
+                       NULL,
+                       callback,
+                       g_hash_table_ref (hash_table));
+}
+
+static void
 _get_has_focus_id_cb (GObject        *object,
                       GAsyncResult   *res,
                       gpointer        user_data)
@@ -1299,23 +1340,54 @@ static void
 bus_engine_proxy_get_has_focus_id (BusEngineProxy *engine)
 {
     BusIBusImpl *ibus = BUS_DEFAULT_IBUS;
-    GHashTable *hash_table;
-
-    g_assert (BUS_IS_ENGINE_PROXY (engine));
     g_assert (ibus);
+    bus_engine_proxy_get_engine_property (engine,
+                                          "FocusId",
+                                          _get_has_focus_id_cb,
+                                          bus_ibus_impl_get_engine_focus_id_table (ibus));
+}
 
-    hash_table = bus_ibus_impl_get_engine_focus_id_table (ibus);
-    g_assert (hash_table);
-    g_dbus_proxy_call ((GDBusProxy *) engine,
-                       "org.freedesktop.DBus.Properties.Get",
-                       g_variant_new ("(ss)",
-                                      IBUS_INTERFACE_ENGINE,
-                                      "FocusId"),
-                       G_DBUS_CALL_FLAGS_NONE,
-                       -1,
-                       NULL,
-                       _get_has_focus_id_cb,
-                       g_hash_table_ref (hash_table));
+static void
+_get_needs_surrounding_text_cb (GObject        *object,
+                                GAsyncResult   *res,
+                                gpointer        user_data)
+{
+    GHashTable *hash_table = (GHashTable*)user_data;
+    BusEngineProxy *engine;
+    GError *error = NULL;
+    GVariant *result;
+
+    g_return_if_fail (BUS_IS_ENGINE_PROXY (object));
+    engine = BUS_ENGINE_PROXY (object);
+    result = g_dbus_proxy_call_finish (G_DBUS_PROXY (object), res, &error);
+
+    if (result != NULL) {
+        GVariant *variant = NULL;
+        gpointer value;
+        g_variant_get (result, "(v)", &variant);
+        engine->needs_surrounding_text = g_variant_get_boolean (variant);
+        g_variant_unref (variant);
+        g_variant_unref (result);
+        value =  GINT_TO_POINTER (engine->needs_surrounding_text
+                                  ? ENGINE_SURROUNDING_TEXT_CATEGORY_HAS_NEED
+                                  : ENGINE_SURROUNDING_TEXT_CATEGORY_NO_NEED);
+        g_hash_table_replace (
+            hash_table,
+            (gpointer)ibus_engine_desc_get_name (engine->desc),
+            value);
+    }
+    g_hash_table_unref (hash_table);
+}
+
+static void
+bus_engine_proxy_get_needs_surrounding_text (BusEngineProxy *engine)
+{
+    BusIBusImpl *ibus = BUS_DEFAULT_IBUS;
+    g_assert (ibus);
+    bus_engine_proxy_get_engine_property (engine,
+                                          "NeedsSurroundingText",
+                                          _get_needs_surrounding_text_cb,
+                                          bus_ibus_impl_get_engine_needs_surrounding_text_table (ibus));
 }
 
 /* a macro to generate a function to call a nullary D-Bus method. */
@@ -1348,6 +1420,8 @@ bus_engine_proxy_focus_in (BusEngineProxy *engine,
     if (engine->has_focus)
         return;
     engine->has_focus = TRUE;
+    if (engine->needs_surrounding_text)
+        g_signal_emit (engine, engine_signals[REQUIRE_SURROUNDING_TEXT], 0);
     if (engine->has_focus_id) {
         g_dbus_proxy_call ((GDBusProxy *)engine,
                            "FocusInId",
@@ -1404,6 +1478,8 @@ bus_engine_proxy_enable (BusEngineProxy *engine)
     g_assert (BUS_IS_ENGINE_PROXY (engine));
     if (!engine->enabled) {
         engine->enabled = TRUE;
+        if (engine->needs_surrounding_text)
+            g_signal_emit (engine, engine_signals[REQUIRE_SURROUNDING_TEXT], 0);
         g_dbus_proxy_call ((GDBusProxy *)engine,
                            "Enable",
                            NULL,

@@ -248,7 +248,7 @@ _xim_preedit_callback_draw (XIMS xims, X11IC *x11ic, const gchar *preedit_string
     pcb.connect_id = x11ic->connect_id;
     pcb.icid = x11ic->icid;
 
-    pcb.todo.draw.caret = len;
+    pcb.todo.draw.caret = x11ic->preedit_cursor;
     pcb.todo.draw.chg_first = 0;
     pcb.todo.draw.chg_length = x11ic->onspot_preedit_length;
     pcb.todo.draw.text = &text;
@@ -569,6 +569,8 @@ xim_forward_event (XIMS xims, IMForwardEventStruct *call_data)
                                       pfe);
         retval = 1;
     }
+
+    LOG (1, "XIM_FORWARD_EVENT retval=%d", retval)
     return retval;
 }
 

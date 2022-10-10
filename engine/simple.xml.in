@@ -4657,6 +4657,18 @@
             <rank>1</rank>
         </engine>
         <engine>
+            <name>xkb:de:neo_qwertz:deu</name>
+            <language>de</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>de</layout>
+            <layout_variant>neo_qwertz</layout_variant>
+            <longname>German (NeoQuertz 2)</longname>
+            <description>German (NeoQwertz 2)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
             <name>xkb:de:mac:deu</name>
             <language>de</language>
             <license>GPL</license>

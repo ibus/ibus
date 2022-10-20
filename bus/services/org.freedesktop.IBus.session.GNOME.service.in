@@ -18,7 +18,7 @@ Conflicts=gnome-session@gnome-login.target
 [Service]
 Type=dbus
 # Only pull --xim in X11 session, it is done via Xwayland-session.d on Wayland
-ExecStart=sh -c '@bindir@/ibus-daemon --panel disable $([ "$XDG_SESSION_TYPE" = "x11" ] && echo "--xim")'
+ExecStart=sh -c 'exec @bindir@/ibus-daemon --panel disable $([ "$XDG_SESSION_TYPE" = "x11" ] && echo "--xim")'
 Restart=on-abnormal
 BusName=org.freedesktop.IBus
 TimeoutStopSec=5

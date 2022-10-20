@@ -7,8 +7,7 @@ Conflicts=gnome-session-initialized.target
 
 [Service]
 Type=dbus
-# Only pull --xim in X11 session, it is done via Xwayland-session.d on Wayland
-ExecStart=sh -c '@bindir@/ibus-daemon $IBUS_DAEMON_ARGS'
+ExecStart=sh -c 'exec @bindir@/ibus-daemon $IBUS_DAEMON_ARGS'
 Restart=on-abnormal
 BusName=org.freedesktop.IBus
 TimeoutStopSec=5

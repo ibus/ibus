@@ -60,7 +60,7 @@ struct _BusEngineProxy {
     /* cached properties */
     IBusPropList *prop_list;
     gboolean has_focus_id;
-    gboolean active_surrounding_text;
+    gboolean has_active_surrounding_text;
 };
 
 struct _BusEngineProxyClass {
@@ -724,7 +724,7 @@ bus_engine_proxy_new_internal (const gchar     *path,
         engine->keymap = ibus_keymap_get (layout);
     }
 
-    g_return_val_if_fail (ibus, engine)
+    g_return_val_if_fail (ibus, engine);
 
     hash_table = bus_ibus_impl_get_engine_focus_id_table (ibus);
     if (hash_table) {
@@ -1370,7 +1370,7 @@ _get_has_active_surrounding_text_cb (GObject        *object,
         g_variant_unref (result);
         value =  GINT_TO_POINTER (
                                 engine->has_active_surrounding_text
-                                ? ENGINE_SURROUNDING_TEXT_CATEGORY_HAS_ACTIVE
+                                ? ENGINE_SURROUNDING_TEXT_CATEGORY_HAS_ACTIVE:
                                   ENGINE_SURROUNDING_TEXT_CATEGORY_NOT_ACTIVE);
         g_hash_table_replace (
             hash_table,

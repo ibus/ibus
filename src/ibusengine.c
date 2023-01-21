@@ -64,7 +64,7 @@ enum {
     PROP_0,
     PROP_ENGINE_NAME,
     PROP_HAS_FOCUS_ID,
-    PROP_NEEDS_SURROUNDING_TEXT,
+    PROP_HAS_ACTIVE_SURROUNDING_TEXT,
 };
 
 
@@ -87,7 +87,7 @@ struct _IBusEnginePrivate {
     gboolean               enable_extension;
     gchar                 *current_extension_name;
     gboolean               has_focus_id;
-    gboolean               needs_surrounding_text;
+    gboolean               has_active_surrounding_text;
 };
 
 
@@ -305,7 +305,7 @@ static const gchar introspection_xml[] =
     /* FIXME properties */
     "    <property name='ContentType' type='(uu)' access='write' />"
     "    <property name='FocusId' type='(b)' access='read' />"
-    "    <property name='NeedsSurroundingText' type='(b)' access='read' />"
+    "    <property name='ActiveSurroundingText' type='(b)' access='read' />"
     "  </interface>"
     "</node>";
 
@@ -395,16 +395,18 @@ ibus_engine_class_init (IBusEngineClass *class)
                         G_PARAM_CONSTRUCT_ONLY));
 
     /**
-     * IBusEngine:needs-surrounding-text:
+     * IBusEngine:active-surrounding-text:
      *
-     * Whether the IBusEngine needs to receive updates when surrounding text
-     * changes.
+     * When this property is set to %TRUE, "RequireSurroundingText" D-Bus
+     * signal will be called by ibus-daemon on every focus-in/out event, with
+     * no need for the engine to call ibus_engine_get_surrounding_text().
+     * This property can only be set at construct time.
      */
     g_object_class_install_property (gobject_class,
-                    PROP_NEEDS_SURROUNDING_TEXT,
-                    g_param_spec_boolean ("needs-surrounding-text",
-                        "engine needs surrounding text updates",
-                        "Set to TRUE if engine needs surrounding text updates",
+                    PROP_HAS_ACTIVE_SURROUNDING_TEXT,
+                    g_param_spec_boolean ("active-surrounding-text",
+                        "requires surrounding text updates on focus events",
+                        "Requires surrounding text updates on focus events",
                         FALSE,
                         G_PARAM_READWRITE |
                         G_PARAM_CONSTRUCT_ONLY));
@@ -1006,8 +1008,8 @@ ibus_engine_set_property (IBusEngine   *engine,
     case PROP_HAS_FOCUS_ID:
         engine->priv->has_focus_id = g_value_get_boolean (value);
         break;
-    case PROP_NEEDS_SURROUNDING_TEXT:
-        engine->priv->needs_surrounding_text = g_value_get_boolean (value);
+    case PROP_HAS_ACTIVE_SURROUNDING_TEXT:
+        engine->priv->has_active_surrounding_text = g_value_get_boolean (value);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (engine, prop_id, pspec);
@@ -1027,8 +1029,8 @@ ibus_engine_get_property (IBusEngine *engine,
     case PROP_HAS_FOCUS_ID:
         g_value_set_boolean (value, engine->priv->has_focus_id);
         break;
-    case PROP_NEEDS_SURROUNDING_TEXT:
-        g_value_set_boolean (value, engine->priv->needs_surrounding_text);
+    case PROP_HAS_ACTIVE_SURROUNDING_TEXT:
+        g_value_set_boolean (value, engine->priv->has_active_surrounding_text);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (engine, prop_id, pspec);
@@ -1470,12 +1472,13 @@ ibus_engine_service_method_call (IBusService           *service,
 }
 
 /**
- * _ibus_engine_needs_surrounding_text:
+ * _ibus_engine_has_active_surrounding_text:
  *
- * Implement the "NeedsSurroundingText" method call of the org.freedesktop.IBus interface.
+ * Implement the "ActiveSurroundingText" method call of the
+ * org.freedesktop.IBus interface.
  */
 static GVariant *
-_ibus_engine_needs_surrounding_text (IBusEngine      *engine,
+_ibus_engine_has_active_surrounding_text (IBusEngine      *engine,
                                      GDBusConnection *connection,
                                      GError         **error)
 {
@@ -1483,7 +1486,7 @@ _ibus_engine_needs_surrounding_text (IBusEngine      *engine,
         *error = NULL;
     }
 
-    return g_variant_new_boolean (engine->priv->needs_surrounding_text);
+    return g_variant_new_boolean (engine->priv->has_active_surrounding_text);
 }
 
 /**
@@ -1519,8 +1522,8 @@ ibus_engine_service_get_property (IBusService        *service,
                                         GDBusConnection *,
                                         GError **);
     } methods [] =  {
-        { "FocusId",                    _ibus_engine_has_focus_id },
-        {"NeedsSurroundingText",        _ibus_engine_needs_surrounding_text},
+        { "FocusId",                _ibus_engine_has_focus_id },
+        { "ActiveSurroundingText",  _ibus_engine_has_active_surrounding_text },
     };
 
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_ENGINE) != 0) {

@@ -10,13 +10,13 @@
 # Yulia <yulia.poyarkova@redhat.com>, 2013-2014
 # yuliya <ypoyarko@redhat.com>, 2015. #zanata
 # Igor Gorbounov <igor.gorbounov@gmail.com>, 2017. #zanata
-# Alexey Rubtsov <rushills@gmail.com>, 2021.
+# Alexey Rubtsov <rushills@gmail.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2017-04-18 11:47+0900\n"
-"PO-Revision-Date: 2021-07-06 15:04+0000\n"
+"PO-Revision-Date: 2022-09-28 08:19+0000\n"
 "Last-Translator: Alexey Rubtsov <rushills@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ru/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.1\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: ../setup/setup.ui.h:1
 msgid "Horizontal"
@@ -938,7 +938,7 @@ msgstr "Емодзи скопировано в буфер обмена."
 #. 
 #: ../ui/gtk3/emojierapp.vala:82
 msgid "\"FONT\" for emoji chracters on emoji dialog"
-msgstr ""
+msgstr "«ШРИФТ» для символов в диалоге эмодзи"
 
 #: ../ui/gtk3/emojierapp.vala:83
 msgid "FONT"
@@ -949,7 +949,7 @@ msgstr "ШРИФТ"
 #. 
 #: ../ui/gtk3/emojierapp.vala:88
 msgid "\"LANG\" for annotations on emoji dialog. E.g. \"en\""
-msgstr ""
+msgstr "«ЯЗЫК» аннотаций в диалоге эмоджи. Например, - «ru»"
 
 #: ../ui/gtk3/emojierapp.vala:89
 msgid "LANG"

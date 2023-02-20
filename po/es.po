@@ -23,14 +23,14 @@
 # Máximo Castañeda Riloba <mcrcctm@gmail.com>, 2018. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
 # Máximo Castañeda Riloba <mcrcctm@gmail.com>, 2019. #zanata
-# Emilio Herrera <ehespinosa57@gmail.com>, 2020, 2021.
+# Emilio Herrera <ehespinosa57@gmail.com>, 2020, 2021, 2022.
 # Adolfo Jayme Barrientos <fitoschido@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-09-03 21:21+0900\n"
-"PO-Revision-Date: 2021-02-22 17:40+0000\n"
+"PO-Revision-Date: 2022-09-09 16:19+0000\n"
 "Last-Translator: Emilio Herrera <ehespinosa57@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/es/>\n"
@@ -39,7 +39,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.14\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -2549,14 +2549,14 @@ msgstr "Warang Citi"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:953
 msgid "Dives Akuru"
-msgstr ""
+msgstr "Dives Akuru"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:957
 msgid "Nandinagari"
-msgstr ""
+msgstr "Nandinagari"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2618,17 +2618,15 @@ msgstr "Macasar"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:993
-#, fuzzy
-#| msgid "Latin-1 Supplement"
 msgid "Lisu Supplement"
-msgstr "Latino-1 (suplemento)"
+msgstr "Lisu Suplemento"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:997
 msgid "Tamil Supplement"
-msgstr ""
+msgstr "Suplemento Tamil"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2663,7 +2661,7 @@ msgstr "Jeroglíficos egipcios"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1017
 msgid "Egyptian Hieroglyph Format Controls"
-msgstr ""
+msgstr "Controles de Formato de Jeroglífico Egipcio"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

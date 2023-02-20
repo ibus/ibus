@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2022-06-20 20:30+0900\n"
-"PO-Revision-Date: 2022-07-04 10:18+0000\n"
+"PO-Revision-Date: 2022-10-05 06:19+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ko/>\n"
@@ -34,17 +34,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
 msgid "Preload engines"
-msgstr "엔진 미리 불러오기"
+msgstr "이미-적재된 엔진"
 
 #. Translators: Tooltip for the button “Preload Engines”
 #: data/dconf/org.freedesktop.ibus.gschema.xml:13
 msgid "Preload engines during ibus starts up"
-msgstr "ibus 시작 할 때에 엔진을 미리 불러옵니다"
+msgstr "ibus 시작 할 때에 이미 적재된 엔진"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:17
 msgid "Engines order"
@@ -3259,23 +3259,23 @@ msgstr "전체 공통 엔진의 취득에 실패했습니다.\n"
 
 #: tools/main.vala:217
 msgid "Read the system registry cache."
-msgstr "시스템 레지스트리 캐시를 읽어들입니다."
+msgstr "시스템 레지스트리 캐쉬를 읽어 들입니다."
 
 #: tools/main.vala:219
 msgid "Read the registry cache FILE."
-msgstr "레지스트리 캐시 파일을 읽어들입니다."
+msgstr "레지스트리 캐쉬 파일을 읽어 들입니다."
 
 #: tools/main.vala:237 tools/main.vala:242
 msgid "The registry cache is invalid.\n"
-msgstr "레지스트리 캐시가 잘못되었습니다.\n"
+msgstr "레지스트리 캐쉬가 잘못되었습니다.\n"
 
 #: tools/main.vala:257
 msgid "Write the system registry cache."
-msgstr "시스템 레지스트리 캐시를 씁니다."
+msgstr "시스템 레지스트리 캐쉬를 씁니다."
 
 #: tools/main.vala:259
 msgid "Write the registry cache FILE."
-msgstr "레지스트리 캐시 파일을 씁니다."
+msgstr "레지스트리 캐쉬 파일을 씁니다."
 
 #: tools/main.vala:295
 msgid ""
@@ -3318,11 +3318,11 @@ msgstr "버전 보기"
 
 #: tools/main.vala:450
 msgid "Show the content of registry cache"
-msgstr "레지스트리 캐시 내용 표시"
+msgstr "레지스트리 캐쉬의 내용 표시"
 
 #: tools/main.vala:451
 msgid "Create registry cache"
-msgstr "레지스트리 캐시 만들기"
+msgstr "레지스트리 캐시 생성"
 
 #: tools/main.vala:452
 msgid "Print the D-Bus address of ibus-daemon"
@@ -3342,7 +3342,7 @@ msgstr "대화창의 이모지를 클립보드에 저장"
 
 #: tools/main.vala:458
 msgid "Show this information"
-msgstr "이 정보 표시"
+msgstr "도움말 정보 표시"
 
 #: tools/main.vala:464
 #, c-format

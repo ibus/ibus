@@ -20,13 +20,14 @@
 # fujiwara <takao.fujiwara1@gmail.com>, 2017. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
 # Nathan <nathan95@live.it>, 2022.
+# Luis Pixeltux <luis.pardus@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-01-08 12:40+0900\n"
-"PO-Revision-Date: 2022-04-25 08:17+0000\n"
-"Last-Translator: Nathan <nathan95@live.it>\n"
+"PO-Revision-Date: 2023-02-05 01:20+0000\n"
+"Last-Translator: Luis Pixeltux <luis.pardus@gmail.com>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/it/>\n"
 "Language: it\n"
@@ -34,7 +35,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -83,11 +84,12 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:32
 msgid "Latin layouts which have no ASCII"
-msgstr ""
+msgstr "Layout latini che non hanno ASCII"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:33
 msgid "US layout is appended to the Latin layouts. variant can be omitted."
 msgstr ""
+"Il layout US viene aggiunto ai layout latini. la variante può essere omessa."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:37
 msgid "Use xmodmap"
@@ -97,6 +99,8 @@ msgstr "Utilizza xmodmap"
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
 msgstr ""
+"Esegue xmodmap se esiste .xmodmap o .Xmodmap quando i motori ibus vengono "
+"attivati."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:42 setup/setup.ui:1208
 msgid "Use system keyboard layout"
@@ -217,16 +221,21 @@ msgid ""
 "If true, the panel follows the input cursor in case the panel is always "
 "shown. If false, the panel is shown at a fixed location."
 msgstr ""
+"Se vero, il pannello segue il cursore di inserimento nel caso in cui il "
+"pannello sia sempre visualizzato. Se false, il pannello viene visualizzato "
+"in una posizione fissa."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:130
 msgid "The milliseconds to show property panel"
-msgstr ""
+msgstr "I millisecondi per mostrare il pannello delle preferenze"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:131
 msgid ""
 "The milliseconds to show property panel after focus-in or properties are "
 "changed."
 msgstr ""
+"I millisecondi per mostrare il pannello delle preferenze dopo l'inserimento "
+"del focus o la modifica delle preferenze."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:135
 msgid "Orientation of lookup table"
@@ -300,7 +309,7 @@ msgstr "Tasti scorciatoia Unicode per gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:174
 msgid "The shortcut keys for turning Unicode typing on or off"
-msgstr ""
+msgstr "I tasti scorciatoia per abilitare o disabilitare la digitazione Unicode"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:178
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
@@ -309,10 +318,12 @@ msgstr "Tasti scelta rapida Emoji per gtk_accelerator_parse"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:179
 msgid "The shortcut keys for turning emoji typing on or off"
 msgstr ""
+"I tasti scorciatoia per abilitare o disabilitare la digitazione di emoji"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:184
 msgid "Custom font name for emoji characters on emoji dialog"
 msgstr ""
+"Nome personalizzato per i caratteri emoji nella finestra di dialogo emoji"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:188
 msgid "Default language for emoji dictionary"

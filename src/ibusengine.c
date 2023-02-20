@@ -1512,11 +1512,10 @@ _ibus_engine_get_active_surrounding_text (IBusEngine      *engine,
                                           GDBusConnection *connection,
                                           GError         **error)
 {
-    if (error) {
-        *error = NULL;
-    }
-
-    return g_variant_new_boolean (engine->priv->has_active_surrounding_text);
+    GVariant *retval = g_variant_new_boolean (
+            engine->priv->has_active_surrounding_text);
+    g_assert (retval);
+    return retval;
 }
 
 /**
@@ -1529,11 +1528,9 @@ _ibus_engine_has_focus_id (IBusEngine      *engine,
                            GDBusConnection *connection,
                            GError         **error)
 {
-    if (error) {
-        *error = NULL;
-    }
-
-    return g_variant_new_boolean (engine->priv->has_focus_id);
+    GVariant *retval = g_variant_new_boolean (engine->priv->has_focus_id);
+    g_assert (retval);
+    return retval;
 }
 
 static GVariant *
@@ -1556,6 +1553,8 @@ ibus_engine_service_get_property (IBusService        *service,
         { "ActiveSurroundingText",  _ibus_engine_get_active_surrounding_text },
     };
 
+    if (error)
+        *error = NULL;
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_ENGINE) != 0) {
         return IBUS_SERVICE_CLASS (ibus_engine_parent_class)->
                 service_get_property (service,
@@ -1575,9 +1574,12 @@ ibus_engine_service_get_property (IBusService        *service,
         }
     }
 
-    g_warning ("service_get_property received an unknown property: %s",
-               property_name ? property_name : "(null)");
-    return NULL;
+    g_set_error (error,
+                 G_DBUS_ERROR,
+                 G_DBUS_ERROR_FAILED,
+                 "service_get_property received an unknown property: %s",
+                 property_name ? property_name : "(null)");
+    g_return_val_if_reached (NULL);
 }
 
 static gboolean
@@ -1592,6 +1594,8 @@ ibus_engine_service_set_property (IBusService        *service,
 {
     IBusEngine *engine = IBUS_ENGINE (service);
 
+    if (error)
+        *error = NULL;
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_ENGINE) != 0) {
         return IBUS_SERVICE_CLASS (ibus_engine_parent_class)->
             service_set_property (service,
@@ -1604,8 +1608,15 @@ ibus_engine_service_set_property (IBusService        *service,
                                   error);
     }
 
-    if (!ibus_engine_service_authorized_method (service, connection))
+    if (!ibus_engine_service_authorized_method (service, connection)) {
+        /* No error message due to the security issue but GError is required
+         * by gdbusconnection.c:invoke_set_property_in_idle_cb() */
+        g_set_error (error,
+                     G_DBUS_ERROR,
+                     G_DBUS_ERROR_FAILED,
+                     " ");
         return FALSE;
+    }
 
     if (g_strcmp0 (property_name, "ContentType") == 0) {
         guint purpose = 0;
@@ -1629,6 +1640,11 @@ ibus_engine_service_set_property (IBusService        *service,
         return TRUE;
     }
 
+    g_set_error (error,
+                 G_DBUS_ERROR,
+                 G_DBUS_ERROR_FAILED,
+                 "service_set_property received an unknown property: %s",
+                 property_name ? property_name : "(null)");
     g_return_val_if_reached (FALSE);
 }
 

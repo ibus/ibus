@@ -158,7 +158,7 @@ ibus_engine_simple_init (IBusEngineSimple *simple)
                                     G_RESOURCE_LOOKUP_FLAGS_NONE,
                                     &error);
     if (error) {
-        g_warning ("Nout found compose resource %s", error->message);
+        g_warning ("Not found compose resource %s", error->message);
         g_clear_error (&error);
         return;
     }

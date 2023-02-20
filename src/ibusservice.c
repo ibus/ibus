@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2019 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2015-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2019 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -370,8 +370,9 @@ ibus_service_service_method_call (IBusService           *service,
     g_dbus_method_invocation_return_error (invocation,
                                            G_DBUS_ERROR,
                                            G_DBUS_ERROR_UNKNOWN_METHOD,
-                                           "%s::%s", interface_name, method_name);
-    return;
+                                           "%s::%s",
+                                           interface_name, method_name);
+    g_return_if_reached ();
 }
 
 static GVariant *
@@ -383,7 +384,15 @@ ibus_service_service_get_property (IBusService     *service,
                                   const gchar      *property_name,
                                   GError          **error)
 {
-    return NULL;
+    if (error) {
+        *error = NULL;
+        g_set_error (error,
+                     G_DBUS_ERROR,
+                     G_DBUS_ERROR_FAILED,
+                     "service_get_property received an unknown property: %s",
+                     property_name ? property_name : "(null)");
+    }
+    g_return_val_if_reached (NULL);
 }
 
 static gboolean
@@ -396,7 +405,15 @@ ibus_service_service_set_property (IBusService     *service,
                                   GVariant         *value,
                                   GError          **error)
 {
-    return FALSE;
+    if (error) {
+        *error = NULL;
+        g_set_error (error,
+                     G_DBUS_ERROR,
+                     G_DBUS_ERROR_FAILED,
+                     "service_set_property received an unknown property: %s",
+                     property_name ? property_name : "(null)");
+    }
+    g_return_val_if_reached (FALSE);
 }
 
 static void

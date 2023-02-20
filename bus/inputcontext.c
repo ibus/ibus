@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2018 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2015-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -1388,6 +1388,8 @@ bus_input_context_service_set_property (IBusService     *service,
                                         GVariant        *value,
                                         GError         **error)
 {
+    if (error)
+        *error = NULL;
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_INPUT_CONTEXT) != 0) {
         return IBUS_SERVICE_CLASS (bus_input_context_parent_class)->
             service_set_property (service,
@@ -1400,10 +1402,22 @@ bus_input_context_service_set_property (IBusService     *service,
                                   error);
     }
 
-    if (!bus_input_context_service_authorized_method (service, connection))
+    if (!BUS_IS_INPUT_CONTEXT (service)) {
+        g_set_error (error,
+                     G_DBUS_ERROR,
+                     G_DBUS_ERROR_FAILED,
+                     "%p is not BusInputContext.", service);
         return FALSE;
-
-    g_return_val_if_fail (BUS_IS_INPUT_CONTEXT (service), FALSE);
+    }
+    if (!bus_input_context_service_authorized_method (service, connection)) {
+        /* No error message due to the security issue but GError is required
+         * by gdbusconnection.c:invoke_set_property_in_idle_cb() */
+        g_set_error (error,
+                     G_DBUS_ERROR,
+                     G_DBUS_ERROR_FAILED,
+                     " ");
+        return FALSE;
+    }
 
     if (g_strcmp0 (property_name, "ContentType") == 0) {
         _ic_set_content_type (BUS_INPUT_CONTEXT (service), value);
@@ -1414,6 +1428,11 @@ bus_input_context_service_set_property (IBusService     *service,
         return TRUE;
     }
 
+    g_set_error (error,
+                 G_DBUS_ERROR,
+                 G_DBUS_ERROR_FAILED,
+                 "service_set_property received an unknown property: %s",
+                 property_name ? property_name : "(null)");
     g_return_val_if_reached (FALSE);
 }
 

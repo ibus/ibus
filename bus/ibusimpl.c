@@ -700,11 +700,14 @@ _ibus_get_address (BusIBusImpl     *ibus,
                    GDBusConnection *connection,
                    GError         **error)
 {
-    if (error) {
-        *error = NULL;
+    GVariant *retval = g_variant_new_string (bus_server_get_address ());
+    if (!retval) {
+        g_set_error (error,
+                     G_DBUS_ERROR,
+                     G_DBUS_ERROR_FAILED,
+                     "Cannot get IBus address");
     }
-
-    return g_variant_new_string (bus_server_get_address ());
+    return retval;
 }
 
 static void
@@ -1213,9 +1216,6 @@ _ibus_get_current_input_context (BusIBusImpl     *ibus,
                                  GError         **error)
 {
     GVariant *retval = NULL;
-    if (error) {
-        *error = NULL;
-    }
 
     if (!ibus->focused_context)
     {
@@ -1359,13 +1359,10 @@ _ibus_get_engines (BusIBusImpl     *ibus,
                    GDBusConnection *connection,
                    GError         **error)
 {
+    GVariant *retval;
     GVariantBuilder builder;
     GList *engines = NULL;
     GList *p;
-
-    if (error) {
-        *error = NULL;
-    }
 
     g_variant_builder_init (&builder, G_VARIANT_TYPE ("av"));
 
@@ -1379,7 +1376,9 @@ _ibus_get_engines (BusIBusImpl     *ibus,
 
     g_list_free (engines);
 
-    return g_variant_builder_end (&builder);
+    retval = g_variant_builder_end (&builder);
+    g_assert (retval);
+    return retval;
 }
 
 static void
@@ -1444,12 +1443,9 @@ _ibus_get_active_engines (BusIBusImpl     *ibus,
                           GDBusConnection *connection,
                           GError         **error)
 {
+    GVariant *retval;
     GVariantBuilder builder;
     GList *p;
-
-    if (error) {
-        *error = NULL;
-    }
 
     g_variant_builder_init (&builder, G_VARIANT_TYPE ("av"));
 
@@ -1459,7 +1455,9 @@ _ibus_get_active_engines (BusIBusImpl     *ibus,
                 ibus_serializable_serialize ((IBusSerializable *) p->data));
     }
 
-    return g_variant_builder_end (&builder);
+    retval = g_variant_builder_end (&builder);
+    g_assert (retval);
+    return retval;
 }
 
 static void
@@ -1528,10 +1526,8 @@ _ibus_get_use_sys_layout (BusIBusImpl     *ibus,
                           GDBusConnection *connection,
                           GError         **error)
 {
-    if (error) {
+    if (error)
         *error = NULL;
-    }
-
     return g_variant_new_boolean (ibus->use_sys_layout);
 }
 
@@ -1566,10 +1562,8 @@ _ibus_get_use_global_engine (BusIBusImpl     *ibus,
                              GDBusConnection *connection,
                              GError         **error)
 {
-    if (error) {
+    if (error)
         *error = NULL;
-    }
-
     return g_variant_new_boolean (ibus->use_global_engine);
 }
 
@@ -1606,10 +1600,6 @@ _ibus_get_global_engine (BusIBusImpl     *ibus,
 {
     IBusEngineDesc *desc = NULL;
     GVariant *retval = NULL;
-
-    if (error) {
-        *error = NULL;
-    }
 
     do {
         if (!ibus->use_global_engine)
@@ -1790,10 +1780,8 @@ _ibus_get_global_engine_enabled (BusIBusImpl     *ibus,
 {
     gboolean enabled = FALSE;
 
-    if (error) {
+    if (error)
         *error = NULL;
-    }
-
     do {
         if (!ibus->use_global_engine)
             break;
@@ -1848,10 +1836,6 @@ _ibus_set_preload_engines (BusIBusImpl     *ibus,
     BusComponent *component = NULL;
     BusFactoryProxy *factory = NULL;
     GPtrArray *array = g_ptr_array_new ();
-
-    if (error) {
-        *error = NULL;
-    }
 
     g_variant_get (value, "^a&s", &names);
 
@@ -1912,11 +1896,9 @@ _ibus_get_embed_preedit_text (BusIBusImpl     *ibus,
                               GDBusConnection *connection,
                               GError         **error)
 {
-    if (error) {
-        *error = NULL;
-    }
-
-    return g_variant_new_boolean (ibus->embed_preedit_text);
+    GVariant *retval = g_variant_new_boolean (ibus->embed_preedit_text);
+    g_assert (retval);
+    return retval;
 }
 
 /**
@@ -1931,10 +1913,6 @@ _ibus_set_embed_preedit_text (BusIBusImpl     *ibus,
                               GVariant        *value,
                               GError         **error)
 {
-    if (error) {
-        *error = NULL;
-    }
-
     gboolean embed_preedit_text = g_variant_get_boolean (value);
     if (embed_preedit_text != ibus->embed_preedit_text) {
         ibus->embed_preedit_text = embed_preedit_text;
@@ -2038,6 +2016,8 @@ bus_ibus_impl_service_get_property (IBusService     *service,
         { "EmbedPreeditText",      _ibus_get_embed_preedit_text },
     };
 
+    if (error)
+        *error = NULL;
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_IBUS) != 0) {
         return IBUS_SERVICE_CLASS (
                 bus_ibus_impl_parent_class)->service_get_property (
@@ -2054,9 +2034,12 @@ bus_ibus_impl_service_get_property (IBusService     *service,
         }
     }
 
-    g_warning ("service_get_property received an unknown property: %s",
-               property_name ? property_name : "(null)");
-    return NULL;
+    g_set_error (error,
+                 G_DBUS_ERROR,
+                 G_DBUS_ERROR_FAILED,
+                 "service_get_property received an unknown property: %s",
+                 property_name ? property_name : "(null)");
+    g_return_val_if_reached (NULL);
 }
 
 /**
@@ -2087,6 +2070,8 @@ bus_ibus_impl_service_set_property (IBusService     *service,
         { "EmbedPreeditText",      _ibus_set_embed_preedit_text },
     };
 
+    if (error)
+        *error = NULL;
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_IBUS) != 0) {
         return IBUS_SERVICE_CLASS (
                 bus_ibus_impl_parent_class)->service_set_property (
@@ -2104,9 +2089,12 @@ bus_ibus_impl_service_set_property (IBusService     *service,
         }
     }
 
-    g_warning ("service_set_property received an unknown property: %s",
-               property_name ? property_name : "(null)");
-    return FALSE;
+    g_set_error (error,
+                 G_DBUS_ERROR,
+                 G_DBUS_ERROR_FAILED,
+                 "service_set_property received an unknown property: %s",
+                 property_name ? property_name : "(null)");
+    g_return_val_if_reached (FALSE);
 }
 
 BusIBusImpl *

@@ -51,7 +51,7 @@ E.g. "Noto Color Emoji", "Android Emoji" font.
 
 .SH "KEYBOARD OPERATIONS"
 .TP
-\fBControl-Period or Control-Semicolon\fR
+\fBSuper-Period\fR
 Launch IBus Emojier. The shortcut key can be customized by
 .B ibus\-setup (1).
 .TP

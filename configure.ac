@@ -153,31 +153,9 @@ AC_SUBST(LIBDL)
 
 # Check endianness.
 AC_MSG_CHECKING([build system endianness])
-ENDIAN=unknown
-AC_RUN_IFELSE(
-    [AC_LANG_PROGRAM(
-        [[
-            #include <endian.h>
-            #if __BYTE_ORDER != __LITTLE_ENDIAN
-            #error
-            #endif
-        ]]
-    )],
-    [ENDIAN=little]
-)
-AC_RUN_IFELSE(
-    [AC_LANG_PROGRAM(
-        [[
-            #include <endian.h>
-            #if __BYTE_ORDER != __BIG_ENDIAN
-            #error
-            #endif
-        ]]
-    )],
-    [ENDIAN=big]
-)
+AC_C_BIGENDIAN([ENDIAN=big],[ENDIAN=little],[ENDIAN=unknown],[])
 if test x"$ENDIAN" != xlittle  -a x"$ENDIAN" != xbig; then
-    AC_MSG_ERROR([Cannot deermine endianness without endian.h])
+    AC_MSG_ERROR([Cannot determine endianness])
 fi
 AC_MSG_RESULT($ENDIAN)
 AC_SUBST(ENDIAN)

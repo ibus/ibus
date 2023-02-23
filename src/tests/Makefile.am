@@ -30,7 +30,7 @@ AM_CPPFLAGS = \
     @GLIB2_CFLAGS@                          \
     @GIO2_CFLAGS@                           \
     -DIBUS_DISABLE_DEPRECATION_WARNINGS     \
-    -DX11_DATA_PREFIX=\"$(X11_PREFIX)\"     \
+    -DX11_LOCALEDATADIR=\"$(X11_LOCALEDATADIR)\" \
     -I$(top_srcdir)/src                     \
     -I$(top_builddir)/src                   \
     $(NULL)

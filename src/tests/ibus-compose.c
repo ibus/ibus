@@ -6,7 +6,6 @@
 #define GREEN "\033[0;32m"
 #define RED   "\033[0;31m"
 #define NC    "\033[0m"
-#define X11_DATADIR X11_DATA_PREFIX "/share/X11/locale"
 
 IBusBus *m_bus;
 gchar *m_compose_file;
@@ -36,7 +35,7 @@ get_compose_path ()
             break;
         if (g_strcmp0 (*l, "C") == 0)
             break;
-        compose_path = g_build_filename (X11_DATADIR,
+        compose_path = g_build_filename (X11_LOCALEDATADIR,
                                          *l,
                                          "Compose",
                                          NULL);

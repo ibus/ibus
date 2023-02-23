@@ -37,7 +37,6 @@
 #include <memory.h>
 #include <stdlib.h>
 
-#define X11_DATADIR X11_DATA_PREFIX "/share/X11/locale"
 #define IBUS_ENGINE_SIMPLE_GET_PRIVATE(o)  \
    ((IBusEngineSimplePrivate *)ibus_engine_simple_get_instance_private (o))
 
@@ -1440,7 +1439,7 @@ ibus_engine_simple_add_table_by_locale (IBusEngineSimple *simple,
             for (sys_lang = sys_langs; *sys_lang; sys_lang++) {
                 if (g_ascii_strncasecmp (*lang, *sys_lang,
                                          strlen (*sys_lang)) == 0) {
-                    path = g_build_filename (X11_DATADIR,
+                    path = g_build_filename (X11_LOCALEDATADIR,
                                              *lang, "Compose", NULL);
                     break;
                 }
@@ -1462,7 +1461,7 @@ ibus_engine_simple_add_table_by_locale (IBusEngineSimple *simple,
             ibus_engine_simple_add_compose_file (simple, path);
         g_clear_pointer(&path, g_free);
     } else {
-        path = g_build_filename (X11_DATADIR, locale, "Compose", NULL);
+        path = g_build_filename (X11_LOCALEDATADIR, locale, "Compose", NULL);
         do {
             if (g_file_test (path, G_FILE_TEST_EXISTS))
                 break;

@@ -39,7 +39,6 @@
 
 #define IBUS_COMPOSE_TABLE_MAGIC "IBusComposeTable"
 #define IBUS_COMPOSE_TABLE_VERSION (4)
-#define X11_DATADIR X11_DATA_PREFIX "/share/X11/locale"
 #define IBUS_MAX_COMPOSE_ALGORITHM_LEN 9
 
 typedef struct {
@@ -285,7 +284,7 @@ expand_include_path (const char *include_path) {
             case 'S': /* system compose dir */
                 o = out;
                 former = g_strndup (head, i - head);
-                out = g_strdup_printf ("%s%s%s", o, former, X11_DATADIR);
+                out = g_strdup_printf ("%s%s%s", o, former, X11_LOCALEDATADIR);
                 head = i + 2;
                 g_free (o);
                 g_free (former);
@@ -397,7 +396,7 @@ get_en_compose_file (void)
     char * const *sys_lang = NULL;
     char *path = NULL;
     for (sys_lang = sys_langs; *sys_lang; sys_lang++) {
-        path = g_build_filename (X11_DATADIR, *sys_lang, "Compose", NULL);
+        path = g_build_filename (X11_LOCALEDATADIR, *sys_lang, "Compose", NULL);
         if (g_file_test (path, G_FILE_TEST_EXISTS))
             break;
         g_clear_pointer (&path, g_free);

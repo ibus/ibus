@@ -54,7 +54,7 @@ AM_CPPFLAGS =                                           \
     -DIBUS_DISABLE_DEPRECATION_WARNINGS                 \
     -DIBUS_COMPILATION                                  \
     -DISOCODES_PREFIX=\"$(ISOCODES_PREFIX)\"            \
-    -DX11_DATA_PREFIX=\"$(X11_PREFIX)\"                 \
+    -DX11_LOCALEDATADIR=\"$(X11_LOCALEDATADIR)\"        \
     $(NULL)
 
 # ibus library

@@ -28,8 +28,6 @@
 #include "ibuscomposetable.h"
 #include "ibusenginesimpleprivate.h"
 
-#define X11_DATADIR X11_DATA_PREFIX "/share/X11/locale"
-
 
 static void
 save_compose_table_endianness (IBusComposeTableEx *compose_table,
@@ -84,7 +82,7 @@ main (int argc, char *argv[])
     if (!path || !g_file_test (path, G_FILE_TEST_EXISTS)) {
         g_clear_pointer (&path, g_free);
         for (sys_lang = sys_langs; *sys_lang; sys_lang++) {
-            path = g_build_filename (X11_DATADIR, *sys_lang,
+            path = g_build_filename (X11_LOCALEDATADIR, *sys_lang,
                                      "Compose", NULL);
             if (!path)
                 continue;
@@ -93,7 +91,7 @@ main (int argc, char *argv[])
         }
     }
     if (!path) {
-        g_warning ("en_US compose file is not found in %s.", X11_DATADIR);
+        g_warning ("en_US compose file is not found in %s.", X11_LOCALEDATADIR);
         return 1;
     } else {
         g_debug ("Create a cache of %s", path);

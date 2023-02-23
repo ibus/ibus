@@ -349,6 +349,14 @@ else
 fi
 AC_SUBST(X11_PREFIX)
 
+# Check locale dir for Compose files.
+AC_CHECK_FILE($X11_PREFIX/share/X11/locale/locale.dir,
+              X11_LOCALEDATADIR="$X11_PREFIX/share/X11/locale",
+              [AC_CHECK_FILE($X11_PREFIX/lib/X11/locale/locale.dir,
+               X11_LOCALEDATADIR="$X11_PREFIX/lib/X11/locale",
+               X11_LOCALEDATADIR="$(datadir)/X11/locale")])
+AC_SUBST(X11_LOCALEDATADIR)
+
 if test x"$enable_wayland" = x"yes"; then
     # Check for wayland
     PKG_CHECK_MODULES(WAYLAND, [

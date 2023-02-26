@@ -130,6 +130,7 @@ AC_PROG_CC_STDC
 AM_PROG_VALAC([0.20])
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
+AX_PROG_CC_FOR_BUILD
 
 # i18n stuff
 AM_GNU_GETTEXT_VERSION([0.19.8])
@@ -150,6 +151,9 @@ AC_CHECK_FUNCS(daemon)
 # Check dlclose() in libc.so.
 AC_CHECK_LIB(c, dlclose, LIBDL="", [AC_CHECK_LIB(dl, dlclose, LIBDL="-ldl")])
 AC_SUBST(LIBDL)
+
+# Check if cross compiling.
+AM_CONDITIONAL(CROSS_COMPILING, test "x$cross_compiling" = xyes)
 
 # Check endianness.
 AC_C_BIGENDIAN([ENDIAN=big], [ENDIAN=little], [ENDIAN=unknown], [ENDIAN=big])
@@ -183,6 +187,14 @@ AH_BOTTOM([
 #  include <errno.h>
 #endif
 ])
+
+if test "x$cross_compiling" = "xyes"; then
+PKG_PROG_PKG_CONFIG_FOR_BUILD
+GLIB_CFLAGS_FOR_BUILD=`$PKG_CONFIG_FOR_BUILD --cflags glib-2.0 gobject-2.0 gio-2.0 gio-unix-2.0 gthread-2.0`
+GLIB_LIBS_FOR_BUILD=`$PKG_CONFIG_FOR_BUILD --libs glib-2.0 gobject-2.0 gio-2.0 gio-unix-2.0 gthread-2.0`
+AC_SUBST(GLIB_CFLAGS_FOR_BUILD)
+AC_SUBST(GLIB_LIBS_FOR_BUILD)
+fi
 
 # --disable-tests option.
 AC_ARG_ENABLE(tests,

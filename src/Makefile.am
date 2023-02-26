@@ -46,9 +46,6 @@ noinst_PROGRAMS = gen-internal-compose-table
 # C preprocessor flags
 AM_CPPFLAGS =                                           \
     -DG_LOG_DOMAIN=\"IBUS\"                             \
-    @GLIB2_CFLAGS@                                      \
-    @GOBJECT2_CFLAGS@                                   \
-    @GIO2_CFLAGS@                                       \
     -DIBUS_CACHE_DIR=\""$(localstatedir)/cache/ibus"\"  \
     -DIBUS_DATA_DIR=\"$(pkgdatadir)\"                   \
     -DIBUS_DISABLE_DEPRECATION_WARNINGS                 \
@@ -64,6 +61,11 @@ libibus_1_0_la_LIBADD =     \
     @GLIB2_LIBS@            \
     @GOBJECT2_LIBS@         \
     @GIO2_LIBS@             \
+    $(NULL)
+libibus_1_0_la_CFLAGS =     \
+    @GLIB2_CFLAGS@          \
+    @GOBJECT2_CFLAGS@       \
+    @GIO2_CFLAGS@           \
     $(NULL)
 libibus_1_0_la_LDFLAGS =            \
     -no-undefined                   \
@@ -107,7 +109,7 @@ ibus_sources =              \
     ibusxevent.c            \
     ibusxml.c               \
     $(NULL)
-libibus_1_0_la_SOURCES =    \
+libibus_sources =           \
     ibuscomposetable.c      \
     ibusenumtypes.c         \
     ibusmarshalers.c        \
@@ -166,6 +168,7 @@ ibus_headers =              \
     ibusxevent.h            \
     ibusxml.h               \
     $(NULL)
+libibus_1_0_la_SOURCES = $(libibus_sources)
 ibusincludedir = $(includedir)/ibus-@IBUS_API_VERSION@
 ibus_public_headers =       \
     $(ibus_headers)         \
@@ -188,6 +191,35 @@ noinst_HEADERS =            \
     $(ibus_private_headers) \
     $(NULL)
 
+if CROSS_COMPILING
+# Avoid libtool when building native libraries
+libnativeibus =
+parser_extra_sources = $(libibus_sources)
+
+glib_cflags = @GLIB_CFLAGS_FOR_BUILD@
+glib_libs = @GLIB_LIBS_FOR_BUILD@
+
+$(noinst_PROGRAMS): CC=$(CC_FOR_BUILD)
+$(noinst_PROGRAMS): CCLD=$(CC_FOR_BUILD)
+$(noinst_PROGRAMS): CFLAGS=$(CFLAGS_FOR_BUILD)
+$(noinst_PROGRAMS): CPPFLAGS=$(CPPFLAGS_FOR_BUILD)
+$(noinst_PROGRAMS): LDFLAGS=$(LDFLAGS_FOR_BUILD)
+else
+libnativeibus = $(libibus)
+parser_extra_sources =
+
+glib_libs =             \
+    @GLIB2_LIBS@        \
+    @GOBJECT2_LIBS@     \
+    @GIO2_LIBS@         \
+    $(NULL)
+glib_cflags =           \
+    @GLIB2_CFLAGS@      \
+    @GOBJECT2_CFLAGS@   \
+    @GIO2_CFLAGS@       \
+    $(NULL)
+endif
+
 gen_internal_compose_table_SOURCES = \
     gencomposetable.c   \
     ibuscomposetable.c  \
@@ -195,11 +227,12 @@ gen_internal_compose_table_SOURCES = \
     ibuskeynames.c      \
     ibuskeyuni.c        \
     $(NULL)
-gen_internal_compose_table_CFLAGS = $(AM_CFLAGS)
+gen_internal_compose_table_CFLAGS =  \
+    $(AM_CFLAGS)        \
+    $(glib_cflags)      \
+    $(NULL)
 gen_internal_compose_table_LDADD = \
-    @GLIB2_LIBS@        \
-    @GOBJECT2_LIBS@     \
-    @GIO2_LIBS@         \
+    $(glib_libs)        \
     $(NULL)
 
 BUILT_SOURCES =                 \
@@ -362,15 +395,15 @@ install-data-hook:
 
 emoji_parser_SOURCES =          \
     emoji-parser.c              \
+    $(parser_extra_sources)     \
     $(NULL)
 emoji_parser_CFLAGS =           \
-    $(GLIB2_CFLAGS)             \
-    $(GOBJECT2_CFLAGS)          \
+    $(AM_CFLAGS)                \
+    $(glib_cflags)              \
     $(NULL)
 emoji_parser_LDADD =            \
-    $(libibus)                  \
-    $(GLIB2_LIBS)               \
-    $(GOBJECT2_LIBS)            \
+    $(libnativeibus)            \
+    $(glib_libs)                \
     $(NULL)
 endif
 
@@ -407,13 +440,15 @@ ibusunicodegen.h:
 
 unicode_parser_SOURCES =        \
     unicode-parser.c            \
+    $(parser_extra_sources)     \
     $(NULL)
 unicode_parser_CFLAGS =         \
-    $(GLIB2_CFLAGS)             \
+    $(AM_CFLAGS)                \
+    $(glib_cflags)              \
     $(NULL)
 unicode_parser_LDADD =          \
-    $(GLIB2_LIBS)               \
-    $(libibus)                  \
+    $(glib_libs)                \
+    $(libnativeibus)            \
     $(NULL)
 endif
 

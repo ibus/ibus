@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
@@ -6,7 +6,7 @@ set -e
 # breaks dbus-launch.  There's dbus-run-session which is
 # better, but not everyone has it yet.
 export DBUS_FATAL_WARNINGS=0
-export TMPDIR=$(mktemp -d --tmpdir="$PWD")
+export TMPDIR=$(mktemp -d -p "$PWD")
 export XDG_CONFIG_HOME="$TMPDIR/config"
 export XDG_CACHE_HOME="$TMPDIR/cache"
 export GSETTINGS_SCHEMA_DIR="$TMPDIR/schemas"
@@ -14,7 +14,12 @@ mkdir -p $XDG_CONFIG_HOME $XDG_CACHE_HOME $GSETTINGS_SCHEMA_DIR
 
 eval `dbus-launch --sh-syntax`
 
-trap 'rm -rf $TMPDIR; kill $DBUS_SESSION_BUS_PID' ERR
+trap cleanup EXIT
+
+cleanup () {
+  test $? -eq 0 && exit
+  rm -rf $TMPDIR; kill $DBUS_SESSION_BUS_PID
+}
 
 # in case that schema is not installed on the system
 glib-compile-schemas --targetdir "$GSETTINGS_SCHEMA_DIR" "$PWD"

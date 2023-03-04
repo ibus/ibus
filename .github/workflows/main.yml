@@ -205,3 +205,104 @@ jobs:
           VERBOSE=1
           DESTDIR="$HOME/build/$USER/dest"
 
+  build-netbsd:
+    name: "build (NetBSD/amd64 10.0 with pkgsrc)"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          #repository: ibus/ibus
+          fetch-depth: 200
+
+      - name: Fetch git tags
+        run: |
+          pwd
+          id
+          ls -al
+          git config --global --add safe.directory $GITHUB_WORKSPACE
+          git branch
+          git fetch --prune --unshallow --tags
+          echo $PATH
+
+      - name: Install packages and run autogen and make (on the NetBSD VM)
+        uses: vmactions/netbsd-vm@v1
+        with:
+          release: "10.0"
+          copyback: false
+          # Check https://github.com/NetBSD/pkgsrc/blob/trunk/inputmethod/ibus/Makefile to check dependencies
+          prepare: |
+            ftp -o - https://cdn.NetBSD.org/pub/NetBSD/NetBSD-`uname -r`/amd64/binary/sets/xbase.tar.xz | tar -C / -zxpf - ./usr/X11R7/bin ./usr/X11R7/include ./usr/X11R7/lib ./usr/X11R7/share
+            ftp -o - https://cdn.NetBSD.org/pub/NetBSD/NetBSD-`uname -r`/amd64/binary/sets/xcomp.tar.xz | tar -C / -zxpf - ./usr/X11R7/bin ./usr/X11R7/include ./usr/X11R7/lib ./usr/X11R7/share
+            # netbsd-vm has installed pkgsrc glib2 so explicitly update it
+            pkg_add -u glib2
+            pkg_add -u pkgconf autoconf automake libtool-base intltool gmake
+            pkg_add -u cldr-emoji-annotation unicode-character-database unicode-emoji
+            pkg_add -u py311-gobject3 dconf gettext-tools gobject-introspection gettext-lib hicolor-icon-theme vala dbus libnotify iso-codes gtk2+ gtk3+
+            pkg_add -u glib2-tools gtk-doc gdbus-codegen git-base
+            git config --global --add safe.directory $GITHUB_WORKSPACE
+
+          run: >
+            MAKE=gmake
+            MSGFMT=/usr/pkg/bin/msgfmt
+            LDFLAGS='-L/usr/pkg/lib -Wl,-R/usr/pkg/lib -L/usr/lib -Wl,-R/usr/lib -L/usr/X11R7/lib -Wl,-R/usr/X11R7/lib'
+            ./autogen.sh
+            --sysconfdir=/usr/pkg/etc
+            --localedir=/usr/pkg/share/locale
+            --enable-dconf
+            --enable-gtk2
+            --enable-gtk3
+            --disable-gtk4
+            --enable-surrounding-text
+            --enable-introspection=yes
+            --disable-systemd-services
+            --disable-appindicator
+            --with-python=/usr/pkg/bin/python3.11
+            --with-unicode-emoji-dir=/usr/pkg/share/unicode/emoji
+            --with-emoji-annotation-dir=/usr/pkg/share/unicode/cldr/common/annotations
+            --with-ucd-dir=/usr/pkg/share/unicode/ucd
+            --x-includes=/usr/X11R7/include
+            --x-libraries=/usr/X11R7/lib
+            --prefix=/usr/pkg
+            --mandir=/usr/pkg/man
+            --enable-option-checking=yes
+            --enable-gtk-doc
+            --enable-install-tests;
+            export DISABLE_DAEMONIZE_IN_TESTS=1;
+            gmake distcheck
+            LDFLAGS="
+            -L/usr/pkg/lib -Wl,-R/usr/pkg/lib
+            -L/usr/lib -Wl,-R/usr/lib
+            -L/usr/X11R7/lib -Wl,-R/usr/X11R7/lib
+            "
+            DISTCHECK_CONFIGURE_FLAGS="
+            MAKE=\"gmake\"
+            MSGFMT=\"/usr/pkg/bin/msgfmt\"
+            --enable-gtk-doc
+            --disable-schemas-compile
+            --enable-memconf
+            --sysconfdir=/usr/pkg/etc
+            --localedir=/usr/pkg/share/locale
+            --enable-dconf
+            --enable-gtk2
+            --enable-gtk3
+            --disable-gtk4
+            --enable-surrounding-text
+            --enable-introspection=yes
+            --disable-systemd-services
+            --disable-appindicator
+            --with-python=/usr/pkg/bin/python3.11
+            --with-unicode-emoji-dir=/usr/pkg/share/unicode/emoji
+            --with-emoji-annotation-dir=/usr/pkg/share/unicode/cldr/common/annotations
+            --with-ucd-dir=/usr/pkg/share/unicode/ucd
+            --x-includes=/usr/X11R7/include
+            --x-libraries=/usr/X11R7/lib
+            --prefix=/usr/pkg
+            --mandir=/usr/pkg/man
+            --enable-install-tests
+            "
+            DISABLE_GUI_TESTS="
+            ibus-compose ibus-keypress test-stress xkb-latin-layouts
+            "
+            VERBOSE=1
+            DESTDIR="$HOME/build/$USER/dest"

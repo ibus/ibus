@@ -4,6 +4,7 @@
 : ${srcdir=$(dirname $0)}
 : ${srcdir:=.}
 : ${SAVE_DIST_FILES:=0}
+: ${MAKE:=make}
 
 olddir=$(pwd)
 # shellcheck disable=SC2016
@@ -73,7 +74,7 @@ cd "$olddir"
     (test "$1" = "--help" ) && {
         exit 0
     } || {
-        echo "Now type 'make' to compile $PKG_NAME" || exit 1
+        echo "Now type '$MAKE' to compile $PKG_NAME" || exit 1
     }
 } || {
     echo "Skipping configure process."
@@ -83,8 +84,8 @@ cd "$srcdir"
 (test "x$SAVE_DIST_FILES" = "x0" ) && {
     # rm engine/simple.xml.in src/ibusemojigen.h src/ibusunicodegen.h
     for d in engine src src/compose; do
-        echo "make -C $d maintainer-clean-generic"
-        make -C $d maintainer-clean-generic
+        echo "$MAKE -C $d maintainer-clean-generic"
+        $MAKE -C $d maintainer-clean-generic
    done
 } || :
 cd "$olddir"

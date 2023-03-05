@@ -139,7 +139,7 @@ srpm: dist @PACKAGE_NAME@.spec
 			@PACKAGE_NAME@.spec
 
 clean-rpm:
-	$(RM) -r "`uname -i`"
+	-$(RM) -r "`uname -i`"
 
 clean-local: clean-rpm
 

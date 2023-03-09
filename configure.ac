@@ -152,12 +152,10 @@ AC_CHECK_LIB(c, dlclose, LIBDL="", [AC_CHECK_LIB(dl, dlclose, LIBDL="-ldl")])
 AC_SUBST(LIBDL)
 
 # Check endianness.
-AC_MSG_CHECKING([build system endianness])
 AC_C_BIGENDIAN([ENDIAN=big],[ENDIAN=little],[ENDIAN=unknown],[])
 if test x"$ENDIAN" != xlittle  -a x"$ENDIAN" != xbig; then
     AC_MSG_ERROR([Cannot determine endianness])
 fi
-AC_MSG_RESULT($ENDIAN)
 AC_SUBST(ENDIAN)
 
 # Check packages.

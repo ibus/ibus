@@ -166,11 +166,12 @@ daemon (gint nochdir, gint noclose)
 #endif
 
 #ifdef HAVE_SYS_PRCTL_H
-static void
-_sig_usr1_handler (int sig)
+static gboolean
+_on_sigusr1 (void)
 {
     g_warning ("The parent process died.");
     bus_server_quit (FALSE);
+    return G_SOURCE_REMOVE;
 }
 #endif
 
@@ -350,7 +351,7 @@ main (gint argc, gchar **argv)
         if (prctl (PR_SET_PDEATHSIG, SIGUSR1))
             g_printerr ("Cannot bind SIGUSR1 for parent death\n");
         else
-            signal (SIGUSR1, _sig_usr1_handler);
+            g_unix_signal_add (SIGUSR1, (GSourceFunc)_on_sigusr1, NULL);
 #endif
     }
     bus_server_run ();

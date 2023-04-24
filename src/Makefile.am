@@ -42,6 +42,7 @@ INTROSPECTION_COMPILER_ARGS = \
 INTROSPECTION_GIRS =
 CLEANFILES =
 noinst_PROGRAMS = gen-internal-compose-table
+GEN_INTERNAL_COMPOSE_TABLE = $(builddir)/gen-internal-compose-table
 
 # C preprocessor flags
 AM_CPPFLAGS =                                           \
@@ -271,7 +272,7 @@ ibus.gresources.xml: ibus.gresources.xml.in
 
 compose/sequences-$(ENDIAN)-endian: gen-internal-compose-table
 	$(AM_V_GEN) $(MKDIR_P) $(builddir)/compose && \
-	$(builddir)/gen-internal-compose-table && \
+	$(GEN_INTERNAL_COMPOSE_TABLE) && \
 	mv $(builddir)/sequences-big-endian $(builddir)/compose && \
 	mv $(builddir)/sequences-little-endian $(builddir)/compose
 
@@ -295,6 +296,7 @@ EMOJI_DICT_FILES = $(patsubst %,dicts/emoji-%.dict,$(LANG_FILES))
 dict_DATA = $(EMOJI_DICT_FILES)
 
 noinst_PROGRAMS += emoji-parser
+EMOJI_PARSER = $(builddir)/emoji-parser
 
 dicts/emoji-%.dict: emoji-parser
 	$(AM_V_at)if test x"$(LANG_FILES)" = x ; then \
@@ -311,7 +313,7 @@ dicts/emoji-%.dict: emoji-parser
 	fi; \
 	is_skip=0; \
 	if test x"$*" = xen ; then \
-	    $(builddir)/emoji-parser \
+	    $(EMOJI_PARSER) \
 	        --unicode-emoji-dir $(UNICODE_EMOJI_DIR) \
 	        --xml $(EMOJI_ANNOTATION_DIR)/$*.xml \
 	        $$xml_derived_option \
@@ -319,7 +321,7 @@ dicts/emoji-%.dict: emoji-parser
 	        --out-category ibusemojigen.h \
 	        --out $@; \
 	else \
-	    $(builddir)/emoji-parser \
+	    $(EMOJI_PARSER) \
 	        --unicode-emoji-dir $(UNICODE_EMOJI_DIR) \
 	        --xml $(EMOJI_ANNOTATION_DIR)/$*.xml \
 	        $$xml_derived_option \
@@ -379,13 +381,14 @@ if ENABLE_UNICODE_DICT
 unicodedir = $(pkgdatadir)/dicts
 unicode_DATA = dicts/unicode-names.dict dicts/unicode-blocks.dict
 noinst_PROGRAMS += unicode-parser
+UNICODE_PARSER = $(builddir)/unicode-parser
 
 dicts/unicode-names.dict: unicode-parser
 	$(AM_V_at)input_file="$(UCD_DIR)/NamesList.txt"; \
 	if test ! -f "$$input_file" ; then \
 	    echo "WARNING: Not found $$input_file" 1>&2; \
 	else \
-	    $(builddir)/unicode-parser \
+	    $(UNICODE_PARSER) \
 	        --input-names-list $$input_file \
 	        --output-names-list $@; \
 	    echo "Generated $@"; \
@@ -396,7 +399,7 @@ dicts/unicode-blocks.dict: unicode-parser
 	if test ! -f "$$input_file" ; then \
 	    echo "WARNING: Not found $$input_file" 1>&2; \
 	else \
-	    $(builddir)/unicode-parser \
+	    $(UNICODE_PARSER) \
 	        --input-blocks $$input_file \
 	        --output-blocks-trans ibusunicodegen.h \
 	        --output-blocks $@; \

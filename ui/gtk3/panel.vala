@@ -41,7 +41,6 @@ class Panel : IBus.PanelService {
     private Gtk.Menu m_ime_menu;
     private Gtk.Menu m_sys_menu;
     private IBus.EngineDesc[] m_engines = {};
-    private IBus.EngineDesc m_en_engine;
     private GLib.HashTable<string, IBus.EngineDesc> m_engine_contexts =
             new GLib.HashTable<string, IBus.EngineDesc>(GLib.str_hash,
                                                         GLib.str_equal);
@@ -583,11 +582,6 @@ class Panel : IBus.PanelService {
         GLib.List<IBus.EngineDesc> im_engines =
                 get_engines_from_locale(engines);
 
-        if (m_is_wayland) {
-            if (xkb_engines.length() > 0)
-                xkb_engines = new GLib.List<IBus.EngineDesc>();
-        }
-
         string[] names = {};
         foreach (unowned IBus.EngineDesc engine in xkb_engines)
             names += engine.get_name();
@@ -763,40 +757,12 @@ class Panel : IBus.PanelService {
         inited_engines_order = false;
     }
 
-    private void update_version_1_5_26() {
-        var message = _("Keymap changes do not work in Plasma Wayland at " +
-                        "present. Please use systemsettings5 instead.");
-#if ENABLE_LIBNOTIFY
-        if (!Notify.is_initted()) {
-            Notify.init ("ibus");
-        }
-
-        var notification = new Notify.Notification(
-                _("IBus Notification"),
-                message,
-                "ibus");
-        notification.set_timeout(30 * 1000);
-        notification.set_category("hotkey");
-
-        try {
-            notification.show();
-        } catch (GLib.Error e) {
-            warning (message);
-        }
-#else
-        warning (message);
-#endif
-    }
-
     private void set_version() {
         string prev_version = m_settings_general.get_string("version");
         string current_version = null;
 
         if (compare_versions(prev_version, "1.5.8") < 0)
             update_version_1_5_8();
-
-        if (compare_versions(prev_version, "1.5.26") < 0)
-            update_version_1_5_26();
 
         current_version = "%d.%d.%d".printf(IBus.MAJOR_VERSION,
                                             IBus.MINOR_VERSION,
@@ -929,20 +895,13 @@ class Panel : IBus.PanelService {
     }
 
     private void switch_engine(int i, bool force = false) {
-        if (m_is_wayland)
-            GLib.assert(i >= 0 && i <= m_engines.length);
-        else
-            GLib.assert(i >= 0 && i < m_engines.length);
+        GLib.assert(i >= 0 && i < m_engines.length);
 
         // Do not need switch
         if (i == 0 && !force)
             return;
 
-        IBus.EngineDesc engine;
-        if (m_is_wayland && m_engines.length == 0)
-            engine = m_en_engine;
-        else
-            engine = m_engines[i];
+        IBus.EngineDesc engine = m_engines[i];
 
         set_engine(engine);
     }
@@ -1038,17 +997,11 @@ class Panel : IBus.PanelService {
         string[] names = {};
 
         foreach (var name in order_names) {
-            if (m_is_wayland && name.has_prefix("xkb:"))
-                name = "xkb:us::eng";
-            if (name in names)
-                continue;
             if (name in engine_names)
                 names += name;
         }
 
         foreach (var name in engine_names) {
-            if (m_is_wayland && name.has_prefix("xkb:"))
-                name = "xkb:us::eng";
             if (name in names)
                 continue;
             names += name;
@@ -1090,19 +1043,8 @@ class Panel : IBus.PanelService {
 
         if (m_engines.length == 0) {
             m_engines = engines;
-            // Do not show engines in panel icon and suggest systemsettings5
-            // in Plasma Wayland in case all engines are XKB.
-            if (m_is_wayland && m_engines.length == 1 &&
-                m_engines[0].get_name() == "xkb:us::eng") {
-                m_engines = {};
-                if (m_en_engine == null) {
-                    m_en_engine =
-                            m_bus.get_engines_by_names({"xkb:us::eng"})[0];
-                }
-            }
             switch_engine(0, true);
-            if (m_engines.length > 0)
-                run_preload_engines(m_engines, 1);
+            run_preload_engines(m_engines, 1);
         } else {
             var current_engine = m_engines[0];
             m_engines = engines;
@@ -1319,10 +1261,6 @@ class Panel : IBus.PanelService {
             var longname = engine.get_longname();
             var textdomain = engine.get_textdomain();
             var transname = GLib.dgettext(textdomain, longname);
-            if (m_is_wayland && engine.get_name().has_prefix("xkb:")) {
-                language = _("Other");
-                transname = _("No input method");
-            }
             var item = new Gtk.MenuItem.with_label(
                 "%s - %s".printf (IBus.get_language_name(language), transname));
             // Make a copy of engine to workaround a bug in vala.
@@ -1571,8 +1509,6 @@ class Panel : IBus.PanelService {
         /* Do not change the order of m_engines during running switcher. */
         if (m_switcher.is_running())
             return;
-        if (m_engines.length == 0)
-            return;
 
         if (m_icon_type == IconType.INDICATOR) {
             // Wait for the callback of the session bus.
@@ -1600,7 +1536,7 @@ class Panel : IBus.PanelService {
 
             if (engine != null) {
                 var name = engine.get_name();
-                if (!m_is_wayland && name.length >= 4 && name[0:4] == "xkb:")
+                if (name.length >= 4 && name[0:4] == "xkb:")
                     language = m_switcher.get_xkb_language(engine);
             }
 

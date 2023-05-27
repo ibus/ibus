@@ -55,24 +55,17 @@ desktopdir = $(datadir)/applications
 org.freedesktop.IBus.Setup.desktop: ibus-setup.desktop
 	$(AM_V_GEN) $(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@
 
-man_one_in_files = ibus-setup.1.in
-man_one_DATA = $(man_one_in_files:.1.in=.1)
+man_one_DATA = ibus-setup.1
 man_onedir = $(mandir)/man1
-%.1: %.1.in
-	$(AM_V_GEN) sed \
-		-e 's|@VERSION[@]|$(VERSION)|g' $< > $@.tmp && \
-		mv $@.tmp $@
 
 CLEANFILES = \
     $(desktop_DATA) \
-    $(man_one_DATA) \
     *.pyc \
     ibus-setup \
     $(NULL)
 
 EXTRA_DIST = \
     $(desktop_notrans_files) \
-    $(man_one_in_files) \
     ibus-setup.in \
     setup.ui \
     $(NULL)

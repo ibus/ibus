@@ -37,13 +37,8 @@ dconfdb_DATA = 00-upstream-settings
 	$(AM_V_GEN) $(srcdir)/make-dconf-override-db.sh > $@ || \
 		{ rc=$$?; $(RM) -rf $@; exit $$rc; }
 
-man_5_in_files = 00-upstream-settings.5.in ibus.5.in
-man_5_DATA = $(man_5_in_files:.5.in=.5)
+man_5_DATA = 00-upstream-settings.5 ibus.5
 man_5dir = $(mandir)/man5
-%.5: %.5.in
-	$(AM_V_GEN) sed \
-	    -e 's|@VERSION[@]|$(VERSION)|g' $< > $@.tmp && \
-	    mv $@.tmp $@
 
 install-data-hook:
 	if test -z "$(DESTDIR)"; then \
@@ -52,14 +47,9 @@ install-data-hook:
 
 EXTRA_DIST = \
     $(gsettings_SCHEMAS) \
-    $(man_5_in_files) \
     make-dconf-override-db.sh \
     profile/ibus \
     00-upstream-settings \
-    $(NULL)
-
-CLEANFILES = \
-    $(man_5_DATA) \
     $(NULL)
 
 MAINTAINERCLEANFILES = \

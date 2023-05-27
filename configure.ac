@@ -831,6 +831,7 @@ bindings/Makefile
 bindings/pygobject/Makefile
 bindings/vala/Makefile
 bus/Makefile
+bus/ibus-daemon.1
 bus/services/Makefile
 client/Makefile
 client/gtk2/Makefile
@@ -847,6 +848,8 @@ data/icons/Makefile
 data/its/Makefile
 data/keymaps/Makefile
 data/dconf/Makefile
+data/dconf/00-upstream-settings.5
+data/dconf/ibus.5
 docs/Makefile
 docs/reference/Makefile
 docs/reference/ibus/ibus-docs.sgml
@@ -858,13 +861,16 @@ ibus/interface/Makefile
 m4/Makefile
 portal/Makefile
 setup/Makefile
+setup/ibus-setup.1
 src/Makefile
 src/compose/Makefile
 src/ibusversion.h
 src/tests/Makefile
 tools/Makefile
+tools/ibus.1
 ui/Makefile
 ui/gtk3/Makefile
+ui/gtk3/ibus-emoji.7
 util/Makefile
 util/IMdkit/Makefile
 Makefile

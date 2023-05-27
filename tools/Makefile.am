@@ -112,24 +112,14 @@ libibusimmodule_la_LDFLAGS = \
     -export-symbols-regex "ibus_.*"                     \
     $(NULL)
 
-man_one_in_files = ibus.1.in
-man_one_DATA = $(man_one_in_files:.1.in=.1)
+man_one_DATA = ibus.1
 man_onedir = $(mandir)/man1
-%.1: %.1.in
-	$(AM_V_GEN) sed \
-		-e 's|@VERSION[@]|$(VERSION)|g' $< > $@.tmp && \
-		mv $@.tmp $@
 
 EXTRA_DIST = \
     $(ibus_immodule_vapi) \
     $(ibusimmodule_gir) \
-    $(man_one_in_files) \
     ibus.bash \
     IBusIMModule-1.0.metadata \
-    $(NULL)
-
-CLEANFILES = \
-    $(man_one_DATA) \
     $(NULL)
 
 if ENABLE_EMOJI_DICT

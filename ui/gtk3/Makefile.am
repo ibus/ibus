@@ -147,8 +147,6 @@ emoji_headers =         \
     ibusemojidialog.h   \
     $(NULL)
 
-man_seven_in_files = ibus-emoji.7.in
-
 # References:
 # libappindicator/src/notification-item.xml
 # libappindicator/src/notification-watcher.xml
@@ -156,7 +154,6 @@ man_seven_in_files = ibus-emoji.7.in
 # kdelibs/kdeui/knotifications/src/org.kde.StatusNotifierWatcher.xml
 EXTRA_DIST =                            \
     $(emoji_headers)                    \
-    $(man_seven_in_files)               \
     emojierapp.vala                     \
     extension.vala                      \
     gtkextension.xml.in                 \
@@ -257,12 +254,8 @@ panelbinding.o: $(srcdir)/panelbinding.c
 
 MAINTAINERCLEANFILES += extension.c panelbinding.c
 
-man_seven_DATA = $(man_seven_in_files:.7.in=.7)
+man_seven_DATA = ibus-emoji.7
 man_sevendir = $(mandir)/man7
-%.7: %.7.in
-	$(AM_V_GEN) sed \
-	    -e 's|@VERSION[@]|$(VERSION)|g' $< > $@.tmp && \
-	    mv $@.tmp $@
 
 desktop_in_files = \
     ibus-ui-emojier.desktop.in \
@@ -289,7 +282,6 @@ org.freedesktop.IBus.Panel.Extension.Gtk3.desktop: ibus-extension-gtk3.desktop
 CLEANFILES += \
     $(desktop_DATA) \
     $(desktop_notrans_files) \
-    $(man_seven_DATA) \
     $(NULL)
 
 endif

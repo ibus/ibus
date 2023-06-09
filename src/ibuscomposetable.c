@@ -732,8 +732,8 @@ compose_data_to_variant (gconstpointer compose_data,
                          gboolean reverse_endianness,
                          GError **error)
 {
-    guint16 *compose_data16 = NULL;
-    guint32 *compose_data32 = NULL;
+    guint16 data16;
+    guint32 data32;
     guint16 *target_data16 = NULL;
     guint32 *target_data32 = NULL;
     gsize i, length;
@@ -759,18 +759,20 @@ compose_data_to_variant (gconstpointer compose_data,
                              "Failed to malloc");
                 return NULL;
             }
-            compose_data32 = (guint32*)compose_data;
-            for (i = 0; i < length; i++)
-                target_data32[i] = GUINT32_SWAP_LE_BE (compose_data32[i]);
+            for (i = 0; i < length; i++) {
+                memcpy(&data32, (char *)compose_data + i * sizeof (data32), sizeof (data32));
+                target_data32[i] = GUINT32_SWAP_LE_BE (data32);
+            }
         } else {
             if (!(target_data16 = g_new0 (guint16, length))) {
                 g_set_error (error, IBUS_ERROR, IBUS_ERROR_FAILED,
                              "Failed to malloc");
                 return NULL;
             }
-            compose_data16 = (guint16*)compose_data;
-            for (i = 0; i < length; i++)
-                target_data16[i] = GUINT16_SWAP_LE_BE (compose_data16[i]);
+            for (i = 0; i < length; i++) {
+                memcpy(&data16, (char *)compose_data + i * sizeof (data16), sizeof (data16));
+                target_data16[i] = GUINT16_SWAP_LE_BE (data16);
+            }
         }
     } else {
         if (is_32bit)
@@ -1365,8 +1367,9 @@ ibus_compose_table_new_with_list (GList   *compose_list,
         if (is_32bit) {
             for (j = 0; compose_data->values[j]; j++) {
                 g_assert (v_index_32bit + j <  v_size_32bit);
-                ibus_compose_seqs_32bit_second[v_index_32bit + j] =
-                        compose_data->values[j];
+                memcpy(&ibus_compose_seqs_32bit_second[v_index_32bit + j],
+                       &compose_data->values[j],
+                       sizeof *ibus_compose_seqs_32bit_second);
             }
             g_assert (m + 1 < (s_size_total - s_size_16bit) * n_index_stride);
             ibus_compose_seqs_32bit_first[m++] = j;

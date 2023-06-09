@@ -64,7 +64,7 @@ AC_SUBST(VALA_TARGET_GLIB_VERSION)
 # Init automake.
 AM_INIT_AUTOMAKE([1.11.1 parallel-tests])
 AM_MAINTAINER_MODE([enable])
-AC_GNU_SOURCE
+AC_USE_SYSTEM_EXTENSIONS
 
 # Support silent build rules. Disable
 # by either passing --disable-silent-rules to configure or passing V=1
@@ -126,7 +126,6 @@ AC_SUBST(DATE_DISPLAY)
 # Check for programs.
 AC_PROG_CC
 AM_PROG_CC_C_O
-AC_PROG_CC_STDC
 AM_PROG_VALAC([0.20])
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
@@ -136,9 +135,9 @@ AM_GNU_GETTEXT_VERSION([0.19.8])
 AM_GNU_GETTEXT([external])
 
 # Define PACKAGE_VERSION_* variables.
-AM_DISABLE_STATIC
-AC_ISC_POSIX
-AC_HEADER_STDC
+AC_DISABLE_STATIC([])
+AC_SEARCH_LIBS([strerror],[cposix])
+
 LT_INIT
 
 # Check header filess.

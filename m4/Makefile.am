@@ -21,7 +21,6 @@
 # USA
 
 EXTRA_DIST = \
-    as-version.m4 \
     ibuslocale.m4 \
     vapigen.m4 \
     $(NULL)

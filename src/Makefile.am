@@ -365,13 +365,13 @@ emoji_parser_SOURCES =          \
     emoji-parser.c              \
     $(NULL)
 emoji_parser_CFLAGS =           \
-    $(GLIB2_CFLAGS)             \
-    $(GOBJECT2_CFLAGS)          \
+    @GLIB2_CFLAGS@              \
+    @GOBJECT2_CFLAGS@           \
     $(NULL)
 emoji_parser_LDADD =            \
     $(libibus)                  \
-    $(GLIB2_LIBS)               \
-    $(GOBJECT2_LIBS)            \
+    @GLIB2_LIBS@                \
+    @GOBJECT2_LIBS@             \
     $(NULL)
 endif
 
@@ -410,10 +410,10 @@ unicode_parser_SOURCES =        \
     unicode-parser.c            \
     $(NULL)
 unicode_parser_CFLAGS =         \
-    $(GLIB2_CFLAGS)             \
+    @GLIB2_CFLAGS@             \
     $(NULL)
 unicode_parser_LDADD =          \
-    $(GLIB2_LIBS)               \
+    @GLIB2_LIBS@               \
     $(libibus)                  \
     $(NULL)
 endif

@@ -339,8 +339,8 @@ dicts/emoji-%.dict: emoji-parser
 	    echo "Skip $$plus_comment $@"; \
 	fi;
 
-ibusemojigen.h:
-	$(MAKE) $(AM_MAKEFLAGS) dicts/emoji-en.dict
+ibusemojigen.h: dicts/emoji-en.dict
+	$(MAKE) $(AM_MAKEFLAGS) $^
 
 # We put dicts/emoji-%.dict as the make target for the parallel build
 # and the make target has to be genarated even if the file size is zero.

@@ -391,7 +391,7 @@ dicts/unicode-names.dict: unicode-parser
 	    echo "Generated $@"; \
 	fi;
 
-dicts/unicode-blocks.dict: unicode-parser
+dicts/unicode-blocks.dict ibusunicodegen.h: unicode-parser
 	$(AM_V_at)input_file="$(UCD_DIR)/Blocks.txt"; \
 	if test ! -f "$$input_file" ; then \
 	    echo "WARNING: Not found $$input_file" 1>&2; \
@@ -402,9 +402,6 @@ dicts/unicode-blocks.dict: unicode-parser
 	        --output-blocks $@; \
 	    echo "Generated $@"; \
 	fi;
-
-ibusunicodegen.h:
-	$(MAKE) $(AM_MAKEFLAGS) dicts/unicode-blocks.dict
 
 unicode_parser_SOURCES =        \
     unicode-parser.c            \

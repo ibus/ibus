@@ -182,7 +182,7 @@ jobs:
         # bindings/pygobject/IBus.py
         run: >
           export DISABLE_DAEMONIZE_IN_TESTS=1;
-          make distcheck
+          make -j$(nproc) distcheck
           DISTCHECK_CONFIGURE_FLAGS="
           --enable-gtk-doc
           --disable-schemas-install

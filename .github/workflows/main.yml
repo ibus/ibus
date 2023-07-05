@@ -43,7 +43,6 @@ jobs:
          UBUNTU_PACKAGES_AUTOGEN: >
            autopoint
            strace
-           wget
          # For make from
          # https://packages.ubuntu.com/search?searchon=sourcenames&keywords=ibus
          UBUNTU_PACKAGES_MAKE: >
@@ -103,7 +102,6 @@ jobs:
            xkeyboard-config-devel
            patch
            strace
-           wget
 
         run: |
           case "${{ matrix.container }}" in
@@ -157,13 +155,6 @@ jobs:
           git branch
           git fetch --prune --unshallow --tags
           echo $PATH
-
-      # https://github.com/orgs/community/discussions/39646
-      # Heard GTK fixes this issue recently
-      - name: Apply additional patches for GitHub action + Docker
-        run: |
-          wget -O ibus-xx-bus-docker-spawn.patch https://github.com/fujiwarat/ibus/commit/d7d9247f517dbee97be551555f6abda3aa57dd39.patch
-          patch -p1 < ./ibus-xx-bus-docker-spawn.patch
 
       - name: Run autogen
         # configure options from

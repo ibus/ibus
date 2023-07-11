@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2018 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2018-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2018 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -298,7 +298,6 @@ gboolean     ibus_input_context_process_key_event
                                              guint32             keycode,
                                              guint32             state);
 
-
 /**
  * ibus_input_context_set_cursor_location:
  * @context: An IBusInputContext.
@@ -519,9 +518,38 @@ void         ibus_input_context_set_content_type
  *
  * See also ibus_engine_update_preedit_text_with_mode().
  */
-void         ibus_input_context_set_client_commit_preedit (
-                                             IBusInputContext   *context,
+void         ibus_input_context_set_client_commit_preedit
+                                            (IBusInputContext   *context,
                                              gboolean            client_commit);
+
+/**
+ * ibus_input_context_set_post_process_key_event:
+ * @context: An #IBusInputContext.
+ * @enable: Can use ibus_input_context_post_process_key_event() to retrieve
+ * commit-text and forwar-key-event signals during
+ * calling ibus_input_context_process_key_event() if it's %TRUE.
+ *
+ * Since: 1.5.00
+ * Stability: Unstable
+ */
+void         ibus_input_context_set_post_process_key_event
+                                            (IBusInputContext   *context,
+                                             gboolean            enable);
+/**
+ * ibus_input_context_post_process_key_event:
+ * @context: An #IBusInputContext.
+ *
+ * Call this API after ibus_input_context_process_key_event() returns
+ * to retrieve commit-text and forwar-key-event signals during
+ * calling ibus_input_context_process_key_event().
+ *
+ * See also ibus_input_context_set_post_process_key_event().
+ *
+ * Since: 1.5.00
+ * Stability: Unstable
+ */
+void         ibus_input_context_post_process_key_event
+                                            (IBusInputContext   *context);
 
 G_END_DECLS
 #endif

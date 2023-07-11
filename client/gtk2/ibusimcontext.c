@@ -111,7 +111,7 @@ static guint    _signal_delete_surrounding_id = 0;
 static guint    _signal_retrieve_surrounding_id = 0;
 
 #if GTK_CHECK_VERSION (3, 98, 4)
-static char _use_sync_mode = 2;
+static char _use_sync_mode = 1;
 #else
 static const gchar *_no_snooper_apps = NO_SNOOPER_APPS;
 static gboolean _use_key_snooper = ENABLE_SNOOPER;
@@ -386,6 +386,7 @@ typedef struct {
     gboolean  retval;
 } ProcessKeyEventReplyData;
 
+
 static void
 _process_key_event_done (GObject      *object,
                          GAsyncResult *res,
@@ -435,6 +436,7 @@ _process_key_event_done (GObject      *object,
 #endif
 }
 
+
 static void
 _process_key_event_reply_done (GObject      *object,
                                GAsyncResult *res,
@@ -457,6 +459,7 @@ _process_key_event_reply_done (GObject      *object,
     g_source_remove (data->count_cb_id);
 }
 
+
 static gboolean
 _process_key_event_count_cb (gpointer user_data)
 {
@@ -471,6 +474,101 @@ _process_key_event_count_cb (gpointer user_data)
     }
     return G_SOURCE_CONTINUE;
 }
+
+
+static gboolean
+_process_key_event_sync (IBusInputContext *context,
+                         guint             keyval,
+                         guint             keycode,
+                         guint             state)
+{
+    gboolean retval;
+
+    g_assert (IBUS_IS_INPUT_CONTEXT (context));
+    retval = ibus_input_context_process_key_event (context,
+                                                   keyval,
+                                                   keycode - 8,
+                                                   state);
+    ibus_input_context_post_process_key_event (context);
+    return retval;
+}
+
+
+static gboolean
+_process_key_event_async (IBusInputContext *context,
+                          guint             keyval,
+                          guint             keycode,
+                          guint             state,
+                          GdkEvent         *event,
+                          IBusIMContext    *ibusimcontext)
+{
+    ProcessKeyEventData *data = g_slice_new0 (ProcessKeyEventData);
+
+    g_assert (event);
+    if (!data) {
+        g_warning ("Cannot allocate async data");
+        return _process_key_event_sync (context, keyval, keycode, state);
+    }
+#if GTK_CHECK_VERSION (3, 98, 4)
+    data->event = gdk_event_ref (event);
+#else
+    data->event = gdk_event_copy (event);
+#endif
+    data->ibusimcontext = ibusimcontext;
+    ibus_input_context_process_key_event_async (context,
+            keyval,
+            keycode - 8,
+            state,
+            -1,
+            NULL,
+            _process_key_event_done,
+            data);
+
+    return TRUE;
+}
+
+
+static gboolean
+_process_key_event_hybrid_async (IBusInputContext *context,
+                                 guint             keyval,
+                                 guint             keycode,
+                                 guint             state)
+{
+    GSource *source = g_timeout_source_new (1);
+    ProcessKeyEventReplyData *data = NULL;
+    gboolean retval = FALSE;
+
+    if (source)
+        data = g_slice_new0 (ProcessKeyEventReplyData);
+    if (!data) {
+        g_warning ("Cannot wait for the reply of the process key event.");
+        retval = _process_key_event_sync (context, keyval, keycode, state);
+        if (source)
+            g_source_destroy (source);
+        return retval;
+    }
+    data->count = 1;
+    g_source_attach (source, NULL);
+    g_source_unref (source);
+    data->count_cb_id = g_source_get_id (source);
+    ibus_input_context_process_key_event_async (context,
+            keyval,
+            keycode - 8,
+            state,
+            -1,
+            NULL,
+            _process_key_event_reply_done,
+            data);
+    g_source_set_callback (source, _process_key_event_count_cb, data, NULL);
+    while (data->count)
+        g_main_context_iteration (NULL, TRUE);
+    /* #2498 Checking source->ref_count might cause Nautilus hang up
+     */
+    retval = data->retval;
+    g_slice_free (ProcessKeyEventReplyData, data);
+    return retval;
+}
+
 
 static gboolean
 _process_key_event (IBusInputContext *context,
@@ -505,70 +603,20 @@ _process_key_event (IBusInputContext *context,
 
     switch (_use_sync_mode) {
     case 1: {
-        retval = ibus_input_context_process_key_event (context,
-                                                       keyval,
-                                                       keycode - 8,
-                                                       state);
+        retval = _process_key_event_sync (context, keyval, keycode, state);
         break;
     }
     case 2: {
-        GSource *source = g_timeout_source_new (1);
-        ProcessKeyEventReplyData *data = NULL;
-
-        if (source)
-            data = g_slice_new0 (ProcessKeyEventReplyData);
-        if (!data) {
-            g_warning ("Cannot wait for the reply of the process key event.");
-            retval = ibus_input_context_process_key_event (context,
-                                                           keyval,
-                                                           keycode - 8,
-                                                           state);
-            if (source)
-                g_source_destroy (source);
-            break;
-        }
-        data->count = 1;
-        g_source_attach (source, NULL);
-        g_source_unref (source);
-        data->count_cb_id = g_source_get_id (source);
-        ibus_input_context_process_key_event_async (context,
-            keyval,
-            keycode - 8,
-            state,
-            -1,
-            NULL,
-            _process_key_event_reply_done,
-            data);
-        g_source_set_callback (source, _process_key_event_count_cb, data, NULL);
-        while (data->count)
-            g_main_context_iteration (NULL, TRUE);
-        if (source->ref_count > 0) {
-            /* g_source_get_id() could causes a SEGV */
-            g_info ("Broken GSource.ref_count and maybe a timing issue in %p.",
-                    source);
-        }
-        retval = data->retval;
-        g_slice_free (ProcessKeyEventReplyData, data);
+        retval = _process_key_event_hybrid_async (context,
+                                                  keyval, keycode, state);
         break;
     }
     default: {
-        ProcessKeyEventData *data = g_slice_new0 (ProcessKeyEventData);
-#if GTK_CHECK_VERSION (3, 98, 4)
-        data->event = gdk_event_ref (event);
-#else
-        data->event = gdk_event_copy ((GdkEvent *)event);
-#endif
-        data->ibusimcontext = ibusimcontext;
-        ibus_input_context_process_key_event_async (context,
-            keyval,
-            keycode - 8,
-            state,
-            -1,
-            NULL,
-            _process_key_event_done,
-            data);
-
-        retval = TRUE;
+        retval = _process_key_event_async (context,
+                                           keyval, keycode, state,
+                                           (GdkEvent *)event,
+                                           ibusimcontext);
+        break;
     }
     }
 
@@ -877,7 +925,55 @@ ibus_im_context_class_init (IBusIMContextClass *class)
     g_assert (_signal_retrieve_surrounding_id != 0);
 
 #if GTK_CHECK_VERSION (3, 98, 4)
-    _use_sync_mode = _get_char_env ("IBUS_ENABLE_SYNC_MODE", 2);
+    /* IBus GtkIMModule, QtIMModlue, ibus-x11, ibus-wayland are called as
+     * IBus clients.
+     * Each GTK application, each QT application, Xorg server, Wayland
+     * comppsitor are called as IBus event owners here.
+     *
+     * The IBus client processes the key events between the IBus event owner
+     * and the IBus daemon and the procedure step is to:
+     *
+     * receive the key event from the IBus event owner and forward the
+     * event to the IBus daemon with the "ProcessKeyEvent" D-Bus method at
+     * first,
+     *
+     * receive the return value from the IBus daemon with the "ProessKeyEvent"
+     * D-Bus method and forward the value to the IBus event owner secondly and
+     * the return value includes if the key event is processed normally or not.
+     *
+     * The procedure behavior can be changed by the "IBUS_ENABLE_SYNC_MODE"
+     * environment variable with the synchronous procedure or asynchronous
+     * one and value is:
+     *
+     * 1: Synchronous process key event:
+     *    Wait for the return of the IBus "ProcessKeyEvent" D-Bus method
+     *    synchronously and forward the return value to the IBus event owner
+     *    synchronously.
+     * 0: Asynchronous process key event:
+     *    Return to the IBus event owner as the key event is processed normally
+     *    at first as soon as the IBus client receives the event from the
+     *    IBus event owner and also forward the event to the IBus daemon with
+     *    the "ProcessKeyEvent" D-Bus method and wait for the return value of
+     *    the D-Bus method *asynchronously*.
+     *    If the return value indicates the key event is disposed by IBus,
+     *    the IBus client does not perform anything. Otherwise the IBus client
+     *    forwards the key event with the gdk_event_put() in GTK3,
+     *    gtk_im_context_filter_key() in GTK4, IMForwardEvent() in XIM API.
+     * 2: Hybrid asynchronous process key event:
+     *    Wait for the return of the IBus "ProcessKeyEvent" D-Bus method
+     *    *asynchronously* with a GSource loop and forward the return value
+     *    to the IBus event owner synchronously. So IBus clients perform
+     *    virtually synchronously to cover problems of IBus synchronous APIs.
+     *
+     * The purpose of the asynchronous process is that each IBus input
+     * method can process the key events without D-Bus timeout and also
+     * the IBus synchronous process has a problem that the IBus
+     * "ProcessKeyEvent" D-Bus method cannot send the commit-text and
+     * forwar-key-event D-Bus signals until the D-Bus method is finished.
+     *
+     * Relative issues: #1713, #2486
+     */
+    _use_sync_mode = _get_char_env ("IBUS_ENABLE_SYNC_MODE", 1);
 #else
     _use_key_snooper = !_get_boolean_env ("IBUS_DISABLE_SNOOPER",
                                           !(ENABLE_SNOOPER));
@@ -1004,8 +1100,6 @@ ibus_im_context_init (GObject *obj)
 #else
     ibusimcontext->caps = IBUS_CAP_PREEDIT_TEXT | IBUS_CAP_FOCUS;
 #endif
-    if (_use_sync_mode == 1)
-        ibusimcontext->caps |= IBUS_CAP_SYNC_PROCESS_KEY_V2;
 
     ibusimcontext->events_queue = g_queue_new ();
 
@@ -2265,6 +2359,8 @@ _create_input_context_done (IBusBus       *bus,
     else {
         gboolean requested_surrounding_text = FALSE;
         ibus_input_context_set_client_commit_preedit (context, TRUE);
+        if (_use_sync_mode == 1)
+            ibus_input_context_set_post_process_key_event (context, TRUE);
         ibusimcontext->ibuscontext = context;
 
         g_signal_connect (ibusimcontext->ibuscontext,
@@ -2489,9 +2585,8 @@ _create_fake_input_context_done (IBusBus       *bus,
                       G_CALLBACK (_ibus_fake_context_destroy_cb),
                       NULL);
 
-    guint32 caps = IBUS_CAP_PREEDIT_TEXT | IBUS_CAP_FOCUS | IBUS_CAP_SURROUNDING_TEXT;
-    if (_use_sync_mode == 1)
-        caps |= IBUS_CAP_SYNC_PROCESS_KEY_V2;
+    guint32 caps = IBUS_CAP_PREEDIT_TEXT | IBUS_CAP_FOCUS
+                   | IBUS_CAP_SURROUNDING_TEXT;
     ibus_input_context_set_capabilities (_fake_context, caps);
 
     /* focus in/out the fake context */

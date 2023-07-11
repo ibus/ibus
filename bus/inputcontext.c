@@ -31,6 +31,8 @@
 #include "marshalers.h"
 #include "types.h"
 
+#define MAX_SYNC_DATA 30
+
 struct _SetEngineByDescData {
     /* context related to the data */
     BusInputContext *context;
@@ -45,6 +47,11 @@ struct _SetEngineByDescData {
     gulong cancelled_handler_id;
 };
 typedef struct _SetEngineByDescData SetEngineByDescData;
+
+typedef struct _SyncForwardingData {
+    gchar     key;
+    IBusText *text;
+} SyncForwardingData;
 
 struct _BusInputContext {
     IBusService parent;
@@ -99,6 +106,9 @@ struct _BusInputContext {
 
     BusPanelProxy *emoji_extension;
     gboolean is_extension_lookup_table;
+    GQueue *queue_during_process_key_event;
+    gboolean use_post_process_key_event;
+    gboolean processing_key_event;
 };
 
 struct _BusInputContextClass {
@@ -156,6 +166,15 @@ static void     bus_input_context_service_method_call
                                     const gchar           *method_name,
                                     GVariant              *parameters,
                                     GDBusMethodInvocation *invocation);
+static GVariant *
+                bus_input_context_service_get_property
+                                   (IBusService           *service,
+                                    GDBusConnection       *connection,
+                                    const gchar           *sender,
+                                    const gchar           *object_path,
+                                    const gchar           *interface_name,
+                                    const gchar           *property_name,
+                                    GError               **error);
 static gboolean bus_input_context_service_set_property
                                    (IBusService           *service,
                                     GDBusConnection       *connection,
@@ -215,8 +234,21 @@ static const gchar introspection_xml[] =
     "<node>\n"
     "  <interface name='org.freedesktop.IBus.InputContext'>\n"
     /* properties */
+    "    <property name='PostProcessKeyEvent' type='(a(yv))' access='read'>\n"
+    "      <annotation name='org.gtk.GDBus.Since'\n"
+    "          value='1.5.29' />\n"
+    "      <annotation name='org.gtk.GDBus.DocString'\n"
+    "          value='Stability: Unstable' />\n"
+    "    </property>\n"
     "    <property name='ContentType' type='(uu)' access='write' />\n"
     "    <property name='ClientCommitPreedit' type='(b)' access='write' />\n"
+    "    <property name='EffectivePostProcessKeyEvent' type='(b)' \n"
+    "                                                  access='write'>\n"
+    "      <annotation name='org.gtk.GDBus.Since'\n"
+    "          value='1.5.29' />\n"
+    "      <annotation name='org.gtk.GDBus.DocString'\n"
+    "          value='Stability: Unstable' />\n"
+    "    </property>\n"
     /* methods */
     "    <method name='ProcessKeyEvent'>\n"
     "      <arg direction='in'  type='u' name='keyval' />\n"
@@ -353,6 +385,8 @@ bus_input_context_class_init (BusInputContextClass *class)
     /* override the parent class's implementation. */
     IBUS_SERVICE_CLASS (class)->service_method_call =
         bus_input_context_service_method_call;
+    IBUS_SERVICE_CLASS (class)->service_get_property =
+        bus_input_context_service_get_property;
     IBUS_SERVICE_CLASS (class)->service_set_property =
         bus_input_context_service_set_property;
     /* register the xml so that bus_ibus_impl_service_method_call will be
@@ -782,6 +816,11 @@ bus_input_context_property_changed (BusInputContext *context,
 }
 
 
+typedef struct _PanelProcessKeyEventData {
+    GDBusMethodInvocation *invocation;
+    BusInputContext *context;
+} PanelProcessKeyEventData;
+
 /**
  * _panel_process_key_event_cb:
  *
@@ -789,14 +828,21 @@ bus_input_context_property_changed (BusInputContext *context,
  * bus_panel_proxy_process_key_event() is finished.
  */
 static void
-_panel_process_key_event_cb (GObject               *source,
-                             GAsyncResult          *res,
-                             GDBusMethodInvocation *invocation)
+_panel_process_key_event_cb (GObject                  *source,
+                             GAsyncResult             *res,
+                             PanelProcessKeyEventData *data)
 {
     GError *error = NULL;
     GVariant *value = g_dbus_proxy_call_finish ((GDBusProxy *)source,
                                                  res,
                                                  &error);
+    GDBusMethodInvocation *invocation;
+    BusInputContext *context;
+
+    g_assert (data);
+    invocation = data->invocation;
+    context = data->context;
+    g_slice_free (PanelProcessKeyEventData, data);
     if (value != NULL) {
         g_dbus_method_invocation_return_value (invocation, value);
         g_variant_unref (value);
@@ -805,6 +851,7 @@ _panel_process_key_event_cb (GObject               *source,
         g_dbus_method_invocation_return_gerror (invocation, error);
         g_error_free (error);
     }
+    context->processing_key_event = FALSE;
 }
 
 typedef struct _ProcessKeyEventData ProcessKeyEventData;
@@ -841,21 +888,27 @@ _ic_process_key_event_reply_cb (GObject               *source,
         gboolean retval = FALSE;
         g_variant_get (value, "(b)", &retval);
         if (context->emoji_extension && !retval) {
+            PanelProcessKeyEventData *pdata =
+                    g_slice_new (PanelProcessKeyEventData);
+            pdata->invocation = invocation;
+            pdata->context = context;
             bus_panel_proxy_process_key_event (context->emoji_extension,
                                                keyval,
                                                keycode,
                                                modifiers,
                                                (GAsyncReadyCallback)
                                                     _panel_process_key_event_cb,
-                                               invocation);
+                                               pdata);
         } else {
             g_dbus_method_invocation_return_value (invocation, value);
+            context->processing_key_event = FALSE;
         }
         g_variant_unref (value);
     }
     else {
         g_dbus_method_invocation_return_gerror (invocation, error);
         g_error_free (error);
+        context->processing_key_event = FALSE;
     }
 
     g_object_unref (context);
@@ -877,6 +930,8 @@ _ic_process_key_event (BusInputContext       *context,
     guint keycode = 0;
     guint modifiers = 0;
 
+    if (context->use_post_process_key_event)
+        context->processing_key_event = TRUE;
     g_variant_get (parameters, "(uuu)", &keyval, &keycode, &modifiers);
     if (G_UNLIKELY (!context->has_focus)) {
         /* workaround: set focus if context does not have focus */
@@ -1372,17 +1427,109 @@ bus_input_context_service_method_call (IBusService            *service,
     g_return_if_reached ();
 }
 
-static void
+/**
+ * _ic_get_post_process_key_event:
+ *
+ * Implement the "PostProcessKeyEvent" get property of the
+ * org.freedesktop.IBus.InputContext interface because currently the Gio
+ * D-Bus method calls don't support multiple nested tuples likes
+ * G_VARIANT_TYPE ("((ba(yv)))")) in "ProcessKeyEvent" D-Bus method
+ * So these post events are separated from the return value "b" of
+ * the "ProcessKeyEvent" D-Bus method call.
+ */
+static GVariant *
+_ic_get_post_process_key_event (BusInputContext *context,
+                                GDBusConnection *connection,
+                                GError         **error)
+{
+    const char *error_message = NULL;
+    GVariantBuilder array;
+    SyncForwardingData *data;
+
+    do {
+        if (!BUS_IS_INPUT_CONTEXT (context)) {
+            error_message = "BusInputContext is freed";
+            break;
+        }
+        if (context->processing_key_event) {
+            error_message = "Another ProcessKeyEvent is called.";
+            break;
+        }
+        g_variant_builder_init (&array, G_VARIANT_TYPE ("a(yv)"));
+        while ((data =
+                g_queue_pop_head (context->queue_during_process_key_event))) {
+            GVariant *variant = ibus_serializable_serialize_object (
+                    IBUS_SERIALIZABLE (data->text));
+            g_variant_builder_add (&array, "(yv)", data->key, variant);
+            g_object_unref (data->text);
+            g_slice_free (SyncForwardingData, data);
+        }
+    } while (FALSE);
+    if (error_message) {
+        g_set_error (error,
+                     G_DBUS_ERROR,
+                     G_DBUS_ERROR_FAILED,
+                     "%s", error_message);
+        return NULL;
+    }
+    return g_variant_builder_end (&array);
+}
+
+static GVariant *
+bus_input_context_service_get_property (IBusService           *service,
+                                        GDBusConnection       *connection,
+                                        const gchar           *sender,
+                                        const gchar           *object_path,
+                                        const gchar           *interface_name,
+                                        const gchar           *property_name,
+                                        GError               **error)
+{
+    int i;
+    static const struct {
+        const char *property_name;
+        GVariant * (* property_callback) (BusInputContext *,
+                                          GDBusConnection *,
+                                          GError **);
+    } properties [] =  {
+        { "PostProcessKeyEvent",   _ic_get_post_process_key_event },
+    };
+
+    if (error)
+        *error = NULL;
+    if (g_strcmp0 (interface_name, IBUS_INTERFACE_INPUT_CONTEXT) != 0) {
+        return IBUS_SERVICE_CLASS (bus_input_context_parent_class)->
+                service_get_property (
+                        service, connection, sender, object_path,
+                        interface_name, property_name,
+                        error);
+    }
+    for (i = 0; i < G_N_ELEMENTS (properties); i++) {
+        if (g_strcmp0 (properties[i].property_name, property_name) == 0) {
+            return properties[i].property_callback ((BusInputContext *)service,
+                                                    connection,
+                                                    error);
+        }
+    }
+
+    g_set_error (error,
+                 G_DBUS_ERROR,
+                 G_DBUS_ERROR_FAILED,
+                 "service_get_property received an unknown property: %s",
+                 property_name ? property_name : "(null)");
+    g_return_val_if_reached (NULL);
+}
+
+static gboolean
 _ic_set_content_type (BusInputContext *context,
-                      GVariant        *value)
+                      GVariant        *value,
+                      GError         **error)
 {
     guint purpose = 0;
     guint hints = 0;
+    gboolean retval = TRUE;
 
     g_variant_get (value, "(uu)", &purpose, &hints);
     if (purpose != context->purpose || hints != context->hints) {
-        GError *error;
-        gboolean retval;
 
         context->purpose = purpose;
         context->hints = hints;
@@ -1400,24 +1547,30 @@ _ic_set_content_type (BusInputContext *context,
                            context->hints);
         }
 
-        error = NULL;
         retval = bus_input_context_property_changed (context,
                                                      "ContentType",
                                                      value,
-                                                     &error);
-        if (!retval) {
-            g_warning ("Failed to emit PropertiesChanged signal: %s",
-                       error->message);
-            g_error_free (error);
-        }
+                                                     error);
     }
+    return retval;
 }
 
-static void
+static gboolean
 _ic_set_client_commit_preedit (BusInputContext *context,
-                               GVariant        *value)
+                               GVariant        *value,
+                               GError         **error)
 {
     g_variant_get (value, "(b)", &context->client_commit_preedit);
+    return TRUE;
+}
+
+static gboolean
+_ic_set_use_post_process_key_event (BusInputContext *context,
+                                    GVariant        *value,
+                                    GError         **error)
+{
+    g_variant_get (value, "(b)", &context->use_post_process_key_event);
+    return TRUE;
 }
 
 static gboolean
@@ -1430,6 +1583,18 @@ bus_input_context_service_set_property (IBusService     *service,
                                         GVariant        *value,
                                         GError         **error)
 {
+    int i;
+    static const struct {
+        const char *property_name;
+        gboolean (* property_callback) (BusInputContext *,
+                                        GVariant *,
+                                        GError **);
+    } properties [] =  {
+        { "ContentType",                   _ic_set_content_type },
+        { "ClientCommitPreedit",           _ic_set_client_commit_preedit },
+        { "EffectivePostProcessKeyEvent",  _ic_set_use_post_process_key_event },
+    };
+
     if (error)
         *error = NULL;
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_INPUT_CONTEXT) != 0) {
@@ -1460,14 +1625,12 @@ bus_input_context_service_set_property (IBusService     *service,
                      " ");
         return FALSE;
     }
-
-    if (g_strcmp0 (property_name, "ContentType") == 0) {
-        _ic_set_content_type (BUS_INPUT_CONTEXT (service), value);
-        return TRUE;
-    }
-    if (g_strcmp0 (property_name, "ClientCommitPreedit") == 0) {
-        _ic_set_client_commit_preedit (BUS_INPUT_CONTEXT (service), value);
-        return TRUE;
+    for (i = 0; i < G_N_ELEMENTS (properties); i++) {
+        if (g_strcmp0 (properties[i].property_name, property_name) == 0) {
+            return properties[i].property_callback ((BusInputContext *) service,
+                                                    value,
+                                                    error);
+        }
     }
 
     g_set_error (error,
@@ -2204,7 +2367,23 @@ _engine_forward_key_event_cb (BusEngineProxy    *engine,
     g_assert (BUS_IS_INPUT_CONTEXT (context));
 
     g_assert (context->engine == engine);
+    g_assert (context->queue_during_process_key_event);
 
+    if (context->processing_key_event && g_queue_get_length (
+                   context->queue_during_process_key_event) <= MAX_SYNC_DATA) {
+        SyncForwardingData *data;
+        IBusText *text = ibus_text_new_from_printf ("%u,%u,%u",
+                                                    keyval, keycode, state);
+        if (g_queue_get_length (context->queue_during_process_key_event)
+            == MAX_SYNC_DATA) {
+            g_warning ("Exceed max number of post process_key_event data");
+        }
+        data = g_slice_new (SyncForwardingData);
+        data->key = 'f';
+        data->text = text;
+        g_queue_push_tail (context->queue_during_process_key_event, data);
+        return;
+    }
     bus_input_context_emit_signal (context,
                                    "ForwardKeyEvent",
                                    g_variant_new ("(uuu)",
@@ -2455,6 +2634,7 @@ bus_input_context_new (BusConnection    *connection,
 
     /* it is a fake input context, just need process hotkey */
     context->fake = (strncmp (client, "fake", 4) == 0);
+    context->queue_during_process_key_event = g_queue_new ();
 
     if (connection) {
         g_object_ref_sink (connection);
@@ -2938,11 +3118,17 @@ bus_input_context_set_content_type (BusInputContext *context,
                                     guint            hints)
 {
     GVariant *value;
+    GError *error = NULL;
 
     g_assert (BUS_IS_INPUT_CONTEXT (context));
 
     value = g_variant_ref_sink (g_variant_new ("(uu)", purpose, hints));
-    _ic_set_content_type (context, value);
+    _ic_set_content_type (context, value, &error);
+    if (error) {
+        g_warning ("Failed to emit PropertiesChanged signal: %s",
+                   error->message);
+        g_error_free (error);
+    }
     g_variant_unref (value);
 }
 
@@ -2952,12 +3138,24 @@ bus_input_context_commit_text_use_extension (BusInputContext *context,
                                              gboolean         use_extension)
 {
     g_assert (BUS_IS_INPUT_CONTEXT (context));
+    g_assert (context->queue_during_process_key_event);
 
     if (text == text_empty || text == NULL)
         return;
 
     if (use_extension && context->emoji_extension) {
         bus_panel_proxy_commit_text_received (context->emoji_extension, text);
+    } else if (context->processing_key_event && g_queue_get_length (
+                   context->queue_during_process_key_event) <= MAX_SYNC_DATA) {
+        SyncForwardingData *data;
+        if (g_queue_get_length (context->queue_during_process_key_event)
+            == MAX_SYNC_DATA) {
+            g_warning ("Exceed max number of sync process_key_event data");
+        }
+        data = g_slice_new (SyncForwardingData);
+        data->key = 'c';
+        data->text = g_object_ref (text);
+        g_queue_push_tail (context->queue_during_process_key_event, data);
     } else {
         GVariant *variant = ibus_serializable_serialize (
                 (IBusSerializable *)text);

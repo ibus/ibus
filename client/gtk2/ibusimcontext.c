@@ -93,6 +93,7 @@ struct _IBusIMContext {
     GdkDevice       *device;
     double           x;
     double           y;
+    GtkEventControllerKey *controller;
 #else
     gboolean         use_button_press_event;
 #endif
@@ -1012,6 +1013,10 @@ ibus_im_context_init (GObject *obj)
     // Create slave im context
     ibusimcontext->slave = gtk_im_context_simple_new ();
 
+#if GTK_CHECK_VERSION (3, 98, 4)
+    ibusimcontext->controller = NULL;
+#endif
+
     g_signal_connect (ibusimcontext->slave,
                       "commit",
                       G_CALLBACK (_slave_commit_cb),
@@ -1462,6 +1467,11 @@ ibus_im_context_set_client_window (GtkIMContext *context,
     ibusimcontext = IBUS_IM_CONTEXT (context);
 
     if (ibusimcontext->client_window) {
+#if GTK_CHECK_VERSION (3, 98, 4)
+        gtk_widget_remove_controller (ibusimcontext->client_window, GTK_EVENT_CONTROLLER (ibusimcontext->controller));
+        ibusimcontext->controller = NULL;
+#endif
+
 #if !GTK_CHECK_VERSION (3, 98, 4)
         if (ibusimcontext->use_button_press_event && _use_sync_mode == 0)
             _connect_button_press_event (ibusimcontext, FALSE);
@@ -1475,6 +1485,12 @@ ibus_im_context_set_client_window (GtkIMContext *context,
 #if !GTK_CHECK_VERSION (3, 98, 4)
         if (!ibusimcontext->use_button_press_event && _use_sync_mode == 0)
             _connect_button_press_event (ibusimcontext, TRUE);
+#endif
+#if GTK_CHECK_VERSION (3, 98, 4)
+        ibusimcontext->controller = GTK_EVENT_CONTROLLER_KEY (gtk_event_controller_key_new ());
+        gtk_event_controller_key_set_im_context (ibusimcontext->controller, GTK_IM_CONTEXT(ibusimcontext));
+        gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (ibusimcontext->controller), GTK_PHASE_CAPTURE);
+        gtk_widget_add_controller (ibusimcontext->client_window, GTK_EVENT_CONTROLLER (ibusimcontext->controller));
 #endif
     }
 #if GTK_CHECK_VERSION (3, 98, 4)

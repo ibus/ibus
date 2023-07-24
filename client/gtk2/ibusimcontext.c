@@ -27,6 +27,7 @@
 
 #include <string.h>
 #include <gtk/gtk.h>
+#include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
 #include <ibus.h>
 #include "ibusimcontext.h"
@@ -1612,8 +1613,13 @@ static gboolean
 _set_cursor_location_internal (IBusIMContext *ibusimcontext)
 {
     GdkRectangle area;
+    GdkDisplay *display = NULL;
 #if GTK_CHECK_VERSION (3, 98, 4)
     GtkWidget *root;
+    GtkNative *native;
+    graphene_point_t p;
+    int tx = 0, ty = 0;
+    double nx = 0., ny = 0.;
 #endif
 
     if(ibusimcontext->client_window == NULL ||
@@ -1623,103 +1629,72 @@ _set_cursor_location_internal (IBusIMContext *ibusimcontext)
 
     area = ibusimcontext->cursor_area;
 
-#ifdef GDK_WINDOWING_WAYLAND
 #if GTK_CHECK_VERSION (3, 98, 4)
     root = GTK_WIDGET (gtk_widget_get_root (ibusimcontext->client_window));
-     /* FIXME: GTK_STYLE_CLASS_TITLEBAR is available in GTK3 but not GTK4.
-      * gtk_css_boxes_get_content_rect() is available in GTK4 but it's an
-      * internal API and calculate the window edge 32 in GTK3.
-      */
-    area.y += 32;
-    area.width = 50; /* FIXME: Why 50 meets the cursor position? */
-    area.height = gtk_widget_get_height (root);
-    area.height += 32;
-    if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ())) {
-        ibus_input_context_set_cursor_location_relative (
-            ibusimcontext->ibuscontext,
-            area.x,
-            area.y,
-            area.width,
-            area.height);
-        return FALSE;
+    /* Translates the given point in client_window coordinates to coordinates
+       relative to root coordinate system. */
+    if (!gtk_widget_compute_point (ibusimcontext->client_window,
+                                   root,
+                                   &GRAPHENE_POINT_INIT (area.x, area.y),
+                                   &p)) {
+        graphene_point_init (&p, area.x, area.y);
     }
-#else
-    if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ())) {
-        gdouble px, py;
-        GdkWindow *parent;
-        GdkWindow *window = ibusimcontext->client_window;
 
-        while ((parent = gdk_window_get_effective_parent (window)) != NULL) {
-            gdk_window_coords_to_parent (window, area.x, area.y, &px, &py);
-            area.x = px;
-            area.y = py;
-            window = parent;
-        }
+    native = gtk_widget_get_native (ibusimcontext->client_window);
+    /* Translates from the surface coordinates into the widget coordinates. */
+    gtk_native_get_surface_transform (native, &nx, &ny);
 
-        _set_rect_scale_factor_with_window (&area,
-                                            ibusimcontext->client_window);
-        ibus_input_context_set_cursor_location_relative (
-            ibusimcontext->ibuscontext,
-            area.x,
-            area.y,
-            area.width,
-            area.height);
-        return FALSE;
-    }
-#endif
-#endif
-
-#if GTK_CHECK_VERSION (3, 98, 4)
-#elif GTK_CHECK_VERSION (2, 91, 0)
-    if (area.x == -1 && area.y == -1 && area.width == 0 && area.height == 0) {
-        area.x = 0;
-        area.y += gdk_window_get_height (ibusimcontext->client_window);
-    }
-#else
-    if (area.x == -1 && area.y == -1 && area.width == 0 && area.height == 0) {
-        gint w, h;
-        gdk_drawable_get_size (ibusimcontext->client_window, &w, &h);
-        area.y += h;
-        area.x = 0;
-    }
-#endif
-
-#if GTK_CHECK_VERSION (3, 98, 4)
-#if defined(GDK_WINDOWING_X11)
-    GdkDisplay *display = gtk_widget_get_display (ibusimcontext->client_window);
+    display = gtk_widget_get_display (ibusimcontext->client_window);
     if (GDK_IS_X11_DISPLAY (display)) {
-        Display *xdisplay = gdk_x11_display_get_xdisplay (display);
-        Window root_window = gdk_x11_display_get_xrootwindow (display);
-        GtkNative *native = gtk_widget_get_native (
-                ibusimcontext->client_window);
-        GdkSurface *surface = gtk_native_get_surface (native);
-        /* The window is the toplevel window but not the inner text widget.
-         * Unfortunatelly GTK4 cannot get the coordinate of the text widget.
-         */
-        Window window = gdk_x11_surface_get_xid (surface);
+        GdkSurface *surface = gtk_native_get_surface
+            (gtk_widget_get_native (ibusimcontext->client_window));
         Window child;
-        int x, y;
-        XTranslateCoordinates (xdisplay, window, root_window,
-                               0, 0, &x, &y, &child);
-        XWindowAttributes xwa;
-        XGetWindowAttributes (xdisplay, window, &xwa);
-        area.x = x - xwa.x + area.x;
-        area.y = y - xwa.y + area.y;
-        area.width = 50; /* FIXME: Why 50 meets the cursor position? */
-        area.height = xwa.height;
+        int scale_factor = gtk_widget_get_scale_factor
+            (ibusimcontext->client_window);
+
+        XTranslateCoordinates (GDK_DISPLAY_XDISPLAY (display),
+                               GDK_SURFACE_XID (surface),
+                               gdk_x11_display_get_xrootwindow (display),
+                               0, 0, &tx, &ty,
+                               &child);
+
+        tx = tx / scale_factor;
+        ty = ty / scale_factor;
     }
-#endif
+
+    area.x = p.x + nx + tx;
+    area.y = p.y + ny + ty;
 #else
     gdk_window_get_root_coords (ibusimcontext->client_window,
                                 area.x, area.y,
                                 &area.x, &area.y);
 #endif
+
     _set_rect_scale_factor_with_window (&area, ibusimcontext->client_window);
-    ibus_input_context_set_cursor_location (ibusimcontext->ibuscontext,
-                                            area.x,
-                                            area.y,
-                                            area.width,
-                                            area.height);
+
+#ifdef GDK_WINDOWING_WAYLAND
+#if !GTK_CHECK_VERSION (3, 98, 4)
+    display = gdk_window_get_display (ibusimcontext->client_window);
+#endif
+
+    if (GDK_IS_WAYLAND_DISPLAY (display)) {
+        ibus_input_context_set_cursor_location_relative (ibusimcontext->ibuscontext,
+                                                         area.x,
+                                                         area.y,
+                                                         area.width,
+                                                         area.height);
+
+    } else {
+#endif
+        ibus_input_context_set_cursor_location (ibusimcontext->ibuscontext,
+                                                area.x,
+                                                area.y,
+                                                area.width,
+                                                area.height);
+#ifdef GDK_WINDOWING_WAYLAND
+    }
+#endif
+
     return FALSE;
 }
 

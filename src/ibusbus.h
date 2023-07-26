@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2013-2019 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2013-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2019 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -41,6 +41,7 @@
 #include "ibusconfig.h"
 #include "ibuscomponent.h"
 #include "ibusshare.h"
+#include "ibusxevent.h"
 
 /*
  * Type macros.
@@ -65,6 +66,22 @@ G_BEGIN_DECLS
 typedef struct _IBusBus IBusBus;
 typedef struct _IBusBusClass IBusBusClass;
 typedef struct _IBusBusPrivate IBusBusPrivate;
+
+/**
+ * IBusBusGlobalBindingType:
+ * @IBUS_BUS_GLOBAL_BINDING_TYPE_ANY: Any types
+ * @IBUS_BUS_GLOBAL_BINDING_TYPE_IME_SWITCHER: IME switcher
+ * @IBUS_BUS_GLOBAL_BINDING_TYPE_EMOJI_TYPING: Emoji typing
+ *
+ * Type enumeration of IBusBusGlobalBindingType.
+ * Since: 1.5.00
+ * Stability: Unstable
+ */
+typedef enum {
+    IBUS_BUS_GLOBAL_BINDING_TYPE_ANY,
+    IBUS_BUS_GLOBAL_BINDING_TYPE_IME_SWITCHER,
+    IBUS_BUS_GLOBAL_BINDING_TYPE_EMOJI_TYPING
+} IBusBusGlobalBindingType;
 
 /**
  * IBusBus:
@@ -1175,6 +1192,72 @@ void         ibus_bus_preload_engines_async
  * Returns: %TRUE if component starts. %FALSE otherwise.
  */
 gboolean     ibus_bus_preload_engines_async_finish
+                                        (IBusBus        *bus,
+                                         GAsyncResult   *res,
+                                         GError        **error);
+
+/**
+ * ibus_bus_set_global_shortcut_keys:
+ * @bus: An #IBusBus.
+ * @gtype: A #IBusBusGlobalBindingType.
+ * @keys: (array zero-terminated=1) (element-type IBusProcessKeyEventData):
+ *        A %NULL-terminated array of #IBusProcessKeyEventData.
+ *        keycode is used for the selecting direction and the forward direction
+ *        in case of 0, otherwise the backward direction.
+ *
+ * Set global shorcut keys for the Wayland session.
+ *
+ * Returns: %TRUE if the global shortcut keys are set. %FALSE otherwise.
+ * Since: 1.5.00
+ * Stability: Unstable
+ */
+gboolean     ibus_bus_set_global_shortcut_keys
+                                        (IBusBus                       *bus,
+                                         IBusBusGlobalBindingType       gtype,
+                                         const IBusProcessKeyEventData *keys);
+
+/**
+ * ibus_bus_set_global_shortcut_keys_async:
+ * @bus: An #IBusBus.
+ * @gtype: A #IBusBusGlobalBindingType.
+ * @keys: (array zero-terminated=1) (element-type IBusProcessKeyEventData):
+ *        A %NULL-terminated array of #IBusProcessKeyEventData.
+ * @timeout_msec: The timeout in milliseconds or -1 to use the default timeout.
+ * @cancellable: A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied
+ *      or %NULL if you don't care about the result of the method invocation.
+ * @user_data: The data to pass to callback.
+ *
+ * Sete global shorcut keys for the Wayland session asynchronously.
+ * Since: 1.5.00
+ * Stability: Unstable
+ */
+void         ibus_bus_set_global_shortcut_keys_async
+                                        (IBusBus                       *bus,
+                                         IBusBusGlobalBindingType       gtype,
+                                         const IBusProcessKeyEventData *keys,
+                                         gint
+                                                                timeout_msec,
+                                         GCancellable
+                                                               *cancellable,
+                                         GAsyncReadyCallback
+                                                                callback,
+                                         gpointer               user_data);
+
+/**
+ * ibus_bus_set_global_shortcut_keys_async_finish:
+ * @bus: An #IBusBus.
+ * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to
+ *   ibus_bus_set_global_shortcut_keys_async().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with ibus_bus_set_global_shortcut_keys_async().
+ *
+ * Returns: %TRUE if the global shortcut keys are set. %FALSE otherwise.
+ * Since: 1.5.00
+ * Stability: Unstable
+ */
+gboolean     ibus_bus_set_global_shortcut_keys_async_finish
                                         (IBusBus        *bus,
                                          GAsyncResult   *res,
                                          GError        **error);

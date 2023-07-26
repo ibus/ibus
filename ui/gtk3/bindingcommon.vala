@@ -99,8 +99,15 @@ class BindingCommon {
                                     ftype);
         keybindings.append(keybinding);
 
-        keybinding_manager.bind(switch_keysym, switch_modifiers,
-                                handler_normal);
+        bool is_wayland = false;
+#if USE_GDK_WAYLAND
+        if (!BindingCommon.default_is_xdisplay())
+            is_wayland = true;
+#endif
+        if (!is_wayland) {
+            keybinding_manager.bind(switch_keysym, switch_modifiers,
+                                    handler_normal);
+        }
         if (ftype == KeyEventFuncType.EMOJI_TYPING) {
             return;
         }
@@ -118,7 +125,7 @@ class BindingCommon {
                                     ftype);
         keybindings.append(keybinding);
 
-        if (ftype == KeyEventFuncType.IME_SWITCHER) {
+        if (!is_wayland && ftype == KeyEventFuncType.IME_SWITCHER) {
             keybinding_manager.bind(switch_keysym, switch_modifiers,
                                     handler_reverse);
         }

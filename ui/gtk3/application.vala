@@ -53,6 +53,8 @@ class Application {
 
         bus.connected.connect(bus_connected);
         bus.disconnected.connect(bus_disconnected);
+        bus.set_watch_ibus_signal(true);
+        bus.global_shortcut_key_responded.connect(bus_global_shortcut_key_cb);
 
         if (bus.is_connected()) {
             init();
@@ -94,6 +96,8 @@ class Application {
                                       Variant        parameters) {
         debug("signal_name = %s", signal_name);
         m_panel = new Panel(bus);
+        if (m_log != null)
+            m_panel.set_log(m_log, m_verbose);
 #if USE_GDK_WAYLAND
         m_realize_surface_id = m_panel.realize_surface.connect(
                 (w, s) => this.set_wayland_surface(s));
@@ -133,6 +137,23 @@ class Application {
 
     private void bus_connected(IBus.Bus bus) {
         init();
+    }
+
+    private void bus_global_shortcut_key_cb(IBus.Bus bus,
+                                            uint8    type,
+                                            bool     is_pressed,
+                                            bool     is_backward) {
+        if (m_panel == null)
+            return;
+        if (m_verbose) {
+            m_log.printf("Global shortcut key %u pressed %s backward %s\n",
+                         type,
+                         is_pressed ? "TRUE" : "FALSE",
+                         is_backward ? "TRUE" : "FALSE");
+            m_log.flush();
+        }
+        IBus.BusGlobalBindingType gtype = (IBus.BusGlobalBindingType)type;
+        m_panel.set_global_shortcut_key_state(gtype, is_pressed, is_backward);
     }
 
 #if USE_GDK_WAYLAND

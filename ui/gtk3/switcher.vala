@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2011-2016 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2015-2019 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2015-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -99,6 +99,11 @@ class Switcher : Gtk.Window {
     private GLib.HashTable<string, string> m_xkb_languages =
             new GLib.HashTable<string, string>(GLib.str_hash,
                                                GLib.str_equal);
+#if USE_GDK_WAYLAND
+    private bool m_hide_after_show;
+
+    public signal void realize_surface(void *surface);
+#endif
 
     public Switcher() {
         GLib.Object(
@@ -131,7 +136,38 @@ class Switcher : Gtk.Window {
         m_label.set_margin_bottom(3);
         vbox.pack_end(m_label, false, false, 0);
 
+#if USE_GDK_WAYLAND
+        if (!BindingCommon.default_is_xdisplay()) {
+            this.realize.connect((w) => {
+                realize_window(true);
+            });
+            this.show.connect((w) => {
+                if (m_hide_after_show)
+                    realize_window(false);
+                m_hide_after_show = false;
+            });
+            this.hide.connect((w) => {
+                m_hide_after_show = true;
+            });
+        } else {
+            grab_focus();
+        }
+#else
         grab_focus();
+#endif
+    }
+
+    public int run_popup(IBus.EngineDesc[] engines,
+                         int               index) {
+        m_result = index;
+        update_engines(engines);
+        /* Let gtk recalculate the window size. */
+        resize(1, 1);
+        m_label.set_text(m_buttons[index].transname);
+        show_all();
+        set_focus(m_buttons[index]);
+        m_result_engine = m_engines[m_result];
+        return m_result;
     }
 
     public int run(uint              keyval,
@@ -333,7 +369,12 @@ class Switcher : Gtk.Window {
                     return false;
                 }
                 m_mouse_moved = true;
+#if USE_GDK_WAYLAND
+                if (BindingCommon.default_is_xdisplay())
+                    button.grab_focus();
+#else
                 button.grab_focus();
+#endif
                 m_selected_engine = index;
                 return false;
             });
@@ -420,6 +461,26 @@ class Switcher : Gtk.Window {
         base.show();
         set_focus_visible(true);
     }
+
+#if USE_GDK_WAYLAND
+    private void realize_window(bool initial) {
+        var window = get_window();
+        if (!window.ensure_native()) {
+            warning("No native window.");
+            return; 
+        }
+        Type instance_type = window.get_type();
+        Type wayland_type = typeof(GdkWayland.Window);
+        if (!instance_type.is_a(wayland_type)) {
+            warning("Not GdkWindowWayland.");
+            return;
+        }
+        if (initial)
+            ((GdkWayland.Window)window).set_use_custom_surface();
+        var surface = ((GdkWayland.Window)window).get_wl_surface();
+        realize_surface(surface);
+    }
+#endif
 
     public override bool key_press_event(Gdk.EventKey e) {
         bool retval = true;

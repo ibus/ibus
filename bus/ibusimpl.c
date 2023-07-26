@@ -88,6 +88,7 @@ struct _BusIBusImpl {
     gchar *global_engine_name;
     gchar *global_previous_engine_name;
     GVariant *extension_register_keys;
+    IBusProcessKeyEventData *ime_switcher_keys;
 };
 
 struct _BusIBusImplClass {
@@ -196,6 +197,15 @@ static const gchar introspection_xml[] =
     "          name='org.freedesktop.DBus.Property.EmitsChangedSignal'\n"
     "          value='true' />\n"
     "    </property>\n"
+    "    <property name='GlobalShortcutKeys' type='(ya(uuu))' access='write'>\n"
+    "      <annotation\n"
+    "          name='org.freedesktop.DBus.Property.EmitsChangedSignal'\n"
+    "          value='true' />\n"
+    "      <annotation name='org.gtk.GDBus.Since'\n"
+    "          value='1.5.29' />\n"
+    "      <annotation name='org.gtk.GDBus.DocString'\n"
+    "          value='Stability: Unstable' />\n"
+    "    </property>\n"
     "    <property name='EmbedPreeditText' type='b' access='readwrite'>\n"
     "      <annotation\n"
     "          name='org.freedesktop.DBus.Property.EmitsChangedSignal'\n"
@@ -226,6 +236,15 @@ static const gchar introspection_xml[] =
     "    </signal>\n"
     "    <signal name='GlobalEngineChanged'>\n"
     "      <arg type='s' name='engine_name' />\n"
+    "    </signal>\n"
+    "    <signal name='GlobalShortcutKeyResponded'>\n"
+    "      <arg type='y' name='type' />\n"
+    "      <arg type='b' name='pressed' />\n"
+    "      <arg type='b' name='backward' />\n"
+    "      <annotation name='org.gtk.GDBus.Since'\n"
+    "          value='1.5.29' />\n"
+    "      <annotation name='org.gtk.GDBus.DocString'\n"
+    "          value='Stability: Unstable' />\n"
     "    </signal>\n"
     "    <property name='ActiveEngines' type='av' access='read' />\n"
     "    <method name='GetAddress'>\n"
@@ -1923,6 +1942,56 @@ _ibus_set_embed_preedit_text (BusIBusImpl     *ibus,
 }
 
 /**
+ * _ibus_set_global_shortcut_keys:
+ *
+ * Implement the "GlobalShortcutKeys" method call of the
+ * org.freedesktop.IBus interface.
+ */
+static gboolean
+_ibus_set_global_shortcut_keys (BusIBusImpl     *ibus,
+                                GDBusConnection *connection,
+                                GVariant        *value,
+                                GError         **error)
+{
+    guchar gtype;
+    GVariantIter *iter = NULL;
+    gsize size, i;
+    guint keyval, keycode, state;
+    IBusProcessKeyEventData *keys;
+
+    g_variant_get_child (value, 0, "y", &gtype);
+    g_variant_get_child (value, 1, "a(uuu)", &iter);
+    size = g_variant_iter_n_children (iter);
+    g_return_val_if_fail (size > 0, FALSE);
+    keys = g_slice_alloc (sizeof (IBusProcessKeyEventData) * (size + 1));
+    i = 0;
+    while (g_variant_iter_loop (iter, "(uuu)", &keyval, &keycode, &state)) {
+        keys[i].keyval = keyval;
+        keys[i].keycode = keycode;
+        keys[i].state = state;
+        i++;
+    }
+    g_variant_iter_free (iter);
+    if (!i) {
+        g_slice_free1 (sizeof (IBusProcessKeyEventData) * (size + 1), keys);
+        return FALSE;
+    }
+    keys[i].keyval = keys[i].keycode = keys[i].state = 0;
+    switch (gtype) {
+    case IBUS_BUS_GLOBAL_BINDING_TYPE_IME_SWITCHER:
+        if (ibus->ime_switcher_keys) {
+            for (i = 0; ibus->ime_switcher_keys[i].keyval; ++i) {}
+            g_slice_free1 (sizeof (IBusProcessKeyEventData) * (i + 1),
+                           ibus->ime_switcher_keys);
+        }
+        ibus->ime_switcher_keys = keys;
+        break;
+    default:;
+    }
+    return TRUE;
+}
+
+/**
  * bus_ibus_impl_service_method_call:
  *
  * Handle a D-Bus method call whose destination and interface name are
@@ -2068,6 +2137,7 @@ bus_ibus_impl_service_set_property (IBusService     *service,
     } methods [] =  {
         { "PreloadEngines",        _ibus_set_preload_engines },
         { "EmbedPreeditText",      _ibus_set_embed_preedit_text },
+        { "GlobalShortcutKeys",    _ibus_set_global_shortcut_keys },
     };
 
     if (error)
@@ -2415,4 +2485,101 @@ bus_ibus_impl_get_engine_active_surrounding_text_table (BusIBusImpl *ibus)
     g_assert (BUS_IS_IBUS_IMPL (ibus));
 
     return ibus->engine_active_surrounding_text_table;
+}
+
+static guint
+keyval_to_modifier(guint keyval)
+{
+    switch(keyval) {
+    case IBUS_KEY_Control_L:
+    case IBUS_KEY_Control_R:
+        return IBUS_CONTROL_MASK;
+    case IBUS_KEY_Shift_L:
+    case IBUS_KEY_Shift_R:
+        return IBUS_SHIFT_MASK;
+    case IBUS_KEY_Caps_Lock:
+        return IBUS_LOCK_MASK;
+    case IBUS_KEY_Alt_L:
+    case IBUS_KEY_Alt_R:
+        return IBUS_MOD1_MASK;
+    case IBUS_KEY_Meta_L:
+    case IBUS_KEY_Meta_R:
+        return IBUS_META_MASK;
+    case IBUS_KEY_Super_L:
+    case IBUS_KEY_Super_R:
+        return IBUS_MOD4_MASK;
+    case IBUS_KEY_Hyper_L:
+    case IBUS_KEY_Hyper_R:
+        return IBUS_HYPER_MASK;
+    default:;
+    }
+    return 0;
+}
+
+gboolean
+bus_ibus_impl_process_key_event (BusIBusImpl *ibus,
+                                 guint        keyval,
+                                 guint        keycode,
+                                 guint        state)
+{
+    int i;
+    guint bind_keyval = 0;
+    guint bind_state = 0;
+    static guint binding_state = 0;
+    gboolean is_pressed = (state & IBUS_RELEASE_MASK) == 0;
+    gboolean is_backward = FALSE;
+    gboolean hit = FALSE;
+    IBusBusGlobalBindingType type = IBUS_BUS_GLOBAL_BINDING_TYPE_ANY;
+
+    g_assert (BUS_IS_IBUS_IMPL (ibus));
+    if (!ibus->ime_switcher_keys)
+        return FALSE;
+    state &= ~IBUS_RELEASE_MASK;
+    for (i = 0; ibus->ime_switcher_keys[i].keyval; ++i) {
+        bind_keyval = ibus->ime_switcher_keys[i].keyval;
+        bind_state = ibus->ime_switcher_keys[i].state;
+        is_backward = ibus->ime_switcher_keys[i].keycode != 0;
+        if (keyval == bind_keyval && state  == bind_state) {
+            if (state != 0) {
+                /* If Super-space is pressed */
+                if (is_pressed)
+                    binding_state = bind_state;
+                /* If Super is pressed but space is released */
+                else if (!is_pressed && binding_state)
+                    break;
+            }
+            hit = TRUE;
+            type = IBUS_BUS_GLOBAL_BINDING_TYPE_IME_SWITCHER;
+            break;
+        } else if (binding_state && !is_pressed) {
+            guint released_modifier = keyval_to_modifier(keyval);
+            binding_state &= state;
+            binding_state &= ~released_modifier;
+            /* If both Super and space is released */
+            if (!binding_state) {
+                hit = TRUE;
+                type = IBUS_BUS_GLOBAL_BINDING_TYPE_IME_SWITCHER;
+            }
+            break;
+        }
+    }
+    if (hit) {
+        g_assert (bind_keyval);
+        GVariant *variant = g_variant_new (
+                "(ybb)",
+                type,
+                is_pressed,
+                is_backward);
+        /* TODO: dbus-monitor can observe the key release D-Bus signal is sent
+         *       immediately but IBusPanelService sometimes gets the signal
+         *       with a delay because the D-Bus receives seems depend on
+         *       the GMainLoop. The delay is resolved with another key press
+         *       as the workaround.
+         *       I also tried g_idle_add() for bus_ibus_impl_emit_signal() and
+         *       a D-Bus method from BusPanelProxy instead of this D-Bus signal
+         *       but this problem couldn't be resolved.
+         */
+        bus_ibus_impl_emit_signal (ibus, "GlobalShortcutKeyResponded", variant);
+    }
+    return hit;
 }

@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* bus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2022 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2022-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2022 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -100,5 +100,11 @@ GHashTable      *bus_ibus_impl_get_engine_focus_id_table
                                                     (BusIBusImpl        *ibus);
 GHashTable      *bus_ibus_impl_get_engine_active_surrounding_text_table
                                                     (BusIBusImpl        *ibus);
+gboolean         bus_ibus_impl_process_key_event    (BusIBusImpl        *ibus,
+                                                     guint               keyval,
+                                                     guint
+                                                                        keycode,
+                                                     guint               state);
+
 G_END_DECLS
 #endif

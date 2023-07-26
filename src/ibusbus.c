@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2021 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2015-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -44,6 +44,7 @@ enum {
     DISCONNECTED,
     GLOBAL_ENGINE_CHANGED,
     NAME_OWNER_CHANGED,
+    GLOBAL_SHORTCUT_KEY_RESPONDED,
     LAST_SIGNAL,
 };
 
@@ -61,7 +62,8 @@ struct _IBusBusPrivate {
     gboolean watch_dbus_signal;
     guint watch_dbus_signal_id;
     gboolean watch_ibus_signal;
-    guint watch_ibus_signal_id;
+    guint watch_global_engine_changed_id;
+    guint watch_global_shortcut_key_responded_id;
     IBusConfig *config;
     gchar *unique_name;
     gboolean connect_async;
@@ -235,6 +237,29 @@ ibus_bus_class_init (IBusBusClass *class)
             G_TYPE_NONE,
             3,
             G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+
+    /**
+     * IBusBus::global-shortcut-key-responded:
+     * @bus: The #IBusBus object which recevied the signal
+     * @type: The type of the global shortcut key.
+     * @is_pressed: %TRUE if the key is pressed.
+     * @is_backward: %TRUE if the backward key is pressed.
+     *
+     * Emitted when global shortcut key is responded.
+     *
+     */
+    bus_signals[GLOBAL_SHORTCUT_KEY_RESPONDED] =
+        g_signal_new (I_("global-shortcut-key-responded"),
+            G_TYPE_FROM_CLASS (class),
+            G_SIGNAL_RUN_LAST,
+            0,
+            NULL, NULL,
+            _ibus_marshal_VOID__UCHAR_BOOLEAN_BOOLEAN,
+            G_TYPE_NONE,
+            3,
+            G_TYPE_UCHAR,
+            G_TYPE_BOOLEAN,
+            G_TYPE_BOOLEAN);
 }
 
 static void
@@ -273,12 +298,20 @@ _connection_ibus_signal_cb (GDBusConnection *connection,
     g_return_if_fail (user_data != NULL);
     g_return_if_fail (IBUS_IS_BUS (user_data));
 
-    if (g_strcmp0 (signal_name, "GlobalEngineChanged") == 0) {
+    if (!g_strcmp0 (signal_name, "GlobalEngineChanged")) {
         gchar *engine_name = NULL;
         g_variant_get (parameters, "(&s)", &engine_name);
         g_signal_emit (IBUS_BUS (user_data),
                        bus_signals[GLOBAL_ENGINE_CHANGED], 0,
                        engine_name);
+    } else if (!g_strcmp0 (signal_name, "GlobalShortcutKeyResponded")) {
+        guchar type = (guchar)IBUS_BUS_GLOBAL_BINDING_TYPE_ANY;
+        gboolean is_pressed = FALSE;
+        gboolean is_backward = FALSE;
+        g_variant_get (parameters, "(ybb)", &type, &is_pressed, &is_backward);
+        g_signal_emit (IBUS_BUS (user_data),
+                       bus_signals[GLOBAL_SHORTCUT_KEY_RESPONDED], 0,
+                       type, is_pressed, is_backward);
     }
     /* FIXME handle org.freedesktop.IBus.RegistryChanged signal if needed */
 }
@@ -308,7 +341,7 @@ ibus_bus_close_connection (IBusBus *bus)
     bus->priv->unique_name = NULL;
 
     bus->priv->watch_dbus_signal_id = 0;
-    bus->priv->watch_ibus_signal_id = 0;
+    bus->priv->watch_global_engine_changed_id = 0;
 
     g_free (bus->priv->bus_address);
     bus->priv->bus_address = NULL;
@@ -548,7 +581,8 @@ ibus_bus_init (IBusBus *bus)
     bus->priv->watch_dbus_signal = FALSE;
     bus->priv->watch_dbus_signal_id = 0;
     bus->priv->watch_ibus_signal = FALSE;
-    bus->priv->watch_ibus_signal_id = 0;
+    bus->priv->watch_global_engine_changed_id = 0;
+    bus->priv->watch_global_shortcut_key_responded_id = 0;
     bus->priv->unique_name = NULL;
     bus->priv->connect_async = FALSE;
     bus->priv->client_only = FALSE;
@@ -1155,14 +1189,25 @@ static void
 ibus_bus_watch_ibus_signal (IBusBus *bus)
 {
     g_return_if_fail (bus->priv->connection != NULL);
-    g_return_if_fail (bus->priv->watch_ibus_signal_id == 0);
+    g_return_if_fail (bus->priv->watch_global_engine_changed_id == 0);
 
     /* Subscribe to ibus signals such as GlboalEngineChanged. */
-    bus->priv->watch_ibus_signal_id
+    bus->priv->watch_global_engine_changed_id
         = g_dbus_connection_signal_subscribe (bus->priv->connection,
                                               "org.freedesktop.IBus",
                                               IBUS_INTERFACE_IBUS,
                                               "GlobalEngineChanged",
+                                              IBUS_PATH_IBUS,
+                                              NULL /* arg0 */,
+                                              (GDBusSignalFlags) 0,
+                                              _connection_ibus_signal_cb,
+                                              bus,
+                                              NULL /* user_data_free_func */);
+    bus->priv->watch_global_shortcut_key_responded_id
+        = g_dbus_connection_signal_subscribe (bus->priv->connection,
+                                              "org.freedesktop.IBus",
+                                              IBUS_INTERFACE_IBUS,
+                                              "GlobalShortcutKeyResponded",
                                               IBUS_PATH_IBUS,
                                               NULL /* arg0 */,
                                               (GDBusSignalFlags) 0,
@@ -1175,10 +1220,15 @@ ibus_bus_watch_ibus_signal (IBusBus *bus)
 static void
 ibus_bus_unwatch_ibus_signal (IBusBus *bus)
 {
-    g_return_if_fail (bus->priv->watch_ibus_signal_id != 0);
-    g_dbus_connection_signal_unsubscribe (bus->priv->connection,
-                                          bus->priv->watch_ibus_signal_id);
-    bus->priv->watch_ibus_signal_id = 0;
+    g_return_if_fail (bus->priv->watch_global_engine_changed_id != 0);
+    g_dbus_connection_signal_unsubscribe (
+            bus->priv->connection,
+            bus->priv->watch_global_engine_changed_id);
+    bus->priv->watch_global_engine_changed_id = 0;
+    g_dbus_connection_signal_unsubscribe (
+            bus->priv->connection,
+            bus->priv->watch_global_shortcut_key_responded_id);
+    bus->priv->watch_global_shortcut_key_responded_id = 0;
 }
 
 void
@@ -2410,6 +2460,109 @@ ibus_bus_preload_engines_async_finish (IBusBus       *bus,
 
     task = G_TASK (res);
     g_assert (g_task_get_source_tag (task) == ibus_bus_preload_engines_async);
+    return _async_finish_void (task, error);
+}
+
+static GVariant *
+ibus_process_key_event_data_list_serialize (
+        IBusBusGlobalBindingType       gtype,
+        const IBusProcessKeyEventData *keys)
+{
+    GVariantBuilder builder, array;
+    gsize i;
+
+    g_variant_builder_init (&builder, G_VARIANT_TYPE_TUPLE);
+    g_variant_builder_add (&builder, "y", gtype);
+    g_variant_builder_init (&array, G_VARIANT_TYPE ("a(uuu)"));
+    for (i = 0; keys[i].keyval; ++i) {
+        g_variant_builder_add (&array, "(uuu)",
+                               keys[i].keyval,
+                               keys[i].keycode,
+                               keys[i].state);
+    }
+    g_variant_builder_add (&builder, "a(uuu)", &array);
+    return g_variant_builder_end (&builder);
+}
+
+gboolean
+ibus_bus_set_global_shortcut_keys (IBusBus                       *bus,
+                                   IBusBusGlobalBindingType       gtype,
+                                   const IBusProcessKeyEventData *keys)
+{
+    GVariant *result;
+    GVariant *variant = NULL;
+
+    g_return_val_if_fail (IBUS_IS_BUS (bus), FALSE);
+    g_return_val_if_fail (keys != NULL && keys[0].keyval != 0, FALSE);
+
+    variant = ibus_process_key_event_data_list_serialize (gtype, keys);
+    result = ibus_bus_call_sync (bus,
+                                 IBUS_SERVICE_IBUS,
+                                 IBUS_PATH_IBUS,
+                                 "org.freedesktop.DBus.Properties",
+                                 "Set",
+                                 g_variant_new ("(ssv)",
+                                                IBUS_INTERFACE_IBUS,
+                                                "GlobalShortcutKeys",
+                                                variant),
+                                 NULL);
+
+    if (result) {
+        g_variant_unref (result);
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+void
+ibus_bus_set_global_shortcut_keys_async (IBusBus                       *bus,
+                                         IBusBusGlobalBindingType       gtype,
+                                         const IBusProcessKeyEventData *keys,
+                                         gint
+                                                                   timeout_msec,
+                                         GCancellable
+                                                                  *cancellable,
+                                         GAsyncReadyCallback
+                                                                   callback,
+                                         gpointer                  user_data)
+{
+    GVariant *variant = NULL;
+
+    g_return_if_fail (IBUS_IS_BUS (bus));
+    g_return_if_fail (keys != NULL && keys[0].keyval != 0);
+
+    variant = ibus_process_key_event_data_list_serialize (gtype, keys);
+    ibus_bus_call_async (bus,
+                         IBUS_SERVICE_IBUS,
+                         IBUS_PATH_IBUS,
+                         "org.freedesktop.DBus.Properties",
+                         "Set",
+                         g_variant_new ("(ssv)",
+                                        IBUS_INTERFACE_IBUS,
+                                        "GlobalShortcutKeys",
+                                        variant),
+                         NULL, /* no return value */
+                         ibus_bus_set_global_shortcut_keys_async,
+                         timeout_msec,
+                         cancellable,
+                         callback,
+                         user_data);
+}
+
+gboolean
+ibus_bus_set_global_shortcut_keys_async_finish (IBusBus       *bus,
+                                                GAsyncResult  *res,
+                                                GError       **error)
+{
+    GTask *task;
+
+    g_assert (IBUS_IS_BUS (bus));
+    g_assert (g_task_is_valid (res, bus));
+
+    task = G_TASK (res);
+    g_assert (g_task_get_source_tag (task) ==
+              ibus_bus_set_global_shortcut_keys_async);
     return _async_finish_void (task, error);
 }
 

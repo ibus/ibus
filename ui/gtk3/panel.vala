@@ -48,6 +48,8 @@ class Panel : IBus.PanelService {
     private CandidatePanel m_candidate_panel;
     private Switcher m_switcher;
     private uint m_switcher_focus_set_engine_id;
+    private int m_switcher_selected_index = -1;
+    private Thread<bool> m_switcher_waiting_release;
     private PropertyManager m_property_manager;
     private PropertyPanel m_property_panel;
     private GLib.Pid m_setup_pid = 0;
@@ -82,12 +84,17 @@ class Panel : IBus.PanelService {
     private ulong m_popup_menu_id;
     private ulong m_activate_id;
     private ulong m_registered_status_notifier_item_id;
+    private unowned FileStream m_log;
+    private bool m_verbose;
 
     private GLib.List<BindingCommon.Keybinding> m_keybindings =
             new GLib.List<BindingCommon.Keybinding>();
 
 #if USE_GDK_WAYLAND
     public signal void realize_surface(void *surface);
+    public signal void update_shortcut_keys(
+            IBus.ProcessKeyEventData[] data,
+            BindingCommon.KeyEventFuncType ftype);
 #endif
 
     public Panel(IBus.Bus bus) {
@@ -140,6 +147,10 @@ class Panel : IBus.PanelService {
 #endif
 
         m_switcher = new Switcher();
+#if USE_GDK_WAYLAND
+        m_switcher.realize_surface.connect(
+                (w, s) => this.realize_surface(s));
+#endif
         // The initial shortcut is "<Super>space"
         bind_switch_shortcut();
 
@@ -419,15 +430,34 @@ class Panel : IBus.PanelService {
 
         var keybinding_manager = KeybindingManager.get_instance();
 
+        BindingCommon.KeyEventFuncType ftype =
+                BindingCommon.KeyEventFuncType.IME_SWITCHER;
         foreach (var accelerator in accelerators) {
             BindingCommon.keybinding_manager_bind(
                     keybinding_manager,
                     ref m_keybindings,
                     accelerator,
-                    BindingCommon.KeyEventFuncType.IME_SWITCHER,
+                    ftype,
                     handle_engine_switch_normal,
                     handle_engine_switch_reverse);
         }
+#if USE_GDK_WAYLAND
+        if (BindingCommon.default_is_xdisplay())
+            return;
+        IBus.ProcessKeyEventData[] keys = {};
+        IBus.ProcessKeyEventData key;
+        foreach (var kb in m_keybindings) {
+            key = { kb.keysym, kb.reverse ? 1 : 0, kb.modifiers };
+            keys += key;
+        }
+        if (keys.length == 0)
+            return;
+        key = { 0, };
+        keys += key;
+        m_bus.set_global_shortcut_keys_async(
+                IBus.BusGlobalBindingType.IME_SWITCHER,
+                keys, -1, null);
+#endif
     }
 
 /*
@@ -757,9 +787,11 @@ class Panel : IBus.PanelService {
         return -1;
     }
 
+
     private void update_version_1_5_8() {
         inited_engines_order = false;
     }
+
 
     private void set_version() {
         string prev_version = m_settings_general.get_string("version");
@@ -778,6 +810,15 @@ class Panel : IBus.PanelService {
 
         m_settings_general.set_string("version", current_version);
     }
+
+
+    private void save_log(string format) {
+        if (m_log == null)
+            return;
+        m_log.puts(format);
+        m_log.flush();
+    }
+
 
     public void load_settings() {
         set_version();
@@ -849,6 +890,32 @@ class Panel : IBus.PanelService {
             m_preload_engines_id = 0;
         }
     }
+
+
+    /**
+     * set_global_shortcut_key_state:
+     *
+     * Handle IME switcher dialog or Emojier on the focused context only
+     * so this API is assumed to use in Wayland.
+     */
+    public void
+    set_global_shortcut_key_state(IBus.BusGlobalBindingType type,
+                                  bool                      is_pressed,
+                                  bool                      is_backward) {
+        switch(type) {
+        case IBus.BusGlobalBindingType.IME_SWITCHER:
+            handle_engine_switch_focused(is_pressed, is_backward);
+            break;
+        default: break;
+        }
+    }
+
+
+    public void set_log(FileStream log, bool verbose) {
+        m_log = log;
+        m_verbose = verbose;
+    }
+
 
     private void engine_contexts_insert(IBus.EngineDesc engine) {
         if (m_use_global_engine)
@@ -962,6 +1029,66 @@ class Panel : IBus.PanelService {
             int i = reverse ? m_engines.length - 1 : 1;
             switch_engine(i);
         }
+    }
+
+
+    private void handle_engine_switch_focused(bool pressed,
+                                              bool reverse) {
+        if (m_engines.length == 0)
+            return;
+        if (pressed) {
+            int i = reverse ? m_engines.length - 1 : 1;
+            if (m_switcher_selected_index >= 0) {
+                i = reverse ? (m_switcher_selected_index - 1)
+                    : (m_switcher_selected_index + 1);
+                i = i < 0 ? m_engines.length - 1
+                    : i == m_engines.length ? 0 : i;
+            }
+            if (m_switcher_delay_time >= 0)
+                m_switcher_selected_index = m_switcher.run_popup(m_engines, i);
+            else
+                m_switcher_selected_index = i;
+            if (m_verbose) {
+                save_log("Panel.%s switcher release %d timer\n".printf(
+                         GLibMacro.G_STRFUNC, m_switcher_selected_index));
+            }
+            m_switcher_waiting_release = null;
+            // TODO: "GlobalShortcutKeyResponded" signal can causes a freeze
+            // due to the GMainLoop dead lock for the key release events and
+            // add 5 seconds timeout here to release the key virtually for the
+            // workaround.
+            //
+            // Timeout.add_seconds() or Idle.add() slso causes the freeze
+            // due to the GMainLoop dead lock and use Thread instead.
+            m_switcher_waiting_release = new Thread<bool>("wait release",
+                                                          () => {
+                Thread.usleep(5000000);
+                handle_engine_switch_release(true);
+                m_switcher_waiting_release = null;
+                return true;
+            });
+        } else {
+            m_switcher_waiting_release = null;
+            handle_engine_switch_release(false);
+        }
+    }
+
+    private void handle_engine_switch_release(bool is_timeout) {
+        if (m_verbose) {
+            save_log("Panel.%s switcher release %d %s\n".printf(
+                     GLibMacro.G_STRFUNC, m_switcher_selected_index,
+                     is_timeout ? "timeout" : "normal"));
+        }
+        // TODO: Unfortunatelly hide() also depends on GMainLoop and can
+        // causes a freeze.
+        m_switcher.hide();
+        while (Gtk.events_pending())
+            Gtk.main_iteration ();
+        // If GLib.Thread() callback is called.
+        if (m_switcher_selected_index < 0)
+            return;
+        switch_engine(m_switcher_selected_index);
+        m_switcher_selected_index = -1;
     }
 
 

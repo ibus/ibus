@@ -933,6 +933,18 @@ _ic_process_key_event (BusInputContext       *context,
     if (context->use_post_process_key_event)
         context->processing_key_event = TRUE;
     g_variant_get (parameters, "(uuu)", &keyval, &keycode, &modifiers);
+    if (bus_ibus_impl_process_key_event (bus_ibus_impl_get_default (),
+                                         keyval,
+                                         keycode,
+                                         modifiers)) {
+        /* If the shortcut key hits, it should return TRUE.
+         * Otherwise a space would be inserted into the active input-context
+         * by pressing Super-space.
+         */
+        g_dbus_method_invocation_return_value (invocation,
+                                               g_variant_new ("(b)", TRUE));
+        return;
+    }
     if (G_UNLIKELY (!context->has_focus)) {
         /* workaround: set focus if context does not have focus */
         BusInputContext *focused_context =
@@ -3249,7 +3261,21 @@ bus_input_context_set_emoji_extension (BusInputContext *context,
         g_object_ref (context->emoji_extension);
         if (!context->connection)
             return;
-        bus_input_context_show_preedit_text (context, TRUE);
+        /* Use bus_input_context_update_preedit_text() instead of
+         * bus_input_context_show_preedit_text() because the Wayland
+         * input-method protocol requires preedit when Escape key
+         * on Emojier causes another focus-in event.
+         */
+        if (!context->preedit_visible) {
+            g_object_ref (context->preedit_text);
+            bus_input_context_update_preedit_text (context,
+                                                   context->preedit_text,
+                                                   context->preedit_cursor_pos,
+                                                   TRUE,
+                                                   context->preedit_mode,
+                                                   TRUE);
+            g_object_unref (context->preedit_text);
+        }
         bus_panel_proxy_set_cursor_location (context->emoji_extension,
                                              context->x,
                                              context->y,

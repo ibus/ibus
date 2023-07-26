@@ -1,7 +1,7 @@
 [Desktop Entry]
 # IBus Wayland is a branding name but not translatable.
 #Name=IBus Wayland
-Exec=@libexecdir@/ibus-ui-gtk3 --enable-wayland-im
+Exec=@libexecdir@/ibus-ui-gtk3 --enable-wayland-im --exec-daemon --daemon-args "--xim --panel disable"
 Type=Application
 X-KDE-Wayland-VirtualKeyboard=true
 Icon=ibus

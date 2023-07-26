@@ -27,6 +27,7 @@
 #include <glib-object.h>
 #include <ibus.h>
 #include <string.h>
+#include <sys/time.h>
 #include <wayland-client.h>
 #include <xkbcommon/xkbcommon.h>
 
@@ -36,12 +37,16 @@
 enum {
     PROP_0 = 0,
     PROP_BUS,
-    PROP_DISPLAY
+    PROP_DISPLAY,
+    PROP_LOG,
+    PROP_VERBOSE
 };
 
 typedef struct _IBusWaylandIMPrivate IBusWaylandIMPrivate;
 struct _IBusWaylandIMPrivate
 {
+    FILE *log;
+    gboolean verbose;
     struct wl_display *display;
     struct zwp_input_method_v1 *input_method;
     struct zwp_input_method_context_v1 *context;
@@ -931,6 +936,10 @@ registry_handle_global (void               *data,
 
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
+    if (priv->verbose) {
+        fprintf (priv->log, "wl_reistry gets interface: %s\n", interface);
+        fflush (priv->log);
+    }
     if (!g_strcmp0 (interface, "zwp_input_method_v1")) {
         priv->input_method =
             wl_registry_bind (registry, name,
@@ -999,6 +1008,71 @@ ibus_wayland_im_class_init (IBusWaylandIMClass *class)
                         "The struct wl_display",
                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
+    /**
+     * IBusWaylandIM:log:
+     *
+     * The FILE of the logging file
+     * The default is $XDG_CACHE_HOME/wayland.log
+     */
+    g_object_class_install_property (gobject_class,
+                    PROP_LOG,
+                    g_param_spec_pointer ("log",
+                        "loggin file",
+                        "The FILE of the logging file",
+                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+    /**
+     * IBusWaylandIM:verbose:
+     *
+     * The verbose logging mode
+     * %TRUE if output the logging file with verbose, otherwise %FALSE.
+     */
+    g_object_class_install_property (gobject_class,
+                    PROP_VERBOSE,
+                    g_param_spec_boolean ("verbose",
+                        "verbose mode",
+                        "The verbose logging mode",
+                        FALSE,
+                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+}
+
+
+static gboolean
+ibus_wayland_im_open_log (IBusWaylandIM *wlim)
+{
+    IBusWaylandIMPrivate *priv;
+    char *directory;
+    char *path;
+    struct timeval time_val;
+    struct tm local_time;
+
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    directory = g_build_filename (g_get_user_cache_dir (), "ibus", NULL);
+    g_return_val_if_fail (directory, FALSE);
+    errno = 0;
+    if (g_mkdir_with_parents (directory, 0700) != 0) {
+        g_error ("mkdir is failed in: %s: %s",
+                 directory, g_strerror (errno));
+        return FALSE;
+    }
+    path = g_build_filename (directory, "wayland.log", NULL);
+    g_free (directory);
+    if (!(priv->log = fopen (path, "w"))) {
+        g_error ("Cannot open log file: %s: %s",
+                 path, g_strerror (errno));
+        return FALSE;
+    }
+    g_free (path);
+    gettimeofday (&time_val, NULL);
+    localtime_r (&time_val.tv_sec, &local_time);
+    fprintf (priv->log, "Start %02d:%02d:%02d.%6d\n",
+             local_time.tm_hour,
+             local_time.tm_min,
+             local_time.tm_sec,
+             (int)time_val.tv_usec);
+    fflush (priv->log);
+    return TRUE;
 }
 
 
@@ -1020,6 +1094,8 @@ ibus_wayland_im_constructor (GType                  type,
     g_object_ref_sink (object);
     wlim = IBUS_WAYLAND_IM (object);
     priv = ibus_wayland_im_get_instance_private (wlim);
+    if (!priv->log)
+        g_assert (ibus_wayland_im_open_log (wlim));
     if (!priv->display)
         priv->display = wl_display_connect (NULL);
     if (!priv->display) {
@@ -1111,6 +1187,14 @@ ibus_wayland_im_set_property (IBusWaylandIM *wlim,
         g_assert (priv->display == NULL);
         priv->display = g_value_get_pointer (value);
         break;
+    case PROP_LOG:
+        g_assert (priv->log == NULL);
+        priv->log = g_value_get_pointer (value);
+        break;
+    case PROP_VERBOSE:
+        g_assert (!priv->verbose);
+        priv->verbose = g_value_get_boolean (value);
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (wlim, prop_id, pspec);
     }
@@ -1133,6 +1217,12 @@ ibus_wayland_im_get_property (IBusWaylandIM *wlim,
         break;
     case PROP_DISPLAY:
         g_value_set_pointer (value, priv->display);
+        break;
+    case PROP_LOG:
+        g_value_set_pointer (value, priv->log);
+        break;
+    case PROP_VERBOSE:
+        g_value_set_boolean (value, priv->verbose);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (wlim, prop_id, pspec);

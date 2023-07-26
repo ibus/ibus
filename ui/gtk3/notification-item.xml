@@ -37,15 +37,8 @@
                 <method name="XAyatanaSecondaryActivate">
                         <arg type="u" name="timestamp" direction="in" />
                 </method>
-                <!-- Activate is missed in AppIndicator -->
-                <method name="Activate">
-                        <arg type="i" name="x" direction="in" />
-                        <arg type="i" name="y" direction="in" />
-                </method>
-                <method name="ContextMenu">
-                        <arg type="i" name="x" direction="in"/>
-                        <arg type="i" name="y" direction="in"/>
-                </method>
+                <!-- Use "Menu" method instead of "Activate" and "ContextMenu"
+                     methods -->
 
 <!-- Signals -->
                 <signal name="NewIcon">

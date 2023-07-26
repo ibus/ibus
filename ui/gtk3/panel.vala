@@ -34,9 +34,6 @@ class Panel : IBus.PanelService {
     private GLib.Settings m_settings_panel = null;
     private IconType m_icon_type = IconType.STATUS_ICON;
     private Indicator m_indicator;
-#if INDICATOR
-    private GLib.DBusConnection m_session_bus_connection;
-#endif
     private Gtk.StatusIcon m_status_icon;
     private Gtk.Menu m_ime_menu;
     private Gtk.Menu m_sys_menu;
@@ -73,9 +70,12 @@ class Panel : IBus.PanelService {
     private string m_icon_prop_key = "";
     private int m_property_icon_delay_time = 500;
     private uint m_property_icon_delay_time_id;
+    private uint m_menu_update_delay_time = 100;
+    private uint m_menu_update_delay_time_id;
     private bool m_is_wayland;
 #if INDICATOR
     private bool m_is_kde = is_kde();
+    private bool m_is_context_menu;
 #else
     private bool m_is_kde = false;
 #endif
@@ -110,6 +110,12 @@ class Panel : IBus.PanelService {
 
         init_settings();
 
+        // indicator.set_menu() requires m_property_manager.
+        m_property_manager = new PropertyManager();
+        m_property_manager.property_activate.connect((w, k, s) => {
+            property_activate(k, s);
+        });
+
         // init ui
 #if INDICATOR
         if (m_is_kde) {
@@ -140,11 +146,6 @@ class Panel : IBus.PanelService {
         if (m_switcher_delay_time >= 0) {
             m_switcher.set_popup_delay_time((uint) m_switcher_delay_time);
         }
-
-        m_property_manager = new PropertyManager();
-        m_property_manager.property_activate.connect((w, k, s) => {
-            property_activate(k, s);
-        });
 
         m_property_panel = new PropertyPanel();
         m_property_panel.property_activate.connect((w, k, s) => {
@@ -328,38 +329,26 @@ class Panel : IBus.PanelService {
 
     private void init_indicator() {
         m_icon_type = IconType.INDICATOR;
-        GLib.Bus.get.begin(GLib.BusType.SESSION, null, (obj, res) => {
-            try {
-                m_session_bus_connection = GLib.Bus.get.end(res);
-                m_indicator =
-                        new Indicator("ibus-ui-gtk3",
-                                      m_session_bus_connection,
-                                      Indicator.Category.APPLICATION_STATUS);
-                m_indicator.title = _("IBus Panel");
-                m_registered_status_notifier_item_id =
-                        m_indicator.registered_status_notifier_item.connect(
-                                () => {
+        m_indicator = new Indicator("ibus-ui-gtk3",
+                                    Indicator.Category.APPLICATION_STATUS);
+        m_indicator.title = "%s\n%s".printf(
+                _("IBus Panel"),
+                _("You can toggle the activate menu and context one with " +
+                   "clicking the mouse middle button on the panel icon."));
+        m_registered_status_notifier_item_id =
+                m_indicator.registered_status_notifier_item.connect(() => {
                     m_indicator.set_status(Indicator.Status.ACTIVE);
                     state_changed();
                 });
-                m_popup_menu_id =
-                        m_indicator.context_menu.connect((x, y, w, b, t) => {
-                    popup_menu_at_pointer_window(
-                        create_context_menu(),
-                        x, y, w,
-                        m_indicator.position_context_menu);
+        m_popup_menu_id =
+                m_indicator.secondary_activate.connect(() => {
+                    m_is_context_menu = !m_is_context_menu;
+                    if (m_is_context_menu)
+                        m_indicator.set_menu(create_context_menu());
+                    else
+                        m_indicator.set_menu(create_activate_menu());
                 });
-                m_activate_id =
-                        m_indicator.activate.connect((x, y, w) => {
-                    popup_menu_at_pointer_window(
-                            create_activate_menu(),
-                            x, y, w,
-                            m_indicator.position_activate_menu);
-                });
-            } catch (GLib.IOError e) {
-                warning("Failed to get the session bus: %s", e.message);
-            }
-        });
+        m_indicator.set_menu(create_activate_menu());
     }
 #endif
 
@@ -415,12 +404,12 @@ class Panel : IBus.PanelService {
         area.y -= win_y;
         m_popup_menu_id = m_status_icon.popup_menu.connect((b, t) => {
                 popup_menu_at_area_window(
-                        create_context_menu(),
+                        create_context_menu(true),
                         area, window, func);
         });
         m_activate_id = m_status_icon.activate.connect(() => {
                 popup_menu_at_area_window(
-                        create_activate_menu(),
+                        create_activate_menu(true),
                         area, window, func);
         });
     }
@@ -1216,12 +1205,12 @@ class Panel : IBus.PanelService {
         }
     }
 
-    private Gtk.Menu create_context_menu() {
+    private Gtk.Menu create_context_menu(bool use_x11 = false) {
         if (m_sys_menu != null)
             return m_sys_menu;
 
         Gdk.Display display_backup = null;
-        if (!BindingCommon.default_is_xdisplay()) {
+        if (use_x11 && !BindingCommon.default_is_xdisplay()) {
             display_backup = Gdk.Display.get_default();
             Gdk.DisplayManager.get().set_default_display(
                     (Gdk.Display)BindingCommon.get_xdisplay());
@@ -1273,9 +1262,9 @@ class Panel : IBus.PanelService {
         return m_sys_menu;
     }
 
-    private Gtk.Menu create_activate_menu() {
+    private Gtk.Menu create_activate_menu(bool use_x11 = false) {
         Gdk.Display display_backup = null;
-        if (!BindingCommon.default_is_xdisplay()) {
+        if (use_x11 && !BindingCommon.default_is_xdisplay()) {
             display_backup = Gdk.Display.get_default();
             Gdk.DisplayManager.get().set_default_display(
                     (Gdk.Display)BindingCommon.get_xdisplay());
@@ -1491,6 +1480,22 @@ class Panel : IBus.PanelService {
         m_property_manager.set_properties(props);
         m_property_panel.set_properties(props);
         set_properties(props);
+
+        if (m_icon_type != IconType.INDICATOR)
+            return;
+        if (m_is_context_menu)
+            return;
+        if (m_menu_update_delay_time_id > 0) {
+            GLib.Source.remove(m_menu_update_delay_time_id);
+            m_menu_update_delay_time_id = 0;
+        }
+        m_menu_update_delay_time_id =
+                Timeout.add(
+                        m_menu_update_delay_time,
+                        () => {
+                            m_indicator.set_menu(create_activate_menu ());
+                            return false;
+                        });
     }
 
     public override void update_property(IBus.Property prop) {

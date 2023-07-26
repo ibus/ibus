@@ -2,6 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
+ * Copyright (C) 2011-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -251,6 +252,22 @@ gboolean         ibus_service_class_add_interfaces
                                                 (IBusServiceClass   *klass,
                                                  const gchar        *xml_data);
 
+/**
+ * ibus_service_class_free_interfaces:
+ * @class: An IBusServiceClass.
+ * @depth: The number of D-Bus introspection interfaces.
+ *
+ * Free the first @depth interfaces if @depth is positive. Free the last
+ * -@depth interfaces if @depth is negative.
+ *
+ * Returns: The actual freed number of the introspection interfaces
+ * if @depth is not 0.
+ * If @depth is 0, the total number of the introspection interfaces is
+ * returned but any interfaces are not freed.
+ */
+int              ibus_service_class_free_interfaces
+                                                (IBusServiceClass   *class,
+                                                 int                 depth);
 
 G_END_DECLS
 #endif

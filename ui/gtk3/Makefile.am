@@ -105,7 +105,19 @@ AM_VALAFLAGS += \
 endif
 
 if ENABLE_APPINDICATOR
-AM_VALAFLAGS += --define=INDICATOR
+AM_VALAFLAGS += \
+    --define=INDICATOR \
+    --pkg=Dbusmenu-0.4 \
+    --pkg=DbusmenuGtk3-0.4 \
+    $(NULL)
+AM_CFLAGS += \
+    @DBUSMENU_GLIB_CFLAGS@ \
+    @DBUSMENU_GTK3_CFLAGS@ \
+    $(NULL)
+AM_LDADD += \
+    @DBUSMENU_GLIB_LIBS@ \
+    @DBUSMENU_GTK3_LIBS@ \
+    $(NULL)
 endif
 
 libexec_PROGRAMS = ibus-ui-gtk3

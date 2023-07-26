@@ -265,7 +265,7 @@ ibus_service_class_init (IBusServiceClass *class)
                         "The connection of service object",
                         G_TYPE_DBUS_CONNECTION,
                         G_PARAM_READWRITE |
-                        G_PARAM_CONSTRUCT_ONLY |
+                        G_PARAM_CONSTRUCT |
                         G_PARAM_STATIC_NAME |
                         G_PARAM_STATIC_NICK |
                         G_PARAM_STATIC_BLURB)
@@ -304,6 +304,7 @@ ibus_service_set_property (IBusService  *service,
         service->priv->object_path = g_value_dup_string (value);
         break;
     case PROP_CONNECTION:
+        g_return_if_fail (!service->priv->connection);
         service->priv->connection = g_value_dup_object (value);
         break;
     default:
@@ -660,4 +661,44 @@ ibus_service_class_add_interfaces (IBusServiceClass   *class,
         g_dbus_node_info_unref (introspection_data);
         return TRUE;
     }
+}
+
+int
+ibus_service_class_free_interfaces (IBusServiceClass   *class,
+                                    int                 depth)
+{
+    GDBusInterfaceInfo **interfaces, **p;
+    int i, positive_depth, total = 0;
+
+    g_array_ref (class->interfaces);
+    p = interfaces = (GDBusInterfaceInfo **)class->interfaces->data;
+    while (*p != NULL) {
+        *p++;
+        total++;
+    }
+    if (!total)
+        return 0;
+    if (!depth)
+        return total;
+    p = interfaces;
+    positive_depth = (depth > 0) ? depth : -depth;
+    for (i = 0; i < positive_depth; i++) {
+        if (i == total) {
+            g_warning ("The length of GDBusInterfaceInfo is %d but your "
+                       "depth is %d", total, depth);
+            positive_depth = total;
+            break;
+        }
+        if (depth > 0)
+            g_dbus_interface_info_unref (*(p + i));
+        else
+            g_dbus_interface_info_unref (*(p + total - 1 - i));
+    }
+    if (depth > 0) {
+        g_array_remove_range (class->interfaces, 0, positive_depth);
+    } else {
+        g_array_remove_range (class->interfaces,
+                              total - positive_depth, positive_depth);
+    }
+    return i;
 }

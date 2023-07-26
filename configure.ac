@@ -365,10 +365,6 @@ else
     AC_SUBST(wayland_scanner_rules)
 fi
 
-if test x"$enable_appindicator" = x"yes"; then
-    enable_appindicator="yes (enabled, use --disable-appindicator to disable)"
-fi
-
 # GObject introspection
 GOBJECT_INTROSPECTION_CHECK([0.6.8])
 
@@ -656,6 +652,12 @@ if test x"$enable_ui" = x"yes"; then
         x11
     ])
     enable_ui="yes (enabled, use --disable-ui to disable)"
+fi
+
+if test x"$enable_appindicator" = x"yes"; then
+    PKG_CHECK_MODULES(DBUSMENU_GLIB, [dbusmenu-glib-0.4])
+    PKG_CHECK_MODULES(DBUSMENU_GTK3, [dbusmenu-gtk3-0.4])
+    enable_appindicator="yes (enabled, use --disable-appindicator to disable)"
 fi
 
 # --disable-engine

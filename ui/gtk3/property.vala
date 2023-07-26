@@ -3,6 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2011-2015 Peng Huang <shawn.p.huang@gmail.com>
+ * Copyright(c) 2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,6 +32,8 @@ public class PropertyManager {
     }
 
     public int create_menu_items(Gtk.Menu menu) {
+        if (m_props == null)
+            return 0;
         return create_menu_items_internal(m_props, menu);
     }
 

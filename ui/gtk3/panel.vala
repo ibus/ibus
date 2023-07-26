@@ -276,7 +276,6 @@ class Panel : IBus.PanelService {
                                            Gdk.Rectangle         area,
                                            Gdk.Window?           window,
                                            Gtk.MenuPositionFunc? func) {
-#if VALA_0_34
         Gdk.Gravity rect_anchor = Gdk.Gravity.SOUTH_WEST;
         Gdk.Gravity menu_anchor = Gdk.Gravity.NORTH_WEST;
 
@@ -288,9 +287,6 @@ class Panel : IBus.PanelService {
         // Gdk.X11.Window.foreign_for_display.
         // https://git.gnome.org/browse/gtk+/tree/gtk/gtkmenu.c?h=gtk-3-22#n2251
         menu.popup_at_rect(window, area, rect_anchor, menu_anchor, null);
-#else
-        menu.popup(null, null, func, 0, Gtk.get_current_event_time());
-#endif
     }
 
 #if INDICATOR
@@ -384,10 +380,26 @@ class Panel : IBus.PanelService {
         Gdk.Window? window = null;
         Gtk.MenuPositionFunc? func = null;
         m_status_icon.set_from_icon_name("ibus-keyboard");
-#if VALA_0_34
+        var display = BindingCommon.get_xdisplay();
+        if (display == null) {
+            warning("No Gdk.X11.Display");
+            return;
+        }
         window = Gdk.X11.Window.lookup_for_display(
-                Gdk.Display.get_default() as Gdk.X11.Display,
+                display,
                 m_status_icon.get_x11_window_id()) as Gdk.Window;
+        if (window == null && !BindingCommon.default_is_xdisplay()) {
+            unowned X.Display xdisplay = display.get_xdisplay();
+            X.Window root = xdisplay.default_root_window();
+            window = Gdk.X11.Window.lookup_for_display(
+                    display,
+                    root);
+            if (window == null) {
+                window = new Gdk.X11.Window.foreign_for_display(
+                        display,
+                        root);
+            }
+        }
         if (window == null) {
             warning("StatusIcon does not have GdkWindow");
             return;
@@ -401,9 +413,6 @@ class Panel : IBus.PanelService {
         // in gdk_window_impl_move_to_rect()
         area.x -= win_x;
         area.y -= win_y;
-#else
-        func = m_status_icon.position_menu;
-#endif
         m_popup_menu_id = m_status_icon.popup_menu.connect((b, t) => {
                 popup_menu_at_area_window(
                         create_context_menu(),
@@ -1208,18 +1217,27 @@ class Panel : IBus.PanelService {
     }
 
     private Gtk.Menu create_context_menu() {
-        // Show system menu
-        if (m_sys_menu == null) {
-            Gtk.MenuItem item;
-            m_sys_menu = new Gtk.Menu();
+        if (m_sys_menu != null)
+            return m_sys_menu;
 
-            item = new Gtk.MenuItem.with_label(_("Preferences"));
-            item.activate.connect((i) => show_setup_dialog());
-            m_sys_menu.append(item);
+        Gdk.Display display_backup = null;
+        if (!BindingCommon.default_is_xdisplay()) {
+            display_backup = Gdk.Display.get_default();
+            Gdk.DisplayManager.get().set_default_display(
+                    (Gdk.Display)BindingCommon.get_xdisplay());
+        }
+
+        // Show system menu
+        Gtk.MenuItem item;
+        m_sys_menu = new Gtk.Menu();
+
+        item = new Gtk.MenuItem.with_label(_("Preferences"));
+        item.activate.connect((i) => show_setup_dialog());
+        m_sys_menu.append(item);
 
 #if EMOJI_DICT
-            item = new Gtk.MenuItem.with_label(_("Emoji Choice"));
-            item.activate.connect((i) => {
+        item = new Gtk.MenuItem.with_label(_("Emoji Choice"));
+        item.activate.connect((i) => {
                 IBus.ExtensionEvent event = new IBus.ExtensionEvent(
                         "name", "emoji", "is-enabled", true,
                         "params", "category-list");
@@ -1229,31 +1247,39 @@ class Panel : IBus.PanelService {
                  * the purpose to IBus.ExtensionEvent above.
                  */
                 panel_extension(event);
-            });
-            m_sys_menu.append(item);
+        });
+        m_sys_menu.append(item);
 #endif
 
-            item = new Gtk.MenuItem.with_label(_("About"));
-            item.activate.connect((i) => show_about_dialog());
-            m_sys_menu.append(item);
+        item = new Gtk.MenuItem.with_label(_("About"));
+        item.activate.connect((i) => show_about_dialog());
+        m_sys_menu.append(item);
 
-            m_sys_menu.append(new Gtk.SeparatorMenuItem());
+        m_sys_menu.append(new Gtk.SeparatorMenuItem());
 
-            item = new Gtk.MenuItem.with_label(_("Restart"));
-            item.activate.connect((i) => m_bus.exit(true));
-            m_sys_menu.append(item);
+        item = new Gtk.MenuItem.with_label(_("Restart"));
+        item.activate.connect((i) => m_bus.exit(true));
+        m_sys_menu.append(item);
 
-            item = new Gtk.MenuItem.with_label(_("Quit"));
-            item.activate.connect((i) => m_bus.exit(false));
-            m_sys_menu.append(item);
+        item = new Gtk.MenuItem.with_label(_("Quit"));
+        item.activate.connect((i) => m_bus.exit(false));
+        m_sys_menu.append(item);
 
-            m_sys_menu.show_all();
-        }
+        m_sys_menu.show_all();
+
+        if (display_backup != null)
+            Gdk.DisplayManager.get().set_default_display(display_backup);
 
         return m_sys_menu;
     }
 
     private Gtk.Menu create_activate_menu() {
+        Gdk.Display display_backup = null;
+        if (!BindingCommon.default_is_xdisplay()) {
+            display_backup = Gdk.Display.get_default();
+            Gdk.DisplayManager.get().set_default_display(
+                    (Gdk.Display)BindingCommon.get_xdisplay());
+        }
         m_ime_menu = new Gtk.Menu();
 
         // Show properties and IME switching menu
@@ -1288,6 +1314,8 @@ class Panel : IBus.PanelService {
         // Do not take focuse to avoid some focus related issues.
         m_ime_menu.set_take_focus(false);
 
+        if (display_backup != null)
+            Gdk.DisplayManager.get().set_default_display(display_backup);
         return m_ime_menu;
     }
 

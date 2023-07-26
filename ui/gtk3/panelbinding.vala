@@ -502,9 +502,18 @@ class PanelBinding : IBus.PanelService {
             return true;
         string selected_string = m_emojier.get_selected_string();
         string prev_context_path = m_emojier.get_input_context_path();
-        if (selected_string != null &&
-            prev_context_path != "" &&
-            prev_context_path == m_current_context_path) {
+        if (selected_string != null && prev_context_path != "") {
+            if (prev_context_path != m_current_context_path) {
+                if (m_is_wayland) {
+                    // Using Wayland input-method protocol in Plasma Wayland
+                    // always allocates new input contexts with focus changes.
+                    debug("Prev input context path %s, now %s",
+                          prev_context_path,
+                          m_current_context_path);
+                } else {
+                    return false;
+                }
+            }
             IBus.Text text = new IBus.Text.from_string(selected_string);
             commit_text_update_favorites(text, false);
             m_emojier.reset();
@@ -776,18 +785,36 @@ class PanelBinding : IBus.PanelService {
 
     private void show_preedit_and_candidate(bool show_candidate) {
         uint cursor_pos = 0;
+        IBus.Text text;
+        bool visible = true;
+
         if (!show_candidate)
             cursor_pos = m_preedit.get_engine_preedit_cursor_pos();
+        /* Showing Emojier in Wayland takes the input focus
+         * and the focus change causes the preedit commit in Qt applications
+         * likes kwrite.
+         * so need to clear the preedit text before showing Emojier.
+         *
+         * Use m_preedit.get_text() because
+         * m_wayland_lookup_table_is_visible will be true after
+         * show_emoji_lookup_table() is called below.
+         */
+        if (show_candidate && m_is_wayland && m_preedit.get_text() == "") {
+            if (m_emojier == null)
+                return;
+            visible = false;
+            text = new IBus.Text.from_static_string("");
+        } else {
+            text = m_preedit.get_engine_preedit_text();
+        }
         update_preedit_text_received(
-                m_preedit.get_engine_preedit_text(),
+                text,
                 cursor_pos,
-                true);
+                visible);
         if (!show_candidate) {
             hide_emoji_lookup_table();
             return;
         }
-        if (m_emojier == null)
-            return;
         /* Wayland gives the focus on Emojir which is a GTK popup window
          * and move the focus fom the current input context to Emojier.
          * This forwards the lookup table to gnome-shell's lookup table
@@ -923,6 +950,17 @@ class PanelBinding : IBus.PanelService {
 
     public override void hide_preedit_text() {
         m_preedit.hide_engine_preedit_text();
+        /* Space key to launch Emojier category popup causes a hide-preedit-text
+         * signal by ibus_engine_simple_update_preedit_text().
+         * On the other hand, the Emoji preedit "e" should be hidden
+         * in Plasam Wayland before Qt applications commit the preedit
+         * with the focus-out event.
+         * So avoid the duplicated show_preedit_and_candidate() here.
+         * Emojier should hide the preedit by itself instead of the callback
+         * of each engine.
+         */
+        if (m_is_wayland && m_preedit.get_text() == "")
+            return;
         show_preedit_and_candidate(false);
     }
 

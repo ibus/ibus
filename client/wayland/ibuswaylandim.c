@@ -84,7 +84,8 @@ struct _IBusWaylandKeyEvent
     uint32_t time;
     uint32_t key;
     enum wl_keyboard_key_state state;
-    IBusInputContext **ibuscontext;
+    uint32_t modifiers;
+    IBusWaylandIM *wlim;
 };
 typedef struct _IBusWaylandKeyEvent IBusWaylandKeyEvent;
 
@@ -397,23 +398,40 @@ static const struct zwp_input_method_context_v1_listener context_listener = {
 };
 
 
-static void
-input_method_keyboard_keymap (void               *data,
-                              struct wl_keyboard *wl_keyboard,
-                              uint32_t            format,
-                              int32_t             fd,
-                              uint32_t            size)
+static struct xkb_keymap *
+create_user_xkb_keymap (struct xkb_context *xkb_context,
+                        IBusEngineDesc     *desc)
 {
-    IBusWaylandIM *wlim = data;
-    IBusWaylandIMPrivate *priv;
+    struct xkb_rule_names names;
+    const gchar *layout;
+
+    g_assert (xkb_context);
+    g_assert (desc);
+    names.rules = "evdev";
+    names.model = "pc105";
+    layout = ibus_engine_desc_get_layout (desc);
+    if (!layout || *layout == '\0' || !g_strcmp0 (layout, "default"))
+        return NULL;
+    names.layout = layout;
+    names.variant = ibus_engine_desc_get_layout_variant (desc);
+    return xkb_keymap_new_from_names (xkb_context, &names, 0);
+}
+
+
+static struct xkb_keymap *
+create_system_xkb_keymap (struct xkb_context *xkb_context,
+                          uint32_t            format,
+                          int32_t             fd,
+                          uint32_t            size)
+{
     GMappedFile *map;
     GError *error = NULL;
+    struct xkb_keymap *xkb_keymap;
 
-    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
-    priv = ibus_wayland_im_get_instance_private (wlim);
+    g_assert (xkb_context);
     if (format != WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1) {
         close(fd);
-        return;
+        return NULL;
     }
 
     map = g_mapped_file_new_from_fd (fd, FALSE, &error);
@@ -423,50 +441,139 @@ input_method_keyboard_keymap (void               *data,
             g_error_free (error);
         }
         close (fd);
-        return;
+        return NULL;
     }
 
-    priv->keymap =
-        xkb_map_new_from_string (priv->xkb_context,
-                                 g_mapped_file_get_contents (map),
-                                 XKB_KEYMAP_FORMAT_TEXT_V1,
-                                 0);
-
+    xkb_keymap = xkb_map_new_from_string (xkb_context,
+                                          g_mapped_file_get_contents (map),
+                                          XKB_KEYMAP_FORMAT_TEXT_V1,
+                                          0);
     g_mapped_file_unref (map);
     close(fd);
+    return xkb_keymap;
+}
 
-    if (!priv->keymap) {
-        return;
-    }
 
-    priv->state = xkb_state_new (priv->keymap);
-    if (!priv->state) {
-        xkb_map_unref (priv->keymap);
-        return;
-    }
+static gboolean
+ibus_wayland_im_update_xkb_state (IBusWaylandIM     *wlim,
+                                  struct xkb_keymap *keymap)
+{
+    IBusWaylandIMPrivate *priv;
+    struct xkb_state *state;
+
+    g_return_val_if_fail (IBUS_IS_WAYLAND_IM (wlim), FALSE);
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    g_return_val_if_fail (keymap, FALSE);
+    g_return_val_if_fail ((state = xkb_state_new (keymap)), FALSE);
 
     priv->shift_mask =
-        1 << xkb_map_mod_get_index (priv->keymap, "Shift");
+        1 << xkb_map_mod_get_index (keymap, "Shift");
     priv->lock_mask =
-        1 << xkb_map_mod_get_index (priv->keymap, "Lock");
+        1 << xkb_map_mod_get_index (keymap, "Lock");
     priv->control_mask =
-        1 << xkb_map_mod_get_index (priv->keymap, "Control");
+        1 << xkb_map_mod_get_index (keymap, "Control");
     priv->mod1_mask =
-        1 << xkb_map_mod_get_index (priv->keymap, "Mod1");
+        1 << xkb_map_mod_get_index (keymap, "Mod1");
     priv->mod2_mask =
-        1 << xkb_map_mod_get_index (priv->keymap, "Mod2");
+        1 << xkb_map_mod_get_index (keymap, "Mod2");
     priv->mod3_mask =
-        1 << xkb_map_mod_get_index (priv->keymap, "Mod3");
+        1 << xkb_map_mod_get_index (keymap, "Mod3");
     priv->mod4_mask =
-        1 << xkb_map_mod_get_index (priv->keymap, "Mod4");
+        1 << xkb_map_mod_get_index (keymap, "Mod4");
     priv->mod5_mask =
-        1 << xkb_map_mod_get_index (priv->keymap, "Mod5");
+        1 << xkb_map_mod_get_index (keymap, "Mod5");
     priv->super_mask =
-        1 << xkb_map_mod_get_index (priv->keymap, "Super");
+        1 << xkb_map_mod_get_index (keymap, "Super");
     priv->hyper_mask =
-        1 << xkb_map_mod_get_index (priv->keymap, "Hyper");
+        1 << xkb_map_mod_get_index (keymap, "Hyper");
     priv->meta_mask =
-        1 << xkb_map_mod_get_index (priv->keymap, "Meta");
+        1 << xkb_map_mod_get_index (keymap, "Meta");
+
+    if (priv->state)
+        xkb_state_unref (priv->state);
+    if (priv->keymap)
+        xkb_keymap_unref (priv->keymap);
+    priv->keymap = keymap;
+    priv->state = state;
+    return TRUE;
+}
+
+
+static void
+_bus_global_engine_changed_cb (IBusBus       *bus,
+                               gchar         *engine_name,
+                               IBusWaylandIM *wlim)
+{
+    IBusWaylandIMPrivate *priv;
+    IBusEngineDesc *desc;
+    struct xkb_keymap *keymap;
+
+    g_return_if_fail (IBUS_IS_BUS (bus));
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    desc = ibus_bus_get_global_engine (bus);
+    g_assert (desc);
+    g_assert (!g_strcmp0 (ibus_engine_desc_get_name (desc), engine_name));
+    keymap = create_user_xkb_keymap (priv->xkb_context, desc);
+    if (keymap && !ibus_wayland_im_update_xkb_state (wlim, keymap))
+        xkb_keymap_unref (keymap);
+}
+
+
+static void
+input_method_keyboard_keymap (void               *data,
+                              struct wl_keyboard *wl_keyboard,
+                              uint32_t            format,
+                              int32_t             fd,
+                              uint32_t            size)
+{
+    IBusWaylandIM *wlim = data;
+    IBusWaylandIMPrivate *priv;
+    struct xkb_keymap *keymap;
+
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+
+    if (priv->keymap && priv->state)
+        return;
+    keymap = create_system_xkb_keymap (priv->xkb_context, format, fd, size);
+    if (keymap && !ibus_wayland_im_update_xkb_state (wlim, keymap))
+        xkb_keymap_unref (keymap);
+}
+
+
+static gboolean
+ibus_wayland_im_post_key (IBusWaylandIM *wlim,
+                          uint32_t       key,
+                          uint32_t       modifiers,
+                          uint32_t       state,
+                          gboolean       filtered)
+{
+    IBusWaylandIMPrivate *priv;
+    uint32_t code = key + 8;
+    uint32_t ch;
+
+    g_return_val_if_fail (IBUS_IS_WAYLAND_IM (wlim), FALSE);
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    if (!priv->state)
+        return FALSE;
+    if (!filtered && (state != WL_KEYBOARD_KEY_STATE_RELEASED)) {
+        ch = xkb_state_key_get_utf32 (priv->state, code);
+        if (!(modifiers & IBUS_MODIFIER_MASK & ~IBUS_SHIFT_MASK) &&
+            ch && ch != '\n' && ch != '\b' && ch != '\r' && ch != '\033' &&
+            ch != '\x7f') {
+            gchar buff[8] = { 0, };
+            buff[g_unichar_to_utf8 (ch, buff)] = '\0';
+            zwp_input_method_context_v1_commit_string (priv->context,
+                                                       priv->serial,
+                                                       buff);
+            filtered = TRUE;
+        }
+    }
+    xkb_state_update_key (priv->state, code,
+                          (state == WL_KEYBOARD_KEY_STATE_RELEASED)
+                          ? XKB_KEY_UP : XKB_KEY_DOWN);
+    return filtered;
 }
 
 
@@ -482,16 +589,29 @@ _process_key_event_done (GObject      *object,
             context,
             res,
             &error);
+    IBusWaylandIMPrivate *priv;
 
     if (error != NULL) {
         g_warning ("Process Key Event failed: %s.", error->message);
         g_error_free (error);
     }
+    g_return_if_fail (event);
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (event->wlim));
 
+    priv = ibus_wayland_im_get_instance_private (event->wlim);
     /* Should ignore key events after input_method_deactivate() is called
-     * even if context->ref_count is not 0 yet.
+     * even if context->ref_count is not 0 yet but priv->ibuscontext is null
+     * because of the async time lag.
      */
-    if (*(event->ibuscontext) && !retval) {
+    if (priv->ibuscontext) {
+        retval = ibus_wayland_im_post_key (event->wlim,
+                                           event->key,
+                                           event->modifiers,
+                                           event->state,
+                                           retval);
+    }
+    /* Check retral from ibus_wayland_im_post_key() */
+    if (priv->ibuscontext && !retval) {
         zwp_input_method_context_v1_key (event->context,
                                          event->serial,
                                          event->time,
@@ -517,7 +637,7 @@ input_method_keyboard_key (void               *data,
     uint32_t num_syms;
     const xkb_keysym_t *syms;
     xkb_keysym_t sym;
-    guint32 modifiers;
+    uint32_t modifiers;
 
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
@@ -550,6 +670,7 @@ input_method_keyboard_key (void               *data,
                                                   sym,
                                                   code,
                                                   modifiers);
+        retval = ibus_wayland_im_post_key (wlim, key, modifiers, state, retval);
         if (!retval) {
             zwp_input_method_context_v1_key (priv->context,
                                              serial,
@@ -563,8 +684,9 @@ input_method_keyboard_key (void               *data,
         event->serial = serial;
         event->time = time;
         event->key = key;
+        event->modifiers = modifiers & ~IBUS_RELEASE_MASK;
         event->state = state;
-        event->ibuscontext = &priv->ibuscontext;
+        event->wlim = wlim;
         ibus_input_context_process_key_event_async (priv->ibuscontext,
                                                     sym,
                                                     code,
@@ -752,8 +874,29 @@ input_method_deactivate (void                               *data,
         priv->cancellable = NULL;
     }
 
+
     if (priv->ibuscontext) {
         ibus_input_context_focus_out (priv->ibuscontext);
+        g_signal_handlers_disconnect_by_func (
+                priv->ibuscontext,
+                G_CALLBACK (_context_commit_text_cb),
+                wlim);
+        g_signal_handlers_disconnect_by_func (
+                priv->ibuscontext,
+                G_CALLBACK (_context_forward_key_event_cb),
+                wlim);
+        g_signal_handlers_disconnect_by_func (
+                priv->ibuscontext,
+                G_CALLBACK (_context_update_preedit_text_cb),
+                wlim);
+        g_signal_handlers_disconnect_by_func (
+                priv->ibuscontext,
+                G_CALLBACK (_context_show_preedit_text_cb),
+                wlim);
+        g_signal_handlers_disconnect_by_func (
+                priv->ibuscontext,
+                G_CALLBACK (_context_hide_preedit_text_cb),
+                wlim);
         g_object_unref (priv->ibuscontext);
         priv->ibuscontext = NULL;
     }
@@ -868,6 +1011,8 @@ ibus_wayland_im_constructor (GType                  type,
     IBusWaylandIM *wlim;
     IBusWaylandIMPrivate *priv;
     GSource *source;
+    IBusEngineDesc *desc;
+    struct xkb_keymap *keymap = NULL;
 
     object = G_OBJECT_CLASS (ibus_wayland_im_parent_class)->constructor (
             type, n_params, params);
@@ -894,6 +1039,21 @@ ibus_wayland_im_constructor (GType                  type,
         g_error ("Failed to create XKB context\n");
     }
 
+    if (!priv->ibusbus || !ibus_bus_is_connected (priv->ibusbus)) {
+        g_warning ("Cannot connect to ibus-daemon");
+        g_object_unref (object);
+        return NULL;
+    }
+    desc = ibus_bus_get_global_engine (priv->ibusbus);
+    if (desc)
+        keymap = create_user_xkb_keymap (priv->xkb_context, desc);
+    if (keymap && !ibus_wayland_im_update_xkb_state (wlim, keymap))
+        xkb_keymap_unref (keymap);
+    ibus_bus_set_watch_ibus_signal (priv->ibusbus, TRUE);
+    g_signal_connect (priv->ibusbus, "global-engine-changed",
+                      G_CALLBACK (_bus_global_engine_changed_cb),
+                      object);
+
     _use_sync_mode = _get_boolean_env ("IBUS_ENABLE_SYNC_MODE", FALSE);
 
     source = ibus_wayland_source_new (priv->display);
@@ -914,7 +1074,16 @@ ibus_wayland_im_init (IBusWaylandIM *wlim)
 static void
 ibus_wayland_im_destroy (IBusObject *object)
 {
+    IBusWaylandIM *wlim = (IBusWaylandIM *)object;
+    IBusWaylandIMPrivate *priv;
+
     g_debug ("IBusWaylandIM is destroyed.");
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (object));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    if (priv->input_method)
+        g_clear_pointer (&priv->input_method, zwp_input_method_v1_destroy);
+    if (priv->panel)
+        g_clear_pointer (&priv->panel, zwp_input_panel_v1_destroy);
     IBUS_OBJECT_CLASS (ibus_wayland_im_parent_class)->destroy (object);
 }
 

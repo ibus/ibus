@@ -89,8 +89,12 @@ struct _IBusWaylandKeyEvent
     uint32_t time;
     uint32_t key;
     enum wl_keyboard_key_state state;
+    xkb_keysym_t sym;
     uint32_t modifiers;
     IBusWaylandIM *wlim;
+    int count;
+    guint count_cb_id;
+    gboolean retval;
 };
 typedef struct _IBusWaylandKeyEvent IBusWaylandKeyEvent;
 
@@ -107,7 +111,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IBusWaylandIM, ibus_wayland_im, IBUS_TYPE_OBJECT)
 
 struct wl_registry *_registry = NULL;
 
-static gboolean _use_sync_mode = FALSE;
+static gboolean _use_sync_mode = 2;
 
 static GObject     *ibus_wayland_im_constructor        (GType          type,
                                                         guint          n_params,
@@ -124,23 +128,26 @@ static void         ibus_wayland_im_get_property       (IBusWaylandIM *wlim,
 static void         ibus_wayland_im_destroy            (IBusObject    *object);
 
 
-static gboolean
-_get_boolean_env (const gchar *name,
-                  gboolean     defval)
+static char
+_get_char_env (const gchar *name,
+               char         defval)
 {
     const gchar *value = g_getenv (name);
 
     if (value == NULL)
-      return defval;
+        return defval;
 
     if (g_strcmp0 (value, "") == 0 ||
         g_strcmp0 (value, "0") == 0 ||
         g_strcmp0 (value, "false") == 0 ||
         g_strcmp0 (value, "False") == 0 ||
-        g_strcmp0 (value, "FALSE") == 0)
-      return FALSE;
+        g_strcmp0 (value, "FALSE") == 0) {
+        return 0;
+    } else if (!g_strcmp0 (value, "2")) {
+        return 2;
+    }
 
-    return TRUE;
+    return 1;
 }
 
 
@@ -588,16 +595,25 @@ _process_key_event_done (GObject      *object,
                          gpointer      user_data)
 {
     IBusInputContext *context = (IBusInputContext *)object;
-    IBusWaylandKeyEvent *event = (IBusWaylandKeyEvent *) user_data;
+    IBusWaylandKeyEvent *event = (IBusWaylandKeyEvent *)user_data;
     GError *error = NULL;
     gboolean retval = ibus_input_context_process_key_event_async_finish (
             context,
             res,
             &error);
-    IBusWaylandIMPrivate *priv;
+    IBusWaylandIMPrivate *priv = NULL;
 
     if (error != NULL) {
-        g_warning ("Process Key Event failed: %s.", error->message);
+        if (event && event->wlim && IBUS_IS_WAYLAND_IM (event->wlim)) {
+            priv = ibus_wayland_im_get_instance_private (event->wlim);
+        }
+        if (priv && priv->log) {
+            fprintf (priv->log, "Process Key Event failed: %s\n",
+                     error->message);
+            fflush (priv->log);
+        } else {
+            g_warning ("Process Key Event failed: %s", error->message);
+        }
         g_error_free (error);
     }
     g_return_if_fail (event);
@@ -624,7 +640,196 @@ _process_key_event_done (GObject      *object,
                                          event->state);
     }
 
-    g_free (event);
+    g_slice_free (IBusWaylandKeyEvent, event);
+}
+
+
+static void
+_process_key_event_reply_done (GObject      *object,
+                               GAsyncResult *res,
+                               gpointer      user_data)
+{
+    IBusInputContext *context = (IBusInputContext *)object;
+    IBusWaylandKeyEvent *event = (IBusWaylandKeyEvent *)user_data;
+    GError *error = NULL;
+    gboolean retval = ibus_input_context_process_key_event_async_finish (
+            context,
+            res,
+            &error);
+    if (error != NULL) {
+        IBusWaylandIMPrivate *priv = NULL;
+        if (event && event->wlim && IBUS_IS_WAYLAND_IM (event->wlim)) {
+            priv = ibus_wayland_im_get_instance_private (event->wlim);
+        }
+        if (priv && priv->log) {
+            fprintf (priv->log, "Process Key Event failed: %s\n",
+                     error->message);
+            fflush (priv->log);
+        } else {
+            g_warning ("Process Key Event failed: %s", error->message);
+        }
+        g_error_free (error);
+    }
+    g_return_if_fail (event);
+    event->retval = retval;
+    event->count = 0;
+    g_source_remove (event->count_cb_id);
+}
+
+
+static gboolean
+_process_key_event_count_cb (gpointer user_data)
+{
+    IBusWaylandKeyEvent *event = (IBusWaylandKeyEvent *)user_data;
+    g_return_val_if_fail (event, G_SOURCE_REMOVE);
+    if (!event->count)
+        return G_SOURCE_REMOVE;
+    /* Wait for about 10 secs. */
+    if (event->count++ == 10000) {
+        event->count = 0;
+        return G_SOURCE_REMOVE;
+    }
+    return G_SOURCE_CONTINUE;
+}
+
+
+static void
+_process_key_event_sync (IBusWaylandIM       *wlim,
+                         IBusWaylandKeyEvent *event)
+{
+    uint32_t code;
+    IBusWaylandIMPrivate *priv;
+    gboolean retval;
+
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    g_assert (event);
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    if (!priv->ibuscontext)
+        return;
+    code = event->key + 8;
+    retval = ibus_input_context_process_key_event (priv->ibuscontext,
+                                                   event->sym,
+                                                   code,
+                                                   event->modifiers);
+    retval = ibus_wayland_im_post_key (wlim,
+                                       event->key,
+                                       event->modifiers,
+                                       event->state,
+                                       retval);
+    if (!retval) {
+        zwp_input_method_context_v1_key (priv->context,
+                                         event->serial,
+                                         event->time,
+                                         event->key,
+                                         event->state);
+    }
+}
+
+
+static void
+_process_key_event_async (IBusWaylandIM       *wlim,
+                          IBusWaylandKeyEvent *event)
+{
+    IBusWaylandIMPrivate *priv;
+    IBusWaylandKeyEvent *async_event;
+    uint32_t code;
+
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    g_assert (event);
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    async_event = g_slice_new0 (IBusWaylandKeyEvent);
+    if (!async_event) {
+        if (priv->log) {
+            fprintf (priv->log, "Cannot allocate async data\n");
+            fflush (priv->log);
+        } else {
+            g_warning ("Cannot allocate async data");
+        }
+        _process_key_event_sync (wlim, event);
+        return;
+    }
+    code = event->key + 8;
+    async_event->context = priv->context;
+    async_event->serial = event->serial;
+    async_event->time = event->time;
+    async_event->key = event->key;
+    async_event->modifiers = event->modifiers & ~IBUS_RELEASE_MASK;
+    async_event->state = event->state;
+    async_event->wlim = wlim;
+    ibus_input_context_process_key_event_async (priv->ibuscontext,
+                                                event->sym,
+                                                code,
+                                                event->modifiers,
+                                                -1,
+                                                NULL,
+                                                _process_key_event_done,
+                                                async_event);
+}
+
+
+static void
+_process_key_event_hybrid_async (IBusWaylandIM       *wlim,
+                                 IBusWaylandKeyEvent *event)
+{
+    IBusWaylandIMPrivate *priv;
+    GSource *source;
+    IBusWaylandKeyEvent *async_event = NULL;
+    uint32_t code;
+
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    g_assert (event);
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    source = g_timeout_source_new (1);
+    if (source)
+        async_event = g_slice_new0 (IBusWaylandKeyEvent);
+    if (!async_event) {
+        if (priv->log) {
+            fprintf (priv->log, "Cannot wait for the reply of the "
+                                "process key event.\n");
+            fflush (priv->log);
+        } else {
+            g_warning ("Cannot wait for the reply of the process key event.");
+        }
+        _process_key_event_sync (wlim, event);
+        if (source)
+            g_source_destroy (source);
+        return;
+    }
+    async_event->count = 1;
+    async_event->wlim = wlim;
+    g_source_attach (source, NULL);
+    g_source_unref (source);
+    async_event->count_cb_id = g_source_get_id (source);
+    code = event->key + 8;
+    ibus_input_context_process_key_event_async (priv->ibuscontext,
+                                                event->sym,
+                                                code,
+                                                event->modifiers,
+                                                -1,
+                                                NULL,
+                                                _process_key_event_reply_done,
+                                                async_event);
+    g_source_set_callback (source, _process_key_event_count_cb,
+                           async_event, NULL);
+    while (async_event->count)
+        g_main_context_iteration (NULL, TRUE);
+    /* #2498 Checking source->ref_count might cause Nautilus hang up
+     */
+    if (priv->ibuscontext) {
+        async_event->retval = ibus_wayland_im_post_key (wlim,
+                                                        event->key,
+                                                        event->modifiers,
+                                                        event->state,
+                                                        async_event->retval);
+    }
+    if (priv->ibuscontext && !async_event->retval) {
+        zwp_input_method_context_v1_key (priv->context,
+                                         event->serial,
+                                         event->time,
+                                         event->key,
+                                         event->state);
+    }
+    g_slice_free (IBusWaylandKeyEvent, async_event);
 }
 
 
@@ -638,11 +843,10 @@ input_method_keyboard_key (void               *data,
 {
     IBusWaylandIM *wlim = data;
     IBusWaylandIMPrivate *priv;
+    IBusWaylandKeyEvent event = { 0, };
     uint32_t code;
     uint32_t num_syms;
     const xkb_keysym_t *syms;
-    xkb_keysym_t sym;
-    uint32_t modifiers;
 
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
@@ -658,48 +862,28 @@ input_method_keyboard_key (void               *data,
         return;
     }
         
+    event.serial = serial;
+    event.time = time;
+    event.key = key;
+    event.state = state;
     code = key + 8;
     num_syms = xkb_key_get_syms (priv->state, code, &syms);
 
-    sym = XKB_KEY_NoSymbol;
+    event.sym = XKB_KEY_NoSymbol;
     if (num_syms == 1)
-        sym = syms[0];
+        event.sym = syms[0];
 
-    modifiers = priv->modifiers;
+    event.modifiers = priv->modifiers;
     if (state == WL_KEYBOARD_KEY_STATE_RELEASED)
-        modifiers |= IBUS_RELEASE_MASK;
+        event.modifiers |= IBUS_RELEASE_MASK;
 
-    if (_use_sync_mode) {
-        gboolean retval =
-            ibus_input_context_process_key_event (priv->ibuscontext,
-                                                  sym,
-                                                  code,
-                                                  modifiers);
-        retval = ibus_wayland_im_post_key (wlim, key, modifiers, state, retval);
-        if (!retval) {
-            zwp_input_method_context_v1_key (priv->context,
-                                             serial,
-                                             time,
-                                             key,
-                                             state);
-        }
-    } else {
-        IBusWaylandKeyEvent *event = g_new (IBusWaylandKeyEvent, 1);
-        event->context = priv->context;
-        event->serial = serial;
-        event->time = time;
-        event->key = key;
-        event->modifiers = modifiers & ~IBUS_RELEASE_MASK;
-        event->state = state;
-        event->wlim = wlim;
-        ibus_input_context_process_key_event_async (priv->ibuscontext,
-                                                    sym,
-                                                    code,
-                                                    modifiers,
-                                                    -1,
-                                                    NULL,
-                                                    _process_key_event_done,
-                                                    event);
+    switch (_use_sync_mode) {
+    case 1:
+        return _process_key_event_sync (wlim, &event);
+    case 2:
+        return _process_key_event_hybrid_async (wlim, &event);
+    default:
+        return _process_key_event_async (wlim, &event);
     }
 }
 
@@ -788,6 +972,7 @@ _create_input_context_done (GObject      *object,
         g_error_free (error);
     }
     else {
+        guint32 capabilities = IBUS_CAP_FOCUS | IBUS_CAP_PREEDIT_TEXT;
         priv->ibuscontext = context;
 
         g_signal_connect (priv->ibuscontext, "commit-text",
@@ -808,16 +993,12 @@ _create_input_context_done (GObject      *object,
                           wlim);
     
 #ifdef ENABLE_SURROUNDING
-        ibus_input_context_set_capabilities (priv->ibuscontext,
-                                             IBUS_CAP_FOCUS |
-                                             IBUS_CAP_PREEDIT_TEXT |
-                                             IBUS_CAP_SURROUNDING_TEXT);
-#else
-        ibus_input_context_set_capabilities (priv->ibuscontext,
-                                             IBUS_CAP_FOCUS |
-                                             IBUS_CAP_PREEDIT_TEXT);
+        capabilities |= IBUS_CAP_SURROUNDING_TEXT;
 #endif
-
+        if (_use_sync_mode == 1)
+            capabilities |= IBUS_CAP_SYNC_PROCESS_KEY_V2;
+        ibus_input_context_set_capabilities (priv->ibuscontext,
+                                             capabilities);
         ibus_input_context_focus_in (priv->ibuscontext);
     }
 }
@@ -1130,7 +1311,7 @@ ibus_wayland_im_constructor (GType                  type,
                       G_CALLBACK (_bus_global_engine_changed_cb),
                       object);
 
-    _use_sync_mode = _get_boolean_env ("IBUS_ENABLE_SYNC_MODE", FALSE);
+    _use_sync_mode = _get_char_env ("IBUS_ENABLE_SYNC_MODE", 2);
 
     source = ibus_wayland_source_new (priv->display);
     g_source_set_priority (source, G_PRIORITY_DEFAULT);

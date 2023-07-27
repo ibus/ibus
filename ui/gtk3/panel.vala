@@ -75,6 +75,7 @@ class Panel : IBus.PanelService {
     private uint m_menu_update_delay_time = 100;
     private uint m_menu_update_delay_time_id;
     private bool m_is_wayland;
+    private bool m_is_wayland_im;
 #if INDICATOR
     private bool m_is_kde = is_kde();
     private bool m_is_context_menu;
@@ -97,13 +98,15 @@ class Panel : IBus.PanelService {
             BindingCommon.KeyEventFuncType ftype);
 #endif
 
-    public Panel(IBus.Bus bus) {
+    public Panel(IBus.Bus bus,
+                 bool     is_wayland_im) {
         GLib.assert(bus.is_connected());
         // Chain up base class constructor
         GLib.Object(connection : bus.get_connection(),
                     object_path : "/org/freedesktop/IBus/Panel");
 
         m_bus = bus;
+        m_is_wayland_im = is_wayland_im;
 
 #if USE_GDK_WAYLAND
         var display = Gdk.Display.get_default();
@@ -300,6 +303,20 @@ class Panel : IBus.PanelService {
         // https://git.gnome.org/browse/gtk+/tree/gtk/gtkmenu.c?h=gtk-3-22#n2251
         menu.popup_at_rect(window, area, rect_anchor, menu_anchor, null);
     }
+
+
+    private static bool is_gnome() {
+        unowned string? desktop =
+            Environment.get_variable("XDG_CURRENT_DESKTOP");
+        if (desktop == "GNOME")
+            return true;
+        if (desktop == null || desktop == "(null)")
+            desktop = Environment.get_variable("XDG_SESSION_DESKTOP");
+        if (desktop == "gnome" || desktop == "GNOME")
+            return true;
+        return false;
+    }
+
 
 #if INDICATOR
     private static bool is_kde() {
@@ -812,6 +829,64 @@ class Panel : IBus.PanelService {
     }
 
 
+    private void check_wayland() {
+        string message = null;
+        if (m_is_wayland && !m_is_wayland_im && !is_gnome()) {
+            var format =
+                    _("IBus should be called from the desktop session in " +
+                      "%s. For KDE, you can launch '%s' " +
+                      "utility and go to \"Input Devices\" -> " +
+                      "\"Virtual Keyboard\" section and select " +
+                      "\"%s\" icon and click \"Apply\" button to " +
+                      "configure IBus in %s. For other desktop " +
+                      "sessions, you can copy the 'Exec=' line in %s file " +
+                      "to a configuration file of the session. " +
+                      "Please refer each document about the \"Wayland " +
+                      "input method\" configuration. Before you configure " +
+                      "the \"Wayland input method\", you should make sure " +
+                      "that QT_IM_MODULE and GTK_IM_MODULE environment " +
+                      "variables are unset in the desktop session.");
+                message = format.printf(
+                        "Wayland",
+                        "systemsettings5",
+                        "IBus Wayland",
+                        "Wayland",
+                        "org.freedesktop.IBus.Panel.Wayland.Gtk3.desktop");
+        } else if (m_is_wayland && m_is_wayland_im && !is_gnome()) {
+            if (Environment.get_variable("QT_IM_MODULE") == "ibus") {
+                var format =
+                        _("Please unset QT_IM_MODULE and GTK_IM_MODULE " +
+                          "environment variables and 'ibus-daemon --panel " +
+                          "disable' should be executed as a child process " +
+                          "of %s component.");
+                message = format.printf(Environment.get_prgname());
+            }
+        }
+        if (message == null)
+            return;
+#if ENABLE_LIBNOTIFY
+        if (!Notify.is_initted()) {
+            Notify.init ("ibus");
+        }
+
+        var notification = new Notify.Notification(
+                _("IBus Notification"),
+                message,
+                "ibus");
+        notification.set_timeout(60 * 1000);
+        notification.set_category("wayland");
+
+        try {
+            notification.show();
+        } catch (GLib.Error e) {
+            warning (message);
+        }
+#else
+        warning (message);
+#endif
+    }
+
+
     private void save_log(string format) {
         if (m_log == null)
             return;
@@ -822,6 +897,7 @@ class Panel : IBus.PanelService {
 
     public void load_settings() {
         set_version();
+        check_wayland();
 
         init_engines_order();
 

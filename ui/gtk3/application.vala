@@ -35,10 +35,10 @@ class Application {
     private Panel m_panel;
     private static FileStream m_log;
     private static bool m_verbose;
+    private static bool m_enable_wayland_im;
 #if USE_GDK_WAYLAND
     private static ulong m_realize_surface_id;
     private static string m_user;
-    private static bool m_enable_wayland_im;
     private static IBus.WaylandIM m_wayland_im;
     private static bool m_exec_daemon;
     private static string m_daemon_args;
@@ -95,7 +95,7 @@ class Application {
                                       string         signal_name,
                                       Variant        parameters) {
         debug("signal_name = %s", signal_name);
-        m_panel = new Panel(bus);
+        m_panel = new Panel(bus, m_enable_wayland_im);
         if (m_log != null)
             m_panel.set_log(m_log, m_verbose);
 #if USE_GDK_WAYLAND

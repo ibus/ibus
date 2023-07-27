@@ -111,7 +111,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IBusWaylandIM, ibus_wayland_im, IBUS_TYPE_OBJECT)
 
 struct wl_registry *_registry = NULL;
 
-static gboolean _use_sync_mode = 2;
+static gboolean _use_sync_mode = 1;
 
 static GObject     *ibus_wayland_im_constructor        (GType          type,
                                                         guint          n_params,
@@ -697,7 +697,6 @@ static void
 _process_key_event_sync (IBusWaylandIM       *wlim,
                          IBusWaylandKeyEvent *event)
 {
-    uint32_t code;
     IBusWaylandIMPrivate *priv;
     gboolean retval;
 
@@ -706,11 +705,11 @@ _process_key_event_sync (IBusWaylandIM       *wlim,
     priv = ibus_wayland_im_get_instance_private (wlim);
     if (!priv->ibuscontext)
         return;
-    code = event->key + 8;
     retval = ibus_input_context_process_key_event (priv->ibuscontext,
                                                    event->sym,
-                                                   code,
+                                                   event->key,
                                                    event->modifiers);
+    ibus_input_context_post_process_key_event (priv->ibuscontext);
     retval = ibus_wayland_im_post_key (wlim,
                                        event->key,
                                        event->modifiers,
@@ -732,7 +731,6 @@ _process_key_event_async (IBusWaylandIM       *wlim,
 {
     IBusWaylandIMPrivate *priv;
     IBusWaylandKeyEvent *async_event;
-    uint32_t code;
 
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     g_assert (event);
@@ -748,7 +746,6 @@ _process_key_event_async (IBusWaylandIM       *wlim,
         _process_key_event_sync (wlim, event);
         return;
     }
-    code = event->key + 8;
     async_event->context = priv->context;
     async_event->serial = event->serial;
     async_event->time = event->time;
@@ -758,7 +755,7 @@ _process_key_event_async (IBusWaylandIM       *wlim,
     async_event->wlim = wlim;
     ibus_input_context_process_key_event_async (priv->ibuscontext,
                                                 event->sym,
-                                                code,
+                                                event->key,
                                                 event->modifiers,
                                                 -1,
                                                 NULL,
@@ -774,7 +771,6 @@ _process_key_event_hybrid_async (IBusWaylandIM       *wlim,
     IBusWaylandIMPrivate *priv;
     GSource *source;
     IBusWaylandKeyEvent *async_event = NULL;
-    uint32_t code;
 
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     g_assert (event);
@@ -800,10 +796,9 @@ _process_key_event_hybrid_async (IBusWaylandIM       *wlim,
     g_source_attach (source, NULL);
     g_source_unref (source);
     async_event->count_cb_id = g_source_get_id (source);
-    code = event->key + 8;
     ibus_input_context_process_key_event_async (priv->ibuscontext,
                                                 event->sym,
-                                                code,
+                                                event->key,
                                                 event->modifiers,
                                                 -1,
                                                 NULL,
@@ -999,6 +994,10 @@ _create_input_context_done (GObject      *object,
             capabilities |= IBUS_CAP_SYNC_PROCESS_KEY_V2;
         ibus_input_context_set_capabilities (priv->ibuscontext,
                                              capabilities);
+        if (_use_sync_mode == 1) {
+            ibus_input_context_set_post_process_key_event (priv->ibuscontext,
+                                                           TRUE);
+        }
         ibus_input_context_focus_in (priv->ibuscontext);
     }
 }
@@ -1311,7 +1310,7 @@ ibus_wayland_im_constructor (GType                  type,
                       G_CALLBACK (_bus_global_engine_changed_cb),
                       object);
 
-    _use_sync_mode = _get_char_env ("IBUS_ENABLE_SYNC_MODE", 2);
+    _use_sync_mode = _get_char_env ("IBUS_ENABLE_SYNC_MODE", 1);
 
     source = ibus_wayland_source_new (priv->display);
     g_source_set_priority (source, G_PRIORITY_DEFAULT);

@@ -252,7 +252,7 @@ AC_ARG_ENABLE(wayland,
     AS_HELP_STRING([--enable-wayland],
                    [Build wayland support]),
     [enable_wayland=$enableval],
-    [enable_wayland=no]
+    [enable_wayland=yes]
 )
 AM_CONDITIONAL([ENABLE_WAYLAND], [test x"$enable_wayland" = x"yes"])
 
@@ -282,10 +282,14 @@ if test x"$enable_gtk3" = x"yes"; then
     PKG_CHECK_MODULES(GTK3, [
         gtk+-3.0 >= gtk3_required_version
     ])
-    PKG_CHECK_EXISTS([gdk-wayland-3.0],
-        [enable_gdk3_wayland=yes],
-        [enable_gdk3_wayland=no]
-    )
+    if test x"$enable_wayland" = x"yes"; then
+        PKG_CHECK_EXISTS([gdk-wayland-3.0],
+            [enable_gdk3_wayland=yes],
+            [enable_gdk3_wayland=no]
+        )
+    else
+        enable_gdk3_wayland=no
+    fi
 
     gtk3_binary_version=`$PKG_CONFIG --variable=gtk_binary_version gtk+-3.0`
     GTK3_IM_MODULEDIR="$libdir"/gtk-3.0/$gtk3_binary_version/immodules

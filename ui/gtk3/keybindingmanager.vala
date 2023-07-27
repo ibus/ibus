@@ -80,12 +80,13 @@ public class KeybindingManager : GLib.Object {
         unowned X.Display display = Gdk.x11_get_default_xdisplay();
 #endif
 
-        int keycode = display.keysym_to_keycode(keysym);
+        //int keycode = display.keysym_to_keycode(keysym);
+        int keycode = 0;
 
         if (keycode == 0)
             return false;
 
-        grab_keycode (Gdk.Display.get_default(), keysym, modifiers);
+        //grab_keycode (Gdk.Display.get_default(), keysym, modifiers);
 
         // store binding
         Keybinding binding = new Keybinding(keysym, modifiers, handler);
@@ -106,9 +107,9 @@ public class KeybindingManager : GLib.Object {
         GLib.List<Keybinding> remove_bindings = new GLib.List<Keybinding>();
         foreach(Keybinding binding in m_bindings) {
             if (binding.keysym == keysym && binding.modifiers == modifiers) {
-                ungrab_keycode (Gdk.Display.get_default(),
-                                binding.keysym,
-                                binding.modifiers);
+                //ungrab_keycode (Gdk.Display.get_default(),
+                //                binding.keysym,
+                //                binding.modifiers);
                 remove_bindings.append(binding);
             }
         }

@@ -3,7 +3,7 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2015 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2015-2022 Takao Fujwiara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2015-2023 Takao Fujwiara <takao.fujiwara1@gmail.com>
 # Copyright (c) 2007-2020 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 NULL =
 
 libibus = $(top_builddir)/src/libibus-@IBUS_API_VERSION@.la
+libibuswaylandim = $(top_builddir)/client/wayland/libibuswaylandim.la
 
 component_DATA = \
 	gtkpanel.xml \
@@ -101,7 +102,19 @@ AM_VALAFLAGS += --define=INDICATOR
 endif
 
 if ENABLE_GDK3_WAYLAND
-AM_VALAFLAGS += --pkg=gdk-wayland --define=USE_GDK_WAYLAND
+AM_CPPFLAGS += \
+    -I$(top_srcdir)/client/wayland \
+    -I$(top_builddir)/client/wayland \
+    $(NULL)
+AM_VALAFLAGS += \
+    --vapidir=$(top_builddir)/client/wayland \
+    --vapidir=$(top_srcdir)/client/wayland \
+    --pkg=ibus-wayland-im-1.0 \
+    --pkg=gdk-wayland --define=USE_GDK_WAYLAND \
+    $(NULL)
+AM_LDADD += \
+    $(libibuswaylandim) \
+    $(NULL)
 endif
 
 libexec_PROGRAMS = ibus-ui-gtk3

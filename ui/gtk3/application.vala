@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2011 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2017-2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2017-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,8 +21,56 @@
  * USA
  */
 
+static string program_name;
+static IBus.Bus bus;
+#if USE_GDK_WAYLAND
+static IBus.WaylandIM wayland_im;
+#endif
+
+
+delegate void EntryFunc(string[] argv);
+
+struct CommandEntry {
+    unowned string name;
+    unowned string description;
+    unowned EntryFunc entry;
+}
+ 
+ 
+const CommandEntry commands[]  = {
+#if USE_GDK_WAYLAND
+    { "--enable-wayland-im", N_("Connect Wayland input method protocol"),
+      make_wayland_im },
+#endif
+    { "--help", N_("Show this information"), print_help }
+};
+
+
+void print_help(string[] argv) {
+    print_usage(stdout);
+    Posix.exit(Posix.EXIT_SUCCESS);
+}
+
+void print_usage(FileStream stream) {
+    stream.printf(_("Usage: %s COMMAND [OPTION...]\n\n"), program_name);
+    stream.printf(_("Commands:\n"));
+    for (int i = 0; i < commands.length; i++) {
+        stream.printf("  %-12s    %s\n",
+                      commands[i].name,
+                      GLib.dgettext(null, commands[i].description));
+    }
+}
+
+
+#if USE_GDK_WAYLAND
+void make_wayland_im(string[] argv) {
+    bus = new IBus.Bus();
+    wayland_im = new IBus.WaylandIM(bus);
+}
+#endif
+
+
 class Application {
-    private IBus.Bus m_bus;
     private Panel m_panel;
 
     public Application(string[] argv) {
@@ -31,18 +79,19 @@ class Application {
         IBus.init();
         Gtk.init(ref argv);
 
-        m_bus = new IBus.Bus();
+        if (bus == null)
+            bus = new IBus.Bus();
 
-        m_bus.connected.connect(bus_connected);
-        m_bus.disconnected.connect(bus_disconnected);
+        bus.connected.connect(bus_connected);
+        bus.disconnected.connect(bus_disconnected);
 
-        if (m_bus.is_connected()) {
+        if (bus.is_connected()) {
             init();
         }
     }
 
     private void init() {
-        DBusConnection connection = m_bus.get_connection();
+        DBusConnection connection = bus.get_connection();
         connection.signal_subscribe("org.freedesktop.DBus",
                                     "org.freedesktop.DBus",
                                     "NameAcquired",
@@ -60,7 +109,7 @@ class Application {
         var flags =
                 IBus.BusNameFlag.ALLOW_REPLACEMENT |
                 IBus.BusNameFlag.REPLACE_EXISTING;
-        m_bus.request_name(IBus.SERVICE_PANEL, flags);
+        bus.request_name(IBus.SERVICE_PANEL, flags);
     }
 
     public int run() {
@@ -75,7 +124,7 @@ class Application {
                                       string         signal_name,
                                       Variant        parameters) {
         debug("signal_name = %s", signal_name);
-        m_panel = new Panel(m_bus);
+        m_panel = new Panel(bus);
         m_panel.load_settings();
     }
 
@@ -115,9 +164,22 @@ class Application {
         // desktop is launched.
         GLib.Environment.unset_variable("GDK_CORE_DEVICE_EVENTS");
         // for Gdk.X11.get_default_xdisplay()
-        Gdk.set_allowed_backends("x11");
+        //Gdk.set_allowed_backends("x11");
 
-        Application app = new Application(argv);
+        program_name = Path.get_basename(argv[0]);
+        string[] new_argv = {};
+        foreach (var arg in argv) {
+            int i = 0;
+            for (i = 0; i < commands.length; i++) {
+                if (commands[i].name == arg) {
+                    commands[i].entry(argv);
+                    break;
+                }
+            }
+            if (i == commands.length)
+                new_argv += arg;
+        }
+        Application app = new Application(new_argv);
         app.run();
     }
 }

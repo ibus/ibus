@@ -63,6 +63,7 @@ $(libibus):
 EXTRA_DIST = \
     $(protocol_sources) \
     IBusWaylandIM-1.0.metadata \
+    ibus-wayland-im-custom.vala \
     README \
     $(NULL)
 
@@ -145,7 +146,10 @@ $(VAPIGEN_VAPIS): $(INTROSPECTION_GIRS)
 ibus_wayland_im_1_0_vapi_DEPS = glib-2.0 gobject-2.0 gio-2.0 ibus-1.0
 ibus_waylayd_im_1_0_vapi_METADATADIRS = $(srcdir) $(top_srcdir)/bindings/vala
 #ibus_waylayd_im_1_0_vapi_VAPIDIRS = $(top_srcdir)/bindings/vala
-ibus_wayland_im_1_0_vapi_FILES = $(INTROSPECTION_GIRS)
+ibus_wayland_im_1_0_vapi_FILES = \
+    $(INTROSPECTION_GIRS) \
+    $(srcdir)/ibus-wayland-im-custom.vala \
+    $(NULL)
 
 endif
 #end of HAVE_INTROSPECTION

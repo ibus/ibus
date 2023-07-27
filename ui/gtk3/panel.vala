@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2011-2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2015-2022 Takao Fujwiara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2015-2023 Takao Fujwiara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -86,6 +86,10 @@ class Panel : IBus.PanelService {
     private GLib.List<BindingCommon.Keybinding> m_keybindings =
             new GLib.List<BindingCommon.Keybinding>();
 
+#if USE_GDK_WAYLAND
+    public signal void realize_surface(void *surface);
+#endif
+
     public Panel(IBus.Bus bus) {
         GLib.assert(bus.is_connected());
         // Chain up base class constructor
@@ -95,12 +99,10 @@ class Panel : IBus.PanelService {
         m_bus = bus;
 
 #if USE_GDK_WAYLAND
-        Gdk.set_allowed_backends("*");
-        var display = Gdk.DisplayManager.get().open_display(null);
+        var display = Gdk.Display.get_default();
         Type instance_type = display.get_type();
         Type wayland_type = typeof(GdkWayland.Display);
         m_is_wayland = instance_type.is_a(wayland_type);
-        Gdk.set_allowed_backends("x11");
 #else
         m_is_wayland = false;
         warning("Checking Wayland is disabled");
@@ -126,6 +128,10 @@ class Panel : IBus.PanelService {
         m_candidate_panel.cursor_down.connect((w) => this.cursor_down());
         m_candidate_panel.candidate_clicked.connect(
                 (w, i, b, s) => this.candidate_clicked(i, b, s));
+#if USE_GDK_WAYLAND
+        m_candidate_panel.realize_surface.connect(
+                (w, s) => this.realize_surface(s));
+#endif
 
         m_switcher = new Switcher();
         // The initial shortcut is "<Super>space"
@@ -377,6 +383,7 @@ class Panel : IBus.PanelService {
         Gdk.Rectangle area = { 0, 0, 0, 0 };
         Gdk.Window? window = null;
         Gtk.MenuPositionFunc? func = null;
+        m_status_icon.set_from_icon_name("ibus-keyboard");
 #if VALA_0_34
         window = Gdk.X11.Window.lookup_for_display(
                 Gdk.Display.get_default() as Gdk.X11.Display,
@@ -407,7 +414,6 @@ class Panel : IBus.PanelService {
                         create_activate_menu(),
                         area, window, func);
         });
-        m_status_icon.set_from_icon_name("ibus-keyboard");
     }
 
     private void bind_switch_shortcut() {

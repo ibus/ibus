@@ -33,12 +33,23 @@
 #include "input-method-unstable-v1-client-protocol.h"
 #include "ibuswaylandim.h"
 
+enum {
+    PROP_0 = 0,
+    PROP_BUS,
+    PROP_DISPLAY
+};
+
+typedef struct _IBusWaylandIMPrivate IBusWaylandIMPrivate;
 struct _IBusWaylandIMPrivate
 {
+    struct wl_display *display;
     struct zwp_input_method_v1 *input_method;
     struct zwp_input_method_context_v1 *context;
     struct wl_keyboard *keyboard;
+    struct zwp_input_panel_v1 *panel;
+    struct zwp_input_panel_surface_v1 *panel_surface;
 
+    IBusBus *ibusbus;
     IBusInputContext *ibuscontext;
     IBusText *preedit_text;
     guint preedit_cursor_pos;
@@ -73,6 +84,7 @@ struct _IBusWaylandKeyEvent
     uint32_t time;
     uint32_t key;
     enum wl_keyboard_key_state state;
+    IBusInputContext **ibuscontext;
 };
 typedef struct _IBusWaylandKeyEvent IBusWaylandKeyEvent;
 
@@ -87,13 +99,24 @@ typedef struct _IBusWaylandSource IBusWaylandSource;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IBusWaylandIM, ibus_wayland_im, IBUS_TYPE_OBJECT)
 
-struct wl_display *_display = NULL;
 struct wl_registry *_registry = NULL;
-static IBusBus *_bus = NULL;
 
 static gboolean _use_sync_mode = FALSE;
 
-static void         ibus_wayland_im_destroy (IBusObject *object);
+static GObject     *ibus_wayland_im_constructor        (GType          type,
+                                                        guint          n_params,
+                                                        GObjectConstructParam
+                                                                      *params);
+static void         ibus_wayland_im_set_property       (IBusWaylandIM *wlim,
+                                                        guint          prop_id,
+                                                        const GValue  *value,
+                                                        GParamSpec    *pspec);
+static void         ibus_wayland_im_get_property       (IBusWaylandIM *wlim,
+                                                        guint          prop_id,
+                                                        GValue        *value,
+                                                        GParamSpec    *pspec);
+static void         ibus_wayland_im_destroy            (IBusObject    *object);
+
 
 static gboolean
 _get_boolean_env (const gchar *name,
@@ -114,6 +137,7 @@ _get_boolean_env (const gchar *name,
     return TRUE;
 }
 
+
 static gboolean
 ibus_wayland_source_prepare (GSource *base,
                              gint    *timeout)
@@ -127,6 +151,7 @@ ibus_wayland_source_prepare (GSource *base,
     return FALSE;
 }
 
+
 static gboolean
 ibus_wayland_source_check (GSource *base)
 {
@@ -137,6 +162,7 @@ ibus_wayland_source_check (GSource *base)
 
     return source->pfd.revents;
 }
+
 
 static gboolean
 ibus_wayland_source_dispatch (GSource    *base,
@@ -153,10 +179,12 @@ ibus_wayland_source_dispatch (GSource    *base,
     return TRUE;
 }
 
+
 static void
 ibus_wayland_source_finalize (GSource *source)
 {
 }
+
 
 static GSourceFuncs ibus_wayland_source_funcs = {
     ibus_wayland_source_prepare,
@@ -164,6 +192,7 @@ static GSourceFuncs ibus_wayland_source_funcs = {
     ibus_wayland_source_dispatch,
     ibus_wayland_source_finalize
 };
+
 
 GSource *
 ibus_wayland_source_new (struct wl_display *display)
@@ -183,15 +212,20 @@ ibus_wayland_source_new (struct wl_display *display)
     return source;
 }
 
+
 static void
 _context_commit_text_cb (IBusInputContext *context,
                          IBusText         *text,
                          IBusWaylandIM    *wlim)
 {
-    zwp_input_method_context_v1_commit_string (wlim->priv->context,
-                                               wlim->priv->serial,
+    IBusWaylandIMPrivate *priv;
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    zwp_input_method_context_v1_commit_string (priv->context,
+                                               priv->serial,
                                                text->text);
 }
+
 
 static void
 _context_forward_key_event_cb (IBusInputContext *context,
@@ -200,28 +234,35 @@ _context_forward_key_event_cb (IBusInputContext *context,
                                guint             modifiers,
                                IBusWaylandIM    *wlim)
 {
+    IBusWaylandIMPrivate *priv;
     uint32_t state;
 
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
     if (modifiers & IBUS_RELEASE_MASK)
         state = WL_KEYBOARD_KEY_STATE_RELEASED;
     else
         state = WL_KEYBOARD_KEY_STATE_PRESSED;
 
-    zwp_input_method_context_v1_keysym (wlim->priv->context,
-                                        wlim->priv->serial,
+    zwp_input_method_context_v1_keysym (priv->context,
+                                        priv->serial,
                                         0,
                                         keyval,
                                         state,
                                         modifiers);
 }
 
+
 static void
 _context_show_preedit_text_cb (IBusInputContext *context,
                                IBusWaylandIM    *wlim)
 {
-    IBusWaylandIMPrivate *priv = wlim->priv;
+    IBusWaylandIMPrivate *priv;
+    uint32_t cursor;
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
     /* CURSOR is byte offset.  */
-    uint32_t cursor =
+    cursor =
         g_utf8_offset_to_pointer (priv->preedit_text->text,
                                   priv->preedit_cursor_pos) -
         priv->preedit_text->text;
@@ -234,15 +275,20 @@ _context_show_preedit_text_cb (IBusInputContext *context,
                                                 priv->preedit_text->text);
 }
 
+
 static void
 _context_hide_preedit_text_cb (IBusInputContext *context,
                                IBusWaylandIM    *wlim)
 {
-    zwp_input_method_context_v1_preedit_string (wlim->priv->context,
-                                                wlim->priv->serial,
+    IBusWaylandIMPrivate *priv;
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    zwp_input_method_context_v1_preedit_string (priv->context,
+                                                priv->serial,
                                                 "",
                                                 "");
 }
+
 
 static void
 _context_update_preedit_text_cb (IBusInputContext *context,
@@ -251,7 +297,9 @@ _context_update_preedit_text_cb (IBusInputContext *context,
                                  gboolean          visible,
                                  IBusWaylandIM    *wlim)
 {
-    IBusWaylandIMPrivate *priv = wlim->priv;
+    IBusWaylandIMPrivate *priv;
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
     if (priv->preedit_text)
         g_object_unref (priv->preedit_text);
     priv->preedit_text = g_object_ref_sink (text);
@@ -263,6 +311,7 @@ _context_update_preedit_text_cb (IBusInputContext *context,
         _context_hide_preedit_text_cb (context, wlim);
 }
 
+
 static void
 handle_surrounding_text (void                               *data,
                          struct zwp_input_method_context_v1 *context,
@@ -272,8 +321,10 @@ handle_surrounding_text (void                               *data,
 {
 #if ENABLE_SURROUNDING
     IBusWaylandIM *wlim = data;
-    IBusWaylandIMPrivate *priv = wlim->priv;
+    IBusWaylandIMPrivate *priv;
 
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
     if (priv->ibuscontext != NULL &&
         ibus_input_context_needs_surrounding_text (priv->ibuscontext)) {
         /* CURSOR_POS and ANCHOR_POS are character offset.  */
@@ -289,11 +340,13 @@ handle_surrounding_text (void                               *data,
 #endif
 }
 
+
 static void
 handle_reset (void                           *data,
               struct zwp_input_method_context_v1 *context)
 {
 }
+
 
 static void
 handle_content_type (void                               *data,
@@ -303,6 +356,7 @@ handle_content_type (void                               *data,
 {
 }
 
+
 static void
 handle_invoke_action (void                               *data,
                       struct zwp_input_method_context_v1 *context,
@@ -311,15 +365,19 @@ handle_invoke_action (void                               *data,
 {
 }
 
+
 static void
 handle_commit_state (void                               *data,
                      struct zwp_input_method_context_v1 *context,
                      uint32_t                            serial)
 {
     IBusWaylandIM *wlim = data;
-
-    wlim->priv->serial = serial;
+    IBusWaylandIMPrivate *priv;
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    priv->serial = serial;
 }
+
 
 static void
 handle_preferred_language (void                               *data,
@@ -327,6 +385,7 @@ handle_preferred_language (void                               *data,
                            const char                         *language)
 {
 }
+
 
 static const struct zwp_input_method_context_v1_listener context_listener = {
     handle_surrounding_text,
@@ -337,6 +396,7 @@ static const struct zwp_input_method_context_v1_listener context_listener = {
     handle_preferred_language
 };
 
+
 static void
 input_method_keyboard_keymap (void               *data,
                               struct wl_keyboard *wl_keyboard,
@@ -345,10 +405,12 @@ input_method_keyboard_keymap (void               *data,
                               uint32_t            size)
 {
     IBusWaylandIM *wlim = data;
-    IBusWaylandIMPrivate *priv = wlim->priv;
+    IBusWaylandIMPrivate *priv;
     GMappedFile *map;
     GError *error = NULL;
 
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
     if (format != WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1) {
         close(fd);
         return;
@@ -407,6 +469,7 @@ input_method_keyboard_keymap (void               *data,
         1 << xkb_map_mod_get_index (priv->keymap, "Meta");
 }
 
+
 static void
 _process_key_event_done (GObject      *object,
                          GAsyncResult *res,
@@ -414,7 +477,6 @@ _process_key_event_done (GObject      *object,
 {
     IBusInputContext *context = (IBusInputContext *)object;
     IBusWaylandKeyEvent *event = (IBusWaylandKeyEvent *) user_data;
-
     GError *error = NULL;
     gboolean retval = ibus_input_context_process_key_event_async_finish (
             context,
@@ -426,7 +488,10 @@ _process_key_event_done (GObject      *object,
         g_error_free (error);
     }
 
-    if (!retval) {
+    /* Should ignore key events after input_method_deactivate() is called
+     * even if context->ref_count is not 0 yet.
+     */
+    if (*(event->ibuscontext) && !retval) {
         zwp_input_method_context_v1_key (event->context,
                                          event->serial,
                                          event->time,
@@ -437,6 +502,7 @@ _process_key_event_done (GObject      *object,
     g_free (event);
 }
 
+
 static void
 input_method_keyboard_key (void               *data,
                            struct wl_keyboard *wl_keyboard,
@@ -446,13 +512,15 @@ input_method_keyboard_key (void               *data,
                            uint32_t            state)
 {
     IBusWaylandIM *wlim = data;
-    IBusWaylandIMPrivate *priv= wlim->priv;
+    IBusWaylandIMPrivate *priv;
     uint32_t code;
     uint32_t num_syms;
     const xkb_keysym_t *syms;
     xkb_keysym_t sym;
     guint32 modifiers;
 
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
     if (!priv->state)
         return;
 
@@ -496,6 +564,7 @@ input_method_keyboard_key (void               *data,
         event->time = time;
         event->key = key;
         event->state = state;
+        event->ibuscontext = &priv->ibuscontext;
         ibus_input_context_process_key_event_async (priv->ibuscontext,
                                                     sym,
                                                     code,
@@ -507,6 +576,7 @@ input_method_keyboard_key (void               *data,
     }
 }
 
+
 static void
 input_method_keyboard_modifiers (void               *data,
                                  struct wl_keyboard *wl_keyboard,
@@ -517,10 +587,11 @@ input_method_keyboard_modifiers (void               *data,
                                  uint32_t            group)
 {
     IBusWaylandIM *wlim = data;
-    IBusWaylandIMPrivate *priv = wlim->priv;
-    struct zwp_input_method_context_v1 *context = priv->context;
+    IBusWaylandIMPrivate *priv;
     xkb_mod_mask_t mask;
 
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
     xkb_state_update_mask (priv->state, mods_depressed,
                            mods_latched, mods_locked, 0, 0, group);
     mask = xkb_state_serialize_mods (priv->state,
@@ -551,10 +622,11 @@ input_method_keyboard_modifiers (void               *data,
     if (mask & priv->meta_mask)
         priv->modifiers |= IBUS_META_MASK;
 
-    zwp_input_method_context_v1_modifiers (context, serial,
+    zwp_input_method_context_v1_modifiers (priv->context, serial,
                                            mods_depressed, mods_latched,
                                            mods_locked, group);
 }
+
 
 static const struct wl_keyboard_listener keyboard_listener = {
     input_method_keyboard_keymap,
@@ -564,18 +636,21 @@ static const struct wl_keyboard_listener keyboard_listener = {
     input_method_keyboard_modifiers
 };
 
+
 static void
 _create_input_context_done (GObject      *object,
                             GAsyncResult *res,
                             gpointer      user_data)
 {
     IBusWaylandIM *wlim = (IBusWaylandIM *) user_data;
-    IBusWaylandIMPrivate *priv = wlim->priv;
-
+    IBusWaylandIMPrivate *priv;
     GError *error = NULL;
-    IBusInputContext *context = ibus_bus_create_input_context_async_finish (
-            _bus, res, &error);
+    IBusInputContext *context;
 
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    context = ibus_bus_create_input_context_async_finish (
+            priv->ibusbus, res, &error);
     if (priv->cancellable != NULL) {
         g_object_unref (priv->cancellable);
         priv->cancellable = NULL;
@@ -620,14 +695,17 @@ _create_input_context_done (GObject      *object,
     }
 }
 
+
 static void
 input_method_activate (void                               *data,
                        struct zwp_input_method_v1         *input_method,
                        struct zwp_input_method_context_v1 *context)
 {
     IBusWaylandIM *wlim = data;
-    IBusWaylandIMPrivate *priv = wlim->priv;
+    IBusWaylandIMPrivate *priv;
 
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
     if (priv->context) {
         zwp_input_method_context_v1_destroy (priv->context);
         priv->context = NULL;
@@ -648,7 +726,7 @@ input_method_activate (void                               *data,
     }
 
     priv->cancellable = g_cancellable_new ();
-    ibus_bus_create_input_context_async (_bus,
+    ibus_bus_create_input_context_async (priv->ibusbus,
                                          "wayland",
                                          -1,
                                          priv->cancellable,
@@ -656,14 +734,17 @@ input_method_activate (void                               *data,
                                          wlim);
 }
 
+
 static void
 input_method_deactivate (void                               *data,
                          struct zwp_input_method_v1         *input_method,
                          struct zwp_input_method_context_v1 *context)
 {
     IBusWaylandIM *wlim = data;
-    IBusWaylandIMPrivate *priv = wlim->priv;
+    IBusWaylandIMPrivate *priv;
 
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
     if (priv->cancellable) {
         /* Cancel any ongoing create input context request.  */
         g_cancellable_cancel (priv->cancellable);
@@ -688,10 +769,12 @@ input_method_deactivate (void                               *data,
     }
 }
 
+
 static const struct zwp_input_method_v1_listener input_method_listener = {
     input_method_activate,
     input_method_deactivate
 };
+
 
 static void
 registry_handle_global (void               *data,
@@ -701,8 +784,10 @@ registry_handle_global (void               *data,
                         uint32_t            version)
 {
     IBusWaylandIM *wlim = data;
-    IBusWaylandIMPrivate *priv = wlim->priv;
+    IBusWaylandIMPrivate *priv;
 
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
     if (!g_strcmp0 (interface, "zwp_input_method_v1")) {
         priv->input_method =
             wl_registry_bind (registry, name,
@@ -710,7 +795,13 @@ registry_handle_global (void               *data,
         zwp_input_method_v1_add_listener (priv->input_method,
                                           &input_method_listener, wlim);
     }
+    if (!g_strcmp0 (interface, "zwp_input_panel_v1")) {
+        priv->panel =
+            wl_registry_bind (registry, name,
+                              &zwp_input_panel_v1_interface, 1);
+    }
 }
+
 
 static void
 registry_handle_global_remove (void               *data,
@@ -718,6 +809,7 @@ registry_handle_global_remove (void               *data,
                                uint32_t            name)
 {
 }
+
 
 static const struct wl_registry_listener registry_listener = {
     registry_handle_global,
@@ -728,26 +820,71 @@ static const struct wl_registry_listener registry_listener = {
 static void
 ibus_wayland_im_class_init (IBusWaylandIMClass *class)
 {
+    GObjectClass *gobject_class = G_OBJECT_CLASS (class);
     IBusObjectClass *ibus_object_class = IBUS_OBJECT_CLASS (class);
+
+    gobject_class->constructor = ibus_wayland_im_constructor;
+    gobject_class->set_property =
+            (GObjectSetPropertyFunc)ibus_wayland_im_set_property;
+    gobject_class->get_property =
+            (GObjectGetPropertyFunc)ibus_wayland_im_get_property;
     ibus_object_class->destroy = ibus_wayland_im_destroy;
+
+    /* install properties */
+    /**
+     * IBusWaylandIM:bus:
+     *
+     * The #IBusBus
+     */
+    g_object_class_install_property (gobject_class,
+                    PROP_BUS,
+                    g_param_spec_object ("bus",
+                        "IBusBus",
+                        "The #IBusBus",
+                        IBUS_TYPE_BUS,
+                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+    /**
+     * IBusWaylandIM:wl_display:
+     *
+     * The struct wl_display
+     */
+    g_object_class_install_property (gobject_class,
+                    PROP_DISPLAY,
+                    g_param_spec_pointer ("wl_display",
+                        "wl_display",
+                        "The struct wl_display",
+                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
 }
 
-static void
-ibus_wayland_im_init (IBusWaylandIM *wlim)
+
+static GObject*
+ibus_wayland_im_constructor (GType                  type,
+                             guint                  n_params,
+                             GObjectConstructParam *params)
 {
+    GObject *object;
+    IBusWaylandIM *wlim;
     IBusWaylandIMPrivate *priv;
     GSource *source;
 
-    wlim->priv = priv = ibus_wayland_im_get_instance_private (wlim);
-    _display = wl_display_connect (NULL);
-    if (_display == NULL) {
+    object = G_OBJECT_CLASS (ibus_wayland_im_parent_class)->constructor (
+            type, n_params, params);
+    /* make bus object sink */
+    g_object_ref_sink (object);
+    wlim = IBUS_WAYLAND_IM (object);
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    if (!priv->display)
+        priv->display = wl_display_connect (NULL);
+    if (!priv->display) {
         g_error ("Failed to connect to Wayland server: %s\n",
                  g_strerror (errno));
     }
 
-    _registry = wl_display_get_registry (_display);
+    _registry = wl_display_get_registry (priv->display);
     wl_registry_add_listener (_registry, &registry_listener, wlim);
-    wl_display_roundtrip (_display);
+    wl_display_roundtrip (priv->display);
     if (priv->input_method == NULL) {
         g_error ("No input_method global\n");
     }
@@ -759,10 +896,18 @@ ibus_wayland_im_init (IBusWaylandIM *wlim)
 
     _use_sync_mode = _get_boolean_env ("IBUS_ENABLE_SYNC_MODE", FALSE);
 
-    source = ibus_wayland_source_new (_display);
+    source = ibus_wayland_source_new (priv->display);
     g_source_set_priority (source, G_PRIORITY_DEFAULT);
     g_source_set_can_recurse (source, TRUE);
     g_source_attach (source, NULL);
+
+    return object;
+}
+
+
+static void
+ibus_wayland_im_init (IBusWaylandIM *wlim)
+{
 }
 
 
@@ -774,12 +919,92 @@ ibus_wayland_im_destroy (IBusObject *object)
 }
 
 
-IBusWaylandIM *
-ibus_wayland_im_new (IBusBus *bus)
+static void
+ibus_wayland_im_set_property (IBusWaylandIM *wlim,
+                              guint          prop_id,
+                              const GValue  *value,
+                              GParamSpec    *pspec)
 {
-    GObject *object = g_object_new (IBUS_TYPE_WAYLAND_IM,
-                                    NULL);
-    _bus = bus;
+    IBusWaylandIMPrivate *priv;
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    switch (prop_id) {
+    case PROP_BUS:
+        g_assert (priv->ibusbus == NULL);
+        priv->ibusbus = g_value_get_object (value);
+        if (!IBUS_IS_BUS (priv->ibusbus)) {
+            g_warning ("bus is not IBusBus.");
+            priv->ibusbus = NULL;
+        }
+        break;
+    case PROP_DISPLAY:
+        g_assert (priv->display == NULL);
+        priv->display = g_value_get_pointer (value);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (wlim, prop_id, pspec);
+    }
+}
+
+
+static void
+ibus_wayland_im_get_property (IBusWaylandIM *wlim,
+                              guint          prop_id,
+                              GValue        *value,
+                              GParamSpec    *pspec)
+{
+    IBusWaylandIMPrivate *priv;
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    switch (prop_id) {
+    case PROP_BUS:
+        g_value_set_object (value, priv->ibusbus);
+        break;
+    case PROP_DISPLAY:
+        g_value_set_pointer (value, priv->display);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (wlim, prop_id, pspec);
+    }
+}
+
+
+IBusWaylandIM *
+ibus_wayland_im_new (const gchar *first_property_name, ...)
+{
+    va_list var_args;
+    GObject *object;
+
+    g_assert (first_property_name);
+
+    va_start (var_args, first_property_name);
+    object = g_object_new_valist (IBUS_TYPE_WAYLAND_IM,
+                                  first_property_name,
+                                  var_args);
+    va_end (var_args);
+
     return IBUS_WAYLAND_IM (object);
 }
 
+gboolean
+ibus_wayland_im_set_surface (IBusWaylandIM *wlim,
+                             void          *surface)
+{
+    IBusWaylandIMPrivate *priv;
+    struct wl_surface *_surface = surface;
+
+    g_return_val_if_fail (wlim, FALSE);
+    g_return_val_if_fail (_surface, FALSE);
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    if (!priv->panel) {
+        g_warning ("Need zwp_input_panel_v1 before the surface setting.");
+        return FALSE;
+    }
+    priv->panel_surface =
+        zwp_input_panel_v1_get_input_panel_surface(priv->panel, _surface);
+    g_return_val_if_fail (priv->panel_surface, FALSE);
+    zwp_input_panel_surface_v1_set_overlay_panel (priv->panel_surface);
+    return TRUE;
+}

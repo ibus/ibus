@@ -2,7 +2,7 @@
  *
  * ibus - The Input Bus
  *
- * Copyright(c) 2015-2017 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2015-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright(c) 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -232,9 +232,10 @@ class Indicator : IBus.Service
         if (m_indicator_window != null)
             return m_indicator_window;
 
-        Gdk.Display display = Gdk.Display.get_default();
-        unowned X.Display xdisplay =
-                (display as Gdk.X11.Display).get_xdisplay();
+        var display = BindingCommon.get_xdisplay();
+        if (display == null)
+            return null;
+        unowned X.Display xdisplay = display.get_xdisplay();
         X.Window current = xdisplay.default_root_window();
         X.Window parent = 0;
         X.Window child = 0;

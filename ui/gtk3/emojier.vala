@@ -759,7 +759,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
 
 
     private void set_css_data() {
-        Gdk.Display display = Gdk.Display.get_default();
+        Gdk.Display display = get_display();
         Gdk.Screen screen = (display != null) ?
                 display.get_default_screen() : null;
 
@@ -2522,7 +2522,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         Gdk.Rectangle monitor_area;
         Gdk.Rectangle work_area;
 #if VALA_0_34
-        Gdk.Display display = Gdk.Display.get_default();
+        Gdk.Display display = get_display();
         Gdk.Monitor monitor = display.get_monitor_at_window(this.get_window());
         monitor_area = monitor.get_geometry();
         work_area = monitor.get_workarea();

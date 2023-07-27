@@ -51,13 +51,12 @@ public class PropertyPanel : Gtk.Box {
 
         set_visible(true);
 
-        m_root_window = Gdk.get_default_root_window();
-        unowned Gdk.Display display = m_root_window.get_display();
-#if VALA_0_24
-        //m_xdisplay = (display as Gdk.X11.Display).get_xdisplay();
-#else
-        //m_xdisplay = Gdk.X11Display.get_xdisplay(display);
-#endif
+        var display = BindingCommon.get_xdisplay();
+        if (display != null) {
+            m_xdisplay = display.get_xdisplay();
+            var screen = display.get_default_screen();
+            m_root_window = screen.get_root_window();
+        }
 
         m_toplevel = new Gtk.Window(Gtk.WindowType.POPUP);
         m_toplevel.add_events(Gdk.EventMask.BUTTON_PRESS_MASK);

@@ -39,12 +39,13 @@
     (ibus_wayland_im_get_type ())
 #define IBUS_WAYLAND_IM(obj)         \
     (G_TYPE_CHECK_INSTANCE_CAST ((obj), IBUS_TYPE_WAYLAND_IM, IBusWaylandIM))
+#define IBUS_IS_WAYLAND_IM(obj)      \
+    (G_TYPE_CHECK_INSTANCE_TYPE ((obj), IBUS_TYPE_WAYLAND_IM))
 
 G_BEGIN_DECLS
 
 typedef struct _IBusWaylandIM IBusWaylandIM;
 typedef struct _IBusWaylandIMClass IBusWaylandIMClass;
-typedef struct _IBusWaylandIMPrivate IBusWaylandIMPrivate;
 
 /**
  * IBusWaylandIM:
@@ -54,7 +55,6 @@ typedef struct _IBusWaylandIMPrivate IBusWaylandIMPrivate;
 struct _IBusWaylandIM {
     /*< private >*/
     IBusObject parent;
-    IBusWaylandIMPrivate *priv;
 };
 
 struct _IBusWaylandIMClass {
@@ -70,13 +70,30 @@ GType            ibus_wayland_im_get_type          (void);
 
 /**
  * ibus_wayland_im_new:
- * @bus: An #IBusBus.
+ * @first_property_name: Name of the first property.
+ * @...: the NULL-terminated arguments of the properties and values.
  *
- * Creates a new #IBusWaylandIM with an #IBusBus.
+ * Creates a new #IBusWaylandIM.
+ * ibus_wayland_im_new() supports the va_list format.
+ * name property is required. e.g.
+ * ibus_wayland_im_new("bus", bus, "wl_display", display, NULL)
  *
  * Returns: A newly allocated #IBusWaylandIM.
  */
-IBusWaylandIM    *ibus_wayland_im_new    (IBusBus            *bus);
+IBusWaylandIM    *ibus_wayland_im_new         (const gchar
+                                                           *first_property_name,
+                                                            ...);
+
+/**
+ * ibus_wayland_im_set_surface:
+ * @wlim: An #IBusWaylandIM.
+ * @surface: A struct wl_surface.
+ *
+ * Set wl_surface to #IBusWaylandIM and return %TRUE if
+ * set_overlay_panel() can be called, otherwise %FALSE.
+ */
+gboolean          ibus_wayland_im_set_surface (IBusWaylandIM *wlim,
+                                               gpointer       surface);
 
 G_END_DECLS
 #endif

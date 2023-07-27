@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2011-2015 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2015-2019 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2015-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,6 +26,9 @@ public class CandidatePanel : Gtk.Box{
     private bool m_vertical_writing;
     private Gtk.Window m_toplevel;
     private Gtk.Box m_vbox;
+#if USE_GDK_WAYLAND
+    private bool m_hide_after_show;
+#endif
 
     private Gtk.Label m_preedit_label;
     private Gtk.Label m_aux_label;
@@ -43,6 +46,9 @@ public class CandidatePanel : Gtk.Box{
     public signal void candidate_clicked(uint index,
                                          uint button,
                                          uint state);
+#if USE_GDK_WAYLAND
+    public signal void realize_surface(void *surface);
+#endif
 
     public CandidatePanel() {
         // Call base class constructor
@@ -61,8 +67,23 @@ public class CandidatePanel : Gtk.Box{
             return true;
         });
         m_toplevel.size_allocate.connect((w, a) => {
-            adjust_window_position();
+            adjust_window_position(w);
         });
+#if USE_GDK_WAYLAND
+        if (!BindingCommon.default_is_xdisplay()) {
+            m_toplevel.realize.connect((w) => {
+                realize_window(true);
+            });
+            m_toplevel.show.connect((w) => {
+                if (m_hide_after_show)
+                    realize_window(false);
+                m_hide_after_show = false;
+            });
+            m_toplevel.hide.connect((w) => {
+                m_hide_after_show = true;
+            });
+        }
+#endif
 
         Handle handle = new Handle();
         handle.set_visible(true);
@@ -296,21 +317,21 @@ public class CandidatePanel : Gtk.Box{
         m_toplevel.move(x, y);
     }
 
-    private void adjust_window_position() {
+    private void adjust_window_position(Gtk.Widget window) {
         if (!m_vertical_writing)
-            adjust_window_position_horizontal();
+            adjust_window_position_horizontal(window);
         else
-            adjust_window_position_vertical();
+            adjust_window_position_vertical(window);
     }
 
-    private Gdk.Rectangle get_monitor_geometry() {
+    private Gdk.Rectangle get_monitor_geometry(Gtk.Widget window) {
         Gdk.Rectangle monitor_area = { 0, };
 
         // Use get_monitor_geometry() instead of get_monitor_area().
         // get_monitor_area() excludes docks, but the lookup window should be
         // shown over them.
 #if VALA_0_34
-        Gdk.Monitor monitor = Gdk.Display.get_default().get_monitor_at_point(
+        Gdk.Monitor monitor = window.get_display().get_monitor_at_point(
                 m_cursor_location.x,
                 m_cursor_location.y);
         monitor_area = monitor.get_geometry();
@@ -323,7 +344,7 @@ public class CandidatePanel : Gtk.Box{
         return monitor_area;
     }
 
-    private void adjust_window_position_horizontal() {
+    private void adjust_window_position_horizontal(Gtk.Widget window) {
         Gdk.Point cursor_right_bottom = {
                 m_cursor_location.x,
                 m_cursor_location.y + m_cursor_location.height
@@ -336,7 +357,7 @@ public class CandidatePanel : Gtk.Box{
             cursor_right_bottom.y + allocation.height
         };
 
-        Gdk.Rectangle monitor_area = get_monitor_geometry();
+        Gdk.Rectangle monitor_area = get_monitor_geometry(window);
         int monitor_right = monitor_area.x + monitor_area.width;
         int monitor_bottom = monitor_area.y + monitor_area.height;
 
@@ -358,7 +379,7 @@ public class CandidatePanel : Gtk.Box{
         move(x, y);
     }
 
-    private void adjust_window_position_vertical() {
+    private void adjust_window_position_vertical(Gtk.Widget window) {
         /* Not sure in which top or left cursor appears
          * in the vertical writing mode.
          * Max (m_cursor_location.width, m_cursor_location.height)
@@ -382,7 +403,7 @@ public class CandidatePanel : Gtk.Box{
             m_cursor_location.y + allocation.height
         };
 
-        Gdk.Rectangle monitor_area = get_monitor_geometry();
+        Gdk.Rectangle monitor_area = get_monitor_geometry(window);
         int monitor_right = monitor_area.x + monitor_area.width;
         int monitor_bottom = monitor_area.y + monitor_area.height;
 
@@ -418,4 +439,24 @@ public class CandidatePanel : Gtk.Box{
 
         move(x, y);
     }
+
+#if USE_GDK_WAYLAND
+    private void realize_window(bool initial) {
+        var window = m_toplevel.get_window();
+        if (!window.ensure_native()) {
+            warning("No native window.");
+            return;
+        }
+        Type instance_type = window.get_type();
+        Type wayland_type = typeof(GdkWayland.Window);
+        if (!instance_type.is_a(wayland_type)) {
+            warning("Not GdkWindowWayland.");
+            return;
+        }
+        if (initial)
+            ((GdkWayland.Window)window).set_use_custom_surface();
+        var surface = ((GdkWayland.Window)window).get_wl_surface();
+        realize_surface(surface);
+    }
+#endif
 }

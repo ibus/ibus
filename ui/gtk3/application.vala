@@ -21,63 +21,22 @@
  * USA
  */
 
-static string program_name;
+static string prgname;
 static IBus.Bus bus;
-#if USE_GDK_WAYLAND
-static IBus.WaylandIM wayland_im;
-#endif
-
-
-delegate void EntryFunc(string[] argv);
-
-struct CommandEntry {
-    unowned string name;
-    unowned string description;
-    unowned EntryFunc entry;
-}
- 
- 
-const CommandEntry commands[]  = {
-#if USE_GDK_WAYLAND
-    { "--enable-wayland-im", N_("Connect Wayland input method protocol"),
-      make_wayland_im },
-#endif
-    { "--help", N_("Show this information"), print_help }
-};
-
-
-void print_help(string[] argv) {
-    print_usage(stdout);
-    Posix.exit(Posix.EXIT_SUCCESS);
-}
-
-void print_usage(FileStream stream) {
-    stream.printf(_("Usage: %s COMMAND [OPTION...]\n\n"), program_name);
-    stream.printf(_("Commands:\n"));
-    for (int i = 0; i < commands.length; i++) {
-        stream.printf("  %-12s    %s\n",
-                      commands[i].name,
-                      GLib.dgettext(null, commands[i].description));
-    }
-}
-
-
-#if USE_GDK_WAYLAND
-void make_wayland_im(string[] argv) {
-    bus = new IBus.Bus();
-    wayland_im = new IBus.WaylandIM(bus);
-}
-#endif
 
 
 class Application {
     private Panel m_panel;
+#if USE_GDK_WAYLAND
+    private static ulong m_realize_surface_id;
+    private static bool m_enable_wayland_im;
+    private static IBus.WaylandIM m_wayland_im;
+#endif
 
-    public Application(string[] argv) {
+    public Application() {
         GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALEDIR);
         GLib.Intl.bind_textdomain_codeset(Config.GETTEXT_PACKAGE, "UTF-8");
         IBus.init();
-        Gtk.init(ref argv);
 
         if (bus == null)
             bus = new IBus.Bus();
@@ -125,6 +84,10 @@ class Application {
                                       Variant        parameters) {
         debug("signal_name = %s", signal_name);
         m_panel = new Panel(bus);
+#if USE_GDK_WAYLAND
+        m_realize_surface_id = m_panel.realize_surface.connect(
+                (w, s) => this.set_wayland_surface(s));
+#endif
         m_panel.load_settings();
     }
 
@@ -144,6 +107,12 @@ class Application {
 
         // unref m_panel
         m_panel.disconnect_signals();
+#if USE_GDK_WAYLAND
+        if (m_realize_surface_id != 0) {
+            GLib.SignalHandler.disconnect(m_panel, m_realize_surface_id);
+            m_realize_surface_id = 0;
+        }
+#endif
         m_panel = null;
     }
 
@@ -156,30 +125,57 @@ class Application {
         init();
     }
 
+#if USE_GDK_WAYLAND
+    private static void make_wayland_im() {
+        bus = new IBus.Bus();
+        var display = Gdk.Display.get_default();
+        var wl_display = ((GdkWayland.Display)display).get_wl_display();
+        m_wayland_im = new IBus.WaylandIM("bus", bus, "wl_display", wl_display);
+    }
+
+    private void set_wayland_surface(void *surface) {
+        m_wayland_im.set_surface(surface);
+    }
+#endif
+
     public static void main(string[] argv) {
         // https://bugzilla.redhat.com/show_bug.cgi?id=1226465#c20
         // In /etc/xdg/plasma-workspace/env/gtk3_scrolling.sh
         // Plasma deskop sets this variable and prevents Super-space,
         // and Ctrl-Shift-e when ibus-ui-gtk3 runs after the
         // desktop is launched.
+        // GDK_CORE_DEVICE_EVENTS is referred by GdkX11DeviceManager
+        // but not GdkWaylandDeviceManager and should be defined
+        // before Gdk.Display.get_default() is called.
         GLib.Environment.unset_variable("GDK_CORE_DEVICE_EVENTS");
-        // for Gdk.X11.get_default_xdisplay()
-        //Gdk.set_allowed_backends("x11");
 
-        program_name = Path.get_basename(argv[0]);
-        string[] new_argv = {};
-        foreach (var arg in argv) {
-            int i = 0;
-            for (i = 0; i < commands.length; i++) {
-                if (commands[i].name == arg) {
-                    commands[i].entry(argv);
-                    break;
-                }
-            }
-            if (i == commands.length)
-                new_argv += arg;
+        OptionEntry entries[]  = {
+#if USE_GDK_WAYLAND
+            { "enable-wayland-im", 'i', 0, GLib.OptionArg.NONE,
+              &m_enable_wayland_im,
+              N_("Connect Wayland input method protocol"),
+              null },
+#endif
+            { null }
+        };
+
+        prgname = Path.get_basename(argv[0]);
+        var parameter_string = "- %s".printf(prgname);
+        GLib.OptionContext context = new GLib.OptionContext(parameter_string);
+        context.add_main_entries(entries, prgname);
+        context.add_group(Gtk.get_option_group (true));
+        try {
+            context.parse(ref argv);
+        } catch (OptionError e) {
+            warning(e.message);
         }
-        Application app = new Application(new_argv);
+
+#if USE_GDK_WAYLAND
+        // Should Make IBusWaylandIM after Gtk.init()
+        if (m_enable_wayland_im)
+            make_wayland_im();
+#endif
+        Application app = new Application();
         app.run();
     }
 }

@@ -51,7 +51,8 @@ main (gint    argc,
         return EXIT_FAILURE;
     }
 
-    g_return_val_if_fail ((wlim = ibus_wayland_im_new (bus)), EXIT_FAILURE);
+    wlim = ibus_wayland_im_new ("bus", bus, NULL);
+    g_return_val_if_fail (wlim, EXIT_FAILURE);
 
     g_signal_connect (bus, "disconnected",
                       G_CALLBACK (_bus_disconnected_cb), NULL);

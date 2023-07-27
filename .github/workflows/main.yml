@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        container: ["fedora:37", "fedora:38", "ubuntu:jammy"]
+        container: ["fedora:38", "fedora:39", "ubuntu:jammy"]
     steps:
       - name: Check container sha tags
         run: |
@@ -26,9 +26,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - container: fedora:37
-            ucd_dir: /usr/share/unicode/ucd
           - container: fedora:38
+            ucd_dir: /usr/share/unicode/ucd
+          - container: fedora:39
             ucd_dir: /usr/share/unicode/ucd
           - container: ubuntu:jammy
             ucd_dir: /usr/share/unicode
@@ -52,6 +52,7 @@ jobs:
            gtk-doc-tools
            iso-codes
            libdconf-dev
+           libdbusmenu-gtk3-dev
            libgirepository1.0-dev
            libglib2.0-dev
            libgtk-3-bin
@@ -67,28 +68,29 @@ jobs:
            unicode-data
            valac
          FEDORA_PACKAGES_MAKE: >
+           cldr-emoji-annotation
+           dbus-glib-devel
+           dbus-python-devel
+           dbus-x11
+           dconf-devel
+           desktop-file-utils
            gettext-devel
-           libtool
+           git
+           gtk-doc
            gtk2-devel
            gtk3-devel
            gtk4-devel
-           dbus-glib-devel
-           dbus-python-devel
-           desktop-file-utils
-           gtk-doc
-           dconf-devel
-           dbus-x11
+           iso-codes-devel
+           libdbusmenu-gtk3-devel
+           libnotify-devel
+           libtool
            python3-devel
            python3-gobject
-           git
-           vala
-           iso-codes-devel
-           libnotify-devel
-           wayland-devel
-           cldr-emoji-annotation
+           systemd
            unicode-emoji
            unicode-ucd
-           systemd
+           vala
+           wayland-devel
          # for gtkdoc-fixxref
          FEDORA_PACKAGES_GTKDOC: >
            glib2-doc

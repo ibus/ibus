@@ -254,7 +254,7 @@ gboolean         ibus_service_class_add_interfaces
 
 /**
  * ibus_service_class_free_interfaces:
- * @class: An IBusServiceClass.
+ * @klass: An IBusServiceClass.
  * @depth: The number of D-Bus introspection interfaces.
  *
  * Free the first @depth interfaces if @depth is positive. Free the last
@@ -266,7 +266,7 @@ gboolean         ibus_service_class_add_interfaces
  * returned but any interfaces are not freed.
  */
 int              ibus_service_class_free_interfaces
-                                                (IBusServiceClass   *class,
+                                                (IBusServiceClass   *klass,
                                                  int                 depth);
 
 G_END_DECLS

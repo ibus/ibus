@@ -19,13 +19,13 @@
 # DaeHyun Sung <sungdh86@gmail.com>, 2016-2019. (gucharmap)
 # Changwoo Ryu <cwryu@debian.org>, 2019-2020.
 # simmon <simmon@nplob.com>, 2021.
-# 김인수 <simmon@nplob.com>, 2022.
+# 김인수 <simmon@nplob.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2023-08-02 00:14+0900\n"
-"PO-Revision-Date: 2022-10-05 06:19+0000\n"
+"PO-Revision-Date: 2023-08-06 02:41+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ko/>\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -340,22 +340,15 @@ msgid "Choose glyphs with input method's language on candidate window"
 msgstr "후보 창에서 입력기의 언어에 따라 글리프 선택"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:239
-#, fuzzy
-#| msgid ""
-#| "Some code points have the different glyphs and Pango determines the "
-#| "glyphs from the language attribute. Pango chooses glyphs from the IBus "
-#| "engine's language if the value is true and choose them from the desktop "
-#| "locale if the value is false."
 msgid ""
 "Some code points have different glyphs and Pango determines the glyphs from "
 "the language attribute. Pango chooses glyphs from the IBus engine's language "
 "if the value is true and chooses them from the desktop locale if the value "
 "is false."
 msgstr ""
-"일부 코드 포인트는 여러 개의 글리프를 사용할 수 있어서 Pango에서 언어 속성에 "
-"따라 글리프를 결정합니다. 이 값이 참이면 Pango에서는 아이버스 엔진의 언어에 "
-"따라 글리프를 결정합니다. 이 값이 거짓이면 데스크톱 로캘에 따라 글리프를 결정"
-"합니다."
+"일부 코드 포인트는 다른 글리프가 있고 Pango는 언어 속성에 따라 글리프를 "
+"결정합니다. Pango는 만약 값이 참이면 IBus 엔진의 언어에서 글리프를 선택하고 "
+"만약 값이 거짓이면 데스크톱 로케일에서 글리프를 선택합니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:250
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -2433,10 +2426,8 @@ msgstr "야지디 문자"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:869
-#, fuzzy
-#| msgid "Arabic Extended-B"
 msgid "Arabic Extended-C"
-msgstr "아랍 문자 확장영역-B"
+msgstr "아랍 문자 확장영역-C"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2678,10 +2669,8 @@ msgstr "파우 킨 하우 문자"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:997
-#, fuzzy
-#| msgid "Devanagari Extended"
 msgid "Devanagari Extended-A"
-msgstr "데바나가리 확장영역"
+msgstr "데바나가리 확장영역-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2724,7 +2713,7 @@ msgstr "마카사르 문자"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1021
 msgid "Kawi"
-msgstr ""
+msgstr "카위 문자"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2961,10 +2950,8 @@ msgstr "고대 그리스 음표"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1153
-#, fuzzy
-#| msgid "Mayan Numerals"
 msgid "Kaktovik Numerals"
-msgstr "마야 숫자"
+msgstr "칵토빅 숫자"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3020,10 +3007,8 @@ msgstr "글라골루 문자 추가영역"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1185
-#, fuzzy
-#| msgid "Cyrillic Extended-C"
 msgid "Cyrillic Extended-D"
-msgstr "키릴 문자 확장영역-C"
+msgstr "키릴 문자 확장영역-D"
 
 #  ‘Genesis Complete Hmong script’; 출처: https://www.unicode.org/L2/L2017/17002r3-n4780r3-nyiakeng-puachue-hmong.pdf
 #. TRANSLATORS: You might refer the translations from gucharmap with
@@ -3052,7 +3037,7 @@ msgstr "완초 문자"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1201
 msgid "Nag Mundari"
-msgstr ""
+msgstr "나그 문다리 문자"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3264,10 +3249,8 @@ msgstr "한중일 통합 한자 확장영역 G"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1321
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension H"
-msgstr "한중일 통합 한자 확장영역 A"
+msgstr "한중일 통합 한자 확장영역 H"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3300,7 +3283,8 @@ msgstr "사용자 추가영역-B"
 #: tools/ibusimmodule.c:10
 msgid ""
 "Set im-module TYPE to \"gtk2\",  \"gtk3\" or \"gtk4\". Default is \"gtk3\"."
-msgstr ""
+msgstr "im-모듈 유형을 \"gtk2\",  \"gtk3\" 또는 \"gtk4\"로 설정합니다. 기본값은 "
+"\"gtk3\"입니다."
 
 #: tools/main.vala:182
 msgid "List engine name only"
@@ -3329,15 +3313,15 @@ msgstr "전체 공통 엔진의 취득에 실패했습니다.\n"
 
 #: tools/main.vala:328
 msgid "Start or restart daemon with \"direct\" or \"systemd\" TYPE."
-msgstr ""
+msgstr "\"direct\" 또는 \"systemd\" 유형으로 시작 또는 재시작합니다."
 
 #: tools/main.vala:331
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
-msgstr ""
+msgstr "SYSTEMD_SERVICE 파일로 데몬을 시작 또는 재시작합니다."
 
 #: tools/main.vala:334
 msgid "Show debug messages."
-msgstr ""
+msgstr "디버그 메세지를 표시합니다."
 
 #: tools/main.vala:453
 msgid "Read the system registry cache."
@@ -3395,10 +3379,8 @@ msgid "Restart ibus-daemon"
 msgstr "ibus-daemon 다시 시작"
 
 #: tools/main.vala:704
-#, fuzzy
-#| msgid "Restart ibus-daemon"
 msgid "Start ibus-daemon"
-msgstr "ibus-daemon 다시 시작"
+msgstr "ibus-daemon을 시작합니다"
 
 #: tools/main.vala:705 ui/gtk3/application.vala:306
 msgid "Show version"
@@ -3430,7 +3412,7 @@ msgstr "대화창의 이모지를 클립보드에 저장"
 
 #: tools/main.vala:714
 msgid "Retrieve im-module value from GTK instance"
-msgstr ""
+msgstr "GTK 사례에서 im-모듈 값을 검색합니다"
 
 #: tools/main.vala:716
 msgid "Show this information"
@@ -3455,22 +3437,20 @@ msgid "%s is unknown command!\n"
 msgstr "%s는 알 수 없는 명령입니다!\n"
 
 #: ui/gtk3/application.vala:311
-#, fuzzy
-#| msgid "Select an input method"
 msgid "Connect Wayland input method protocol"
-msgstr "입력기를 선택합니다"
+msgstr "웨이랜드 입력 방식 통신규약을 연결합니다"
 
 #: ui/gtk3/application.vala:315
 msgid "Execute ibus-daemon if it's not running"
-msgstr ""
+msgstr "만약 동작하지 않으면 ibus-데몬을 실행합니다"
 
 #: ui/gtk3/application.vala:319
 msgid "ibus-daemon's arguments"
-msgstr ""
+msgstr "ibus-데몬의 인수"
 
 #: ui/gtk3/application.vala:323
 msgid "Verbose logging"
-msgstr ""
+msgstr "상세한 로깅"
 
 #: ui/gtk3/emojier.vala:235
 msgid "Favorites"
@@ -3618,7 +3598,8 @@ msgstr "IBus 패널"
 msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
-msgstr ""
+msgstr "당신은 패널 아이콘에서 마우스 가운데 누름단추를 눌러서 활성화 메뉴와 "
+"컨텍스를 전환 할 수 있습니다."
 
 #: ui/gtk3/panel.vala:836
 #, c-format
@@ -3632,6 +3613,13 @@ msgid ""
 "input method\", you should make sure that QT_IM_MODULE and GTK_IM_MODULE "
 "environment variables are unset in the desktop session."
 msgstr ""
+"IBus는 %s의 데스크탑 세션에서 호출되어야 합니다. KDE에서는, '%s' 유틸리티를 "
+"실행 할 수 있고 \"입력 장치\" -> \"가상 키보드\" 부분으로 이동하며 \"%s\" "
+"아이콘을 선택하여 \"적용\" 누름단추를 눌러서 %s에서 IBus를 구성합니다. 다른 "
+"데스크탑 세션에서는, %s 파일의 'Exec=' 행에서 세션의 구성 파일로 복사 할 수 "
+"있습니다. \"웨이랜드 입력 방식\" 구성에 대해서 개별 문서를 참조하세요. "
+"당신이 \"웨이랜드 입력 방식\"을 구성하기 전에, QT_IM_MODULE 및 GTK_IM_MODULE "
+"환경 변수가 데스크탑 세션에서 설정 해제되었는지 확인해야 합니다."
 
 #: ui/gtk3/panel.vala:858
 #, c-format
@@ -3640,6 +3628,8 @@ msgid ""
 "daemon --panel disable' should be executed as a child process of %s "
 "component."
 msgstr ""
+"QT_IM_MODULE과 GTK_IM_Module 환경 변수 및 'ibus-데몬' 설정을 해제해 주세요 --"
+" 판넬 비활성화는 %s 구성 요소의 하위 프로세스로 실행되어야 합니다."
 
 #: ui/gtk3/panel.vala:873
 msgid "IBus Notification"

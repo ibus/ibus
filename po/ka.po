@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.26\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2023-07-27 00:14+0900\n"
+"POT-Creation-Date: 2023-08-02 00:14+0900\n"
 "PO-Revision-Date: 2023-07-05 14:20+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/ibus/"
@@ -304,10 +304,10 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:239
 msgid ""
-"Some code points have the different glyphs and Pango determines the glyphs "
-"from the language attribute. Pango chooses glyphs from the IBus engine's "
-"language if the value is true and choose them from the desktop locale if the "
-"value is false."
+"Some code points have different glyphs and Pango determines the glyphs from "
+"the language attribute. Pango chooses glyphs from the IBus engine's language "
+"if the value is true and chooses them from the desktop locale if the value "
+"is false."
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:250

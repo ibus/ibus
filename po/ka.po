@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.26\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2023-08-02 00:14+0900\n"
-"PO-Revision-Date: 2023-07-05 14:20+0000\n"
+"PO-Revision-Date: 2023-08-10 17:21+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ka/>\n"
@@ -2330,10 +2330,8 @@ msgstr "იეზიდური"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:869
-#, fuzzy
-#| msgid "Latin Extended-C"
 msgid "Arabic Extended-C"
-msgstr "ლათინური გაფართოებული-C"
+msgstr "არაბული გაფართოებული-C"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2556,10 +2554,8 @@ msgstr ""
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:997
-#, fuzzy
-#| msgid "Latin Extended-A"
 msgid "Devanagari Extended-A"
-msgstr "ლათინური გაფართოებული-A"
+msgstr "დევანაგარი გაფართოებული-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2887,10 +2883,8 @@ msgstr ""
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1185
-#, fuzzy
-#| msgid "Latin Extended-D"
 msgid "Cyrillic Extended-D"
-msgstr "ლათინური გაფართოებული-D"
+msgstr "კირილიცა გაფართოებული-D"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3127,10 +3121,8 @@ msgstr "CJK გაერთიანებული იდეოგრაფე�
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1321
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension H"
-msgstr "CJK გაერთიანებული იდეოგრაფების გაფართოება A"
+msgstr "CJK გაერთიანებული იდეოგრაფების გაფართოება H"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

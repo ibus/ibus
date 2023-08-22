@@ -17,13 +17,13 @@
 # Roman Spirgi <bigant@fedoraproject.org>, 2017. #zanata
 # Thomas Eichhorn <tomislav@posteo.de>, 2017. #zanata
 # Tobias Weise <tobias.weise@web.de>, 2017. #zanata
-# Mike FABIAN <mfabian@redhat.com>, 2020, 2021, 2022.
+# Mike FABIAN <mfabian@redhat.com>, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2023-08-02 00:14+0900\n"
-"PO-Revision-Date: 2022-07-04 10:18+0000\n"
+"PO-Revision-Date: 2023-08-04 17:21+0000\n"
 "Last-Translator: Mike FABIAN <mfabian@redhat.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/de/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -351,12 +351,6 @@ msgid "Choose glyphs with input method's language on candidate window"
 msgstr "Wähle Glyphen in der Sprache der Eingabemethode im Kandidatenfenster"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:239
-#, fuzzy
-#| msgid ""
-#| "Some code points have the different glyphs and Pango determines the "
-#| "glyphs from the language attribute. Pango chooses glyphs from the IBus "
-#| "engine's language if the value is true and choose them from the desktop "
-#| "locale if the value is false."
 msgid ""
 "Some code points have different glyphs and Pango determines the glyphs from "
 "the language attribute. Pango chooses glyphs from the IBus engine's language "
@@ -366,7 +360,7 @@ msgstr ""
 "Zu manchen Unicodenummern gibt es unterschiedliche Glyphen je nach Sprache "
 "und Pango bestimmt die korrekten Glyphen anhand des Sprachattributs. Pango "
 "wählt Glyphen passend zur Sprache des IBus engines wenn dieser Wert true ist "
-"und von der Lokale des Desktops wenn dieser Wert false ist."
+"und passend zur Lokale des Desktops wenn dieser Wert false ist."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:250
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -2447,10 +2441,8 @@ msgstr "Jesidisch"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:869
-#, fuzzy
-#| msgid "Arabic Extended-B"
 msgid "Arabic Extended-C"
-msgstr "Arabisch, Erweiterung B"
+msgstr "Arabisch, Erweiterung C"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2673,10 +2665,8 @@ msgstr "Pau Cin Hau"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:997
-#, fuzzy
-#| msgid "Devanagari Extended"
 msgid "Devanagari Extended-A"
-msgstr "Devanagari, erweitert"
+msgstr "Devanagari, Erweiterung A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2718,7 +2708,7 @@ msgstr "Makassar"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1021
 msgid "Kawi"
-msgstr ""
+msgstr "Kawi"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2948,10 +2938,8 @@ msgstr "Altgriechische Notenschriftzeichen"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1153
-#, fuzzy
-#| msgid "Mayan Numerals"
 msgid "Kaktovik Numerals"
-msgstr "Maya-Zahlzeichen"
+msgstr "Kaktovik-Zahlzeichen"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3006,10 +2994,8 @@ msgstr "Glagolitisch, Ergänzung"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1185
-#, fuzzy
-#| msgid "Cyrillic Extended-C"
 msgid "Cyrillic Extended-D"
-msgstr "Kyrillisch, erweitert-C"
+msgstr "Kyrillisch, erweitert-D"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3037,7 +3023,7 @@ msgstr "Wancho"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1201
 msgid "Nag Mundari"
-msgstr ""
+msgstr "Nag Mundari"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3246,10 +3232,8 @@ msgstr "Vereinheitlichte CJK-Ideogramme, Erweiterung G"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1321
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension H"
-msgstr "Vereinheitlichte CJK-Ideogramme, Erweiterung A"
+msgstr "Vereinheitlichte CJK-Ideogramme, Erweiterung H"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3283,6 +3267,7 @@ msgstr "Supplementary Private Use Area-B"
 msgid ""
 "Set im-module TYPE to \"gtk2\",  \"gtk3\" or \"gtk4\". Default is \"gtk3\"."
 msgstr ""
+"Setze den Inputmodultyp auf „gtk2“, „gtk3“ oder „gtk4“. Standard ist „gtk3“."
 
 #: tools/main.vala:182
 msgid "List engine name only"
@@ -3312,14 +3297,15 @@ msgstr "Auslesen der globalen Engine fehlgeschlagen.\n"
 #: tools/main.vala:328
 msgid "Start or restart daemon with \"direct\" or \"systemd\" TYPE."
 msgstr ""
+"Starten oder Neustarten des Daemons mit dem Typ „direct“ oder „systemd“."
 
 #: tools/main.vala:331
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
-msgstr ""
+msgstr "Starten oder Neustarten des Daemons mit der SYSTEMD_SERVICE Datei."
 
 #: tools/main.vala:334
 msgid "Show debug messages."
-msgstr ""
+msgstr "Debug-Meldungen anzeigen."
 
 #: tools/main.vala:453
 msgid "Read the system registry cache."
@@ -3378,10 +3364,8 @@ msgid "Restart ibus-daemon"
 msgstr "Neustart ibus-daemon"
 
 #: tools/main.vala:704
-#, fuzzy
-#| msgid "Restart ibus-daemon"
 msgid "Start ibus-daemon"
-msgstr "Neustart ibus-daemon"
+msgstr "ibus-daemon starten"
 
 #: tools/main.vala:705 ui/gtk3/application.vala:306
 msgid "Show version"
@@ -3413,7 +3397,7 @@ msgstr "Kopieren des ausgewählten Emoji in die Zwischenablage"
 
 #: tools/main.vala:714
 msgid "Retrieve im-module value from GTK instance"
-msgstr ""
+msgstr "Hole den Wert von „im-module“ aus der GTK-Instanz"
 
 #: tools/main.vala:716
 msgid "Show this information"
@@ -3438,22 +3422,20 @@ msgid "%s is unknown command!\n"
 msgstr "%s ist ein unbekannter Befehl!\n"
 
 #: ui/gtk3/application.vala:311
-#, fuzzy
-#| msgid "Select an input method"
 msgid "Connect Wayland input method protocol"
-msgstr "Eingabemethode wählen"
+msgstr "Verbinde mit dem Wayland-Eingabemethodenprotokoll"
 
 #: ui/gtk3/application.vala:315
 msgid "Execute ibus-daemon if it's not running"
-msgstr ""
+msgstr "Starte ibus-daemon falls er nicht läuft"
 
 #: ui/gtk3/application.vala:319
 msgid "ibus-daemon's arguments"
-msgstr ""
+msgstr "Argumente für ibus-daemon"
 
 #: ui/gtk3/application.vala:323
 msgid "Verbose logging"
-msgstr ""
+msgstr "Ausführliche Protokollierung"
 
 #: ui/gtk3/emojier.vala:235
 msgid "Favorites"
@@ -3603,6 +3585,8 @@ msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
 msgstr ""
+"Du kannst das Aktivierungsmenü und das Kontextmenü anzeigen, indem du mit "
+"der mittleren Maustaste auf das Panel-Symbol klickst."
 
 #: ui/gtk3/panel.vala:836
 #, c-format
@@ -3616,6 +3600,16 @@ msgid ""
 "input method\", you should make sure that QT_IM_MODULE and GTK_IM_MODULE "
 "environment variables are unset in the desktop session."
 msgstr ""
+"IBus sollte innerhalb der Desktop-Sitzung in %s aufgerufen werden. Für KDE "
+"kannst du das '%s'-Dienstprogramm starten und zu \"Eingabegeräte\" -> "
+"\"Virtuelle Tastatur\" navigieren. Wähle dort das \"%s\"-Symbol aus und "
+"klicke auf die Schaltfläche \"Anwenden\", um IBus in %s zu konfigurieren. "
+"Für andere Desktop-Sitzungen kannst du die Zeile 'Exec=' in der Datei %s in "
+"eine Konfigurationsdatei der Sitzung kopieren. Bitte siehe das entsprechende "
+"Dokument zur Konfiguration der \"Wayland-Eingabemethode\". Bevor du die "
+"\"Wayland-Eingabemethode\" konfigurierst, stelle sicher, dass die "
+"Umgebungsvariablen QT_IM_MODULE und GTK_IM_MODULE in der Desktop-Sitzung "
+"nicht gesetzt sind."
 
 #: ui/gtk3/panel.vala:858
 #, c-format
@@ -3624,6 +3618,9 @@ msgid ""
 "daemon --panel disable' should be executed as a child process of %s "
 "component."
 msgstr ""
+"Bitte setze die Umgebungsvariablen QT_IM_MODULE und GTK_IM_MODULE zurück, "
+"und 'ibus-daemon --panel disable' sollte als Unterprozess der %s-Komponente "
+"ausgeführt werden."
 
 #: ui/gtk3/panel.vala:873
 msgid "IBus Notification"

@@ -4,14 +4,14 @@
 # This file is distributed under the same license as the ibus package.
 #
 # Translators:
-# Yuri Chornoivan <yurchor@ukr.net>, 2011-2015, 2017-2020, 2021, 2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2011-2015, 2017-2020, 2021, 2022, 2023.
 # fujiwara <takao.fujiwara1@gmail.com>, 2015, 2017. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2023-08-02 00:14+0900\n"
-"PO-Revision-Date: 2022-07-04 10:18+0000\n"
+"PO-Revision-Date: 2023-08-04 17:21+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/uk/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -339,12 +339,6 @@ msgid "Choose glyphs with input method's language on candidate window"
 msgstr "Вибирати гліфи з мови способу введення у вікні варіантів"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:239
-#, fuzzy
-#| msgid ""
-#| "Some code points have the different glyphs and Pango determines the "
-#| "glyphs from the language attribute. Pango chooses glyphs from the IBus "
-#| "engine's language if the value is true and choose them from the desktop "
-#| "locale if the value is false."
 msgid ""
 "Some code points have different glyphs and Pango determines the glyphs from "
 "the language attribute. Pango chooses glyphs from the IBus engine's language "
@@ -2429,10 +2423,8 @@ msgstr "Єзидська"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:869
-#, fuzzy
-#| msgid "Arabic Extended-B"
 msgid "Arabic Extended-C"
-msgstr "Арабська розширена-B"
+msgstr "Арабська розширена-C"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2655,10 +2647,8 @@ msgstr "Пау Цин Хау"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:997
-#, fuzzy
-#| msgid "Devanagari Extended"
 msgid "Devanagari Extended-A"
-msgstr "Розширена деванагарі"
+msgstr "Розширена деванагарі-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2700,7 +2690,7 @@ msgstr "Макасар"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1021
 msgid "Kawi"
-msgstr ""
+msgstr "Каві"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2930,10 +2920,8 @@ msgstr "Давньогрецькі символи запису музики"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1153
-#, fuzzy
-#| msgid "Mayan Numerals"
 msgid "Kaktovik Numerals"
-msgstr "Цифри майя"
+msgstr "Цифри кактовік"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2988,10 +2976,8 @@ msgstr "Додаткові глаголиці"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1185
-#, fuzzy
-#| msgid "Cyrillic Extended-C"
 msgid "Cyrillic Extended-D"
-msgstr "Кирилиця розширена-C"
+msgstr "Кирилиця розширена-D"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3019,7 +3005,7 @@ msgstr "Ванчо"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1201
 msgid "Nag Mundari"
-msgstr ""
+msgstr "Наг-мундарі"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3228,10 +3214,8 @@ msgstr "Універсальні ідеографічні ієрогліфи, д
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1321
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension H"
-msgstr "Ієрогліфічні ідеограми, додаток A"
+msgstr "Ієрогліфічні ідеограми, додаток H"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3265,6 +3249,8 @@ msgstr "Додаткова область приватного використ�
 msgid ""
 "Set im-module TYPE to \"gtk2\",  \"gtk3\" or \"gtk4\". Default is \"gtk3\"."
 msgstr ""
+"Встановити ТИП для im-module у значення «gtk2», «gtk3» або «gtk4». Типовим є "
+"«gtk3»."
 
 #: tools/main.vala:182
 msgid "List engine name only"
@@ -3294,14 +3280,15 @@ msgstr "Спроба отримання назви загального руші
 #: tools/main.vala:328
 msgid "Start or restart daemon with \"direct\" or \"systemd\" TYPE."
 msgstr ""
+"Запустити або перезапустити фонову службу з ТИПом «direct» або «systemd»."
 
 #: tools/main.vala:331
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
-msgstr ""
+msgstr "Запустити або перезапустити фонову службу з файлом СЛУЖБА_SYSTEMD."
 
 #: tools/main.vala:334
 msgid "Show debug messages."
-msgstr ""
+msgstr "Показати діагностичні повідомлення."
 
 #: tools/main.vala:453
 msgid "Read the system registry cache."
@@ -3360,10 +3347,8 @@ msgid "Restart ibus-daemon"
 msgstr "Перезапустити фонову службу ibus"
 
 #: tools/main.vala:704
-#, fuzzy
-#| msgid "Restart ibus-daemon"
 msgid "Start ibus-daemon"
-msgstr "Перезапустити фонову службу ibus"
+msgstr "Запустити ibus-daemon"
 
 #: tools/main.vala:705 ui/gtk3/application.vala:306
 msgid "Show version"
@@ -3395,7 +3380,7 @@ msgstr "Зберегти емодзі з вікна до буфера обмін
 
 #: tools/main.vala:714
 msgid "Retrieve im-module value from GTK instance"
-msgstr ""
+msgstr "Отримати значення im-module з екземпляра GTK"
 
 #: tools/main.vala:716
 msgid "Show this information"
@@ -3420,22 +3405,20 @@ msgid "%s is unknown command!\n"
 msgstr "Команда %s є невідомою програмі!\n"
 
 #: ui/gtk3/application.vala:311
-#, fuzzy
-#| msgid "Select an input method"
 msgid "Connect Wayland input method protocol"
-msgstr "Виберіть спосіб введення"
+msgstr "З'єднати протокол способу введення Wayland"
 
 #: ui/gtk3/application.vala:315
 msgid "Execute ibus-daemon if it's not running"
-msgstr ""
+msgstr "Виконати ibus-daemon, якщо службу не запущено"
 
 #: ui/gtk3/application.vala:319
 msgid "ibus-daemon's arguments"
-msgstr ""
+msgstr "Аргументи ibus-daemon"
 
 #: ui/gtk3/application.vala:323
 msgid "Verbose logging"
-msgstr ""
+msgstr "Докладне ведення журналу"
 
 #: ui/gtk3/emojier.vala:235
 msgid "Favorites"
@@ -3585,6 +3568,8 @@ msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
 msgstr ""
+"Ви можете перемкнути меню активації та контекстне меню клацанням середньою "
+"кнопкою миші на піктограмі панелі."
 
 #: ui/gtk3/panel.vala:836
 #, c-format
@@ -3598,6 +3583,15 @@ msgid ""
 "input method\", you should make sure that QT_IM_MODULE and GTK_IM_MODULE "
 "environment variables are unset in the desktop session."
 msgstr ""
+"IBus має бути викликано зі стільничного сеансу у %s. У KDE ви можете "
+"запустити допоміжну програму «%s» і перейти до розділу «Пристрої введення» -"
+"> «Віртуальна клавіатура», вибрати піктограму «%s» і натиснуто кнопку "
+"«Застосувати» для налаштовування IBus у %s. В інших стільничних сеансах ви "
+"можете скопіювати рядок «Exec=» з файла %s до файла налаштувань сеансу. Будь "
+"ласка, зверніться до документації щодо налаштовування «Способу введення "
+"Wayland». До налаштовування «Способу введення Wayland» вам слід "
+"переконатися, що у стільничному середовищі скасовано встановлення змінних "
+"QT_IM_MODULE і GTK_IM_MODULE."
 
 #: ui/gtk3/panel.vala:858
 #, c-format
@@ -3606,6 +3600,9 @@ msgid ""
 "daemon --panel disable' should be executed as a child process of %s "
 "component."
 msgstr ""
+"Будь ласка, скасуйте визначення змінних середовища QT_IM_MODULE і "
+"GTK_IM_MODULE. «ibus-daemon --panel disable» має бути виконано як дочірній "
+"процес компонента %s."
 
 #: ui/gtk3/panel.vala:873
 msgid "IBus Notification"

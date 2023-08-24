@@ -1,6 +1,8 @@
 ABOUT-NLS
 aclocal.m4
 autom4te.cache/
+bindings/vala/*.c
+bus/ibus-daemon.1
 ChangeLog
 compile
 config.guess
@@ -13,9 +15,13 @@ config.status
 config.sub
 configure
 configure~
+data/dconf/00-upstream-settings.5
+data/dconf/ibus.5
 depcomp
+.deps
 docs/reference/ibus/ibus-docs.sgml
 engine/ibus_engine_simple_vala.stamp-t
+engine/main.c
 *.gir
 gtk-doc.make
 ibus-1.0.pc
@@ -45,6 +51,7 @@ po/remove-potcdate.sin
 po/Rules-quot
 po/stamp-po
 py-compile
+setup/ibus-setup.1
 src/dicts
 src/emoji-parser
 src/gen-internal-compose-table
@@ -73,6 +80,11 @@ src/tests/ibus-util
 src/tests/*.log
 src/tests/*.trs
 src/unicode-parser
+*.stamp
 stamp-h1
 test-driver
+tools/ibus.1
+tools/main.c
 *.typelib
+ui/gtk3/*.c
+ui/gtk3/ibus-emoji.7

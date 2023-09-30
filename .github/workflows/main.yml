@@ -129,10 +129,7 @@ jobs:
             ;;
           fedora*)
             cat /etc/fedora-release
-            DNF=dnf5
-            if test "${{ matrix.container }}" = "fedora:38" ; then
-                DNF=dnf
-            fi
+            DNF=dnf
             echo "$DNF -y update"
             $DNF -y update
             echo "$DNF -y install git which"

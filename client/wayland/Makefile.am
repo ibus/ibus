@@ -31,6 +31,7 @@ DISTCLEANFILES =
 protocol_sources = \
     input-method-unstable-v1-client-protocol.h \
     input-method-unstable-v1-protocol.c \
+    text-input-unstable-v1-client-protocol.h \
     $(NULL)
 
 ibus_wayland_SOURCES = \

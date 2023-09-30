@@ -2,7 +2,8 @@
 /* vim:set et sts=4: */
 /* IBus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2008-2013 Red Hat, Inc.
+ * Copyright (C) 2011-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2008-2023 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -90,6 +91,55 @@ typedef enum {
     IBUS_ATTR_UNDERLINE_LOW     = 3,
     IBUS_ATTR_UNDERLINE_ERROR   = 4,
 } IBusAttrUnderline;
+
+
+/**
+ * IBusAttrPreedit:
+ * @IBUS_ATTR_PREEDIT_DEFAULT: Default style for composing text.
+ * @IBUS_ATTR_PREEDIT_NONE: Style should be the same as in non-composing text.
+ * @IBUS_ATTR_PREEDIT_WHOLE: Most language engines wish to draw underline in
+ *                           the typed whole preedit string except for the
+ *                           prediction string. (Chinese, Japanese,
+ *                           Typing-booster)
+ * @IBUS_ATTR_PREEDIT_SELECTION: Modifying an active segment is distinguished
+ *                               against whole the preedit text. (Hangul,
+ *                               Japanese)
+ * @IBUS_ATTR_PREEDIT_PREDICTION: A prediction string can be appended after the
+ *                                typed string. (Typing-booster)
+ * @IBUS_ATTR_PREEDIT_PREFIX: A prefix string can be an informative color.
+ *                            (Table)
+ * @IBUS_ATTR_PREEDIT_SUFFIX: A suffix string can be an informative color.
+ *                            (Table)
+ * @IBUS_ATTR_PREEDIT_ERROR_SPELLING: An detected typo could be an error color
+ *                                    with a spelling check or the word could
+ *                                    not be found in a dictionary. The
+ *                                    underline color also might be more
+ *                                    visible. (Typing-booster, Table)
+ * @IBUS_ATTR_PREEDIT_ERROR_COMPOSE: A wrong compose key could be an error
+ *                                   color. (Typing-booster)
+ *
+ * Type of Pre-edit style as the semantic name.
+ * The Wayland specs prefers to express the semantic values rather than RGB
+ * values and text-input protocol version 1 defines some values:
+ * https://gitlab.freedesktop.org/wayland/wayland-protocols/-/blob/main/unstable/text-input/text-input-unstable-v1.xml?ref_type=heads#L251
+ *
+ * IBus compiled the values for major input method engines:
+ * https://github.com/ibus/ibus/wiki/Wayland-Colors
+ *
+ * Since: 1.5.29
+ * Stability: Unstable
+ */
+typedef enum {
+    IBUS_ATTR_PREEDIT_DEFAULT = 0,
+    IBUS_ATTR_PREEDIT_NONE,
+    IBUS_ATTR_PREEDIT_WHOLE,
+    IBUS_ATTR_PREEDIT_SELECTION,
+    IBUS_ATTR_PREEDIT_PREDICTION,
+    IBUS_ATTR_PREEDIT_PREFIX,
+    IBUS_ATTR_PREEDIT_SUFFIX,
+    IBUS_ATTR_PREEDIT_ERROR_SPELLING,
+    IBUS_ATTR_PREEDIT_ERROR_COMPOSE,
+} IBusAttrPreedit;
 
 typedef struct _IBusAttribute IBusAttribute;
 typedef struct _IBusAttributeClass IBusAttributeClass;

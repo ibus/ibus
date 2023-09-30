@@ -32,6 +32,7 @@
 #include <xkbcommon/xkbcommon.h>
 
 #include "input-method-unstable-v1-client-protocol.h"
+#include "text-input-unstable-v1-client-protocol.h"
 #include "ibuswaylandim.h"
 
 enum {
@@ -58,6 +59,7 @@ struct _IBusWaylandIMPrivate
     IBusInputContext *ibuscontext;
     IBusText *preedit_text;
     guint preedit_cursor_pos;
+    guint preedit_mode;
     IBusModifierType modifiers;
 
     struct xkb_context *xkb_context;
@@ -266,12 +268,176 @@ _context_forward_key_event_cb (IBusInputContext *context,
 }
 
 
+/**
+ * ibus_wayland_im_update_preedit_style:
+ * @wlim: An #IBusWaylandIM
+ *
+ * Convert RGB values to IBusAttrPreedit at first.
+ * Convert IBusAttrPreedit to zwp_text_input_v1_preedit_style at second.
+ *
+ * RF. https://github.com/ibus/ibus/wiki/Wayland-Colors
+ */
+static void
+ibus_wayland_im_update_preedit_style (IBusWaylandIM *wlim)
+{
+    IBusWaylandIMPrivate *priv;
+    IBusAttrList *attrs;
+    guint i;
+    const char *str;
+    uint32_t whole_wstyle = ZWP_TEXT_INPUT_V1_PREEDIT_STYLE_DEFAULT;
+
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    if (!priv->preedit_text)
+        return;
+    attrs = priv->preedit_text->attrs;
+    if (!attrs)
+        return;
+    for (i = 0; ; i++) {
+        IBusAttribute *attr = ibus_attr_list_get (attrs, i);
+        IBusAttrPreedit istyle = IBUS_ATTR_PREEDIT_DEFAULT;
+        uint32_t wstyle = ZWP_TEXT_INPUT_V1_PREEDIT_STYLE_DEFAULT;
+        uint32_t start, end;
+        if (attr == NULL)
+                break;
+        switch (attr->type) {
+        case IBUS_ATTR_TYPE_UNDERLINE:
+            istyle = IBUS_ATTR_PREEDIT_WHOLE;
+            break;
+        case IBUS_ATTR_TYPE_FOREGROUND:
+            switch (attr->value) {
+            case 0x7F7F7F: /* typing-booster */
+                istyle = IBUS_ATTR_PREEDIT_PREDICTION;
+                break;
+            case 0xF90F0F: /* table */
+                istyle = IBUS_ATTR_PREEDIT_PREFIX;
+                break;
+            case 0x1EDC1A: /* table */
+                istyle = IBUS_ATTR_PREEDIT_SUFFIX;
+                break;
+            case 0xA40000: /* typing-booster, table */
+                istyle = IBUS_ATTR_PREEDIT_ERROR_SPELLING;
+                break;
+            case 0xFF00FF: /* typing-booster */
+                istyle = IBUS_ATTR_PREEDIT_ERROR_COMPOSE;
+                break;
+            case 0x0: /* Japanese */
+            case 0xFF000000:
+                break;
+            case 0xFFFFFF: /* hangul */
+            case 0xFFFFFFFF:
+                istyle = IBUS_ATTR_PREEDIT_SELECTION;
+                break;
+            default: /* Custom */
+                istyle = IBUS_ATTR_PREEDIT_NONE;
+            }
+            break;
+        case IBUS_ATTR_TYPE_BACKGROUND:
+            switch (attr->value) {
+            case 0xC8C8F0: /* Japanese */
+            case 0xFFC8C8F0:
+                istyle = IBUS_ATTR_PREEDIT_SELECTION;
+                break;
+            default:; /* Custom */
+            }
+            break;
+        default:
+            istyle = IBUS_ATTR_PREEDIT_NONE;
+        }
+        switch (istyle) {
+        case IBUS_ATTR_PREEDIT_NONE:
+            wstyle = ZWP_TEXT_INPUT_V1_PREEDIT_STYLE_NONE;
+            break;
+        case IBUS_ATTR_PREEDIT_WHOLE:
+            wstyle = ZWP_TEXT_INPUT_V1_PREEDIT_STYLE_UNDERLINE;
+            break;
+        case IBUS_ATTR_PREEDIT_SELECTION:
+            wstyle = ZWP_TEXT_INPUT_V1_PREEDIT_STYLE_SELECTION;
+            break;
+        case IBUS_ATTR_PREEDIT_PREDICTION:
+            wstyle = ZWP_TEXT_INPUT_V1_PREEDIT_STYLE_INACTIVE;
+            break;
+        case IBUS_ATTR_PREEDIT_PREFIX:
+            wstyle = ZWP_TEXT_INPUT_V1_PREEDIT_STYLE_HIGHLIGHT;
+            break;
+        case IBUS_ATTR_PREEDIT_SUFFIX:
+            wstyle = ZWP_TEXT_INPUT_V1_PREEDIT_STYLE_INACTIVE;
+            break;
+        case IBUS_ATTR_PREEDIT_ERROR_SPELLING:
+            wstyle = ZWP_TEXT_INPUT_V1_PREEDIT_STYLE_INCORRECT;
+            break;
+        case IBUS_ATTR_PREEDIT_ERROR_COMPOSE:
+            wstyle = ZWP_TEXT_INPUT_V1_PREEDIT_STYLE_INCORRECT;
+            break;
+        default:;
+        }
+        if (wstyle == ZWP_TEXT_INPUT_V1_PREEDIT_STYLE_DEFAULT)
+            continue;
+        str = priv->preedit_text->text;
+        start = g_utf8_offset_to_pointer (str, attr->start_index) - str;
+        end = g_utf8_offset_to_pointer (str, attr->end_index) - str;
+        /* Double styles cannot be applied likes the underline and
+         * preedit color. */
+        if (start == 0 && strlen (str) == end &&
+            (i > 0 || ibus_attr_list_get (attrs, i + 1))) {
+            whole_wstyle = wstyle;
+            continue;
+        }
+        if (start > end) {
+            g_warning ("Wrong start %d and end %d for %s", start, end, str);
+            return;
+        }
+        zwp_input_method_context_v1_preedit_styling (priv->context,
+                                                     start,
+                                                     end - start,
+                                                     wstyle);
+    }
+    if (whole_wstyle != ZWP_TEXT_INPUT_V1_PREEDIT_STYLE_DEFAULT) {
+        uint32_t whole_start = 0;
+        uint32_t whole_end = strlen (str);
+        uint32_t start, end;
+        for (i = 0; ; i++) {
+            IBusAttribute *attr = ibus_attr_list_get (attrs, i);
+            if (!attr)
+                break;
+            start = g_utf8_offset_to_pointer (str, attr->start_index) - str;
+            end = g_utf8_offset_to_pointer (str, attr->end_index) - str;
+            if (start == 0 && strlen (str) == end)
+                continue;
+            if (start == 0) {
+                whole_start = end;
+            } else if (strlen (str) == end) {
+                whole_end = start;
+            } else {
+                whole_end = start;
+                if (whole_start < whole_end) {
+                    zwp_input_method_context_v1_preedit_styling (
+                            priv->context,
+                            whole_start,
+                            whole_end - whole_start,
+                            whole_wstyle);
+                }
+                whole_start = end;
+                whole_end = strlen (str);
+            }
+        }
+        if (whole_start < whole_end) {
+            zwp_input_method_context_v1_preedit_styling (
+                priv->context,
+                whole_start,
+                whole_end - whole_start,
+                whole_wstyle);
+        }
+    }
+}
+
 static void
 _context_show_preedit_text_cb (IBusInputContext *context,
                                IBusWaylandIM    *wlim)
 {
     IBusWaylandIMPrivate *priv;
     uint32_t cursor;
+    const char *commit = "";
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
     /* CURSOR is byte offset.  */
@@ -282,10 +448,13 @@ _context_show_preedit_text_cb (IBusInputContext *context,
 
     zwp_input_method_context_v1_preedit_cursor (priv->context,
                                                 cursor);
+    ibus_wayland_im_update_preedit_style (wlim);
+    if (priv->preedit_mode == IBUS_ENGINE_PREEDIT_COMMIT)
+        commit = priv->preedit_text->text;
     zwp_input_method_context_v1_preedit_string (priv->context,
                                                 priv->serial,
                                                 priv->preedit_text->text,
-                                                priv->preedit_text->text);
+                                                commit);
 }
 
 
@@ -308,6 +477,7 @@ _context_update_preedit_text_cb (IBusInputContext *context,
                                  IBusText         *text,
                                  gint              cursor_pos,
                                  gboolean          visible,
+                                 guint             mode,
                                  IBusWaylandIM    *wlim)
 {
     IBusWaylandIMPrivate *priv;
@@ -317,6 +487,7 @@ _context_update_preedit_text_cb (IBusInputContext *context,
         g_object_unref (priv->preedit_text);
     priv->preedit_text = g_object_ref_sink (text);
     priv->preedit_cursor_pos = cursor_pos;
+    priv->preedit_mode = mode;
 
     if (visible)
         _context_show_preedit_text_cb (context, wlim);
@@ -977,7 +1148,7 @@ _create_input_context_done (GObject      *object,
                           G_CALLBACK (_context_forward_key_event_cb),
                           wlim);
 
-        g_signal_connect (priv->ibuscontext, "update-preedit-text",
+        g_signal_connect (priv->ibuscontext, "update-preedit-text-with-mode",
                           G_CALLBACK (_context_update_preedit_text_cb),
                           wlim);
         g_signal_connect (priv->ibuscontext, "show-preedit-text",
@@ -994,6 +1165,7 @@ _create_input_context_done (GObject      *object,
             capabilities |= IBUS_CAP_SYNC_PROCESS_KEY_V2;
         ibus_input_context_set_capabilities (priv->ibuscontext,
                                              capabilities);
+        ibus_input_context_set_client_commit_preedit (priv->ibuscontext, TRUE);
         if (_use_sync_mode == 1) {
             ibus_input_context_set_post_process_key_event (priv->ibuscontext,
                                                            TRUE);

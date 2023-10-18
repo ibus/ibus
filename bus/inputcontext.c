@@ -2382,7 +2382,7 @@ _engine_forward_key_event_cb (BusEngineProxy    *engine,
     g_assert (context->queue_during_process_key_event);
 
     if (context->processing_key_event && g_queue_get_length (
-                   context->queue_during_process_key_event) <= MAX_SYNC_DATA) {
+            context->queue_during_process_key_event) <= MAX_SYNC_DATA) {
         SyncForwardingData *data;
         IBusText *text = ibus_text_new_from_printf ("%u,%u,%u",
                                                     keyval, keycode, state);
@@ -2420,6 +2420,21 @@ _engine_delete_surrounding_text_cb (BusEngineProxy    *engine,
 
     g_assert (context->engine == engine);
 
+    if (context->processing_key_event && g_queue_get_length (
+            context->queue_during_process_key_event) <= MAX_SYNC_DATA) {
+        SyncForwardingData *data;
+        IBusText *text = ibus_text_new_from_printf ("%d,%u",
+                                                    offset_from_cursor, nchars);
+        if (g_queue_get_length (context->queue_during_process_key_event)
+            == MAX_SYNC_DATA) {
+            g_warning ("Exceed max number of sync process_key_event data");
+        }
+        data = g_slice_new (SyncForwardingData);
+        data->key = 'd';
+        data->text = g_object_ref (text);
+        g_queue_push_tail (context->queue_during_process_key_event, data);
+        return;
+    }
     bus_input_context_emit_signal (context,
                                    "DeleteSurroundingText",
                                    g_variant_new ("(iu)",
@@ -2442,6 +2457,20 @@ _engine_require_surrounding_text_cb (BusEngineProxy    *engine,
 
     g_assert (context->engine == engine);
 
+    if (context->processing_key_event && g_queue_get_length (
+            context->queue_during_process_key_event) <= MAX_SYNC_DATA) {
+        SyncForwardingData *data;
+        IBusText *text = ibus_text_new_from_static_string ("");
+        if (g_queue_get_length (context->queue_during_process_key_event)
+            == MAX_SYNC_DATA) {
+            g_warning ("Exceed max number of post process_key_event data");
+        }
+        data = g_slice_new (SyncForwardingData);
+        data->key = 'r';
+        data->text = text;
+        g_queue_push_tail (context->queue_during_process_key_event, data);
+        return;
+    }
     bus_input_context_emit_signal (context,
                                    "RequireSurroundingText",
                                    NULL,
@@ -3158,7 +3187,7 @@ bus_input_context_commit_text_use_extension (BusInputContext *context,
     if (use_extension && context->emoji_extension) {
         bus_panel_proxy_commit_text_received (context->emoji_extension, text);
     } else if (context->processing_key_event && g_queue_get_length (
-                   context->queue_during_process_key_event) <= MAX_SYNC_DATA) {
+            context->queue_during_process_key_event) <= MAX_SYNC_DATA) {
         SyncForwardingData *data;
         if (g_queue_get_length (context->queue_during_process_key_event)
             == MAX_SYNC_DATA) {

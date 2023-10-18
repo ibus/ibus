@@ -1406,6 +1406,7 @@ ibus_input_context_set_post_process_key_event (IBusInputContext *context,
 void
 ibus_input_context_post_process_key_event (IBusInputContext *context)
 {
+    IBusInputContextPrivate *priv;
     GVariant *cached_var_post;
     gboolean enable = FALSE;
     GVariant *result;
@@ -1418,6 +1419,7 @@ ibus_input_context_post_process_key_event (IBusInputContext *context)
 
     g_assert (IBUS_IS_INPUT_CONTEXT (context));
 
+    priv = IBUS_INPUT_CONTEXT_GET_PRIVATE (IBUS_INPUT_CONTEXT (context));
     cached_var_post =
         g_dbus_proxy_get_cached_property ((GDBusProxy *)context,
                                           "EffectivePostProcessKeyEvent");
@@ -1477,6 +1479,27 @@ ibus_input_context_post_process_key_event (IBusInputContext *context)
                            keyval,
                            keycode,
                            state | IBUS_FORWARD_MASK);
+            break;
+        }
+        case 'r': {
+            priv->needs_surrounding_text = TRUE;
+            g_signal_emit (context,
+                           context_signals[REQUIRE_SURROUNDING_TEXT], 0);
+            break;
+        }
+        case 'd': {
+            gchar **array = NULL;
+            gint offset_from_cursor;
+            guint nchars;
+            array = g_strsplit (text->text, ",", -1);
+            offset_from_cursor = g_ascii_strtoll (array[0], NULL, 10);
+            nchars = g_ascii_strtoull (array[1], NULL, 10);
+            g_strfreev (array);
+            g_signal_emit (context,
+                           context_signals[DELETE_SURROUNDING_TEXT],
+                           0,
+                           offset_from_cursor,
+                           nchars);
             break;
         }
         default:

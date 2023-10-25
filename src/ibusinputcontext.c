@@ -1403,10 +1403,104 @@ ibus_input_context_set_post_process_key_event (IBusInputContext *context,
     g_variant_unref (var_post);
 }
 
+
+static void
+ibus_input_context_fwd_text_to_commit (IBusInputContext *context,
+                                       IBusText         *text)
+{
+    g_signal_emit (context, context_signals[COMMIT_TEXT], 0, text);
+}
+
+
+static void
+ibus_input_context_fwd_text_to_forward_key_event (IBusInputContext *context,
+                                                  IBusText         *text)
+{
+    gchar **array = NULL;
+    guint keyval, keycode, state;
+    array = g_strsplit (text->text, ",", -1);
+    keyval = g_ascii_strtoull (array[0], NULL, 10);
+    keycode = g_ascii_strtoull (array[1], NULL, 10);
+    state = g_ascii_strtoull (array[2], NULL, 10);
+    g_strfreev (array);
+    g_signal_emit (context,
+                   context_signals[FORWARD_KEY_EVENT],
+                   0,
+                   keyval,
+                   keycode,
+                   state | IBUS_FORWARD_MASK);
+}
+
+
+static void
+ibus_input_context_fwd_text_to_require_surrounding (IBusInputContext *context,
+                                                    IBusText         *text)
+{
+    IBusInputContextPrivate *priv;
+    g_assert (IBUS_IS_INPUT_CONTEXT (context));
+    priv = IBUS_INPUT_CONTEXT_GET_PRIVATE (IBUS_INPUT_CONTEXT (context));
+    priv->needs_surrounding_text = TRUE;
+    g_signal_emit (context, context_signals[REQUIRE_SURROUNDING_TEXT], 0);
+}
+
+
+static void
+ibus_input_context_fwd_text_to_delete_surrounding (IBusInputContext *context,
+                                                   IBusText         *text)
+{
+    gchar **array = NULL;
+    gint offset_from_cursor;
+    guint nchars;
+    array = g_strsplit (text->text, ",", -1);
+    offset_from_cursor = g_ascii_strtoll (array[0], NULL, 10);
+    nchars = g_ascii_strtoull (array[1], NULL, 10);
+    g_strfreev (array);
+    g_signal_emit (context,
+                   context_signals[DELETE_SURROUNDING_TEXT],
+                   0,
+                   offset_from_cursor,
+                   nchars);
+}
+
+
+static void
+ibus_input_context_fwd_text_to_update_preedit (IBusInputContext *context,
+                                               IBusText         *text,
+                                               IBusText         *position,
+                                               char              type)
+{
+    gchar **array = NULL;
+    guint32 cursor_pos;
+    gboolean visible;
+    guint mode = 0;
+
+    array = g_strsplit (position->text, ",", -1);
+    cursor_pos = g_ascii_strtoull (array[0], NULL, 10);
+    visible = g_ascii_strtoull (array[1], NULL, 10) ? TRUE : FALSE;
+    if (type == 'u') {
+                g_signal_emit (context,
+                               context_signals[UPDATE_PREEDIT_TEXT],
+                               0,
+                               text,
+                               cursor_pos,
+                               visible);
+    } else {
+                mode = g_ascii_strtoull (array[2], NULL, 10);
+                g_signal_emit (context,
+                               context_signals[UPDATE_PREEDIT_TEXT_WITH_MODE],
+                               0,
+                               text,
+                               cursor_pos,
+                               visible,
+                               mode);
+    }
+    g_strfreev (array);
+}
+
+
 void
 ibus_input_context_post_process_key_event (IBusInputContext *context)
 {
-    IBusInputContextPrivate *priv;
     GVariant *cached_var_post;
     gboolean enable = FALSE;
     GVariant *result;
@@ -1419,7 +1513,6 @@ ibus_input_context_post_process_key_event (IBusInputContext *context)
 
     g_assert (IBUS_IS_INPUT_CONTEXT (context));
 
-    priv = IBUS_INPUT_CONTEXT_GET_PRIVATE (IBUS_INPUT_CONTEXT (context));
     cached_var_post =
         g_dbus_proxy_get_cached_property ((GDBusProxy *)context,
                                           "EffectivePostProcessKeyEvent");
@@ -1454,7 +1547,7 @@ ibus_input_context_post_process_key_event (IBusInputContext *context)
     g_assert (variant);
     g_variant_iter_init (&iter, variant);
     size = g_variant_iter_n_children (&iter);
-    while (size >0 && g_variant_iter_loop (&iter, "(yv)", &type, &vtext)) {
+    while (size > 0 && g_variant_iter_loop (&iter, "(yv)", &type, &vtext)) {
         IBusText *text =
                 (IBusText *)ibus_serializable_deserialize_object (vtext);
         if (!IBUS_IS_TEXT (text)) {
@@ -1463,43 +1556,48 @@ ibus_input_context_post_process_key_event (IBusInputContext *context)
         }
         switch (type) {
         case 'c':
-            g_signal_emit (context, context_signals[COMMIT_TEXT], 0, text);
+            ibus_input_context_fwd_text_to_commit (context, text);
             break;
         case 'f': {
-            gchar **array = NULL;
-            guint keyval, keycode, state;
-            array = g_strsplit (text->text, ",", -1);
-            keyval = g_ascii_strtoull (array[0], NULL, 10);
-            keycode = g_ascii_strtoull (array[1], NULL, 10);
-            state = g_ascii_strtoull (array[2], NULL, 10);
-            g_strfreev (array);
-            g_signal_emit (context,
-                           context_signals[FORWARD_KEY_EVENT],
-                           0,
-                           keyval,
-                           keycode,
-                           state | IBUS_FORWARD_MASK);
+            ibus_input_context_fwd_text_to_forward_key_event (context, text);
             break;
         }
         case 'r': {
-            priv->needs_surrounding_text = TRUE;
-            g_signal_emit (context,
-                           context_signals[REQUIRE_SURROUNDING_TEXT], 0);
+            ibus_input_context_fwd_text_to_require_surrounding (context, text);
             break;
         }
         case 'd': {
-            gchar **array = NULL;
-            gint offset_from_cursor;
-            guint nchars;
-            array = g_strsplit (text->text, ",", -1);
-            offset_from_cursor = g_ascii_strtoll (array[0], NULL, 10);
-            nchars = g_ascii_strtoull (array[1], NULL, 10);
-            g_strfreev (array);
-            g_signal_emit (context,
-                           context_signals[DELETE_SURROUNDING_TEXT],
-                           0,
-                           offset_from_cursor,
-                           nchars);
+            ibus_input_context_fwd_text_to_delete_surrounding (context, text);
+            break;
+        }
+        case 'u':
+        case 'm': {
+            IBusText *position;
+            g_clear_pointer (&vtext, g_variant_unref);
+            if (!g_variant_iter_loop (&iter, "(yv)", &type, &vtext)) {
+                g_warning ("%s: %s", G_STRFUNC,
+                           "Type 'u' requires next type 'u'");
+                break;
+            }
+            if (type != 'u' && type != 'm') {
+                g_warning ("%s: %s", G_STRFUNC,
+                           "The next of type 'u' should be type 'u'");
+                break;
+            }
+            position =
+                    (IBusText *)ibus_serializable_deserialize_object (vtext);
+            if (!IBUS_IS_TEXT (position)) {
+                g_warning ("%s: %s", G_STRFUNC, "text is not IBusText");
+                break;
+            }
+            ibus_input_context_fwd_text_to_update_preedit (context,
+                                                           text,
+                                                           position,
+                                                           type);
+            if (g_object_is_floating (position)) {
+                g_object_ref_sink (position);
+                g_object_unref (position);
+            }
             break;
         }
         default:

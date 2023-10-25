@@ -48,10 +48,24 @@ struct _SetEngineByDescData {
 };
 typedef struct _SetEngineByDescData SetEngineByDescData;
 
+typedef struct _DeleteSurroundingData {
+    gint        offset;
+    guint       nchars;
+} DeleteSurroundingData;
+
 typedef struct _SyncForwardingData {
-    gchar     key;
-    IBusText *text;
+    char        key;
+    IBusText   *text;
 } SyncForwardingData;
+
+typedef struct _SyncForwardingPreData {
+    char        key;
+    IBusText   *text;
+    union {
+        guint                 uints[3];
+        DeleteSurroundingData deleting;
+    } u;
+} SyncForwardingPreData;
 
 struct _BusInputContext {
     IBusService parent;
@@ -943,6 +957,7 @@ _ic_process_key_event (BusInputContext       *context,
          */
         g_dbus_method_invocation_return_value (invocation,
                                                g_variant_new ("(b)", TRUE));
+        context->processing_key_event = FALSE;
         return;
     }
     if (G_UNLIKELY (!context->has_focus)) {
@@ -1005,6 +1020,7 @@ _ic_process_key_event (BusInputContext       *context,
     else {
         g_dbus_method_invocation_return_value (invocation,
                                                g_variant_new ("(b)", FALSE));
+        context->processing_key_event = FALSE;
     }
 }
 
@@ -1654,6 +1670,71 @@ bus_input_context_service_set_property (IBusService     *service,
 }
 
 
+static gboolean
+bus_input_context_make_post_process_key_event (BusInputContext       *context,
+                                               SyncForwardingPreData *pre_data)
+{
+    SyncForwardingData *data;
+    if (context->processing_key_event && g_queue_get_length (
+            context->queue_during_process_key_event) <= MAX_SYNC_DATA) {
+        if (g_queue_get_length (context->queue_during_process_key_event)
+            == MAX_SYNC_DATA) {
+            g_warning ("Exceed max number of post process_key_event data");
+        }
+        data = g_slice_new (SyncForwardingData);
+        data->key = pre_data->key;
+        switch (pre_data->key) {
+        case 'c':
+            data->text = g_object_ref (pre_data->text);
+            break;
+        case 'd':
+            data->text = ibus_text_new_from_printf (
+                    "%d,%u",
+                    pre_data->u.deleting.offset,
+                    pre_data->u.deleting.nchars);
+            break;
+        case 'f':
+            data->text = ibus_text_new_from_printf ("%u,%u,%u",
+                                                    pre_data->u.uints[0],
+                                                    pre_data->u.uints[1],
+                                                    pre_data->u.uints[2]);
+            break;
+        case 'h':
+        case 'r':
+        case 's':
+            data->text = ibus_text_new_from_static_string ("");
+            break;
+        case 'u':
+        case 'm':
+            data->text = g_object_ref (pre_data->text);
+            g_queue_push_tail (context->queue_during_process_key_event, data);
+            data = g_slice_new (SyncForwardingData);
+            data->key = pre_data->key;
+            if (pre_data->key == 'u') {
+                data->text = ibus_text_new_from_printf (
+                        "%u,%u",
+                        pre_data->u.uints[0],
+                        pre_data->u.uints[1]);
+            } else {
+                data->text = ibus_text_new_from_printf (
+                        "%u,%u,%u",
+                        pre_data->u.uints[0],
+                        pre_data->u.uints[1],
+                        pre_data->u.uints[2]);
+            }
+            break;
+        default:
+            g_warning ("Type %c of SyncForwardingData is not supported",
+                       pre_data->key);
+            g_slice_free (SyncForwardingData, data);
+            return FALSE;
+        }
+        g_queue_push_tail (context->queue_during_process_key_event, data);
+        return TRUE;
+    }
+    return FALSE;
+}
+
 gboolean
 bus_input_context_has_focus (BusInputContext *context)
 {
@@ -1893,6 +1974,9 @@ bus_input_context_show_preedit_text (BusInputContext *context,
     }
 
     if (PREEDIT_CONDITION) {
+        SyncForwardingPreData pre_data = { 's', };
+        if (bus_input_context_make_post_process_key_event (context, &pre_data))
+            return;
         bus_input_context_emit_signal (context,
                                        "ShowPreeditText",
                                        NULL,
@@ -1933,6 +2017,9 @@ bus_input_context_hide_preedit_text (BusInputContext *context,
     }
 
     if (PREEDIT_CONDITION) {
+        SyncForwardingPreData pre_data = { 'h', };
+        if (bus_input_context_make_post_process_key_event (context, &pre_data))
+            return;
         bus_input_context_emit_signal (context,
                                        "HidePreeditText",
                                        NULL,
@@ -2375,27 +2462,18 @@ _engine_forward_key_event_cb (BusEngineProxy    *engine,
                               guint              state,
                               BusInputContext   *context)
 {
+    SyncForwardingPreData pre_data = { 'f', };
+
     g_assert (BUS_IS_ENGINE_PROXY (engine));
     g_assert (BUS_IS_INPUT_CONTEXT (context));
-
     g_assert (context->engine == engine);
     g_assert (context->queue_during_process_key_event);
 
-    if (context->processing_key_event && g_queue_get_length (
-            context->queue_during_process_key_event) <= MAX_SYNC_DATA) {
-        SyncForwardingData *data;
-        IBusText *text = ibus_text_new_from_printf ("%u,%u,%u",
-                                                    keyval, keycode, state);
-        if (g_queue_get_length (context->queue_during_process_key_event)
-            == MAX_SYNC_DATA) {
-            g_warning ("Exceed max number of post process_key_event data");
-        }
-        data = g_slice_new (SyncForwardingData);
-        data->key = 'f';
-        data->text = text;
-        g_queue_push_tail (context->queue_during_process_key_event, data);
+    pre_data.u.uints[0] = keyval;
+    pre_data.u.uints[1] = keycode;
+    pre_data.u.uints[2] = state;
+    if (bus_input_context_make_post_process_key_event (context, &pre_data))
         return;
-    }
     bus_input_context_emit_signal (context,
                                    "ForwardKeyEvent",
                                    g_variant_new ("(uuu)",
@@ -2415,26 +2493,16 @@ _engine_delete_surrounding_text_cb (BusEngineProxy    *engine,
                                     guint              nchars,
                                     BusInputContext   *context)
 {
+    SyncForwardingPreData pre_data = { 'd', };
+
     g_assert (BUS_IS_ENGINE_PROXY (engine));
     g_assert (BUS_IS_INPUT_CONTEXT (context));
-
     g_assert (context->engine == engine);
 
-    if (context->processing_key_event && g_queue_get_length (
-            context->queue_during_process_key_event) <= MAX_SYNC_DATA) {
-        SyncForwardingData *data;
-        IBusText *text = ibus_text_new_from_printf ("%d,%u",
-                                                    offset_from_cursor, nchars);
-        if (g_queue_get_length (context->queue_during_process_key_event)
-            == MAX_SYNC_DATA) {
-            g_warning ("Exceed max number of sync process_key_event data");
-        }
-        data = g_slice_new (SyncForwardingData);
-        data->key = 'd';
-        data->text = g_object_ref (text);
-        g_queue_push_tail (context->queue_during_process_key_event, data);
+    pre_data.u.deleting.offset = offset_from_cursor;
+    pre_data.u.deleting.nchars = nchars;
+    if (bus_input_context_make_post_process_key_event (context, &pre_data))
         return;
-    }
     bus_input_context_emit_signal (context,
                                    "DeleteSurroundingText",
                                    g_variant_new ("(iu)",
@@ -2452,25 +2520,14 @@ static void
 _engine_require_surrounding_text_cb (BusEngineProxy    *engine,
                                      BusInputContext   *context)
 {
+    SyncForwardingPreData pre_data = { 'r', };
+
     g_assert (BUS_IS_ENGINE_PROXY (engine));
     g_assert (BUS_IS_INPUT_CONTEXT (context));
-
     g_assert (context->engine == engine);
 
-    if (context->processing_key_event && g_queue_get_length (
-            context->queue_during_process_key_event) <= MAX_SYNC_DATA) {
-        SyncForwardingData *data;
-        IBusText *text = ibus_text_new_from_static_string ("");
-        if (g_queue_get_length (context->queue_during_process_key_event)
-            == MAX_SYNC_DATA) {
-            g_warning ("Exceed max number of post process_key_event data");
-        }
-        data = g_slice_new (SyncForwardingData);
-        data->key = 'r';
-        data->text = text;
-        g_queue_push_tail (context->queue_during_process_key_event, data);
+    if (bus_input_context_make_post_process_key_event (context, &pre_data))
         return;
-    }
     bus_input_context_emit_signal (context,
                                    "RequireSurroundingText",
                                    NULL,
@@ -3178,6 +3235,8 @@ bus_input_context_commit_text_use_extension (BusInputContext *context,
                                              IBusText        *text,
                                              gboolean         use_extension)
 {
+    SyncForwardingPreData pre_data = { 'c', text, };
+
     g_assert (BUS_IS_INPUT_CONTEXT (context));
     g_assert (context->queue_during_process_key_event);
 
@@ -3186,17 +3245,9 @@ bus_input_context_commit_text_use_extension (BusInputContext *context,
 
     if (use_extension && context->emoji_extension) {
         bus_panel_proxy_commit_text_received (context->emoji_extension, text);
-    } else if (context->processing_key_event && g_queue_get_length (
-            context->queue_during_process_key_event) <= MAX_SYNC_DATA) {
-        SyncForwardingData *data;
-        if (g_queue_get_length (context->queue_during_process_key_event)
-            == MAX_SYNC_DATA) {
-            g_warning ("Exceed max number of sync process_key_event data");
-        }
-        data = g_slice_new (SyncForwardingData);
-        data->key = 'c';
-        data->text = g_object_ref (text);
-        g_queue_push_tail (context->queue_during_process_key_event, data);
+    } else if (bus_input_context_make_post_process_key_event (context,
+                                                              &pre_data)) {
+        return;
     } else {
         GVariant *variant = ibus_serializable_serialize (
                 (IBusSerializable *)text);
@@ -3245,9 +3296,18 @@ bus_input_context_update_preedit_text (BusInputContext *context,
                                              context->preedit_cursor_pos,
                                              context->preedit_visible);
     } else if (PREEDIT_CONDITION) {
+        SyncForwardingPreData pre_data = { 'u', context->preedit_text, };
         GVariant *variant = ibus_serializable_serialize (
                 (IBusSerializable *)context->preedit_text);
-        if (context->client_commit_preedit) {
+        pre_data.u.uints[0] = context->preedit_cursor_pos;
+        pre_data.u.uints[1] = extension_visible ? 1 : 0;
+        pre_data.u.uints[2] = context->preedit_mode;
+        if (context->client_commit_preedit)
+            pre_data.key = 'm';
+        if (bus_input_context_make_post_process_key_event (context,
+                                                           &pre_data)) {
+            return;
+        } else if (context->client_commit_preedit) {
             bus_input_context_emit_signal (
                     context,
                     "UpdatePreeditTextWithMode",

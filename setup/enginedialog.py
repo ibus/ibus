@@ -115,28 +115,28 @@ class EngineDialog(Gtk.Dialog):
         if row.back:
             return True
 
-        word = self.__filter_word.lower()
-        if word in row.name.lower():
+        words = self.__filter_word.lower().strip().split()
+        if all(word in row.name.lower() for word in words):
             return True
-        if word in row.untrans.lower():
+        if all(word in row.untrans.lower() for word in words):
             return True
         # Search engine name in language list
         if row.lang_info:
             if row.name in self.__engines_for_lang.keys():
                 for row_l in self.__engines_for_lang[row.name]:
-                    if word in row_l.name.lower():
+                    if all(word in row_l.name.lower() for word in words):
                         return True
-                    if word in row_l.untrans.lower():
+                    if all(word in row_l.untrans.lower() for word in words):
                         return True
         # Search language name in engine list
         if not row.lang_info:
             for l in self.__engines_for_lang.keys():
-                if word in l.lower():
+                if all(word in l.lower() for word in words):
                     for row_l in self.__engines_for_lang[l]:
                         if row.name == row_l.name:
                             return True
             for (trans, untrans) in self.__untrans_for_lang.items():
-                if word in untrans.lower():
+                if all(word in untrans.lower() for word in words):
                     for row_l in self.__engines_for_lang[trans]:
                         if row.name == row_l.name:
                             return True
@@ -305,6 +305,8 @@ class EngineDialog(Gtk.Dialog):
     def __show_more(self):
         self.__set_fixed_size()
         self.__filter_entry.show()
+        # Get focus after clicking on the view-more row:
+        self.__filter_entry.grab_focus_without_selecting()
         self.__showing_extra = True
         self.__list.invalidate_filter()
 

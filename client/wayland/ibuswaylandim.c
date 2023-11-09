@@ -840,8 +840,6 @@ input_method_keyboard_key (void               *data,
     IBusWaylandIMPrivate *priv;
     IBusWaylandKeyEvent event = { 0, };
     uint32_t code;
-    uint32_t num_syms;
-    const xkb_keysym_t *syms;
 
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
@@ -862,12 +860,8 @@ input_method_keyboard_key (void               *data,
     event.key = key;
     event.state = state;
     code = key + 8;
-    num_syms = xkb_key_get_syms (priv->state, code, &syms);
-
-    event.sym = XKB_KEY_NoSymbol;
-    if (num_syms == 1)
-        event.sym = syms[0];
-
+    /* xkb_key_get_syms() does not return the capital syms with Shift key. */
+    event.sym = xkb_state_key_get_one_sym (priv->state, code);
     event.modifiers = priv->modifiers;
     if (state == WL_KEYBOARD_KEY_STATE_RELEASED)
         event.modifiers |= IBUS_RELEASE_MASK;

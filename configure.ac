@@ -349,11 +349,18 @@ fi
 AC_SUBST(X11_PREFIX)
 
 # Check locale dir for Compose files.
-AC_CHECK_FILE($X11_PREFIX/share/X11/locale/locale.dir,
-              X11_LOCALEDATADIR="$X11_PREFIX/share/X11/locale",
-              [AC_CHECK_FILE($X11_PREFIX/lib/X11/locale/locale.dir,
-                             X11_LOCALEDATADIR="$X11_PREFIX/lib/X11/locale",
-                             X11_LOCALEDATADIR="$(datadir)/X11/locale")])
+if test x"$cross_compiling" != xyes; then
+    AC_CHECK_FILE($X11_PREFIX/share/X11/locale/locale.dir,
+                  X11_LOCALEDATADIR="$X11_PREFIX/share/X11/locale",
+                  [AC_CHECK_FILE($X11_PREFIX/lib/X11/locale/locale.dir,
+                                 X11_LOCALEDATADIR="$X11_PREFIX/lib/X11/locale",
+                                 X11_LOCALEDATADIR="$(datadir)/X11/locale")])
+else
+    if test x"$X11_LOCALEDATADIR" == x; then
+        X11_LOCALEDATADIR="$X11_PREFIX/share/X11/locale"
+    fi
+    AC_MSG_RESULT([Skipping X11 locale directory check when cross compiling. Using: $X11_LOCALEDATADIR])
+fi
 AC_SUBST(X11_LOCALEDATADIR)
 
 if test x"$enable_wayland" = x"yes"; then

@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2023-08-02 17:20+0900\n"
+"POT-Creation-Date: 2024-02-12 11:33+0900\n"
 "PO-Revision-Date: 2023-10-07 12:36+0000\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
@@ -337,8 +337,8 @@ msgid ""
 "is false."
 msgstr ""
 "有些字碼點會有不同的字形，而 Pango 會根據語言特性判定字形。如果該值為真，則 "
-"Pango 會根據 IBus "
-"引擎提供的語言選擇字形；如果該值為假，則會根據桌面的語言地區設定選擇字形。"
+"Pango 會根據 IBus 引擎提供的語言選擇字形；如果該值為假，則會根據桌面的語言地"
+"區設定選擇字形。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:250
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -479,7 +479,7 @@ msgstr "確定(_O)"
 msgid "More…"
 msgstr "其他…"
 
-#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1446
+#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1456
 msgid "About"
 msgstr "關於"
 
@@ -3158,48 +3158,57 @@ msgstr "中日韓統一表意文字擴充 F"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1313
+#, fuzzy
+#| msgid "CJK Unified Ideographs Extension A"
+msgid "CJK Unified Ideographs Extension I"
+msgstr "中日韓統一表意文字擴充 A"
+
+#. TRANSLATORS: You might refer the translations from gucharmap with
+#. the following command:
+#. msgmerge -C gucharmap.po ibus.po ibus.pot
+#: src/ibusunicodegen.h:1317
 msgid "CJK Compatibility Ideographs Supplement"
 msgstr "中日韓相容表意文字補充"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1317
+#: src/ibusunicodegen.h:1321
 msgid "CJK Unified Ideographs Extension G"
 msgstr "中日韓統一表意文字擴充 G"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1321
+#: src/ibusunicodegen.h:1325
 msgid "CJK Unified Ideographs Extension H"
 msgstr "中日韓統一表意文字擴充 H"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1325
+#: src/ibusunicodegen.h:1329
 msgid "Tags"
 msgstr "標籤"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1329
+#: src/ibusunicodegen.h:1333
 msgid "Variation Selectors Supplement"
 msgstr "字形變體選取符補充"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1333
+#: src/ibusunicodegen.h:1337
 msgid "Supplementary Private Use Area-A"
 msgstr "補充私用區-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1337
+#: src/ibusunicodegen.h:1341
 msgid "Supplementary Private Use Area-B"
 msgstr "補充私用區-B"
 
@@ -3208,138 +3217,152 @@ msgid ""
 "Set im-module TYPE to \"gtk2\",  \"gtk3\" or \"gtk4\". Default is \"gtk3\"."
 msgstr "設定 im-module 類別為「gtk2」、「gtk3」、「gtk4」。預設為「gtk3」。"
 
-#: tools/main.vala:182
+#: tools/main.vala:266
 msgid "List engine name only"
 msgstr "僅列出引擎名稱"
 
-#: tools/main.vala:198 tools/main.vala:394 tools/main.vala:436
+#: tools/main.vala:282 tools/main.vala:571 tools/main.vala:645
+#, c-format
 msgid "Can't connect to IBus.\n"
 msgstr "無法連接 IBus。\n"
 
-#: tools/main.vala:224
+#: tools/main.vala:308
 #, c-format
 msgid "language: %s\n"
 msgstr "語言：%s\n"
 
-#: tools/main.vala:294
+#: tools/main.vala:378
+#, c-format
 msgid "No engine is set.\n"
 msgstr "尚未設定引擎。\n"
 
-#: tools/main.vala:302
+#: tools/main.vala:386
+#, c-format
 msgid "Set global engine failed.\n"
 msgstr "無法設定全域引擎。\n"
 
-#: tools/main.vala:307
+#: tools/main.vala:391
+#, c-format
 msgid "Get global engine failed.\n"
 msgstr "無法取得全域引擎。\n"
 
-#: tools/main.vala:328
-msgid "Start or restart daemon with \"direct\" or \"systemd\" TYPE."
+#: tools/main.vala:527
+#, fuzzy
+#| msgid "Start or restart daemon with \"direct\" or \"systemd\" TYPE."
+msgid ""
+"Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" TYPE."
 msgstr "以「direct」或「systemd」型別啟動或重新啟動幕後程式。"
 
-#: tools/main.vala:331
+#: tools/main.vala:531
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
 msgstr "以 SYSTEMD_SERVICE 檔案啟動或重新啟動幕後程式。"
 
-#: tools/main.vala:334
+#: tools/main.vala:534 tools/main.vala:617
 msgid "Show debug messages."
 msgstr "顯示除錯訊息。"
 
-#: tools/main.vala:453
+#: tools/main.vala:613
+#, fuzzy
+#| msgid "Start or restart daemon with \"direct\" or \"systemd\" TYPE."
+msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
+msgstr "以「direct」或「systemd」型別啟動或重新啟動幕後程式。"
+
+#: tools/main.vala:662
 msgid "Read the system registry cache."
 msgstr "讀取系統註冊快取。"
 
-#: tools/main.vala:455
+#: tools/main.vala:664
 msgid "Read the registry cache FILE."
 msgstr "讀取註冊快取 FILE。"
 
-#: tools/main.vala:473 tools/main.vala:478
+#: tools/main.vala:682 tools/main.vala:687
+#, c-format
 msgid "The registry cache is invalid.\n"
 msgstr "註冊快取無效。\n"
 
-#: tools/main.vala:494
+#: tools/main.vala:703
 msgid "Write the system registry cache."
 msgstr "寫入系統註冊快取。"
 
-#: tools/main.vala:496
+#: tools/main.vala:705
 msgid "Write the registry cache FILE."
 msgstr "寫入註冊快取 FILE。"
 
-#: tools/main.vala:534
+#: tools/main.vala:743
 msgid ""
 "Use engine schema paths instead of ibus core, which can be comma-separated "
 "values."
 msgstr "使用引擎基模位置取代 ibus 核心，可以透過逗號分割字串。"
 
-#: tools/main.vala:623
+#: tools/main.vala:832
 msgid "Resetting…"
 msgstr "重設中…"
 
-#: tools/main.vala:641
+#: tools/main.vala:850
 msgid "Done"
 msgstr "完成"
 
-#: tools/main.vala:699
+#: tools/main.vala:908
 msgid "Set or get engine"
 msgstr "設定引擎或取得引擎"
 
-#: tools/main.vala:700
+#: tools/main.vala:909
 msgid "Exit ibus-daemon"
 msgstr "離開 ibus-daemon"
 
-#: tools/main.vala:701
+#: tools/main.vala:910
 msgid "Show available engines"
 msgstr "顯示可用的引擎"
 
-#: tools/main.vala:702
+#: tools/main.vala:911
 msgid "(Not implemented)"
 msgstr "(尚未實作)"
 
-#: tools/main.vala:703
+#: tools/main.vala:912
 msgid "Restart ibus-daemon"
 msgstr "重新啟動 ibus-daemon"
 
-#: tools/main.vala:704
+#: tools/main.vala:913
 msgid "Start ibus-daemon"
 msgstr "啟動 ibus-daemon"
 
-#: tools/main.vala:705 ui/gtk3/application.vala:306
+#: tools/main.vala:914 ui/gtk3/application.vala:306
 msgid "Show version"
 msgstr "顯示版本"
 
-#: tools/main.vala:706
+#: tools/main.vala:915
 msgid "Show the content of registry cache"
 msgstr "顯示註冊快取的內容"
 
-#: tools/main.vala:707
+#: tools/main.vala:916
 msgid "Create registry cache"
 msgstr "建立註冊快取"
 
-#: tools/main.vala:708
+#: tools/main.vala:917
 msgid "Print the D-Bus address of ibus-daemon"
 msgstr "列印 ibus-daemon 的 D-Bus 位址"
 
-#: tools/main.vala:709
+#: tools/main.vala:918
 msgid "Show the configuration values"
 msgstr "顯示組態值"
 
-#: tools/main.vala:710
+#: tools/main.vala:919
 msgid "Reset the configuration values"
 msgstr "重設組態值"
 
-#: tools/main.vala:712
+#: tools/main.vala:921
 msgid "Save emoji on dialog to clipboard"
 msgstr "將對話窗中的繪文字儲存到剪貼簿"
 
-#: tools/main.vala:714
+#: tools/main.vala:923
 msgid "Retrieve im-module value from GTK instance"
 msgstr "從 GTK 實體擷取 im-module 值"
 
-#: tools/main.vala:716
+#: tools/main.vala:925
 msgid "Show this information"
 msgstr "顯示此資訊"
 
-#: tools/main.vala:723
+#: tools/main.vala:932
 #, c-format
 msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
@@ -3348,11 +3371,12 @@ msgstr ""
 "用法：%s COMMAND [OPTION...]\n"
 "\n"
 
-#: tools/main.vala:724
+#: tools/main.vala:933
+#, c-format
 msgid "Commands:\n"
 msgstr "指令：\n"
 
-#: tools/main.vala:754
+#: tools/main.vala:963
 #, c-format
 msgid "%s is unknown command!\n"
 msgstr "%s 為未知指令！\n"
@@ -3432,6 +3456,7 @@ msgid "Description: %s"
 msgstr "描述：%s"
 
 #: ui/gtk3/emojier.vala:1599
+#, c-format
 msgid "None"
 msgstr "無"
 
@@ -3451,7 +3476,7 @@ msgid "Alias: %s"
 msgstr "別名：%s"
 
 #: ui/gtk3/emojier.vala:2180 ui/gtk3/ibus-extension-gtk3.desktop.in:3
-#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1431
+#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1440
 msgid "Emoji Choice"
 msgstr "繪文字選擇"
 
@@ -3510,17 +3535,18 @@ msgstr "符合指定整數長度"
 msgid "Match with the condition of the specified integer"
 msgstr "符合指定整數的條件"
 
-#: ui/gtk3/panel.vala:363 ui/gtk3/panel.vala:386
+#: ui/gtk3/panel.vala:362 ui/gtk3/panel.vala:385
+#, c-format
 msgid "IBus Panel"
 msgstr "IBus 面板"
 
-#: ui/gtk3/panel.vala:364
+#: ui/gtk3/panel.vala:363
 msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
 msgstr "您可以對面板圖示點按滑鼠中鍵，來切換使用中選單與情境選單。"
 
-#: ui/gtk3/panel.vala:836
+#: ui/gtk3/panel.vala:841
 #, c-format
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
@@ -3532,15 +3558,14 @@ msgid ""
 "input method\", you should make sure that QT_IM_MODULE and GTK_IM_MODULE "
 "environment variables are unset in the desktop session."
 msgstr ""
-"IBus 應該要從 %s 的桌面作業階段中呼叫。以 KDE "
-"來說，您可以啟動「%s」公用程式，前往「輸入裝置 -> "
-"虛擬鍵盤」區段，選取「%s」圖示，並點按「套用」按鈕，以組態設定 %s 的 "
-"IBus。至於其他桌面作業階段，您可以將 %s "
-"檔案中的「Exec=」那一列複製到作業階段的組態檔中。請參考「Wayland "
-"輸入法」組態的各個相關文件。在您組態設定「Wayland 輸入法」之前，"
-"您應該先確認該桌面作業階段中沒有設定 QT_IM_MODULE 和 GTK_IM_MODULE 環境變數。"
+"IBus 應該要從 %s 的桌面作業階段中呼叫。以 KDE 來說，您可以啟動「%s」公用程"
+"式，前往「輸入裝置 -> 虛擬鍵盤」區段，選取「%s」圖示，並點按「套用」按鈕，以"
+"組態設定 %s 的 IBus。至於其他桌面作業階段，您可以將 %s 檔案中的「Exec=」那一"
+"列複製到作業階段的組態檔中。請參考「Wayland 輸入法」組態的各個相關文件。在您"
+"組態設定「Wayland 輸入法」之前，您應該先確認該桌面作業階段中沒有設定 "
+"QT_IM_MODULE 和 GTK_IM_MODULE 環境變數。"
 
-#: ui/gtk3/panel.vala:858
+#: ui/gtk3/panel.vala:863
 #, c-format
 msgid ""
 "Please unset QT_IM_MODULE and GTK_IM_MODULE environment variables and 'ibus-"
@@ -3550,50 +3575,52 @@ msgstr ""
 "請取消 QT-IM_MODULE 和 GTK_IM_MODULE 環境變數的設定，且「ibus-daemon --panel "
 "disable」應作為 %s 組件的子程序執行。"
 
-#: ui/gtk3/panel.vala:873
+#: ui/gtk3/panel.vala:878
 msgid "IBus Notification"
 msgstr "IBus 通知"
 
-#: ui/gtk3/panel.vala:1228
+#: ui/gtk3/panel.vala:1233
 #, c-format
 msgid ""
 "Your configured input method %s does not exist in IBus input methods so "
 "\"US\" layout was configured instead of your input method."
-msgstr "您所組態設定的輸入法 %s 不存在於 IBus "
-"輸入法中，所以組態設定將改為「US」鍵盤配置。"
+msgstr ""
+"您所組態設定的輸入法 %s 不存在於 IBus 輸入法中，所以組態設定將改為「US」鍵盤"
+"配置。"
 
-#: ui/gtk3/panel.vala:1233
+#: ui/gtk3/panel.vala:1238
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
 msgstr "您有至少一個組態設定的輸入法不存在於 IBus 輸入法中。"
 
-#: ui/gtk3/panel.vala:1236
+#: ui/gtk3/panel.vala:1241
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
-msgstr "請執行「ibus-setup」命令，開啟「輸入法」分頁，並再次組態設定您的輸入法。"
+msgstr ""
+"請執行「ibus-setup」命令，開啟「輸入法」分頁，並再次組態設定您的輸入法。"
 
-#: ui/gtk3/panel.vala:1394
+#: ui/gtk3/panel.vala:1399
 msgid "IBus is an intelligent input bus for Linux/Unix."
 msgstr "IBus 為 Linux/Unix 上的智慧型輸入法框架。"
 
-#: ui/gtk3/panel.vala:1398
+#: ui/gtk3/panel.vala:1403
 msgid "translator-credits"
 msgstr ""
 "Ding-Yi Chen 陳定彞 <dchen@redhat.com>, 2009.\n"
 "Cheng-Chia Tseng <pswo10680@gmail.com>, 2010-17.\n"
 "Yi-Jyun Pan <pan93412@gmail.com>, 2019-20."
 
-#: ui/gtk3/panel.vala:1426
+#: ui/gtk3/panel.vala:1434
 msgid "Preferences"
 msgstr "偏好設定"
 
-#: ui/gtk3/panel.vala:1452
+#: ui/gtk3/panel.vala:1462
 msgid "Restart"
 msgstr "重新啟動"
 
-#: ui/gtk3/panel.vala:1456
+#: ui/gtk3/panel.vala:1466
 msgid "Quit"
 msgstr "結束"
 

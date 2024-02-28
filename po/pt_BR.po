@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2023-08-02 17:20+0900\n"
+"POT-Creation-Date: 2024-02-12 11:33+0900\n"
 "PO-Revision-Date: 2024-02-07 16:31+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
@@ -342,7 +342,8 @@ msgstr "Ícone personalizado"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:234
 msgid "Custom icon name for arrow buttons on candidate window"
-msgstr "Nome de ícone personalizado para botões de seta na janela de candidatos"
+msgstr ""
+"Nome de ícone personalizado para botões de seta na janela de candidatos"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:238 setup/setup.ui:1317
 msgid "Choose glyphs with input method's language on candidate window"
@@ -511,7 +512,7 @@ msgstr "_OK"
 msgid "More…"
 msgstr "Mais…"
 
-#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1446
+#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1456
 msgid "About"
 msgstr "Sobre"
 
@@ -3242,13 +3243,22 @@ msgstr "Ideogramas unificados CJK extensão F"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1313
+#, fuzzy
+#| msgid "CJK Unified Ideographs Extension A"
+msgid "CJK Unified Ideographs Extension I"
+msgstr "Ideogramas unificados CJK extensão A"
+
+#. TRANSLATORS: You might refer the translations from gucharmap with
+#. the following command:
+#. msgmerge -C gucharmap.po ibus.po ibus.pot
+#: src/ibusunicodegen.h:1317
 msgid "CJK Compatibility Ideographs Supplement"
 msgstr "Suplemento de ideogramas de compatibilidade CJK"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1317
+#: src/ibusunicodegen.h:1321
 #, fuzzy
 #| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension G"
@@ -3257,7 +3267,7 @@ msgstr "Ideogramas unificados CJK extensão A"
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1321
+#: src/ibusunicodegen.h:1325
 #, fuzzy
 #| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension H"
@@ -3266,28 +3276,28 @@ msgstr "Ideogramas unificados CJK extensão A"
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1325
+#: src/ibusunicodegen.h:1329
 msgid "Tags"
 msgstr "Marcas"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1329
+#: src/ibusunicodegen.h:1333
 msgid "Variation Selectors Supplement"
 msgstr "Suplemento de seletores de variação"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1333
+#: src/ibusunicodegen.h:1337
 msgid "Supplementary Private Use Area-A"
 msgstr "Área de uso privado suplementar-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1337
+#: src/ibusunicodegen.h:1341
 msgid "Supplementary Private Use Area-B"
 msgstr "Área de uso privado suplementar-B"
 
@@ -3296,64 +3306,74 @@ msgid ""
 "Set im-module TYPE to \"gtk2\",  \"gtk3\" or \"gtk4\". Default is \"gtk3\"."
 msgstr ""
 
-#: tools/main.vala:182
+#: tools/main.vala:266
 msgid "List engine name only"
 msgstr "Somente o Nome do motor da lista"
 
-#: tools/main.vala:198 tools/main.vala:394 tools/main.vala:436
+#: tools/main.vala:282 tools/main.vala:571 tools/main.vala:645
+#, c-format
 msgid "Can't connect to IBus.\n"
 msgstr "Não foi possível conectar ao IBus.\n"
 
-#: tools/main.vala:224
+#: tools/main.vala:308
 #, c-format
 msgid "language: %s\n"
 msgstr "idioma: %s\n"
 
-#: tools/main.vala:294
+#: tools/main.vala:378
+#, c-format
 msgid "No engine is set.\n"
 msgstr "Nenhum motor está definido.\n"
 
-#: tools/main.vala:302
+#: tools/main.vala:386
+#, c-format
 msgid "Set global engine failed.\n"
 msgstr "A configuração do motor global falhou.\n"
 
-#: tools/main.vala:307
+#: tools/main.vala:391
+#, c-format
 msgid "Get global engine failed.\n"
 msgstr "A obtenção de motor global falhou.\n"
 
-#: tools/main.vala:328
-msgid "Start or restart daemon with \"direct\" or \"systemd\" TYPE."
+#: tools/main.vala:527
+msgid ""
+"Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" TYPE."
 msgstr ""
 
-#: tools/main.vala:331
+#: tools/main.vala:531
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
 msgstr ""
 
-#: tools/main.vala:334
+#: tools/main.vala:534 tools/main.vala:617
 msgid "Show debug messages."
 msgstr ""
 
-#: tools/main.vala:453
+#: tools/main.vala:613
+msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
+msgstr ""
+
+#: tools/main.vala:662
 msgid "Read the system registry cache."
 msgstr "Lê o cache de registro do sistema."
 
-#: tools/main.vala:455
+#: tools/main.vala:664
 msgid "Read the registry cache FILE."
 msgstr "Lê o ARQUIVO de cache de registro."
 
-#: tools/main.vala:473 tools/main.vala:478
+#: tools/main.vala:682 tools/main.vala:687
+#, c-format
 msgid "The registry cache is invalid.\n"
 msgstr "O cache de registro é inválido.\n"
 
-#: tools/main.vala:494
+#: tools/main.vala:703
 msgid "Write the system registry cache."
 msgstr "Escreve o cache de registro do sistema."
 
-#: tools/main.vala:496
+#: tools/main.vala:705
 msgid "Write the registry cache FILE."
 msgstr "Escreve o ARQUIVO de cache de registro."
 
-#: tools/main.vala:534
+#: tools/main.vala:743
 msgid ""
 "Use engine schema paths instead of ibus core, which can be comma-separated "
 "values."
@@ -3361,77 +3381,77 @@ msgstr ""
 "Usa caminhos de esquema de motores em vez do ibus core, que podem ser "
 "valores separados por vírgula."
 
-#: tools/main.vala:623
+#: tools/main.vala:832
 msgid "Resetting…"
 msgstr "Redefinindo…"
 
-#: tools/main.vala:641
+#: tools/main.vala:850
 msgid "Done"
 msgstr "Concluído"
 
-#: tools/main.vala:699
+#: tools/main.vala:908
 msgid "Set or get engine"
 msgstr "Define ou obtém o motor"
 
-#: tools/main.vala:700
+#: tools/main.vala:909
 msgid "Exit ibus-daemon"
 msgstr "Encerra o ibus-daemon"
 
-#: tools/main.vala:701
+#: tools/main.vala:910
 msgid "Show available engines"
 msgstr "Mostra os motores disponíveis"
 
-#: tools/main.vala:702
+#: tools/main.vala:911
 msgid "(Not implemented)"
 msgstr "(Não implementado)"
 
-#: tools/main.vala:703
+#: tools/main.vala:912
 msgid "Restart ibus-daemon"
 msgstr "Reinicia o ibus-daemon"
 
-#: tools/main.vala:704
+#: tools/main.vala:913
 #, fuzzy
 #| msgid "Restart ibus-daemon"
 msgid "Start ibus-daemon"
 msgstr "Reinicia o ibus-daemon"
 
-#: tools/main.vala:705 ui/gtk3/application.vala:306
+#: tools/main.vala:914 ui/gtk3/application.vala:306
 msgid "Show version"
 msgstr "Mostra a versão"
 
-#: tools/main.vala:706
+#: tools/main.vala:915
 msgid "Show the content of registry cache"
 msgstr "Mostra o conteúdo do cache de registro"
 
-#: tools/main.vala:707
+#: tools/main.vala:916
 msgid "Create registry cache"
 msgstr "Cria um cache de registro"
 
-#: tools/main.vala:708
+#: tools/main.vala:917
 msgid "Print the D-Bus address of ibus-daemon"
 msgstr "Imprime o endereço D-Bus do ibus-daemon"
 
-#: tools/main.vala:709
+#: tools/main.vala:918
 msgid "Show the configuration values"
 msgstr "Mostra os valores de configuração"
 
-#: tools/main.vala:710
+#: tools/main.vala:919
 msgid "Reset the configuration values"
 msgstr "Redefine os valores de configuração"
 
-#: tools/main.vala:712
+#: tools/main.vala:921
 msgid "Save emoji on dialog to clipboard"
 msgstr "Salva emoji no diálogo para a área de transferência"
 
-#: tools/main.vala:714
+#: tools/main.vala:923
 msgid "Retrieve im-module value from GTK instance"
 msgstr ""
 
-#: tools/main.vala:716
+#: tools/main.vala:925
 msgid "Show this information"
 msgstr "Mostra essa informação"
 
-#: tools/main.vala:723
+#: tools/main.vala:932
 #, c-format
 msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
@@ -3440,11 +3460,12 @@ msgstr ""
 "Uso: %s COMANDO [OPÇÃO...]\n"
 "\n"
 
-#: tools/main.vala:724
+#: tools/main.vala:933
+#, c-format
 msgid "Commands:\n"
 msgstr "Comandos:\n"
 
-#: tools/main.vala:754
+#: tools/main.vala:963
 #, c-format
 msgid "%s is unknown command!\n"
 msgstr "%s é um comando desconhecido!\n"
@@ -3526,6 +3547,7 @@ msgid "Description: %s"
 msgstr "Descrição: %s"
 
 #: ui/gtk3/emojier.vala:1599
+#, c-format
 msgid "None"
 msgstr "Nenhum"
 
@@ -3545,7 +3567,7 @@ msgid "Alias: %s"
 msgstr "Apelido: %s"
 
 #: ui/gtk3/emojier.vala:2180 ui/gtk3/ibus-extension-gtk3.desktop.in:3
-#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1431
+#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1440
 msgid "Emoji Choice"
 msgstr "Escolha do emoji"
 
@@ -3606,17 +3628,18 @@ msgstr "Corresponder com o comprimento do inteiro especificado"
 msgid "Match with the condition of the specified integer"
 msgstr "Corresponder com a condição do inteiro especificado"
 
-#: ui/gtk3/panel.vala:363 ui/gtk3/panel.vala:386
+#: ui/gtk3/panel.vala:362 ui/gtk3/panel.vala:385
+#, c-format
 msgid "IBus Panel"
 msgstr "Painel IBus"
 
-#: ui/gtk3/panel.vala:364
+#: ui/gtk3/panel.vala:363
 msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
 msgstr ""
 
-#: ui/gtk3/panel.vala:836
+#: ui/gtk3/panel.vala:841
 #, c-format
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
@@ -3629,7 +3652,7 @@ msgid ""
 "environment variables are unset in the desktop session."
 msgstr ""
 
-#: ui/gtk3/panel.vala:858
+#: ui/gtk3/panel.vala:863
 #, c-format
 msgid ""
 "Please unset QT_IM_MODULE and GTK_IM_MODULE environment variables and 'ibus-"
@@ -3637,46 +3660,46 @@ msgid ""
 "component."
 msgstr ""
 
-#: ui/gtk3/panel.vala:873
+#: ui/gtk3/panel.vala:878
 msgid "IBus Notification"
 msgstr ""
 
-#: ui/gtk3/panel.vala:1228
+#: ui/gtk3/panel.vala:1233
 #, c-format
 msgid ""
 "Your configured input method %s does not exist in IBus input methods so "
 "\"US\" layout was configured instead of your input method."
 msgstr ""
 
-#: ui/gtk3/panel.vala:1233
+#: ui/gtk3/panel.vala:1238
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
 msgstr ""
 
-#: ui/gtk3/panel.vala:1236
+#: ui/gtk3/panel.vala:1241
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
 msgstr ""
 
-#: ui/gtk3/panel.vala:1394
+#: ui/gtk3/panel.vala:1399
 msgid "IBus is an intelligent input bus for Linux/Unix."
 msgstr "IBus é um barramento de entrada inteligente para o Linux/Unix."
 
-#: ui/gtk3/panel.vala:1398
+#: ui/gtk3/panel.vala:1403
 msgid "translator-credits"
 msgstr "Rafael Fontenelle <rafaelff@gnome.org>"
 
-#: ui/gtk3/panel.vala:1426
+#: ui/gtk3/panel.vala:1434
 msgid "Preferences"
 msgstr "Preferências"
 
-#: ui/gtk3/panel.vala:1452
+#: ui/gtk3/panel.vala:1462
 msgid "Restart"
 msgstr "Reiniciar"
 
-#: ui/gtk3/panel.vala:1456
+#: ui/gtk3/panel.vala:1466
 msgid "Quit"
 msgstr "Sair"
 

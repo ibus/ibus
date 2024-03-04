@@ -17,13 +17,13 @@
 # Roman Spirgi <bigant@fedoraproject.org>, 2017. #zanata
 # Thomas Eichhorn <tomislav@posteo.de>, 2017. #zanata
 # Tobias Weise <tobias.weise@web.de>, 2017. #zanata
-# Mike FABIAN <mfabian@redhat.com>, 2020, 2021, 2022, 2023.
+# Mike FABIAN <mfabian@redhat.com>, 2020, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2024-02-28 19:10+0900\n"
-"PO-Revision-Date: 2023-08-04 17:21+0000\n"
+"PO-Revision-Date: 2024-02-29 13:35+0000\n"
 "Last-Translator: Mike FABIAN <mfabian@redhat.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/de/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.2\n"
+"X-Generator: Weblate 5.4\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3218,10 +3218,8 @@ msgstr "Vereinheitlichte CJK-Ideogramme, Erweiterung F"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1313
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension I"
-msgstr "Vereinheitlichte CJK-Ideogramme, Erweiterung A"
+msgstr "Vereinheitlichte CJK-Ideogramme, Erweiterung I"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3308,12 +3306,11 @@ msgid "Get global engine failed.\n"
 msgstr "Auslesen der globalen Engine fehlgeschlagen.\n"
 
 #: tools/main.vala:527
-#, fuzzy
-#| msgid "Start or restart daemon with \"direct\" or \"systemd\" TYPE."
 msgid ""
 "Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" TYPE."
 msgstr ""
-"Starten oder Neustarten des Daemons mit dem Typ „direct“ oder „systemd“."
+"Starten oder Neustarten des Daemons mit dem Typ „direct“, „systemd“ oder "
+"„kde-wayland“."
 
 #: tools/main.vala:531
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
@@ -3324,11 +3321,8 @@ msgid "Show debug messages."
 msgstr "Debug-Meldungen anzeigen."
 
 #: tools/main.vala:613
-#, fuzzy
-#| msgid "Start or restart daemon with \"direct\" or \"systemd\" TYPE."
 msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
-msgstr ""
-"Starten oder Neustarten des Daemons mit dem Typ „direct“ oder „systemd“."
+msgstr "Beenden des Daemons mit dem Typ „direct“ oder „kde-wayland“."
 
 #: tools/main.vala:662
 msgid "Read the system registry cache."

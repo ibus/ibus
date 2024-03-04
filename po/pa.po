@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2023-08-02 17:20+0900\n"
+"POT-Creation-Date: 2024-02-28 19:10+0900\n"
 "PO-Revision-Date: 2023-12-07 15:43+0000\n"
 "Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Punjabi <https://translate.fedoraproject.org/projects/ibus/"
@@ -71,8 +71,8 @@ msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
 msgstr ""
-"ਸੰਭਾਲਿਆ ਵਰਜ਼ਨ ਨੰਬਰ ਪੁਰਾਣੇ ਇੰਸਟਾਲ ਕੀਤੇ ਹੋਏ ibus ਅਤੇ ਮੌਜੂਦਾ ibus ਦੇ ਵਰਜ਼ਨ ਵਿਚਲੇ "
-"ਫ਼ਰਕ ਨੂੰ ਜਾਂਚਣ ਲਈ ਵਰਤਿਆ ਜਾਏਗਾ।"
+"ਸੰਭਾਲਿਆ ਵਰਜ਼ਨ ਨੰਬਰ ਪੁਰਾਣੇ ਇੰਸਟਾਲ ਕੀਤੇ ਹੋਏ ibus ਅਤੇ ਮੌਜੂਦਾ ibus ਦੇ ਵਰਜ਼ਨ ਵਿਚਲੇ ਫ਼ਰਕ ਨੂੰ ਜਾਂਚਣ "
+"ਲਈ ਵਰਤਿਆ ਜਾਏਗਾ।"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:80
 msgid "Latin layouts which have no ASCII"
@@ -467,7 +467,7 @@ msgstr "ਠੀਕ ਹੈ(_O)"
 msgid "More…"
 msgstr "...ਹੋਰ"
 
-#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1446
+#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1456
 msgid "About"
 msgstr "ਇਸ ਬਾਰੇ"
 
@@ -3151,48 +3151,55 @@ msgstr ""
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1313
-msgid "CJK Compatibility Ideographs Supplement"
+msgid "CJK Unified Ideographs Extension I"
 msgstr ""
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1317
-msgid "CJK Unified Ideographs Extension G"
+msgid "CJK Compatibility Ideographs Supplement"
 msgstr ""
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1321
-msgid "CJK Unified Ideographs Extension H"
+msgid "CJK Unified Ideographs Extension G"
 msgstr ""
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1325
-msgid "Tags"
+msgid "CJK Unified Ideographs Extension H"
 msgstr ""
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1329
-msgid "Variation Selectors Supplement"
+msgid "Tags"
 msgstr ""
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1333
-msgid "Supplementary Private Use Area-A"
+msgid "Variation Selectors Supplement"
 msgstr ""
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1337
+msgid "Supplementary Private Use Area-A"
+msgstr ""
+
+#. TRANSLATORS: You might refer the translations from gucharmap with
+#. the following command:
+#. msgmerge -C gucharmap.po ibus.po ibus.pot
+#: src/ibusunicodegen.h:1341
 msgid "Supplementary Private Use Area-B"
 msgstr ""
 
@@ -3201,140 +3208,150 @@ msgid ""
 "Set im-module TYPE to \"gtk2\",  \"gtk3\" or \"gtk4\". Default is \"gtk3\"."
 msgstr ""
 
-#: tools/main.vala:182
+#: tools/main.vala:266
 msgid "List engine name only"
 msgstr "ਸਿਰਫ ਇੰਜਣ ਨਾਂ ਵੇਖਾਓ"
 
-#: tools/main.vala:198 tools/main.vala:394 tools/main.vala:436
+#: tools/main.vala:282 tools/main.vala:571 tools/main.vala:645
+#, c-format
 msgid "Can't connect to IBus.\n"
 msgstr "IBus ਨਾਲ ਨਹੀਂ ਜੁੜ ਸਕਿਆ।\n"
 
-#: tools/main.vala:224
+#: tools/main.vala:308
 #, c-format
 msgid "language: %s\n"
 msgstr "ਭਾਸ਼ਾ: %s\n"
 
-#: tools/main.vala:294
+#: tools/main.vala:378
+#, c-format
 msgid "No engine is set.\n"
 msgstr "ਕੋਈ ਇੰਜਣ ਸੈੱਟ ਨਹੀਂ ਹੈ।\n"
 
-#: tools/main.vala:302
+#: tools/main.vala:386
+#, c-format
 msgid "Set global engine failed.\n"
 msgstr "ਗਲੋਬਲ ਇੰਜਣ ਸੈੱਟ ਕਰਨ ਲਈ ਫੇਲ੍ਹ।\n"
 
-#: tools/main.vala:307
+#: tools/main.vala:391
+#, c-format
 msgid "Get global engine failed.\n"
 msgstr "ਗਲੋਬਲ ਇੰਜਣ ਫੇਲ ਹੋਇਆ।\n"
 
-#: tools/main.vala:328
-msgid "Start or restart daemon with \"direct\" or \"systemd\" TYPE."
+#: tools/main.vala:527
+msgid ""
+"Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" TYPE."
 msgstr ""
 
-#: tools/main.vala:331
+#: tools/main.vala:531
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
 msgstr ""
 
-#: tools/main.vala:334
+#: tools/main.vala:534 tools/main.vala:617
 msgid "Show debug messages."
 msgstr ""
 
-#: tools/main.vala:453
+#: tools/main.vala:613
+msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
+msgstr ""
+
+#: tools/main.vala:662
 msgid "Read the system registry cache."
 msgstr "ਸਿਸਟਮ ਰਜਿਸਟਰੀ ਕੈਚੇ ਪੜ੍ਹੋ।"
 
-#: tools/main.vala:455
+#: tools/main.vala:664
 msgid "Read the registry cache FILE."
 msgstr "ਰਜਿਸਟਰੀ ਕੈਚੇ ਫ਼ਈਲ ਪੜ੍ਹੋ।"
 
-#: tools/main.vala:473 tools/main.vala:478
+#: tools/main.vala:682 tools/main.vala:687
+#, c-format
 msgid "The registry cache is invalid.\n"
 msgstr "ਰਜਿਸਟਰੀ ਕੈਚੇ ਅਯੋਗ ਹੈ।\n"
 
-#: tools/main.vala:494
+#: tools/main.vala:703
 msgid "Write the system registry cache."
 msgstr "ਸਿਸਟਮ ਰਜਿਸਟਰੀ ਕੈਚੇ ਲਿਖੋ।"
 
-#: tools/main.vala:496
+#: tools/main.vala:705
 msgid "Write the registry cache FILE."
 msgstr "ਰਜਿਸਟਰੀ ਕੈਚੇ ਫ਼ਾਈਲ ਲਿਖੋ।"
 
-#: tools/main.vala:534
+#: tools/main.vala:743
 msgid ""
 "Use engine schema paths instead of ibus core, which can be comma-separated "
 "values."
 msgstr ""
 
-#: tools/main.vala:623
+#: tools/main.vala:832
 msgid "Resetting…"
 msgstr "...ਮੁੜ-ਸੈਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: tools/main.vala:641
+#: tools/main.vala:850
 msgid "Done"
 msgstr "ਮੁਕੰਮਲ"
 
-#: tools/main.vala:699
+#: tools/main.vala:908
 msgid "Set or get engine"
 msgstr "ਇੰਜਣ ਸੈੱਟ ਜਾਂ ਪ੍ਰਾਪਤ ਕਰੋ"
 
-#: tools/main.vala:700
+#: tools/main.vala:909
 msgid "Exit ibus-daemon"
 msgstr "ibus-daemon ਤੋਂ ਬਾਹਰ ਆਓ"
 
-#: tools/main.vala:701
+#: tools/main.vala:910
 msgid "Show available engines"
 msgstr "ਉਪਲੱਬਧ ਇੰਜਣ ਵਿਖਾਓ"
 
-#: tools/main.vala:702
+#: tools/main.vala:911
 msgid "(Not implemented)"
 msgstr "(ਲਾਗੂ ਨਹੀਂ ਕੀਤੀ ਹੋਈ)"
 
-#: tools/main.vala:703
+#: tools/main.vala:912
 msgid "Restart ibus-daemon"
 msgstr "ibus-daemon ਮੁੜ ਸ਼ੁਰੂ ਕਰੋ"
 
-#: tools/main.vala:704
+#: tools/main.vala:913
 #, fuzzy
 #| msgid "Restart ibus-daemon"
 msgid "Start ibus-daemon"
 msgstr "ibus-daemon ਮੁੜ ਸ਼ੁਰੂ ਕਰੋ"
 
-#: tools/main.vala:705 ui/gtk3/application.vala:306
+#: tools/main.vala:914 ui/gtk3/application.vala:306
 msgid "Show version"
 msgstr "ਵਰਜ਼ਨ ਵੇਖੋ"
 
-#: tools/main.vala:706
+#: tools/main.vala:915
 msgid "Show the content of registry cache"
 msgstr "ਰਜਿਸਟਰੀ ਕੈਚੇ ਦੇ ਅੰਸ਼ ਵਿਖਾਓ"
 
-#: tools/main.vala:707
+#: tools/main.vala:916
 msgid "Create registry cache"
 msgstr "ਰਜਿਸਟਰੀ ਕੈਸ਼ ਬਣਾਓ"
 
-#: tools/main.vala:708
+#: tools/main.vala:917
 msgid "Print the D-Bus address of ibus-daemon"
 msgstr "ibus-daemon ਦਾ D-Bus ਪਤਾ ਛਾਪੋ"
 
-#: tools/main.vala:709
+#: tools/main.vala:918
 msgid "Show the configuration values"
 msgstr "ਸੰਰਚਨਾ ਮੁੱਲ ਦਿਖਾਓ"
 
-#: tools/main.vala:710
+#: tools/main.vala:919
 msgid "Reset the configuration values"
 msgstr "ਸੰਰਚਨਾ ਮੁੱਲ ਮੁੜ-ਸੈਟ ਕਰੋ"
 
-#: tools/main.vala:712
+#: tools/main.vala:921
 msgid "Save emoji on dialog to clipboard"
 msgstr ""
 
-#: tools/main.vala:714
+#: tools/main.vala:923
 msgid "Retrieve im-module value from GTK instance"
 msgstr ""
 
-#: tools/main.vala:716
+#: tools/main.vala:925
 msgid "Show this information"
 msgstr "ਇਹ ਜਾਣਕਾਰੀ ਵਿਖਾਓ"
 
-#: tools/main.vala:723
+#: tools/main.vala:932
 #, c-format
 msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
@@ -3343,11 +3360,12 @@ msgstr ""
 "ਵਰਤੋਂ: %s COMMAND [OPTION...]\n"
 "\n"
 
-#: tools/main.vala:724
+#: tools/main.vala:933
+#, c-format
 msgid "Commands:\n"
 msgstr "ਕਮਾਂਡ:\n"
 
-#: tools/main.vala:754
+#: tools/main.vala:963
 #, c-format
 msgid "%s is unknown command!\n"
 msgstr "%s ਅਣਜਾਣ ਕਮਾਂਡ ਹੈ!\n"
@@ -3429,6 +3447,7 @@ msgid "Description: %s"
 msgstr "ਵਰਣਨ: %s"
 
 #: ui/gtk3/emojier.vala:1599
+#, c-format
 msgid "None"
 msgstr "ਕੋਈ ਨਹੀਂ"
 
@@ -3448,7 +3467,7 @@ msgid "Alias: %s"
 msgstr ""
 
 #: ui/gtk3/emojier.vala:2180 ui/gtk3/ibus-extension-gtk3.desktop.in:3
-#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1431
+#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1440
 msgid "Emoji Choice"
 msgstr "ਇਮੋਜ਼ੀ ਚੋਣ"
 
@@ -3505,17 +3524,18 @@ msgstr ""
 msgid "Match with the condition of the specified integer"
 msgstr ""
 
-#: ui/gtk3/panel.vala:363 ui/gtk3/panel.vala:386
+#: ui/gtk3/panel.vala:362 ui/gtk3/panel.vala:385
+#, c-format
 msgid "IBus Panel"
 msgstr "IBus ਪੈਨਲ"
 
-#: ui/gtk3/panel.vala:364
+#: ui/gtk3/panel.vala:363
 msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
 msgstr ""
 
-#: ui/gtk3/panel.vala:836
+#: ui/gtk3/panel.vala:841
 #, c-format
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
@@ -3528,7 +3548,7 @@ msgid ""
 "environment variables are unset in the desktop session."
 msgstr ""
 
-#: ui/gtk3/panel.vala:858
+#: ui/gtk3/panel.vala:863
 #, c-format
 msgid ""
 "Please unset QT_IM_MODULE and GTK_IM_MODULE environment variables and 'ibus-"
@@ -3536,49 +3556,49 @@ msgid ""
 "component."
 msgstr ""
 
-#: ui/gtk3/panel.vala:873
+#: ui/gtk3/panel.vala:878
 msgid "IBus Notification"
 msgstr ""
 
-#: ui/gtk3/panel.vala:1228
+#: ui/gtk3/panel.vala:1233
 #, c-format
 msgid ""
 "Your configured input method %s does not exist in IBus input methods so "
 "\"US\" layout was configured instead of your input method."
 msgstr ""
 
-#: ui/gtk3/panel.vala:1233
+#: ui/gtk3/panel.vala:1238
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
 msgstr ""
 
-#: ui/gtk3/panel.vala:1236
+#: ui/gtk3/panel.vala:1241
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
 msgstr ""
 
-#: ui/gtk3/panel.vala:1394
+#: ui/gtk3/panel.vala:1399
 msgid "IBus is an intelligent input bus for Linux/Unix."
 msgstr "IBus ਲੀਨਕਸ/ਯੂਨੈਕਸ ਲਈ ਮਾਹਰ ਇੰਪੁੱਟ ਬੱਸ ਹੈ।"
 
-#: ui/gtk3/panel.vala:1398
+#: ui/gtk3/panel.vala:1403
 msgid "translator-credits"
 msgstr ""
 "ਅਮਨਪਰੀਤ ਸਿੰਘ ਆਲਮ <aalam@users.sf.net> ੨੦੦੮-੨੦੨੨\n"
 "ਜਸਵਿੰਦਰ ਸਿੰਘ <j.phulewala@gmail.com>\n"
 "http://satluj.org"
 
-#: ui/gtk3/panel.vala:1426
+#: ui/gtk3/panel.vala:1434
 msgid "Preferences"
 msgstr "ਮੇਰੀ ਪਸੰਦ"
 
-#: ui/gtk3/panel.vala:1452
+#: ui/gtk3/panel.vala:1462
 msgid "Restart"
 msgstr "ਮੁੜ-ਚਾਲੂ ਕਰੋ"
 
-#: ui/gtk3/panel.vala:1456
+#: ui/gtk3/panel.vala:1466
 msgid "Quit"
 msgstr "ਬਾਹਰ"
 

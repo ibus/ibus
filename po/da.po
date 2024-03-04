@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2023-07-27 00:14+0900\n"
+"POT-Creation-Date: 2024-02-28 19:10+0900\n"
 "PO-Revision-Date: 2023-07-25 10:36+0200\n"
 "Last-Translator: Alan Mortensen <alanmortensen.am@gmail.com>\n"
 "Language-Team: Danish <https://translate.fedoraproject.org/projects/ibus/"
@@ -332,11 +332,17 @@ msgid "Choose glyphs with input method's language on candidate window"
 msgstr "Vælg glyffer med inputmetodens sprog i kandidatvinduet"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:239
+#, fuzzy
+#| msgid ""
+#| "Some code points have the different glyphs and Pango determines the "
+#| "glyphs from the language attribute. Pango chooses glyphs from the IBus "
+#| "engine's language if the value is true and choose them from the desktop "
+#| "locale if the value is false."
 msgid ""
-"Some code points have the different glyphs and Pango determines the glyphs "
-"from the language attribute. Pango chooses glyphs from the IBus engine's "
-"language if the value is true and choose them from the desktop locale if the "
-"value is false."
+"Some code points have different glyphs and Pango determines the glyphs from "
+"the language attribute. Pango chooses glyphs from the IBus engine's language "
+"if the value is true and chooses them from the desktop locale if the value "
+"is false."
 msgstr ""
 "Nogle kodepunkter beslutter glyffer for de forskellige glyffer og Pango fra "
 "sprogattributten. Pango vælger glyffer fra IBus-motorens sprog hvis værdien "
@@ -488,7 +494,7 @@ msgstr "_OK"
 msgid "More…"
 msgstr "Mere…"
 
-#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1446
+#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1456
 msgid "About"
 msgstr "Om"
 
@@ -3182,48 +3188,57 @@ msgstr "CJK-forenede ideografer-udvidelse F"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1313
+#, fuzzy
+#| msgid "CJK Unified Ideographs Extension A"
+msgid "CJK Unified Ideographs Extension I"
+msgstr "CJK-forenede ideografer-udvidelse A"
+
+#. TRANSLATORS: You might refer the translations from gucharmap with
+#. the following command:
+#. msgmerge -C gucharmap.po ibus.po ibus.pot
+#: src/ibusunicodegen.h:1317
 msgid "CJK Compatibility Ideographs Supplement"
 msgstr "Supplerende CJK-kompatibilitetsideografer"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1317
+#: src/ibusunicodegen.h:1321
 msgid "CJK Unified Ideographs Extension G"
 msgstr "CJK-forenede ideografer-udvidelse G"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1321
+#: src/ibusunicodegen.h:1325
 msgid "CJK Unified Ideographs Extension H"
 msgstr "CJK-forenede ideografer, udvidelse H"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1325
+#: src/ibusunicodegen.h:1329
 msgid "Tags"
 msgstr "Mærkater"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1329
+#: src/ibusunicodegen.h:1333
 msgid "Variation Selectors Supplement"
 msgstr "Variationsvælgere-supplement"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1333
+#: src/ibusunicodegen.h:1337
 msgid "Supplementary Private Use Area-A"
 msgstr "Ekstra privat brug-område-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
-#: src/ibusunicodegen.h:1337
+#: src/ibusunicodegen.h:1341
 msgid "Supplementary Private Use Area-B"
 msgstr "Ekstra privat brug-område-B"
 
@@ -3234,64 +3249,78 @@ msgstr ""
 "Indstil TYPE for im-module til \"gtk2\", \"gtk3\" eller \"gtk4\"; standard "
 "er \"gtk3\"."
 
-#: tools/main.vala:182
+#: tools/main.vala:266
 msgid "List engine name only"
 msgstr "Vis kun motornavn"
 
-#: tools/main.vala:198 tools/main.vala:394 tools/main.vala:436
+#: tools/main.vala:282 tools/main.vala:571 tools/main.vala:645
+#, c-format
 msgid "Can't connect to IBus.\n"
 msgstr "Kan ikke oprette forbindelse til IBus.\n"
 
-#: tools/main.vala:224
+#: tools/main.vala:308
 #, c-format
 msgid "language: %s\n"
 msgstr "sprog: %s\n"
 
-#: tools/main.vala:294
+#: tools/main.vala:378
+#, c-format
 msgid "No engine is set.\n"
 msgstr "Ingen motor er sat.\n"
 
-#: tools/main.vala:302
+#: tools/main.vala:386
+#, c-format
 msgid "Set global engine failed.\n"
 msgstr "Sætning af global motor mislykkedes.\n"
 
-#: tools/main.vala:307
+#: tools/main.vala:391
+#, c-format
 msgid "Get global engine failed.\n"
 msgstr "Hentning af global motor mislykkedes.\n"
 
-#: tools/main.vala:328
-msgid "Start or restart daemon with \"direct\" or \"systemd\" TYPE."
+#: tools/main.vala:527
+#, fuzzy
+#| msgid "Start or restart daemon with \"direct\" or \"systemd\" TYPE."
+msgid ""
+"Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" TYPE."
 msgstr "Start eller genstart dæmon med TYPE \"direct\" eller \"systemd\"."
 
-#: tools/main.vala:331
+#: tools/main.vala:531
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
 msgstr "Start eller genstart dæmon med SYSTEMD_SERVICE-fil."
 
-#: tools/main.vala:334
+#: tools/main.vala:534 tools/main.vala:617
 msgid "Show debug messages."
 msgstr "Vis fejlsøgningsbeskeder."
 
-#: tools/main.vala:453
+#: tools/main.vala:613
+#, fuzzy
+#| msgid "Start or restart daemon with \"direct\" or \"systemd\" TYPE."
+msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
+msgstr "Start eller genstart dæmon med TYPE \"direct\" eller \"systemd\"."
+
+#: tools/main.vala:662
 msgid "Read the system registry cache."
 msgstr "Læs systemets registreringsmellemlager."
 
-#: tools/main.vala:455
+#: tools/main.vala:664
 msgid "Read the registry cache FILE."
 msgstr "Læs den registreringsmellemlageret FIL."
 
-#: tools/main.vala:473 tools/main.vala:478
+#: tools/main.vala:682 tools/main.vala:687
+#, c-format
 msgid "The registry cache is invalid.\n"
 msgstr "Registreringsmellemlageret er ugyldigt.\n"
 
-#: tools/main.vala:494
+#: tools/main.vala:703
 msgid "Write the system registry cache."
 msgstr "Skriv systemets registreringsmellemlager."
 
-#: tools/main.vala:496
+#: tools/main.vala:705
 msgid "Write the registry cache FILE."
 msgstr "Skriv den registreringsmellemlageret FIL."
 
-#: tools/main.vala:534
+#: tools/main.vala:743
 msgid ""
 "Use engine schema paths instead of ibus core, which can be comma-separated "
 "values."
@@ -3299,75 +3328,75 @@ msgstr ""
 "Brug motorskema-stier i stedet for ibus-kerne, hvilket kan være "
 "kommaseparerede værdier."
 
-#: tools/main.vala:623
+#: tools/main.vala:832
 msgid "Resetting…"
 msgstr "Nulstiller…"
 
-#: tools/main.vala:641
+#: tools/main.vala:850
 msgid "Done"
 msgstr "Færdig"
 
-#: tools/main.vala:699
+#: tools/main.vala:908
 msgid "Set or get engine"
 msgstr "Sæt eller hent motor"
 
-#: tools/main.vala:700
+#: tools/main.vala:909
 msgid "Exit ibus-daemon"
 msgstr "Forlad ibus-daemon"
 
-#: tools/main.vala:701
+#: tools/main.vala:910
 msgid "Show available engines"
 msgstr "Vis tilgængelige motorer"
 
-#: tools/main.vala:702
+#: tools/main.vala:911
 msgid "(Not implemented)"
 msgstr "(ikke implementeret)"
 
-#: tools/main.vala:703
+#: tools/main.vala:912
 msgid "Restart ibus-daemon"
 msgstr "Genstart ibus-daemon"
 
-#: tools/main.vala:704
+#: tools/main.vala:913
 msgid "Start ibus-daemon"
 msgstr "Start ibus-daemon"
 
-#: tools/main.vala:705 ui/gtk3/application.vala:306
+#: tools/main.vala:914 ui/gtk3/application.vala:306
 msgid "Show version"
 msgstr "Vis version"
 
-#: tools/main.vala:706
+#: tools/main.vala:915
 msgid "Show the content of registry cache"
 msgstr "Vis indholdet af registreringsmellemlager"
 
-#: tools/main.vala:707
+#: tools/main.vala:916
 msgid "Create registry cache"
 msgstr "Opret registreringsmellemlager"
 
-#: tools/main.vala:708
+#: tools/main.vala:917
 msgid "Print the D-Bus address of ibus-daemon"
 msgstr "Print D-Bus-adressen af ibus-daemon"
 
-#: tools/main.vala:709
+#: tools/main.vala:918
 msgid "Show the configuration values"
 msgstr "Vis konfigurationsværdierne"
 
-#: tools/main.vala:710
+#: tools/main.vala:919
 msgid "Reset the configuration values"
 msgstr "Nulstil konfigurationsværdierne"
 
-#: tools/main.vala:712
+#: tools/main.vala:921
 msgid "Save emoji on dialog to clipboard"
 msgstr "Gem emoji i dialog til udklipsholder"
 
-#: tools/main.vala:714
+#: tools/main.vala:923
 msgid "Retrieve im-module value from GTK instance"
 msgstr "Hent værdien af im-module fra GTK-instans"
 
-#: tools/main.vala:716
+#: tools/main.vala:925
 msgid "Show this information"
 msgstr "Vis denne information"
 
-#: tools/main.vala:723
+#: tools/main.vala:932
 #, c-format
 msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
@@ -3376,11 +3405,12 @@ msgstr ""
 "Anvendelse: %s KOMMANDO [TILVALG...]\n"
 "\n"
 
-#: tools/main.vala:724
+#: tools/main.vala:933
+#, c-format
 msgid "Commands:\n"
 msgstr "Kommandoer:\n"
 
-#: tools/main.vala:754
+#: tools/main.vala:963
 #, c-format
 msgid "%s is unknown command!\n"
 msgstr "%s er ukendt kommando!\n"
@@ -3461,6 +3491,7 @@ msgid "Description: %s"
 msgstr "Beskrivelse: %s"
 
 #: ui/gtk3/emojier.vala:1599
+#, c-format
 msgid "None"
 msgstr "Ingen"
 
@@ -3480,7 +3511,7 @@ msgid "Alias: %s"
 msgstr "Alias: %s"
 
 #: ui/gtk3/emojier.vala:2180 ui/gtk3/ibus-extension-gtk3.desktop.in:3
-#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1431
+#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1440
 msgid "Emoji Choice"
 msgstr "Valg af emoji"
 
@@ -3541,17 +3572,18 @@ msgstr "Match med længen af det angive heltal"
 msgid "Match with the condition of the specified integer"
 msgstr "Match med betingelsen af det angive heltal"
 
-#: ui/gtk3/panel.vala:363 ui/gtk3/panel.vala:386
+#: ui/gtk3/panel.vala:362 ui/gtk3/panel.vala:385
+#, c-format
 msgid "IBus Panel"
 msgstr "IBus-panel"
 
-#: ui/gtk3/panel.vala:364
+#: ui/gtk3/panel.vala:363
 msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
 msgstr ""
 
-#: ui/gtk3/panel.vala:836
+#: ui/gtk3/panel.vala:841
 #, c-format
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
@@ -3564,7 +3596,7 @@ msgid ""
 "environment variables are unset in the desktop session."
 msgstr ""
 
-#: ui/gtk3/panel.vala:858
+#: ui/gtk3/panel.vala:863
 #, c-format
 msgid ""
 "Please unset QT_IM_MODULE and GTK_IM_MODULE environment variables and 'ibus-"
@@ -3572,11 +3604,11 @@ msgid ""
 "component."
 msgstr ""
 
-#: ui/gtk3/panel.vala:873
+#: ui/gtk3/panel.vala:878
 msgid "IBus Notification"
 msgstr "IBus-påmindelse"
 
-#: ui/gtk3/panel.vala:1228
+#: ui/gtk3/panel.vala:1233
 #, c-format
 msgid ""
 "Your configured input method %s does not exist in IBus input methods so "
@@ -3586,7 +3618,7 @@ msgstr ""
 "indtastningsmetoder, så \"US\"-layoutet blev konfigureret i stedet for din "
 "indtastningsmetode."
 
-#: ui/gtk3/panel.vala:1233
+#: ui/gtk3/panel.vala:1238
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
@@ -3594,7 +3626,7 @@ msgstr ""
 "Mindst en af dine konfigurerede indtastningsmetoder findes ikke i IBus-"
 "indtastningsmetoder."
 
-#: ui/gtk3/panel.vala:1236
+#: ui/gtk3/panel.vala:1241
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
@@ -3602,11 +3634,11 @@ msgstr ""
 "Kør kommandoen \"ibus-setup\", åbn fanebladet \"Indtastningsmetode\" og "
 "konfigurér dine indtastningsmetoder igen."
 
-#: ui/gtk3/panel.vala:1394
+#: ui/gtk3/panel.vala:1399
 msgid "IBus is an intelligent input bus for Linux/Unix."
 msgstr "IBus er en intelligent indtastningsbus til Linux/Unix."
 
-#: ui/gtk3/panel.vala:1398
+#: ui/gtk3/panel.vala:1403
 msgid "translator-credits"
 msgstr ""
 "Kris Thomsen\n"
@@ -3617,15 +3649,15 @@ msgstr ""
 "Websted http://dansk-gruppen.dk\n"
 "E-mail <dansk@dansk-gruppen.dk>"
 
-#: ui/gtk3/panel.vala:1426
+#: ui/gtk3/panel.vala:1434
 msgid "Preferences"
 msgstr "Præferencer"
 
-#: ui/gtk3/panel.vala:1452
+#: ui/gtk3/panel.vala:1462
 msgid "Restart"
 msgstr "Genstart"
 
-#: ui/gtk3/panel.vala:1456
+#: ui/gtk3/panel.vala:1466
 msgid "Quit"
 msgstr "Afslut"
 

@@ -509,7 +509,7 @@ class Panel : IBus.PanelService {
         string layouts;
         string variants;
         string option;
-        XKBLayout.get_layout(out layouts, out variants, out option);
+        m_xkblayout.get_layout(out layouts, out variants, out option);
 
         GLib.List<IBus.EngineDesc> xkb_engines =
                 new GLib.List<IBus.EngineDesc>();

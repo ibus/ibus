@@ -4,7 +4,7 @@
  *
  * Copyright(c) 2014 Red Hat, Inc.
  * Copyright(c) 2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2014 Takao Fujiwara <tfujiwar@redhat.com>
+ * Copyright(c) 2014-2024 Takao Fujiwara <tfujiwar@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,11 +25,11 @@
 class XKBLayout
 {
     private const string XKB_COMMAND = "setxkbmap";
-    private const string XKB_QUERY_ARG = "-query";
     private const string XKB_LAYOUT_ARG = "-layout";
     private const string XMODMAP_COMMAND = "xmodmap";
     private const string[] XMODMAP_KNOWN_FILES = {".xmodmap", ".xmodmaprc",
                                                   ".Xmodmap", ".Xmodmaprc"};
+    private string[] m_get_layout_args = {};
     private string[] m_xkb_latin_layouts = {};
     private string m_default_layout = "";
     private string m_default_variant = "";
@@ -39,16 +39,23 @@ class XKBLayout
     public XKBLayout() {
     }
 
+
     public void set_latin_layouts(string[] xkb_latin_layouts) {
         m_xkb_latin_layouts = xkb_latin_layouts;
     }
 
-    public static void get_layout(out string layout,
-                                  out string variant,
-                                  out string option) {
+
+    public void get_layout(out string layout,
+                           out string variant,
+                           out string option) {
+        search_get_layout_program();
+        if (m_get_layout_args[0] == null) {
+            warning("Not found localectl or setxkbmap command in PATH");
+            return;
+        }
         string[] exec_command = {};
-        exec_command += XKB_COMMAND;
-        exec_command += XKB_QUERY_ARG;
+        foreach (unowned string arg in m_get_layout_args)
+            exec_command += arg;
         string standard_output = null;
         string standard_error = null;
         int exit_status = 0;
@@ -69,45 +76,93 @@ class XKBLayout
         } catch (GLib.SpawnError err) {
             stderr.printf("IBUS_ERROR: %s\n", err.message);
         }
-        if (exit_status != 0) {
+        if (exit_status != 0)
             stderr.printf("IBUS_ERROR: %s\n", standard_error ?? "");
-        }
-        if (standard_output == null) {
+        if (standard_output == null)
             return;
+
+        if (exec_command[0] == "localectl") {
+            parse_localectl_status_str(standard_output,
+                                       out layout,
+                                       out variant,
+                                       out option);
+        } else if (exec_command[0] == XKB_COMMAND) {
+            parse_xkbmap_query_str(standard_output,
+                                   out layout,
+                                   out variant,
+                                   out option);
         }
+    }
 
+
+    private void search_get_layout_program() {
+        if (m_get_layout_args[0] != null)
+            return;
+        string get_layout_command = null;
+        // setxkbmap can get the session XKB options in Xorg.
+        if (BindingCommon.default_is_xdisplay())
+            get_layout_command = "setxkbmap -query";
+        else if (GLib.Environment.find_program_in_path("localectl") != null)
+            get_layout_command = "localectl status";
+        else if (GLib.Environment.find_program_in_path("setxkbmap") != null)
+            get_layout_command = "setxkbmap -query";
+        if (get_layout_command != null)
+            m_get_layout_args = get_layout_command.split(" ");
+    }
+
+
+    private void parse_localectl_status_str(string standard_output,
+                                            out string layout,
+                                            out string variant,
+                                            out string option) {
+        layout = "";
+        variant = "";
+        option = "";
         foreach (string line in standard_output.split("\n")) {
-            string element = "layout:";
-            string retval = "";
-            if (line.has_prefix(element)) {
-                retval = line[element.length:line.length];
-                if (retval != null) {
-                    retval = retval.strip();
+            const string[] elements = { "X11 Layout:", "X11 Variant:" };
+            foreach (unowned string element in elements) {
+                string retval = "";
+                int index = line.index_of(element);
+                if (index >= 0) {
+                    retval = line[index + element.length:line.length];
+                    if (retval != null)
+                        retval = retval.strip();
+                    if (element == elements[0])
+                        layout = retval;
+                    else if (element == elements[1])
+                        variant = retval;
                 }
-                layout = retval;
-            }
-
-            element = "variant:";
-            retval = "";
-            if (line.has_prefix(element)) {
-                retval = line[element.length:line.length];
-                if (retval != null) {
-                    retval = retval.strip();
-                }
-                variant = retval;
-            }
-
-            element = "options:";
-            retval = "";
-            if (line.has_prefix(element)) {
-                retval = line[element.length:line.length];
-                if (retval != null) {
-                    retval = retval.strip();
-                }
-                option = retval;
             }
         }
     }
+
+
+    private void parse_xkbmap_query_str(string standard_output,
+                                        out string layout,
+                                        out string variant,
+                                        out string option) {
+        layout = "";
+        variant = "";
+        option = "";
+        foreach (string line in standard_output.split("\n")) {
+            const string[] elements = { "layout:", "variant:", "options:" };
+            foreach (unowned string element in elements) {
+                string retval = "";
+                if (line.has_prefix(element)) {
+                    retval = line[element.length:line.length];
+                    if (retval != null)
+                        retval = retval.strip();
+                    if (element == elements[0])
+                        layout = retval;
+                    else if (element == elements[1])
+                        variant = retval;
+                    else if (element == elements[2])
+                        option = retval;
+                }
+            }
+        }
+    }
+
 
     public void set_layout(IBus.EngineDesc engine) {
         string layout = engine.get_layout();
@@ -206,6 +261,7 @@ class XKBLayout
         run_xmodmap();
     }
 
+
     public void run_xmodmap() {
         if (!m_use_xmodmap) {
             return;
@@ -245,6 +301,7 @@ class XKBLayout
             break;
         }
     }
+
 
     public void set_use_xmodmap(bool use_xmodmap) {
         m_use_xmodmap = use_xmodmap;

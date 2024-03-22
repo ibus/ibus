@@ -356,7 +356,7 @@ if test x"$cross_compiling" != xyes; then
                                  X11_LOCALEDATADIR="$X11_PREFIX/lib/X11/locale",
                                  X11_LOCALEDATADIR="$(datadir)/X11/locale")])
 else
-    if test x"$X11_LOCALEDATADIR" == x; then
+    if test x"$X11_LOCALEDATADIR" = x; then
         X11_LOCALEDATADIR="$X11_PREFIX/share/X11/locale"
     fi
     AC_MSG_RESULT([Skipping X11 locale directory check when cross compiling. Using: $X11_LOCALEDATADIR])

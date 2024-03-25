@@ -156,7 +156,7 @@ jobs:
           echo $GITHUB_WORKSPACE
           ls -a
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           #repository: ibus/ibus
           fetch-depth: 200

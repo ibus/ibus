@@ -672,10 +672,8 @@ ibus_service_class_free_interfaces (IBusServiceClass   *class,
 
     g_array_ref (class->interfaces);
     p = interfaces = (GDBusInterfaceInfo **)class->interfaces->data;
-    while (*p != NULL) {
-        *p++;
+    for (; *p != NULL; ++p)
         total++;
-    }
     if (!total)
         return 0;
     if (!depth)

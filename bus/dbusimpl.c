@@ -785,9 +785,13 @@ bus_dbus_impl_get_name_owner (BusDBusImpl           *dbus,
     const gchar *name = NULL;
     g_variant_get (parameters, "(&s)", &name);
 
-    if (g_strcmp0 (name, "org.freedesktop.DBus") == 0 ||
-        g_strcmp0 (name, "org.freedesktop.IBus") == 0) {
+    if (g_strcmp0 (name, "org.freedesktop.DBus") == 0) {
+        /* The bus daemon is its own unique name, as per the D-Bus Specification */
         name_owner = name;
+    }
+    else if (g_strcmp0 (name, "org.freedesktop.IBus") == 0) {
+        /* The IBus daemon is always the first connection on the bus */
+        name_owner = ":1.1";
     }
     else {
         BusConnection *owner = bus_dbus_impl_get_connection_by_name (dbus, name);

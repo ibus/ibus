@@ -710,7 +710,8 @@ bus_dbus_impl_list_names (BusDBusImpl           *dbus,
 
     /* FIXME should add them? */
     g_variant_builder_add (&builder, "s", "org.freedesktop.DBus");
-    g_variant_builder_add (&builder, "s", "org.freedesktop.IBus");
+    g_variant_builder_add (&builder, "s", IBUS_SERVICE_IBUS);
+    g_variant_builder_add (&builder, "s", IBUS_NAME_OWNER_NAME);
 
     /* append well-known names */
     GList *names, *name;
@@ -785,11 +786,11 @@ bus_dbus_impl_get_name_owner (BusDBusImpl           *dbus,
     const gchar *name = NULL;
     g_variant_get (parameters, "(&s)", &name);
 
-    if (g_strcmp0 (name, "org.freedesktop.DBus") == 0 ||
-        g_strcmp0 (name, "org.freedesktop.IBus") == 0) {
+    if (!g_strcmp0 (name, "org.freedesktop.DBus")) {
         name_owner = name;
-    }
-    else {
+    } else if (!g_strcmp0 (name, IBUS_SERVICE_IBUS)) {
+        name_owner = IBUS_NAME_OWNER_NAME;
+    } else {
         BusConnection *owner = bus_dbus_impl_get_connection_by_name (dbus, name);
         if (owner != NULL) {
             name_owner = bus_connection_get_unique_name (owner);
@@ -800,8 +801,7 @@ bus_dbus_impl_get_name_owner (BusDBusImpl           *dbus,
         g_dbus_method_invocation_return_error (invocation,
                         G_DBUS_ERROR, G_DBUS_ERROR_NAME_HAS_NO_OWNER,
                         "Can not get name owner of '%s': no such name", name);
-    }
-    else {
+    } else {
         g_dbus_method_invocation_return_value (invocation,
                         g_variant_new ("(s)", name_owner));
     }
@@ -932,6 +932,9 @@ bus_dbus_impl_add_match (BusDBusImpl           *dbus,
                         "Parse match rule [%s] failed", rule_text);
         return;
     }
+    /* ibus_bus_watch_ibus_signal() supports IBUS_SERVICE_IBUS sender. */
+    if (!g_strcmp0 (bus_match_rule_get_sender (rule), IBUS_SERVICE_IBUS))
+        bus_match_rule_set_sender (rule, IBUS_NAME_OWNER_NAME);
 
     g_dbus_method_invocation_return_value (invocation, NULL);
     GList *p;
@@ -1510,7 +1513,8 @@ bus_dbus_impl_connection_filter_cb (GDBusConnection *dbus_connection,
         /* connection unique name as sender of the message*/
         g_dbus_message_set_sender (message, bus_connection_get_unique_name (connection));
 
-        if (g_strcmp0 (destination, "org.freedesktop.IBus") == 0) {
+        if (!g_strcmp0 (destination, IBUS_SERVICE_IBUS) ||
+            !g_strcmp0 (destination, IBUS_NAME_OWNER_NAME)) {
             /* the message is sent to IBus service. messages from ibusbus and ibuscontext may fall into this category. */
             switch (message_type) {
             case G_DBUS_MESSAGE_TYPE_METHOD_CALL:
@@ -1528,8 +1532,7 @@ bus_dbus_impl_connection_filter_cb (GDBusConnection *dbus_connection,
                 g_object_unref (message);
                 g_return_val_if_reached (NULL);  /* return NULL since the service does not handle signals. */
             }
-        }
-        else if (g_strcmp0 (destination, "org.freedesktop.DBus") == 0) {
+        } else if (!g_strcmp0 (destination, "org.freedesktop.DBus")) {
             /* the message is sent to DBus service. messages from ibusbus may fall into this category. */
             switch (message_type) {
             case G_DBUS_MESSAGE_TYPE_METHOD_CALL:
@@ -1547,8 +1550,7 @@ bus_dbus_impl_connection_filter_cb (GDBusConnection *dbus_connection,
                 g_object_unref (message);
                 g_return_val_if_reached (NULL);  /* return NULL since the service does not handle signals. */
             }
-        }
-        else if (destination == NULL) {
+        } else if (destination == NULL) {
             /* the message is sent to the current connection. communications between ibus-daemon and panel/engines may fall into this
              * category since the panel/engine proxies created by ibus-daemon does not set bus name. */
             switch (message_type) {
@@ -1570,8 +1572,7 @@ bus_dbus_impl_connection_filter_cb (GDBusConnection *dbus_connection,
                 g_object_unref (message);
                 g_return_val_if_reached (NULL);  /* return NULL since the service does not handle messages. */
             }
-        }
-        else {
+        } else {
             /* The message is sent to an other service. Forward it.
              * For example, the config proxy class in src/ibusconfig.c sets its "g-name" property (i.e. destination) to IBUS_SERVICE_CONFIG. */
             bus_dbus_impl_forward_message (dbus, connection, message);

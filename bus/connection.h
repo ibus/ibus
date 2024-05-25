@@ -42,6 +42,9 @@
 #define BUS_CONNECTION_GET_CLASS(obj)   \
     (G_TYPE_INSTANCE_GET_CLASS ((obj), BUS_TYPE_CONNECTION, BusConnectionClass))
 
+/* bus_dbus_impl_hello() sets the client unique names ":1.1" or later. */
+#define IBUS_NAME_OWNER_NAME ":1.0"
+
 G_BEGIN_DECLS
 
 typedef struct _BusConnection BusConnection;

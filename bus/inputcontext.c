@@ -755,7 +755,7 @@ bus_input_context_send_signal (BusInputContext *context,
             ibus_service_get_object_path ((IBusService *)context),
             interface_name,
             signal_name);
-    g_dbus_message_set_sender (message, "org.freedesktop.IBus");
+    g_dbus_message_set_sender (message, IBUS_NAME_OWNER_NAME);
     g_dbus_message_set_destination (
             message,
             bus_connection_get_unique_name (context->connection));

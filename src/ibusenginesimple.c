@@ -385,7 +385,7 @@ ibus_engine_simple_update_preedit_text (IBusEngineSimple *simple)
 
     if (s->len == 0) {
         /* #2536 IBusEngine can inherit IBusEngineSimple for comopse keys.
-         * If the previous preedit is zero, the current preedit does not 
+         * If the previous preedit is zero, the current preedit does not
          * need to be hidden here at least because ibus-daemon could have
          * another preedit for the child IBusEnigne likes m17n and caclling
          * ibus_engine_hide_preedit_text() here could cause a reset of

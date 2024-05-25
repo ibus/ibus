@@ -1326,6 +1326,17 @@ ibus_engine_service_method_call (IBusService           *service,
             return;
         }
         priv->enable_extension = ibus_extension_event_is_enabled (event);
+        /* IBusEngineSimple no longer calls to hide the preedit with the zero
+         * lenght and this sends the null preedit here when the emojier
+         * commits or escapes the emoji preedit text.
+         * TODO: Do we need a signal for the parent engines to inform this
+         * information because some engines don't wish to hide their preedit
+         * with hiding the emoji preedit?
+         */
+        if (!priv->enable_extension) {
+            IBusText *text = ibus_text_new_from_static_string ("");
+            ibus_engine_update_preedit_text (engine, text, 0, FALSE);
+        }
         g_dbus_method_invocation_return_value (invocation, NULL);
         return;
     }

@@ -28,3 +28,6 @@
 # for 'Pointer_*' XKB option names.
 <UFDD5> <0> : "⁰"
 
+# Same sequences
+<U2800> <0> : "a"
+<braille_blank> <0> : "a"

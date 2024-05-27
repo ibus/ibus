@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* ibus - The Input Bus
  * Copyright (C) 2013-2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2013-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2013-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -615,7 +615,7 @@ ibus_compose_key_flag (guint key)
     /* If name is null, the key sequence is expressed as "<Uxxxx>" format in
      * the Compose file and the typed keysym has the flag.
      */
-    if (!name)
+    if (!name || g_str_has_prefix (name, "0x"))
         return 0x1000000;
     /* "<Pointer_EnableKeys>" is not described in the Compose file but <UFEF9>
      * in the file.

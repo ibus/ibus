@@ -22,3 +22,9 @@
 # This case swaps c_h and C_h in en-US
 <c_h>   : "C’h"
 <C_h>   : "c’h"
+# AltGr-t, Shift-asterisk with fr(bepo_afnor) keymap outputs
+# <UFDD5> <0>
+# Support Unicode keysyms in case they are not used in XKB options except
+# for 'Pointer_*' XKB option names.
+<UFDD5> <0> : "⁰"
+

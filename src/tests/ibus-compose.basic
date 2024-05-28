@@ -34,7 +34,7 @@
 # Test Vietnamese (vn layout) symbols
 # https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/-/blob/c895b24cae5eab27b7ebe45953835da82076c69b/symbols/vn#L30
 <ohorn> <grave> : "Ờ" U1EDC
-<01A1> <grave> : "Ờ" U1EDC
+<U01A1> <grave> : "Ờ" U1EDC
 # Other symbols
 <U2800> <0> : "a"
 <braille_blank> <0> : "a"

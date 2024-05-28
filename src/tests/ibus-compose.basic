@@ -28,6 +28,13 @@
 # for 'Pointer_*' XKB option names.
 <UFDD5> <0> : "⁰"
 
-# Same sequences
+# Same sequences: a Unicode keysym <Uxxxx> has real value 0x01000000 + xxxx.
+# See: https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/blob/68de489ec6c2fb6f8cfc47b0bba7edd0f9942f17/include/X11/keysymdef.h#L82
+
+# Test Vietnamese (vn layout) symbols
+# https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/-/blob/c895b24cae5eab27b7ebe45953835da82076c69b/symbols/vn#L30
+<ohorn> <grave> : "Ờ" U1EDC
+<01A1> <grave> : "Ờ" U1EDC
+# Other symbols
 <U2800> <0> : "a"
 <braille_blank> <0> : "a"

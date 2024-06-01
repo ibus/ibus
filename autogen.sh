@@ -42,7 +42,7 @@ cd "$srcdir"
     touch ChangeLog
 }
 
-(test "x$DISABLE_INSTALL_PKGS" = "x") && {
+(test "x$DISABLE_INSTALL_PKGS" = "x") && (test "x$FLATPAK_ID" = "x" ) && {
     (test -f /etc/fedora-release ) && {
         rpm -q $FEDORA_PKG1 || exit 1
         rpm -q $FEDORA_PKG2 || exit 1

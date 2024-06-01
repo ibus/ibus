@@ -509,9 +509,20 @@ AM_CONDITIONAL([ENABLE_DAEMON], [true])
 
 PYGOBJECT_REQUIRED=3.0.0
 
-PKG_CHECK_EXISTS([pygobject-3.0 >= $PYGOBJECT_REQUIRED],
-                 [enable_pygobject=yes], [enable_pygobject=no])
+# When IBus is built with the Json files in test directory, the build
+# tries to install IBus.py file into pyoverridesdir
+# but the directory is readonly with `flatpak-builder` 
+AC_ARG_ENABLE(pygobject,
+    AS_HELP_STRING([--disable-pygobject],
+                   [Disable pygobject.]),
+    [enable_pygobject=$enableval],
+    [enable_pygobject=yes]
+)
 
+if test "x$enable_pygobject" = "xyes"; then
+    PKG_CHECK_EXISTS([pygobject-3.0 >= $PYGOBJECT_REQUIRED],
+                     [enable_pygobject=yes], [enable_pygobject=no])
+fi
 if test "x$enable_pygobject" = "xyes"; then
     PKG_CHECK_MODULES(PYTHON, [pygobject-3.0 >= $PYGOBJECT_REQUIRED])
 

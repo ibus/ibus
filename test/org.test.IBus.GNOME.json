@@ -1,7 +1,7 @@
 {
     "app-id": "org.test.IBus",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "3.24",
+    "runtime-version": "40",
     "sdk": "org.gnome.Sdk",
     "command": "/usr/bin/zenity",
     "finish-args": [
@@ -33,10 +33,20 @@
                 {
                     "type": "git",
                     "url": "https://github.com/ibus/ibus.git",
-                    "branch": "master"
+                    "branch": "main"
                 }
             ],
-            "config-opts": ["--disable-emoji-dict", "--disable-dconf", "--disable-gtk2", "--disable-libnotify", "--disable-unicode-dict", "--disable-ui"],
+            "config-opts": [
+                "--disable-appindicator",
+                "--disable-emoji-dict",
+                "--disable-dconf",
+                "--disable-gtk2",
+                "--disable-libnotify",
+                "--disable-pygobject",
+                "--disable-systemd-services",
+                "--disable-unicode-dict",
+                "--disable-ui"
+            ],
             "post-install": ["gtk-query-immodules-3.0 /app/lib/gtk-3.0/3.0.0/immodules/im-ibus.so > /app/lib/gtk-3.0/3.0.0/immodules.cache"]
         }
     ]

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
- Copyright (C) 2017-2019 Red Hat, Inc.
+ Copyright (C) 2017-2024 Red Hat, Inc.
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -128,8 +128,13 @@
       <arg type='v' name='prop' />
     </signal>
 
+    <property name='PostProcessKeyEvent' type='(a(yv))' access='read'>
+    </property>
     <property name='ContentType' type='(uu)' access='write' />
     <property name='ClientCommitPreedit' type='(b)' access='write' />
+    <property name='EffectivePostProcessKeyEvent' type='(b)' access='write'>
+    </property>
+
   </interface>
 
   <interface name='org.freedesktop.IBus.Service'>

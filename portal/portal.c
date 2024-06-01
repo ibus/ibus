@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
- * Copyright (C) 2017-2021 Red Hat, Inc.
+ * Copyright (C) 2017-2024 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -66,8 +66,10 @@ struct _IBusPortalClass
 
 enum
 {
-    PROP_CONTENT_TYPE = 1,
+    PROP_POST_PROCESS_KEY_EVENT = 1,
+    PROP_CONTENT_TYPE,
     PROP_CLIENT_COMMIT_PREEDIT,
+    PROP_EFFECTIVE_POST_PROCESS_KEY_EVENT,
     N_PROPERTIES
 };
 
@@ -330,6 +332,23 @@ ibus_portal_context_set_property (IBusPortalContext *portal_context,
                            NULL  /* user_data */
                            );
         break;
+    case PROP_EFFECTIVE_POST_PROCESS_KEY_EVENT:
+        g_dbus_proxy_call (G_DBUS_PROXY (portal_context->context),
+                           "org.freedesktop.DBus.Properties.Set",
+                           g_variant_new ("(ssv)",
+                                          IBUS_INTERFACE_INPUT_CONTEXT,
+                                          "EffectivePostProcessKeyEvent",
+                                          g_value_get_variant (value)),
+                           G_DBUS_CALL_FLAGS_NONE,
+                           -1,
+                           NULL, /* cancellable */
+                           NULL, /* callback */
+                           NULL  /* user_data */
+                           );
+        break;
+    case PROP_POST_PROCESS_KEY_EVENT:
+        g_warning ("No support for setting content type");
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (portal_context, prop_id, pspec);
     }
@@ -341,10 +360,37 @@ ibus_portal_context_get_property (IBusPortalContext *portal_context,
                                   GValue            *value,
                                   GParamSpec        *pspec)
 {
+    GVariant *result;
+    GVariant *variant = NULL;
+    GError *error = NULL;
     switch (prop_id) {
+    case PROP_POST_PROCESS_KEY_EVENT:
+        result = g_dbus_proxy_call_sync (G_DBUS_PROXY (portal_context->context),
+                                         "org.freedesktop.DBus.Properties.Get",
+                                         g_variant_new (
+                                                 "(ss)",
+                                                 IBUS_INTERFACE_INPUT_CONTEXT,
+                                                 "PostProcessKeyEvent"),
+                                         G_DBUS_CALL_FLAGS_NONE,
+                                         -1,
+                                         NULL, /* cancellable */
+                                         &error);
+        if (error) {
+            g_warning ("Error PostProcessKeyEvent: %s", error->message);
+            g_error_free (error);
+            break;
+        }
+        g_variant_get (result, "(v)", &variant);
+        if (!variant) {
+            g_warning ("No child in PostProcessKeyEvent");
+            break;
+        }
+        g_value_set_variant (value, variant);
+        break;
     case PROP_CONTENT_TYPE:
     case PROP_CLIENT_COMMIT_PREEDIT:
-        g_warning ("No support for setting content type");
+    case PROP_EFFECTIVE_POST_PROCESS_KEY_EVENT:
+        g_warning ("No support for getting content type");
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (portal_context, prop_id, pspec);
@@ -387,7 +433,7 @@ ibus_portal_context_class_init (IBusPortalContextClass *klass)
     skeleton_class->g_authorize_method = ibus_portal_context_g_authorize_method;
 
     ibus_dbus_input_context_override_properties (gobject_class,
-                                                 PROP_CONTENT_TYPE);
+                                                 PROP_POST_PROCESS_KEY_EVENT);
 }
 
 static void

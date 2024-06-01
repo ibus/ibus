@@ -400,9 +400,6 @@ portal_context_g_signal (GDBusProxy        *proxy,
     GError *error = NULL;
     GDBusConnection *connection;
 
-    if (g_strcmp0 (sender_name, IBUS_SERVICE_IBUS) != 0)
-        return;
-
     connection = g_dbus_interface_skeleton_get_connection (
             G_DBUS_INTERFACE_SKELETON (portal_context));
     if (!g_dbus_connection_emit_signal (connection,

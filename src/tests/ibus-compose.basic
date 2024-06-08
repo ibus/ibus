@@ -3,7 +3,9 @@
 <Multi_key> <quotedbl> <Cyrillic_zhe>   : "Ӝ"   U04DC
 <Multi_key> <quotedbl> <Cyrillic_ZHE>   : "ӝ"   U04DD
 #
-# Unicode tests of Uxxxx
+# A Unicode keysym <Uxxxx> has a real value 0x01000000 + xxxx.
+# https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/blob/master/include/X11/keysymdef.h?ref_type=heads#L82
+#
 # en-US is "ǡ" U01E1 but this case is "ǟ" U01DE
 <dead_macron> <U0227>                           : "ǟ"   U01DE
 <Multi_key> <macron> <U0227>                    : "ǟ"   U01DE
@@ -13,6 +15,10 @@
 # Support Unicode keysyms in case they are not used in XKB options except
 # for 'Pointer_*' XKB option names.
 <UFDD5> <0> : "⁰" U2070
+# ohorn, grave with vn keymap
+# IBus does not distingish ohorn and Aogonek
+<ohorn> <grave> : "Ờ" U1EDC
+<U01A1> <grave> : "Ờ" U1EDC
 #
 ### Multibyte chars tests
 # Khmer digraphs

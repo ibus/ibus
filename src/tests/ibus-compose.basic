@@ -8,6 +8,13 @@
 <dead_macron> <U0227>                           : "ǟ"   U01DE
 <Multi_key> <macron> <U0227>                    : "ǟ"   U01DE
 <Multi_key> <underscore> <U0227>                : "ǟ"   U01DE
+# AltGr-t, Shift-asterisk with fr(bepo_afnor) keymap outputs
+# <UFDD5> <0>
+# Support Unicode keysyms in case they are not used in XKB options except
+# for 'Pointer_*' XKB option names.
+<UFDD5> <0> : "⁰" U2070
+#
+### Multibyte chars tests
 # Khmer digraphs
 # This case swaps U17fe and U17ff in en-US
 <U17fe> : "ាំ"
@@ -22,3 +29,6 @@
 # This case swaps c_h and C_h in en-US
 <c_h>   : "C’h"
 <C_h>   : "c’h"
+# Some <U10000> are supported for musical composer in en-US
+<Multi_key> <U1D157> <U1D165>     : "𝇒"   U1D1D2 # MUSICAL SYMBOL SQUARE B
+

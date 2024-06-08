@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* ibus - The Input Bus
  * Copyright (C) 2013-2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2013-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2013-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -222,6 +222,12 @@ parse_compose_sequence (IBusComposeData *compose_data,
             compose_data->sequence[n] = codepoint;
         }
 
+        if (codepoint >= 0x10000) {
+            if (!ibus_compose_key_flag (0xffff & codepoint)) {
+                g_warning ("The keysym %s > 0xffff is not supported: %s",
+                           match, line);
+            }
+        }
         if (codepoint == IBUS_KEY_VoidSymbol) {
             g_warning ("Could not get code point of keysym %s: %s",
                        match, line);
@@ -603,6 +609,7 @@ ibus_compose_list_check_duplicated (GList  *compose_list,
 
 /*
  * Actual typed keysyms have a flag against the definition.
+ * https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/blob/master/include/X11/keysymdef.h?ref_type=heads#L82
  * https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/master/nls/en_US.UTF-8/Compose.pre#L4559
  */
 guint
@@ -611,11 +618,27 @@ ibus_compose_key_flag (guint key)
     const char *name;
     if (key <= 0xff)
         return 0;
+    switch (key) {
+    /* <Aogonek> is not used in UTF-8 compose sequences but <ohorn> in EN
+     * compose file and vn keymap is assumed instead.
+     */
+    case 0x1a1:
+    /* <Zabovedot> is not used in UTF-8 compose sequences but <Uhorn> in EN
+     * compose file and vn keymap s assumed instead.
+     */
+    case 0x1af:
+    /* <caron> is not used in UTF-8 compose sequences but <EZH> in EN compose
+     * file and fr(nodeadkeys) keymap is assumed instead.
+     */
+    case 0x1b7:
+        return 0x1000000;
+    default:;
+    }
     name = ibus_keyval_name (key);
     /* If name is null, the key sequence is expressed as "<Uxxxx>" format in
      * the Compose file and the typed keysym has the flag.
      */
-    if (!name)
+    if (!name || g_str_has_prefix (name, "0x"))
         return 0x1000000;
     /* "<Pointer_EnableKeys>" is not described in the Compose file but <UFEF9>
      * in the file.
@@ -648,8 +671,8 @@ ibus_compose_data_compare (gpointer a,
         gunichar code_a = compose_data_a->sequence[i];
         gunichar code_b = compose_data_b->sequence[i];
 
-        code_a += ibus_compose_key_flag (code_a);
-        code_b += ibus_compose_key_flag (code_b);
+        code_a &= 0xffff;
+        code_b &= 0xffff;
         if (code_a != code_b)
             return code_a - code_b;
         if (code_a == 0 && code_b == 0)
@@ -1581,9 +1604,9 @@ compare_seq (const void *key, const void *value)
         guint saved_key = (guint)seq[i];
         guint flag = ibus_compose_key_flag (saved_key);
         if (typed_key < (saved_key + flag))
-            return -1;
+            return (0xffff & typed_key) - saved_key;
         else if (typed_key > (saved_key + flag))
-            return 1;
+            return (0xffff & typed_key) - saved_key;
 
         i++;
     }

@@ -42,6 +42,7 @@ struct _IBusComposeTablePrivate
 };
 
 
+guint    ibus_compose_key_flag      (guint                       key);
 gboolean ibus_check_algorithmically (const guint                *compose_buffer,
                                      int                         n_compose,
                                      gunichar                   *output);

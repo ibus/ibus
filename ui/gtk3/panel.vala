@@ -446,11 +446,10 @@ class Panel : IBus.PanelService {
     }
 
     private void bind_switch_shortcut() {
-        if (m_is_wayland_im)
-            return;
         string[] accelerators = m_settings_hotkey.get_strv("triggers");
 
-        var keybinding_manager = KeybindingManager.get_instance();
+        var keybinding_manager =
+                KeybindingManager.get_instance(m_is_wayland_im);
 
         BindingCommon.KeyEventFuncType ftype =
                 BindingCommon.KeyEventFuncType.IME_SWITCHER;

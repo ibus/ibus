@@ -60,8 +60,9 @@ public class KeybindingManager : GLib.Object {
     public delegate void KeybindingHandlerFunc(Gdk.Event event);
 
 
-    private  KeybindingManager() {
-        Gdk.Event.handler_set(event_handler);
+    private  KeybindingManager(bool is_wayland_im) {
+        if (!is_wayland_im)
+            Gdk.Event.handler_set(event_handler);
     }
 
     /**
@@ -107,9 +108,9 @@ public class KeybindingManager : GLib.Object {
             m_bindings.remove (binding);
     }
 
-    public static KeybindingManager get_instance () {
+    public static KeybindingManager get_instance (bool is_wayland_im=false) {
         if (m_instance == null)
-            m_instance = new KeybindingManager ();
+            m_instance = new KeybindingManager (is_wayland_im);
         return m_instance;
     }
 

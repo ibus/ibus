@@ -26,6 +26,8 @@ do
         echo "Clean $CACHE_FILES"
         rm $CACHE_FILES
     fi
+    # Need to wait for 1 sec not to be freezed with gnome-shell in Wayland
+    sleep 1
 done << EOF_ENVS
 `cat $SRCDIR/ibus-compose.env`
 EOF_ENVS

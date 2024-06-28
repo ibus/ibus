@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2024-02-28 19:10+0900\n"
+"POT-Creation-Date: 2024-05-23 22:16+0900\n"
 "PO-Revision-Date: 2024-02-29 13:35+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/ibus/"
@@ -491,7 +491,7 @@ msgstr "_OK"
 msgid "More…"
 msgstr "Mer …"
 
-#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1456
+#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1510
 msgid "About"
 msgstr "Om"
 
@@ -3241,76 +3241,71 @@ msgstr ""
 "Ställ in im-modul TYP till \"gtk2\",  \"gtk3\" eller \"gtk4\". Standard är "
 "\"gtk3\"."
 
-#: tools/main.vala:266
+#: tools/main.vala:311
 msgid "List engine name only"
 msgstr "Lista endast maskinnamn"
 
-#: tools/main.vala:282 tools/main.vala:571 tools/main.vala:645
-#, c-format
+#: tools/main.vala:327 tools/main.vala:628 tools/main.vala:705
 msgid "Can't connect to IBus.\n"
 msgstr "Kan inte ansluta till IBus.\n"
 
-#: tools/main.vala:308
+#: tools/main.vala:353
 #, c-format
 msgid "language: %s\n"
 msgstr "språk: %s\n"
 
-#: tools/main.vala:378
-#, c-format
+#: tools/main.vala:423
 msgid "No engine is set.\n"
 msgstr "Ingen maskin är satt.\n"
 
-#: tools/main.vala:386
-#, c-format
+#: tools/main.vala:431
 msgid "Set global engine failed.\n"
 msgstr "Att sätta den globala maskinen misslyckades.\n"
 
-#: tools/main.vala:391
-#, c-format
+#: tools/main.vala:436
 msgid "Get global engine failed.\n"
 msgstr "Att hämta den globala maskinen misslyckades.\n"
 
-#: tools/main.vala:527
+#: tools/main.vala:573
 msgid ""
 "Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" TYPE."
 msgstr ""
 "Starta eller starta om demonen med \"direct\", \"systemd\" eller \"kde-"
 "wayland\" TYP."
 
-#: tools/main.vala:531
+#: tools/main.vala:577
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
 msgstr "Starta eller starta om demonen med SYSTEMD_SERVICE fil."
 
-#: tools/main.vala:534 tools/main.vala:617
+#: tools/main.vala:580 tools/main.vala:674
 msgid "Show debug messages."
 msgstr "Visa felsökningsmeddelanden."
 
-#: tools/main.vala:613
+#: tools/main.vala:670
 msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
 msgstr "Avsluta demonen med \"direct\" eller \"kde-wayland\" TYP."
 
-#: tools/main.vala:662
+#: tools/main.vala:722
 msgid "Read the system registry cache."
 msgstr "Läs systemregistercachen."
 
-#: tools/main.vala:664
+#: tools/main.vala:724
 msgid "Read the registry cache FILE."
 msgstr "Läs registercachen i FIL."
 
-#: tools/main.vala:682 tools/main.vala:687
-#, c-format
+#: tools/main.vala:742 tools/main.vala:747
 msgid "The registry cache is invalid.\n"
 msgstr "Registercachen är felaktig.\n"
 
-#: tools/main.vala:703
+#: tools/main.vala:763
 msgid "Write the system registry cache."
 msgstr "Skriv systemregistercachen."
 
-#: tools/main.vala:705
+#: tools/main.vala:765
 msgid "Write the registry cache FILE."
 msgstr "Skriv registercachen till FIL."
 
-#: tools/main.vala:743
+#: tools/main.vala:803
 msgid ""
 "Use engine schema paths instead of ibus core, which can be comma-separated "
 "values."
@@ -3318,75 +3313,75 @@ msgstr ""
 "Använd motorschemasökvägar istället för ibus-kärnan, vilket kan vara "
 "kommaseparerade värden."
 
-#: tools/main.vala:832
+#: tools/main.vala:892
 msgid "Resetting…"
 msgstr "Återställer …"
 
-#: tools/main.vala:850
+#: tools/main.vala:910
 msgid "Done"
 msgstr "Klart"
 
-#: tools/main.vala:908
+#: tools/main.vala:968
 msgid "Set or get engine"
 msgstr "Sätt eller hämta maskin"
 
-#: tools/main.vala:909
+#: tools/main.vala:969
 msgid "Exit ibus-daemon"
 msgstr "Avsluta ibus-demonen"
 
-#: tools/main.vala:910
+#: tools/main.vala:970
 msgid "Show available engines"
 msgstr "Visa tillgängliga maskiner"
 
-#: tools/main.vala:911
+#: tools/main.vala:971
 msgid "(Not implemented)"
 msgstr "(Inte implementerat)"
 
-#: tools/main.vala:912
+#: tools/main.vala:972
 msgid "Restart ibus-daemon"
 msgstr "Starta om ibus-demonen"
 
-#: tools/main.vala:913
+#: tools/main.vala:973
 msgid "Start ibus-daemon"
 msgstr "Starta om ibus-demon"
 
-#: tools/main.vala:914 ui/gtk3/application.vala:306
+#: tools/main.vala:974 ui/gtk3/application.vala:317
 msgid "Show version"
 msgstr "Visa versionen"
 
-#: tools/main.vala:915
+#: tools/main.vala:975
 msgid "Show the content of registry cache"
 msgstr "Vissa innehållet i registercachen"
 
-#: tools/main.vala:916
+#: tools/main.vala:976
 msgid "Create registry cache"
 msgstr "Skapa en registercache"
 
-#: tools/main.vala:917
+#: tools/main.vala:977
 msgid "Print the D-Bus address of ibus-daemon"
 msgstr "Skriv ut D-Bus-adressen till ibus-demonen"
 
-#: tools/main.vala:918
+#: tools/main.vala:978
 msgid "Show the configuration values"
 msgstr "Visa konfigurationsvärdena"
 
-#: tools/main.vala:919
+#: tools/main.vala:979
 msgid "Reset the configuration values"
 msgstr "Återställ konfigurationsvärdena"
 
-#: tools/main.vala:921
+#: tools/main.vala:981
 msgid "Save emoji on dialog to clipboard"
 msgstr "Spara emoji i dialogen till urklipp"
 
-#: tools/main.vala:923
+#: tools/main.vala:983
 msgid "Retrieve im-module value from GTK instance"
 msgstr "Hämta im-modulvärde från GTK-instans"
 
-#: tools/main.vala:925
+#: tools/main.vala:985
 msgid "Show this information"
 msgstr "Visa denna information"
 
-#: tools/main.vala:932
+#: tools/main.vala:992
 #, c-format
 msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
@@ -3395,29 +3390,28 @@ msgstr ""
 "Användning: %s KOMMANDO [FLAGGA …]\n"
 "\n"
 
-#: tools/main.vala:933
-#, c-format
+#: tools/main.vala:993
 msgid "Commands:\n"
 msgstr "Kommandon:\n"
 
-#: tools/main.vala:963
+#: tools/main.vala:1023
 #, c-format
 msgid "%s is unknown command!\n"
 msgstr "%s är ett okänt kommando!\n"
 
-#: ui/gtk3/application.vala:311
+#: ui/gtk3/application.vala:322
 msgid "Connect Wayland input method protocol"
 msgstr "Anslut Wayland inmatningsmetodprotokoll"
 
-#: ui/gtk3/application.vala:315
+#: ui/gtk3/application.vala:326
 msgid "Execute ibus-daemon if it's not running"
 msgstr "Starta igång ibus-daemon om den inte körs"
 
-#: ui/gtk3/application.vala:319
+#: ui/gtk3/application.vala:330
 msgid "ibus-daemon's arguments"
 msgstr "ibus-demonens argument"
 
-#: ui/gtk3/application.vala:323
+#: ui/gtk3/application.vala:334
 msgid "Verbose logging"
 msgstr "Omfattande loggning"
 
@@ -3480,7 +3474,6 @@ msgid "Description: %s"
 msgstr "Beskrivning: %s"
 
 #: ui/gtk3/emojier.vala:1599
-#, c-format
 msgid "None"
 msgstr "Ingen"
 
@@ -3500,7 +3493,7 @@ msgid "Alias: %s"
 msgstr "Alias: %s"
 
 #: ui/gtk3/emojier.vala:2180 ui/gtk3/ibus-extension-gtk3.desktop.in:3
-#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1440
+#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1471
 msgid "Emoji Choice"
 msgstr "Emoji-val"
 
@@ -3560,12 +3553,11 @@ msgstr "Matcha med längden på det angivna heltalet"
 msgid "Match with the condition of the specified integer"
 msgstr "Matcha med villkoret för det angivna heltalet"
 
-#: ui/gtk3/panel.vala:362 ui/gtk3/panel.vala:385
-#, c-format
+#: ui/gtk3/panel.vala:366 ui/gtk3/panel.vala:389
 msgid "IBus Panel"
 msgstr "IBus-panel"
 
-#: ui/gtk3/panel.vala:363
+#: ui/gtk3/panel.vala:367
 msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
@@ -3573,7 +3565,7 @@ msgstr ""
 "Du kan växla mellan aktiveringsmenyn och en kontextmeny genom att klicka med "
 "musens mittknapp på panelikonen."
 
-#: ui/gtk3/panel.vala:841
+#: ui/gtk3/panel.vala:853
 #, c-format
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
@@ -3595,7 +3587,7 @@ msgstr ""
 "miljövariablerna QT_IM_MODULE och GTK_IM_MODULE är inställda i "
 "skrivbordssessionen."
 
-#: ui/gtk3/panel.vala:863
+#: ui/gtk3/panel.vala:875
 #, c-format
 msgid ""
 "Please unset QT_IM_MODULE and GTK_IM_MODULE environment variables and 'ibus-"
@@ -3606,11 +3598,19 @@ msgstr ""
 "daemon --panel disable' bör köras som en underordnad process av %s "
 "komponenten."
 
-#: ui/gtk3/panel.vala:878
+#: ui/gtk3/panel.vala:884
+#, c-format
+msgid ""
+"Seems you run %s with '--enable-wayland-im' option but your display server "
+"is Xorg so the Wayland feature is disabled. You would be better off running "
+"ibus-daemon directly instead or %s without that option."
+msgstr ""
+
+#: ui/gtk3/panel.vala:900
 msgid "IBus Notification"
 msgstr "IBus avisering"
 
-#: ui/gtk3/panel.vala:1233
+#: ui/gtk3/panel.vala:1252
 #, c-format
 msgid ""
 "Your configured input method %s does not exist in IBus input methods so "
@@ -3620,7 +3620,7 @@ msgstr ""
 "inmatningsbetoder så ”US”-layouten konfigurerades istället för din "
 "inmatningsmetod."
 
-#: ui/gtk3/panel.vala:1238
+#: ui/gtk3/panel.vala:1257
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
@@ -3628,7 +3628,7 @@ msgstr ""
 "Åtminstone en av dina konfigurerade inmatningsmetode existerar inte bland "
 "IBus inmatningsmetoder."
 
-#: ui/gtk3/panel.vala:1241
+#: ui/gtk3/panel.vala:1260
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
@@ -3636,29 +3636,29 @@ msgstr ""
 "Kör kommandot ”ibus-setup”, öppna fliken ”Inmatningsmetod” och konfigurera "
 "dina inmatningsmetoder igen."
 
-#: ui/gtk3/panel.vala:1399
+#: ui/gtk3/panel.vala:1418
 msgid "IBus is an intelligent input bus for Linux/Unix."
 msgstr "IBus är en intelligent inmatningsbuss för Linux/Unix."
 
-#: ui/gtk3/panel.vala:1403
+#: ui/gtk3/panel.vala:1422
 msgid "translator-credits"
 msgstr "Göran Uddeborg <goeran@uddeborg.se>"
 
-#: ui/gtk3/panel.vala:1434
+#: ui/gtk3/panel.vala:1463
 msgid "Preferences"
 msgstr "Inställningar"
 
-#: ui/gtk3/panel.vala:1462
+#: ui/gtk3/panel.vala:1516
 msgid "Restart"
 msgstr "Starta om"
 
-#: ui/gtk3/panel.vala:1466
+#: ui/gtk3/panel.vala:1525
 msgid "Quit"
 msgstr "Avsluta"
 
 #. Translators: If your locale is RTL, the msgstr is "default:RTL".
 #. * Otherwise the msgstr is "default:LTR".
-#: ui/gtk3/propertypanel.vala:367 ui/gtk3/propertypanel.vala:375
+#: ui/gtk3/propertypanel.vala:371 ui/gtk3/propertypanel.vala:379
 msgid "default:LTR"
 msgstr "default:LTR"
 

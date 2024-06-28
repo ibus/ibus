@@ -15,13 +15,14 @@
 # Emmanuel Nedelec <nednet@wanadoo.fr>, 2017. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2015, 2017-2019. #zanata
 # elmerys <contact@zle.fr>, 2018. #zanata
+# Léane GRASSER <leane.grasser@proton.me>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-12-11 16:21+0900\n"
-"PO-Revision-Date: 2022-11-09 11:19+0000\n"
-"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
+"PO-Revision-Date: 2024-06-27 09:36+0000\n"
+"Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/fr/>\n"
 "Language: fr\n"
@@ -29,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11

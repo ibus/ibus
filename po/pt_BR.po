@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2023-08-02 17:20+0900\n"
-"PO-Revision-Date: 2024-02-07 16:31+0000\n"
+"PO-Revision-Date: 2024-03-25 13:58+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/pt_BR/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -2276,10 +2276,8 @@ msgstr "Linear A"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:777
-#, fuzzy
-#| msgid "Latin Extended-A"
 msgid "Latin Extended-F"
-msgstr "Latim estendido A"
+msgstr "Latim estendido F"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

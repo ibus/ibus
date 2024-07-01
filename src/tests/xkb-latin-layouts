@@ -120,6 +120,11 @@ EOF_READ_XKB
 
 main()
 {
+    if [ x"$WAYLAND_DISPLAY" != x ] ; then
+        echo "setxkbmap does not work in Wayland"
+        exit 77
+    fi
+
     parse_args "$@"
 
     if [ x"$INSTALLED_SCHEMAS_DIR" != x ] ; then

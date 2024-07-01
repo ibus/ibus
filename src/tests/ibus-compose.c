@@ -13,6 +13,9 @@ static IBusComposeTableEx *m_compose_table;
 static IBusEngine *m_engine;
 static gchar *m_srcdir;
 static GMainLoop *m_loop;
+#if GTK_CHECK_VERSION (4, 0, 0)
+static gboolean m_list_toplevel;
+#endif
 
 typedef enum {
     TEST_CREATE_ENGINE,
@@ -25,9 +28,16 @@ typedef struct _TestIdleData {
 } TestIdleData;
 
 extern guint ibus_compose_key_flag (guint key);
+
+#if GTK_CHECK_VERSION (4, 0, 0)
+static gboolean event_controller_enter_cb (GtkEventController *controller,
+                                           gpointer            user_data);
+#else
 static gboolean window_focus_in_event_cb (GtkWidget     *entry,
                                           GdkEventFocus *event,
                                           gpointer       data);
+#endif
+
 
 static gchar *
 get_compose_path ()
@@ -76,7 +86,11 @@ idle_cb (gpointer user_data)
             if (g_main_loop_is_running (m_loop))
                 g_main_loop_quit (m_loop);
             g_clear_pointer (&m_loop, g_main_loop_unref);
+#if GTK_CHECK_VERSION (4, 0, 0)
+            m_list_toplevel = FALSE;
+#else
             gtk_main_quit ();
+#endif
         }
         data->idle_id = 0;
         break;
@@ -171,12 +185,27 @@ register_ibus_engine ()
 
 
 static void
+window_destroy_cb (void)
+{
+#if GTK_CHECK_VERSION (4, 0, 0)
+    m_list_toplevel = FALSE;
+#else
+    gtk_main_quit ();
+#endif
+}
+
+
+static void
 set_engine_cb (GObject      *object,
                GAsyncResult *res,
                gpointer      user_data)
 {
     IBusBus *bus = IBUS_BUS (object);
+#if GTK_CHECK_VERSION (4, 0, 0)
+    GtkEventController *controller = GTK_EVENT_CONTROLLER (user_data);
+#else
     GtkWidget *entry = GTK_WIDGET (user_data);
+#endif
     GError *error = NULL;
     static TestIdleData data = { .category = TEST_COMMIT_TEXT, .idle_id = 0 };
     int i, j;
@@ -254,14 +283,22 @@ set_engine_cb (GObject      *object,
         }
     }
 
+#if GTK_CHECK_VERSION (4, 0, 0)
+    g_signal_handlers_disconnect_by_func (
+            controller,
+            G_CALLBACK (event_controller_enter_cb),
+            NULL);
+#else
     g_signal_handlers_disconnect_by_func (entry, 
                                           G_CALLBACK (window_focus_in_event_cb),
                                           NULL);
+#endif
     data.idle_id = g_timeout_add_seconds (10, idle_cb, &data);
 }
 
-static gboolean
-window_focus_in_event_cb (GtkWidget *entry, GdkEventFocus *event, gpointer data)
+
+static void
+set_engine (gpointer user_data)
 {
     g_assert (m_bus != NULL);
     ibus_bus_set_global_engine_async (m_bus,
@@ -269,9 +306,30 @@ window_focus_in_event_cb (GtkWidget *entry, GdkEventFocus *event, gpointer data)
                                       -1,
                                       NULL,
                                       set_engine_cb,
-                                      entry);
+                                      user_data);
+}
+
+
+#if GTK_CHECK_VERSION (4, 0, 0)
+static gboolean
+event_controller_enter_cb (GtkEventController *controller,
+                           gpointer            user_data)
+{
+    set_engine (controller);
     return FALSE;
 }
+
+#else
+
+static gboolean
+window_focus_in_event_cb (GtkWidget     *entry,
+                          GdkEventFocus *event,
+                          gpointer       data)
+{
+    set_engine (entry);
+    return FALSE;
+}
+#endif
 
 
 static void
@@ -293,7 +351,9 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
     int seq;
     gunichar code = g_utf8_get_char (chars);
     const gchar *test;
+#if ! GTK_CHECK_VERSION (4, 0, 0)
     GtkEntry *entry = GTK_ENTRY (user_data);
+#endif
     IBusComposeTablePrivate *priv;
     static TestIdleData data = { .category = TEST_COMMIT_TEXT, .idle_id = 0 };
 
@@ -377,7 +437,11 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
     n_loop++;
 #endif
 
+#if GTK_CHECK_VERSION (4, 0, 0)
+    gtk_entry_buffer_set_text (buffer, "", 1);
+#else
     gtk_entry_set_text (entry, "");
+#endif
     g_main_loop_quit (m_loop);
 }
 
@@ -385,19 +449,40 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
 static void
 create_window ()
 {
-    GtkWidget *window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    GtkWidget *entry = gtk_entry_new ();
+    GtkWidget *window;
+    GtkWidget *entry;
     GtkEntryBuffer *buffer;
+#if GTK_CHECK_VERSION (4, 0, 0)
+    GtkEventController *controller;
+
+    window = gtk_window_new ();
+#else
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+#endif
+    entry = gtk_entry_new ();
 
     g_signal_connect (window, "destroy",
-                      G_CALLBACK (gtk_main_quit), NULL);
+                      G_CALLBACK (window_destroy_cb), NULL);
+#if GTK_CHECK_VERSION (4, 0, 0)
+    controller = gtk_event_controller_focus_new ();
+    g_signal_connect (controller, "enter",
+                      G_CALLBACK (event_controller_enter_cb), NULL);
+    gtk_widget_add_controller (window, controller);
+#else
     g_signal_connect (entry, "focus-in-event",
                       G_CALLBACK (window_focus_in_event_cb), NULL);
+#endif
     buffer = gtk_entry_get_buffer (GTK_ENTRY (entry));
     g_signal_connect (buffer, "inserted-text",
                       G_CALLBACK (window_inserted_text_cb), entry);
+
+#if GTK_CHECK_VERSION (4, 0, 0)
+    gtk_window_set_child (GTK_WINDOW (window), entry);
+    gtk_widget_show (window);
+#else
     gtk_container_add (GTK_CONTAINER (window), entry);
     gtk_widget_show_all (window);
+#endif
 }
 
 
@@ -408,6 +493,9 @@ test_compose (void)
     if (!register_ibus_engine ())
         return;
 
+#if GTK_CHECK_VERSION (4, 0, 0)
+    m_list_toplevel = TRUE;
+#endif
     create_window ();
     /* FIXME:
      * IBusIMContext opens GtkIMContextSimple as the slave and
@@ -417,7 +505,13 @@ test_compose (void)
      " "GTK+ supports to output one char only: "
      */
     flags = g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL);
+#if GTK_CHECK_VERSION (4, 0, 0)
+    gtk_window_list_toplevels ();
+    while (m_list_toplevel)
+        g_main_context_iteration (NULL, TRUE);
+#else
     gtk_main ();
+#endif
     g_log_set_always_fatal (flags);
 }
 
@@ -428,14 +522,21 @@ main (int argc, char *argv[])
     gchar *test_name;
     gchar *test_path;
 
-    ibus_init ();
+    /* ibus_init() should not be called here because
+     * ibus_init() is called from IBus Gtk4 IM module even if
+     * GTK_IM_MODULE=wayland is exported.
+     */
     /* Avoid a warning of "AT-SPI: Could not obtain desktop path or name"
      * with gtk_main().
      */
     if (!g_setenv ("NO_AT_BRIDGE", "1", TRUE))
         g_message ("Failed setenv NO_AT_BRIDGE\n");
     g_test_init (&argc, &argv, NULL);
+#if GTK_CHECK_VERSION (4, 0, 0)
+    gtk_init ();
+#else
     gtk_init (&argc, &argv);
+#endif
 
     m_srcdir = (argc > 1 && strlen (argv[1]) < FILENAME_MAX)
             ? g_strdup (argv[1]) : g_strdup (".");

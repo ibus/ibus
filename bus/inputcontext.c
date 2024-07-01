@@ -1289,6 +1289,15 @@ _ic_set_engine (BusInputContext       *context,
                 GDBusMethodInvocation *invocation)
 {
     gchar *engine_name = NULL;
+    BusIBusImpl *ibus = bus_ibus_impl_get_default ();
+
+    if (bus_ibus_impl_is_use_global_engine (ibus)) {
+        g_dbus_method_invocation_return_error (invocation,
+                G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
+                "Cannot set engines when use-global-engine is enabled.");
+        return;
+    }
+
     g_variant_get (parameters, "(&s)", &engine_name);
 
     if (!bus_input_context_has_focus (context)) {

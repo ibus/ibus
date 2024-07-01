@@ -355,6 +355,16 @@ test_keypress (void)
     int status = 0;
     GError *error = NULL;
 
+#ifdef GDK_WINDOWING_WAYLAND
+    {
+        GdkDisplay *display = gdk_display_get_default ();
+        if (GDK_IS_WAYLAND_DISPLAY (display)) {
+            g_test_skip_printf ("setxkbmap and XTEST do not work in Wayland.\n");
+            return;
+        }
+    }
+#endif
+
     /* localectl does not change the session keymap. */
     path = g_find_program_in_path ("setxkbmap");
     if (path) {
@@ -395,18 +405,8 @@ main (int argc, char *argv[])
 #else
     gtk_init (&argc, &argv);
 #endif
-#ifdef GDK_WINDOWING_WAYLAND
-    {
-        GdkDisplay *display = gdk_display_get_default ();
-        if (GDK_IS_WAYLAND_DISPLAY (display)) {
-            g_print ("setxkbmap and XTEST do not work in Wayland.\n");
-            return 0;
-        }
-    }
-#endif
 
     g_test_add_func ("/ibus/keyrepss", test_keypress);
-
 
     return g_test_run ();
 }

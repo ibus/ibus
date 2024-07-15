@@ -848,8 +848,8 @@ static gboolean
 cancelled_idle_cb (EngineProxyNewData *data)
 {
     g_task_return_new_error (data->task,
-                             G_DBUS_ERROR,
-                             G_DBUS_ERROR_FAILED,
+                             G_IO_ERROR,
+                             G_IO_ERROR_CANCELLED,
                              "Operation was cancelled");
 
     engine_proxy_new_data_free (data);
@@ -887,8 +887,8 @@ bus_engine_proxy_new (IBusEngineDesc      *desc,
 
     if (g_cancellable_is_cancelled (cancellable)) {
         g_task_return_new_error (task,
-                                 G_DBUS_ERROR,
-                                 G_DBUS_ERROR_FAILED,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_CANCELLED,
                                  "Operation was cancelled");
         g_object_unref (task);
         return;

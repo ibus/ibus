@@ -2548,7 +2548,7 @@ new_engine_cb (GObject             *obj,
             g_task_return_new_error (data->task,
                                      G_IO_ERROR,
                                      G_IO_ERROR_CANCELLED,
-                                     "Opertation was cancelled");
+                                     "Operation was cancelled");
         }
         else {
             /* Let BusEngineProxy call a Disable signal. */

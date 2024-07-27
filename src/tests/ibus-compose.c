@@ -7,19 +7,24 @@
 #define RED   "\033[0;31m"
 #define NC    "\033[0m"
 
+static gchar *m_test_name;
+static gchar *m_session_name;
 static IBusBus *m_bus;
 static gchar *m_compose_file;
 static IBusComposeTableEx *m_compose_table;
 static IBusEngine *m_engine;
 static gchar *m_srcdir;
+static gboolean m_is_gtk_32bit_compose_error;
 static GMainLoop *m_loop;
+static char *m_engine_is_focused;
 #if GTK_CHECK_VERSION (4, 0, 0)
 static gboolean m_list_toplevel;
 #endif
 
 typedef enum {
+    TEST_COMMIT_TEXT,
     TEST_CREATE_ENGINE,
-    TEST_COMMIT_TEXT
+    TEST_DELAYED_FOCUS_IN
 } TestIDleCategory;
 
 typedef struct _TestIdleData {
@@ -37,6 +42,19 @@ static gboolean window_focus_in_event_cb (GtkWidget     *entry,
                                           GdkEventFocus *event,
                                           gpointer       data);
 #endif
+
+
+gboolean
+is_integrated_desktop ()
+{
+    if (!m_session_name)
+        m_session_name = g_strdup (g_getenv ("XDG_SESSION_DESKTOP"));
+    if (!m_session_name)
+        return FALSE;
+    if (!g_ascii_strncasecmp (m_session_name, "gnome", strlen ("gnome")))
+       return TRUE;
+    return FALSE;
+}
 
 
 gboolean
@@ -63,11 +81,15 @@ get_compose_path ()
     const gchar * const *l;
     gchar *compose_path = NULL;
 
+    if (m_is_gtk_32bit_compose_error)
+        g_assert (g_setenv ("LANG", m_test_name, TRUE));
 #if GLIB_CHECK_VERSION (2, 58, 0)
     langs = g_get_language_names_with_category ("LC_CTYPE");
 #else
     langs = g_get_language_names ();
 #endif
+    if (m_is_gtk_32bit_compose_error)
+        g_assert (g_setenv ("LANG", "en_US.UTF-8", TRUE));
     for (l = langs; *l; l++) {
         if (g_str_has_prefix (*l, "en_US"))
             break;
@@ -91,6 +113,9 @@ gboolean
 idle_cb (gpointer user_data)
 {
     TestIdleData *data = (TestIdleData *)user_data;
+    static int n = 0;
+    gboolean terminate_program = FALSE;
+
     g_assert (data);
     switch (data->category) {
     case TEST_CREATE_ENGINE:
@@ -103,20 +128,72 @@ idle_cb (gpointer user_data)
             if (g_main_loop_is_running (m_loop))
                 g_main_loop_quit (m_loop);
             g_clear_pointer (&m_loop, g_main_loop_unref);
-#if GTK_CHECK_VERSION (4, 0, 0)
-            m_list_toplevel = FALSE;
-#else
-            gtk_main_quit ();
-#endif
+            terminate_program = TRUE;
         }
         data->idle_id = 0;
+        break;
+    case TEST_DELAYED_FOCUS_IN:
+        if (m_engine_is_focused) {
+            data->idle_id = 0;
+            n = 0;
+            g_main_loop_quit (m_loop);
+            return G_SOURCE_REMOVE;
+        }
+        if (n++ < 10) {
+            g_test_message ("Waiting for \"focus-in\" signal %dth times", n);
+            return G_SOURCE_CONTINUE;
+        }
+        g_test_fail_printf ("\"focus-in\" signal is timeout.");
+        g_main_loop_quit (m_loop);
+        terminate_program = TRUE;
+        n = 0;
         break;
     default:
         g_test_fail_printf ("Idle func is called by wrong category:%d.",
                             data->category);
         break;
     }
+    if (terminate_program) {
+#if GTK_CHECK_VERSION (4, 0, 0)
+        m_list_toplevel = FALSE;
+#else
+        gtk_main_quit ();
+#endif
+    }
     return G_SOURCE_REMOVE;
+}
+
+
+static void
+engine_focus_in_cb (IBusEngine *engine,
+#ifdef IBUS_FOCUS_IN_ID
+                    gchar      *object_path,
+                    gchar      *client,
+#endif
+                    gpointer    user_data)
+{
+#ifdef IBUS_FOCUS_IN_ID
+    g_test_message ("engine_focus_in_cb %s %s", object_path, client);
+    m_engine_is_focused = g_strdup (client);
+#else
+    g_test_message ("engine_focus_in_cb");
+    m_engine_is_focused = g_strdup ("No named");
+#endif
+}
+
+static void
+engine_focus_out_cb (IBusEngine *engine,
+#ifdef IBUS_FOCUS_IN_ID
+                     gchar      *object_path,
+#endif
+                     gpointer    user_data)
+{
+#ifdef IBUS_FOCUS_IN_ID
+    g_test_message ("engine_focus_out_cb %s", object_path);
+#else
+    g_test_message ("engine_focus_out_cb");
+#endif
+    g_clear_pointer (&m_engine_is_focused, g_free);
 }
 
 
@@ -135,11 +212,30 @@ create_engine_cb (IBusFactory *factory,
     g_assert (data);
     /* Don't reset idle_id to avoid duplicated register_ibus_engine(). */
     g_source_remove (data->idle_id);
-    m_engine = ibus_engine_new_with_type (IBUS_TYPE_ENGINE_SIMPLE,
-                                          name,
-                                          engine_path,
-                                          ibus_bus_get_connection (m_bus));
+    m_engine = (IBusEngine *)g_object_new (
+            IBUS_TYPE_ENGINE_SIMPLE,
+            "engine-name",      name,
+            "object-path",      engine_path,
+            "connection",       ibus_bus_get_connection (m_bus),
+#ifdef IBUS_FOCUS_IN_ID
+            "has-focus-id",     TRUE,
+#endif
+            NULL);
     g_free (engine_path);
+
+    m_engine_is_focused = NULL;
+#ifdef IBUS_FOCUS_IN_ID
+    g_signal_connect (m_engine, "focus-in-id",
+#else
+    g_signal_connect (m_engine, "focus-in",
+#endif
+                      G_CALLBACK (engine_focus_in_cb), NULL);
+#ifdef IBUS_FOCUS_IN_ID
+    g_signal_connect (m_engine, "focus-out-id",
+#else
+    g_signal_connect (m_engine, "focus-out",
+#endif
+                      G_CALLBACK (engine_focus_out_cb), NULL);
     if (m_compose_file)
         compose_path = g_build_filename (m_srcdir, m_compose_file, NULL);
     else
@@ -235,6 +331,13 @@ set_engine_cb (GObject      *object,
         return;
     }
 
+    /* ibus_im_context_focus_in() is called after GlboalEngine is set. */
+    if (is_integrated_desktop () && !m_engine_is_focused) {
+        data.category = TEST_DELAYED_FOCUS_IN;
+        data.idle_id = g_timeout_add_seconds (1, idle_cb, &data);
+        g_main_loop_run (m_loop);
+        if (data.idle_id != 0)
+            return;
     if (m_compose_table == NULL) {
         g_test_skip ("Your locale uses en_US compose table.");
         idle_cb (&data);
@@ -319,6 +422,7 @@ set_engine (gpointer user_data)
 {
     g_test_message ("set_engine() is calling");
     g_assert (m_bus != NULL);
+
     ibus_bus_set_global_engine_async (m_bus,
                                       "xkbtest:us::eng",
                                       -1,
@@ -346,6 +450,11 @@ event_controller_enter_delay (gpointer user_data)
     }
     if (i++ == 10) {
         g_test_fail_printf ("Window is not realized with %d times", i);
+#if GTK_CHECK_VERSION (4, 0, 0)
+        m_list_toplevel = FALSE;
+#else
+        gtk_main_quit ();
+#endif
         return G_SOURCE_REMOVE;
     }
     g_test_message ("event_controller_enter_delay %d", i);
@@ -360,16 +469,43 @@ event_controller_enter_cb (GtkEventController *controller,
     static guint id = 0;
 
     g_test_message ("EventController emits \"enter\" signal");
-    /* Call an idle function because gtk_widget_add_controller()
-     * calls g_list_prepend() for event_controllers and this controller is
-     * always called before "gtk-text-focus-controller"
-     * is caleld and the IM context does not receive the focus-in yet.
-     */
     if (id)
         return;
-    id = g_idle_add (event_controller_enter_delay, controller);
+    if (is_integrated_desktop ()) {
+        /* Wait for 3 seconds in GNOME Wayland because there is a long time lag
+         * between the "enter" signal on the event controller in GtkText
+         * and the "FocusIn" D-Bus signal in BusInputContext of ibus-daemon
+         * because mutter/core/window.c:meta_window_show() calls
+         * mutter/core/window.c:meta_window_focus() ->
+         * mutter/wayland/meta-wayland-text-input.c:
+         *   meta_wayland_text_input_set_focus() ->
+         * mutter/clutter/clutter/clutter-input-method.c:
+         *   clutter_input_method_focus_out()
+         * I.e. "FocusOut" and "FocusIn" D-Bus methods are always delayed
+         * against the window present in GNOME Wayland.
+         * If "FocusOut" and "FocusIn" D-Bus signals would be called after
+         * "SetGlobalEngine" D-BUs signal was called in ibus-daemon,
+         * the following functions could be called:
+         *   engine_focus_out_cb() for the "gnome-shell" context
+         *   engine_focus_in_cb() for the "fake" context
+         *   engine_focus_out_cb() for the "fake" context
+         *   engine_focus_in_cb() for the "gnome-shell" context
+         * and ibus_engine_commit_text() would not work.
+         * This assume the focus-in/out signals are called within the timeout
+         * seconds.
+         */
+        id = g_timeout_add_seconds (3,
+                                    event_controller_enter_delay,
+                                    controller);
+    } else {
+        /* Call an idle function in Xorg because gtk_widget_add_controller()
+         * calls g_list_prepend() for event_controllers and this controller is
+         * always called before "gtk-text-focus-controller"
+         * is caleld and the IM context does not receive the focus-in yet.
+         */
+        id = g_idle_add (event_controller_enter_delay, controller);
+    }
 }
-
 #else
 
 static gboolean
@@ -550,10 +686,18 @@ static void
 test_init (void)
 {
     char *tty_name = ttyname (STDIN_FILENO);
-    GMainLoop *loop = g_main_loop_new (NULL, TRUE);
+    GMainLoop *loop;
+    static guint idle_id = 0;
+
+    if (idle_id) {
+        g_test_incomplete ("Test is called twice due to a timeout.");
+        return;
+    }
+
+    loop = g_main_loop_new (NULL, TRUE);
     g_test_message ("Test on %s", tty_name ? tty_name : "(null)");
     if (tty_name && g_strstr_len (tty_name, -1, "pts")) {
-        g_timeout_add_seconds (3, _wait_for_key_release_cb, loop);
+        idle_id = g_timeout_add_seconds (3, _wait_for_key_release_cb, loop);
         g_main_loop_run (loop);
     }
     g_main_loop_unref (loop);
@@ -586,14 +730,16 @@ test_compose (void)
     gtk_main ();
 #endif
     g_log_set_always_fatal (flags);
+    g_clear_pointer (&m_engine_is_focused, g_free);
+    g_clear_pointer (&m_session_name, g_free);
 }
 
 
 int
 main (int argc, char *argv[])
 {
-    gchar *test_name;
     gchar *test_path;
+    int retval;
 
     ibus_init ();
     /* Avoid a warning of "AT-SPI: Could not obtain desktop path or name"
@@ -612,21 +758,42 @@ main (int argc, char *argv[])
             ? g_strdup (argv[1]) : g_strdup (".");
     m_compose_file = g_strdup (g_getenv ("COMPOSE_FILE"));
 #if GLIB_CHECK_VERSION (2, 58, 0)
-    test_name = g_strdup (g_get_language_names_with_category ("LC_CTYPE")[0]);
+    m_test_name = g_strdup (g_get_language_names_with_category ("LC_CTYPE")[0]);
 #else
-    test_name = g_strdup (g_getenv ("LANG"));
+    m_test_name = g_strdup (g_getenv ("LANG"));
 #endif
     if (m_compose_file &&
-        (!test_name || !g_ascii_strncasecmp (test_name, "en_US", 5))) {
-        g_free (test_name);
-        test_name = g_path_get_basename (m_compose_file);
+        (!m_test_name || !g_ascii_strncasecmp (m_test_name, "en_US", 5))) {
+        g_free (m_test_name);
+        m_test_name = g_path_get_basename (m_compose_file);
+    }
+    /* The parent of GtkIMContextWayland is GtkIMContextSimple and
+     * it outputs a warning of "Can't handle >16bit keyvals" in
+     * gtk/gtkcomposetable.c:parse_compose_sequence() in pt-BR locales
+     * and any warnings are treated as errors with g_test_run()
+     * So export LANG=en_US.UTF-8 for GNOME Wayland as a workaround.
+     */
+    if (m_test_name && (!g_ascii_strncasecmp (m_test_name, "pt_BR", 5) ||
+                        !g_ascii_strncasecmp (m_test_name, "fi_FI", 5)
+                       )) {
+        m_is_gtk_32bit_compose_error = TRUE;
+    }
+    if (m_is_gtk_32bit_compose_error) {
+#if 1
+        g_assert (g_setenv ("LANG", "en_US.UTF-8", TRUE));
+#else
+        /* FIXME: Use expected_messages in g_log_structured() */
+        g_test_expect_message ("Gtk", G_LOG_LEVEL_WARNING,
+                               "Can't handle >16bit keyvals");
+#endif
     }
     g_test_add_func ("/ibus-compose/test-init", test_init);
     m_loop = g_main_loop_new (NULL, TRUE);
-    test_path = g_build_filename ("/ibus-compose", test_name, NULL);
+    test_path = g_build_filename ("/ibus-compose", m_test_name, NULL);
     g_test_add_func (test_path, test_compose);
     g_free (test_path);
-    g_free (test_name);
 
-    return g_test_run ();
+    retval = g_test_run ();
+    g_free (m_test_name);
+    return retval;
 }

@@ -120,6 +120,15 @@ EOF_READ_XKB
 
 main()
 {
+    if [ x"$DISPLAY" = x ] ; then
+        echo "skip: No display. Maybe headless mode."
+        exit 77
+    fi
+    if ! which setxkbmap > /dev/null ; then
+        echo "skip: No setxkbmap"
+        exit 77
+    fi
+
     parse_args "$@"
 
     if [ x"$INSTALLED_SCHEMAS_DIR" != x ] ; then

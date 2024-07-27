@@ -182,8 +182,8 @@ ibus_bus_SOURCES = ibus-bus.c
 ibus_bus_LDADD = $(prog_ldadd)
 
 ibus_compose_SOURCES = ibus-compose.c
-ibus_compose_CFLAGS = @GTK3_CFLAGS@
-ibus_compose_LDADD = $(prog_ldadd) @GTK3_LIBS@
+ibus_compose_CFLAGS = @GTK4_CFLAGS@
+ibus_compose_LDADD = $(prog_ldadd) @GTK4_LIBS@
 
 ibus_config_SOURCES = ibus-config.c
 ibus_config_LDADD = $(prog_ldadd)
@@ -207,8 +207,8 @@ ibus_keynames_SOURCES = ibus-keynames.c
 ibus_keynames_LDADD = $(prog_ldadd)
 
 ibus_keypress_SOURCES = ibus-keypress.c
-ibus_keypress_CFLAGS = @GTK3_CFLAGS@ @XTEST_CFLAGS@
-ibus_keypress_LDADD = $(prog_ldadd) @GTK3_LIBS@ @XTEST_LIBS@
+ibus_keypress_CFLAGS = @GTK4_CFLAGS@ @XTEST_CFLAGS@
+ibus_keypress_LDADD = $(prog_ldadd) @GTK4_LIBS@ @XTEST_LIBS@
 
 ibus_registry_SOURCES = ibus-registry.c
 ibus_registry_LDADD = $(prog_ldadd)

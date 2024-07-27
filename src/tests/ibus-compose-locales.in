@@ -6,7 +6,8 @@ BUILDDIR=`dirname $0`
 
 export IBUS_COMPOSE_CACHE_DIR=$PWD
 
-retval=0
+RETVAL=0
+INITED=0
 # Deleted for var in `cat *.env` because IFS=$'\n' is not supported in POSIX sh
 while read var
 do
@@ -14,19 +15,26 @@ do
     if [ "x$IS_COMMENT" != x ] ; then
         continue
     fi
+    while [ x"$IBUS_DAEMON_WITH_SYSTEMD" != x ] && [ $INITED -lt 6 ] ; do
+        echo "Waiting for ${INITED}0 secs till 60 secs"
+        sleep 10
+        INITED=`expr $INITED + 1`
+    done
     # Use $* instead of $@ not to mix strings and integers
     echo "# Starting $var $BUILDDIR/ibus-compose $SRCDIR $*"
     # Need to enclose $@ with double quotes not to split the array.
     env $var $BUILDDIR/ibus-compose $SRCDIR "$@"
-    retval=`expr $retval + $?`
-    echo "# Finished $var $BUILDDIR/ibus-compose $SRCDIR $* with $retval"
+    RETVAL=`expr $RETVAL + $?`
+    echo "# Finished $var $BUILDDIR/ibus-compose $SRCDIR $* with $RETVAL"
 
     CACHE_FILES=`ls *.cache`
     if [ x"$CACHE_FILES" != x ] ; then
         echo "Clean $CACHE_FILES"
         rm $CACHE_FILES
     fi
+    # Need to wait for 1 sec not to be freezed with gnome-shell in Wayland
+    sleep 1
 done << EOF_ENVS
 `cat $SRCDIR/ibus-compose.env`
 EOF_ENVS
-exit $retval
+exit $RETVAL

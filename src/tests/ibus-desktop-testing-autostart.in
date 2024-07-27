@@ -4,8 +4,8 @@
 #
 # ibus - The Input Bus
 #
-# Copyright (c) 2018-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
-# Copyright (c) 2018 Red Hat, Inc.
+# Copyright (c) 2021-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2021 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,16 +21,13 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-# This test runs /usr/bin/ibus-daemon after install ibus
-
 
 PROGNAME=`basename $0`
 TEST_CASE_DIR="@INSTALLEDDIR@"
 MODULE_SH='ibus-desktop-testing-module'
 MODULE_SH_PATH="@LIBEXECDIR@/$MODULE_SH"
-AUTOSTART_DESKTOP_DIR="@DATADIR@/ibus/tests"
-TEST_LOG="test-suite.log"
-TESTING_RUNNER="default"
+TEST_LOG="test-autostart.log"
+TESTING_RUNNER=""
 
 
 if test -f $MODULE_SH_PATH ; then
@@ -45,18 +42,8 @@ fi
 
 usage()
 {
-    command=""
-    for element in $SESSION_COMMAND; do
-        if test x"$element" = x; then
-            continue
-        fi
-        if echo "$element" | grep -q -E "^-" ; then
-            continue
-        fi
-        command="$element"
-    done
     $ECHO -e \
-"This test runs /usr/bin/ibus-daemon after install ibus\n"                     \
+"This test suite is called from /etc/xdg/autostart for systemd sessions\n"     \
 "$PROGNAME [OPTIONS…]\n"                                                       \
 "\n"                                                                           \
 "OPTIONS:\n"                                                                   \
@@ -64,26 +51,19 @@ usage()
 "-v, --version                    Show version\n"                              \
 "-b, --builddir=BUILDDIR          Set the BUILDDIR\n"                          \
 "-s, --srcdir=SOURCEDIR           Set the SOURCEDIR\n"                         \
-"-c, --no-graphics                Use Xvfb instead of Xorg or Wayland\n"       \
 "-V, --verbose                    Verbose log for ibus-daemon\n"               \
-"-d, --session=SESSION            Run SESSION. The default is ${command}.\n"   \
-"                                 Suffix '-with-dbus' can run SESSION with dbus session.\n" \
-"                                 E.g. --session=${command}-with-dbus\n"       \
-"-l, --lang=LANG                  Run SESSION with LANG\n"                     \
 "-t, --tests=\"TESTS...\"           Run TESTS programs which is separated by space\n" \
 "-r, --runner=RUNNER              Run TESTS programs with a test RUNNER.\n"    \
-"                                 RUNNDER = 'gnome' or 'default'.\n"           \
+"                                 RUNNDER = 'gnome', 'default' or ''.\n"       \
 "                                 'default' is an embedded runner.\n"          \
-"-i, --no-systemd                 Run gnome-seesion directly withoout systemd\n" \
-"                                 and login manager for legacy GNOME and this\n" \
-"                                 mode does not support Wayland.\n" \
+"                                 '' is no tests.\n"                           \
 "-T, --timeout=TIMEOUT            Set timeout (default TIMEOUT is 300 sec).\n" \
 "-o, --output=OUTPUT_FILE         Output the log to OUTPUT_FILE\n"             \
 "                                 default is $TEST_LOG\n"                      \
 "-O, --result=RESULT_FILE         Output the result to RESULT_FILE\n"          \
 "                                 default is stdout\n"                         \
 "-S, --screendump=DUMP_FILE       Output the screen to DUMP_FILE ('STDOUT' can be stdout)\n" \
-"-D, --delete-tests               Delete test enviroments and user $TEST_USER\n" \
+"-e, --envcheck                   Retrieve environment variables\n"            \
 ""
 }
 
@@ -92,8 +72,7 @@ main()
 {
     parse_args "$@"
     init_session
-    run_dbus_daemon 2>>$TEST_LOG 1>>$TEST_LOG
-    run_session 2>>$TEST_LOG 1>>$TEST_LOG
+    check_env
     save_screen
     run_test_suite
     finit

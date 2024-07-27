@@ -1,0 +1,876 @@
+#!/bin/sh
+# -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+# vim:set noet ts=4:
+#
+# ibus - The Input Bus
+#
+# Copyright (c) 2018-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2018 Red Hat, Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+
+# POSIX sh has no 'echo -e'
+: ${ECHO:='/usr/bin/echo'}
+# POSIX sh has $UID
+# DASH saves the graves in '``' as characters not to be extracted
+: ${UID:=`id -u`}
+: ${TEST_CASE_DIR='/usr/share/installed-tests'}
+: ${AUTOSTART_DESKTOP_DIR='/usr/share/ibus/tests'}
+
+
+VERSION=0.4
+BUILDDIR="."
+SRCDIR="."
+TEST_LOG_STDOUT=0
+RESULT_LOG=""
+SCREEN_LOG=""
+HAVE_GRAPHICS=1
+VERBOSE=0
+SESSION_COMMAND="dbus-launch --exit-with-session gnome-session"
+SESSION_LANG=
+SESSION_IS_GNOME=1
+GNOME_SHELL_WAYLAND_COMMAND="gnome-shell --wayland --headless --virtual-monitor 1024x768"
+SYSTEMD_SYSTEM_DIR="/usr/lib/systemd/user"
+PID_XORG=0
+PID_GNOME_SESSION=0
+ENABLED_SYSTEMD=1
+TEST_USER=itestuser
+TEST_USER_HOME=/export/home/$TEST_USER
+GDM_CONF=/run/gdm/custom.conf
+AUTOSTART_DESKTOP_FILE="org.freedesktop.IBus.Desktop.Testing.desktop"
+TESTS=""
+TIMEOUT=300
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m'
+ENV_CHECK=0
+ENV_COMMANDS='
+id
+pwd
+pstree -asp $$
+gsettings list-recursively org.gnome.shell
+rpm -q gnome-shell-extension-no-overview gnome-shell gnome-session
+ps -ef | grep ibus | grep -v grep
+ibus address
+env
+#dbus-send --session --print-reply --dest=org.gnome.Shell.Introspect /org/gnome/Shell/Introspect org.gnome.Shell.Introspect.GetWindows
+'
+
+
+print_log()
+{
+    if [ x"$RESULT_LOG" != x ] ; then
+        # avoid 'echo -e' before call 'sed'.
+        if [ x"$1" = x'-e' ] ; then
+            shift
+        fi
+        NO_ESCAPE=`echo "$@" | sed -e 's/\\\033\\[0;3.m//g' -e 's/\\\033\\[0m//g'`
+        $ECHO $NO_ESCAPE >> $RESULT_LOG
+    else
+        $ECHO "$@"
+    fi
+}
+
+
+parse_args()
+{
+    # This is GNU getopt. "sudo port getopt" in BSD?
+    ARGS=`getopt -o hvb:s:cVd:t:r:iT:o:O:S:el:D --long \
+help,version,builddir:,srcdir:,no-graphics,verbose,desktop:,session:,tests:,\
+runner:,no-systemd,timeout:,output:,result:,screendump:,envcheck,lang:,\
+delete-tests\
+        -- "$@"`;
+    eval set -- "$ARGS"
+    while [ 1 ] ; do
+        case "$1" in
+        -h | --help )        usage; exit 0;;
+        -v | --version )     $ECHO -e "$VERSION"; exit 0;;
+        -b | --builddir )    BUILDDIR="$2"; shift 2;;
+        -s | --srcdir )      SRCDIR="$2"; shift 2;;
+        -c | --no-graphics ) HAVE_GRAPHICS=0; shift;;
+        -V | --verbose )     VERBOSE=1; shift;;
+        --desktop )          SESSION_COMMAND="$2"
+                             print_log -e "--desktop is deprecated. Use --session instead"
+                             shift 2;;
+        -d | --session )     SESSION_COMMAND="$2"; shift 2;;
+        -t | --tests )       TESTS="$2"; shift 2;;
+        -r | --runner )      TESTING_RUNNER="$2"; shift 2;;
+        -i | --no-systemd )  ENABLED_SYSTEMD=0; shift;;
+        -T | --timeout )     TIMEOUT="$2"; shift 2;;
+        -o | --output )      TEST_LOG="$2"; shift 2;;
+        -O | --result )      RESULT_LOG="$2"; shift 2;;
+        -S | --screendump )  SCREEN_LOG="$2"; shift 2;;
+        -e | --envcheck )    ENV_CHECK=1; shift;;
+        -l | --lang )        SESSION_LANG="$2"; shift 2;;
+        -D | --delete-tests ) delete_test_user; exit 0;;
+        -- )                 shift; break;;
+        * )                  usage; exit 1;;
+        esac
+    done
+    DL='$'
+    if echo "$SESSION_COMMAND" | grep -q -E ".*-with-dbus$DL" ; then
+        SESSION_COMMAND=`echo "$SESSION_COMMAND" | sed -e 's/-with-dbus$//'`
+        SESSION_COMMAND="dbus-launch --exit-with-session $SESSION_COMMAND"
+    fi
+}
+
+
+check_tty()
+{
+    TTY=`tty`
+    if echo $PROGNAME | grep -q runner ; then
+        if [ $ENABLED_SYSTEMD -eq 1 ] && [  $SESSION_IS_GNOME -eq 1 ] ; then
+            if echo "$TTY" | grep -E 'tty|console' ; then
+               print_log -e "${RED}FAIL${NC}: ${RED}ERROR${NC}: Changing runlevel does not support console. Please log into the host with ssh."
+               exit 1
+            fi
+        fi
+        if [ $ENABLED_SYSTEMD -eq 0 ] ; then
+            if echo "$TTY" | grep -E 'pts' ; then
+               print_log -e "Running session with ssh. It might be good to use console instead."
+            fi
+        fi
+        SESSION=`ps -ef | grep session | grep -v grep`
+        if [ x"$SESSION" != x ] ; then
+               print_log -e "${RED}FAIL${NC}: ${RED}ERROR${NC}: Session is running: $SESSION"
+               exit 1
+        fi
+    fi
+}
+
+
+check_env()
+{
+    if test $ENV_CHECK -eq 0 ; then
+        return
+    fi
+    while read cmd ; do
+        if test x"$cmd" = x ; then
+            continue
+        fi
+        if echo "$cmd" | grep -q "^#"; then
+            continue
+        fi
+        echo "# $cmd" 2>>$TEST_LOG 1>>$TEST_LOG
+        eval "$cmd" 2>>$TEST_LOG 1>>$TEST_LOG
+    done << EOF_ENV_COMMANDS
+`echo "$ENV_COMMANDS"`
+EOF_ENV_COMMANDS
+}
+
+
+save_screen_real()
+{
+    SCREEN_PNG="`date '+%Y%m%d%H%M%S'`.png"
+    gnome-screenshot --file=$SCREEN_PNG
+    if test x"$SCREEN_LOG" = xSTDOUT ; then
+        base64 $SCREEN_PNG
+        touch /var/tmp/STDOUT.log
+    else
+        base64 $SCREEN_PNG > $SCREEN_LOG
+    fi
+}
+
+
+save_screen()
+{
+    if test x"$SCREEN_LOG" = x ; then
+        return
+    fi
+    if test x"$SCREEN_LOG" = xSTDOUT ; then
+        if test -f /var/tmp/STDOUT.log ; then
+            rm /var/tmp/STDOUT.log
+        fi
+    else
+        if test -f "$SCREEN_LOG" ; then
+            rm "$SCREEN_LOG"
+        fi
+    fi
+    save_screen_real &
+    while test 1 ; do
+        if test x"$SCREEN_LOG" = xSTDOUT ; then
+            if test -f /var/tmp/STDOUT.log ; then
+                break
+            fi
+        else
+            if test -f "$SCREEN_LOG" ; then
+                break
+            fi
+        fi
+        sleep 1
+    done
+}
+
+
+create_test_user()
+{
+    if grep -q $TEST_USER /etc/passwd; then
+        return;
+    fi
+    useradd -d $TEST_USER_HOME -m -s /bin/bash $TEST_USER
+    pwconv
+    passwd -d $TEST_USER
+}
+
+
+create_autologin_gdm()
+{
+    if test -f $GDM_CONF && grep -q $TEST_USER $GDM_CONF; then
+        return;
+    fi
+    cat > $GDM_CONF << _EOF_GDM_CONF
+[daemon]
+AutomaticLoginEnable=true
+AutomaticLogin=$TEST_USER
+_EOF_GDM_CONF
+}
+
+
+create_xdg_autostart()
+{
+    if test -f "$TEST_USER_HOME/.config/autostart/$AUTOSTART_DESKTOP_FILE" ; then
+        return
+    fi
+    if test ! -d "$TEST_USER_HOME" ; then
+        print_log -e "${RED}FAIL${NC}: ${RED}ERROR${NC}: No $TEST_USER_HOME"
+        exit 1
+    fi
+    desktop_file="$AUTOSTART_DESKTOP_DIR/$AUTOSTART_DESKTOP_FILE"
+    if test ! -f $desktop_file ; then
+        print_log -e "${RED}FAIL${NC}: ${RED}ERROR${NC}: No $desktop_file"
+        exit 1
+    fi
+    mkdir -p "$TEST_USER_HOME/.config/autostart"
+    cp "$desktop_file" "$TEST_USER_HOME/.config/autostart"
+    LINE="AutostartCondition=if-exists $TEST_USER_HOME/.config/autostart/$AUTOSTART_DESKTOP_FILE"
+    echo "$LINE" >> "$TEST_USER_HOME/.config/autostart/$AUTOSTART_DESKTOP_FILE"
+    chown -R "$TEST_USER" "$TEST_USER_HOME/.config"
+}
+
+
+delete_test_user()
+{
+    print_log "Deleting $TEST_USER"
+    pkill -u $TEST_USER
+    if grep -q $TEST_USER /etc/passwd; then
+        userdel -r $TEST_USER
+    fi
+    if test -f $GDM_CONF && grep -q $TEST_USER $GDM_CONF; then
+        rm $GDM_CONF
+    fi
+
+    if echo "$SESSION_COMMAND" | grep -q gnome-session ; then
+        SESSION_IS_GNOME=1
+    else
+        SESSION_IS_GNOME=0
+    fi
+
+    LOGIN_USER=$USER
+    LOGIN_HOME=$HOME
+    if [ $ENABLED_SYSTEMD -eq 1 ] && [  $SESSION_IS_GNOME -eq 1 ] ; then
+        LOGIN_USER=$TEST_USER
+        LOGIN_HOME=$TEST_USER_HOME
+    fi
+
+    print_log "Deleting $LOGIN_USER environments"
+    if test -f "$LOGIN_HOME/.config/gnome-initial-setup-done" ; then
+        rm "$LOGIN_HOME/.config/gnome-initial-setup-done"
+    fi
+    if test -f "$LOGIN_HOME/.config/user-dirs.locale" ; then
+        rm "$LOGIN_HOME/.config/user-dirs.locale"
+    fi
+    if test -f /var/lib/AccountsService/users/$LOGIN_USER ; then
+        rm /var/lib/AccountsService/users/$LOGIN_USER
+    fi
+    sync
+}
+
+
+init_session()
+{
+    if [ "$RESULT_LOG" != "" ] ; then
+        if [ -f $RESULT_LOG ] ; then
+            rm $RESULT_LOG
+        fi
+    fi
+    echo "$TEST_LOG" | grep ':stdout' > /dev/null
+    HAS_STDOUT=$?
+    if [ $HAS_STDOUT -eq 0 ] ; then
+        TEST_LOG=`echo "$TEST_LOG" | sed -e 's|:stdout||'`
+        TEST_LOG_STDOUT=1
+    fi
+    if [ "$TEST_LOG" = "" ] ; then
+        print_log -e "${RED}FAIL${NC}: ${RED}ERROR${NC}: a log file is required to get return value with 'read' command"
+        exit 1
+    elif [ -f $TEST_LOG ] ; then
+        rm $TEST_LOG
+    fi
+
+    if echo "$SESSION_COMMAND" | grep -q gnome-session ; then
+        SESSION_IS_GNOME=1
+    else
+        SESSION_IS_GNOME=0
+    fi
+
+    LOGIN_USER=$USER
+    LOGIN_HOME=$HOME
+    check_tty
+    if [ $ENABLED_SYSTEMD -eq 1 ] && [  $SESSION_IS_GNOME -eq 1 ] ; then
+        SESSION_FILE1="/usr/lib/systemd/system/gnome-headless-session@.service"
+        SESSION_FILE2="/usr/lib/systemd/system/graphical.target"
+        if [ $HAVE_GRAPHICS -eq 0 ] && [ ! -f "$SESSION_FILE1" ] ; then
+            print_log -e "${RED}FAIL${NC}: ${RED}ERROR${NC}: No $SESSION_FILE1: You need to install 'gdm' and 'systemd' package"
+            exit 1
+        fi
+        if [ $HAVE_GRAPHICS -eq 1 ] ; then
+            if [ ! -f "$SESSION_FILE2" ] ; then
+                print_log -e "${RED}FAIL${NC}: ${RED}ERROR${NC}: No $SESSION_FILE2: You need to install 'systemd' package"
+                exit 1
+            fi
+            if [ ! -f /usr/sbin/gdm ] ; then
+                print_log -e "${RED}FAIL${NC}: ${RED}ERROR${NC}: No /usr/sbin/gdm: Currently only gdm is supported for auto login."
+                exit 1
+            fi
+        fi
+        create_test_user
+        create_autologin_gdm
+        create_xdg_autostart
+        LOGIN_USER=$TEST_USER
+        LOGIN_HOME=$TEST_USER_HOME
+    else
+        rm -f $TEST_USER_HOME/.config/autostart/$AUTOSTART_DESKTOP_FILE
+    fi
+
+    if [ ! -f $LOGIN_HOME/.config/gnome-initial-setup-done ] ; then
+        mkdir -p $LOGIN_HOME/.config
+        touch $LOGIN_HOME/.config/gnome-initial-setup-done
+        chown -R $LOGIN_USER $LOGIN_HOME/.config
+    fi
+    IS_SYSTEM_ACCOUNT=false
+    if [ "$LOGIN_USER" = "root" ] ; then
+            IS_SYSTEM_ACCOUNT=true
+    fi
+    if test x"$SESSION_LANG" = x ; then
+        SESSION_LANG=$LANG
+    fi
+    if test -f /var/lib/AccountsService/users/$LOGIN_USER; then
+        sed -i -e "s/\(Language=\).*/\1$SESSION_LANG/" \
+                /var/lib/AccountsService/users/$LOGIN_USER
+    else
+        mkdir -p /var/lib/AccountsService/users
+        cat > /var/lib/AccountsService/users/$LOGIN_USER << _EOF_AS_CONF
+[User]
+Language=$SESSION_LANG
+XSession=gnome
+SystemAccount=$IS_SYSTEM_ACCOUNT
+_EOF_AS_CONF
+    fi
+
+    # Prevent from launching a XDG dialog
+    XDG_LOCALE_FILE="$LOGIN_HOME/.config/user-dirs.locale"
+    if [ -f $XDG_LOCALE_FILE ] ; then
+        XDG_LANG_ORIG=`cat $XDG_LOCALE_FILE`
+        XDG_LANG_NEW=`echo $SESSION_LANG | sed -e 's/\(.*\)\..*/\1/'`
+        if [ "$XDG_LANG_ORIG" != "$XDG_LANG_NEW" ] ; then
+            echo "# Overriding XDG locale $XDG_LANG_ORIG with $XDG_LANG_NEW"
+            echo "$XDG_LANG_NEW" > $XDG_LOCALE_FILE
+        fi
+    fi
+
+    if [ $ENABLED_SYSTEMD -eq 1 ] && [  $SESSION_IS_GNOME -eq 1 ] ; then
+        return
+    fi
+    # `su` command does not run loginctl
+    export XDG_SESSION_TYPE='x11'
+    export XDG_SESSION_CLASS=user
+    # `su` command does not get focus in events without this variable.
+    # Need to restart sshd after set "PermitRootLogin yes" in sshd_config
+    if [ "x$XDG_RUNTIME_DIR" = x ] ; then
+        export XDG_RUNTIME_DIR="/run/user/$UID"
+        is_root_login=`grep "^PermitRootLogin" /etc/ssh/sshd_config | grep yes`
+        if [ "x$ANSIBLE" != x ] && [ "x$is_root_login" = x ] ; then
+            print_log -e "${RED}FAIL${NC}: No permission to get focus-in events in GtkWindow with ansible"
+            echo "su command does not configure necessary login info "         \
+                 "with systemd and GtkWindow cannot receive focus-events "     \
+                 "when ibus-desktop-testing-runner is executed by "            \
+                 "ansible-playbook." >> $TEST_LOG
+            echo "Enabling root login via sshd, restarting sshd, set "         \
+                 "XDG_RUNTIME_DIR can resolve the problem under "              \
+                 "ansible-playbook." >> $TEST_LOG
+            exit 1
+        fi
+    fi
+    #  Do we need XDG_SESSION_ID and XDG_SEAT?
+    #export XDG_CONFIG_DIRS=/etc/xdg
+    #export XDG_SESSION_ID=10
+    #export XDG_SESSION_DESKTOP=gnome
+    #export XDG_SEAT=seat0
+}
+
+
+run_dbus_daemon()
+{
+    if [ $ENABLED_SYSTEMD -eq 1 ] && [  $SESSION_IS_GNOME -eq 1 ] ; then
+        return
+    fi
+    # Use dbus-launch --exit-with-session later instead of --sh-syntax
+    # GNOME uses a unix:abstract address and it effects gsettings set values
+    # in each test case.
+    # TODO: Should we comment out this line?
+    export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$UID/bus"
+}
+
+
+init_gnome()
+{
+    if test $SESSION_IS_GNOME -ne 1 ; then
+        print_log -e "${RED}FAIL${NC}: ${RED}ERROR${NC}: Should not be called"
+        exit 1
+    fi
+    LOGIN_USER=$USER
+    if test $ENABLED_SYSTEMD -eq 1 ; then
+        LOGIN_USER=$TEST_USER
+    fi
+    # gsettings set command needs dconf-service with the same $DISPLAY
+    pkill dconf-service
+    # G_MESSAGES_DEBUG=all or G_MESSAGES_DEBUG=GLib-GIO-DEBUG would append
+    # debug messages to gsettings output and could not get the result correctly.
+    backup_G_MESSAGES_DEBUG="$G_MESSAGES_DEBUG"
+    unset G_MESSAGES_DEBUG
+    # Disable Tour dialog to get focus
+    GET_WELCOME_DIALOG="gsettings get org.gnome.shell welcome-dialog-last-shown-version"
+    if test $LOGIN_USER = $USER ; then
+        V=`dbus-run-session $GET_WELCOME_DIALOG`
+    else
+        V=`sudo -u $LOGIN_USER dbus-run-session $GET_WELCOME_DIALOG`
+    fi
+    if [ x"$V" = x"''" ] ; then
+        SET_WELCOME_DIALOG="gsettings set org.gnome.shell welcome-dialog-last-shown-version '100'"
+        if test $LOGIN_USER = $USER ; then
+            dbus-run-session $SET_WELCOME_DIALOG
+        else
+            sudo -u $LOGIN_USER dbus-run-session $SET_WELCOME_DIALOG
+        fi
+    fi
+    # gnome-shell now starts overview mode by login.
+    # https://extensions.gnome.org/extension/4099/no-overview/
+    NO_SYS_DIR=/usr/share/gnome-shell/extensions/no-overview@fthx
+    if test $LOGIN_USER = $USER ; then
+        NO_USER_DIR=$HOME/.local/share/gnome-shell/extensions/no-overview@fthx
+    else
+        NO_USER_DIR=$TEST_USER_HOME/.local/share/gnome-shell/extensions/no-overview@fthx
+    fi
+    if [ ! -d $NO_SYS_DIR ] && [ ! -d $NO_USER_DIR ] ; then
+        mkdir -p "`dirname $NO_USER_DIR`"
+        cp -R "no-overview@fthx" "`dirname $NO_USER_DIR`"
+        if test $LOGIN_USER = $USER ; then
+            chown -R $LOGIN_USER $HOME/.local
+        else
+            chown -R $LOGIN_USER $TEST_USER_HOME/.local
+        fi
+    fi
+    if [ $LOGIN_USER != $USER ] ; then
+        SHELL_SERVICE_FILE="org.gnome.Shell@wayland.service"
+        SYSTEMD_USER_DIR="$TEST_USER_HOME/.config/systemd/user"
+        if test $HAVE_GRAPHICS -ne 1 ; then
+            if test ! -f "$SYSTEMD_USER_DIR/$SHELL_SERVICE_FILE" ; then
+                mkdir -p "$SYSTEMD_USER_DIR"
+                pushd "$SYSTEMD_USER_DIR"
+                sed -e "s|^ExecStart=.*|ExecStart=$GNOME_SHELL_WAYLAND_COMMAND|" \
+                    $SYSTEMD_SYSTEM_DIR/$SHELL_SERVICE_FILE \
+                    > $SHELL_SERVICE_FILE
+                diff $SYSTEMD_SYSTEM_DIR/$SHELL_SERVICE_FILE $SHELL_SERVICE_FILE
+                popd
+                chown -R $LOGIN_USER "$TEST_USER_HOME/.config"
+            fi
+        else
+            if test -f "$SYSTEMD_USER_DIR/$SHELL_SERVICE_FILE" ; then
+                rm "$SYSTEMD_USER_DIR/$SHELL_SERVICE_FILE"
+            fi
+        fi
+    fi
+    GET_DISABLE_USER_EX="gsettings get org.gnome.shell disable-user-extensions"
+    if test $LOGIN_USER = $USER ; then
+        V=`dbus-run-session $GET_DISABLE_USER_EX`
+    else
+        V=`sudo -u $LOGIN_USER dbus-run-session $GET_DISABLE_USER_EX`
+    fi
+    if [ x"$V" = x"true" ] ; then
+        SET_DISABLE_USER_EX="gsettings set org.gnome.shell disable-user-extensions false"
+        if test $LOGIN_USER = $USER ; then
+            dbus-run-session $SET_DISABLE_USER_EX
+        else
+            sudo -u $LOGIN_USER dbus-run-session $SET_DISABLE_USER_EX
+        fi
+    fi
+    GET_ENABLED_EXS="gsettings get org.gnome.shell enabled-extensions"
+    if test $LOGIN_USER = $USER ; then
+        V=`dbus-run-session $GET_ENABLED_EXS`
+    else
+        V=`sudo -u $LOGIN_USER dbus-run-session $GET_ENABLED_EXS`
+    fi
+    echo "$V" | grep "no-overview" > /dev/null
+    V2=$?
+    if [ $V2 -ne 0 ] ; then
+        V3=`echo "$V" | sed -e 's/@as //' -e 's/\[//' -e 's/\]//'`
+        if [ x"$V3" = x"''" ] || [ x"$V3" = x"" ]; then
+            V4="['no-overview@fthx']"
+        else
+            V4="[$V3,'no-overview@fthx']"
+        fi
+        SET_ENABLED_EXS="gsettings set org.gnome.shell enabled-extensions \"$V4\""
+        if test $LOGIN_USER = $USER ; then
+            eval dbus-run-session $SET_ENABLED_EXS
+        else
+            eval sudo -u $LOGIN_USER dbus-run-session $SET_ENABLED_EXS
+        fi
+    fi
+    # Disable notify dialog when the disk usage is low.
+    SET_NOTIFY_DISK="gsettings set org.gnome.settings-daemon.plugins.housekeeping free-size-gb-no-notify 0"
+    if test $LOGIN_USER = $USER ; then
+            eval dbus-run-session $SET_NOTIFY_DISK
+    else
+            eval sudo -u $LOGIN_USER dbus-run-session $SET_NOTIFY_DISK
+    fi
+    if [ x"$backup_G_MESSAGES_DEBUG" != x ] ; then
+        export G_MESSAGES_DEBUG="$backup_G_MESSAGES_DEBUG"
+    fi
+}
+
+
+operate_desktop_with_systemd()
+{
+    SESSION=gnome-headless-session
+    COMMAND="$1"
+
+    #if test $HAVE_GRAPHICS -eq 1 ; then
+        case "$COMMAND" in
+        "start") systemctl isolate graphical.target
+                 echo ""
+                 ;;
+        "stop")  init 3;;
+        "")      print_log -e "${RED}FAIL${NC}: ${RED}ERROR${NC}: Wrong command $COMMAND"
+                 exit 1;;
+        esac
+    #else
+    #    setenforce 0
+    #    systemctl $COMMAND ${SESSION}@${TEST_USER}
+    #fi
+    case "$COMMAND" in
+    "start") sleep 30;;
+    "") ;;
+    esac
+    #if test $HAVE_GRAPHICS -eq 1 ; then
+        systemctl status --no-pager graphical.target
+    #else
+    #    systemctl status --no-pager ${SESSION}@${TEST_USER}
+    #fi
+    ps -ef | grep X
+    ps -ef | grep session
+    ps -ef | grep ibus
+}
+
+
+run_session()
+{
+    if [ $ENABLED_SYSTEMD -eq 1 ] && [  $SESSION_IS_GNOME -eq 1 ] ; then
+        init_gnome
+        operate_desktop_with_systemd "start"
+        return
+    fi
+    export DISPLAY=:99.0
+    if test $HAVE_GRAPHICS -eq 1 ; then
+        /usr/libexec/Xorg.wrap -noreset +extension GLX +extension RANDR +extension RENDER -logfile ./xorg.log -config ./xorg.conf -configdir . $DISPLAY &
+    else
+        /usr/bin/Xvfb $DISPLAY -noreset +extension GLX +extension RANDR +extension RENDER -screen 0 1280x1024x24 &
+    fi
+    PID_XORG=$!
+    sleep 1
+    # init_gnome need to be called with $DISPLAY before gnome-session is called
+    if [  $SESSION_IS_GNOME -eq 1 ] ; then
+        init_gnome
+    fi
+    echo "Running $SESSION_COMMAND with $USER and LANG=$SESSION_LANG in `tty`"
+    if test x"$SESSION_LANG" = x ; then
+        $SESSION_COMMAND &
+    else
+        env LANG=$SESSION_LANG $SESSION_COMMAND &
+    fi
+    PID_GNOME_SESSION=$!
+    sleep 30
+
+    IBUS_ARGS="--verbose --panel disable"
+    # gnome-shell 42 checks if org.freedesktop.IBus.session.GNOME.service
+    # systemd file is available with org.freedesktop.systemd1.Manager.GetUnit
+    # D-Bus method, which is provided by IBus 1.5.26, and if the file
+    # is available, gnome-shell no longer launch ibus-daemon
+    # because gnome-shell assumes gnome-session would launch ibus-daemon
+    # with org.freedesktop.systemd1.Manager.StartUnit D-Bus method.
+    # But actually gnome-session failed to launch ibus-daemon
+    # because the IBus systemd file depends on gnome-session.target
+    # but this CI launches gnome-session directly.
+    #
+    # So ibus-dameon is now always called here after gnome-shell fails to
+    # launch ibus-daemon.
+    # It may be better this CI launches GDM autologin to run gnome-session
+    # with gnome-session.target systemd file.
+    # But `systemctl start gdm` terminates the parent script forcibly
+    # and the script cannot get the CI result.
+    if test $VERBOSE -eq 1 ; then
+        ibus-daemon $IBUS_ARGS &
+    else
+        ibus-daemon $IBUS_ARGS --daemonize
+    fi
+    sleep 3
+    ps -ef | grep ibus
+}
+
+
+count_case_result()
+{
+    retval=$1
+    pass=$2
+    fail=$3
+
+    if test $retval -eq  0 ; then
+        pass=`expr $pass + 1`
+    else
+        fail=`expr $fail + 1`
+    fi
+    echo $pass $fail
+}
+
+
+echo_case_result()
+{
+    retval=$1
+    tst=$2
+    subtst=${3:-''}
+
+    if test $retval -eq  0 ; then
+        echo "PASS: $tst $subtst" >>$TEST_LOG
+    else
+        echo "FAIL: $tst $subtst" >>$TEST_LOG
+    fi
+}
+
+
+wait_for_systemd_autostart()
+{
+    PS_IBUS="ps -ef | grep ibus-desktop-testing | grep autostart | grep -v grep"
+    i=0
+    while test 1 ; do
+        R=`eval "$PS_IBUS"`
+        if test x"$R" != x ; then
+            break;
+        fi
+        if test $i -ge 12 ; then
+            print_log -e "${RED}FAIL${NC}: Timeout to run ibus-desktop-testing-autostart"
+            return
+        fi
+        i=`expr $i + 1`
+        sleep 5
+    done
+    print_log -e "Start ibus-desktop-testing-autostart"
+    i=0
+    while test 1 ; do
+        R=`eval "$PS_IBUS"`
+        if test x"$R" = x ; then
+            break;
+        fi
+        if test $i -ge $TIMEOUT ; then
+            print_log -e "${RED}FAIL${NC}: Timeout to exit ibus-desktop-testing-autostart"
+            return
+        fi
+        i=`expr $i + 1`
+        sleep 5
+    done
+    print_log -e "Exit ibus-desktop-testing-autostart"
+}
+
+run_direct_test_cases()
+{
+    pass=0
+    fail=0
+    for tst in $TESTS; do
+        ENVS=
+        if test -f $SRCDIR/${tst}.env ; then
+            ENVS="`cat $SRCDIR/${tst}.env`"
+        fi
+        if test x"$ENVS" = x ; then
+            $BUILDDIR/$tst $SRCDIR 2>>$TEST_LOG 1>>$TEST_LOG
+            retval=$?
+            read pass fail << EOF_COUNT
+            `count_case_result $retval $pass $fail`
+EOF_COUNT
+            echo_case_result $retval $tst
+            CACHE_FILES=`ls *.cache`
+            if [ x"$CACHE_FILES" != x ] ; then
+                echo "# Clean $CACHE_FILES" >>$TEST_LOG
+                rm $CACHE_FILES
+            fi
+        else
+            i=1
+            # Deleted for var in "$ENVS" because IFS=$'\n' is not supported
+            # in POSIX sh
+            while read e ; do
+                first=`echo "$e" | grep '^#'`
+                if test x"$first" = x"#" ; then
+                    continue
+                fi
+                echo "# Starting $e $BUILDDIR/$tst $SRCDIR" >>$TEST_LOG
+                env $e $BUILDDIR/$tst $SRCDIR 2>>$TEST_LOG 1>>$TEST_LOG
+                retval=$?
+                echo "# Finished $e $BUILDDIR/$tst $SRCDIR with $retval" >>$TEST_LOG
+                read pass fail << EOF_COUNT
+                `count_case_result $retval $pass $fail`
+EOF_COUNT
+                echo_case_result $retval $tst $e
+                CACHE_FILES=`ls *.cache`
+                if [ x"$CACHE_FILES" != x ] ; then
+                    echo "# Clean $CACHE_FILES" >>$TEST_LOG
+                    rm $CACHE_FILES
+                fi
+                i=`expr $i + 1`
+            done << EOF_ENVS
+            `echo "$ENVS"`
+EOF_ENVS
+        fi
+    done
+    echo $pass $fail
+}
+
+
+run_gnome_desktop_testing_runner()
+{
+    pass=0
+    fail=0
+    if [ x"$TESTS" = x ] ; then
+        TESTS='ibus'
+    fi
+    if echo $PROGNAME | grep -q autostart ; then
+        export IBUS_DAEMON_WITH_SYSTEMD=1
+    fi
+    for tst in $TESTS; do
+        tst_dir="$TEST_CASE_DIR/$tst"
+        if [ ! -d "$tst_dir" ] ; then
+            print_log -e "${RED}FAIL${NC}: Not found %tst_dir"
+            fail=1
+            continue
+        fi
+        gnome-desktop-testing-runner --timeout=$TIMEOUT $tst \
+                2>>$TEST_LOG 1>>$TEST_LOG
+        retval=$?
+        read pass fail << EOF
+        `count_case_result $retval $pass $fail`
+EOF
+    done
+    child_pass=`grep '^PASS:' $TEST_LOG | wc -l`
+    child_fail=`grep '^FAIL:' $TEST_LOG | wc -l`
+    if [ $child_pass -ne 0 ] || [ $child_fail -ne 0 ] ; then
+        pass=$child_pass
+        if [ $child_fail -ne 0 ] ; then
+            fail=`expr $child_fail / 2`
+        else
+            fail=0
+        fi
+    fi
+    echo $pass $fail
+}
+
+
+run_test_suite()
+{
+    print_log -e "Start test suite `date '+%F %H:%M:%S:%N'`"
+    if echo $PROGNAME | grep -q runner ; then
+        if [ $ENABLED_SYSTEMD -eq 1 ] && [  $SESSION_IS_GNOME -eq 1 ] ; then
+            wait_for_systemd_autostart
+            return
+        fi
+        if ps -ef | grep X | grep -q wayland ; then
+            # Expect GTK_IM_MODULE=wayland by default
+            :
+        else
+            export GTK_IM_MODULE=ibus
+        fi
+    else
+        if test x"$XDG_SESSION_TYPE" = xwayland ; then
+            :
+        else
+            export GTK_IM_MODULE=ibus
+        fi
+    fi
+    pass=0
+    fail=0
+    export IBUS_COMPOSE_CACHE_DIR=$PWD
+    if test x"$TESTING_RUNNER" = x ; then
+        return
+    fi
+    case $TESTING_RUNNER in
+    default)
+        # Get only the last value with do-while.
+        read pass fail << EOF_RUNNER
+        `run_direct_test_cases`
+EOF_RUNNER
+        ;;
+    gnome)
+        read pass fail << EOF_RUNNER
+        `run_gnome_desktop_testing_runner`
+EOF_RUNNER
+        ;;
+    esac
+    echo ""
+    print_log -e "End test suite `date '+%F %H:%M:%S:%N'`"
+    # Fedora CI assumes the test is failed even if $fail is 0.
+    if [ $pass -ne 0 ] ; then
+        print_log -e "${GREEN}PASS${NC}: $pass"
+    fi
+    if [ $fail -ne 0 ] ; then
+        print_log -e "${RED}FAIL${NC}: $fail"
+    fi
+}
+
+
+finit()
+{
+    if test $PID_XORG -ne 0 ; then
+        echo "# Killing left gnome-session and Xorg"
+        kill $PID_GNOME_SESSION $PID_XORG
+        ibus exit
+        SUSER=`echo "$USER" | cut -c 1-7`
+        LEFT_CALENDAR=`ps -ef | grep gnome-shell-calendar-server | grep $SUSER | grep -v grep`
+        if test x"$LEFT_CALENDAR" != x ; then
+            echo "# Killing left gnome-shell-calendar-server"
+            echo "$LEFT_CALENDAR"
+            echo "$LEFT_CALENDAR" | awk '{print $2}' | xargs kill
+        fi
+    fi
+    if echo $PROGNAME | grep -q runner ; then
+        if [ $ENABLED_SYSTEMD -eq 1 ] && [  $SESSION_IS_GNOME -eq 1 ] ; then
+            operate_desktop_with_systemd "stop"
+        fi
+    fi
+
+    echo ""
+    if test -f $TEST_LOG ; then
+        if [ $TEST_LOG_STDOUT -eq 1 ] ; then
+            cat $TEST_LOG
+        else
+            echo "# See $TEST_LOG"
+        fi
+    fi
+    echo "# Finished $PROGNAME testing"
+}

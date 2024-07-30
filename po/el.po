@@ -1,24 +1,21 @@
-# Mongolian translation of ibus.
+# Source translation of ibus.
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (C) 2015-2016 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (C) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # This file is distributed under the same license as the ibus package.
 #
-# Translators:
-# bayanmunkh <sageson.m@gmail.com>, 2016. #zanata
+# Giannis Antypas <gianni.antypas@gmail.com>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: IBus\n"
+"Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2024-05-23 22:16+0900\n"
-"PO-Revision-Date: 2016-01-29 12:31-0500\n"
-"Last-Translator: bayanmunkh <sageson.m@gmail.com>\n"
-"Language-Team: Mongolian\n"
-"Language: mn\n"
+"PO-Revision-Date: 2024-05-23 22:16+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.9.3\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -123,7 +120,7 @@ msgstr ""
 #: data/dconf/org.freedesktop.ibus.gschema.xml:119
 #: data/dconf/org.freedesktop.ibus.gschema.xml:124 setup/setup.ui:236
 msgid "The shortcut keys for turning input method on or off"
-msgstr "Оролтын аргыг унтрааж асаах товчлол түлхүүрүүд"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:123
 msgid "Trigger shortcut keys for gtk_accelerator_parse"
@@ -212,7 +209,7 @@ msgstr ""
 #: data/dconf/org.freedesktop.ibus.gschema.xml:189 setup/setup.ui:482
 #: setup/setup.ui:487
 msgid "Show icon on system tray"
-msgstr "Системийн хавтан дахь харах тэмдэг"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:193
 msgid "Show input method name"
@@ -220,7 +217,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:194 setup/setup.ui:501
 msgid "Show input method name on language bar"
-msgstr "Хэлний бар дахь оролтын аргын нэрийг харах"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:198
 msgid "RGBA value of XKB icon"
@@ -267,44 +264,32 @@ msgid "Custom font name for language panel"
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom theme"
-msgstr "Фонтоо сонгох:"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:219
-#, fuzzy
-#| msgid "Show input method name on language bar"
 msgid "Use custom theme name for language panel"
-msgstr "Хэлний бар дахь оролтын аргын нэрийг харах"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
-#, fuzzy
-#| msgid "Custom"
 msgid "Custom theme"
-msgstr "Өөрчлөх"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:224
-#, fuzzy
-#| msgid "Show input method name on language bar"
 msgid "Custom theme name for language panel"
-msgstr "Хэлний бар дахь оролтын аргын нэрийг харах"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:228
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom icon"
-msgstr "Фонтоо сонгох:"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:229
 msgid "Use custom icon name for arrow buttons on candidate window"
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:233
-#, fuzzy
-#| msgid "Custom"
 msgid "Custom icon"
-msgstr "Өөрчлөх"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:234
 msgid "Custom icon name for arrow buttons on candidate window"
@@ -327,20 +312,16 @@ msgid "Unicode shortcut keys for gtk_accelerator_parse"
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:251
-#, fuzzy
-#| msgid "The shortcut keys for turning input method on or off"
 msgid "The shortcut keys for turning Unicode typing on or off"
-msgstr "Оролтын аргыг унтрааж асаах товчлол түлхүүрүүд"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:255
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:256
-#, fuzzy
-#| msgid "The shortcut keys for turning input method on or off"
 msgid "The shortcut keys for turning emoji typing on or off"
-msgstr "Оролтын аргыг унтрааж асаах товчлол түлхүүрүүд"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:261
 msgid "Custom font name for emoji characters on emoji dialog"
@@ -488,7 +469,7 @@ msgstr ""
 #. add button
 #: setup/enginedialog.py:61 setup/keyboardshortcut.py:124 setup/setup.ui:676
 msgid "_Add"
-msgstr "_Нэмэх"
+msgstr ""
 
 #. create im name & icon column
 #: setup/enginetreeview.py:69 setup/setup.ui:850
@@ -497,7 +478,7 @@ msgstr ""
 
 #: setup/ibus-setup.desktop:3 setup/setup.ui:81
 msgid "IBus Preferences"
-msgstr "ibus тохиргоо"
+msgstr ""
 
 #: setup/ibus-setup.desktop:4
 msgid "Set IBus Preferences"
@@ -570,100 +551,100 @@ msgstr ""
 
 #: setup/setup.ui:11
 msgid "Horizontal"
-msgstr "Хэвтээ"
+msgstr ""
 
 #: setup/setup.ui:14
 msgid "Vertical"
-msgstr "Босоо"
+msgstr ""
 
 #: setup/setup.ui:25
 msgid "Top left corner"
-msgstr "Зүүн дээд булан"
+msgstr ""
 
 #: setup/setup.ui:28
 msgid "Top right corner"
-msgstr "Баруун дээд булан"
+msgstr ""
 
 #: setup/setup.ui:31
 msgid "Bottom left corner"
-msgstr "Зүүн доод булан"
+msgstr ""
 
 #: setup/setup.ui:34
 msgid "Bottom right corner"
-msgstr "Баруун доод булан"
+msgstr ""
 
 #: setup/setup.ui:37
 msgid "Custom"
-msgstr "Өөрчлөх"
+msgstr ""
 
 #: setup/setup.ui:48
 msgid "Do not show"
-msgstr "Битгий харуул"
+msgstr ""
 
 #: setup/setup.ui:51
 msgid "Hide automatically"
-msgstr "Автоматаар нуух"
+msgstr ""
 
 #: setup/setup.ui:54
 msgid "Always"
-msgstr "Үргэлж"
+msgstr ""
 
 #: setup/setup.ui:125
 msgid "The shortcut keys for switching to next input method in the list"
-msgstr "Жагсаалтад байгаа оролтын дараагийн арга руу шилжих товчлол түлхүүрүүд"
+msgstr ""
 
 #: setup/setup.ui:127
 msgid "Next input method:"
-msgstr "Дараагийн оролтын арга:"
+msgstr ""
 
 #: setup/setup.ui:139
 msgid "The shortcut keys for switching to previous input method in the list"
-msgstr "Жагсаалтад байгаа оролтын өмнөх арга руу шилжих товчлол түлхүүрүүд"
+msgstr ""
 
 #: setup/setup.ui:141
 msgid "Previous input method:"
-msgstr "Өмнөх оролтын арга"
+msgstr ""
 
 #: setup/setup.ui:169 setup/setup.ui:211 setup/setup.ui:278 setup/setup.ui:331
 #: setup/setup.ui:915 setup/setup.ui:969
 msgid "..."
-msgstr "..."
+msgstr ""
 
 #: setup/setup.ui:238
 msgid "Enable or disable:"
-msgstr "Нээх эсвэл Хаах"
+msgstr ""
 
 #: setup/setup.ui:250
 msgid "Enable:"
-msgstr "Нээх"
+msgstr ""
 
 #: setup/setup.ui:303
 msgid "Disable:"
-msgstr "Хаах"
+msgstr ""
 
 #: setup/setup.ui:357 setup/setup.ui:995
 msgid "<b>Keyboard Shortcuts</b>"
-msgstr "<b>Гарын товчлолууд</b>"
+msgstr ""
 
 #: setup/setup.ui:386
 msgid "Set the orientation of candidates in lookup table"
-msgstr "Харах хүснэгтэд байгаа нэмэлтүүдийн эргүүлэлтийг тохируулах"
+msgstr ""
 
 #: setup/setup.ui:388
 msgid "Candidates orientation:"
-msgstr "Нэмэлтүүдийг эргүүлэлт:"
+msgstr ""
 
 #: setup/setup.ui:419
 msgid "Set the behavior of ibus how to show or hide language bar"
-msgstr "Хэлний цэсийг нуух болон харуулах эсэхийг тохируулах"
+msgstr ""
 
 #: setup/setup.ui:421
 msgid "Show property panel:"
-msgstr "Шинжүүдийн самбарыг харах:"
+msgstr ""
 
 #: setup/setup.ui:435
 msgid "Language panel position:"
-msgstr "Хэлний самбарын байрлал:"
+msgstr ""
 
 #: setup/setup.ui:506
 msgid "Show input method's name on language bar when check the checkbox"
@@ -679,7 +660,7 @@ msgstr ""
 
 #: setup/setup.ui:539
 msgid "Use custom font:"
-msgstr "Фонтоо сонгох:"
+msgstr ""
 
 #: setup/setup.ui:574 setup/setup.ui:1168
 msgid "<b>Font and Style</b>"
@@ -687,7 +668,7 @@ msgstr ""
 
 #: setup/setup.ui:591
 msgid "General"
-msgstr "Ерөнхий"
+msgstr ""
 
 #: setup/setup.ui:683
 msgid "Add the selected input method into the enabled input methods"
@@ -695,7 +676,7 @@ msgstr ""
 
 #: setup/setup.ui:694
 msgid "_Remove"
-msgstr "_Арилгах"
+msgstr ""
 
 #: setup/setup.ui:701
 msgid "Remove the selected input method from the enabled input methods"
@@ -750,10 +731,8 @@ msgid "Emoji annotation:"
 msgstr ""
 
 #: setup/setup.ui:939
-#, fuzzy
-#| msgid "The shortcut keys for turning input method on or off"
 msgid "The shortcut keys to enable Unicode code point conversions"
-msgstr "Оролтын аргыг унтрааж асаах товчлол түлхүүрүүд"
+msgstr ""
 
 #: setup/setup.ui:941
 msgid "Unicode code point:"
@@ -764,10 +743,8 @@ msgid "Set a font of Unicode candidates on the emoji dialog"
 msgstr ""
 
 #: setup/setup.ui:1027
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Unicode font:"
-msgstr "Фонтоо сонгох:"
+msgstr ""
 
 #: setup/setup.ui:1050
 msgid "Set a language of emoji annotations on the emoji dialog"
@@ -820,20 +797,16 @@ msgid ""
 msgstr ""
 
 #: setup/setup.ui:1341
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom theme:"
-msgstr "Фонтоо сонгох:"
+msgstr ""
 
 #: setup/setup.ui:1342
 msgid "Choose a theme of the candidate window"
 msgstr ""
 
 #: setup/setup.ui:1378
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom icon:"
-msgstr "Фонтоо сонгох:"
+msgstr ""
 
 #: setup/setup.ui:1379
 msgid "Choose a theme of the arrow buttons on the candidate window"
@@ -1990,10 +1963,8 @@ msgstr ""
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:661
-#, fuzzy
-#| msgid "Vertical"
 msgid "Vertical Forms"
-msgstr "Босоо"
+msgstr ""
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

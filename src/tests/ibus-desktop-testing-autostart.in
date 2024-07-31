@@ -73,6 +73,7 @@ main()
     parse_args "$@"
     init_session
     check_env
+    #run_monitor
     save_screen
     run_test_suite
     finit

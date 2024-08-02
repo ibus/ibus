@@ -106,6 +106,7 @@ test_sourcesdir = $(datadir)/installed-tests/ibus
 
 CLEANFILES += \
     $(test_metas) \
+    ibus-desktop-testing-autostart \
     ibus-desktop-testing-runner \
     org.freedesktop.IBus.Desktop.Testing.desktop \
     $(NULL)
@@ -119,7 +120,10 @@ CLEANFILES += \
     $(NULL)
 endif
 test_execsdir = $(libexecdir)/installed-tests/ibus
-libexec_SCRIPTS = ibus-desktop-testing-autostart
+libexec_SCRIPTS = \
+  ibus-desktop-testing-autostart \
+  ibus-desktop-testing-module \
+  $(NULL)
 
 test_frame_DATA = org.freedesktop.IBus.Desktop.Testing.desktop
 test_framedir = $(pkgdatadir)/tests
@@ -142,9 +146,21 @@ ibus-compose-locales: ibus-compose-locales.in
 	mv $@.tmp $@; \
 	$(NULL)
 
+ibus-desktop-testing-autostart: ibus-desktop-testing-autostart.in
+	INSTALLEDDIR=$(datadir)/installed-tests; \
+	sed -e "s|@DATADIR[@]|$(datadir)|g" \
+	    -e "s|@INSTALLEDDIR[@]|$$INSTALLEDDIR|g" \
+	    -e "s|@LIBEXECDIR[@]|$(libexecdir)|g" \
+	    $< > $@.tmp; \
+	mv $@.tmp $@; \
+	$(NULL)
+
 ibus-desktop-testing-runner: ibus-desktop-testing-runner.in
 	INSTALLEDDIR=$(datadir)/installed-tests; \
-	sed -e "s|@INSTALLEDDIR[@]|$$INSTALLEDDIR|g" $< > $@.tmp; \
+	sed -e "s|@DATADIR[@]|$(datadir)|g" \
+	    -e "s|@INSTALLEDDIR[@]|$$INSTALLEDDIR|g" \
+	    -e "s|@LIBEXECDIR[@]|$(libexecdir)|g" \
+	    $< > $@.tmp; \
 	mv $@.tmp $@; \
 	$(NULL)
 
@@ -157,7 +173,8 @@ EXTRA_DIST = \
     ibus-compose.env \
     ibus-compose-locales.in \
     ibus-desktop-testing.desktop.in \
-    ibus-desktop-testing-autostart \
+    ibus-desktop-testing-autostart.in \
+    ibus-desktop-testing-module \
     ibus-desktop-testing-runner.in \
     $(NULL)
 
@@ -165,8 +182,8 @@ ibus_bus_SOURCES = ibus-bus.c
 ibus_bus_LDADD = $(prog_ldadd)
 
 ibus_compose_SOURCES = ibus-compose.c
-ibus_compose_CFLAGS = @GTK3_CFLAGS@
-ibus_compose_LDADD = $(prog_ldadd) @GTK3_LIBS@
+ibus_compose_CFLAGS = @GTK4_CFLAGS@
+ibus_compose_LDADD = $(prog_ldadd) @GTK4_LIBS@
 
 ibus_config_SOURCES = ibus-config.c
 ibus_config_LDADD = $(prog_ldadd)
@@ -190,8 +207,8 @@ ibus_keynames_SOURCES = ibus-keynames.c
 ibus_keynames_LDADD = $(prog_ldadd)
 
 ibus_keypress_SOURCES = ibus-keypress.c
-ibus_keypress_CFLAGS = @GTK3_CFLAGS@ @XTEST_CFLAGS@
-ibus_keypress_LDADD = $(prog_ldadd) @GTK3_LIBS@ @XTEST_LIBS@
+ibus_keypress_CFLAGS = @GTK4_CFLAGS@ @XTEST_CFLAGS@
+ibus_keypress_LDADD = $(prog_ldadd) @GTK4_LIBS@ @XTEST_LIBS@
 
 ibus_registry_SOURCES = ibus-registry.c
 ibus_registry_LDADD = $(prog_ldadd)

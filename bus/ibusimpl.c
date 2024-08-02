@@ -2463,6 +2463,14 @@ bus_ibus_impl_is_embed_preedit_text (BusIBusImpl *ibus)
     return ibus->embed_preedit_text;
 }
 
+gboolean
+bus_ibus_impl_is_use_global_engine (BusIBusImpl *ibus)
+{
+    g_assert (BUS_IS_IBUS_IMPL (ibus));
+
+    return ibus->use_global_engine;
+}
+
 BusInputContext *
 bus_ibus_impl_get_focused_input_context (BusIBusImpl *ibus)
 {

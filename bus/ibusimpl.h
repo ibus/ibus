@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* bus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2022-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2022-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2022 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -94,6 +94,7 @@ BusComponent    *bus_ibus_impl_lookup_component_by_name
 gboolean         bus_ibus_impl_is_use_sys_layout    (BusIBusImpl        *ibus);
 gboolean         bus_ibus_impl_is_embed_preedit_text
                                                     (BusIBusImpl        *ibus);
+gboolean         bus_ibus_impl_is_use_global_engine (BusIBusImpl        *ibus);
 BusInputContext *bus_ibus_impl_get_focused_input_context
                                                     (BusIBusImpl        *ibus);
 GHashTable      *bus_ibus_impl_get_engine_focus_id_table

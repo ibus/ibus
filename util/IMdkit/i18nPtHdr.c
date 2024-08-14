@@ -1757,7 +1757,6 @@ static void ProcessQueue (XIMS ims, CARD16 connect_id)
         switch (hdr->major_opcode)
         {
         case XIM_FORWARD_EVENT:
-            sync();
             ForwardEventMessageProc(ims, &call_data, p1);
             break;
         }

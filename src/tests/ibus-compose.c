@@ -331,13 +331,22 @@ set_engine_cb (GObject      *object,
         return;
     }
 
-    /* ibus_im_context_focus_in() is called after GlboalEngine is set. */
-    if (is_integrated_desktop () && !m_engine_is_focused) {
-        data.category = TEST_DELAYED_FOCUS_IN;
-        data.idle_id = g_timeout_add_seconds (1, idle_cb, &data);
-        g_main_loop_run (m_loop);
-        if (data.idle_id != 0)
-            return;
+    /* ibus_im_context_focus_in() is called after GlboalEngine is set.
+     * The focus-in/out events happen more slowly in a busy system
+     * likes with a TMT tool.
+     */
+    if (is_integrated_desktop () && g_getenv ("IBUS_DAEMON_WITH_SYSTEMD")) {
+        g_test_message ("Start tiny \"focus-in\" signal test");
+        for (i = 0; i < 3; i++) {
+            data.category = TEST_DELAYED_FOCUS_IN;
+            data.idle_id = g_timeout_add_seconds (1, idle_cb, &data);
+            g_main_loop_run (m_loop);
+            if (data.idle_id != 0)
+                return;
+        }
+        g_test_message ("End tiny \"focus-in\" signal test");
+        data.category = TEST_COMMIT_TEXT;
+    }
     if (m_compose_table == NULL) {
         g_test_skip ("Your locale uses en_US compose table.");
         idle_cb (&data);

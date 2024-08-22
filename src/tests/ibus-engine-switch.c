@@ -1,5 +1,6 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 
+#include <locale.h>
 #include <string.h>
 #include <unistd.h>
 #include "ibus.h"
@@ -251,6 +252,8 @@ main (gint    argc,
       gchar **argv)
 {
     gint result;
+    /* To get UTF-8 error messages with glib2 */
+    setlocale (LC_ALL, "");
     ibus_init ();
     g_test_init (&argc, &argv, NULL);
     bus = ibus_bus_new ();

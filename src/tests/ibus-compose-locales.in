@@ -15,8 +15,8 @@ do
     if [ "x$IS_COMMENT" != x ] ; then
         continue
     fi
-    while [ x"$IBUS_DAEMON_WITH_SYSTEMD" != x ] && [ $INITED -lt 6 ] ; do
-        echo "Waiting for ${INITED}0 secs till 60 secs"
+    while [ x"$IBUS_DAEMON_WITH_SYSTEMD" != x ] && [ $INITED -lt 12 ] ; do
+        echo "Waiting for ${INITED}0 secs till 120 secs"
         sleep 10
         INITED=`expr $INITED + 1`
     done

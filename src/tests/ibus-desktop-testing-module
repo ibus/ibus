@@ -63,8 +63,9 @@ pwd
 pstree -asp $$
 gsettings list-recursively org.gnome.shell
 rpm -q gnome-shell-extension-no-overview gnome-shell gnome-session
-ps -ef | grep ibus | grep -v grep
+ps -ef | grep ibus | grep -v TMT | grep -v grep
 ibus address
+locale
 env
 #dbus-send --session --print-reply --dest=org.gnome.Shell.Introspect /org/gnome/Shell/Introspect org.gnome.Shell.Introspect.GetWindows
 '
@@ -133,7 +134,8 @@ check_tty()
     TTY=`tty`
     if echo $PROGNAME | grep -q runner ; then
         if [ $ENABLED_SYSTEMD -eq 1 ] && [  $SESSION_IS_GNOME -eq 1 ] ; then
-            if echo "$TTY" | grep -E 'tty|console' ; then
+            # "not a tty" is correct with TMT tool
+            if echo "$TTY" | grep -E 'tty|console' | grep -v "not a tty" ; then
                print_log -e "${RED}FAIL${NC}: ${RED}ERROR${NC}: Changing runlevel does not support console. Please log into the host with ssh."
                exit 1
             fi
@@ -143,7 +145,7 @@ check_tty()
                print_log -e "Running session with ssh. It might be good to use console instead."
             fi
         fi
-        SESSION=`ps -ef | grep session | grep -v grep`
+        SESSION=`ps -ef | grep session | grep -v TMT | grep -v sshd-session | grep -v grep`
         if [ x"$SESSION" != x ] ; then
                print_log -e "${RED}FAIL${NC}: ${RED}ERROR${NC}: Session is running: $SESSION"
                exit 1
@@ -254,7 +256,8 @@ create_xdg_autostart()
         exit 1
     fi
     mkdir -p "$TEST_USER_HOME/.config/autostart"
-    cp "$desktop_file" "$TEST_USER_HOME/.config/autostart"
+    sed -e "s/\(^Exec=.*\)tests ibus\(.*\)/\1tests $TESTS\2/" "$desktop_file" \
+        > "$TEST_USER_HOME/.config/autostart/$AUTOSTART_DESKTOP_FILE"
     LINE="AutostartCondition=if-exists $TEST_USER_HOME/.config/autostart/$AUTOSTART_DESKTOP_FILE"
     echo "$LINE" >> "$TEST_USER_HOME/.config/autostart/$AUTOSTART_DESKTOP_FILE"
     chown -R "$TEST_USER" "$TEST_USER_HOME/.config"
@@ -327,6 +330,9 @@ init_session()
 
     LOGIN_USER=$USER
     LOGIN_HOME=$HOME
+    if [ x"$TESTS" = x ] ; then
+        TESTS='ibus'
+    fi
     check_tty
     if [ $ENABLED_SYSTEMD -eq 1 ] && [  $SESSION_IS_GNOME -eq 1 ] ; then
         SESSION_FILE1="/usr/lib/systemd/system/gnome-headless-session@.service"
@@ -482,9 +488,25 @@ init_gnome()
             chown -R $LOGIN_USER $TEST_USER_HOME/.local
         fi
     fi
+
+    ## Use gnome-headless-session for the no-graphics option because currently
+    ## GDM itself cannot run the login screen(greeter) without a display so
+    ## the no-graphics option does not work with GDM and the TMT tool
+    ## while GDM can invoke the headless GNOME Wayland sessions.
+    ##
+    ## Use GNOME_SHELL_WAYLAND_COMMAND for the no-graphics option to add a
+    ## virtual monitor since gnome-headless-session provides a headless mode
+    ## but no monitor and IBus focus-in/out events does not work without
+    ## any monitors.
+    ##
+    ## Use the systemd locale configuration for the no-graphcis mode since
+    ## gnome-headless-session does not pull LANG from AccountsService.
+    ##
     if [ $LOGIN_USER != $USER ] ; then
         SHELL_SERVICE_FILE="org.gnome.Shell@wayland.service"
         SYSTEMD_USER_DIR="$TEST_USER_HOME/.config/systemd/user"
+        ENV_USER_DIR="$TEST_USER_HOME/.config/environment.d"
+        LOCALE_CONF="$ENV_USER_DIR/ibus.conf"
         if test $HAVE_GRAPHICS -ne 1 ; then
             if test ! -f "$SYSTEMD_USER_DIR/$SHELL_SERVICE_FILE" ; then
                 mkdir -p "$SYSTEMD_USER_DIR"
@@ -494,11 +516,18 @@ init_gnome()
                     > $SHELL_SERVICE_FILE
                 diff $SYSTEMD_SYSTEM_DIR/$SHELL_SERVICE_FILE $SHELL_SERVICE_FILE
                 popd
-                chown -R $LOGIN_USER "$TEST_USER_HOME/.config"
             fi
+            mkdir -p "$ENV_USER_DIR"
+            cat > "$LOCALE_CONF" << _EOF_LOCALE_CONF
+LANG=$SESSION_LANG
+_EOF_LOCALE_CONF
+            chown -R $LOGIN_USER "$TEST_USER_HOME/.config"
         else
             if test -f "$SYSTEMD_USER_DIR/$SHELL_SERVICE_FILE" ; then
                 rm "$SYSTEMD_USER_DIR/$SHELL_SERVICE_FILE"
+            fi
+            if test -f "$LOCALE_CONF" ; then
+                rm "$LOCALE_CONF"
             fi
         fi
     fi
@@ -556,7 +585,7 @@ operate_desktop_with_systemd()
     SESSION=gnome-headless-session
     COMMAND="$1"
 
-    #if test $HAVE_GRAPHICS -eq 1 ; then
+    if test $HAVE_GRAPHICS -eq 1 ; then
         case "$COMMAND" in
         "start") systemctl isolate graphical.target
                  echo ""
@@ -565,22 +594,24 @@ operate_desktop_with_systemd()
         "")      print_log -e "${RED}FAIL${NC}: ${RED}ERROR${NC}: Wrong command $COMMAND"
                  exit 1;;
         esac
-    #else
-    #    setenforce 0
-    #    systemctl $COMMAND ${SESSION}@${TEST_USER}
-    #fi
+    else
+        setenforce 0
+        systemctl $COMMAND ${SESSION}@${TEST_USER}
+    fi
     case "$COMMAND" in
     "start") sleep 30;;
     "") ;;
     esac
-    #if test $HAVE_GRAPHICS -eq 1 ; then
+    if test $HAVE_GRAPHICS -eq 1 ; then
         systemctl status --no-pager graphical.target
-    #else
-    #    systemctl status --no-pager ${SESSION}@${TEST_USER}
-    #fi
+    else
+        systemctl status --no-pager ${SESSION}@${TEST_USER}
+    fi
     ps -ef | grep X
     ps -ef | grep session
     ps -ef | grep ibus
+    SUSER=`echo "$LOGIN_USER" | cut -c 1-7`
+    ps -ef | grep $SUSER
 }
 
 
@@ -636,6 +667,23 @@ run_session()
     fi
     sleep 3
     ps -ef | grep ibus
+}
+
+
+run_monitor()
+{
+    if ! which gnome-monitor-config > /dev/null ; then
+        print_log -e "${RED}FAIL${NC}: No gnome-monitor-config"
+        return
+    fi
+    if [ $ENABLED_SYSTEMD -ne 1 ] || [  $SESSION_IS_GNOME -ne 1 ] \
+       || [ $HAVE_GRAPHICS -ne 1 ] ; then
+        return
+    fi
+    /usr/libexec/gnome-screen-cast.py -v 1024 768 &
+    sleep 3
+    gnome-monitor-config list
+    #gnome-monitor-config set -LpM Virtual-1 -t normal -m 1024x768@60.004
 }
 
 
@@ -758,9 +806,6 @@ run_gnome_desktop_testing_runner()
 {
     pass=0
     fail=0
-    if [ x"$TESTS" = x ] ; then
-        TESTS='ibus'
-    fi
     if echo $PROGNAME | grep -q autostart ; then
         export IBUS_DAEMON_WITH_SYSTEMD=1
     fi

@@ -39,6 +39,23 @@ static gboolean window_focus_in_event_cb (GtkWidget     *entry,
 #endif
 
 
+gboolean
+_wait_for_key_release_cb (gpointer user_data)
+{
+    GMainLoop *loop = (GMainLoop *)user_data;
+    /* If this program is invoked by manual with Enter key in GNOME
+     * Wayland session, ibus_input_context_focus_in() can be called in
+     * test_context_engine_set_by_global() before the key release of
+     * the Enter key so ibus/bus/inputcontext.c:_ic_process_key_event()
+     * could call another bus_input_context_focus_in() in that test case
+     * and fail.
+     */
+    g_test_message ("Wait for 3 seconds for key release event");
+    g_main_loop_quit (loop);
+    return G_SOURCE_REMOVE;
+}
+
+
 static gchar *
 get_compose_path ()
 {
@@ -312,12 +329,45 @@ set_engine (gpointer user_data)
 
 
 #if GTK_CHECK_VERSION (4, 0, 0)
+static gboolean
+event_controller_enter_delay (gpointer user_data)
+{
+    GtkEventController *controller = (GtkEventController *)user_data;
+    GtkWidget *text = gtk_event_controller_get_widget (controller);
+    static int i = 0;
+
+    /* Wait for gtk_text_realize() which calls gtk_text_im_set_focus_in()
+     * while gtk_text_focus_changed() also calls gtk_text_im_set_focus_in()
+     * in GNOME Xorg.
+     */
+    if (gtk_widget_get_realized (text)) {
+        set_engine (user_data);
+        return G_SOURCE_REMOVE;
+    }
+    if (i++ == 10) {
+        g_test_fail_printf ("Window is not realized with %d times", i);
+        return G_SOURCE_REMOVE;
+    }
+    g_test_message ("event_controller_enter_delay %d", i);
+    return G_SOURCE_CONTINUE;
+}
+
+
 static void
 event_controller_enter_cb (GtkEventController *controller,
                            gpointer            user_data)
 {
+    static guint id = 0;
+
     g_test_message ("EventController emits \"enter\" signal");
-    set_engine (controller);
+    /* Call an idle function because gtk_widget_add_controller()
+     * calls g_list_prepend() for event_controllers and this controller is
+     * always called before "gtk-text-focus-controller"
+     * is caleld and the IM context does not receive the focus-in yet.
+     */
+    if (id)
+        return;
+    id = g_idle_add (event_controller_enter_delay, controller);
 }
 
 #else
@@ -473,8 +523,9 @@ create_window ()
 #if GTK_CHECK_VERSION (4, 0, 0)
     controller = gtk_event_controller_focus_new ();
     text = gtk_editable_get_delegate (GTK_EDITABLE (entry));
-    g_signal_connect (controller, "enter",
-                      G_CALLBACK (event_controller_enter_cb), NULL);
+    gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_BUBBLE);
+    g_signal_connect_after (controller, "enter",
+                            G_CALLBACK (event_controller_enter_cb), NULL);
     gtk_widget_add_controller (GTK_WIDGET (text), controller);
 #else
     g_signal_connect (entry, "focus-in-event",
@@ -494,6 +545,19 @@ create_window ()
 #endif
 }
 
+
+static void
+test_init (void)
+{
+    char *tty_name = ttyname (STDIN_FILENO);
+    GMainLoop *loop = g_main_loop_new (NULL, TRUE);
+    g_test_message ("Test on %s", tty_name ? tty_name : "(null)");
+    if (tty_name && g_strstr_len (tty_name, -1, "pts")) {
+        g_timeout_add_seconds (3, _wait_for_key_release_cb, loop);
+        g_main_loop_run (loop);
+    }
+    g_main_loop_unref (loop);
+}
 
 static void
 test_compose (void)
@@ -557,6 +621,7 @@ main (int argc, char *argv[])
         g_free (test_name);
         test_name = g_path_get_basename (m_compose_file);
     }
+    g_test_add_func ("/ibus-compose/test-init", test_init);
     m_loop = g_main_loop_new (NULL, TRUE);
     test_path = g_build_filename ("/ibus-compose", test_name, NULL);
     g_test_add_func (test_path, test_compose);

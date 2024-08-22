@@ -2,7 +2,7 @@
 Name=IBus Desktop Testing Runner
 GenericName=Input Method Desktop Testing Runner
 Comment=Test plugin for IBus Desktop Testing
-Exec=@libexecdir@/ibus-desktop-testing-autostart /var/tmp/ibus-ci-autostart.log
+Exec=sh -c 'exec @libexecdir@/ibus-desktop-testing-autostart --envcheck --output $HOME/test-autostart.log --result $HOME/test.log --runner gnome --screendump $HOME/screen.log --tests ibus'
 Terminal=false
 Type=Application
 Encoding=UTF-8

@@ -3,7 +3,7 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2015 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2015-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # Copyright (c) 2007-2018 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
@@ -106,6 +106,7 @@ test_sourcesdir = $(datadir)/installed-tests/ibus
 
 CLEANFILES += \
     $(test_metas) \
+    ibus-desktop-testing-autostart \
     ibus-desktop-testing-runner \
     org.freedesktop.IBus.Desktop.Testing.desktop \
     $(NULL)
@@ -119,7 +120,10 @@ CLEANFILES += \
     $(NULL)
 endif
 test_execsdir = $(libexecdir)/installed-tests/ibus
-libexec_SCRIPTS = ibus-desktop-testing-autostart
+libexec_SCRIPTS = \
+  ibus-desktop-testing-autostart \
+  ibus-desktop-testing-module \
+  $(NULL)
 
 test_frame_DATA = org.freedesktop.IBus.Desktop.Testing.desktop
 test_framedir = $(pkgdatadir)/tests
@@ -142,9 +146,21 @@ ibus-compose-locales: ibus-compose-locales.in
 	mv $@.tmp $@; \
 	$(NULL)
 
+ibus-desktop-testing-autostart: ibus-desktop-testing-autostart.in
+	INSTALLEDDIR=$(datadir)/installed-tests; \
+	sed -e "s|@DATADIR[@]|$(datadir)|g" \
+	    -e "s|@INSTALLEDDIR[@]|$$INSTALLEDDIR|g" \
+	    -e "s|@LIBEXECDIR[@]|$(libexecdir)|g" \
+	    $< > $@.tmp; \
+	mv $@.tmp $@; \
+	$(NULL)
+
 ibus-desktop-testing-runner: ibus-desktop-testing-runner.in
 	INSTALLEDDIR=$(datadir)/installed-tests; \
-	sed -e "s|@INSTALLEDDIR[@]|$$INSTALLEDDIR|g" $< > $@.tmp; \
+	sed -e "s|@DATADIR[@]|$(datadir)|g" \
+	    -e "s|@INSTALLEDDIR[@]|$$INSTALLEDDIR|g" \
+	    -e "s|@LIBEXECDIR[@]|$(libexecdir)|g" \
+	    $< > $@.tmp; \
 	mv $@.tmp $@; \
 	$(NULL)
 
@@ -157,7 +173,8 @@ EXTRA_DIST = \
     ibus-compose.env \
     ibus-compose-locales.in \
     ibus-desktop-testing.desktop.in \
-    ibus-desktop-testing-autostart \
+    ibus-desktop-testing-autostart.in \
+    ibus-desktop-testing-module \
     ibus-desktop-testing-runner.in \
     $(NULL)
 

@@ -7,18 +7,27 @@
 #define RED   "\033[0;31m"
 #define NC    "\033[0m"
 
-IBusBus *m_bus;
-gchar *m_compose_file;
-IBusComposeTableEx *m_compose_table;
-IBusEngine *m_engine;
-gchar *m_srcdir;
+static IBusBus *m_bus;
+static gchar *m_compose_file;
+static IBusComposeTableEx *m_compose_table;
+static IBusEngine *m_engine;
+static gchar *m_srcdir;
+static GMainLoop *m_loop;
 
-guint ibus_compose_key_flag (guint key);
+typedef enum {
+    TEST_CREATE_ENGINE,
+    TEST_COMMIT_TEXT
+} TestIDleCategory;
 
+typedef struct _TestIdleData {
+    TestIDleCategory category;
+    guint            idle_id;
+} TestIdleData;
+
+extern guint ibus_compose_key_flag (guint key);
 static gboolean window_focus_in_event_cb (GtkWidget     *entry,
                                           GdkEventFocus *event,
                                           gpointer       data);
-
 
 static gchar *
 get_compose_path ()
@@ -51,17 +60,50 @@ get_compose_path ()
 }
 
 
+gboolean
+idle_cb (gpointer user_data)
+{
+    TestIdleData *data = (TestIdleData *)user_data;
+    g_assert (data);
+    switch (data->category) {
+    case TEST_CREATE_ENGINE:
+        g_test_fail_printf ("\"create-engine\" signal is timeout.");
+        break;
+    case TEST_COMMIT_TEXT:
+        if (data->idle_id)
+            g_test_fail_printf ("Commiting composed chars is timeout.");
+        if (m_loop) {
+            if (g_main_loop_is_running (m_loop))
+                g_main_loop_quit (m_loop);
+            g_clear_pointer (&m_loop, g_main_loop_unref);
+            gtk_main_quit ();
+        }
+        data->idle_id = 0;
+        break;
+    default:
+        g_test_fail_printf ("Idle func is called by wrong category:%d.",
+                            data->category);
+        break;
+    }
+    return G_SOURCE_REMOVE;
+}
+
+
 static IBusEngine *
 create_engine_cb (IBusFactory *factory,
                   const gchar *name,
-                  gpointer     data)
+                  gpointer     user_data)
 {
     static int i = 1;
     gchar *engine_path =
             g_strdup_printf ("/org/freedesktop/IBus/engine/simpletest/%d",
                              i++);
     gchar *compose_path;
+    TestIdleData *data = (TestIdleData *)user_data;
 
+    g_assert (data);
+    /* Don't reset idle_id to avoid duplicated register_ibus_engine(). */
+    g_source_remove (data->idle_id);
     m_engine = ibus_engine_new_with_type (IBUS_TYPE_ENGINE_SIMPLE,
                                           name,
                                           engine_path,
@@ -75,28 +117,33 @@ create_engine_cb (IBusFactory *factory,
         ibus_engine_simple_add_compose_file (IBUS_ENGINE_SIMPLE (m_engine),
                                              compose_path);
         m_compose_table = ibus_compose_table_load_cache (compose_path);
-        if (m_compose_table == NULL)
-            g_warning ("Your locale uses en_US compose table.");
     }
     g_free (compose_path);
     return m_engine;
 }
 
+
 static gboolean
 register_ibus_engine ()
 {
+    static TestIdleData data = { .category = TEST_CREATE_ENGINE, .idle_id = 0 };
     IBusFactory *factory;
     IBusComponent *component;
     IBusEngineDesc *desc;
 
+    if (data.idle_id) {
+        g_test_incomplete ("Test is called twice due to a timeout.");
+        return TRUE;
+    }
     m_bus = ibus_bus_new ();
     if (!ibus_bus_is_connected (m_bus)) {
-        g_critical ("ibus-daemon is not running.");
+        g_test_fail_printf ("ibus-daemon is not running.");
         return FALSE;
     }
     factory = ibus_factory_new (ibus_bus_get_connection (m_bus));
+    data.idle_id = g_timeout_add_seconds (20, idle_cb, &data);
     g_signal_connect (factory, "create-engine",
-                      G_CALLBACK (create_engine_cb), NULL);
+                      G_CALLBACK (create_engine_cb), &data);
 
     component = ibus_component_new (
             "org.freedesktop.IBus.SimpleTest",
@@ -122,34 +169,29 @@ register_ibus_engine ()
     return TRUE;
 }
 
-static gboolean
-finit (gpointer data)
-{
-    g_test_incomplete ("time out");
-    gtk_main_quit ();
-    return FALSE;
-}
 
 static void
-set_engine_cb (GObject *object, GAsyncResult *res, gpointer data)
+set_engine_cb (GObject      *object,
+               GAsyncResult *res,
+               gpointer      user_data)
 {
     IBusBus *bus = IBUS_BUS (object);
-    GtkWidget *entry = GTK_WIDGET (data);
+    GtkWidget *entry = GTK_WIDGET (user_data);
     GError *error = NULL;
+    static TestIdleData data = { .category = TEST_COMMIT_TEXT, .idle_id = 0 };
     int i, j;
     int index_stride;
     IBusComposeTablePrivate *priv;
 
     if (!ibus_bus_set_global_engine_async_finish (bus, res, &error)) {
-        gchar *msg = g_strdup_printf ("set engine failed: %s", error->message);
-        g_test_incomplete (msg);
-        g_free (msg);
+        g_test_fail_printf ("set engine failed: %s", error->message);
         g_error_free (error);
         return;
     }
 
     if (m_compose_table == NULL) {
-        gtk_main_quit ();
+        g_test_skip ("Your locale uses en_US compose table.");
+        idle_cb (&data);
         return;
     }
 
@@ -157,6 +199,7 @@ set_engine_cb (GObject *object, GAsyncResult *res, gpointer data)
     for (i = 0;
          i < (m_compose_table->n_seqs * index_stride);
          i += index_stride) {
+        data.idle_id = g_timeout_add_seconds (20, idle_cb, &data);
         for (j = i; j < i + (index_stride - 2); j++) {
             guint keyval = m_compose_table->data[j];
             guint keycode = 0;
@@ -172,12 +215,22 @@ set_engine_cb (GObject *object, GAsyncResult *res, gpointer data)
             g_signal_emit_by_name (m_engine, "process-key-event",
                                    keyval, keycode, modifiers, &retval);
         }
+        /* Need to wait for calling window_inserted_text_cb() with
+         * g_main_loop_run() because the commit-text event could be cancelled
+         * by the next commit-text event with gnome-shell in Wayland.
+         */
+        g_main_loop_run (m_loop);
+        if (data.idle_id) {
+            g_source_remove (data.idle_id);
+            data.idle_id = 0;
+        }
     }
     priv = m_compose_table->priv;
     if (priv) {
         for (i = 0;
              i < (priv->first_n_seqs * index_stride);
              i += index_stride) {
+            data.idle_id = g_timeout_add_seconds (20, idle_cb, &data);
             for (j = i; j < i + (index_stride - 2); j++) {
                 guint keyval = priv->data_first[j];
                 guint keycode = 0;
@@ -193,13 +246,18 @@ set_engine_cb (GObject *object, GAsyncResult *res, gpointer data)
                 g_signal_emit_by_name (m_engine, "process-key-event",
                                        keyval, keycode, modifiers, &retval);
             }
+            g_main_loop_run (m_loop);
+            if (data.idle_id) {
+                g_source_remove (data.idle_id);
+                data.idle_id = 0;
+            }
         }
     }
 
     g_signal_handlers_disconnect_by_func (entry, 
                                           G_CALLBACK (window_focus_in_event_cb),
                                           NULL);
-    g_timeout_add_seconds (10, finit, NULL);
+    data.idle_id = g_timeout_add_seconds (10, idle_cb, &data);
 }
 
 static gboolean
@@ -215,12 +273,13 @@ window_focus_in_event_cb (GtkWidget *entry, GdkEventFocus *event, gpointer data)
     return FALSE;
 }
 
+
 static void
 window_inserted_text_cb (GtkEntryBuffer *buffer,
                          guint           position,
                          const gchar    *chars,
                          guint           nchars,
-                         gpointer        data)
+                         gpointer        user_data)
 {
 /* https://gitlab.gnome.org/GNOME/gtk/commit/9981f46e0b
  * The latest GTK does not emit "inserted-text" when the text is "".
@@ -234,8 +293,9 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
     int seq;
     gunichar code = g_utf8_get_char (chars);
     const gchar *test;
-    GtkEntry *entry = GTK_ENTRY (data);
+    GtkEntry *entry = GTK_ENTRY (user_data);
     IBusComposeTablePrivate *priv;
+    static TestIdleData data = { .category = TEST_COMMIT_TEXT, .idle_id = 0 };
 
     g_assert (m_compose_table != NULL);
 
@@ -302,20 +362,25 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
             stride = 0;
             seq = 0;
         } else {
-            gtk_main_quit ();
+            /* Finish tests */
+            idle_cb (&data);
             return;
         }
     }
     if (enable_32bit && seq == priv->first_n_seqs) {
-        gtk_main_quit ();
+        /* Finish tests */
+        idle_cb (&data);
         return;
     }
 
 #if !GTK_CHECK_VERSION (3, 22, 16)
     n_loop++;
 #endif
+
     gtk_entry_set_text (entry, "");
+    g_main_loop_quit (m_loop);
 }
+
 
 static void
 create_window ()
@@ -335,14 +400,13 @@ create_window ()
     gtk_widget_show_all (window);
 }
 
+
 static void
 test_compose (void)
 {
     GLogLevelFlags flags;
-    if (!register_ibus_engine ()) {
-        g_test_fail ();
+    if (!register_ibus_engine ())
         return;
-    }
 
     create_window ();
     /* FIXME:
@@ -356,6 +420,7 @@ test_compose (void)
     gtk_main ();
     g_log_set_always_fatal (flags);
 }
+
 
 int
 main (int argc, char *argv[])
@@ -380,10 +445,12 @@ main (int argc, char *argv[])
 #else
     test_name = g_strdup (g_getenv ("LANG"));
 #endif
-    if (!test_name || !g_ascii_strncasecmp (test_name, "en_US", 5)) {
+    if (m_compose_file &&
+        (!test_name || !g_ascii_strncasecmp (test_name, "en_US", 5))) {
         g_free (test_name);
         test_name = g_path_get_basename (m_compose_file);
     }
+    m_loop = g_main_loop_new (NULL, TRUE);
     test_path = g_build_filename ("/ibus-compose", test_name, NULL);
     g_test_add_func (test_path, test_compose);
     g_free (test_path);

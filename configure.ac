@@ -237,6 +237,9 @@ AC_ARG_ENABLE(gtk4,
 )
 AM_CONDITIONAL([ENABLE_GTK4], [test x"$enable_gtk4" = x"yes"])
 
+AM_CONDITIONAL([ENABLE_GTK3_OR_4],
+               [test x"$enable_gtk3" = x"yes" || test x"$enable_gtk4" = x"yes"])
+
 # --disable-xim option.
 AC_ARG_ENABLE(xim,
     AS_HELP_STRING([--disable-xim],

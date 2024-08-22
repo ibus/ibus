@@ -1,12 +1,16 @@
 #include <gtk/gtk.h>
+#if GTK_CHECK_VERSION (4, 0, 0)
+#include <gdk/x11/gdkx.h>
+#else
 #include <gdk/gdkx.h>
+#endif
 #include "ibus.h"
 #include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/extensions/XTest.h>
 
 #ifdef GDK_WINDOWING_WAYLAND
-#if GTK_CHECK_VERSION (3, 98, 4)
+#if GTK_CHECK_VERSION (4, 0, 0)
 #include <gdk/wayland/gdkwayland.h>
 #else
 #include <gdk/gdkwayland.h>
@@ -51,12 +55,18 @@ static const gunichar test_results[][60] = {
 };
 
 
-IBusBus *m_bus;
-IBusEngine *m_engine;
+static IBusBus *m_bus;
+static IBusEngine *m_engine;
+#if GTK_CHECK_VERSION (4, 0, 0)
+static gboolean m_list_toplevel;
 
+static gboolean event_controller_enter_cb (GtkEventController *controller,
+                                           gpointer            user_data);
+#else
 static gboolean window_focus_in_event_cb (GtkWidget     *entry,
                                           GdkEventFocus *event,
                                           gpointer       data);
+#endif
 
 static IBusEngine *
 create_engine_cb (IBusFactory *factory, const gchar *name, gpointer data)
@@ -118,7 +128,11 @@ static gboolean
 finit (gpointer data)
 {
     g_critical ("time out");
+#if GTK_CHECK_VERSION (4, 0, 0)
+    m_list_toplevel = FALSE;
+#else
     gtk_main_quit ();
+#endif
     return FALSE;
 }
 
@@ -174,18 +188,28 @@ send_key_event (Display *xdisplay,
 }
 
 static void
+window_destroy_cb (void)
+{
+#if GTK_CHECK_VERSION (4, 0, 0)
+    m_list_toplevel = FALSE;
+#else
+    gtk_main_quit ();
+#endif
+}
+
+static void
 set_engine_cb (GObject      *object,
                GAsyncResult *res,
-               gpointer      data)
+               gpointer      user_data)
 {
     IBusBus *bus = IBUS_BUS (object);
-    GtkWidget *entry = GTK_WIDGET (data);
+#if ! GTK_CHECK_VERSION (4, 0, 0)
+    GtkWidget *entry = GTK_WIDGET (user_data);
+#endif
     GdkDisplay *display;
     Display *xdisplay = NULL;
     GError *error = NULL;
     int i, j;
-
-    g_assert (GTK_IS_ENTRY (entry));
 
     if (!ibus_bus_set_global_engine_async_finish (bus, res, &error)) {
         g_critical ("set engine failed: %s", error->message);
@@ -193,7 +217,11 @@ set_engine_cb (GObject      *object,
         return;
     }
 
+#if GTK_CHECK_VERSION (4, 0, 0)
+    display = gdk_display_get_default ();
+#else
     display = gtk_widget_get_display (entry);
+#endif
     g_assert (GDK_IS_X11_DISPLAY (display));
     xdisplay = gdk_x11_display_get_xdisplay (display);
     g_return_if_fail (xdisplay);
@@ -210,8 +238,8 @@ set_engine_cb (GObject      *object,
     g_timeout_add_seconds (10, finit, NULL);
 }
 
-static gboolean
-window_focus_in_event_cb (GtkWidget *entry, GdkEventFocus *event, gpointer data)
+static void
+set_engine (gpointer user_data)
 {
     g_assert (m_bus != NULL);
     ibus_bus_set_global_engine_async (m_bus,
@@ -219,18 +247,40 @@ window_focus_in_event_cb (GtkWidget *entry, GdkEventFocus *event, gpointer data)
                                       -1,
                                       NULL,
                                       set_engine_cb,
-                                      entry);
+                                      user_data);
+}
+
+#if GTK_CHECK_VERSION (4, 0, 0)
+static gboolean
+event_controller_enter_cb (GtkEventController *controller,
+                           gpointer            user_data)
+{
+    set_engine (controller);
     return FALSE;
 }
+
+#else
+
+static gboolean
+window_focus_in_event_cb (GtkWidget     *entry,
+                          GdkEventFocus *event,
+                          gpointer       user_data)
+{
+    set_engine (entry);
+    return FALSE;
+}
+#endif
 
 static void
 window_inserted_text_cb (GtkEntryBuffer *buffer,
                          guint           position,
                          const gchar    *chars,
                          guint           nchars,
-                         gpointer        data)
+                         gpointer        user_data)
 {
-    GtkWidget *entry = data;
+#if ! GTK_CHECK_VERSION (4, 0, 0)
+    GtkWidget *entry = user_data;
+#endif
     static int i = 0;
     static int j = 0;
 
@@ -242,10 +292,19 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
         g_print ("\n");
         i++;
         j = 0;
-        if (test_results[i][0] == 0)
+        if (test_results[i][0] == 0) {
+#if GTK_CHECK_VERSION (4, 0, 0)
+            m_list_toplevel = FALSE;
+#else
             gtk_main_quit ();
-        else
+#endif
+        } else {
+#if GTK_CHECK_VERSION (4, 0, 0)
+            gtk_entry_buffer_set_text (buffer, "", 1);
+#else
             gtk_entry_set_text (GTK_ENTRY (entry), "");
+#endif
+        }
         return;
     }
     g_assert (g_utf8_get_char (chars) == test_results[i][j]);
@@ -255,19 +314,39 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
 static void
 create_window ()
 {
-    GtkWidget *window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    GtkWidget *window;
     GtkWidget *entry = gtk_entry_new ();
     GtkEntryBuffer *buffer;
+#if GTK_CHECK_VERSION (4, 0, 0)
+    GtkEventController *controller;
+
+    window = gtk_window_new ();
+#else
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+#endif
 
     g_signal_connect (window, "destroy",
-                      G_CALLBACK (gtk_main_quit), NULL);
+                      G_CALLBACK (window_destroy_cb), NULL);
+#if GTK_CHECK_VERSION (4, 0, 0)
+    controller = gtk_event_controller_focus_new ();
+    g_signal_connect (controller, "enter",
+                      G_CALLBACK (event_controller_enter_cb), NULL);
+    gtk_widget_add_controller (window, controller);
+#else
     g_signal_connect (entry, "focus-in-event",
                       G_CALLBACK (window_focus_in_event_cb), NULL);
+#endif
     buffer = gtk_entry_get_buffer (GTK_ENTRY (entry));
     g_signal_connect (buffer, "inserted-text",
                       G_CALLBACK (window_inserted_text_cb), entry);
+#if GTK_CHECK_VERSION (4, 0, 0)
+    gtk_window_set_child (GTK_WINDOW (window), entry);
+    gtk_window_set_focus (GTK_WINDOW (window), entry);
+    gtk_window_present (GTK_WINDOW (window));
+#else
     gtk_container_add (GTK_CONTAINER (window), entry);
     gtk_widget_show_all (window);
+#endif
 }
 
 static void
@@ -276,6 +355,16 @@ test_keypress (void)
     gchar *path;
     int status = 0;
     GError *error = NULL;
+
+#ifdef GDK_WINDOWING_WAYLAND
+    {
+        GdkDisplay *display = gdk_display_get_default ();
+        if (GDK_IS_WAYLAND_DISPLAY (display)) {
+            g_test_skip_printf ("setxkbmap and XTEST do not work in Wayland.");
+            return;
+        }
+    }
+#endif
 
     /* localectl does not change the session keymap. */
     path = g_find_program_in_path ("setxkbmap");
@@ -287,33 +376,38 @@ test_keypress (void)
     g_free (path);
     g_assert (register_ibus_engine ());
 
+#if GTK_CHECK_VERSION (4, 0, 0)
+    m_list_toplevel = TRUE;
+#endif
     create_window ();
+#if GTK_CHECK_VERSION (4, 0, 0)
+    while (m_list_toplevel)
+        g_main_context_iteration (NULL, TRUE);
+#else
     gtk_main ();
+#endif
 }
 
 int
 main (int argc, char *argv[])
 {
-    ibus_init ();
+    /* ibus_init() should not be called here because
+     * ibus_init() is called from IBus Gtk4 IM module even if
+     * GTK_IM_MODULE=wayland is exported.
+     */
     /* Avoid a warning of "AT-SPI: Could not obtain desktop path or name"
      * with gtk_main().
      */
     if (!g_setenv ("NO_AT_BRIDGE", "1", TRUE))
         g_message ("Failed setenv NO_AT_BRIDGE\n");
     g_test_init (&argc, &argv, NULL);
+#if GTK_CHECK_VERSION (4, 0, 0)
+    gtk_init ();
+#else
     gtk_init (&argc, &argv);
-#ifdef GDK_WINDOWING_WAYLAND
-    {
-        GdkDisplay *display = gdk_display_get_default ();
-        if (GDK_IS_WAYLAND_DISPLAY (display)) {
-            g_print ("setxkbmap and XTEST do not work in Wayland.\n");
-            return 0;
-        }
-    }
 #endif
 
     g_test_add_func ("/ibus/keyrepss", test_keypress);
-
 
     return g_test_run ();
 }

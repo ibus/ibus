@@ -192,7 +192,7 @@ parse_compose_sequence (IBusComposeData *compose_data,
 
     for (i = 1; words[i] != NULL; i++) {
         char *start = words[i];
-        char *end = index (words[i], '>');
+        char *end = strchr (words[i], '>');
         char *match;
         gunichar codepoint;
 

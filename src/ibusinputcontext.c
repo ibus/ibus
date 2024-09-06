@@ -1168,6 +1168,8 @@ ibus_input_context_set_surrounding_text (IBusInputContext   *context,
                                 NULL                        /* user_data */
                                 );
         }
+    } else {
+       g_object_unref(text);
     }
 }
 

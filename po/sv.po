@@ -4,10 +4,10 @@
 # This file is distributed under the same license as the ibus package.
 #
 # Translators:
-# Göran Uddeborg <goeran@uddeborg.se>, 2017. #zanata, 2020.
+# Göran Uddeborg <goeran@uddeborg.se>, 2017. #zanata, 2020, 2024.
 # fujiwara <takao.fujiwara1@gmail.com>, 2017, 2018. #zanata
-# Göran Uddeborg <goeran@uddeborg.se>, 2018. #zanata, 2020.
-# Göran Uddeborg <goeran@uddeborg.se>, 2019. #zanata, 2020.
+# Göran Uddeborg <goeran@uddeborg.se>, 2018. #zanata, 2020, 2024.
+# Göran Uddeborg <goeran@uddeborg.se>, 2019. #zanata, 2020, 2024.
 # Allan Nordhøy <epost@anotheragency.no>, 2020.
 # Sebastian Rasmussen <sebras@gmail.com>, 2021.
 # Luna Jernberg <bittin@reimu.nl>, 2023, 2024.
@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2024-05-23 22:16+0900\n"
-"PO-Revision-Date: 2024-02-29 13:35+0000\n"
-"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
+"PO-Revision-Date: 2024-07-11 20:38+0000\n"
+"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/sv/>\n"
 "Language: sv\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3605,6 +3605,9 @@ msgid ""
 "is Xorg so the Wayland feature is disabled. You would be better off running "
 "ibus-daemon directly instead or %s without that option."
 msgstr ""
+"Det verkar som att du kör %s med flaggan ”--enable-wayland-im” men din "
+"displayserver är Xorg så funktionen Wayland är avaktiverad. Det är bättre om "
+"du kör ibus-daemon direkt istället eller %s utan den flaggan."
 
 #: ui/gtk3/panel.vala:900
 msgid "IBus Notification"

@@ -7,7 +7,7 @@
 # Charles-Antoine Couret <cacouret@wanadoo.fr>, 2009
 # dominique bribanick <chepioq@gmail.com>, 2011,2014
 # Jérôme Fenal <jfenal@gmail.com>, 2012-2013
-# Julien Humbert <julroy67@gmail.com>, 2009-2015, 2020, 2021, 2022.
+# Julien Humbert <julroy67@gmail.com>, 2009-2015, 2020, 2021, 2022, 2024.
 # Sam Friedmann <sam.friedmann@redhat.com>, 2010
 # Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2016-2019, 2020.
 # José Fournier <jaaf64@zoraldia.com>, 2016, 2017. #zanata
@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2024-05-23 22:16+0900\n"
-"PO-Revision-Date: 2024-06-27 09:36+0000\n"
-"Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
+"PO-Revision-Date: 2024-09-11 06:38+0000\n"
+"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/fr/>\n"
 "Language: fr\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -297,7 +297,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:208
 msgid "Use custom font"
-msgstr "Utiliser une police personnalisée :"
+msgstr "Utiliser une police personnalisée"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:209
 msgid "Use custom font name for language panel"
@@ -1137,7 +1137,7 @@ msgstr "Arabe étendu-B"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:117
 msgid "Arabic Extended-A"
-msgstr "Arable étendu-A"
+msgstr "Arabe étendu-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3322,7 +3322,7 @@ msgstr ""
 
 #: tools/main.vala:580 tools/main.vala:674
 msgid "Show debug messages."
-msgstr "afficher les messages de débogage"
+msgstr "Afficher les messages de débogage."
 
 #: tools/main.vala:670
 msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
@@ -3385,9 +3385,8 @@ msgid "Restart ibus-daemon"
 msgstr "Redémarrer ibus-daemon"
 
 #: tools/main.vala:973
-#, fuzzy
 msgid "Start ibus-daemon"
-msgstr "Redémarrer ibus-daemon"
+msgstr "Démarrer ibus-daemon"
 
 #: tools/main.vala:974 ui/gtk3/application.vala:317
 msgid "Show version"

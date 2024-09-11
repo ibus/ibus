@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2024-05-23 22:16+0900\n"
-"PO-Revision-Date: 2024-02-29 13:35+0000\n"
+"PO-Revision-Date: 2024-08-30 09:21+0000\n"
 "Last-Translator: Mike FABIAN <mfabian@redhat.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/de/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.7\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3642,6 +3642,10 @@ msgid ""
 "is Xorg so the Wayland feature is disabled. You would be better off running "
 "ibus-daemon directly instead or %s without that option."
 msgstr ""
+"Anscheinend führen Sie %s mit der Option '--enable-wayland-im' aus, aber Ihr "
+"Display-Server ist Xorg, so dass die Wayland-Funktion deaktiviert ist. Es "
+"wäre besser, den ibus-daemon direkt auszuführen oder %s ohne diese Option zu "
+"verwenden."
 
 #: ui/gtk3/panel.vala:900
 msgid "IBus Notification"

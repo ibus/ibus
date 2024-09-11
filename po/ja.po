@@ -2760,7 +2760,7 @@ msgstr "ムロ文字"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1069
 msgid "Tangsa"
-msgstr ""
+msgstr "タンサ文字"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2908,7 +2908,7 @@ msgstr "古代ギリシア記譜法"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1153
 msgid "Kaktovik Numerals"
-msgstr ""
+msgstr "カクトビック数字"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2993,7 +2993,7 @@ msgstr "ワンチョ文字"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1201
 msgid "Nag Mundari"
-msgstr ""
+msgstr "ナグ・ムンダリ文字"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3611,6 +3611,9 @@ msgid ""
 "is Xorg so the Wayland feature is disabled. You would be better off running "
 "ibus-daemon directly instead or %s without that option."
 msgstr ""
+"'--enable-wayland-im'オプションを使用して%sを実行したように見え、画面表示サー"
+"バーがXorgでウェイランド機能が無効になっています。代わりに、ibus-daemonを直接"
+"実行するか、オプションを指定せずに%sを実行する方がよいでしょう。"
 
 #: ui/gtk3/panel.vala:900
 msgid "IBus Notification"

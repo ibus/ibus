@@ -422,6 +422,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             G_TYPE_UINT,
             G_TYPE_UINT,
             G_TYPE_UINT);
+    g_signal_set_va_marshaller (context_signals[PROCESS_KEY_EVENT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_BOOLEAN__UINT_UINT_UINTv);
 
     context_signals[SET_CURSOR_LOCATION] =
         g_signal_new (I_("set-cursor-location"),
@@ -436,6 +439,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             G_TYPE_INT,
             G_TYPE_INT,
             G_TYPE_INT);
+    g_signal_set_va_marshaller (context_signals[SET_CURSOR_LOCATION],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__INT_INT_INT_INTv);
 
     context_signals[SET_CURSOR_LOCATION_RELATIVE] =
         g_signal_new (I_("set-cursor-location-relative"),
@@ -450,6 +456,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             G_TYPE_INT,
             G_TYPE_INT,
             G_TYPE_INT);
+    g_signal_set_va_marshaller (context_signals[SET_CURSOR_LOCATION_RELATIVE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__INT_INT_INT_INTv);
 
     context_signals[FOCUS_IN] =
         g_signal_new (I_("focus-in"),
@@ -459,6 +468,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             NULL, NULL,
             bus_marshal_VOID__VOID,
             G_TYPE_NONE, 0);
+    g_signal_set_va_marshaller (context_signals[FOCUS_IN],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     context_signals[FOCUS_OUT] =
         g_signal_new (I_("focus-out"),
@@ -468,6 +480,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             NULL, NULL,
             bus_marshal_VOID__VOID,
             G_TYPE_NONE, 0);
+    g_signal_set_va_marshaller (context_signals[FOCUS_OUT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     context_signals[UPDATE_PREEDIT_TEXT] =
         g_signal_new (I_("update-preedit-text"),
@@ -481,6 +496,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             IBUS_TYPE_TEXT,
             G_TYPE_UINT,
             G_TYPE_BOOLEAN);
+    g_signal_set_va_marshaller (context_signals[UPDATE_PREEDIT_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECT_UINT_BOOLEANv);
 
     context_signals[SHOW_PREEDIT_TEXT] =
         g_signal_new (I_("show-preedit-text"),
@@ -491,6 +509,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (context_signals[SHOW_PREEDIT_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     context_signals[HIDE_PREEDIT_TEXT] =
         g_signal_new (I_("hide-preedit-text"),
@@ -501,6 +522,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (context_signals[HIDE_PREEDIT_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     context_signals[UPDATE_AUXILIARY_TEXT] =
         g_signal_new (I_("update-auxiliary-text"),
@@ -513,6 +537,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             2,
             IBUS_TYPE_TEXT,
             G_TYPE_BOOLEAN);
+    g_signal_set_va_marshaller (context_signals[UPDATE_AUXILIARY_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECT_BOOLEANv);
 
     context_signals[SHOW_AUXILIARY_TEXT] =
         g_signal_new (I_("show-auxiliary-text"),
@@ -523,6 +550,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (context_signals[SHOW_AUXILIARY_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     context_signals[HIDE_AUXILIARY_TEXT] =
         g_signal_new (I_("hide-auxiliary-text"),
@@ -533,6 +563,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (context_signals[HIDE_AUXILIARY_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     context_signals[UPDATE_LOOKUP_TABLE] =
         g_signal_new (I_("update-lookup-table"),
@@ -545,6 +578,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             2,
             IBUS_TYPE_LOOKUP_TABLE,
             G_TYPE_BOOLEAN);
+    g_signal_set_va_marshaller (context_signals[UPDATE_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECT_BOOLEANv);
 
     context_signals[SHOW_LOOKUP_TABLE] =
         g_signal_new (I_("show-lookup-table"),
@@ -554,6 +590,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             NULL, NULL,
             bus_marshal_VOID__VOID,
             G_TYPE_NONE, 0);
+    g_signal_set_va_marshaller (context_signals[SHOW_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     context_signals[HIDE_LOOKUP_TABLE] =
         g_signal_new (I_("hide-lookup-table"),
@@ -563,6 +602,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             NULL, NULL,
             bus_marshal_VOID__VOID,
             G_TYPE_NONE, 0);
+    g_signal_set_va_marshaller (context_signals[HIDE_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     context_signals[PAGE_UP_LOOKUP_TABLE] =
         g_signal_new (I_("page-up-lookup-table"),
@@ -572,6 +614,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             NULL, NULL,
             bus_marshal_VOID__VOID,
             G_TYPE_NONE, 0);
+    g_signal_set_va_marshaller (context_signals[PAGE_UP_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     context_signals[PAGE_DOWN_LOOKUP_TABLE] =
         g_signal_new (I_("page-down-lookup-table"),
@@ -581,6 +626,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             NULL, NULL,
             bus_marshal_VOID__VOID,
             G_TYPE_NONE, 0);
+    g_signal_set_va_marshaller (context_signals[PAGE_DOWN_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     context_signals[CURSOR_UP_LOOKUP_TABLE] =
         g_signal_new (I_("cursor-up-lookup-table"),
@@ -590,6 +638,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             NULL, NULL,
             bus_marshal_VOID__VOID,
             G_TYPE_NONE, 0);
+    g_signal_set_va_marshaller (context_signals[CURSOR_UP_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     context_signals[CURSOR_DOWN_LOOKUP_TABLE] =
         g_signal_new (I_("cursor-down-lookup-table"),
@@ -599,6 +650,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             NULL, NULL,
             bus_marshal_VOID__VOID,
             G_TYPE_NONE, 0);
+    g_signal_set_va_marshaller (context_signals[CURSOR_DOWN_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     context_signals[REGISTER_PROPERTIES] =
         g_signal_new (I_("register-properties"),
@@ -610,6 +664,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             G_TYPE_NONE,
             1,
             IBUS_TYPE_PROP_LIST);
+    g_signal_set_va_marshaller (context_signals[REGISTER_PROPERTIES],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECTv);
 
     context_signals[UPDATE_PROPERTY] =
         g_signal_new (I_("update-property"),
@@ -621,6 +678,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             G_TYPE_NONE,
             1,
             IBUS_TYPE_PROPERTY);
+    g_signal_set_va_marshaller (context_signals[UPDATE_PROPERTY],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECTv);
 
     context_signals[ENGINE_CHANGED] =
         g_signal_new (I_("engine-changed"),
@@ -631,6 +691,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (context_signals[ENGINE_CHANGED],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     /* This signal is not for notifying an event on this object, but is for
      * requesting an engine as the name shows.
@@ -646,7 +709,10 @@ bus_input_context_class_init (BusInputContextClass *class)
             bus_marshal_OBJECT__STRING,
             IBUS_TYPE_ENGINE_DESC,
             1,
-            G_TYPE_STRING);
+            G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+    g_signal_set_va_marshaller (context_signals[REQUEST_ENGINE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__STRINGv);
 
     context_signals[SET_CONTENT_TYPE] =
         g_signal_new (I_("set-content-type"),
@@ -659,6 +725,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             2,
             G_TYPE_UINT,
             G_TYPE_UINT);
+    g_signal_set_va_marshaller (context_signals[SET_CONTENT_TYPE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__UINT_UINTv);
 
     context_signals[PANEL_EXTENSION] =
         g_signal_new (I_("panel-extension"),
@@ -670,6 +739,9 @@ bus_input_context_class_init (BusInputContextClass *class)
             G_TYPE_NONE,
             1,
             IBUS_TYPE_EXTENSION_EVENT);
+    g_signal_set_va_marshaller (context_signals[PANEL_EXTENSION],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECTv);
 
     text_empty = ibus_text_new_from_string ("");
     g_object_ref_sink (text_empty);

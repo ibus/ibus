@@ -576,6 +576,9 @@ bus_dbus_impl_class_init (BusDBusImplClass *class)
             G_TYPE_STRING,
             G_TYPE_STRING,
             G_TYPE_STRING);
+    g_signal_set_va_marshaller (dbus_signals[NAME_OWNER_CHANGED],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECT_STRING_STRING_STRINGv);
 
     dbus_signals[NAME_LOST] =
         g_signal_new (I_("name-lost"),
@@ -588,6 +591,9 @@ bus_dbus_impl_class_init (BusDBusImplClass *class)
             2,
             BUS_TYPE_CONNECTION,
             G_TYPE_STRING);
+    g_signal_set_va_marshaller (dbus_signals[NAME_LOST],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECT_STRINGv);
 
     dbus_signals[NAME_ACQUIRED] =
         g_signal_new (I_("name-acquired"),
@@ -600,6 +606,9 @@ bus_dbus_impl_class_init (BusDBusImplClass *class)
             2,
             BUS_TYPE_CONNECTION,
             G_TYPE_STRING);
+    g_signal_set_va_marshaller (dbus_signals[NAME_ACQUIRED],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECT_STRINGv);
 }
 
 static void

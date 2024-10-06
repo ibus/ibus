@@ -99,12 +99,12 @@ BUILT_SOURCES =             \
 
 # gen marshal
 marshalers.h: marshalers.list
-	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=bus_marshal $(srcdir)/marshalers.list --header --internal > $@.tmp && \
+	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=bus_marshal $(srcdir)/marshalers.list --header --internal --valist-marshallers > $@.tmp && \
 	mv $@.tmp $@
 
 marshalers.c: marshalers.h marshalers.list
 	$(AM_V_GEN) (echo "#include \"marshalers.h\""; \
-	$(GLIB_GENMARSHAL) --prefix=bus_marshal $(srcdir)/marshalers.list --body --internal) > $@.tmp && \
+	$(GLIB_GENMARSHAL) --prefix=bus_marshal $(srcdir)/marshalers.list --body --internal --valist-marshallers) > $@.tmp && \
 	mv $@.tmp $@
 
 if ENABLE_EMOJI_DICT

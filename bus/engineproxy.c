@@ -189,6 +189,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             G_TYPE_NONE,
             1,
             IBUS_TYPE_TEXT);
+    g_signal_set_va_marshaller (engine_signals[COMMIT_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECTv);
 
     engine_signals[FORWARD_KEY_EVENT] =
         g_signal_new (I_("forward-key-event"),
@@ -202,6 +205,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             G_TYPE_UINT,
             G_TYPE_UINT,
             G_TYPE_UINT);
+    g_signal_set_va_marshaller (engine_signals[FORWARD_KEY_EVENT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__UINT_UINT_UINTv);
 
     engine_signals[DELETE_SURROUNDING_TEXT] =
         g_signal_new (I_("delete-surrounding-text"),
@@ -214,6 +220,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             2,
             G_TYPE_INT,
             G_TYPE_UINT);
+    g_signal_set_va_marshaller (engine_signals[DELETE_SURROUNDING_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__INT_UINTv);
 
     engine_signals[REQUIRE_SURROUNDING_TEXT] =
         g_signal_new (I_("require-surrounding-text"),
@@ -224,6 +233,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (engine_signals[REQUIRE_SURROUNDING_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     engine_signals[UPDATE_PREEDIT_TEXT] =
         g_signal_new (I_("update-preedit-text"),
@@ -238,6 +250,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             G_TYPE_UINT,
             G_TYPE_BOOLEAN,
             G_TYPE_UINT);
+    g_signal_set_va_marshaller (engine_signals[UPDATE_PREEDIT_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECT_UINT_BOOLEAN_UINTv);
 
     engine_signals[SHOW_PREEDIT_TEXT] =
         g_signal_new (I_("show-preedit-text"),
@@ -248,6 +263,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (engine_signals[SHOW_PREEDIT_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     engine_signals[HIDE_PREEDIT_TEXT] =
         g_signal_new (I_("hide-preedit-text"),
@@ -258,6 +276,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (engine_signals[HIDE_PREEDIT_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     engine_signals[UPDATE_AUXILIARY_TEXT] =
         g_signal_new (I_("update-auxiliary-text"),
@@ -270,6 +291,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             2,
             IBUS_TYPE_TEXT,
             G_TYPE_BOOLEAN);
+    g_signal_set_va_marshaller (engine_signals[UPDATE_AUXILIARY_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECT_BOOLEANv);
 
     engine_signals[SHOW_AUXILIARY_TEXT] =
         g_signal_new (I_("show-auxiliary-text"),
@@ -280,6 +304,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (engine_signals[SHOW_AUXILIARY_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     engine_signals[HIDE_AUXILIARY_TEXT] =
         g_signal_new (I_("hide-auxiliary-text"),
@@ -290,6 +317,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (engine_signals[HIDE_AUXILIARY_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     engine_signals[UPDATE_LOOKUP_TABLE] =
         g_signal_new (I_("update-lookup-table"),
@@ -302,6 +332,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             2,
             IBUS_TYPE_LOOKUP_TABLE,
             G_TYPE_BOOLEAN);
+    g_signal_set_va_marshaller (engine_signals[UPDATE_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECT_BOOLEANv);
 
     engine_signals[SHOW_LOOKUP_TABLE] =
         g_signal_new (I_("show-lookup-table"),
@@ -312,6 +345,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (engine_signals[SHOW_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     engine_signals[HIDE_LOOKUP_TABLE] =
         g_signal_new (I_("hide-lookup-table"),
@@ -322,6 +358,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (engine_signals[HIDE_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     engine_signals[PAGE_UP_LOOKUP_TABLE] =
         g_signal_new (I_("page-up-lookup-table"),
@@ -332,6 +371,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (engine_signals[PAGE_UP_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     engine_signals[PAGE_DOWN_LOOKUP_TABLE] =
         g_signal_new (I_("page-down-lookup-table"),
@@ -342,6 +384,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (engine_signals[PAGE_DOWN_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     engine_signals[CURSOR_UP_LOOKUP_TABLE] =
         g_signal_new (I_("cursor-up-lookup-table"),
@@ -352,6 +397,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (engine_signals[CURSOR_UP_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     engine_signals[CURSOR_DOWN_LOOKUP_TABLE] =
         g_signal_new (I_("cursor-down-lookup-table"),
@@ -362,6 +410,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             bus_marshal_VOID__VOID,
             G_TYPE_NONE,
             0);
+    g_signal_set_va_marshaller (engine_signals[CURSOR_DOWN_LOOKUP_TABLE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     engine_signals[REGISTER_PROPERTIES] =
         g_signal_new (I_("register-properties"),
@@ -373,6 +424,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             G_TYPE_NONE,
             1,
             IBUS_TYPE_PROP_LIST);
+    g_signal_set_va_marshaller (engine_signals[REGISTER_PROPERTIES],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECTv);
 
     engine_signals[UPDATE_PROPERTY] =
         g_signal_new (I_("update-property"),
@@ -384,6 +438,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             G_TYPE_NONE,
             1,
             IBUS_TYPE_PROPERTY);
+    g_signal_set_va_marshaller (engine_signals[UPDATE_PROPERTY],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECTv);
 
     engine_signals[PANEL_EXTENSION] =
         g_signal_new (I_("panel-extension"),
@@ -395,6 +452,9 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
             G_TYPE_NONE,
             1,
             IBUS_TYPE_EXTENSION_EVENT);
+    g_signal_set_va_marshaller (engine_signals[PANEL_EXTENSION],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECTv);
 
     text_empty = ibus_text_new_from_static_string ("");
     g_object_ref_sink (text_empty);

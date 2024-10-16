@@ -759,7 +759,7 @@ ibus_unicode_block_destroy (IBusUnicodeBlock *block)
 {
     g_clear_pointer (&block->priv->name, g_free);
 
-    IBUS_OBJECT_CLASS (ibus_unicode_data_parent_class)->
+    IBUS_OBJECT_CLASS (ibus_unicode_block_parent_class)->
             destroy (IBUS_OBJECT (block));
 }
 

@@ -1,46 +1,47 @@
-# Mongolian translation of ibus.
+# Source translation of ibus.
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (C) 2015-2016 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (C) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # This file is distributed under the same license as the ibus package.
 #
-# Translators:
-# bayanmunkh <sageson.m@gmail.com>, 2016. #zanata
+# Giannis Antypas <gianni.antypas@gmail.com>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: IBus\n"
+"Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2024-05-23 22:16+0900\n"
-"PO-Revision-Date: 2016-01-29 12:31-0500\n"
-"Last-Translator: bayanmunkh <sageson.m@gmail.com>\n"
-"Language-Team: Mongolian\n"
-"Language: mn\n"
+"PO-Revision-Date: 2024-09-07 16:38+0000\n"
+"Last-Translator: Giannis Antypas <gianni.antypas@gmail.com>\n"
+"Language-Team: Greek <https://translate.fedoraproject.org/projects/ibus/ibus/"
+"el/>\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.9.3\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
 msgid "Preload engines"
-msgstr ""
+msgstr "Προφόρτωση μηχανών"
 
 #. Translators: Tooltip for the button “Preload Engines”
 #: data/dconf/org.freedesktop.ibus.gschema.xml:13
 msgid "Preload engines during ibus starts up"
-msgstr ""
+msgstr "Προφόρτωση μηχανών κατά τις εκκινήσεις του ibus"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:17
 msgid "Engines order"
-msgstr ""
+msgstr "Σειρά μηχανών"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:18
 msgid "Saved engines order in input method list"
-msgstr ""
+msgstr "Αποθηκευμένη σειρά μηχανών στη λίστα μεθόδου εισαγωγής"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:22
 msgid "Popup delay milliseconds for IME switcher window"
 msgstr ""
+"Χιλιοστά δευτερολέπτων καθυστέρησης ανάδυσης για το παράθυρο εναλλαγής IME"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
 msgid ""
@@ -48,65 +49,78 @@ msgid ""
 "400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
 "show the window and switch prev/next engines."
 msgstr ""
+"Ορισμός χιλιοστών δευτερολέπτων καθυστέρησης ανάδυσης για την εμφάνισης του "
+"παραθύρου εναλλαγής IME. Η προεπιλογή είναι 400. 0 = Άμεση εμφάνιση του "
+"παραθύρου. 0 < Καθυστέρηση χιλιοστών δευτερολέπτων. 0 > Να μην εμφανίζεται "
+"το παράθυρο και εναλλαγή προηγούμενων/επόμενων μηχανών."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"
-msgstr ""
+msgstr "Αποθηκευμένος αριθμός έκδοσης"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:28
 msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
 msgstr ""
+"Ο αποθηκευμένος αριθμός έκδοσης θα χρησιμοποιηθεί για έλεγχο της διαφοράς "
+"ανάμεσα στην έκδοση της προηγούμενης εγκατάστασης ibus και σε αυτή της "
+"τρέχουσας του ibus."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:80
 msgid "Latin layouts which have no ASCII"
-msgstr ""
+msgstr "Διατάξεις Λατινικών που δεν έχουν ASCII"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:81
 msgid "US layout is appended to the Latin layouts. variant can be omitted."
 msgstr ""
+"Η διάταξη US προσαρτάται στις διατάξεις Λατινικών. Η μεταβλητή μπορεί να "
+"παραλειφθεί."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:85
 msgid "Use xmodmap"
-msgstr ""
+msgstr "Χρήση xmodmap"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:86
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
 msgstr ""
+"Εκτέλεση του xmodmap αν το .xmodmap ή το .Xmodmap υφίσταται όποτε οι μηχανές "
+"ibus μεταβάλλονται."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:90 setup/setup.ui:1220
 msgid "Use system keyboard layout"
-msgstr ""
+msgstr "Χρήση διάταξης πληκτρολογίου συστήματος"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:91 setup/setup.ui:1225
 msgid "Use system keyboard (XKB) layout"
-msgstr ""
+msgstr "Χρήση διάταξης πληκτρολογίου (XKB) συστήματος"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:95
 msgid "Embed Preedit Text"
-msgstr ""
+msgstr "Ενσωμάτωση κειμένου προεπεξεργασίας"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:96
 msgid "Embed Preedit Text in Application Window"
-msgstr ""
+msgstr "Ενσωμάτωση κειμένου προεπεξεργασίας στο παράθυρο εφαρμογής"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:100
 msgid "Use global input method"
-msgstr ""
+msgstr "Χρήση μεθόδου καθολικής εισαγωγής"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:101 setup/setup.ui:1269
 msgid "Share the same input method among all applications"
-msgstr ""
+msgstr "Κοινή χρήση της ίδιας μεθόδου εισαγωγής ανάμεσα σε όλες τις εφαρμογές"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:105
 msgid "Enable input method by default"
-msgstr ""
+msgstr "Ενεργοποίηση μεθόδου εισαγωγής από προεπιλογή"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:106
 msgid "Enable input method by default when the application gets input focus"
 msgstr ""
+"Ενεργοποίηση μεθόδου εισαγωγής από προεπιλογή όταν η εφαρμογή αποκτά εστίαση "
+"εισαγωγής"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:110
 msgid "DConf preserve name prefixes"
@@ -118,67 +132,71 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:118
 msgid "Trigger shortcut keys"
-msgstr ""
+msgstr "Έναυσμα πλήκτρων συντομεύσεων"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:119
 #: data/dconf/org.freedesktop.ibus.gschema.xml:124 setup/setup.ui:236
 msgid "The shortcut keys for turning input method on or off"
-msgstr "Оролтын аргыг унтрааж асаах товчлол түлхүүрүүд"
+msgstr ""
+"Τα πλήκτρα συντομεύσεων για ενεργοποίηση και απενεργοποίηση μεθόδου εισαγωγής"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:123
 msgid "Trigger shortcut keys for gtk_accelerator_parse"
-msgstr ""
+msgstr "Έναυσμα πλήκτρων συντομεύσεων για το gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:128
 msgid "Enable shortcut keys"
-msgstr ""
+msgstr "Ενεργοποίηση πλήκτρων συντομεύσεων"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:129
 msgid "The shortcut keys for turning input method on"
-msgstr ""
+msgstr "Τα πλήκτρα συντομεύσεων για ενεργοποίηση μεθόδου εισαγωγής"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:133
 msgid "Disable shortcut keys"
-msgstr ""
+msgstr "Απενεργοποίηση πλήκτρων συντομεύσεων"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:134
 msgid "The shortcut keys for turning input method off"
-msgstr ""
+msgstr "Τα πλήκτρα συντομεύσεων για απενεργοποίηση μεθόδου εισαγωγής"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:138
 #: data/dconf/org.freedesktop.ibus.gschema.xml:143
 msgid "Next engine shortcut keys"
-msgstr ""
+msgstr "Επόμενη μηχανή πλήκτρων συντομεύσεων"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:139
 #: data/dconf/org.freedesktop.ibus.gschema.xml:144
 msgid "The shortcut keys for switching to the next input method in the list"
 msgstr ""
+"Τα πλήκτρα συντομεύσεων για μετάβαση στην επόμενη μέθοδο εισαγωγής στη λίστα"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:148
 #: data/dconf/org.freedesktop.ibus.gschema.xml:153
 msgid "Prev engine shortcut keys"
-msgstr ""
+msgstr "Προηγούμενη μηχανή πλήκτρων συντομεύσεων"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:149
 #: data/dconf/org.freedesktop.ibus.gschema.xml:154
 msgid "The shortcut keys for switching to the previous input method"
-msgstr ""
+msgstr "Τα πλήκτρα συντομεύσεων για μετάβαση στην προηγούμενη μέθοδο εισαγωγής"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:160
 msgid "Auto hide"
-msgstr ""
+msgstr "Αυτόματη απόκρυψη"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:161
 msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
 msgstr ""
+"Η συμπεριφορά του πίνακα ιδιοτήτων. 0 = Μη εμφάνιση, 1 = Αυτόματη απόκρυψη, "
+"2 = Πάντα εμφάνιση"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:165
 #: data/dconf/org.freedesktop.ibus.gschema.xml:169
 msgid "Language panel position"
-msgstr ""
+msgstr "Θέση πίνακα γλωσσών"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:173
 msgid "Follow the input cursor in case the panel is always shown"
@@ -192,39 +210,41 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:178
 msgid "The milliseconds to show property panel"
-msgstr ""
+msgstr "Τα χιλιοστά δευτερολέπτων εμφάνισης του πίνακα ιδιοτήτων"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:179
 msgid ""
 "The milliseconds to show property panel after focus-in or properties are "
 "changed."
 msgstr ""
+"Τα χιλιοστά δευτερολέπτων εμφάνισης του πίνακα ιδιοτήτων μετά από εστίαση ή "
+"αλλαγή ιδιοτήτων."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:183
 msgid "Orientation of lookup table"
-msgstr ""
+msgstr "Προσανατολισμός πίνακα αναζήτησης"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:184
 msgid "Orientation of lookup table. 0 = Horizontal, 1 = Vertical"
-msgstr ""
+msgstr "Προσανατολισμός πίνακα αναζήτησης. 0 = Οριζόντιος, 1 = Κάθετος"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:188
 #: data/dconf/org.freedesktop.ibus.gschema.xml:189 setup/setup.ui:482
 #: setup/setup.ui:487
 msgid "Show icon on system tray"
-msgstr "Системийн хавтан дахь харах тэмдэг"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:193
 msgid "Show input method name"
-msgstr ""
+msgstr "Εμφάνιση ονόματος μεθόδου εισαγωγής"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:194 setup/setup.ui:501
 msgid "Show input method name on language bar"
-msgstr "Хэлний бар дахь оролтын аргын нэрийг харах"
+msgstr "Εμφάνιση ονόματος μεθόδου εισαγωγής στη γραμμή γλωσσών"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:198
 msgid "RGBA value of XKB icon"
-msgstr ""
+msgstr "Τιμή RGBA του εικονιδίου XKB"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:199
 msgid ""
@@ -240,6 +260,7 @@ msgstr ""
 #: data/dconf/org.freedesktop.ibus.gschema.xml:203
 msgid "The milliseconds to show the panel icon for a property"
 msgstr ""
+"Τα χιλιοστά δευτερολέπτων εμφάνισης του εικονιδίου πίνακα για μια ιδιότητα"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:204
 msgid ""
@@ -267,48 +288,39 @@ msgid "Custom font name for language panel"
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom theme"
-msgstr "Фонтоо сонгох:"
+msgstr "Χρήση προσαρμοσμένου θέματος"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:219
-#, fuzzy
-#| msgid "Show input method name on language bar"
 msgid "Use custom theme name for language panel"
-msgstr "Хэлний бар дахь оролтын аргын нэрийг харах"
+msgstr "Χρήση προσαρμοσμένου θέματος για πίνακα γλώσσας"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
-#, fuzzy
-#| msgid "Custom"
 msgid "Custom theme"
-msgstr "Өөрчлөх"
+msgstr "Προσαρμοσμένο θέμα"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:224
-#, fuzzy
-#| msgid "Show input method name on language bar"
 msgid "Custom theme name for language panel"
-msgstr "Хэлний бар дахь оролтын аргын нэрийг харах"
+msgstr "Όνομα προσαρμοσμένου θέματος για πίνακα γλώσσας"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:228
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom icon"
-msgstr "Фонтоо сонгох:"
+msgstr "Χρήση προσαρμοσμένου εικονιδίου"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:229
 msgid "Use custom icon name for arrow buttons on candidate window"
 msgstr ""
+"Χρήση ονόματος προσαρμοσμένου εικονιδίου για κουμπιά βέλους στο υποψήφιο "
+"παράθυρο"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:233
-#, fuzzy
-#| msgid "Custom"
 msgid "Custom icon"
-msgstr "Өөрчлөх"
+msgstr "Προσαρμοσμένο εικονίδιο"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:234
 msgid "Custom icon name for arrow buttons on candidate window"
 msgstr ""
+"Όνομα προσαρμοσμένου εικονιδίου για κουμπιά βέλους στο υποψήφιο παράθυρο"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:238 setup/setup.ui:1317
 msgid "Choose glyphs with input method's language on candidate window"
@@ -324,23 +336,23 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:250
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
-msgstr ""
+msgstr "Πλήκτρα συντομεύσεων Unicode για το gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:251
-#, fuzzy
-#| msgid "The shortcut keys for turning input method on or off"
 msgid "The shortcut keys for turning Unicode typing on or off"
-msgstr "Оролтын аргыг унтрааж асаах товчлол түлхүүрүүд"
+msgstr ""
+"Τα πλήκτρα συντομεύσεων για ενεργοποίηση ή απενεργοποίηση πληκτρολόγησης "
+"Unicode"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:255
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
-msgstr ""
+msgstr "Πλήκτρα συντομεύσεων Emoji για το gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:256
-#, fuzzy
-#| msgid "The shortcut keys for turning input method on or off"
 msgid "The shortcut keys for turning emoji typing on or off"
-msgstr "Оролтын аргыг унтрааж асаах товчлол түлхүүрүүд"
+msgstr ""
+"Τα πλήκτρα συντομεύσεων για ενεργοποίηση ή απενεργοποίηση πληκτρολόγησης "
+"emoji"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:261
 msgid "Custom font name for emoji characters on emoji dialog"
@@ -348,7 +360,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:265
 msgid "Default language for emoji dictionary"
-msgstr ""
+msgstr "Προεπιλεγμένη γλώσσα για λεξικό emoji"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:266
 msgid ""
@@ -432,6 +444,8 @@ msgid ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
 msgstr ""
+"Πνευματικά δικαιώματα (c) 2007-2010 Peng Huang\n"
+"Πνευματικά δικαιώματα (c) 2007-2010 Red Hat, Inc."
 
 #: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
@@ -439,73 +453,73 @@ msgstr ""
 
 #: setup/emojilang.py:67
 msgid "Select a language"
-msgstr ""
+msgstr "Επιλογή γλώσσας"
 
 #: setup/emojilang.py:70 setup/enginedialog.py:60 setup/keyboardshortcut.py:339
 #: setup/main.py:634
 msgid "_Cancel"
-msgstr ""
+msgstr "_Ακύρωση"
 
 #: setup/emojilang.py:71 setup/keyboardshortcut.py:340 setup/main.py:635
 msgid "_OK"
-msgstr ""
+msgstr "_Εντάξει"
 
 #: setup/emojilang.py:235 setup/enginedialog.py:224
 msgid "More…"
-msgstr ""
+msgstr "Περισσότερα…"
 
 #: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1510
 msgid "About"
-msgstr ""
+msgstr "Σχετικά"
 
 #: setup/engineabout.py:40 setup/setup.ui:1488
 msgid "_Close"
-msgstr ""
+msgstr "_Κλείσιμο"
 
 #: setup/engineabout.py:72
 #, python-format
 msgid "Language: %s\n"
-msgstr ""
+msgstr "Γλώσσα: %s\n"
 
 #: setup/engineabout.py:75
 #, python-format
 msgid "Keyboard layout: %s\n"
-msgstr ""
+msgstr "Διάταξη πληκτρολογίου: %s\n"
 
 #: setup/engineabout.py:78
 #, python-format
 msgid "Author: %s\n"
-msgstr ""
+msgstr "Συντάκτης: %s\n"
 
 #: setup/engineabout.py:81
 msgid "Description:\n"
-msgstr ""
+msgstr "Περιγραφή:\n"
 
 #: setup/enginecombobox.py:139 setup/enginedialog.py:57
 msgid "Select an input method"
-msgstr ""
+msgstr "Επιλογή μεθόδου εισαγωγής"
 
 #. add button
 #: setup/enginedialog.py:61 setup/keyboardshortcut.py:124 setup/setup.ui:676
 msgid "_Add"
-msgstr "_Нэмэх"
+msgstr "_Προσθήκη"
 
 #. create im name & icon column
 #: setup/enginetreeview.py:69 setup/setup.ui:850
 msgid "Input Method"
-msgstr ""
+msgstr "Μέθοδος εισαγωγής"
 
 #: setup/ibus-setup.desktop:3 setup/setup.ui:81
 msgid "IBus Preferences"
-msgstr "ibus тохиргоо"
+msgstr "Προτιμήσεις IBus"
 
 #: setup/ibus-setup.desktop:4
 msgid "Set IBus Preferences"
-msgstr ""
+msgstr "Ρύθμιση προτιμήσεων IBus"
 
 #: setup/keyboardshortcut.py:55
 msgid "Keyboard shortcuts"
-msgstr ""
+msgstr "Συντομεύσεις πληκτρολογίου"
 
 #: setup/keyboardshortcut.py:67
 msgid "Key code:"
@@ -518,12 +532,12 @@ msgstr ""
 #. apply button
 #: setup/keyboardshortcut.py:130
 msgid "_Apply"
-msgstr ""
+msgstr "_Εφαρμογή"
 
 #. delete button
 #: setup/keyboardshortcut.py:136
 msgid "_Delete"
-msgstr ""
+msgstr "_Διαγραφή"
 
 #: setup/keyboardshortcut.py:252
 msgid ""
@@ -533,7 +547,7 @@ msgstr ""
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
-msgstr ""
+msgstr "Παρακαλούμε πατήστε ένα κουμπί (ή ένα συνδυασμό κουμπιών)"
 
 #: setup/main.py:122 setup/main.py:662
 msgid "Use shortcut with shift to switch to the previous input method"
@@ -561,68 +575,68 @@ msgstr ""
 #: setup/main.py:636
 #, python-format
 msgid "Select keyboard shortcut for %s"
-msgstr ""
+msgstr "Επιλογή συντόμευσης πληκτρολογίου για %s"
 
 #. Translators: Title of the window
 #: setup/main.py:638
 msgid "switching input methods"
-msgstr ""
+msgstr "εναλλαγή μεθόδων εισαγωγής"
 
 #: setup/setup.ui:11
 msgid "Horizontal"
-msgstr "Хэвтээ"
+msgstr "Οριζόντιος"
 
 #: setup/setup.ui:14
 msgid "Vertical"
-msgstr "Босоо"
+msgstr "Κάθετος"
 
 #: setup/setup.ui:25
 msgid "Top left corner"
-msgstr "Зүүн дээд булан"
+msgstr "Πάνω αριστερή γωνία"
 
 #: setup/setup.ui:28
 msgid "Top right corner"
-msgstr "Баруун дээд булан"
+msgstr "Πάνω δεξιά γωνία"
 
 #: setup/setup.ui:31
 msgid "Bottom left corner"
-msgstr "Зүүн доод булан"
+msgstr "Κάτω αριστερή γωνία"
 
 #: setup/setup.ui:34
 msgid "Bottom right corner"
-msgstr "Баруун доод булан"
+msgstr "Κάτω δεξιά γωνία"
 
 #: setup/setup.ui:37
 msgid "Custom"
-msgstr "Өөрчлөх"
+msgstr ""
 
 #: setup/setup.ui:48
 msgid "Do not show"
-msgstr "Битгий харуул"
+msgstr "Να μην εμφανίζεται"
 
 #: setup/setup.ui:51
 msgid "Hide automatically"
-msgstr "Автоматаар нуух"
+msgstr "Απόκρυψη αυτόματα"
 
 #: setup/setup.ui:54
 msgid "Always"
-msgstr "Үргэлж"
+msgstr "Πάντα"
 
 #: setup/setup.ui:125
 msgid "The shortcut keys for switching to next input method in the list"
-msgstr "Жагсаалтад байгаа оролтын дараагийн арга руу шилжих товчлол түлхүүрүүд"
+msgstr ""
 
 #: setup/setup.ui:127
 msgid "Next input method:"
-msgstr "Дараагийн оролтын арга:"
+msgstr "Επόμενη μέθοδος εισαγωγής:"
 
 #: setup/setup.ui:139
 msgid "The shortcut keys for switching to previous input method in the list"
-msgstr "Жагсаалтад байгаа оролтын өмнөх арга руу шилжих товчлол түлхүүрүүд"
+msgstr ""
 
 #: setup/setup.ui:141
 msgid "Previous input method:"
-msgstr "Өмнөх оролтын арга"
+msgstr "Προηγούμενη μέθοδος εισαγωγής:"
 
 #: setup/setup.ui:169 setup/setup.ui:211 setup/setup.ui:278 setup/setup.ui:331
 #: setup/setup.ui:915 setup/setup.ui:969
@@ -631,39 +645,39 @@ msgstr "..."
 
 #: setup/setup.ui:238
 msgid "Enable or disable:"
-msgstr "Нээх эсвэл Хаах"
+msgstr "Ενεργοποίηση ή απενεργοποίηση:"
 
 #: setup/setup.ui:250
 msgid "Enable:"
-msgstr "Нээх"
+msgstr "Ενεργοποίηση:"
 
 #: setup/setup.ui:303
 msgid "Disable:"
-msgstr "Хаах"
+msgstr "Απενεργοποίηση:"
 
 #: setup/setup.ui:357 setup/setup.ui:995
 msgid "<b>Keyboard Shortcuts</b>"
-msgstr "<b>Гарын товчлолууд</b>"
+msgstr "<b>Συντομεύσεις πληκτρολογίου</b>"
 
 #: setup/setup.ui:386
 msgid "Set the orientation of candidates in lookup table"
-msgstr "Харах хүснэгтэд байгаа нэмэлтүүдийн эргүүлэлтийг тохируулах"
+msgstr ""
 
 #: setup/setup.ui:388
 msgid "Candidates orientation:"
-msgstr "Нэмэлтүүдийг эргүүлэлт:"
+msgstr ""
 
 #: setup/setup.ui:419
 msgid "Set the behavior of ibus how to show or hide language bar"
-msgstr "Хэлний цэсийг нуух болон харуулах эсэхийг тохируулах"
+msgstr ""
 
 #: setup/setup.ui:421
 msgid "Show property panel:"
-msgstr "Шинжүүдийн самбарыг харах:"
+msgstr "Εμφάνιση πίνακα ιδιοτήτων:"
 
 #: setup/setup.ui:435
 msgid "Language panel position:"
-msgstr "Хэлний самбарын байрлал:"
+msgstr "Θέση πίνακα γλώσσας:"
 
 #: setup/setup.ui:506
 msgid "Show input method's name on language bar when check the checkbox"
@@ -671,7 +685,7 @@ msgstr ""
 
 #: setup/setup.ui:520
 msgid "Embed preedit text in application window"
-msgstr ""
+msgstr "Ενσωμάτωση κειμένου προεπεξεργασίας στο παράθυρο εφαρμογής"
 
 #: setup/setup.ui:525
 msgid "Embed the preedit text of input method in the application window"
@@ -679,7 +693,7 @@ msgstr ""
 
 #: setup/setup.ui:539
 msgid "Use custom font:"
-msgstr "Фонтоо сонгох:"
+msgstr ""
 
 #: setup/setup.ui:574 setup/setup.ui:1168
 msgid "<b>Font and Style</b>"
@@ -687,7 +701,7 @@ msgstr ""
 
 #: setup/setup.ui:591
 msgid "General"
-msgstr "Ерөнхий"
+msgstr "Γενικά"
 
 #: setup/setup.ui:683
 msgid "Add the selected input method into the enabled input methods"
@@ -695,7 +709,7 @@ msgstr ""
 
 #: setup/setup.ui:694
 msgid "_Remove"
-msgstr "_Арилгах"
+msgstr "_Αφαίρεση"
 
 #: setup/setup.ui:701
 msgid "Remove the selected input method from the enabled input methods"
@@ -703,7 +717,7 @@ msgstr ""
 
 #: setup/setup.ui:712
 msgid "_Up"
-msgstr ""
+msgstr "_Πάνω"
 
 #: setup/setup.ui:719
 msgid "Move up the selected input method in the enabled input methods list"
@@ -711,7 +725,7 @@ msgstr ""
 
 #: setup/setup.ui:730
 msgid "_Down"
-msgstr ""
+msgstr "_Κάτω"
 
 #: setup/setup.ui:737
 msgid "Move down the selected input method in the enabled input methods"
@@ -719,7 +733,7 @@ msgstr ""
 
 #: setup/setup.ui:748
 msgid "_About"
-msgstr ""
+msgstr "_Σχετικά"
 
 #: setup/setup.ui:755
 msgid "Show information of the selected input method"
@@ -727,7 +741,7 @@ msgstr ""
 
 #: setup/setup.ui:766
 msgid "_Preferences"
-msgstr ""
+msgstr "_Προτιμήσεις"
 
 #: setup/setup.ui:773
 msgid "Show setup of the selected input method"
@@ -750,10 +764,8 @@ msgid "Emoji annotation:"
 msgstr ""
 
 #: setup/setup.ui:939
-#, fuzzy
-#| msgid "The shortcut keys for turning input method on or off"
 msgid "The shortcut keys to enable Unicode code point conversions"
-msgstr "Оролтын аргыг унтрааж асаах товчлол түлхүүрүүд"
+msgstr ""
 
 #: setup/setup.ui:941
 msgid "Unicode code point:"
@@ -764,10 +776,8 @@ msgid "Set a font of Unicode candidates on the emoji dialog"
 msgstr ""
 
 #: setup/setup.ui:1027
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Unicode font:"
-msgstr "Фонтоо сонгох:"
+msgstr ""
 
 #: setup/setup.ui:1050
 msgid "Set a language of emoji annotations on the emoji dialog"
@@ -803,11 +813,11 @@ msgstr ""
 
 #: setup/setup.ui:1188
 msgid "Emoji"
-msgstr ""
+msgstr "Εμότζι"
 
 #: setup/setup.ui:1242
 msgid "<b>Keyboard Layout</b>"
-msgstr ""
+msgstr "<b>Διάταξη πληκτρολογίου</b>"
 
 #: setup/setup.ui:1290
 msgid "<b>Global input method settings</b>"
@@ -820,20 +830,16 @@ msgid ""
 msgstr ""
 
 #: setup/setup.ui:1341
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom theme:"
-msgstr "Фонтоо сонгох:"
+msgstr ""
 
 #: setup/setup.ui:1342
 msgid "Choose a theme of the candidate window"
 msgstr ""
 
 #: setup/setup.ui:1378
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom icon:"
-msgstr "Фонтоо сонгох:"
+msgstr ""
 
 #: setup/setup.ui:1379
 msgid "Choose a theme of the arrow buttons on the candidate window"
@@ -853,7 +859,7 @@ msgstr ""
 
 #: src/ibusemojigen.h:31
 msgid "Animals & Nature"
-msgstr ""
+msgstr "Ζώα & Φύση"
 
 #: src/ibusemojigen.h:32
 msgid "Component"
@@ -865,15 +871,15 @@ msgstr ""
 
 #: src/ibusemojigen.h:34
 msgid "Food & Drink"
-msgstr ""
+msgstr "Φαγητό & Ποτό"
 
 #: src/ibusemojigen.h:35
 msgid "Objects"
-msgstr ""
+msgstr "Αντικείμενα"
 
 #: src/ibusemojigen.h:36
 msgid "People & Body"
-msgstr ""
+msgstr "Άνθρωποι & Σώμα"
 
 #: src/ibusemojigen.h:37
 msgid "Smileys & Emotion"
@@ -881,7 +887,7 @@ msgstr ""
 
 #: src/ibusemojigen.h:38
 msgid "Symbols"
-msgstr ""
+msgstr "Σύμβολα"
 
 #: src/ibusemojigen.h:39
 msgid "Travel & Places"
@@ -1990,10 +1996,8 @@ msgstr ""
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:661
-#, fuzzy
-#| msgid "Vertical"
 msgid "Vertical Forms"
-msgstr "Босоо"
+msgstr ""
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2833,14 +2837,14 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1141
 msgid "Byzantine Musical Symbols"
-msgstr ""
+msgstr "Βυζαντινά μουσικά σύμβολα"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1145
 msgid "Musical Symbols"
-msgstr ""
+msgstr "Μουσικά σύμβολα"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3196,7 +3200,7 @@ msgstr ""
 
 #: tools/main.vala:327 tools/main.vala:628 tools/main.vala:705
 msgid "Can't connect to IBus.\n"
-msgstr ""
+msgstr "Αδυναμία σύνδεσης στο IBus.\n"
 
 #: tools/main.vala:353
 #, c-format
@@ -3209,11 +3213,11 @@ msgstr ""
 
 #: tools/main.vala:431
 msgid "Set global engine failed.\n"
-msgstr ""
+msgstr "Αποτυχία ορισμού καθολικής μηχανής.\n"
 
 #: tools/main.vala:436
 msgid "Get global engine failed.\n"
-msgstr ""
+msgstr "Αποτυχία απόκτησης καθολικής μηχανής.\n"
 
 #: tools/main.vala:573
 msgid ""
@@ -3226,7 +3230,7 @@ msgstr ""
 
 #: tools/main.vala:580 tools/main.vala:674
 msgid "Show debug messages."
-msgstr ""
+msgstr "Εμφάνιση μηνυμάτων αποσφαλμάτωσης."
 
 #: tools/main.vala:670
 msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
@@ -3268,15 +3272,15 @@ msgstr ""
 
 #: tools/main.vala:968
 msgid "Set or get engine"
-msgstr ""
+msgstr "Ορισμός ή απόκτηση μηχανής"
 
 #: tools/main.vala:969
 msgid "Exit ibus-daemon"
-msgstr ""
+msgstr "Έξοδος ibus-daemon"
 
 #: tools/main.vala:970
 msgid "Show available engines"
-msgstr ""
+msgstr "Εμφάνιση διαθέσιμων μηχανών"
 
 #: tools/main.vala:971
 msgid "(Not implemented)"
@@ -3284,15 +3288,15 @@ msgstr ""
 
 #: tools/main.vala:972
 msgid "Restart ibus-daemon"
-msgstr ""
+msgstr "Επανεκκίνηση ibus-daemon"
 
 #: tools/main.vala:973
 msgid "Start ibus-daemon"
-msgstr ""
+msgstr "Εκκίνηση ibus-daemon"
 
 #: tools/main.vala:974 ui/gtk3/application.vala:317
 msgid "Show version"
-msgstr ""
+msgstr "Εμφάνιση έκδοσης"
 
 #: tools/main.vala:975
 msgid "Show the content of registry cache"
@@ -3308,11 +3312,11 @@ msgstr ""
 
 #: tools/main.vala:978
 msgid "Show the configuration values"
-msgstr ""
+msgstr "Εμφάνιση των τιμών διαμόρφωσης"
 
 #: tools/main.vala:979
 msgid "Reset the configuration values"
-msgstr ""
+msgstr "Επαναφορά των τιμών διαμόρφωσης"
 
 #: tools/main.vala:981
 msgid "Save emoji on dialog to clipboard"
@@ -3324,7 +3328,7 @@ msgstr ""
 
 #: tools/main.vala:985
 msgid "Show this information"
-msgstr ""
+msgstr "Εμφάνιση αυτής της πληροφορίας"
 
 #: tools/main.vala:992
 #, c-format
@@ -3335,16 +3339,16 @@ msgstr ""
 
 #: tools/main.vala:993
 msgid "Commands:\n"
-msgstr ""
+msgstr "Εντολές:\n"
 
 #: tools/main.vala:1023
 #, c-format
 msgid "%s is unknown command!\n"
-msgstr ""
+msgstr "Το %s είναι άγνωστη εντολή!\n"
 
 #: ui/gtk3/application.vala:322
 msgid "Connect Wayland input method protocol"
-msgstr ""
+msgstr "Σύνδεση πρωτοκόλλου μεθόδου εισαγωγής Wayland"
 
 #: ui/gtk3/application.vala:326
 msgid "Execute ibus-daemon if it's not running"
@@ -3356,19 +3360,19 @@ msgstr ""
 
 #: ui/gtk3/application.vala:334
 msgid "Verbose logging"
-msgstr ""
+msgstr "Λεπτομερής καταγραφή"
 
 #: ui/gtk3/emojier.vala:235
 msgid "Favorites"
-msgstr ""
+msgstr "Αγαπημένα"
 
 #: ui/gtk3/emojier.vala:236
 msgid "Others"
-msgstr ""
+msgstr "Λοιπά"
 
 #: ui/gtk3/emojier.vala:237
 msgid "Open Unicode choice"
-msgstr ""
+msgstr "Άνοιγμα επιλογής Unicode"
 
 #: ui/gtk3/emojier.vala:1000
 msgid "Bring back emoji choice"
@@ -3388,19 +3392,19 @@ msgstr ""
 
 #: ui/gtk3/emojier.vala:1118
 msgid "Close"
-msgstr ""
+msgstr "Κλείσιμο"
 
 #: ui/gtk3/emojier.vala:1124
 msgid "Menu"
-msgstr ""
+msgstr "Μενού"
 
 #: ui/gtk3/emojier.vala:1135
 msgid "Click to view a warning message"
-msgstr ""
+msgstr "Κάνετε κλικ για εμφάνιση ενός μηνύματος προειδοποίησης"
 
 #: ui/gtk3/emojier.vala:1179
 msgid "Loading a Unicode dictionary:"
-msgstr ""
+msgstr "Φόρτωση ενός λεξικού Unicode:"
 
 #: ui/gtk3/emojier.vala:1425
 #, c-format
@@ -3414,11 +3418,11 @@ msgstr ""
 #: ui/gtk3/emojier.vala:1599 ui/gtk3/emojier.vala:1612
 #, c-format
 msgid "Description: %s"
-msgstr ""
+msgstr "Περιγραφή: %s"
 
 #: ui/gtk3/emojier.vala:1599
 msgid "None"
-msgstr ""
+msgstr "Κανένα"
 
 #: ui/gtk3/emojier.vala:1623
 #, c-format
@@ -3428,21 +3432,21 @@ msgstr ""
 #: ui/gtk3/emojier.vala:1649
 #, c-format
 msgid "Name: %s"
-msgstr ""
+msgstr "Όνομα: %s"
 
 #: ui/gtk3/emojier.vala:1657
 #, c-format
 msgid "Alias: %s"
-msgstr ""
+msgstr "Ψευδώνυμο: %s"
 
 #: ui/gtk3/emojier.vala:2180 ui/gtk3/ibus-extension-gtk3.desktop.in:3
 #: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1471
 msgid "Emoji Choice"
-msgstr ""
+msgstr "Επιλογή Emoji"
 
 #: ui/gtk3/emojier.vala:2182
 msgid "Unicode Choice"
-msgstr ""
+msgstr "Επιλογή Unicode"
 
 #: ui/gtk3/emojier.vala:2484
 msgid ""
@@ -3495,7 +3499,7 @@ msgstr ""
 
 #: ui/gtk3/panel.vala:366 ui/gtk3/panel.vala:389
 msgid "IBus Panel"
-msgstr ""
+msgstr "Πίνακας IBus"
 
 #: ui/gtk3/panel.vala:367
 msgid ""
@@ -3534,7 +3538,7 @@ msgstr ""
 
 #: ui/gtk3/panel.vala:900
 msgid "IBus Notification"
-msgstr ""
+msgstr "Ειδοποίηση IBus"
 
 #: ui/gtk3/panel.vala:1252
 #, c-format
@@ -3565,15 +3569,15 @@ msgstr ""
 
 #: ui/gtk3/panel.vala:1463
 msgid "Preferences"
-msgstr ""
+msgstr "Προτιμήσεις"
 
 #: ui/gtk3/panel.vala:1516
 msgid "Restart"
-msgstr ""
+msgstr "Επανεκκίνηση"
 
 #: ui/gtk3/panel.vala:1525
 msgid "Quit"
-msgstr ""
+msgstr "Τερματισμός"
 
 #. Translators: If your locale is RTL, the msgstr is "default:RTL".
 #. * Otherwise the msgstr is "default:LTR".

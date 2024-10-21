@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2024-02-28 19:10+0900\n"
+"POT-Creation-Date: 2024-05-23 22:16+0900\n"
 "PO-Revision-Date: 2024-03-04 15:36+0000\n"
 "Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Punjabi <https://translate.fedoraproject.org/projects/ibus/"
@@ -457,7 +457,7 @@ msgstr "ਠੀਕ ਹੈ(_O)"
 msgid "More…"
 msgstr "...ਹੋਰ"
 
-#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1456
+#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1510
 msgid "About"
 msgstr "ਇਸ ਬਾਰੇ"
 
@@ -3190,150 +3190,144 @@ msgid ""
 "Set im-module TYPE to \"gtk2\",  \"gtk3\" or \"gtk4\". Default is \"gtk3\"."
 msgstr ""
 
-#: tools/main.vala:266
+#: tools/main.vala:311
 msgid "List engine name only"
 msgstr "ਸਿਰਫ ਇੰਜਣ ਨਾਂ ਵੇਖਾਓ"
 
-#: tools/main.vala:282 tools/main.vala:571 tools/main.vala:645
-#, c-format
+#: tools/main.vala:327 tools/main.vala:628 tools/main.vala:705
 msgid "Can't connect to IBus.\n"
 msgstr "IBus ਨਾਲ ਨਹੀਂ ਜੁੜ ਸਕਿਆ।\n"
 
-#: tools/main.vala:308
+#: tools/main.vala:353
 #, c-format
 msgid "language: %s\n"
 msgstr "ਭਾਸ਼ਾ: %s\n"
 
-#: tools/main.vala:378
-#, c-format
+#: tools/main.vala:423
 msgid "No engine is set.\n"
 msgstr "ਕੋਈ ਇੰਜਣ ਸੈੱਟ ਨਹੀਂ ਹੈ।\n"
 
-#: tools/main.vala:386
-#, c-format
+#: tools/main.vala:431
 msgid "Set global engine failed.\n"
 msgstr "ਗਲੋਬਲ ਇੰਜਣ ਸੈੱਟ ਕਰਨ ਲਈ ਫੇਲ੍ਹ।\n"
 
-#: tools/main.vala:391
-#, c-format
+#: tools/main.vala:436
 msgid "Get global engine failed.\n"
 msgstr "ਗਲੋਬਲ ਇੰਜਣ ਫੇਲ ਹੋਇਆ।\n"
 
-#: tools/main.vala:527
+#: tools/main.vala:573
 msgid ""
 "Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" TYPE."
 msgstr ""
-"\"direct\", \"systemd\" ਜਾਂ \"kde-wayland\" ਕਿਸਮ ਨਾਲ ਡੈਮਨ ਨੂੰ ਸ਼ੁਰੂ ਜਾਂ ਮੁੜ "
-"ਸ਼ੁਰੂ ਕਰੋ।"
+"\"direct\", \"systemd\" ਜਾਂ \"kde-wayland\" ਕਿਸਮ ਨਾਲ ਡੈਮਨ ਨੂੰ ਸ਼ੁਰੂ ਜਾਂ ਮੁੜ ਸ਼ੁਰੂ ਕਰੋ।"
 
-#: tools/main.vala:531
+#: tools/main.vala:577
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
 msgstr "SYSTEMD_SERVICE ਫਾਇਲ ਨਾਲ ਡੈਮਨ ਨੂੰ ਸ਼ੁਰੂ ਜਾਂ ਮੁੜ-ਸ਼ੁਰੂ ਕਰੋ।"
 
-#: tools/main.vala:534 tools/main.vala:617
+#: tools/main.vala:580 tools/main.vala:674
 msgid "Show debug messages."
 msgstr "ਡੀਬੱਗ ਸੁਨੇਹੇ ਵੇਖਾਓ।"
 
-#: tools/main.vala:613
+#: tools/main.vala:670
 msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
 msgstr ""
 
-#: tools/main.vala:662
+#: tools/main.vala:722
 msgid "Read the system registry cache."
 msgstr "ਸਿਸਟਮ ਰਜਿਸਟਰੀ ਕੈਚੇ ਪੜ੍ਹੋ।"
 
-#: tools/main.vala:664
+#: tools/main.vala:724
 msgid "Read the registry cache FILE."
 msgstr "ਰਜਿਸਟਰੀ ਕੈਚੇ ਫ਼ਈਲ ਪੜ੍ਹੋ।"
 
-#: tools/main.vala:682 tools/main.vala:687
-#, c-format
+#: tools/main.vala:742 tools/main.vala:747
 msgid "The registry cache is invalid.\n"
 msgstr "ਰਜਿਸਟਰੀ ਕੈਚੇ ਅਯੋਗ ਹੈ।\n"
 
-#: tools/main.vala:703
+#: tools/main.vala:763
 msgid "Write the system registry cache."
 msgstr "ਸਿਸਟਮ ਰਜਿਸਟਰੀ ਕੈਚੇ ਲਿਖੋ।"
 
-#: tools/main.vala:705
+#: tools/main.vala:765
 msgid "Write the registry cache FILE."
 msgstr "ਰਜਿਸਟਰੀ ਕੈਚੇ ਫ਼ਾਈਲ ਲਿਖੋ।"
 
-#: tools/main.vala:743
+#: tools/main.vala:803
 msgid ""
 "Use engine schema paths instead of ibus core, which can be comma-separated "
 "values."
 msgstr ""
 
-#: tools/main.vala:832
+#: tools/main.vala:892
 msgid "Resetting…"
 msgstr "...ਮੁੜ-ਸੈਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: tools/main.vala:850
+#: tools/main.vala:910
 msgid "Done"
 msgstr "ਮੁਕੰਮਲ"
 
-#: tools/main.vala:908
+#: tools/main.vala:968
 msgid "Set or get engine"
 msgstr "ਇੰਜਣ ਸੈੱਟ ਜਾਂ ਪ੍ਰਾਪਤ ਕਰੋ"
 
-#: tools/main.vala:909
+#: tools/main.vala:969
 msgid "Exit ibus-daemon"
 msgstr "ibus-daemon ਤੋਂ ਬਾਹਰ ਆਓ"
 
-#: tools/main.vala:910
+#: tools/main.vala:970
 msgid "Show available engines"
 msgstr "ਉਪਲੱਬਧ ਇੰਜਣ ਵਿਖਾਓ"
 
-#: tools/main.vala:911
+#: tools/main.vala:971
 msgid "(Not implemented)"
 msgstr "(ਲਾਗੂ ਨਹੀਂ ਕੀਤੀ ਹੋਈ)"
 
-#: tools/main.vala:912
+#: tools/main.vala:972
 msgid "Restart ibus-daemon"
 msgstr "ibus-daemon ਮੁੜ ਸ਼ੁਰੂ ਕਰੋ"
 
-#: tools/main.vala:913
+#: tools/main.vala:973
 msgid "Start ibus-daemon"
 msgstr "ibus-daemon ਸ਼ੁਰੂ ਕਰੋ"
 
-#: tools/main.vala:914 ui/gtk3/application.vala:306
+#: tools/main.vala:974 ui/gtk3/application.vala:317
 msgid "Show version"
 msgstr "ਵਰਜ਼ਨ ਵੇਖੋ"
 
-#: tools/main.vala:915
+#: tools/main.vala:975
 msgid "Show the content of registry cache"
 msgstr "ਰਜਿਸਟਰੀ ਕੈਚੇ ਦੇ ਅੰਸ਼ ਵਿਖਾਓ"
 
-#: tools/main.vala:916
+#: tools/main.vala:976
 msgid "Create registry cache"
 msgstr "ਰਜਿਸਟਰੀ ਕੈਸ਼ ਬਣਾਓ"
 
-#: tools/main.vala:917
+#: tools/main.vala:977
 msgid "Print the D-Bus address of ibus-daemon"
 msgstr "ibus-daemon ਦਾ D-Bus ਪਤਾ ਛਾਪੋ"
 
-#: tools/main.vala:918
+#: tools/main.vala:978
 msgid "Show the configuration values"
 msgstr "ਸੰਰਚਨਾ ਮੁੱਲ ਦਿਖਾਓ"
 
-#: tools/main.vala:919
+#: tools/main.vala:979
 msgid "Reset the configuration values"
 msgstr "ਸੰਰਚਨਾ ਮੁੱਲ ਮੁੜ-ਸੈਟ ਕਰੋ"
 
-#: tools/main.vala:921
+#: tools/main.vala:981
 msgid "Save emoji on dialog to clipboard"
 msgstr ""
 
-#: tools/main.vala:923
+#: tools/main.vala:983
 msgid "Retrieve im-module value from GTK instance"
 msgstr ""
 
-#: tools/main.vala:925
+#: tools/main.vala:985
 msgid "Show this information"
 msgstr "ਇਹ ਜਾਣਕਾਰੀ ਵਿਖਾਓ"
 
-#: tools/main.vala:932
+#: tools/main.vala:992
 #, c-format
 msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
@@ -3342,29 +3336,28 @@ msgstr ""
 "ਵਰਤੋਂ: %s COMMAND [OPTION...]\n"
 "\n"
 
-#: tools/main.vala:933
-#, c-format
+#: tools/main.vala:993
 msgid "Commands:\n"
 msgstr "ਕਮਾਂਡ:\n"
 
-#: tools/main.vala:963
+#: tools/main.vala:1023
 #, c-format
 msgid "%s is unknown command!\n"
 msgstr "%s ਅਣਜਾਣ ਕਮਾਂਡ ਹੈ!\n"
 
-#: ui/gtk3/application.vala:311
+#: ui/gtk3/application.vala:322
 msgid "Connect Wayland input method protocol"
 msgstr "ਵੇਅਲੈਂਡ ਇਨਪੁੱਟ ਢੰਗ ਪਰੋਟੋਕਾਲ ਨਾਲ ਕਨੈਕਟ ਕਰੋ"
 
-#: ui/gtk3/application.vala:315
+#: ui/gtk3/application.vala:326
 msgid "Execute ibus-daemon if it's not running"
 msgstr "ibus-daemon ਨੂੰ ਚਲਾਓ, ਜੇ ਨਹੀ ਚੱਲ ਰਹੀ ਹੈ"
 
-#: ui/gtk3/application.vala:319
+#: ui/gtk3/application.vala:330
 msgid "ibus-daemon's arguments"
 msgstr "ibus-daemonਦੇ ਆਰਗੂਮੈਂਟ"
 
-#: ui/gtk3/application.vala:323
+#: ui/gtk3/application.vala:334
 msgid "Verbose logging"
 msgstr ""
 
@@ -3427,7 +3420,6 @@ msgid "Description: %s"
 msgstr "ਵਰਣਨ: %s"
 
 #: ui/gtk3/emojier.vala:1599
-#, c-format
 msgid "None"
 msgstr "ਕੋਈ ਨਹੀਂ"
 
@@ -3447,7 +3439,7 @@ msgid "Alias: %s"
 msgstr "ਉਪ-ਨਾਂ: %s"
 
 #: ui/gtk3/emojier.vala:2180 ui/gtk3/ibus-extension-gtk3.desktop.in:3
-#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1440
+#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1471
 msgid "Emoji Choice"
 msgstr "ਇਮੋਜ਼ੀ ਚੋਣ"
 
@@ -3504,18 +3496,17 @@ msgstr ""
 msgid "Match with the condition of the specified integer"
 msgstr ""
 
-#: ui/gtk3/panel.vala:362 ui/gtk3/panel.vala:385
-#, c-format
+#: ui/gtk3/panel.vala:366 ui/gtk3/panel.vala:389
 msgid "IBus Panel"
 msgstr "IBus ਪੈਨਲ"
 
-#: ui/gtk3/panel.vala:363
+#: ui/gtk3/panel.vala:367
 msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
 msgstr ""
 
-#: ui/gtk3/panel.vala:841
+#: ui/gtk3/panel.vala:853
 #, c-format
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
@@ -3528,7 +3519,7 @@ msgid ""
 "environment variables are unset in the desktop session."
 msgstr ""
 
-#: ui/gtk3/panel.vala:863
+#: ui/gtk3/panel.vala:875
 #, c-format
 msgid ""
 "Please unset QT_IM_MODULE and GTK_IM_MODULE environment variables and 'ibus-"
@@ -3536,55 +3527,63 @@ msgid ""
 "component."
 msgstr ""
 
-#: ui/gtk3/panel.vala:878
+#: ui/gtk3/panel.vala:884
+#, c-format
+msgid ""
+"Seems you run %s with '--enable-wayland-im' option but your display server "
+"is Xorg so the Wayland feature is disabled. You would be better off running "
+"ibus-daemon directly instead or %s without that option."
+msgstr ""
+
+#: ui/gtk3/panel.vala:900
 msgid "IBus Notification"
 msgstr "IBus ਨੋਟੀਫਿਕੇਸ਼ਨ"
 
-#: ui/gtk3/panel.vala:1233
+#: ui/gtk3/panel.vala:1252
 #, c-format
 msgid ""
 "Your configured input method %s does not exist in IBus input methods so "
 "\"US\" layout was configured instead of your input method."
 msgstr ""
 
-#: ui/gtk3/panel.vala:1238
+#: ui/gtk3/panel.vala:1257
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
 msgstr ""
 
-#: ui/gtk3/panel.vala:1241
+#: ui/gtk3/panel.vala:1260
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
 msgstr ""
 
-#: ui/gtk3/panel.vala:1399
+#: ui/gtk3/panel.vala:1418
 msgid "IBus is an intelligent input bus for Linux/Unix."
 msgstr "IBus ਲੀਨਕਸ/ਯੂਨੈਕਸ ਲਈ ਮਾਹਰ ਇੰਪੁੱਟ ਬੱਸ ਹੈ।"
 
-#: ui/gtk3/panel.vala:1403
+#: ui/gtk3/panel.vala:1422
 msgid "translator-credits"
 msgstr ""
 "ਅਮਨਪਰੀਤ ਸਿੰਘ ਆਲਮ <aalam@users.sf.net> ੨੦੦੮-੨੦੨੨\n"
 "ਜਸਵਿੰਦਰ ਸਿੰਘ <j.phulewala@gmail.com>\n"
 "http://satluj.org"
 
-#: ui/gtk3/panel.vala:1434
+#: ui/gtk3/panel.vala:1463
 msgid "Preferences"
 msgstr "ਮੇਰੀ ਪਸੰਦ"
 
-#: ui/gtk3/panel.vala:1462
+#: ui/gtk3/panel.vala:1516
 msgid "Restart"
 msgstr "ਮੁੜ-ਚਾਲੂ ਕਰੋ"
 
-#: ui/gtk3/panel.vala:1466
+#: ui/gtk3/panel.vala:1525
 msgid "Quit"
 msgstr "ਬਾਹਰ"
 
 #. Translators: If your locale is RTL, the msgstr is "default:RTL".
 #. * Otherwise the msgstr is "default:LTR".
-#: ui/gtk3/propertypanel.vala:367 ui/gtk3/propertypanel.vala:375
+#: ui/gtk3/propertypanel.vala:371 ui/gtk3/propertypanel.vala:379
 msgid "default:LTR"
 msgstr "default:LTR"
 

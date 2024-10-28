@@ -646,6 +646,8 @@ ibus_unicode_data_load_async_done (GObject *source_object,
     } else {
         data->callback (list, data->user_data);
     }
+    
+    g_slist_free_full (list, (GDestroyNotify)g_object_unref);
     g_slice_free (IBusUnicodeDataLoadData, data);
 }
 

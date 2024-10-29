@@ -1,28 +1,30 @@
-# translation of ibus.pot to Indonesia 
+# translation of ibus.pot to Indonesia
 # Indonesia translation of ibus.
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
 # This file is distributed under the same license as the ibus package.
 #
 # Translators:
 # Rahman Yusri Aftian <aftian9603@gmail.com>, 2019
+# Andika Triwidada <andika@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2014-02-18 13:46+0900\n"
-"PO-Revision-Date: 2019-07-16 11:19+0700\n"
-"Language-Team: Indonesian\n"
+"PO-Revision-Date: 2024-10-29 09:58+0000\n"
+"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
+"Language-Team: Indonesian <https://translate.fedoraproject.org/projects/ibus/"
+"ibus/id/>\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.2.1\n"
-"Last-Translator: Rahman Yusri Aftian <aftian9603@gmail.com>\n"
-"Language: id\n"
+"X-Generator: Weblate 5.7.2\n"
 
 #: ../setup/setup.ui.h:1
 msgid "Horizontal"
-msgstr "Horisontal"
+msgstr "Horizontal"
 
 #: ../setup/setup.ui.h:2
 msgid "Vertical"
@@ -34,7 +36,7 @@ msgstr "Pojok kiri atas"
 
 #: ../setup/setup.ui.h:4
 msgid "Top right corner"
-msgstr "Ujung kanan atas"
+msgstr "Pojok kanan atas"
 
 #: ../setup/setup.ui.h:5
 msgid "Bottom left corner"
@@ -46,7 +48,7 @@ msgstr "Pojok kanan bawah"
 
 #: ../setup/setup.ui.h:7
 msgid "Custom"
-msgstr "Custom"
+msgstr "Ubahan"
 
 #: ../setup/setup.ui.h:8
 msgid "Do not show"
@@ -66,19 +68,19 @@ msgstr "Preferensi IBus"
 
 #: ../setup/setup.ui.h:12
 msgid "The shortcut keys for switching to next input method in the list"
-msgstr "Tombol pintas untuk beralih ke metode input berikutnya dalam daftar"
+msgstr "Tombol pintas untuk beralih ke metode masukan berikutnya dalam daftar"
 
 #: ../setup/setup.ui.h:13
 msgid "Next input method:"
-msgstr "Metode input selanjutnya:"
+msgstr "Metode masukan selanjutnya:"
 
 #: ../setup/setup.ui.h:14
 msgid "The shortcut keys for switching to previous input method in the list"
-msgstr "Tombol pintas untuk beralih ke metode input sebelumnya dalam daftar"
+msgstr "Tombol pintas untuk beralih ke metode masukan sebelumnya dalam daftar"
 
 #: ../setup/setup.ui.h:15
 msgid "Previous input method:"
-msgstr "Metode input sebelumnya:"
+msgstr "Metode masukan sebelumnya:"
 
 #: ../setup/setup.ui.h:16
 msgid "..."
@@ -86,7 +88,7 @@ msgstr "..."
 
 #: ../setup/setup.ui.h:17 ../data/ibus.schemas.in.h:10
 msgid "The shortcut keys for turning input method on or off"
-msgstr "Tombol pintas untuk mengaktifkan atau menonaktifkan metode input"
+msgstr "Tombol pintas untuk mengaktifkan atau menonaktifkan metode masukan"
 
 #: ../setup/setup.ui.h:18
 msgid "Enable or disable:"
@@ -102,7 +104,7 @@ msgstr "Nonaktifkan:"
 
 #: ../setup/setup.ui.h:21
 msgid "<b>Keyboard Shortcuts</b>"
-msgstr "<b>Keyboard Shortcuts</b>"
+msgstr "<b>Pintasan Papan Ketik</b>"
 
 #: ../setup/setup.ui.h:22
 msgid "Set the orientation of candidates in lookup table"
@@ -130,12 +132,12 @@ msgstr "Tampilkan ikon pada baki sistem"
 
 #: ../setup/setup.ui.h:28 ../data/ibus.schemas.in.h:32
 msgid "Show input method name on language bar"
-msgstr "Tampilkan nama metode input pada bilah bahasa"
+msgstr "Tampilkan nama metode masukan pada bilah bahasa"
 
 #: ../setup/setup.ui.h:29
 msgid "Show input method's name on language bar when check the checkbox"
 msgstr ""
-"Tampilkan nama metode input pada bilah bahasa saat mencentang kotak centang"
+"Tampilkan nama metode masukan pada bilah bahasa saat mencentang kotak centang"
 
 #: ../setup/setup.ui.h:30
 msgid "Embed preedit text in application window"
@@ -143,15 +145,15 @@ msgstr "Sematkan teks yang sudah disiapkan di jendela aplikasi"
 
 #: ../setup/setup.ui.h:31
 msgid "Embed the preedit text of input method in the application window"
-msgstr "Sematkan teks metode input yang sudah ada di jendela aplikasi"
+msgstr "Sematkan teks metode masukan yang sudah ada di jendela aplikasi"
 
 #: ../setup/setup.ui.h:32
 msgid "Use custom font:"
-msgstr "Gunakan font khusus:"
+msgstr "Gunakan fonta ubahan:"
 
 #: ../setup/setup.ui.h:33
 msgid "<b>Font and Style</b>"
-msgstr "<b>Font and Style</b>"
+msgstr "<b>Fonta dan Gaya</b>"
 
 #: ../setup/setup.ui.h:34
 msgid "General"
@@ -165,15 +167,15 @@ msgstr "T_ambah"
 #: ../setup/setup.ui.h:36
 msgid "Add the selected input method into the enabled input methods"
 msgstr ""
-"Tambahkan metode input yang dipilih ke dalam metode input yang diaktifkan"
+"Tambahkan metode masukan yang dipilih ke dalam metode masukan yang diaktifkan"
 
 #: ../setup/setup.ui.h:37
 msgid "_Remove"
-msgstr "_Hapus"
+msgstr "_Buang"
 
 #: ../setup/setup.ui.h:38
 msgid "Remove the selected input method from the enabled input methods"
-msgstr "Hapus metode input yang dipilih dari metode input yang diaktifkan"
+msgstr "Hapus metode masukan yang dipilih dari metode masukan yang diaktifkan"
 
 #: ../setup/setup.ui.h:39
 msgid "_Up"
@@ -182,7 +184,8 @@ msgstr "_Naik"
 #: ../setup/setup.ui.h:40
 msgid "Move up the selected input method in the enabled input methods list"
 msgstr ""
-"Naikkan metode input yang dipilih dalam daftar metode input yang diaktifkan"
+"Naikkan metode masukan yang dipilih dalam daftar metode masukan yang "
+"diaktifkan"
 
 #: ../setup/setup.ui.h:41
 msgid "_Down"
@@ -191,7 +194,8 @@ msgstr "_Turun"
 #: ../setup/setup.ui.h:42
 msgid "Move down the selected input method in the enabled input methods"
 msgstr ""
-"Naikkan metode input yang dipilih dalam daftar metode input yang diaktifkan"
+"Turunkan metode masukan yang dipilih dalam daftar metode masukan yang "
+"diaktifkan"
 
 #: ../setup/setup.ui.h:43
 msgid "_About"
@@ -199,7 +203,7 @@ msgstr "Ihw_al"
 
 #: ../setup/setup.ui.h:44
 msgid "Show information of the selected input method"
-msgstr "Tampilkan informasi tentang metode input yang dipilih"
+msgstr "Tampilkan informasi tentang metode masukan yang dipilih"
 
 #: ../setup/setup.ui.h:45
 msgid "_Preferences"
@@ -207,7 +211,7 @@ msgstr "_Preferensi"
 
 #: ../setup/setup.ui.h:46
 msgid "Show setup of the selected input method"
-msgstr "Tampilkan pengaturan metode input yang dipilih"
+msgstr "Tampilkan pengaturan metode masukan yang dipilih"
 
 #: ../setup/setup.ui.h:47
 msgid ""
@@ -215,34 +219,34 @@ msgid ""
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
 "the panel icon.</i></small>"
 msgstr ""
-"<small><i> Metode input aktif dapat diubah dari yang dipilih dalam daftar "
-"di atas dengan menekan tombol pintasan keyboard atau mengklik ikon panel. </"
-"i></small>"
+"<small><i> Metode masukan aktif dapat diubah dari yang dipilih dalam daftar "
+"di atas dengan menekan tombol pintasan papan ketik atau mengklik ikon panel. "
+"</i></small>"
 
 #. create im name & icon column
 #: ../setup/setup.ui.h:48 ../setup/enginetreeview.py:66
 msgid "Input Method"
-msgstr "Metode Input"
+msgstr "Metode Masukan"
 
 #: ../setup/setup.ui.h:49 ../data/ibus.schemas.in.h:33
 msgid "Use system keyboard layout"
-msgstr "Gunakan tata letak keyboard sistem"
+msgstr "Gunakan tata letak papan ketik sistem"
 
 #: ../setup/setup.ui.h:50 ../data/ibus.schemas.in.h:34
 msgid "Use system keyboard (XKB) layout"
-msgstr "Gunakan tata letak keyboard (XKB) sistem"
+msgstr "Gunakan tata letak papan ketik (XKB) sistem"
 
 #: ../setup/setup.ui.h:51
 msgid "<b>Keyboard Layout</b>"
-msgstr "<b>Keyboard Layout</b>"
+msgstr "<b>Tata Letak Papan Ketik</b>"
 
 #: ../setup/setup.ui.h:52 ../data/ibus.schemas.in.h:42
 msgid "Share the same input method among all applications"
-msgstr "Bagikan metode input yang sama di antara semua aplikasi"
+msgstr "Bagikan metode masukan yang sama di antara semua aplikasi"
 
 #: ../setup/setup.ui.h:53
 msgid "<b>Global input method settings</b>"
-msgstr "<b>Pengaturan metode input global</b>"
+msgstr "<b>Pengaturan metode masukan global</b>"
 
 #: ../setup/setup.ui.h:54
 msgid "Advanced"
@@ -258,8 +262,8 @@ msgid ""
 "\n"
 msgstr ""
 "<big><b>IBus</b></big>\n"
-"<small>The intelligent input bus</small>\n"
-"Homepage: https://github.com/ibus/ibus/wiki\n"
+"<small>Bus masukan cerdas</small>\n"
+"Laman web: https://github.com/ibus/ibus/wiki\n"
 "\n"
 "\n"
 "\n"
@@ -270,23 +274,23 @@ msgstr "Mulai ibus saat masuk"
 
 #: ../setup/setup.ui.h:63
 msgid "<b>Startup</b>"
-msgstr "<b>Startup</b>"
+msgstr "<b>Awal Mula</b>"
 
 #: ../setup/setup.ui.h:64 ../setup/engineabout.py:34 ../ui/gtk3/panel.vala:736
 msgid "About"
-msgstr "Ihwal"
+msgstr "Tentang"
 
 #: ../setup/setup.ui.h:65 ../setup/engineabout.py:36
 msgid "_Close"
-msgstr "_Keluar"
+msgstr "_Tutup"
 
 #: ../data/ibus.schemas.in.h:1
 msgid "Preload engines"
-msgstr "Sebelum memuat mesin"
+msgstr "Pra muat mesin"
 
 #: ../data/ibus.schemas.in.h:2
 msgid "Preload engines during ibus starts up"
-msgstr "Sebelum memuat mesin selama ibus dimulai"
+msgstr "Pramuat mesin selama ibus dimulai"
 
 #: ../data/ibus.schemas.in.h:3
 msgid "Engines order"
@@ -294,11 +298,11 @@ msgstr "Urutan mesin"
 
 #: ../data/ibus.schemas.in.h:4
 msgid "Saved engines order in input method list"
-msgstr "Mesin yang disimpan memesan dalam daftar metode input"
+msgstr "Mesin yang disimpan memesan dalam daftar metode masukan"
 
 #: ../data/ibus.schemas.in.h:5
 msgid "Popup delay milliseconds for IME switcher window"
-msgstr "Popup delay milidetik untuk jendela pengalih IME"
+msgstr "Tundaan popup mili detik untuk jendela pengalih IME"
 
 #: ../data/ibus.schemas.in.h:6
 msgid ""
@@ -306,10 +310,9 @@ msgid ""
 "400. 0 = Show the window immediately. 0 &lt; Delay milliseconds. 0 &gt; Do "
 "not show the window and switch prev/next engines."
 msgstr ""
-"Tetapkan milidetik tunda munculan untuk menampilkan jendela pengalih IME. "
-"Standarnya adalah 400. 0 = Tunjukkan jendela dengan segera. 0 &lt; Tunda "
-"milidetik. 0 &gt; Jangan perlihatkan jendela dan alihkan mesin Sebelum/"
-"Sesudah."
+"Tetapkan mili detik tunda munculnya popup untuk menampilkan jendela pengalih "
+"IME. Bakunya adalah 400. 0 = Tunjukkan jendela seketika. 0 &lt; Tunda mili "
+"detik. 0 &gt; Jangan perlihatkan jendela dan alihkan mesin sebelum/sesudah."
 
 #: ../data/ibus.schemas.in.h:7
 msgid "Saved version number"
@@ -321,31 +324,31 @@ msgid ""
 "version of the previous installed ibus and one of the current ibus."
 msgstr ""
 "Nomor versi yang disimpan akan digunakan untuk memeriksa perbedaan antara "
-"versi ibus yang diinstal sebelumnya dan salah satu ibus saat ini."
+"versi ibus yang dipasang sebelumnya dan salah satu ibus saat ini."
 
 #: ../data/ibus.schemas.in.h:9
 msgid "Trigger shortcut keys"
-msgstr "Kunci pintas pemicu"
+msgstr "Tombol pintas picu"
 
 #: ../data/ibus.schemas.in.h:11
 msgid "Trigger shortcut keys for gtk_accelerator_parse"
-msgstr "Kunci pintas pemicu untuk gtk_accelerator_parse"
+msgstr "Tombol pintas pemicu untuk gtk_accelerator_parse"
 
 #: ../data/ibus.schemas.in.h:12
 msgid "Enable shortcut keys"
-msgstr "Aktifkan tombol pintas"
+msgstr "Tombol pintas fungsikan"
 
 #: ../data/ibus.schemas.in.h:13
 msgid "The shortcut keys for turning input method on"
-msgstr "Tombol pintas untuk mengaktifkan metode input"
+msgstr "Tombol pintas untuk mengaktifkan metode masukan"
 
 #: ../data/ibus.schemas.in.h:14
 msgid "Disable shortcut keys"
-msgstr "Nonaktifkan tombol pintasan"
+msgstr "Tombol pintas nonaktikan"
 
 #: ../data/ibus.schemas.in.h:15
 msgid "The shortcut keys for turning input method off"
-msgstr "Tombol pintas untuk mematikan metode input"
+msgstr "Tombol pintas untuk mematikan metode masukan"
 
 #: ../data/ibus.schemas.in.h:16
 msgid "Next engine shortcut keys"
@@ -353,15 +356,15 @@ msgstr "Tombol pintas mesin berikutnya"
 
 #: ../data/ibus.schemas.in.h:17
 msgid "The shortcut keys for switching to the next input method in the list"
-msgstr "Tombol pintas untuk beralih ke metode input berikutnya dalam daftar"
+msgstr "Tombol pintas untuk beralih ke metode masukan berikutnya dalam daftar"
 
 #: ../data/ibus.schemas.in.h:18
 msgid "Prev engine shortcut keys"
-msgstr "Prev engine shortcut keys"
+msgstr "Tombol pintas mesin sebelumnya"
 
 #: ../data/ibus.schemas.in.h:19
 msgid "The shortcut keys for switching to the previous input method"
-msgstr "Tombol pintas untuk beralih ke metode input sebelumnya"
+msgstr "Tombol pintas untuk beralih ke metode masukan sebelumnya"
 
 #: ../data/ibus.schemas.in.h:20
 msgid "Auto hide"
@@ -385,84 +388,84 @@ msgid ""
 "corner, 2 = Bottom left corner, 3 = Bottom right corner, 4 = Custom"
 msgstr ""
 "Posisi panel bahasa. 0 = Pojok kiri atas, 1 = Pojok kanan atas, 2 = Pojok "
-"kiri bawah, 3 = Pojok kanan bawah, 4 = Kustom"
+"kiri bawah, 3 = Pojok kanan bawah, 4 = Ubahan"
 
 #: ../data/ibus.schemas.in.h:24
 msgid "Follow the input cursor in case the panel is always shown"
-msgstr "Ikuti kursor input jika panel selalu ditampilkan"
+msgstr "Ikuti kursor masukan jika panel selalu ditampilkan"
 
 #: ../data/ibus.schemas.in.h:25
 msgid ""
 "If true, the panel follows the input cursor in case the panel is always "
 "shown. If false, the panel is shown at a fixed location."
 msgstr ""
-"Jika benar, panel mengikuti kursor input jika panel selalu ditampilkan. "
+"Jika benar, panel mengikuti kursor masukan jika panel selalu ditampilkan. "
 "Jika salah, panel ditampilkan di lokasi tetap."
 
 #: ../data/ibus.schemas.in.h:26
 msgid "The milliseconds to show property panel"
-msgstr "Milidetik untuk menampilkan panel properti"
+msgstr "Mili detik untuk menampilkan panel properti"
 
 #: ../data/ibus.schemas.in.h:27
 msgid ""
 "The milliseconds to show property panel after focus-in or properties are "
 "changed."
 msgstr ""
-"Milidetik untuk menampilkan panel properti setelah fokus-masuk atau "
+"Mili detik untuk menampilkan panel properti setelah menerima fokus atau "
 "properti diubah."
 
 #: ../data/ibus.schemas.in.h:28
 msgid "Orientation of lookup table"
-msgstr "Orientation of lookup table"
+msgstr "Orientasi dari tabel pencarian"
 
 #: ../data/ibus.schemas.in.h:29
 msgid "Orientation of lookup table. 0 = Horizontal, 1 = Vertical"
-msgstr "Orientasi tabel pencarian. 0 = Horisontal, 1 = Vertikal"
+msgstr "Orientasi tabel pencarian. 0 = Horizontal, 1 = Vertikal"
 
 #: ../data/ibus.schemas.in.h:31
 msgid "Show input method name"
-msgstr "Tampilkan nama metode input"
+msgstr "Tampilkan nama metode masukan"
 
 #: ../data/ibus.schemas.in.h:35
 msgid "Use custom font"
-msgstr "Gunakan font khusus"
+msgstr "Gunakan fonta ubahan"
 
 #: ../data/ibus.schemas.in.h:36
 msgid "Use custom font name for language panel"
-msgstr "Gunakan nama font khusus untuk panel bahasa"
+msgstr "Gunakan nama fonta ubahan untuk panel bahasa"
 
 #: ../data/ibus.schemas.in.h:37
 msgid "Custom font"
-msgstr "Fonta Khusus"
+msgstr "Fonta ubahan"
 
 #: ../data/ibus.schemas.in.h:38
 msgid "Custom font name for language panel"
-msgstr "Nama font khusus untuk panel bahasa"
+msgstr "Nama fonta ubahan untuk panel bahasa"
 
 #: ../data/ibus.schemas.in.h:39
 msgid "Embed Preedit Text"
-msgstr "Sematkan Teks Preedit"
+msgstr "Sematkan Teks Prasunting"
 
 #: ../data/ibus.schemas.in.h:40
 msgid "Embed Preedit Text in Application Window"
-msgstr "Sematkan Teks Preedit di Jendela Aplikasi"
+msgstr "Sematkan Teks Prasunting di Jendela Aplikasi"
 
 #: ../data/ibus.schemas.in.h:41
 msgid "Use global input method"
-msgstr "Gunakan metode input global"
+msgstr "Gunakan metode masukan global"
 
 #: ../data/ibus.schemas.in.h:43
 msgid "Enable input method by default"
-msgstr "Aktifkan metode input secara default"
+msgstr "Fungsikan metode masukan secara baku"
 
 #: ../data/ibus.schemas.in.h:44
 msgid "Enable input method by default when the application gets input focus"
 msgstr ""
-"Aktifkan metode input secara default ketika aplikasi mendapat fokus input"
+"Fungsikan metode masukan secara baku ketika aplikasi mendapat fokus masukan"
 
 #: ../data/ibus.schemas.in.h:45
 msgid "DConf preserve name prefixes"
-msgstr "DConf menyimpan awalan nama"
+msgstr "DConf mempertahankan awalan nama"
 
 #: ../data/ibus.schemas.in.h:46
 msgid "Prefixes of DConf keys to stop name conversion"
@@ -473,12 +476,12 @@ msgid ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
 msgstr ""
-"Copyright (c) 2007-2010 Peng Huang\n"
-"Copyright (c) 2007-2010 Red Hat, Inc."
+"Hak Cipta (c) 2007-2010 Peng Huang\n"
+"Hak Cipta (c) 2007-2010 Red Hat, Inc."
 
 #: ../ibus/lang.py:41 ../src/ibusutil.c:150 ../src/ibusutil.c:152
 msgid "Other"
-msgstr "Lain"
+msgstr "Lainnya"
 
 #: ../setup/engineabout.py:68
 #, python-format
@@ -488,12 +491,12 @@ msgstr "Bahasa: %s\n"
 #: ../setup/engineabout.py:71
 #, python-format
 msgid "Keyboard layout: %s\n"
-msgstr "Keyboard layout: %s\n"
+msgstr "Tata letak papan ketik: %s\n"
 
 #: ../setup/engineabout.py:74
 #, python-format
 msgid "Author: %s\n"
-msgstr "Pembuat: %s\n"
+msgstr "Penulis: %s\n"
 
 #: ../setup/engineabout.py:77
 msgid "Description:\n"
@@ -501,7 +504,7 @@ msgstr "Deskripsi:\n"
 
 #: ../setup/enginecombobox.py:139
 msgid "Select an input method"
-msgstr "Pilih metode input"
+msgstr "Pilih metode masukan"
 
 #: ../setup/enginetreeview.py:94
 msgid "Kbd"
@@ -513,11 +516,11 @@ msgstr "Setel Preferensi IBus"
 
 #: ../setup/keyboardshortcut.py:55
 msgid "Keyboard shortcuts"
-msgstr "Pintasan keyboard"
+msgstr "Pintasan papan tik"
 
 #: ../setup/keyboardshortcut.py:66
 msgid "Key code:"
-msgstr "Kata kunci:"
+msgstr "Kode tombol:"
 
 #: ../setup/keyboardshortcut.py:81
 msgid "Modifiers:"
@@ -526,12 +529,12 @@ msgstr "Pengubah:"
 #. apply button
 #: ../setup/keyboardshortcut.py:133
 msgid "_Apply"
-msgstr "Mener_apkan"
+msgstr "Ter_apkan"
 
 #. delete button
 #: ../setup/keyboardshortcut.py:139
 msgid "_Delete"
-msgstr "Men_ghapus"
+msgstr "_Hapus"
 
 #: ../setup/keyboardshortcut.py:254
 msgid ""
@@ -539,7 +542,7 @@ msgid ""
 "The dialog will be closed when the key is released."
 msgstr ""
 "Silakan tekan tombol (atau kombinasi tombol).\n"
-"Dialog akan ditutup ketika kunci dilepaskan."
+"Dialog akan ditutup ketika tombol dilepaskan."
 
 #: ../setup/keyboardshortcut.py:256
 msgid "Please press a key (or a key combination)"
@@ -547,7 +550,7 @@ msgstr "Silakan tekan tombol (atau kombinasi tombol)"
 
 #: ../setup/keyboardshortcut.py:338 ../setup/main.py:374
 msgid "_Cancel"
-msgstr "Ba_tal"
+msgstr "_Batal"
 
 #: ../setup/keyboardshortcut.py:339 ../setup/main.py:375
 msgid "_OK"
@@ -556,11 +559,11 @@ msgstr "_OK"
 #: ../setup/main.py:102 ../setup/main.py:395
 msgid "Use shortcut with shift to switch to the previous input method"
 msgstr ""
-"Gunakan pintasan dengan shift untuk beralih ke metode input sebelumnya"
+"Gunakan pintasan dengan shift untuk beralih ke metode masukan sebelumnya"
 
 #: ../setup/main.py:329
 msgid "The IBus daemon is not running. Do you wish to start it?"
-msgstr "Daemon IBus tidak berjalan. Apakah Anda ingin memulainya?"
+msgstr "Daemon IBus tidak sedang berjalan. Apakah Anda ingin memulainya?"
 
 #: ../setup/main.py:350
 msgid ""
@@ -571,34 +574,34 @@ msgid ""
 "  export QT_IM_MODULE=ibus"
 msgstr ""
 "IBus telah dimulai! Jika Anda tidak dapat menggunakan IBus, tambahkan baris "
-"berikut ke $ HOME / .bashrc Anda; kemudian masuk kembali ke desktop Anda.\n"
-"  ekspor GTK_IM_MODULE=ibus\n"
-"  export XMODIFIERS =@im= ibus\n"
+"berikut ke $ HOME/.bashrc Anda; kemudian masuk kembali ke desktop Anda.\n"
+"  export GTK_IM_MODULE=ibus\n"
+"  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
 
 #. Translators: %d == 5 currently
 #: ../setup/main.py:364
 #, python-format
 msgid "IBus daemon could not be started in %d seconds."
-msgstr "Daemon IBus tidak dapat dimulai dalam% d detik."
+msgstr "Daemon IBus tidak dapat dimulai dalam %d detik."
 
 #: ../setup/main.py:376
 #, python-format
 msgid "Select keyboard shortcut for %s"
-msgstr "Pilih pintasan keyboard untuk %s"
+msgstr "Pilih pintasan papan ketik untuk %s"
 
 #: ../setup/main.py:377
 msgid "switching input methods"
-msgstr "beralih metode input"
+msgstr "beralih metode masukan"
 
 #: ../tools/main.vala:42
 msgid "List engine name only"
-msgstr "Daftar nama mesin saja"
+msgstr "Cantumkan daftar nama mesin saja"
 
 #: ../tools/main.vala:58 ../tools/main.vala:179 ../tools/main.vala:189
 #, c-format
 msgid "Can't connect to IBus.\n"
-msgstr "Tidak dapat terhubung ke IBus.\n"
+msgstr "Tidak bisa terhubung ke IBus.\n"
 
 #: ../tools/main.vala:84
 #, c-format
@@ -622,24 +625,24 @@ msgstr "Dapatkan mesin global gagal.\n"
 
 #: ../tools/main.vala:204
 msgid "Read the system registry cache."
-msgstr "Baca cache registri sistem."
+msgstr "Baca singgahan registri sistem."
 
 #: ../tools/main.vala:206
 msgid "Read the registry cache FILE."
-msgstr "Baca FILE cache registri."
+msgstr "Baca BERKAS singgahan registri."
 
 #: ../tools/main.vala:224 ../tools/main.vala:229
 #, c-format
 msgid "The registry cache is invalid.\n"
-msgstr "Cache registri tidak valid.\n"
+msgstr "Singgahan registri tidak valid.\n"
 
 #: ../tools/main.vala:244
 msgid "Write the system registry cache."
-msgstr "Tulis cache registri sistem."
+msgstr "Tulis singgahan registri sistem."
 
 #: ../tools/main.vala:246
 msgid "Write the registry cache FILE."
-msgstr "Tulis FILE cache registri."
+msgstr "Tulis BERKAS singgahan registri."
 
 #: ../tools/main.vala:293
 msgid "Set or get engine"
@@ -655,11 +658,11 @@ msgstr "Tampilkan mesin yang tersedia"
 
 #: ../tools/main.vala:296
 msgid "(Not implemented)"
-msgstr "(Tidak diterapkan)"
+msgstr "(Tidak diimplementasi)"
 
 #: ../tools/main.vala:297
 msgid "Restart ibus-daemon"
-msgstr "Muat ulang ibus-daemon"
+msgstr "Jalankan ulang ibus-daemon"
 
 #: ../tools/main.vala:298
 msgid "Show version"
@@ -667,11 +670,11 @@ msgstr "Tampilkan versi"
 
 #: ../tools/main.vala:299
 msgid "Show the content of registry cache"
-msgstr "Tampilkan konten cache registri"
+msgstr "Tampilkan konten singgahan registri"
 
 #: ../tools/main.vala:300
 msgid "Create registry cache"
-msgstr "Buat cache registri"
+msgstr "Buat singgahan registri"
 
 #: ../tools/main.vala:301
 msgid "Print the D-Bus address of ibus-daemon"
@@ -687,7 +690,7 @@ msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
 "\n"
 msgstr ""
-"Menggunakan: %s COMMAND [OPTION...]\n"
+"Cara pakai: %s PERINTAH [OPSI...]\n"
 "\n"
 
 #: ../tools/main.vala:309
@@ -702,19 +705,21 @@ msgstr "%s perintah tidak dikenal!\n"
 
 #: ../ui/gtk3/panel.vala:425
 msgid "IBus Update"
-msgstr "IBus Update"
+msgstr "Pembaruan IBus"
 
 #: ../ui/gtk3/panel.vala:426 ../ui/gtk3/panel.vala:437
 msgid "Super+space is now the default hotkey."
-msgstr "Super + space sekarang merupakan hotkey default."
+msgstr "Super+spasi sekarang merupakan tombol pintas baku."
 
 #: ../ui/gtk3/panel.vala:707
 msgid "IBus is an intelligent input bus for Linux/Unix."
-msgstr "IBus adalah bus input cerdas untuk Linux / Unix."
+msgstr "IBus adalah bus masukan cerdas untuk Linux/Unix."
 
 #: ../ui/gtk3/panel.vala:711
 msgid "translator-credits"
-msgstr "kredit-penerjemah"
+msgstr ""
+"Rahman Yusri Aftian <aftian9603@gmail.com>, 2019.\n"
+"Andika Triwidada <andika@gmail.com>, 2024."
 
 #: ../ui/gtk3/panel.vala:732
 msgid "Preferences"
@@ -722,7 +727,7 @@ msgstr "Prefensi"
 
 #: ../ui/gtk3/panel.vala:742
 msgid "Restart"
-msgstr "Muat ulang"
+msgstr "Mulai Ulang"
 
 #: ../ui/gtk3/panel.vala:746
 msgid "Quit"

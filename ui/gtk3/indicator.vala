@@ -2,7 +2,7 @@
  *
  * ibus - The Input Bus
  *
- * Copyright(c) 2015-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright(c) 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -429,45 +429,59 @@ class Indicator : IBus.Service
                                                        string   sender,
                                                        string   object_path,
                                                        string   interface_name,
-                                                       string   property_name) {
-        GLib.return_val_if_fail (object_path == this.object_path, null);
-        GLib.return_val_if_fail (
-                interface_name == NOTIFICATION_ITEM_DBUS_IFACE,
-                null);
+                                                       string   property_name)
+    throws GLib.Error {
+        if (object_path != this.object_path) {
+            throw new GLib.DBusError.FAILED(
+                    "%s != %s".printf(object_path, this.object_path));
+        }
+        if (interface_name != NOTIFICATION_ITEM_DBUS_IFACE) {
+            throw new GLib.DBusError.FAILED(
+                    "%s != %s".printf(interface_name,
+                                      NOTIFICATION_ITEM_DBUS_IFACE));
+        }
 
-        if (property_name == "Id")
-            return _get_id(connection);
-        if (property_name == "Category")
-            return _get_category(connection);
-        if (property_name == "Status")
-            return _get_status(connection);
-        if (property_name == "IconName")
-            return _get_icon_name(connection);
-        if (property_name == "IconPixmap")
-            return _get_icon_vector(connection);
-        if (property_name == "IconAccessibleDesc")
-            return _get_icon_desc(connection);
-        if (property_name == "AttentionIconName")
-            return _get_attention_icon_name(connection);
-        if (property_name == "AttentionAccessibleDesc")
-            return _get_attention_icon_desc(connection);
-        if (property_name == "Title")
-            return _get_title(connection);
-        if (property_name == "IconThemePath")
-            return _get_icon_theme_path(connection);
-        if (property_name == "Menu")
-            return _get_menu(connection);
-        if (property_name == "XAyatanaLabel")
-            return _get_xayatana_label(connection);
-        if (property_name == "XAyatanaLabelGuide")
-            return _get_xayatana_label_guide(connection);
-        if (property_name == "XAyatanaOrderingIndex")
-            return _get_xayatana_ordering_index(connection);
+        GLib.Variant? result = null;
+        if (property_name == "Id") {
+            result = _get_id(connection);
+        } else if (property_name == "Category") {
+            result = _get_category(connection);
+        } else if (property_name == "Status") {
+            result = _get_status(connection);
+        } else if (property_name == "IconName") {
+            result = _get_icon_name(connection);
+        } else if (property_name == "IconPixmap") {
+            result = _get_icon_vector(connection);
+        } else if (property_name == "IconAccessibleDesc") {
+            result = _get_icon_desc(connection);
+        } else if (property_name == "AttentionIconName") {
+            result = _get_attention_icon_name(connection);
+        } else if (property_name == "AttentionAccessibleDesc") {
+            result = _get_attention_icon_desc(connection);
+        } else if (property_name == "Title") {
+            result = _get_title(connection);
+        } else if (property_name == "IconThemePath") {
+            result = _get_icon_theme_path(connection);
+        } else if (property_name == "Menu") {
+            result = _get_menu(connection);
+        } else if (property_name == "XAyatanaLabel") {
+            result = _get_xayatana_label(connection);
+        } else if (property_name == "XAyatanaLabelGuide") {
+            result = _get_xayatana_label_guide(connection);
+        } else if (property_name == "XAyatanaOrderingIndex") {
+            result = _get_xayatana_ordering_index(connection);
+        } else {
+            throw new GLib.DBusError.UNKNOWN_PROPERTY(
+                "IBus.Indicator does not handle the property: "
+                + property_name);
+        }
 
-        warning("service_get_property() does not handle the property: " +
-                property_name);
-
-        return null;
+        if (result == null) {
+            throw new GLib.DBusError.FAILED(
+                "IBus.Indicator returns null for the property "
+                + property_name);
+        }
+        return result;
     }
 
 

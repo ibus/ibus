@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2011-2015 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2015-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -255,16 +255,20 @@ public class CandidatePanel : Gtk.Box{
 
         if (m_candidate_area.get_visible() ||
             m_preedit_label.get_visible() ||
-            m_aux_label.get_visible())
-            m_toplevel.show();
-        else
-            m_toplevel.hide();
+            m_aux_label.get_visible()) {
+            this.show();
+        } else {
+            // Should call realize_surface() before wl_surface_destroy() in
+            // Wayland input-method protocol V2.
+            this.hide();
+        }
 
         if (m_aux_label.get_visible() &&
-            (m_candidate_area.get_visible() || m_preedit_label.get_visible()))
+            (m_candidate_area.get_visible() || m_preedit_label.get_visible())) {
             m_hseparator.show();
-        else
+        } else {
             m_hseparator.hide();
+        }
     }
 
     private void create_ui() {
@@ -310,6 +314,9 @@ public class CandidatePanel : Gtk.Box{
     }
 
     public new void hide() {
+#if USE_GDK_WAYLAND
+        realize_surface(null);
+#endif
         m_toplevel.hide();
     }
 

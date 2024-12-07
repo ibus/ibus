@@ -79,11 +79,9 @@ class Panel : IBus.PanelService {
     private uint m_menu_update_delay_time_id;
     private bool m_is_wayland;
     private bool m_is_wayland_im;
+    private bool m_is_indicator;
 #if INDICATOR
-    private bool m_is_kde = is_kde();
     private bool m_is_context_menu;
-#else
-    private bool m_is_kde = false;
 #endif
     private ulong m_popup_menu_id;
     private ulong m_activate_id;
@@ -114,11 +112,15 @@ class Panel : IBus.PanelService {
 #if USE_GDK_WAYLAND
         m_is_wayland = !BindingCommon.default_is_xdisplay();
 #else
-        m_is_wayland = false;
         warning("Checking Wayland is disabled");
 #endif
 
         init_settings();
+        set_version();
+        check_wayland();
+#if INDICATOR
+        m_is_indicator = is_indicator();
+#endif
 
         // indicator.set_menu() requires m_property_manager.
         m_property_manager = new PropertyManager();
@@ -128,7 +130,7 @@ class Panel : IBus.PanelService {
 
         // init ui
 #if INDICATOR
-        if (m_is_kde) {
+        if (m_is_indicator) {
             init_indicator();
         } else {
             init_status_icon();
@@ -165,9 +167,6 @@ class Panel : IBus.PanelService {
         m_property_panel.property_activate.connect((w, k, s) => {
             property_activate(k, s);
         });
-
-        set_version();
-        check_wayland();
 
         state_changed();
     }
@@ -322,7 +321,10 @@ class Panel : IBus.PanelService {
 
 
 #if INDICATOR
-    private static bool is_kde() {
+    private bool is_indicator() {
+        if (m_is_wayland && m_is_wayland_im)
+            return true;
+
         unowned string? desktop =
             Environment.get_variable("XDG_CURRENT_DESKTOP");
         if (desktop == "KDE")
@@ -408,7 +410,7 @@ class Panel : IBus.PanelService {
         window = Gdk.X11.Window.lookup_for_display(
                 display,
                 m_status_icon.get_x11_window_id()) as Gdk.Window;
-        if (window == null && !BindingCommon.default_is_xdisplay()) {
+        if (window == null && m_is_wayland) {
             unowned X.Display xdisplay = display.get_xdisplay();
             X.Window root = xdisplay.default_root_window();
             window = Gdk.X11.Window.lookup_for_display(
@@ -463,7 +465,7 @@ class Panel : IBus.PanelService {
                     handle_engine_switch_reverse);
         }
 #if USE_GDK_WAYLAND
-        if (BindingCommon.default_is_xdisplay())
+        if (!m_is_wayland)
             return;
         IBus.ProcessKeyEventData[] keys = {};
         IBus.ProcessKeyEventData key;
@@ -962,7 +964,7 @@ class Panel : IBus.PanelService {
     public void disconnect_signals() {
         unowned GLib.Object object = m_status_icon;
 #if INDICATOR
-        if (m_is_kde)
+        if (m_is_indicator)
             object = m_indicator;
 #endif
         if (m_popup_menu_id > 0) {
@@ -1178,6 +1180,11 @@ class Panel : IBus.PanelService {
                      GLibMacro.G_STRFUNC, m_switcher_selected_index,
                      is_timeout ? "timeout" : "normal"));
         }
+#if USE_GDK_WAYLAND
+        // Should call realize_surface() before wl_surface_destroy() in
+        // Wayland input-method protocol V2.
+        this.realize_surface(null);
+#endif
         // TODO: Unfortunatelly hide() also depends on GMainLoop and can
         // causes a freeze.
         m_switcher.hide();
@@ -1490,7 +1497,7 @@ class Panel : IBus.PanelService {
             return m_sys_menu;
 
         Gdk.Display display_backup = null;
-        if (use_x11 && !BindingCommon.default_is_xdisplay()) {
+        if (use_x11 && m_is_wayland) {
             var display = BindingCommon.get_xdisplay();
             display_backup = Gdk.Display.get_default();
             if (display != null) {
@@ -1514,7 +1521,7 @@ class Panel : IBus.PanelService {
 
         item = new Gtk.MenuItem.with_label(_("Restart"));
         item.activate.connect((i) => {
-            if (m_is_kde && !BindingCommon.default_is_xdisplay())
+            if (m_is_indicator && m_is_wayland)
                 run_ibus_command("restart");
             else
                 m_bus.exit(true);
@@ -1523,7 +1530,7 @@ class Panel : IBus.PanelService {
 
         item = new Gtk.MenuItem.with_label(_("Quit"));
         item.activate.connect((i) => {
-            if (m_is_kde && !BindingCommon.default_is_xdisplay())
+            if (m_is_indicator && m_is_wayland)
                 run_ibus_command("exit");
             else
                 m_bus.exit(false);
@@ -1540,6 +1547,8 @@ class Panel : IBus.PanelService {
 
     private Gtk.Menu create_activate_menu(bool use_x11 = false) {
         Gdk.Display display_backup = null;
+        // Should not use m_is_wayland since register_properties()
+        // Can be called before Panel.init().
         if (use_x11 && !BindingCommon.default_is_xdisplay()) {
             var display = BindingCommon.get_xdisplay();
             display_backup = Gdk.Display.get_default();

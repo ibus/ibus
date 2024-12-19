@@ -58,6 +58,7 @@ ibus_wayland_LDADD = \
 ibus_wayland_CFLAGS = \
     $(GIO2_CFLAGS) \
     $(WAYLAND_CFLAGS) \
+    -DIBUS_COMPILATION \
     -I$(top_srcdir)/src \
     -I$(top_builddir)/src \
     $(NULL)
@@ -85,6 +86,7 @@ noinst_LTLIBRARIES = $(libibuswaylandim)
 libibuswaylandim_la_CPPFLAGS = \
     $(GIO2_CFLAGS) \
     $(WAYLAND_CFLAGS) \
+    -DIBUS_COMPILATION \
     -I$(top_srcdir)/src \
     -I$(top_builddir)/src \
     $(NULL)
@@ -128,6 +130,7 @@ IBusWaylandIM_1_0_gir_FILES =      \
     ibuswaylandim.h                \
     $(NULL)
 IBusWaylandIM_1_0_gir_CFLAGS =                  \
+    -DIBUS_COMPILATION                          \
     -I$(srcdir)                                 \
     -I$(builddir)                               \
     -I$(top_srcdir)/src                         \

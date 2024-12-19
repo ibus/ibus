@@ -95,6 +95,16 @@ IBusWaylandIM    *ibus_wayland_im_new         (const gchar
 gboolean          ibus_wayland_im_set_surface (IBusWaylandIM *wlim,
                                                gpointer       surface);
 
+/**
+ * ibus_wayland_im_get_object_path:
+ * @wlim: An #IBusWaylandIM.
+ *
+ * Return the object path if #IBusWaylandIM has #IBusInputContext and
+ * the Wayland input-method is activated in this case.
+ * Otherwise return %NULL.
+ */
+const gchar *     ibus_wayland_im_get_object_path
+                                              (IBusWaylandIM *wlim);
+
 G_END_DECLS
 #endif
-

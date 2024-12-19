@@ -3,7 +3,7 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2013 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2019-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2019-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # Copyright (c) 2007-2019 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or modify
@@ -31,7 +31,11 @@ DISTCLEANFILES =
 protocol_sources = \
     input-method-unstable-v1-client-protocol.h \
     input-method-unstable-v1-protocol.c \
+    input-method-unstable-v2-client-protocol.h \
+    input-method-unstable-v2-protocol.c \
     text-input-unstable-v1-client-protocol.h \
+    virtual-keyboard-unstable-v1-client-protocol.h \
+    virtual-keyboard-unstable-v1-protocol.c \
     $(NULL)
 
 ibus_wayland_SOURCES = \
@@ -54,6 +58,7 @@ ibus_wayland_LDADD = \
 ibus_wayland_CFLAGS = \
     $(GIO2_CFLAGS) \
     $(WAYLAND_CFLAGS) \
+    -DIBUS_COMPILATION \
     -I$(top_srcdir)/src \
     -I$(top_builddir)/src \
     $(NULL)
@@ -81,6 +86,7 @@ noinst_LTLIBRARIES = $(libibuswaylandim)
 libibuswaylandim_la_CPPFLAGS = \
     $(GIO2_CFLAGS) \
     $(WAYLAND_CFLAGS) \
+    -DIBUS_COMPILATION \
     -I$(top_srcdir)/src \
     -I$(top_builddir)/src \
     $(NULL)
@@ -124,6 +130,7 @@ IBusWaylandIM_1_0_gir_FILES =      \
     ibuswaylandim.h                \
     $(NULL)
 IBusWaylandIM_1_0_gir_CFLAGS =                  \
+    -DIBUS_COMPILATION                          \
     -I$(srcdir)                                 \
     -I$(builddir)                               \
     -I$(top_srcdir)/src                         \

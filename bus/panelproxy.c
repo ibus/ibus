@@ -2,8 +2,8 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2017-2018 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2008-2018 Red Hat, Inc.
+ * Copyright (C) 2017-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2008-2024 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -56,7 +56,8 @@ enum {
     UPDATE_PREEDIT_TEXT_RECEIVED,
     UPDATE_LOOKUP_TABLE_RECEIVED,
     UPDATE_AUXILIARY_TEXT_RECEIVED,
-    LAST_SIGNAL,
+    FORWARD_PROCESS_KEY_EVENT,
+    LAST_SIGNAL
 };
 
 struct _BusPanelProxy {
@@ -174,6 +175,9 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             NULL, NULL,
             bus_marshal_VOID__VOID,
             G_TYPE_NONE, 0);
+    g_signal_set_va_marshaller (panel_signals[PAGE_UP],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     panel_signals[PAGE_DOWN] =
         g_signal_new (I_("page-down"),
@@ -183,6 +187,9 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             NULL, NULL,
             bus_marshal_VOID__VOID,
             G_TYPE_NONE, 0);
+    g_signal_set_va_marshaller (panel_signals[PAGE_DOWN],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     panel_signals[CURSOR_UP] =
         g_signal_new (I_("cursor-up"),
@@ -192,6 +199,9 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             NULL, NULL,
             bus_marshal_VOID__VOID,
             G_TYPE_NONE, 0);
+    g_signal_set_va_marshaller (panel_signals[CURSOR_UP],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     panel_signals[CURSOR_DOWN] =
         g_signal_new (I_("cursor-down"),
@@ -201,6 +211,9 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             NULL, NULL,
             bus_marshal_VOID__VOID,
             G_TYPE_NONE, 0);
+    g_signal_set_va_marshaller (panel_signals[CURSOR_DOWN],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VOIDv);
 
     panel_signals[CANDIDATE_CLICKED] =
         g_signal_new (I_("candidate-clicked"),
@@ -213,6 +226,9 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             G_TYPE_UINT,
             G_TYPE_UINT,
             G_TYPE_UINT);
+    g_signal_set_va_marshaller (panel_signals[CANDIDATE_CLICKED],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__UINT_UINT_UINTv);
 
     panel_signals[PROPERTY_ACTIVATE] =
         g_signal_new (I_("property-activate"),
@@ -224,6 +240,9 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             G_TYPE_NONE, 2,
             G_TYPE_STRING,
             G_TYPE_INT);
+    g_signal_set_va_marshaller (panel_signals[PROPERTY_ACTIVATE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__STRING_INTv);
 
     panel_signals[PROPERTY_SHOW] =
         g_signal_new (I_("property-show"),
@@ -234,6 +253,9 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             bus_marshal_VOID__STRING,
             G_TYPE_NONE, 1,
             G_TYPE_STRING);
+    g_signal_set_va_marshaller (panel_signals[PROPERTY_SHOW],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__STRINGv);
 
     panel_signals[PROPERTY_HIDE] =
         g_signal_new (I_("property-hide"),
@@ -244,6 +266,9 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             bus_marshal_VOID__STRING,
             G_TYPE_NONE, 1,
             G_TYPE_STRING);
+    g_signal_set_va_marshaller (panel_signals[PROPERTY_HIDE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__STRINGv);
 
     panel_signals[COMMIT_TEXT] =
         g_signal_new (I_("commit-text"),
@@ -254,6 +279,9 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             bus_marshal_VOID__OBJECT,
             G_TYPE_NONE, 1,
             IBUS_TYPE_TEXT);
+    g_signal_set_va_marshaller (panel_signals[COMMIT_TEXT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECTv);
 
     panel_signals[PANEL_EXTENSION] =
         g_signal_new (I_("panel-extension"),
@@ -264,6 +292,9 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             bus_marshal_VOID__OBJECT,
             G_TYPE_NONE, 1,
             IBUS_TYPE_EXTENSION_EVENT);
+    g_signal_set_va_marshaller (panel_signals[PANEL_EXTENSION],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECTv);
 
     panel_signals[PANEL_EXTENSION_REGISTER_KEYS] =
         g_signal_new (I_("panel-extension-register-keys"),
@@ -274,6 +305,9 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             bus_marshal_VOID__VARIANT,
             G_TYPE_NONE, 1,
             G_TYPE_VARIANT);
+    g_signal_set_va_marshaller (panel_signals[PANEL_EXTENSION_REGISTER_KEYS],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VARIANTv);
 
     panel_signals[UPDATE_PREEDIT_TEXT_RECEIVED] =
         g_signal_new (I_("update-preedit-text-received"),
@@ -286,6 +320,9 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             IBUS_TYPE_TEXT,
             G_TYPE_UINT,
             G_TYPE_BOOLEAN);
+    g_signal_set_va_marshaller (panel_signals[UPDATE_PREEDIT_TEXT_RECEIVED],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECT_UINT_BOOLEANv);
 
     panel_signals[UPDATE_LOOKUP_TABLE_RECEIVED] =
         g_signal_new (I_("update-lookup-table-received"),
@@ -297,6 +334,9 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             G_TYPE_NONE, 2,
             IBUS_TYPE_LOOKUP_TABLE,
             G_TYPE_BOOLEAN);
+    g_signal_set_va_marshaller (panel_signals[UPDATE_LOOKUP_TABLE_RECEIVED],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECT_BOOLEANv);
 
     panel_signals[UPDATE_AUXILIARY_TEXT_RECEIVED] =
         g_signal_new (I_("update-auxiliary-text-received"),
@@ -308,6 +348,24 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
             G_TYPE_NONE, 2,
             IBUS_TYPE_TEXT,
             G_TYPE_BOOLEAN);
+    g_signal_set_va_marshaller (panel_signals[UPDATE_AUXILIARY_TEXT_RECEIVED],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__OBJECT_BOOLEANv);
+
+    panel_signals[FORWARD_PROCESS_KEY_EVENT] =
+        g_signal_new (I_("forward-process-key-event"),
+            G_TYPE_FROM_CLASS (class),
+            G_SIGNAL_RUN_LAST,
+            0,
+            NULL, NULL,
+            bus_marshal_VOID__UINT_UINT_UINT,
+            G_TYPE_NONE, 3,
+            G_TYPE_UINT,
+            G_TYPE_UINT,
+            G_TYPE_UINT);
+    g_signal_set_va_marshaller (panel_signals[FORWARD_PROCESS_KEY_EVENT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__UINT_UINT_UINTv);
 }
 
 static void
@@ -480,6 +538,16 @@ bus_panel_proxy_g_signal (GDBusProxy  *proxy,
         g_signal_emit (panel, panel_signals[UPDATE_AUXILIARY_TEXT_RECEIVED], 0,
                        text, visible);
         _g_object_unref_if_floating (text);
+        return;
+    }
+
+    if (g_strcmp0 ("ForwardProcessKeyEvent", signal_name) == 0) {
+        uint keyval;
+        uint keycode;
+        uint modifiers;
+        g_variant_get (parameters, "(uuu)", &keyval, &keycode, &modifiers);
+        g_signal_emit (panel, panel_signals[FORWARD_PROCESS_KEY_EVENT], 0,
+                       keyval, keycode, modifiers);
         return;
     }
 
@@ -770,6 +838,10 @@ _context_update_auxiliary_text_cb (BusInputContext *context,
 
     g_return_if_fail (panel->focused_context == context);
 
+    if (!bus_input_context_is_extension_lookup_table (context) &&
+        panel->panel_type == PANEL_TYPE_EXTENSION_EMOJI) {
+        return;
+    }
     bus_panel_proxy_update_auxiliary_text (panel,
                                            text,
                                            visible);
@@ -786,6 +858,10 @@ _context_update_lookup_table_cb (BusInputContext *context,
 
     g_return_if_fail (panel->focused_context == context);
 
+    if (!bus_input_context_is_extension_lookup_table (context) &&
+        panel->panel_type == PANEL_TYPE_EXTENSION_EMOJI) {
+        return;
+    }
     bus_panel_proxy_update_lookup_table (panel,
                                          table,
                                          visible);

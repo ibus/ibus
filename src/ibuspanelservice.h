@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (c) 2009-2014 Google Inc. All rights reserved.
- * Copyright (c) 2017-2018 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (c) 2017-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -362,5 +362,21 @@ void ibus_panel_service_update_lookup_table_received
                                           (IBusPanelService *panel,
                                            IBusLookupTable  *table,
                                            gboolean          visible);
+
+/**
+ * ibus_panel_service_forward_process_key_event:
+ * @panel: An #IBusPanelService.
+ * @keyval: Key symbol of a key event.
+ * @keycode: Keycode of a key event.
+ * @state: Key modifier flags.
+ *
+ * Forward key events when an IBus popup takes the focus and the events
+ * needs to be forwared to the target IBus engine.
+ */
+void ibus_panel_service_forward_process_key_event
+                                          (IBusPanelService *panel,
+                                           guint32           keyval,
+                                           guint32           keycode,
+                                           guint32           state);
 G_END_DECLS
 #endif

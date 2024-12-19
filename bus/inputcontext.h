@@ -2,8 +2,8 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2017-2018 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2008-2018 Red Hat, Inc.
+ * Copyright (C) 2017-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2008-2024 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -392,5 +392,22 @@ void                 bus_input_context_clear_preedit_text
                                                  gboolean
                                                                    with_signal);
 
+/**
+ * bus_input_context_is_extension_lookup_table:
+ *
+ * Return if the lookup table is extension.
+ */
+gboolean             bus_input_context_is_extension_lookup_table
+                                                (BusInputContext    *context);
+
+/**
+ * bus_input_context_forward_process_key_event:
+ *
+ * Forward key events to the focused engine.
+ */
+void bus_input_context_forward_process_key_event (BusInputContext *context,
+                                                  guint            keyval,
+                                                  guint            keycode,
+                                                  guint            modifiers);
 G_END_DECLS
 #endif

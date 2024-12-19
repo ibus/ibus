@@ -453,6 +453,22 @@ _panel_update_auxiliary_text_received_cb (BusPanelProxy *panel,
 }
 
 static void
+_panel_forward_process_key_event_cb (BusPanelProxy *panel,
+                                     uint           keyval,
+                                     uint           keycode,
+                                     uint           modifiers,
+                                     BusIBusImpl   *ibus)
+{
+    g_return_if_fail (BUS_IS_IBUS_IMPL (ibus));
+    if (!ibus->focused_context)
+        return;
+    bus_input_context_forward_process_key_event (ibus->focused_context,
+                                                 keyval,
+                                                 keycode,
+                                                 modifiers);
+}
+
+static void
 _registry_changed_cb (IBusRegistry *registry,
                       BusIBusImpl  *ibus)
 {
@@ -552,6 +568,11 @@ _dbus_name_owner_changed_cb (BusDBusImpl   *dbus,
                     *panel,
                     "update-auxiliary-text-received",
                     G_CALLBACK (_panel_update_auxiliary_text_received_cb),
+                    ibus);
+            g_signal_connect (
+                    *panel,
+                    "forward-process-key-event",
+                    G_CALLBACK (_panel_forward_process_key_event_cb),
                     ibus);
 
             if (ibus->focused_context != NULL) {
@@ -2592,4 +2613,11 @@ bus_ibus_impl_process_key_event (BusIBusImpl *ibus,
         bus_ibus_impl_emit_signal (ibus, "GlobalShortcutKeyResponded", variant);
     }
     return hit;
+}
+
+gboolean
+bus_ibus_impl_is_wayland_session (BusIBusImpl *ibus)
+{
+    g_assert (BUS_IS_IBUS_IMPL (ibus));
+    return ibus->ime_switcher_keys ? TRUE : FALSE;
 }

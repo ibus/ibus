@@ -106,6 +106,6 @@ gboolean         bus_ibus_impl_process_key_event    (BusIBusImpl        *ibus,
                                                      guint
                                                                         keycode,
                                                      guint               state);
-
+gboolean         bus_ibus_impl_is_wayland_session   (BusIBusImpl        *ibus);
 G_END_DECLS
 #endif

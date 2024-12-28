@@ -2,8 +2,8 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2017-2018 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2008-2018 Red Hat, Inc.
+ * Copyright (C) 2017-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2008-2024 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -56,7 +56,8 @@ enum {
     UPDATE_PREEDIT_TEXT_RECEIVED,
     UPDATE_LOOKUP_TABLE_RECEIVED,
     UPDATE_AUXILIARY_TEXT_RECEIVED,
-    LAST_SIGNAL,
+    FORWARD_PROCESS_KEY_EVENT,
+    LAST_SIGNAL
 };
 
 struct _BusPanelProxy {
@@ -350,6 +351,21 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
     g_signal_set_va_marshaller (panel_signals[UPDATE_AUXILIARY_TEXT_RECEIVED],
                                 G_TYPE_FROM_CLASS (class),
                                 bus_marshal_VOID__OBJECT_BOOLEANv);
+
+    panel_signals[FORWARD_PROCESS_KEY_EVENT] =
+        g_signal_new (I_("forward-process-key-event"),
+            G_TYPE_FROM_CLASS (class),
+            G_SIGNAL_RUN_LAST,
+            0,
+            NULL, NULL,
+            bus_marshal_VOID__UINT_UINT_UINT,
+            G_TYPE_NONE, 3,
+            G_TYPE_UINT,
+            G_TYPE_UINT,
+            G_TYPE_UINT);
+    g_signal_set_va_marshaller (panel_signals[FORWARD_PROCESS_KEY_EVENT],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__UINT_UINT_UINTv);
 }
 
 static void
@@ -522,6 +538,16 @@ bus_panel_proxy_g_signal (GDBusProxy  *proxy,
         g_signal_emit (panel, panel_signals[UPDATE_AUXILIARY_TEXT_RECEIVED], 0,
                        text, visible);
         _g_object_unref_if_floating (text);
+        return;
+    }
+
+    if (g_strcmp0 ("ForwardProcessKeyEvent", signal_name) == 0) {
+        uint keyval;
+        uint keycode;
+        uint modifiers;
+        g_variant_get (parameters, "(uuu)", &keyval, &keycode, &modifiers);
+        g_signal_emit (panel, panel_signals[FORWARD_PROCESS_KEY_EVENT], 0,
+                       keyval, keycode, modifiers);
         return;
     }
 
@@ -812,6 +838,10 @@ _context_update_auxiliary_text_cb (BusInputContext *context,
 
     g_return_if_fail (panel->focused_context == context);
 
+    if (!bus_input_context_is_extension_lookup_table (context) &&
+        panel->panel_type == PANEL_TYPE_EXTENSION_EMOJI) {
+        return;
+    }
     bus_panel_proxy_update_auxiliary_text (panel,
                                            text,
                                            visible);
@@ -828,6 +858,10 @@ _context_update_lookup_table_cb (BusInputContext *context,
 
     g_return_if_fail (panel->focused_context == context);
 
+    if (!bus_input_context_is_extension_lookup_table (context) &&
+        panel->panel_type == PANEL_TYPE_EXTENSION_EMOJI) {
+        return;
+    }
     bus_panel_proxy_update_lookup_table (panel,
                                          table,
                                          visible);

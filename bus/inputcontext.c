@@ -123,6 +123,14 @@ struct _BusInputContext {
     GQueue *queue_during_process_key_event;
     gboolean use_post_process_key_event;
     gboolean processing_key_event;
+
+    /* IBus CandidatePanel has focus if the client application does not support
+     * the Wayland input-method protocol likes setting XMODIFIERS or
+     * GTK_IM_MODULE enviroment variable in Wayland. So if the focus-out is
+     * sent to the activated IBus engine, the engine may clear the preedit
+     * and try to hide the CandidatePanel.
+     */
+    gboolean ignore_focus_out;
 };
 
 struct _BusInputContextClass {
@@ -359,7 +367,7 @@ static const gchar introspection_xml[] =
 
 G_DEFINE_TYPE (BusInputContext, bus_input_context, IBUS_TYPE_SERVICE)
 
-/* TRUE if we can send preedit text to client. FALSE if the panel has to handle
+/* %TRUE if we can send preedit text to client. FALSE if the panel has to handle
  * it. Note that we check IBUS_CAP_FOCUS here since
  * when the capability is not set, the client has to handle a preedit text
  * regardless of the embed_preedit_text config. */
@@ -367,6 +375,22 @@ G_DEFINE_TYPE (BusInputContext, bus_input_context, IBUS_TYPE_SERVICE)
     ((context->capabilities & IBUS_CAP_PREEDIT_TEXT) && \
      (bus_ibus_impl_is_embed_preedit_text (\
             BUS_DEFAULT_IBUS) || (context->capabilities & IBUS_CAP_FOCUS) == 0))
+
+/* CandidatePanel takes the focus when it runs in the Wayland session without
+ * the Wayland panel protocol and if the active engine receives the focus-out
+ * events, the most engines try to hide CandidatePanel and the preedit.
+ * It means CandidatePanel repeats to be shown and hidden if the client does
+ * not support the Wayland protocol.
+ * This way ignores the focus-out events in XIM and GTK2 applications and the
+ * active engine can keep the focus virtually to continue to update the
+ * preedit and lookup table.
+ */
+#define IGNORE_FOCUS_OUT_CONDITION  \
+    ((!g_strcmp0 (context->client, "xim") || \
+      !g_ascii_strncasecmp (context->client, "gtk-im", 6)) \
+     && visible \
+     && !context->is_extension_lookup_table \
+     && bus_ibus_impl_is_wayland_session (BUS_DEFAULT_IBUS))
 
 static void
 _connection_destroy_cb (BusConnection   *connection,
@@ -1001,6 +1025,24 @@ _ic_process_key_event_reply_cb (GObject               *source,
     g_slice_free (ProcessKeyEventData, data);
 }
 
+static void
+_forward_process_key_event_reply_cb (GObject               *source,
+                                     GAsyncResult          *res,
+                                     ProcessKeyEventData   *data)
+{
+    BusInputContext *context = data->context;
+    GError *error = NULL;
+    GVariant *value = g_dbus_proxy_call_finish ((GDBusProxy *)source,
+                                                 res,
+                                                 &error);
+    if (value != NULL)
+        g_variant_unref (value);
+    else
+        g_error_free (error);
+    g_object_unref (context);
+    g_slice_free (ProcessKeyEventData, data);
+}
+
 /**
  * _ic_process_key_event:
  *
@@ -1019,7 +1061,7 @@ _ic_process_key_event (BusInputContext       *context,
     if (context->use_post_process_key_event)
         context->processing_key_event = TRUE;
     g_variant_get (parameters, "(uuu)", &keyval, &keycode, &modifiers);
-    if (bus_ibus_impl_process_key_event (bus_ibus_impl_get_default (),
+    if (bus_ibus_impl_process_key_event (BUS_DEFAULT_IBUS,
                                          keyval,
                                          keycode,
                                          modifiers)) {
@@ -1239,6 +1281,8 @@ _ic_focus_out (BusInputContext       *context,
                GDBusMethodInvocation *invocation)
 {
     if (context->capabilities & IBUS_CAP_FOCUS) {
+        if (context->ignore_focus_out)
+            return;
         bus_input_context_focus_out (context);
         g_dbus_method_invocation_return_value (invocation, NULL);
     }
@@ -2238,6 +2282,13 @@ bus_input_context_update_lookup_table (BusInputContext *context,
     context->lookup_table = (IBusLookupTable *)g_object_ref_sink (
             table ? table : lookup_table_empty);
     context->lookup_table_visible = visible;
+    /* If not PREEDIT_CONDITION, ignore_focus_out flag is already evaluated in
+     * bus_input_context_update_preedit_text() because UpdatePreeditText
+     * D-Bus method is always sent to the IBus panel in xterm before
+     * UpdateLookupTable D-BUs method is sent to the panel.
+     */
+    if (PREEDIT_CONDITION)
+        context->ignore_focus_out = FALSE;
 
     if (context->capabilities & IBUS_CAP_LOOKUP_TABLE) {
         GVariant *variant =
@@ -2248,6 +2299,8 @@ bus_input_context_update_lookup_table (BusInputContext *context,
                                        NULL);
     }
     else {
+        if (IGNORE_FOCUS_OUT_CONDITION)
+            context->ignore_focus_out = TRUE;
         g_signal_emit (context,
                        context_signals[UPDATE_LOOKUP_TABLE],
                        0,
@@ -3368,6 +3421,7 @@ bus_input_context_update_preedit_text (BusInputContext *context,
         context->preedit_visible = visible;
         context->preedit_mode = mode;
     }
+    context->ignore_focus_out = FALSE;
     extension_visible = context->preedit_visible ||
                         (context->emoji_extension != NULL);
 
@@ -3410,6 +3464,8 @@ bus_input_context_update_preedit_text (BusInputContext *context,
                     NULL);
         }
     } else {
+        if (IGNORE_FOCUS_OUT_CONDITION)
+            context->ignore_focus_out = TRUE;
         g_signal_emit (context,
                        context_signals[UPDATE_PREEDIT_TEXT],
                        0,
@@ -3478,4 +3534,35 @@ bus_input_context_panel_extension_received (BusInputContext    *context,
     if (!context->engine)
         return;
     bus_engine_proxy_panel_extension_received (context->engine, event);
+}
+
+gboolean
+bus_input_context_is_extension_lookup_table (BusInputContext *context)
+{
+    g_assert (BUS_IS_INPUT_CONTEXT (context));
+    return context->is_extension_lookup_table;
+}
+
+void
+bus_input_context_forward_process_key_event (BusInputContext *context,
+                                             guint            keyval,
+                                             guint            keycode,
+                                             guint            modifiers)
+{
+    ProcessKeyEventData *data = g_slice_new0 (ProcessKeyEventData);
+    g_assert (BUS_IS_INPUT_CONTEXT (context));
+    if (context->has_focus && context->engine && context->fake == FALSE) {
+        data->context = g_object_ref (context);
+        data->keyval = keyval;
+        data->keycode = keycode;
+        data->modifiers = modifiers;
+        bus_engine_proxy_process_key_event (
+                context->engine,
+                keyval,
+                keycode,
+                modifiers,
+                (GAsyncReadyCallback)
+                        _forward_process_key_event_reply_cb,
+                data);
+    }
 }

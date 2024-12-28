@@ -3,7 +3,7 @@
 /* ibus - The Input Bus
  * Copyright (c) 2009-2014 Google Inc. All rights reserved.
  * Copyright (C) 2010-2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2017-2018 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2017-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -281,6 +281,11 @@ static const gchar introspection_xml[] =
     "    <signal name='UpdateLookupTableReceived'>"
     "      <arg type='v' name='table' />"
     "      <arg type='b' name='visible' />"
+    "    </signal>"
+    "    <signal name='ForwardProcessKeyEvent'>"
+    "      <arg type='u' name='keyval' />"
+    "      <arg type='u' name='keycode' />"
+    "      <arg type='u' name='state' />"
     "    </signal>"
     "  </interface>"
     "</node>";
@@ -1717,6 +1722,22 @@ ibus_panel_service_update_lookup_table_received (IBusPanelService *panel,
     if (g_object_is_floating (table)) {
         g_object_unref (table);
     }
+}
+
+void
+ibus_panel_service_forward_process_key_event (IBusPanelService *panel,
+                                              guint32           keyval,
+                                              guint32           keycode,
+                                              guint32           state)
+{
+    g_return_if_fail (IBUS_IS_PANEL_SERVICE (panel));
+    ibus_service_emit_signal ((IBusService *) panel,
+                              NULL,
+                              IBUS_INTERFACE_PANEL,
+                              "ForwardProcessKeyEvent",
+                              g_variant_new ("(uuu)",
+                                              keyval, keycode, state),
+                              NULL);
 }
 
 #define DEFINE_FUNC(name, Name)                             \

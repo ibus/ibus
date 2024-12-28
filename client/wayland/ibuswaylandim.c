@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
- * Copyright (C) 2019-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2019-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2013 Intel Corporation
- * Copyright (C) 2013-2023 Red Hat, Inc.
+ * Copyright (C) 2013-2024 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -26,6 +26,7 @@
 #include <errno.h>
 #include <glib-object.h>
 #include <ibus.h>
+#include <ibusinternal.h>
 #include <string.h>
 #include <sys/time.h>
 #include <wayland-client.h>
@@ -43,6 +44,12 @@ enum {
     PROP_DISPLAY,
     PROP_LOG,
     PROP_VERBOSE
+};
+
+enum {
+    IBUS_FOCUS_IN,
+    IBUS_FOCUS_OUT,
+    LAST_SIGNAL,
 };
 
 typedef enum
@@ -158,6 +165,8 @@ static struct wl_seat *_seat;
 static struct zwp_virtual_keyboard_manager_v1  *_virtual_keyboard_manager;
 
 static gboolean _use_sync_mode = 1;
+
+static guint wayland_im_signals[LAST_SIGNAL] = { 0 };
 
 static void         input_method_deactivate
                               (void                               *data,
@@ -1506,6 +1515,11 @@ _create_input_context_done (GObject      *object,
                                                            TRUE);
         }
         ibus_input_context_focus_in (priv->ibuscontext);
+        g_signal_emit (wlim,
+                       wayland_im_signals[IBUS_FOCUS_IN],
+                       0,
+                       g_dbus_proxy_get_object_path (
+                               G_DBUS_PROXY (priv->ibuscontext)));
     }
 }
 
@@ -1583,6 +1597,8 @@ input_method_deactivate (void                               *data,
 
 
     if (priv->ibuscontext) {
+        const gchar *object_path = g_dbus_proxy_get_object_path (
+                G_DBUS_PROXY (priv->ibuscontext));
         ibus_input_context_focus_out (priv->ibuscontext);
         g_signal_handlers_disconnect_by_func (
                 priv->ibuscontext,
@@ -1606,6 +1622,10 @@ input_method_deactivate (void                               *data,
                 wlim);
         g_object_unref (priv->ibuscontext);
         priv->ibuscontext = NULL;
+        g_signal_emit (wlim,
+                       wayland_im_signals[IBUS_FOCUS_OUT],
+                       0,
+                       object_path);
     }
 
     if (priv->preedit_text) {
@@ -1882,6 +1902,44 @@ ibus_wayland_im_class_init (IBusWaylandIMClass *class)
                         FALSE,
                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
+    /* install signals */
+    /* this module can call ibus_input_context_focus_in() and the focus-in
+     * signal can reach the IBus panel and this also can call
+     * ibus_input_context_focus_out() but the focus-out signal does not reach
+     * the panel in case X11 client gets the focus because ibus-x11 calls
+     * ibus_input_context_focus_in() before this calls
+     * ibus_input_context_focus_out() and ibus-dameon ignores the double
+     * focus-out signal since the focus-out signal already happened with the
+     * focus-in signal. SO IBUS_FOCUS_OUT signal is needed at least to
+     * send the signal to the panel certainly.
+     */
+    wayland_im_signals[IBUS_FOCUS_IN] =
+        g_signal_new (I_("ibus-focus-in"),
+            G_TYPE_FROM_CLASS (class),
+            G_SIGNAL_RUN_LAST,
+            0,
+            NULL, NULL,
+            g_cclosure_marshal_VOID__STRING,
+            G_TYPE_NONE,
+            1,
+            G_TYPE_STRING);
+    g_signal_set_va_marshaller (wayland_im_signals[IBUS_FOCUS_IN],
+                                G_TYPE_FROM_CLASS (class),
+                                g_cclosure_marshal_VOID__STRINGv);
+
+    wayland_im_signals[IBUS_FOCUS_OUT] =
+        g_signal_new (I_("ibus-focus-out"),
+            G_TYPE_FROM_CLASS (class),
+            G_SIGNAL_RUN_LAST,
+            0,
+            NULL, NULL,
+            g_cclosure_marshal_VOID__STRING,
+            G_TYPE_NONE,
+            1,
+            G_TYPE_STRING);
+    g_signal_set_va_marshaller (wayland_im_signals[IBUS_FOCUS_OUT],
+                                G_TYPE_FROM_CLASS (class),
+                                g_cclosure_marshal_VOID__STRINGv);
 }
 
 
@@ -1931,7 +1989,6 @@ ibus_wayland_im_constructor (GType                  type,
     GObject *object;
     IBusWaylandIM *wlim;
     IBusWaylandIMPrivate *priv;
-    GSource *source;
     IBusEngineDesc *desc;
     struct xkb_keymap *keymap = NULL;
 
@@ -1989,11 +2046,6 @@ ibus_wayland_im_constructor (GType                  type,
                       object);
 
     _use_sync_mode = _get_char_env ("IBUS_ENABLE_SYNC_MODE", 1);
-
-    source = ibus_wayland_source_new (priv->display);
-    g_source_set_priority (source, G_PRIORITY_DEFAULT);
-    g_source_set_can_recurse (source, TRUE);
-    g_source_attach (source, NULL);
 
     return object;
 }
@@ -2128,9 +2180,11 @@ ibus_wayland_im_set_surface (IBusWaylandIM *wlim,
 
     g_return_val_if_fail (wlim, FALSE);
     priv = ibus_wayland_im_get_instance_private (wlim);
+
     switch (priv->version) {
     case INPUT_METHOD_V1:
-        g_return_val_if_fail (_surface, FALSE);
+        if (!_surface)
+            return TRUE;
         if (!priv->panel) {
             g_warning ("Need zwp_input_panel_v1 before the surface setting.");
             return FALSE;

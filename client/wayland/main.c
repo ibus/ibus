@@ -1,8 +1,8 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
- * Copyright (C) 2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2023 Red Hat, Inc.
+ * Copyright (C) 2023-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2023-2024 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -23,9 +23,12 @@
 #include "config.h"
 
 #include <ibus.h>
+#include <wayland-client-core.h>
 #include <stdlib.h>
 
 #include "ibuswaylandim.h"
+
+extern GSource *ibus_wayland_source_new (struct wl_display *display);
 
 static void
 _bus_disconnected_cb (IBusBus *bus,
@@ -41,7 +44,9 @@ main (gint    argc,
       gchar **argv)
 {
     IBusBus *bus;
+    struct wl_display *display;
     IBusWaylandIM *wlim;
+    GSource *source;
 
     ibus_init ();
 
@@ -51,8 +56,17 @@ main (gint    argc,
         return EXIT_FAILURE;
     }
 
-    wlim = ibus_wayland_im_new ("bus", bus, NULL);
+    if (!(display = wl_display_connect (NULL))) {
+        g_printerr ("Cannot open Wayland display\n");
+        return EXIT_FAILURE;
+    }
+    wlim = ibus_wayland_im_new ("wl_display", display, "bus", bus, NULL);
     g_return_val_if_fail (wlim, EXIT_FAILURE);
+
+    source = ibus_wayland_source_new (display);
+    g_source_set_priority (source, G_PRIORITY_DEFAULT);
+    g_source_set_can_recurse (source, TRUE);
+    g_source_attach (source, NULL);
 
     g_signal_connect (bus, "disconnected",
                       G_CALLBACK (_bus_disconnected_cb), NULL);

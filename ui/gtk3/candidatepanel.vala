@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2011-2015 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,9 +26,6 @@ public class CandidatePanel : Gtk.Box{
     private bool m_vertical_writing;
     private Gtk.Window m_toplevel;
     private Gtk.Box m_vbox;
-#if USE_GDK_WAYLAND
-    private bool m_hide_after_show;
-#endif
 
     private Gtk.Label m_preedit_label;
     private Gtk.Label m_aux_label;
@@ -38,6 +35,15 @@ public class CandidatePanel : Gtk.Box{
     private Gdk.Rectangle m_cursor_location;
 
     private Pango.Attribute m_language_attribute;
+    private uint m_update_id;
+
+#if USE_GDK_WAYLAND
+    private bool m_no_wayland_panel;
+    private bool m_hide_after_show;
+    private uint m_set_preedit_text_id;
+    private uint m_set_auxiliary_text_id;
+    private uint m_set_lookup_table_id;
+#endif
 
     public signal void cursor_up();
     public signal void cursor_down();
@@ -47,10 +53,13 @@ public class CandidatePanel : Gtk.Box{
                                          uint button,
                                          uint state);
 #if USE_GDK_WAYLAND
+    public signal void forward_process_key_event(uint keyval,
+                                                 uint keycode,
+                                                 uint modifiers);
     public signal void realize_surface(void *surface);
 #endif
 
-    public CandidatePanel() {
+    public CandidatePanel(bool no_wayland_panel) {
         // Call base class constructor
         GLib.Object(
             name : "IBusCandidate",
@@ -58,6 +67,9 @@ public class CandidatePanel : Gtk.Box{
             visible: true
         );
 
+#if USE_GDK_WAYLAND
+        m_no_wayland_panel = no_wayland_panel;
+#endif
         m_toplevel = new Gtk.Window(Gtk.WindowType.POPUP);
         m_toplevel.add_events(Gdk.EventMask.BUTTON_PRESS_MASK);
         m_toplevel.button_press_event.connect((w, e) => {
@@ -84,6 +96,29 @@ public class CandidatePanel : Gtk.Box{
             });
         }
 #endif
+        m_toplevel.key_press_event.connect(
+                (widget, event) => {
+#if USE_GDK_WAYLAND
+                    uint32 keyval = event.keyval;
+                    uint32 keycode = event.hardware_keycode;
+                    uint32 state = event.state;
+                    forward_process_key_event(keyval, keycode, state);
+#endif
+                    return false;
+                }
+        );
+        m_toplevel.key_release_event.connect(
+                (widget, event) => {
+#if USE_GDK_WAYLAND
+                    uint32 keyval = event.keyval;
+                    uint32 keycode = event.hardware_keycode;
+                    uint32 state = event.state;
+                    state |= IBus.ModifierType.RELEASE_MASK;
+                    forward_process_key_event(keyval, keycode, state);
+#endif
+                    return false;
+                }
+        );
 
         Handle handle = new Handle();
         handle.set_visible(true);
@@ -161,6 +196,24 @@ public class CandidatePanel : Gtk.Box{
     }
 
     public void set_preedit_text(IBus.Text? text, uint cursor) {
+#if USE_GDK_WAYLAND
+        if (m_set_preedit_text_id > 0)
+            GLib.Source.remove(m_set_preedit_text_id);
+        // FIXME: Too many PreeditText D-Bus signal happens in Wayland.
+        m_set_preedit_text_id =
+                Timeout.add(100,
+                            () => {
+                                //warning("test set_preedit_text_real");
+                                m_set_preedit_text_id = 0;
+                                set_preedit_text_real(text, cursor);
+                                return Source.REMOVE;
+                            });
+#else
+        set_preedit_text_real(text, cursor);
+#endif
+    }
+
+    public void set_preedit_text_real(IBus.Text? text, uint cursor) {
         if (text != null) {
             var str = text.get_text();
 
@@ -180,6 +233,23 @@ public class CandidatePanel : Gtk.Box{
     }
 
     public void set_auxiliary_text(IBus.Text? text) {
+#if USE_GDK_WAYLAND
+        if (m_set_auxiliary_text_id > 0)
+            GLib.Source.remove(m_set_auxiliary_text_id);
+        // FIXME: Too many PreeditText D-Bus signal happens in Wayland.
+        m_set_auxiliary_text_id =
+                Timeout.add(100,
+                            () => {
+                                m_set_auxiliary_text_id = 0;
+                                set_auxiliary_text_real(text);
+                                return Source.REMOVE;
+                            });
+#else
+        set_auxiliary_text_real(text);
+#endif
+    }
+
+    public void set_auxiliary_text_real(IBus.Text? text) {
         if (text != null) {
             m_aux_label.set_text(text.get_text());
             Pango.AttrList attrs = get_pango_attr_list_from_ibus_text(text);
@@ -194,6 +264,22 @@ public class CandidatePanel : Gtk.Box{
     }
 
     public void set_lookup_table(IBus.LookupTable? table) {
+#if USE_GDK_WAYLAND
+        if (m_set_lookup_table_id > 0)
+            GLib.Source.remove(m_set_lookup_table_id);
+        // FIXME: Too many PreeditText D-Bus signal happens in Wayland.
+        m_set_lookup_table_id = Timeout.add(100,
+                                            () => {
+                                                m_set_lookup_table_id = 0;
+                                                set_lookup_table_real(table);
+                                                return Source.REMOVE;
+                                            });
+#else
+        set_lookup_table_real(table);
+#endif
+    }
+
+    public void set_lookup_table_real(IBus.LookupTable? table) {
         IBus.Text[] candidates = {};
         uint cursor_in_page = 0;
         bool show_cursor = true;
@@ -221,7 +307,9 @@ public class CandidatePanel : Gtk.Box{
             orientation = (IBus.Orientation)table.get_orientation();
         }
 
-        m_candidate_area.set_candidates(candidates, cursor_in_page, show_cursor);
+        m_candidate_area.set_candidates(candidates,
+                                        cursor_in_page,
+                                        show_cursor);
         set_labels(labels);
 
         if (table != null) {
@@ -244,6 +332,18 @@ public class CandidatePanel : Gtk.Box{
     }
 
     private void update() {
+        if (m_update_id > 0)
+            GLib.Source.remove(m_update_id);
+        // set_lookup_table() and set_preedit_text() happens sequentially.
+        m_update_id = Timeout.add(100,
+                                  () => {
+                                      m_update_id = 0;
+                                      update_real();
+                                      return Source.REMOVE;
+                                  });
+    }
+
+    private void update_real() {
         /* Do not call gtk_window_resize() in
          * GtkWidgetClass->get_preferred_width()
          * because the following warning is shown in GTK 3.20:
@@ -449,6 +549,10 @@ public class CandidatePanel : Gtk.Box{
 
 #if USE_GDK_WAYLAND
     private void realize_window(bool initial) {
+        // The custom surface can be used when the Wayland input-method
+        // is activated.
+        if (m_no_wayland_panel)
+            return;
         var window = m_toplevel.get_window();
         if (!window.ensure_native()) {
             warning("No native window.");

@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2011 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2017-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2017-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -38,6 +38,8 @@ class Application {
     private static bool m_enable_wayland_im;
 #if USE_GDK_WAYLAND
     private static ulong m_realize_surface_id;
+    private static ulong m_ibus_focus_in_id;
+    private static ulong m_ibus_focus_out_id;
     private static string m_user;
     private static IBus.WaylandIM m_wayland_im;
     private static bool m_exec_daemon;
@@ -101,6 +103,10 @@ class Application {
 #if USE_GDK_WAYLAND
         m_realize_surface_id = m_panel.realize_surface.connect(
                 (w, s) => this.set_wayland_surface(s));
+        m_ibus_focus_in_id = m_wayland_im.ibus_focus_in.connect(
+                (w, o) => m_panel.set_wayland_object_path(o));
+        m_ibus_focus_out_id = m_wayland_im.ibus_focus_out.connect(
+                (w, o) => m_panel.set_wayland_object_path(null));
 #endif
         m_panel.load_settings();
     }
@@ -125,6 +131,14 @@ class Application {
         if (m_realize_surface_id != 0) {
             GLib.SignalHandler.disconnect(m_panel, m_realize_surface_id);
             m_realize_surface_id = 0;
+        }
+        if (m_ibus_focus_in_id != 0) {
+            GLib.SignalHandler.disconnect(m_wayland_im, m_ibus_focus_in_id);
+            m_ibus_focus_in_id = 0;
+        }
+        if (m_ibus_focus_out_id != 0) {
+            GLib.SignalHandler.disconnect(m_wayland_im, m_ibus_focus_out_id);
+            m_ibus_focus_out_id = 0;
         }
 #endif
         m_panel = null;

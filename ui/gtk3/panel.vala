@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2011-2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2015-2024 Takao Fujwiara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2015-2025 Takao Fujwiara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -49,6 +49,10 @@ class Panel : IBus.PanelService {
     private bool m_use_global_engine = true;
     private bool m_use_engine_lang = true;
     private CandidatePanel m_candidate_panel;
+    private CandidatePanel m_candidate_panel_active;
+#if USE_GDK_WAYLAND
+    private CandidatePanel m_candidate_panel_x11;
+#endif
     private Switcher m_switcher;
     private uint m_switcher_focus_set_engine_id;
     private int m_switcher_selected_index = -1;
@@ -93,6 +97,7 @@ class Panel : IBus.PanelService {
             new GLib.List<BindingCommon.Keybinding>();
 
 #if USE_GDK_WAYLAND
+    private string? m_wayland_object_path;
     public signal void realize_surface(void *surface);
     public signal void update_shortcut_keys(
             IBus.ProcessKeyEventData[] data,
@@ -139,17 +144,8 @@ class Panel : IBus.PanelService {
         init_status_icon();
 #endif
 
-        m_candidate_panel = new CandidatePanel();
-        m_candidate_panel.page_up.connect((w) => this.page_up());
-        m_candidate_panel.page_down.connect((w) => this.page_down());
-        m_candidate_panel.cursor_up.connect((w) => this.cursor_up());
-        m_candidate_panel.cursor_down.connect((w) => this.cursor_down());
-        m_candidate_panel.candidate_clicked.connect(
-                (w, i, b, s) => this.candidate_clicked(i, b, s));
-#if USE_GDK_WAYLAND
-        m_candidate_panel.realize_surface.connect(
-                (w, s) => this.realize_surface(s));
-#endif
+        m_candidate_panel = candidate_panel_new(false);
+        m_candidate_panel_active = m_candidate_panel;
 
         m_switcher = new Switcher();
 #if USE_GDK_WAYLAND
@@ -181,6 +177,40 @@ class Panel : IBus.PanelService {
                 BindingCommon.KeyEventFuncType.ANY, m_keybindings);
         m_keybindings = null;
     }
+
+    private CandidatePanel candidate_panel_new(bool no_wayland_panel) {
+        CandidatePanel candidate_panel = new CandidatePanel(no_wayland_panel);
+        candidate_panel.page_up.connect((w) => this.page_up());
+        candidate_panel.page_down.connect((w) => this.page_down());
+        candidate_panel.cursor_up.connect((w) => this.cursor_up());
+        candidate_panel.cursor_down.connect((w) => this.cursor_down());
+        candidate_panel.candidate_clicked.connect(
+                (w, i, b, s) => this.candidate_clicked(i, b, s));
+#if USE_GDK_WAYLAND
+        candidate_panel.forward_process_key_event.connect(
+                (w, v, c, m) => this.forward_process_key_event(v, c - 8, m));
+        candidate_panel.realize_surface.connect(
+                (w, s) => this.realize_surface(s));
+#endif
+        return candidate_panel;
+    }
+
+#if USE_GDK_WAYLAND
+    private CandidatePanel get_active_candidate_panel() {
+        if (m_wayland_object_path == null) {
+            if (m_candidate_panel_x11 == null) {
+                m_candidate_panel_x11 = candidate_panel_new(true);
+                set_use_glyph_from_engine_lang();
+                m_candidate_panel_x11.set_vertical(
+                        m_settings_panel.get_int("lookup-table-orientation")
+                        == IBus.Orientation.VERTICAL);
+            }
+            return m_candidate_panel_x11;
+        } else {
+            return m_candidate_panel;
+        }
+    }
+#endif
 
     private void init_settings() {
         m_settings_general = new GLib.Settings("org.freedesktop.ibus.general");
@@ -252,11 +282,7 @@ class Panel : IBus.PanelService {
 
         m_settings_panel.changed["use-glyph-from-engine-lang"].connect((key) =>
         {
-                m_use_engine_lang = m_settings_panel.get_boolean(
-                        "use-glyph-from-engine-lang");
-                var engine = m_bus.get_global_engine();
-                if (engine != null)
-                    set_language_from_engine(engine);
+                set_use_glyph_from_engine_lang();
         });
 
         m_settings_panel.changed["show-icon-on-systray"].connect((key) => {
@@ -684,6 +710,14 @@ class Panel : IBus.PanelService {
                 m_settings_general.get_boolean("use-xmodmap"));
     }
 
+    private void set_use_glyph_from_engine_lang() {
+        m_use_engine_lang = m_settings_panel.get_boolean(
+                "use-glyph-from-engine-lang");
+        var engine = m_bus.get_global_engine();
+        if (engine != null)
+            set_language_from_engine(engine);
+    }
+
     private void set_show_icon_on_systray(bool update_now) {
         if (m_icon_type == IconType.STATUS_ICON) {
             if (m_status_icon == null)
@@ -712,12 +746,12 @@ class Panel : IBus.PanelService {
     }
 
     private void set_lookup_table_orientation() {
-        if (m_candidate_panel == null)
-            return;
 
-        m_candidate_panel.set_vertical(
-                m_settings_panel.get_int("lookup-table-orientation")
-                == IBus.Orientation.VERTICAL);
+        if (m_candidate_panel_active != null) {
+            m_candidate_panel_active.set_vertical(
+                    m_settings_panel.get_int("lookup-table-orientation")
+                    == IBus.Orientation.VERTICAL);
+        }
     }
 
     private void set_show_property_panel() {
@@ -1031,14 +1065,18 @@ class Panel : IBus.PanelService {
     }
 
     private void set_language_from_engine(IBus.EngineDesc engine) {
-        if (m_use_engine_lang) {
-            m_candidate_panel.set_language(new Pango.AttrLanguage(
-                    Pango.Language.from_string(engine.get_language())));
-        } else {
-            m_candidate_panel.set_language(new Pango.AttrLanguage(
-                    Pango.Language.from_string(null)));
+        m_candidate_panel.set_language(new Pango.AttrLanguage(
+                Pango.Language.from_string(m_use_engine_lang
+                                           ? engine.get_language()
+                                           : null)));
+#if USE_GDK_WAYLAND
+        if (m_candidate_panel_x11 != null) {
+            m_candidate_panel_x11.set_language(new Pango.AttrLanguage(
+                    Pango.Language.from_string(m_use_engine_lang
+                                               ? engine.get_language()
+                                               : null)));
         }
-
+#endif
     }
 
     private void set_engine(IBus.EngineDesc engine) {
@@ -1547,8 +1585,6 @@ class Panel : IBus.PanelService {
 
     private Gtk.Menu create_activate_menu(bool use_x11 = false) {
         Gdk.Display display_backup = null;
-        // Should not use m_is_wayland since register_properties()
-        // Can be called before Panel.init().
         if (use_x11 && !BindingCommon.default_is_xdisplay()) {
             var display = BindingCommon.get_xdisplay();
             display_backup = Gdk.Display.get_default();
@@ -1659,7 +1695,7 @@ class Panel : IBus.PanelService {
     /* override virtual functions */
     public override void set_cursor_location(int x, int y,
                                              int width, int height) {
-        m_candidate_panel.set_cursor_location(x, y, width, height);
+        m_candidate_panel_active.set_cursor_location(x, y, width, height);
         m_property_panel.set_cursor_location(x, y, width, height);
     }
 
@@ -1809,40 +1845,51 @@ class Panel : IBus.PanelService {
                                              uint cursor_pos,
                                              bool visible) {
         if (visible) {
-            m_candidate_panel.set_preedit_text(text, cursor_pos);
+#if USE_GDK_WAYLAND
+            m_candidate_panel_active = get_active_candidate_panel();
+#endif
+            m_candidate_panel_active.set_preedit_text(text, cursor_pos);
             m_property_panel.set_preedit_text(text, cursor_pos);
         } else {
-            m_candidate_panel.set_preedit_text(null, 0);
+            m_candidate_panel_active.set_preedit_text(null, 0);
             m_property_panel.set_preedit_text(null, 0);
         }
     }
 
     public override void hide_preedit_text() {
-        m_candidate_panel.set_preedit_text(null, 0);
+        m_candidate_panel_active.set_preedit_text(null, 0);
     }
 
     public override void update_auxiliary_text(IBus.Text text,
                                                bool visible) {
-        m_candidate_panel.set_auxiliary_text(visible ? text : null);
+#if USE_GDK_WAYLAND
+        if (visible)
+            m_candidate_panel_active = get_active_candidate_panel();
+#endif
+        m_candidate_panel_active.set_auxiliary_text(visible ? text : null);
         m_property_panel.set_auxiliary_text(visible ? text : null);
     }
 
     public override void hide_auxiliary_text() {
-        m_candidate_panel.set_auxiliary_text(null);
+        m_candidate_panel_active.set_auxiliary_text(null);
     }
 
     public override void update_lookup_table(IBus.LookupTable table,
                                              bool visible) {
-        m_candidate_panel.set_lookup_table(visible ? table : null);
+#if USE_GDK_WAYLAND
+        if (visible)
+            m_candidate_panel_active = get_active_candidate_panel();
+#endif
+        m_candidate_panel_active.set_lookup_table(visible ? table : null);
         m_property_panel.set_lookup_table(visible ? table : null);
     }
 
     public override void hide_lookup_table() {
-        m_candidate_panel.set_lookup_table(null);
+        m_candidate_panel_active.set_lookup_table(null);
     }
 
     public override void set_content_type(uint purpose, uint hints) {
-        m_candidate_panel.set_content_type(purpose, hints);
+        m_candidate_panel_active.set_content_type(purpose, hints);
     }
 
     public override void state_changed() {
@@ -1854,6 +1901,14 @@ class Panel : IBus.PanelService {
         if (m_icon_type == IconType.INDICATOR) {
             // Wait for the callback of the session bus.
             if (m_indicator == null)
+                return;
+        }
+#endif
+
+#if USE_GDK_WAYLAND
+        // GtkStatusIcon.priv.image is NULL in Wayland
+        if (m_icon_type == STATUS_ICON &&
+            !BindingCommon.default_is_xdisplay()) {
                 return;
         }
 #endif
@@ -1946,4 +2001,10 @@ class Panel : IBus.PanelService {
         }
         m_settings_general.set_strv("engines-order", names);
     }
+
+#if USE_GDK_WAYLAND
+    public void set_wayland_object_path(string? object_path) {
+        m_wayland_object_path = object_path;
+    }
+#endif
 }

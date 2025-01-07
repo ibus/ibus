@@ -56,7 +56,6 @@ class Panel : IBus.PanelService {
     private Switcher m_switcher;
     private uint m_switcher_focus_set_engine_id;
     private int m_switcher_selected_index = -1;
-    private Thread<bool> m_switcher_waiting_release;
     private PropertyManager m_property_manager;
     private PropertyPanel m_property_panel;
     private GLib.Pid m_setup_pid = 0;
@@ -1191,23 +1190,7 @@ class Panel : IBus.PanelService {
                 save_log("Panel.%s switcher release %d timer\n".printf(
                          GLibMacro.G_STRFUNC, m_switcher_selected_index));
             }
-            m_switcher_waiting_release = null;
-            // TODO: "GlobalShortcutKeyResponded" signal can causes a freeze
-            // due to the GMainLoop dead lock for the key release events and
-            // add 5 seconds timeout here to release the key virtually for the
-            // workaround.
-            //
-            // Timeout.add_seconds() or Idle.add() slso causes the freeze
-            // due to the GMainLoop dead lock and use Thread instead.
-            m_switcher_waiting_release = new Thread<bool>("wait release",
-                                                          () => {
-                Thread.usleep(5000000);
-                handle_engine_switch_release(true);
-                m_switcher_waiting_release = null;
-                return true;
-            });
         } else {
-            m_switcher_waiting_release = null;
             handle_engine_switch_release(false);
         }
     }

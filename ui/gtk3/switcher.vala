@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2011-2016 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2015-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -405,6 +405,8 @@ class Switcher : Gtk.Window {
 #if VALA_0_34
         // display.get_monitor_at_window() is null because of unrealized window
         Gdk.Monitor monitor = display.get_primary_monitor();
+        if (monitor == null)
+            return;
         Gdk.Rectangle area = monitor.get_geometry();
         screen_width = area.width;
 #else

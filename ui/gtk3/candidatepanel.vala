@@ -40,6 +40,11 @@ public class CandidatePanel : Gtk.Box{
 #if USE_GDK_WAYLAND
     private bool m_no_wayland_panel;
     private bool m_hide_after_show;
+    private uint m_prev_page_size;
+    private uint m_prev_ncandidates;
+    private uint m_prev_cursor;
+    private uint m_prev_cursor_in_page;
+    private bool m_prev_show_cursor;
     private uint m_set_preedit_text_id;
     private uint m_set_auxiliary_text_id;
     private uint m_set_lookup_table_id;
@@ -265,8 +270,24 @@ public class CandidatePanel : Gtk.Box{
 
     public void set_lookup_table(IBus.LookupTable? table) {
 #if USE_GDK_WAYLAND
-        if (m_set_lookup_table_id > 0)
-            GLib.Source.remove(m_set_lookup_table_id);
+        if (m_set_lookup_table_id > 0) {
+            if (table == null ||
+                (m_prev_page_size == table.get_page_size() &&
+                 m_prev_ncandidates == table.get_number_of_candidates() &&
+                 m_prev_cursor == table.get_cursor_pos() &&
+                 m_prev_cursor_in_page == table.get_cursor_in_page() &&
+                 m_prev_show_cursor == table.is_cursor_visible())
+               ) {
+                GLib.Source.remove(m_set_lookup_table_id);
+            }
+        }
+        if (table != null) {
+            m_prev_page_size = table.get_page_size();
+            m_prev_ncandidates = table.get_number_of_candidates();
+            m_prev_cursor = table.get_cursor_pos();
+            m_prev_cursor_in_page = table.get_cursor_in_page();
+            m_prev_show_cursor = table.is_cursor_visible();
+        }
         // FIXME: Too many PreeditText D-Bus signal happens in Wayland.
         m_set_lookup_table_id = Timeout.add(100,
                                             () => {

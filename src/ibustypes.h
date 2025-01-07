@@ -2,8 +2,8 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2010-2022 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2008-2022 Red Hat, Inc.
+ * Copyright (C) 2010-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,7 +30,7 @@
 
 /**
  * SECTION: ibustypes
- * @short_description: Generic types for  IBus.
+ * @short_description: Generic types for IBus.
  * @stability: Stable
  *
  * This section consists generic types for IBus, including shift/control key
@@ -340,5 +340,23 @@ typedef enum
     IBUS_INPUT_HINT_PRIVATE             = 1 << 11
 } IBusInputHints;
 
-#endif
+/**
+ * IBUS_MODIFIER_FILTER:
+ *
+ * This is a filter for shortcut keys.
+ * Since: 1.5.00
+ */
+#define IBUS_MODIFIER_FILTER                    \
+       (IBUS_MODIFIER_MASK & ~(                 \
+        IBUS_LOCK_MASK |  /* Caps Lock */       \
+        IBUS_MOD2_MASK |  /* Num Lock */        \
+        IBUS_BUTTON1_MASK |                     \
+        IBUS_BUTTON2_MASK |                     \
+        IBUS_BUTTON3_MASK |                     \
+        IBUS_BUTTON4_MASK |                     \
+        IBUS_BUTTON5_MASK |                     \
+        IBUS_SUPER_MASK |                       \
+        IBUS_HYPER_MASK |                       \
+        IBUS_META_MASK))
 
+#endif

@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2018-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2018-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2021 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -308,20 +308,6 @@ static const gchar introspection_xml[] =
     "    <property name='ActiveSurroundingText' type='(b)' access='read' />"
     "  </interface>"
     "</node>";
-
-static const guint IBUS_MODIFIER_FILTER =
-        IBUS_MODIFIER_MASK & ~(
-        IBUS_LOCK_MASK |  /* Caps Lock */
-        IBUS_MOD2_MASK |  /* Num Lock */
-        IBUS_BUTTON1_MASK |
-        IBUS_BUTTON2_MASK |
-        IBUS_BUTTON3_MASK |
-        IBUS_BUTTON4_MASK |
-        IBUS_BUTTON5_MASK |
-        IBUS_SUPER_MASK |
-        IBUS_HYPER_MASK |
-        IBUS_META_MASK);
-
 
 static void
 ibus_engine_class_init (IBusEngineClass *class)
@@ -1126,7 +1112,7 @@ ibus_engine_filter_key_event (IBusEngine *engine,
         modifiers &= ~IBUS_SUPER_MASK;
         modifiers |= IBUS_MOD4_MASK;
     }
-    modifiers = modifiers & IBUS_MODIFIER_FILTER;
+    modifiers &= IBUS_MODIFIER_FILTER;
     if (keyval >= IBUS_KEY_A && keyval <= IBUS_KEY_Z &&
         (modifiers & IBUS_SHIFT_MASK) != 0) {
         keyval = keyval - IBUS_KEY_A + IBUS_KEY_a;

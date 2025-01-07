@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -242,10 +242,13 @@ ibus_bus_class_init (IBusBusClass *class)
      * IBusBus::global-shortcut-key-responded:
      * @bus: The #IBusBus object which recevied the signal
      * @type: The type of the global shortcut key.
-     * @is_pressed: %TRUE if the key is pressed.
+     * @keyval: Key symbol of the key press.
+     * @keycode: KeyCode of the key press.
+     * @state: Key modifier flags.
      * @is_backward: %TRUE if the backward key is pressed.
      *
      * Emitted when global shortcut key is responded.
+     * Since 1.5.00
      *
      */
     bus_signals[GLOBAL_SHORTCUT_KEY_RESPONDED] =
@@ -254,11 +257,13 @@ ibus_bus_class_init (IBusBusClass *class)
             G_SIGNAL_RUN_LAST,
             0,
             NULL, NULL,
-            _ibus_marshal_VOID__UCHAR_BOOLEAN_BOOLEAN,
+            _ibus_marshal_VOID__UCHAR_UINT_UINT_UINT_BOOLEAN,
             G_TYPE_NONE,
-            3,
+            5,
             G_TYPE_UCHAR,
-            G_TYPE_BOOLEAN,
+            G_TYPE_UINT,
+            G_TYPE_UINT,
+            G_TYPE_UINT,
             G_TYPE_BOOLEAN);
 }
 
@@ -306,12 +311,15 @@ _connection_ibus_signal_cb (GDBusConnection *connection,
                        engine_name);
     } else if (!g_strcmp0 (signal_name, "GlobalShortcutKeyResponded")) {
         guchar type = (guchar)IBUS_BUS_GLOBAL_BINDING_TYPE_ANY;
-        gboolean is_pressed = FALSE;
+        guint keyval = 0;
+        guint keycode = 0;
+        guint state = 0;
         gboolean is_backward = FALSE;
-        g_variant_get (parameters, "(ybb)", &type, &is_pressed, &is_backward);
+        g_variant_get (parameters, "(yuuub)",
+                       &type, &keyval, &keycode, &state, &is_backward);
         g_signal_emit (IBUS_BUS (user_data),
                        bus_signals[GLOBAL_SHORTCUT_KEY_RESPONDED], 0,
-                       type, is_pressed, is_backward);
+                       type, keyval, keycode, state, is_backward);
     }
     /* FIXME handle org.freedesktop.IBus.RegistryChanged signal if needed */
 }

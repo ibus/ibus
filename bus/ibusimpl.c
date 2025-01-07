@@ -2,8 +2,8 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2011-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2008-2024 Red Hat, Inc.
+ * Copyright (C) 2011-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -239,10 +239,12 @@ static const gchar introspection_xml[] =
     "    </signal>\n"
     "    <signal name='GlobalShortcutKeyResponded'>\n"
     "      <arg type='y' name='type' />\n"
-    "      <arg type='b' name='pressed' />\n"
+    "      <arg type='u' name='keyval' />\n"
+    "      <arg type='u' name='keycode' />\n"
+    "      <arg type='u' name='state' />\n"
     "      <arg type='b' name='backward' />\n"
     "      <annotation name='org.gtk.GDBus.Since'\n"
-    "          value='1.5.29' />\n"
+    "          value='1.5.00' />\n"
     "      <annotation name='org.gtk.GDBus.DocString'\n"
     "          value='Stability: Unstable' />\n"
     "    </signal>\n"
@@ -2554,6 +2556,7 @@ bus_ibus_impl_process_key_event (BusIBusImpl *ibus,
                                  guint        state)
 {
     int i;
+    guint modifiers = state;
     guint bind_keyval = 0;
     guint bind_state = 0;
     static guint binding_state = 0;
@@ -2565,13 +2568,22 @@ bus_ibus_impl_process_key_event (BusIBusImpl *ibus,
     g_assert (BUS_IS_IBUS_IMPL (ibus));
     if (!ibus->ime_switcher_keys)
         return FALSE;
-    state &= ~IBUS_RELEASE_MASK;
+    /*
+     * GTK3 has both IBUS_SUPER_MASK & IBUS_MOD4_MASK.
+     * GTK4 has IBUS_SUPER_MASK.
+     * Qt5 has IBUS_MOD4_MASK.
+     */
+    if (modifiers & IBUS_SUPER_MASK) {
+        modifiers &= ~IBUS_SUPER_MASK;
+        modifiers |= IBUS_MOD4_MASK;
+    }
+    modifiers &= IBUS_MODIFIER_FILTER & ~IBUS_RELEASE_MASK;
     for (i = 0; ibus->ime_switcher_keys[i].keyval; ++i) {
         bind_keyval = ibus->ime_switcher_keys[i].keyval;
         bind_state = ibus->ime_switcher_keys[i].state;
         is_backward = ibus->ime_switcher_keys[i].keycode != 0;
-        if (keyval == bind_keyval && state  == bind_state) {
-            if (state != 0) {
+        if (keyval == bind_keyval && modifiers == bind_state) {
+            if (modifiers != 0) {
                 /* If Super-space is pressed */
                 if (is_pressed)
                     binding_state = bind_state;
@@ -2584,7 +2596,7 @@ bus_ibus_impl_process_key_event (BusIBusImpl *ibus,
             break;
         } else if (binding_state && !is_pressed) {
             guint released_modifier = keyval_to_modifier(keyval);
-            binding_state &= state;
+            binding_state &= modifiers;
             binding_state &= ~released_modifier;
             /* If both Super and space is released */
             if (!binding_state) {
@@ -2597,10 +2609,7 @@ bus_ibus_impl_process_key_event (BusIBusImpl *ibus,
     if (hit) {
         g_assert (bind_keyval);
         GVariant *variant = g_variant_new (
-                "(ybb)",
-                type,
-                is_pressed,
-                is_backward);
+                "(yuuub)", type, keyval, keycode, state, is_backward);
         /* TODO: dbus-monitor can observe the key release D-Bus signal is sent
          *       immediately but IBusPanelService sometimes gets the signal
          *       with a delay because the D-Bus receives seems depend on

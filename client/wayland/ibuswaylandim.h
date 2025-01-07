@@ -97,4 +97,3 @@ gboolean          ibus_wayland_im_set_surface (IBusWaylandIM *wlim,
 
 G_END_DECLS
 #endif
-

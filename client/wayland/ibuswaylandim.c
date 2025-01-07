@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
- * Copyright (C) 2019-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2019-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2013 Intel Corporation
- * Copyright (C) 2013-2024 Red Hat, Inc.
+ * Copyright (C) 2013-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -129,6 +129,8 @@ struct _IBusWaylandIMPrivate
     xkb_mod_mask_t meta_mask;
 
     uint32_t serial;
+    int32_t repeat_rate;
+    int32_t repeat_delay;
 
     GCancellable *cancellable;
 };
@@ -145,6 +147,7 @@ struct _IBusWaylandKeyEvent
     IBusWaylandIM *wlim;
     int count;
     guint count_cb_id;
+    guint repeat_rate_id;
     gboolean retval;
 };
 typedef struct _IBusWaylandKeyEvent IBusWaylandKeyEvent;
@@ -164,9 +167,34 @@ static struct wl_registry *_registry;
 static struct wl_seat *_seat;
 static struct zwp_virtual_keyboard_manager_v1  *_virtual_keyboard_manager;
 
-static gboolean _use_sync_mode = 1;
+static char _use_sync_mode = 1;
 
 static guint wayland_im_signals[LAST_SIGNAL] = { 0 };
+
+static const guint repeat_ignore[] = {
+  0,
+  IBUS_KEY_Overlay1_Enable,
+  IBUS_KEY_Overlay2_Enable,
+  IBUS_KEY_Shift_L,
+  IBUS_KEY_Shift_R,
+  IBUS_KEY_Control_L,
+  IBUS_KEY_Control_R,
+  IBUS_KEY_Caps_Lock,
+  IBUS_KEY_Shift_Lock,
+  IBUS_KEY_Meta_L,
+  IBUS_KEY_Meta_R,
+  IBUS_KEY_Alt_L,
+  IBUS_KEY_Alt_R,
+  IBUS_KEY_Super_L,
+  IBUS_KEY_Super_R,
+  IBUS_KEY_Hyper_L,
+  IBUS_KEY_Hyper_R,
+  IBUS_KEY_Mode_switch,
+  IBUS_KEY_ISO_Level3_Shift,
+  IBUS_KEY_ISO_Level3_Latch,
+  IBUS_KEY_ISO_Level5_Shift,
+  IBUS_KEY_ISO_Level5_Latch
+};
 
 static void         input_method_deactivate
                               (void                               *data,
@@ -1218,6 +1246,112 @@ _process_key_event_hybrid_async (IBusWaylandIM       *wlim,
 }
 
 
+static gboolean
+_process_key_event_repeat_rate_cb (gpointer user_data)
+{
+    IBusWaylandKeyEvent *event = (IBusWaylandKeyEvent *)user_data;
+
+    g_return_val_if_fail (event, G_SOURCE_REMOVE);
+    switch (_use_sync_mode) {
+    case 1:
+        _process_key_event_sync (event->wlim, event);
+        break;
+    case 2:
+        _process_key_event_hybrid_async (event->wlim, event);
+        break;
+    default:
+        _process_key_event_async (event->wlim, event);
+    }
+    return G_SOURCE_CONTINUE;
+}
+
+
+static gboolean
+_process_key_event_repeat_delay_cb (gpointer user_data)
+{
+    IBusWaylandKeyEvent *event = (IBusWaylandKeyEvent *)user_data;
+    IBusWaylandIM *wlim;
+    IBusWaylandIMPrivate *priv;
+    GSource *source;
+
+    g_return_val_if_fail (event, G_SOURCE_REMOVE);
+    if (event->count)
+        return G_SOURCE_CONTINUE;
+
+    wlim = event->wlim;
+    g_return_val_if_fail (IBUS_IS_WAYLAND_IM (wlim), G_SOURCE_REMOVE);
+    priv = ibus_wayland_im_get_instance_private (wlim);
+
+    event->count = 1;
+    switch (_use_sync_mode) {
+    case 1:
+        _process_key_event_sync (event->wlim, event);
+        break;
+    case 2:
+        _process_key_event_hybrid_async (event->wlim, event);
+        break;
+    default:
+        _process_key_event_async (event->wlim, event);
+    }
+    source = g_timeout_source_new (priv->repeat_rate);
+    g_source_attach (source, NULL);
+    g_source_unref (source);
+    event->repeat_rate_id = g_source_get_id (source);
+    g_source_set_callback (source, _process_key_event_repeat_rate_cb,
+                           event, NULL);
+    return G_SOURCE_CONTINUE;
+}
+
+
+static gboolean
+key_event_check_repeat (IBusWaylandIM       *wlim,
+                        IBusWaylandKeyEvent *event)
+{
+    IBusWaylandIMPrivate *priv;
+    int i;
+    GSource *source;
+    static IBusWaylandKeyEvent repeating_event = { 0, };
+
+    g_return_val_if_fail (IBUS_IS_WAYLAND_IM (wlim), FALSE);
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    for (i = 0; i < G_N_ELEMENTS (repeat_ignore); i++) {
+        if (event->sym == repeat_ignore[i])
+            return FALSE;
+    }
+
+    if (event->state == WL_KEYBOARD_KEY_STATE_PRESSED) {
+        if (repeating_event.repeat_rate_id) {
+            g_source_remove (repeating_event.repeat_rate_id);
+            repeating_event.repeat_rate_id = 0;
+        }
+        if (repeating_event.count_cb_id) {
+            /* Double KeyPress happen likes Ctrl-a-b */
+            g_source_remove (repeating_event.count_cb_id);
+            repeating_event.count_cb_id = 0;
+        }
+        source = g_timeout_source_new (priv->repeat_delay);
+        g_source_attach (source, NULL);
+        g_source_unref (source);
+        /* Copy the keycode and modifier since Ctrl key has a delay. */
+        memcpy (&repeating_event, event, sizeof (IBusWaylandKeyEvent));
+        repeating_event.count_cb_id = g_source_get_id (source);
+        repeating_event.count = 0;
+        g_source_set_callback (source, _process_key_event_repeat_delay_cb,
+                               &repeating_event, NULL);
+    } else {
+        if (repeating_event.repeat_rate_id) {
+            g_source_remove (repeating_event.repeat_rate_id);
+            repeating_event.repeat_rate_id = 0;
+        }
+        if (repeating_event.count_cb_id) {
+            g_source_remove (repeating_event.count_cb_id);
+            repeating_event.count_cb_id = 0;
+        }
+    }
+    return TRUE;
+}
+
+
 static void
 input_method_keyboard_key (void                      *data,
                            struct zwp_keyboard_union *keyboard,
@@ -1257,7 +1391,9 @@ input_method_keyboard_key (void                      *data,
     event.modifiers = priv->modifiers;
     if (state == WL_KEYBOARD_KEY_STATE_RELEASED)
         event.modifiers |= IBUS_RELEASE_MASK;
+    event.wlim = wlim;
 
+    key_event_check_repeat (wlim, &event);
     switch (_use_sync_mode) {
     case 1:
         return _process_key_event_sync (wlim, &event);
@@ -1332,6 +1468,27 @@ input_method_keyboard_modifiers (void                      *data,
 
 
 static void
+input_method_keyboard_repeat_info (void                      *data,
+                                   struct zwp_keyboard_union *keyboard,
+                                   int32_t                    rate,
+                                   int32_t                    delay)
+{
+    IBusWaylandIM *wlim = data;
+    IBusWaylandIMPrivate *priv;
+
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    priv->repeat_rate = rate;
+    priv->repeat_delay = delay;
+    if (priv->verbose) {
+        fprintf (priv->log, "keyboard repeat info rate %d delay %d\n",
+                rate, delay);
+        fflush (priv->log);
+    }
+}
+
+
+static void
 input_method_keyboard_keymap_v1 (void               *data,
                                  struct wl_keyboard *keyboard_v1,
                                  uint32_t            format,
@@ -1376,6 +1533,18 @@ input_method_keyboard_modifiers_v1 (void               *data,
                                      mods_latched,
                                      mods_locked,
                                      group);
+}
+
+
+static void
+input_method_keyboard_repeat_info_v1 (void               *data,
+                                      struct wl_keyboard *keyboard_v1,
+                                      int32_t             rate,
+                                      int32_t             delay)
+{
+    struct zwp_keyboard_union keyboard;
+    keyboard.u.keyboard_v1 = keyboard_v1;
+    input_method_keyboard_repeat_info (data, &keyboard, rate, delay);
 }
 
 
@@ -1437,6 +1606,9 @@ input_method_keyboard_repeat_info_v2 (void   *data,
                                       int32_t rate,
                                       int32_t delay)
 {
+    struct zwp_keyboard_union keyboard;
+    keyboard.u.keyboard_v2 = keyboard_v2;
+    input_method_keyboard_repeat_info (data, &keyboard, rate, delay);
 }
 
 
@@ -1445,7 +1617,10 @@ static const struct wl_keyboard_listener keyboard_listener_v1 = {
     .enter = NULL, /* enter */
     .leave = NULL, /* leave */
     .key = input_method_keyboard_key_v1,
-    .modifiers = input_method_keyboard_modifiers_v1
+    .modifiers = input_method_keyboard_modifiers_v1,
+#ifdef WL_KEYBOARD_REPEAT_INFO_SINCE_VERSION
+    .repeat_info = input_method_keyboard_repeat_info_v1
+#endif
 };
 
 
@@ -1788,7 +1963,8 @@ registry_handle_global (void               *data,
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
     if (priv->verbose) {
-        fprintf (priv->log, "wl_registry gets interface: %s\n", interface);
+        fprintf (priv->log, "wl_registry gets interface: %s version: %u\n",
+                 interface, version);
         fflush (priv->log);
     }
     priv->serial = 0;
@@ -1798,10 +1974,12 @@ registry_handle_global (void               *data,
                 wl_registry_bind (registry, name,
                                   &zwp_input_method_manager_v2_interface, 1);
     } else if (!g_strcmp0 (interface, zwp_input_method_v1_interface.name)) {
+        if (version >= 4)
+            version = 4;
         priv->version = INPUT_METHOD_V1;
         priv->input_method_v1 =
                 wl_registry_bind (registry, name,
-                                  &zwp_input_method_v1_interface, 1);
+                                  &zwp_input_method_v1_interface, version);
         zwp_input_method_v1_add_listener (priv->input_method_v1,
                                           &input_method_listener_v1, wlim);
     } else if (!g_strcmp0 (interface, zwp_input_panel_v1_interface.name)) {
@@ -2006,6 +2184,8 @@ ibus_wayland_im_constructor (GType                  type,
         g_error ("Failed to connect to Wayland server: %s\n",
                  g_strerror (errno));
     }
+    priv->repeat_rate = 25;
+    priv->repeat_delay = 600;
 
     _registry = wl_display_get_registry (priv->display);
     wl_registry_add_listener (_registry, &registry_listener, wlim);

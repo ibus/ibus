@@ -165,6 +165,53 @@ public class IBusEmojier : Gtk.ApplicationWindow {
                 set_label(text);
         }
     }
+    /*
+     * ECheckVisibleLabel:
+     * Create a label with the Pango context for the font glyph checking.
+     */
+    private class ECheckVisibleLabel : EWhiteLabel {
+        private Pango.Layout layout;
+        public ECheckVisibleLabel(string text = "") {
+            GLib.Object(
+                name : "IBusEmojierCheckVisibleLabel"
+            );
+            if (text != "")
+                set_label(text);
+            var pango_context = get_pango_context();
+            layout = new Pango.Layout(pango_context);
+            var font_desc =
+                    Pango.FontDescription.from_string(m_emoji_font_family);
+            layout.set_font_description(font_desc);
+        }
+        public bool is_glyph_visible(string emoji) {
+            string cleaned_emoji = emoji
+                .replace("\uFE0E", "")
+                .replace("\uFE0F", "");
+            if (cleaned_emoji == "")
+                return false;
+            layout.set_text(cleaned_emoji, -1);
+            unowned Pango.LayoutLine? line = layout.get_line_readonly(0);
+            if (line == null)
+                return false;
+            Pango.Rectangle ink_rect;
+            Pango.Rectangle logical_rect;
+            line.get_pixel_extents(out ink_rect, out logical_rect);
+            if (ink_rect.width <= 0 || ink_rect.height <= 0)
+                return false;
+            // Check if single glyph is available for single characters
+            if (cleaned_emoji.char_count() == 1) {
+                unowned GLib.SList<Pango.GlyphItem>? runs = line.runs;
+                if (runs != null && runs.length() == 1) {
+                    var run = runs.data;
+                    var font = run.item.analysis.font;
+                    unichar ch = cleaned_emoji.get_char();
+                    if (!font.has_char(ch))
+                        return false;
+                }
+            }
+            return true;
+        }
+    }
     private class EPaddedLabel : Gtk.Label {
         public EPaddedLabel(string          text,
                             Gtk.Align       align) {
@@ -1268,12 +1315,29 @@ public class IBusEmojier : Gtk.ApplicationWindow {
     }
 
 
+    private delegate void CheckGlyph(string                  emoji,
+	                             ref GLib.SList<string>? emojis,
+	                             bool                    do_sort);
+
     private GLib.SList<string>?
     lookup_emojis_from_annotation(string annotation) {
         GLib.SList<string>? total_emojis = null;
+        GLib.SList<string>? non_glyph_emojis = null;
         unowned GLib.SList<string>? sub_emojis = null;
         unowned GLib.SList<unichar>? sub_exact_unicodes = null;
         unowned GLib.SList<unichar>? sub_unicodes = null;
+        var label = new ECheckVisibleLabel();
+        CheckGlyph check_if_non_glyph_emojis = (emoji, ref emojis, do_sort) => {
+            if (label.is_glyph_visible(emoji)) {
+                if (do_sort)
+                    emojis.insert_sorted(emoji, GLib.strcmp);
+                else
+                    emojis.append(emoji);
+            } else if (non_glyph_emojis.find_custom(emoji,
+                                                    GLib.strcmp) == null) {
+                non_glyph_emojis.append(emoji);
+            }
+        };
         int length = annotation.length;
         if (m_has_partial_match && length >= m_partial_match_length) {
             GLib.SList<string>? sorted_emojis = null;
@@ -1303,40 +1367,43 @@ public class IBusEmojier : Gtk.ApplicationWindow {
                 sub_emojis = m_annotation_to_emojis_dict.lookup(key);
                 foreach (unowned string emoji in sub_emojis) {
                     if (total_emojis.find_custom(emoji, GLib.strcmp) == null) {
-                        sorted_emojis.insert_sorted(emoji, GLib.strcmp);
+                        check_if_non_glyph_emojis(emoji,
+                                                  ref sorted_emojis,
+                                                  true);
                     }
                 }
             }
             foreach (string emoji in sorted_emojis) {
-                if (total_emojis.find_custom(emoji, GLib.strcmp) == null) {
+                if (total_emojis.find_custom(emoji, GLib.strcmp) == null)
                     total_emojis.append(emoji);
-                }
             }
         } else {
             sub_emojis = m_annotation_to_emojis_dict.lookup(annotation);
             foreach (unowned string emoji in sub_emojis)
-                total_emojis.append(emoji);
+               check_if_non_glyph_emojis(emoji,
+                                         ref total_emojis,
+                                         false);
         }
         sub_exact_unicodes = m_name_to_unicodes_dict.lookup(annotation);
         foreach (unichar code in sub_exact_unicodes) {
             string ch = code.to_string();
-            if (total_emojis.find_custom(ch, GLib.strcmp) == null) {
-                total_emojis.append(ch);
-            }
+            if (total_emojis.find_custom(ch, GLib.strcmp) == null)
+                check_if_non_glyph_emojis(ch,
+                                          ref total_emojis,
+                                          false);
         }
         if (length >= m_partial_match_length) {
             GLib.SList<string>? sorted_unicodes = null;
             foreach (unowned string key in m_name_to_unicodes_dict.get_keys()) {
-                bool matched = false;
-                if (key.index_of(annotation) >= 0)
-                        matched = true;
-                if (!matched)
-                    continue;
-                sub_unicodes = m_name_to_unicodes_dict.lookup(key);
-                foreach (unichar code in sub_unicodes) {
-                    string ch = code.to_string();
-                    if (sorted_unicodes.find_custom(ch, GLib.strcmp) == null) {
-                        sorted_unicodes.insert_sorted(ch, GLib.strcmp);
+                if (key.index_of(annotation) >= 0) {
+                    sub_unicodes = m_name_to_unicodes_dict.lookup(key);
+                    foreach (unichar code in sub_unicodes) {
+                        string ch = code.to_string();
+                        if (sorted_unicodes.find_custom(ch, GLib.strcmp) == null) {
+                            check_if_non_glyph_emojis(ch,
+                                                      ref sorted_unicodes,
+                                                      true);
+                        }
                     }
                 }
             }
@@ -1344,6 +1411,11 @@ public class IBusEmojier : Gtk.ApplicationWindow {
                 if (total_emojis.find_custom(ch, GLib.strcmp) == null) {
                     total_emojis.append(ch);
                 }
+            }
+        }
+        foreach (string emoji in non_glyph_emojis) {
+            if (total_emojis.find_custom(emoji, GLib.strcmp) == null) {
+                total_emojis.append(emoji);
             }
         }
         if (!m_loaded_unicode && m_unicode_deserialize_unicode_signal_id == 0) {

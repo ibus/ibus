@@ -96,6 +96,7 @@ class Switcher : Gtk.Window {
     private double m_mouse_init_x;
     private double m_mouse_init_y;
     private bool   m_mouse_moved;
+    private bool   m_no_wayland_panel;
     private GLib.HashTable<string, string> m_xkb_languages =
             new GLib.HashTable<string, string>(GLib.str_hash,
                                                GLib.str_equal);
@@ -105,7 +106,7 @@ class Switcher : Gtk.Window {
     public signal void realize_surface(void *surface);
 #endif
 
-    public Switcher() {
+    public Switcher(bool no_wayland_panel) {
         GLib.Object(
             type : Gtk.WindowType.POPUP,
             events : Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.KEY_RELEASE_MASK,
@@ -115,6 +116,7 @@ class Switcher : Gtk.Window {
             modal : true,
             focus_visible : true
         );
+        m_no_wayland_panel = no_wayland_panel;
         Gtk.Box vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(vbox);
         m_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -157,9 +159,19 @@ class Switcher : Gtk.Window {
 #endif
     }
 
-    public int run_popup(IBus.EngineDesc[] engines,
+    public int run_popup(uint              keyval,
+                         uint              state,
+                         IBus.EngineDesc[] engines,
                          int               index) {
-        m_result = index;
+        m_keyval = keyval;
+        m_modifiers = state & IBus.MODIFIER_FILTER;
+        if (m_keyval >= IBus.KEY_A && m_keyval <= IBus.KEY_Z &&
+            (m_modifiers & Gdk.ModifierType.SHIFT_MASK) != 0) {
+            m_keyval = m_keyval - IBus.KEY_A + IBus.KEY_a;
+        }
+        m_primary_modifier = KeybindingManager.get_primary_modifier(
+                m_modifiers);
+        m_selected_engine = m_result = index;
         update_engines(engines);
         /* Let gtk recalculate the window size. */
         resize(1, 1);
@@ -176,8 +188,8 @@ class Switcher : Gtk.Window {
                    IBus.EngineDesc[] engines,
                    int               index,
                    string            input_context_path) {
-        assert (m_loop == null);
-        assert (index < engines.length);
+        assert(m_loop == null);
+        assert(index < engines.length);
 
         if (m_is_running)
             return index;
@@ -186,7 +198,7 @@ class Switcher : Gtk.Window {
         m_modifiers = state;
         m_primary_modifier =
             KeybindingManager.get_primary_modifier(
-                state & KeybindingManager.MODIFIER_FILTER);
+                state & IBus.MODIFIER_FILTER);
         m_selected_engine = m_result = index;
         m_input_context_path = input_context_path;
         m_result_engine = null;
@@ -466,6 +478,10 @@ class Switcher : Gtk.Window {
 
 #if USE_GDK_WAYLAND
     private void realize_window(bool initial) {
+        // The custom surface can be used when the Wayland input-method
+        // is activated.
+        if (m_no_wayland_panel)
+            return;
         var window = get_window();
         if (!window.ensure_native()) {
             warning("No native window.");
@@ -485,7 +501,7 @@ class Switcher : Gtk.Window {
 #endif
 
     public override bool key_press_event(Gdk.EventKey e) {
-        bool retval = true;
+        bool retval = Gdk.EVENT_STOP;
 
 /* Gdk.EventKey is changed to the pointer.
  * https://git.gnome.org/browse/vala/commit/?id=598942f1
@@ -501,14 +517,15 @@ class Switcher : Gtk.Window {
         }
 
         do {
-            uint modifiers = KeybindingManager.MODIFIER_FILTER & pe.state;
+            uint modifiers = IBus.MODIFIER_FILTER & pe.state;
+            uint keyval = pe.keyval;
 
             if ((modifiers != m_modifiers) &&
                 (modifiers != (m_modifiers | Gdk.ModifierType.SHIFT_MASK))) {
                 break;
             }
 
-            if (pe.keyval == m_keyval) {
+            if (keyval == m_keyval) {
                 if (modifiers == m_modifiers)
                     next_engine();
                 else // modififers == m_modifiers | SHIFT_MASK
@@ -516,7 +533,7 @@ class Switcher : Gtk.Window {
                 break;
             }
 
-            switch (pe.keyval) {
+            switch (keyval) {
                 case 0x08fb: /* leftarrow */
                 case 0xff51: /* Left */
                     previous_engine();
@@ -532,7 +549,7 @@ class Switcher : Gtk.Window {
                 case 0xff54: /* Down */
                     break;
                 default:
-                    debug("0x%04x", pe.keyval);
+                    debug("0x%04x", keyval);
                     break;
             }
         } while (false);
@@ -548,13 +565,14 @@ class Switcher : Gtk.Window {
 
         if (KeybindingManager.primary_modifier_still_pressed((Gdk.Event) pe,
             m_primary_modifier)) {
-            return true;
+            return Gdk.EVENT_STOP;
         }
 
         // if e.type == Gdk.EventType.KEY_RELEASE, m_loop is already null.
-        if (m_loop == null) {
-            return false;
-        }
+        // m_loop is always null in Wayland but this signal is not emitted
+        // when the Wayland panel protocol is enabled.
+        if (m_loop == null && !m_no_wayland_panel)
+            return Gdk.EVENT_PROPAGATE;
 
         if (m_popup_delay_time > 0) {
             if (m_popup_delay_time_id != 0) {
@@ -563,9 +581,19 @@ class Switcher : Gtk.Window {
             }
         }
 
-        m_loop.quit();
         m_result = (int)m_selected_engine;
-        return true;
+        if (!m_no_wayland_panel) {
+            m_loop.quit();
+        } else {
+            // Switcher without the Wayland panel protocol can return
+            // the m_result_engine immediately in Wayland without waiting
+            // for the focus-in event due to a virtual input context in
+            // ibus-daemon.
+            GLib.assert(m_result < m_engines.length);
+            m_result_engine = m_engines[m_result];
+            hide();
+        }
+        return Gdk.EVENT_STOP;
     }
 
     public void set_popup_delay_time(uint popup_delay_time) {
@@ -625,5 +653,6 @@ class Switcher : Gtk.Window {
         m_input_context_path = "";
         m_result = -1;
         m_result_engine = null;
+        m_keyval = 0;
     }
 }

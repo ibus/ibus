@@ -49,7 +49,7 @@ class BindingCommon {
         public KeyEventFuncType ftype { get; set; }
     }
 
-    public delegate void KeybindingFuncHandlerFunc(Gdk.Event event);
+    public delegate void KeybindingHandlerFunc(Gdk.Event event);
 
     public static void
     keybinding_manager_bind(KeybindingManager           keybinding_manager,

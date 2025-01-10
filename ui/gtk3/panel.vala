@@ -50,10 +50,12 @@ class Panel : IBus.PanelService {
     private bool m_use_engine_lang = true;
     private CandidatePanel m_candidate_panel;
     private CandidatePanel m_candidate_panel_active;
+    private Switcher m_switcher;
+    private Switcher m_switcher_active;
 #if USE_GDK_WAYLAND
     private CandidatePanel m_candidate_panel_x11;
+    private Switcher m_switcher_x11;
 #endif
-    private Switcher m_switcher;
     private uint m_switcher_focus_set_engine_id;
     private int m_switcher_selected_index = -1;
     private PropertyManager m_property_manager;
@@ -146,17 +148,10 @@ class Panel : IBus.PanelService {
         m_candidate_panel = candidate_panel_new(false);
         m_candidate_panel_active = m_candidate_panel;
 
-        m_switcher = new Switcher();
-#if USE_GDK_WAYLAND
-        m_switcher.realize_surface.connect(
-                (w, s) => this.realize_surface(s));
-#endif
+        m_switcher = switcher_new(false);
+        m_switcher_active = m_switcher;
         // The initial shortcut is "<Super>space"
         bind_switch_shortcut();
-
-        if (m_switcher_delay_time >= 0) {
-            m_switcher.set_popup_delay_time((uint) m_switcher_delay_time);
-        }
 
         m_property_panel = new PropertyPanel();
         m_property_panel.property_activate.connect((w, k, s) => {
@@ -194,6 +189,28 @@ class Panel : IBus.PanelService {
         return candidate_panel;
     }
 
+    private Switcher switcher_new(bool no_wayland_panel) {
+        Switcher switcher = new Switcher(no_wayland_panel);
+#if USE_GDK_WAYLAND
+        switcher.realize_surface.connect(
+                (w, s) => this.realize_surface(s));
+        switcher.hide.connect(
+                (w) => {
+                    if (!no_wayland_panel)
+                        return;
+                    IBus.EngineDesc? selected_engine =
+                        switcher.get_selected_engine();
+                    set_engine(selected_engine);
+                    switcher.reset();
+                    m_switcher_selected_index = -1;
+                });
+#endif
+        if (m_switcher_delay_time >= 0) {
+            switcher.set_popup_delay_time((uint) m_switcher_delay_time);
+        }
+        return switcher;
+    }
+
 #if USE_GDK_WAYLAND
     private CandidatePanel get_active_candidate_panel() {
         if (m_wayland_object_path == null) {
@@ -207,6 +224,16 @@ class Panel : IBus.PanelService {
             return m_candidate_panel_x11;
         } else {
             return m_candidate_panel;
+        }
+    }
+
+    private Switcher get_active_switcher() {
+        if (m_wayland_object_path == null) {
+            if (m_switcher_x11 == null)
+                m_switcher_x11 = switcher_new(true);
+            return m_switcher_x11;
+        } else {
+            return m_switcher;
         }
     }
 #endif
@@ -678,8 +705,15 @@ class Panel : IBus.PanelService {
         m_switcher_delay_time =
                 m_settings_general.get_int("switcher-delay-time");
 
-        if (m_switcher != null && m_switcher_delay_time >= 0) {
-            m_switcher.set_popup_delay_time((uint) m_switcher_delay_time);
+        if (m_switcher_delay_time >= 0) {
+            if (m_switcher != null)
+                m_switcher.set_popup_delay_time((uint)m_switcher_delay_time);
+#if USE_GDK_WAYLAND
+            if (m_switcher_x11 != null) {
+                m_switcher_x11.set_popup_delay_time(
+                        (uint)m_switcher_delay_time);
+            }
+#endif
         }
     }
 
@@ -793,7 +827,7 @@ class Panel : IBus.PanelService {
             if (m_xkb_icon_pixbufs.size() > 0) {
                 m_xkb_icon_pixbufs.remove_all();
 
-                if (m_status_icon != null && m_switcher != null)
+                if (m_status_icon != null && m_switcher_active != null)
                     state_changed();
             }
         }
@@ -802,7 +836,7 @@ class Panel : IBus.PanelService {
             if (m_xkb_icon_image.size() > 0) {
                 m_xkb_icon_image.remove_all();
 
-                if (m_indicator != null && m_switcher != null)
+                if (m_indicator != null && m_switcher_active != null)
                     state_changed();
             }
         }
@@ -1034,11 +1068,13 @@ class Panel : IBus.PanelService {
      */
     public void
     set_global_shortcut_key_state(IBus.BusGlobalBindingType type,
-                                  bool                      is_pressed,
+                                  uint                      keyval,
+                                  uint                      keycode,
+                                  uint                      state,
                                   bool                      is_backward) {
         switch(type) {
         case IBus.BusGlobalBindingType.IME_SWITCHER:
-            handle_engine_switch_focused(is_pressed, is_backward);
+            handle_engine_switch_focused(keyval, keycode, state, is_backward);
             break;
         default: break;
         }
@@ -1129,7 +1165,7 @@ class Panel : IBus.PanelService {
             return;
 
         uint keyval = event.key.keyval;
-        uint modifiers = KeybindingManager.MODIFIER_FILTER & event.key.state;
+        uint modifiers = IBus.MODIFIER_FILTER & event.key.state;
 
         uint primary_modifiers =
             KeybindingManager.get_primary_modifier(event.key.state);
@@ -1153,8 +1189,8 @@ class Panel : IBus.PanelService {
              * in state_changed() and m_switcher.run() returns the index
              * for m_engines[] but m_engines[] was modified by state_changed()
              * and the index is not correct. */
-            i = m_switcher.run(keyval, modifiers, event, m_engines, i,
-                               m_real_current_context_path);
+            i = m_switcher_active.run(keyval, modifiers, event, m_engines, i,
+                                      m_real_current_context_path);
 
             if (i < 0) {
                 debug("switch cancelled");
@@ -1170,10 +1206,14 @@ class Panel : IBus.PanelService {
     }
 
 
-    private void handle_engine_switch_focused(bool pressed,
+    private void handle_engine_switch_focused(uint keyval,
+                                              uint keycode,
+                                              uint state,
                                               bool reverse) {
         if (m_engines.length < 2)
             return;
+        bool pressed = (state & IBus.ModifierType.RELEASE_MASK) != 0
+                       ? false : true;
         if (pressed) {
             int i = reverse ? m_engines.length - 1 : 1;
             if (m_switcher_selected_index >= 0) {
@@ -1182,10 +1222,18 @@ class Panel : IBus.PanelService {
                 i = i < 0 ? m_engines.length - 1
                     : i == m_engines.length ? 0 : i;
             }
-            if (m_switcher_delay_time >= 0)
-                m_switcher_selected_index = m_switcher.run_popup(m_engines, i);
-            else
+            if (m_switcher_delay_time >= 0) {
+#if USE_GDK_WAYLAND
+                m_switcher_active = get_active_switcher();
+#endif
+                m_switcher_selected_index =
+                        m_switcher_active.run_popup(keyval,
+                                                    state,
+                                                    m_engines,
+                                                    i);
+            } else {
                 m_switcher_selected_index = i;
+            }
             if (m_verbose) {
                 save_log("Panel.%s switcher release %d timer\n".printf(
                          GLibMacro.G_STRFUNC, m_switcher_selected_index));
@@ -1208,7 +1256,7 @@ class Panel : IBus.PanelService {
 #endif
         // TODO: Unfortunatelly hide() also depends on GMainLoop and can
         // causes a freeze.
-        m_switcher.hide();
+        m_switcher_active.hide();
         while (Gtk.events_pending())
             Gtk.main_iteration ();
         // If GLib.Thread() callback is called.
@@ -1683,13 +1731,14 @@ class Panel : IBus.PanelService {
     }
 
     private bool switcher_focus_set_engine_real() {
-        IBus.EngineDesc? selected_engine = m_switcher.get_selected_engine();
-        string prev_context_path = m_switcher.get_input_context_path();
+        IBus.EngineDesc? selected_engine =
+                m_switcher_active.get_selected_engine();
+        string prev_context_path = m_switcher_active.get_input_context_path();
         if (selected_engine != null &&
             prev_context_path != "" &&
             prev_context_path == m_current_context_path) {
             set_engine(selected_engine);
-            m_switcher.reset();
+            m_switcher_active.reset();
             return true;
         }
 
@@ -1697,11 +1746,12 @@ class Panel : IBus.PanelService {
     }
 
     private void switcher_focus_set_engine() {
-        IBus.EngineDesc? selected_engine = m_switcher.get_selected_engine();
-        string prev_context_path = m_switcher.get_input_context_path();
+        IBus.EngineDesc? selected_engine =
+                m_switcher_active.get_selected_engine();
+        string prev_context_path = m_switcher_active.get_input_context_path();
         if (selected_engine == null &&
             prev_context_path != "" &&
-            m_switcher.is_running()) {
+            m_switcher_active.is_running()) {
             var context = GLib.MainContext.default();
             if (m_switcher_focus_set_engine_id > 0 &&
                 context.find_source_by_id(m_switcher_focus_set_engine_id)
@@ -1813,7 +1863,8 @@ class Panel : IBus.PanelService {
                         m_menu_update_delay_time,
                         () => {
                             m_indicator.set_menu(create_activate_menu ());
-                            return false;
+                            m_menu_update_delay_time_id = 0;
+                            return Source.REMOVE;
                         });
 #endif
     }
@@ -1877,7 +1928,7 @@ class Panel : IBus.PanelService {
 
     public override void state_changed() {
         /* Do not change the order of m_engines during running switcher. */
-        if (m_switcher.is_running())
+        if (m_switcher_active.is_running())
             return;
 
 #if INDICATOR
@@ -1919,7 +1970,7 @@ class Panel : IBus.PanelService {
             if (engine != null) {
                 var name = engine.get_name();
                 if (name.length >= 4 && name[0:4] == "xkb:")
-                    language = m_switcher.get_xkb_language(engine);
+                    language = m_switcher_active.get_xkb_language(engine);
             }
 
             if (language != null) {

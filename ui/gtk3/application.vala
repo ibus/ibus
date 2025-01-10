@@ -155,19 +155,28 @@ class Application {
 
     private void bus_global_shortcut_key_cb(IBus.Bus bus,
                                             uint8    type,
-                                            bool     is_pressed,
+                                            uint     keyval,
+                                            uint     keycode,
+                                            uint     state,
                                             bool     is_backward) {
         if (m_panel == null)
             return;
         if (m_verbose) {
-            m_log.printf("Global shortcut key %u pressed %s backward %s\n",
+            m_log.printf("Global shortcut key %u keyval %X keycode %u " +
+                         "state %X pressed %s backward %s\n",
                          type,
-                         is_pressed ? "TRUE" : "FALSE",
+                         keyval, keycode, state,
+                         (state & IBus.ModifierType.RELEASE_MASK) != 0
+                                 ? "FALSE" : "TRUE",
                          is_backward ? "TRUE" : "FALSE");
             m_log.flush();
         }
         IBus.BusGlobalBindingType gtype = (IBus.BusGlobalBindingType)type;
-        m_panel.set_global_shortcut_key_state(gtype, is_pressed, is_backward);
+        m_panel.set_global_shortcut_key_state(gtype,
+                                              keyval,
+                                              keycode,
+                                              state,
+                                              is_backward);
     }
 
 #if USE_GDK_WAYLAND

@@ -79,6 +79,23 @@ struct zwp_input_method_union {
     } u;
 };
 
+typedef struct _IBusWaylandSeat IBusWaylandSeat;
+struct _IBusWaylandSeat
+{
+    struct wl_seat *seat;
+    uint32_t wl_name;
+    char *name;
+
+    /* Input Method V2 */
+    struct zwp_input_method_v2 *input_method_v2;
+    struct zwp_input_method_keyboard_grab_v2 *keyboard_v2;
+    struct zwp_virtual_keyboard_v1 *virtual_keyboard;
+    struct zwp_input_popup_surface_v2 *input_popup_surface;
+    gboolean active;
+    gboolean pending_activate;
+    gboolean pending_deactivate;
+};
+
 typedef struct _IBusWaylandIMPrivate IBusWaylandIMPrivate;
 struct _IBusWaylandIMPrivate
 {
@@ -86,6 +103,9 @@ struct _IBusWaylandIMPrivate
     gboolean verbose;
     struct wl_display *display;
     IMProtocolVersion version;
+
+    GPtrArray *seats;
+    IBusWaylandSeat *seat;
 
     /* Input Method V1 */
     struct zwp_input_method_v1 *input_method_v1;
@@ -96,13 +116,6 @@ struct _IBusWaylandIMPrivate
 
     /* Input Method V2 */
     struct zwp_input_method_manager_v2 *input_method_manager_v2;
-    struct zwp_input_method_v2 *input_method_v2;
-    struct zwp_input_method_keyboard_grab_v2 *keyboard_v2;
-    struct zwp_virtual_keyboard_v1 *virtual_keyboard;
-    struct zwp_input_popup_surface_v2 *input_popup_surface;
-    gboolean active;
-    gboolean pending_activate;
-    gboolean pending_deactivate;
 
     IBusBus *ibusbus;
     IBusInputContext *ibuscontext;
@@ -164,7 +177,6 @@ typedef struct _IBusWaylandSource IBusWaylandSource;
 G_DEFINE_TYPE_WITH_PRIVATE (IBusWaylandIM, ibus_wayland_im, IBUS_TYPE_OBJECT)
 
 static struct wl_registry *_registry;
-static struct wl_seat *_seat;
 static struct zwp_virtual_keyboard_manager_v1  *_virtual_keyboard_manager;
 
 static char _use_sync_mode = 1;
@@ -334,8 +346,8 @@ ibus_wayland_im_commit_text (IBusWaylandIM *wlim,
                                                    str);
         break;
     case INPUT_METHOD_V2:
-        zwp_input_method_v2_commit_string (priv->input_method_v2, str);
-        zwp_input_method_v2_commit (priv->input_method_v2, priv->serial);
+        zwp_input_method_v2_commit_string (priv->seat->input_method_v2, str);
+        zwp_input_method_v2_commit (priv->seat->input_method_v2, priv->serial);
         break;
     default:
         g_assert_not_reached ();
@@ -362,7 +374,7 @@ ibus_wayland_im_key (IBusWaylandIM *wlim,
                                          state);
         break;
     case INPUT_METHOD_V2:
-        zwp_virtual_keyboard_v1_key (priv->virtual_keyboard,
+        zwp_virtual_keyboard_v1_key (priv->seat->virtual_keyboard,
                                      time, key, state);
         break;
     default:
@@ -653,11 +665,11 @@ _context_show_preedit_text_cb (IBusInputContext *context,
         break;
     case INPUT_METHOD_V2:
         zwp_input_method_v2_set_preedit_string  (
-                priv->input_method_v2,
+                priv->seat->input_method_v2,
                 priv->preedit_text->text,
                 cursor,
                 strlen (priv->preedit_text->text));
-        zwp_input_method_v2_commit (priv->input_method_v2, priv->serial);
+        zwp_input_method_v2_commit (priv->seat->input_method_v2, priv->serial);
         break;
     default:
         g_assert_not_reached ();
@@ -680,9 +692,9 @@ _context_hide_preedit_text_cb (IBusInputContext *context,
                                                     "");
         break;
     case INPUT_METHOD_V2:
-        zwp_input_method_v2_set_preedit_string  (priv->input_method_v2,
+        zwp_input_method_v2_set_preedit_string  (priv->seat->input_method_v2,
                                                  "", 0, 0);
-        zwp_input_method_v2_commit (priv->input_method_v2, priv->serial);
+        zwp_input_method_v2_commit (priv->seat->input_method_v2, priv->serial);
         break;
     default:
         g_assert_not_reached ();
@@ -828,6 +840,7 @@ create_user_xkb_keymap (struct xkb_context *xkb_context,
         return NULL;
     names.layout = layout;
     names.variant = ibus_engine_desc_get_layout_variant (desc);
+    names.options = "";
     return xkb_keymap_new_from_names (xkb_context, &names, 0);
 }
 
@@ -949,7 +962,7 @@ input_method_keyboard_keymap (void                      *data,
     priv = ibus_wayland_im_get_instance_private (wlim);
 
     if (priv->version != INPUT_METHOD_V1) {
-        zwp_virtual_keyboard_v1_keymap (priv->virtual_keyboard,
+        zwp_virtual_keyboard_v1_keymap (priv->seat->virtual_keyboard,
                                         format, fd, size);
     }
     if (priv->keymap && priv->state)
@@ -959,6 +972,38 @@ input_method_keyboard_keymap (void                      *data,
         xkb_keymap_unref (keymap);
 }
 
+
+static void
+ibus_wayland_seat_destroy (gpointer data)
+{
+    IBusWaylandSeat *seat = (IBusWaylandSeat *)data;
+    g_return_if_fail (seat);
+    g_free (seat->name);
+    zwp_input_popup_surface_v2_destroy (seat->input_popup_surface);
+    zwp_virtual_keyboard_v1_destroy (seat->virtual_keyboard);
+    zwp_input_method_keyboard_grab_v2_destroy (seat->keyboard_v2);
+    zwp_input_method_v2_destroy (seat->input_method_v2);
+    g_slice_free (IBusWaylandSeat, seat);
+}
+
+
+static IBusWaylandSeat *
+_get_seat_with_name (GPtrArray *seats,
+                     uint32_t   wl_name,
+                     guint     *index)
+{
+    guint i;
+    g_return_val_if_fail (seats, NULL);
+    for (i = 0; i < seats->len; ++i) {
+        IBusWaylandSeat *seat = g_ptr_array_index (seats, i);
+        if (seat->wl_name == wl_name) {
+            if (index)
+                *index = i;
+            return seat;
+        }
+    }
+    return NULL;
+}
 
 static gboolean
 ibus_wayland_im_post_key (IBusWaylandIM *wlim,
@@ -981,7 +1026,7 @@ ibus_wayland_im_post_key (IBusWaylandIM *wlim,
             return FALSE;
         break;
     case INPUT_METHOD_V2:
-        if (!priv->active)
+        if (!priv->seat->active)
             return FALSE;
         break;
     default:
@@ -1483,7 +1528,7 @@ input_method_keyboard_modifiers (void                      *data,
                                                mods_locked, group);
         break;
     case INPUT_METHOD_V2:
-        zwp_virtual_keyboard_v1_modifiers (priv->virtual_keyboard,
+        zwp_virtual_keyboard_v1_modifiers (priv->seat->virtual_keyboard,
                                            mods_depressed, mods_latched,
                                            mods_locked, group);
         break;
@@ -1753,10 +1798,10 @@ input_method_activate (void                               *data,
                                   wlim);
         break;
     case INPUT_METHOD_V2:
-        priv->keyboard_v2 = zwp_input_method_v2_grab_keyboard (
+        priv->seat->keyboard_v2 = zwp_input_method_v2_grab_keyboard (
                 input_method->u.input_method_v2);
         zwp_input_method_keyboard_grab_v2_add_listener (
-                priv->keyboard_v2,
+                priv->seat->keyboard_v2,
                 &keyboard_listener_v2,
                 wlim);
         break;
@@ -1842,6 +1887,8 @@ input_method_deactivate (void                               *data,
         }
         break;
     case INPUT_METHOD_V2:
+        if (priv->seat->keyboard_v2)
+            zwp_input_method_keyboard_grab_v2_release (priv->seat->keyboard_v2);
         break;
     default:
         g_assert_not_reached ();
@@ -1880,7 +1927,7 @@ input_method_activate_v2 (void                       *data,
 
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
-    priv->pending_activate = TRUE;
+    priv->seat->pending_activate = TRUE;
 }
 
 
@@ -1893,7 +1940,7 @@ input_method_deactivate_v2 (void                       *data,
 
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
-    priv->pending_deactivate = TRUE;
+    priv->seat->pending_deactivate = TRUE;
 }
 
 
@@ -1940,15 +1987,15 @@ input_method_done_v2 (void                       *data,
     priv->serial++;
     input_method.u.input_method_v2 = input_method_v2;
 
-    if (priv->pending_activate && !priv->active) {
-        priv->active = TRUE;
+    if (priv->seat->pending_activate && !priv->seat->active) {
+        priv->seat->active = TRUE;
         input_method_activate (data, &input_method, NULL);
-    } else if (priv->pending_deactivate && priv->active) {
-        priv->active = FALSE;
+    } else if (priv->seat->pending_deactivate && priv->seat->active) {
+        priv->seat->active = FALSE;
         input_method_deactivate (data, &input_method, NULL);
     }
-    priv->pending_activate = FALSE;
-    priv->pending_deactivate = FALSE;
+    priv->seat->pending_activate = FALSE;
+    priv->seat->pending_deactivate = FALSE;
 }
 
 
@@ -1977,6 +2024,30 @@ static const struct zwp_input_method_v2_listener input_method_listener_v2 = {
 
 
 static void
+seat_handle_capabilities(void *data, struct wl_seat *wl_seat,
+                         enum wl_seat_capability caps)
+{
+}
+
+static void
+seat_handle_name(void *data, struct wl_seat *wl_seat, const char *name)
+{
+    IBusWaylandSeat *seat = data;
+    g_assert (seat);
+    g_assert (name);
+
+    g_free (seat->name);
+    seat->name = g_strdup(name);
+}
+
+
+static const struct wl_seat_listener seat_listener = {
+    .capabilities = seat_handle_capabilities,
+    .name = seat_handle_name,
+};
+
+
+static void
 registry_handle_global (void               *data,
                         struct wl_registry *registry,
                         uint32_t            name,
@@ -1989,8 +2060,9 @@ registry_handle_global (void               *data,
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
     if (priv->verbose) {
-        fprintf (priv->log, "wl_registry gets interface: %s version: %u\n",
-                 interface, version);
+        fprintf (priv->log,
+                 "wl_registry gets interface: %s name: %u version: %u\n",
+                 interface, name, version);
         fflush (priv->log);
     }
     priv->serial = 0;
@@ -2012,10 +2084,31 @@ registry_handle_global (void               *data,
         priv->panel = wl_registry_bind (registry, name,
                                         &zwp_input_panel_v1_interface, 1);
     } else if (!g_strcmp0 (interface, wl_seat_interface.name)) {
+        IBusWaylandSeat *seat = g_slice_new0 (IBusWaylandSeat);
         if (version >= 5)
             version = 5;
-        _seat = wl_registry_bind (registry, name,
-                                  &wl_seat_interface, version);
+        seat->seat = wl_registry_bind (registry, name,
+                                       &wl_seat_interface, version);
+        seat->wl_name = name;
+        wl_seat_add_listener (seat->seat, &seat_listener, seat);
+        g_ptr_array_add (priv->seats, seat);
+        /* Assume the constructor of IBusWaylandIM is done and the second
+         * seat is called here and don't have to wait for
+         * wl_display_roundtrip().
+         */
+        if (priv->seat) {
+            seat->input_method_v2 =
+                    zwp_input_method_manager_v2_get_input_method (
+                            priv->input_method_manager_v2,
+                            seat->seat);
+            zwp_input_method_v2_add_listener (seat->input_method_v2,
+                                              &input_method_listener_v2, wlim);
+            seat->virtual_keyboard =
+                    zwp_virtual_keyboard_manager_v1_create_virtual_keyboard (
+                            _virtual_keyboard_manager,
+                            seat->seat);
+        }
+        priv->seat = seat;
     } else if (!g_strcmp0 (interface,
                            zwp_virtual_keyboard_manager_v1_interface.name)) {
         _virtual_keyboard_manager =
@@ -2031,6 +2124,30 @@ registry_handle_global_remove (void               *data,
                                struct wl_registry *registry,
                                uint32_t            name)
 {
+    IBusWaylandIM *wlim = data;
+    IBusWaylandIMPrivate *priv;
+    IBusWaylandSeat *seat;
+    guint i = 0;
+
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    if (priv->verbose) {
+        fprintf (priv->log, "wl_registry remove name: %u\n", name);
+        fflush (priv->log);
+    }
+    if (!(seat = _get_seat_with_name (priv->seats, name, &i)))
+        return;
+    if (priv->verbose) {
+        fprintf (priv->log, "Remove %s seat.\n", seat->name);
+        fflush (priv->log);
+    }
+    g_ptr_array_remove_index (priv->seats, i);
+    if (priv->seat == seat) {
+        if (!priv->seats->len)
+            priv->seat = NULL;
+        else
+            priv->seat = g_ptr_array_index (priv->seats, 0);
+    }
 }
 
 
@@ -2193,6 +2310,7 @@ ibus_wayland_im_constructor (GType                  type,
     GObject *object;
     IBusWaylandIM *wlim;
     IBusWaylandIMPrivate *priv;
+    IBusWaylandSeat *seat = NULL;
     IBusEngineDesc *desc;
     struct xkb_keymap *keymap = NULL;
 
@@ -2210,24 +2328,27 @@ ibus_wayland_im_constructor (GType                  type,
         g_error ("Failed to connect to Wayland server: %s\n",
                  g_strerror (errno));
     }
+    priv->seats = g_ptr_array_new_with_free_func (ibus_wayland_seat_destroy);
     priv->repeat_rate = 25;
     priv->repeat_delay = 600;
 
     _registry = wl_display_get_registry (priv->display);
     wl_registry_add_listener (_registry, &registry_listener, wlim);
     wl_display_roundtrip (priv->display);
-    if (priv->input_method_manager_v2 && _seat && _virtual_keyboard_manager) {
-        priv->input_method_v2 = zwp_input_method_manager_v2_get_input_method (
+    if (priv->input_method_manager_v2 && priv->seat &&
+        _virtual_keyboard_manager) {
+        seat = priv->seat;
+        seat->input_method_v2 = zwp_input_method_manager_v2_get_input_method (
                 priv->input_method_manager_v2,
-                _seat);
-        zwp_input_method_v2_add_listener (priv->input_method_v2,
+                seat->seat);
+        zwp_input_method_v2_add_listener (seat->input_method_v2,
                                           &input_method_listener_v2, wlim);
-        priv->virtual_keyboard =
+        seat->virtual_keyboard =
                 zwp_virtual_keyboard_manager_v1_create_virtual_keyboard (
                         _virtual_keyboard_manager,
-                        _seat);
+                        seat->seat);
     }
-    if (!priv->input_method_v2 && !priv->input_method_v1) {
+    if ((!seat || !seat->input_method_v2) && !priv->input_method_v1) {
         g_error ("No input_method global\n");
     }
 
@@ -2276,13 +2397,9 @@ ibus_wayland_im_destroy (IBusObject *object)
         g_clear_pointer (&priv->panel, zwp_input_panel_v1_destroy);
     if (priv->input_method_v1)
         g_clear_pointer (&priv->input_method_v1, zwp_input_method_v1_destroy);
-    if (priv->input_popup_surface) {
-        g_clear_pointer (&priv->input_popup_surface,
-                         zwp_input_popup_surface_v2_destroy);
-    }
-    if (priv->virtual_keyboard) {
-        g_clear_pointer (&priv->virtual_keyboard,
-                         zwp_virtual_keyboard_v1_destroy);
+    if (priv->seats) {
+        g_ptr_array_free (priv->seats, TRUE);
+        priv->seats = NULL;
     }
     if (priv->input_method_manager_v2) {
         g_clear_pointer (&priv->input_method_manager_v2,
@@ -2402,19 +2519,19 @@ ibus_wayland_im_set_surface (IBusWaylandIM *wlim,
         zwp_input_panel_surface_v1_set_overlay_panel (priv->panel_surface);
         break;
     case INPUT_METHOD_V2:
-        if (!priv->input_method_v2) {
+        if (!priv->seat || !priv->seat->input_method_v2) {
             g_warning ("Need zwp_input_method_v2 before the surface setting.");
             return FALSE;
         }
-        if (priv->input_popup_surface) {
-            g_clear_pointer (&priv->input_popup_surface,
+        if (priv->seat->input_popup_surface) {
+            g_clear_pointer (&priv->seat->input_popup_surface,
                              zwp_input_popup_surface_v2_destroy);
         }
         if (!_surface)
             return TRUE;
-        priv->input_popup_surface =
+        priv->seat->input_popup_surface =
                 zwp_input_method_v2_get_input_popup_surface (
-                        priv->input_method_v2,
+                        priv->seat->input_method_v2,
                         _surface);
         break;
     default:

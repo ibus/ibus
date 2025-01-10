@@ -3,8 +3,8 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2016 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
-# Copyright (c) 2007-2024 Red Hat, Inc.
+# Copyright (c) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2007-2025 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -372,10 +372,18 @@ if test x"$enable_wayland" = x"yes"; then
         wayland-client >= 1.2.0
         xkbcommon
     ])
+    PKG_CHECK_EXISTS([wayland-protocols],
+        [WAYLAND_PRTCLS_DIR="`$PKG_CONFIG --variable=pkgdatadir wayland-protocols`"],
+        [WAYLAND_PRTCLS_DIR="/usr/share/wayland-protocols"]
+    )
+    WAYLAND_PRTCLS_DIR="`echo $WAYLAND_PRTCLS_DIR`"
     m4_ifdef([WAYLAND_SCANNER_RULES],
-             [WAYLAND_PRTCLS_SUBDIR='wayland-protocols/unstable/input-method'
-              AC_SUBST(WAYLAND_PRTCLS_SUBDIR)
-              WAYLAND_SCANNER_RULES(['$(datadir)/$(WAYLAND_PRTCLS_SUBDIR)'])],
+             [WAYLAND_IM_PRTCL_SUBDIR='unstable/input-method'
+              WAYLAND_TEXT_PRTCL_SUBDIR='unstable/text-input'
+              AC_SUBST(WAYLAND_PRTCLS_DIR)
+              AC_SUBST(WAYLAND_IM_PRTCL_SUBDIR)
+              AC_SUBST(WAYLAND_TEXT_PRTCL_SUBDIR)
+              WAYLAND_SCANNER_RULES(['$(WAYLAND_PRTCLS_DIR)/$(WAYLAND_IM_PRTCL_SUBDIR)'])],
              [AC_SUBST(wayland_scanner_rules)])
     enable_wayland="yes (enabled, use --disable-wayland to disable)"
 else

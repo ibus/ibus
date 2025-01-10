@@ -3,7 +3,7 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2013 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2019-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2019-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # Copyright (c) 2007-2019 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or modify
@@ -70,10 +70,38 @@ EXTRA_DIST = \
     $(protocol_sources) \
     IBusWaylandIM-1.0.metadata \
     ibus-wayland-im-custom.vala \
+    input-method-unstable-v2.xml \
+    virtual-keyboard-unstable-v1.xml \
     README \
     $(NULL)
 
--include @wayland_scanner_rules@
+if ENABLE_WAYLAND
+# Do not use wayland_scanner_rules = /usr/share/wayland/wayland-scanner.mk
+# for multiple protocols.
+wayland_text_protocoldir = $(WAYLAND_PRTCLS_DIR)/$(WAYLAND_TEXT_PRTCL_SUBDIR)
+
+input-method-unstable-v1-client-protocol.h: $(wayland_protocoldir)/input-method-unstable-v1.xml
+	$(AM_V_GEN)$(wayland_scanner) client-header $< $@
+
+input-method-unstable-v1-protocol.c: $(wayland_protocoldir)/input-method-unstable-v1.xml
+	$(AM_V_GEN)$(wayland_scanner) code $< $@
+
+input-method-unstable-v2-client-protocol.h: $(srcdir)/input-method-unstable-v2.xml
+	$(AM_V_GEN)$(wayland_scanner) client-header $< $@
+
+input-method-unstable-v2-protocol.c: $(srcdir)/input-method-unstable-v2.xml
+	$(AM_V_GEN)$(wayland_scanner) code $< $@
+
+text-input-unstable-v1-client-protocol.h: $(wayland_text_protocoldir)/text-input-unstable-v1.xml
+	$(AM_V_GEN)$(wayland_scanner) client-header $< $@
+
+virtual-keyboard-unstable-v1-client-protocol.h: $(srcdir)/virtual-keyboard-unstable-v1.xml
+	$(AM_V_GEN)$(wayland_scanner) client-header $< $@
+
+virtual-keyboard-unstable-v1-protocol.c: $(srcdir)/virtual-keyboard-unstable-v1.xml
+	$(AM_V_GEN)$(wayland_scanner) code $< $@
+endif
+
 
 # `make distdir` can go to ibus/client/wayland
 if ENABLE_WAYLAND

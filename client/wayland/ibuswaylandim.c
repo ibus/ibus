@@ -1250,17 +1250,32 @@ static gboolean
 _process_key_event_repeat_rate_cb (gpointer user_data)
 {
     IBusWaylandKeyEvent *event = (IBusWaylandKeyEvent *)user_data;
+    IBusWaylandIM *wlim;
+    IBusWaylandIMPrivate *priv;
 
     g_return_val_if_fail (event, G_SOURCE_REMOVE);
+
+    wlim = event->wlim;
+    if (!IBUS_IS_WAYLAND_IM (wlim)) {
+        g_warning ("Failed BUS_IS_WAYLAND_IM (wlim)");
+        event->repeat_rate_id = 0;
+        return G_SOURCE_REMOVE;
+    }
+    priv = ibus_wayland_im_get_instance_private (wlim);
+
+    if (!priv->ibuscontext) {
+        event->repeat_rate_id = 0;
+        return G_SOURCE_REMOVE;
+    }
     switch (_use_sync_mode) {
     case 1:
-        _process_key_event_sync (event->wlim, event);
+        _process_key_event_sync (wlim, event);
         break;
     case 2:
-        _process_key_event_hybrid_async (event->wlim, event);
+        _process_key_event_hybrid_async (wlim, event);
         break;
     default:
-        _process_key_event_async (event->wlim, event);
+        _process_key_event_async (wlim, event);
     }
     return G_SOURCE_CONTINUE;
 }
@@ -1275,12 +1290,23 @@ _process_key_event_repeat_delay_cb (gpointer user_data)
     GSource *source;
 
     g_return_val_if_fail (event, G_SOURCE_REMOVE);
-    if (event->count)
-        return G_SOURCE_CONTINUE;
 
     wlim = event->wlim;
-    g_return_val_if_fail (IBUS_IS_WAYLAND_IM (wlim), G_SOURCE_REMOVE);
+    if (!IBUS_IS_WAYLAND_IM (wlim)) {
+        g_warning ("Failed BUS_IS_WAYLAND_IM (wlim)");
+        event->count_cb_id = 0;
+        return G_SOURCE_REMOVE;
+    }
     priv = ibus_wayland_im_get_instance_private (wlim);
+
+    /* The key release event was sent to non-Wayland apps likes xterm. */
+    if (!priv->ibuscontext) {
+        event->count_cb_id = 0;
+        return G_SOURCE_REMOVE;
+    }
+
+    if (event->count)
+        return G_SOURCE_CONTINUE;
 
     event->count = 1;
     switch (_use_sync_mode) {

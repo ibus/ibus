@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,6 +30,9 @@ private const string IBUS_SCHEMAS_PANEL_EMOJI =
 private const string SYSTEMD_SESSION_GNOME_FILE =
         "org.freedesktop.IBus.session.GNOME.service";
 
+#if IBUS_WAYLAND
+bool is_wayland_session = false;
+#endif
 bool name_only = false;
 /* system() exists as a public API. */
 bool is_system = false;
@@ -209,6 +212,111 @@ is_running_daemon_via_systemd(GLib.DBusConnection connection,
     return false;
 }
 
+
+#if IBUS_WAYLAND
+void registry_global_cb(void       *data,
+                        Wl.Registry wl_registry,
+                        uint32      name,
+                        string     @interface,
+                        uint32      version) {
+    if (verbose) {
+        stderr.printf("Wl.RegistryListenerGlobal name: %3u interface: %s " +
+                      "version: %u.\n", name, interface, version);
+    }
+    if (interface == "zwp_input_method_manager_v2") {
+        is_wayland_session = true;
+    } else if (interface == "zwp_input_method_v1") {
+        stderr.printf("Wayland input-method protocol version 1 does not " +
+                      "work with the forked application.\n");
+        is_wayland_session = true;
+    }
+}
+
+
+void registry_global_remove_cb(void       *data,
+                               Wl.Registry wl_registry,
+                               uint32      name) {
+}
+
+
+bool check_wayland_protocols() {
+    var display = new Wl.Display.connect(null);
+    if (display == null)
+        return false;
+    var registry = display.get_registry();
+    var listener = Wl.RegistryListener() {
+        global = registry_global_cb,
+        global_remove = registry_global_remove_cb
+    };
+    registry.add_listener (listener, null);
+    display.roundtrip();
+    return true;
+}
+
+
+bool start_daemon_in_wayland(bool     restart,
+                             string[] _argv) {
+
+    check_wayland_protocols();
+    if (!is_wayland_session) {
+        stderr.printf("Cannot find the Wayland input-method protocol.\n");
+        return false;
+    }
+
+    var bus = get_bus();
+    if (restart) {
+        if (bus == null) {
+            stderr.printf(_("Can't connect to IBus.\n"));
+            return false;
+        }
+        bus.exit(false);
+        if (verbose) {
+            stderr.printf("Succeed to exit ibus-daemon with an IBus API " +
+                          "directly.\n");
+        }
+        bus = null;
+    } else if (bus != null) {
+        stderr.printf("%s\n".printf(_("IBus is running.")));
+        Posix.exit(Posix.EXIT_FAILURE);
+        return true;
+    }
+
+    string cmd = Config.LIBEXECDIR + "/ibus-ui-gtk3";
+    var file = File.new_for_path(cmd);
+    if (!file.query_exists())
+        cmd = "../ui/gtk3/ibus-ui-gtk3";
+
+    string daemon_args = "--xim --panel disable";
+    if (_argv.length > 1)
+        daemon_args = string.joinv(" ", _argv[1:]);
+    string[] argv = { cmd };
+    argv += "--enable-wayland-im";
+    argv += "--exec-daemon";
+    argv += "--daemon-args";
+    argv += "%s".printf(daemon_args);
+    if (verbose)
+        argv += "--verbose";
+
+    string[] env = Environ.get();
+
+    try {
+        // Non-blocking
+        Process.spawn_async(null, argv, env,
+                            SpawnFlags.SEARCH_PATH,
+                            null, null);
+    } catch (SpawnError e) {
+        stderr.printf("%s\n", e.message);
+        Posix.exit(Posix.EXIT_FAILURE);
+        return true;
+    }
+    if (verbose) {
+        stderr.printf("Succeed to %s ibus-daemon with a Wayland " +
+                      "input-method version 2.\n",
+                      restart ? "restart" : "start");
+    }
+    return true;
+}
+#endif
 
 bool
 start_daemon_with_dbus_systemd(GLib.DBusConnection connection,
@@ -515,6 +623,7 @@ bool operate_daemon_in_kde_wayland(GLib.DBusConnection connection,
                             "restarted.\n");
                 } else {
                     stderr.printf("kwinrc is not updated for exit.\n");
+                    return true;
                 }
             }
         }
@@ -570,8 +679,8 @@ int start_daemon_real(string[] argv,
                       bool     restart) {
     const OptionEntry[] options = {
         { "type", 0, 0, OptionArg.STRING, out daemon_type,
-          N_("Start or restart daemon with \"direct\", \"systemd\" or " +
-             "\"kde-wayland\" TYPE."),
+          N_("Start or restart daemon with \"direct\", \"systemd\", " +
+             "\"kde-wayland\" or \"wayland\" TYPE."),
           "TYPE" },
         { "service-file", 0, 0, OptionArg.STRING, out systemd_service_file,
           N_("Start or restart daemon with SYSTEMD_SERVICE file."),
@@ -592,13 +701,26 @@ int start_daemon_real(string[] argv,
         return Posix.EXIT_FAILURE;
     }
     if (daemon_type != null && daemon_type != "direct" &&
-        daemon_type != "systemd" && daemon_type != "kde-wayland") {
+        daemon_type != "systemd" && daemon_type != "kde-wayland" &&
+        daemon_type != "wayland") {
         stderr.printf("type argument must be \"direct\" or \"systemd\" " +
-                      "or \"kde-wayland\"\n");
+                      "or \"kde-wayland\" or \"wayland\"\n");
         return Posix.EXIT_FAILURE;
     }
     if (systemd_service_file == null)
         systemd_service_file = SYSTEMD_SESSION_GNOME_FILE;
+
+    if (daemon_type == null || daemon_type == "wayland") {
+#if IBUS_WAYLAND
+        if (start_daemon_in_wayland(restart, argv))
+            return Posix.EXIT_SUCCESS;
+#else
+        if (daemon_type == "wayland") {
+            stderr.printf("Please build IBus with Wayland.\n");
+            return Posix.EXIT_FAILURE;
+        }
+#endif
+    }
 
     if (daemon_type == null || daemon_type == "kde-wayland") {
         do {
@@ -615,6 +737,7 @@ int start_daemon_real(string[] argv,
                 return Posix.EXIT_SUCCESS;
         } while (false);
     }
+
     if (daemon_type == null || daemon_type == "systemd") {
         if (start_daemon_with_systemd(restart, verbose))
             return Posix.EXIT_SUCCESS;
@@ -622,8 +745,8 @@ int start_daemon_real(string[] argv,
 
     if (daemon_type == "systemd" || daemon_type == "kde-wayland")
         return Posix.EXIT_FAILURE;
+    var bus = get_bus();
     if (restart) {
-        var bus = get_bus();
         if (bus == null) {
             stderr.printf(_("Can't connect to IBus.\n"));
             return Posix.EXIT_FAILURE;
@@ -633,6 +756,9 @@ int start_daemon_real(string[] argv,
             stderr.printf("Succeed to restart ibus-daemon with an IBus API " +
                           "directly.\n");
         }
+    } else if (bus != null) {
+        stderr.printf("%s\n".printf(_("IBus is running.")));
+        return Posix.EXIT_FAILURE;
     } else {
         string startarg = "ibus-daemon";
         argv[0] = startarg;

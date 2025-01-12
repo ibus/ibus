@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        container: ["fedora:40", "fedora:41", "ubuntu:jammy"]
+        container: ["fedora:41", "fedora:42", "ubuntu:jammy"]
     steps:
       - name: Check container sha tags
         run: |
@@ -26,15 +26,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - container: fedora:40
+          - container: fedora:41
             ucd_dir: /usr/share/unicode/ucd
-          - container: fedora:40
+          - container: fedora:41
             ucd_dir: /usr/share/unicode/ucd
             test_config: '--disable-wayland'
-          - container: fedora:40
+          - container: fedora:41
             ucd_dir: /usr/share/unicode/ucd
             test_config: '--disable-appindicator'
-          - container: fedora:41
+          - container: fedora:42
             ucd_dir: /usr/share/unicode/ucd
           - container: ubuntu:jammy
             ucd_dir: /usr/share/unicode
@@ -74,6 +74,9 @@ jobs:
            unicode-cldr-core
            unicode-data
            valac
+           valac-0.56-vapi
+           wayland-protocols
+           wget
          FEDORA_PACKAGES_MAKE: >
            cldr-emoji-annotation
            dbus-glib-devel
@@ -98,6 +101,7 @@ jobs:
            unicode-ucd
            vala
            wayland-devel
+           wayland-protocols-devel
          # for gtkdoc-fixxref
          FEDORA_PACKAGES_GTKDOC: >
            glib2-doc
@@ -175,6 +179,11 @@ jobs:
         # configure options from
         # https://salsa.debian.org/debian/ibus/-/blob/master/debian/rules
         run: >
+          if ! ls /usr/share/vala-*/vapi/wayland-client.vapi;
+          then
+          wget https://gitlab.gnome.org/GNOME/vala/-/raw/0.56/vapi/wayland-client.vapi;
+          mv wayland-client.vapi bindings/vala/.;
+          fi;
           ./autogen.sh
           --enable-gtk-doc
           --with-python=/usr/bin/python3

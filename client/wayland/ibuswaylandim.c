@@ -183,29 +183,30 @@ static char _use_sync_mode = 1;
 
 static guint wayland_im_signals[LAST_SIGNAL] = { 0 };
 
+/* common with IBUS_COMPOSE_IGNORE_KEYLIST[]
+* and invalid_accelerator_vals[].
+*/
 static const guint repeat_ignore[] = {
-  0,
-  IBUS_KEY_Overlay1_Enable,
-  IBUS_KEY_Overlay2_Enable,
-  IBUS_KEY_Shift_L,
-  IBUS_KEY_Shift_R,
-  IBUS_KEY_Control_L,
-  IBUS_KEY_Control_R,
-  IBUS_KEY_Caps_Lock,
-  IBUS_KEY_Shift_Lock,
-  IBUS_KEY_Meta_L,
-  IBUS_KEY_Meta_R,
-  IBUS_KEY_Alt_L,
-  IBUS_KEY_Alt_R,
-  IBUS_KEY_Super_L,
-  IBUS_KEY_Super_R,
-  IBUS_KEY_Hyper_L,
-  IBUS_KEY_Hyper_R,
-  IBUS_KEY_Mode_switch,
-  IBUS_KEY_ISO_Level3_Shift,
-  IBUS_KEY_ISO_Level3_Latch,
-  IBUS_KEY_ISO_Level5_Shift,
-  IBUS_KEY_ISO_Level5_Latch
+    0,
+    IBUS_KEY_Shift_L, IBUS_KEY_Shift_R,
+    IBUS_KEY_Control_L, IBUS_KEY_Control_R,
+    IBUS_KEY_Caps_Lock, IBUS_KEY_Shift_Lock, IBUS_KEY_ISO_Lock,
+    IBUS_KEY_Meta_L, IBUS_KEY_Meta_R,
+    IBUS_KEY_Alt_L, IBUS_KEY_Alt_R,
+    IBUS_KEY_Super_L, IBUS_KEY_Super_R,
+    IBUS_KEY_Hyper_L, IBUS_KEY_Hyper_R,
+    IBUS_KEY_ISO_Level2_Latch,
+    IBUS_KEY_ISO_Level3_Latch, IBUS_KEY_ISO_Level3_Lock,
+    IBUS_KEY_ISO_Level3_Shift,
+    IBUS_KEY_ISO_Level5_Latch, IBUS_KEY_ISO_Level5_Lock,
+    IBUS_KEY_ISO_Level5_Shift,
+    IBUS_KEY_ISO_Group_Latch, IBUS_KEY_ISO_Group_Lock,
+    IBUS_KEY_ISO_Group_Shift,
+    IBUS_KEY_ISO_Next_Group, IBUS_KEY_ISO_Next_Group_Lock,
+    IBUS_KEY_ISO_Prev_Group, IBUS_KEY_ISO_Prev_Group_Lock,
+    IBUS_KEY_ISO_First_Group, IBUS_KEY_ISO_First_Group_Lock,
+    IBUS_KEY_ISO_Last_Group, IBUS_KEY_ISO_Last_Group_Lock,
+    IBUS_KEY_Overlay1_Enable, IBUS_KEY_Overlay2_Enable
 };
 
 static void         input_method_deactivate

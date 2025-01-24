@@ -63,8 +63,9 @@ ibus_accelerator_valid (guint           keyval,
                         IBusModifierType modifiers)
 {
     static const guint invalid_accelerator_vals[] = {
-        /* common keys between invalid_accelerator_vals[] and
-         * IBUS_COMPOSE_IGNORE_KEYLIST[].
+        /* common keys between invalid_accelerator_vals[],
+         * IBUS_COMPOSE_IGNORE_KEYLIST[], and
+         * repeat_ignore[].
          */
         IBUS_KEY_Shift_L, IBUS_KEY_Shift_R,
         IBUS_KEY_Control_L, IBUS_KEY_Control_R,
@@ -73,7 +74,6 @@ ibus_accelerator_valid (guint           keyval,
         IBUS_KEY_Alt_L, IBUS_KEY_Alt_R,
         IBUS_KEY_Super_L, IBUS_KEY_Super_R,
         IBUS_KEY_Hyper_L, IBUS_KEY_Hyper_R,
-        IBUS_KEY_Mode_switch,
         IBUS_KEY_ISO_Level2_Latch,
         IBUS_KEY_ISO_Level3_Latch, IBUS_KEY_ISO_Level3_Lock,
         IBUS_KEY_ISO_Level3_Shift,
@@ -85,6 +85,7 @@ ibus_accelerator_valid (guint           keyval,
         IBUS_KEY_ISO_Prev_Group, IBUS_KEY_ISO_Prev_Group_Lock,
         IBUS_KEY_ISO_First_Group, IBUS_KEY_ISO_First_Group_Lock,
         IBUS_KEY_ISO_Last_Group, IBUS_KEY_ISO_Last_Group_Lock,
+        IBUS_KEY_Overlay1_Enable, IBUS_KEY_Overlay2_Enable,
         /* invalid_accelerator_vals[] specific keys */
         IBUS_KEY_Num_Lock, IBUS_KEY_Multi_key,
         IBUS_KEY_Scroll_Lock, IBUS_KEY_Sys_Req,

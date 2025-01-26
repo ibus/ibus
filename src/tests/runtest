@@ -44,7 +44,7 @@ MACHINE=`uname -m`
 if test x"$MACHINE" = xx86_64 ; then
     GTK_QUERY_MODULE=gtk-query-immodules-3.0-64
 fi
-if ! command -v $GTK_QUERY_MODULE &> /dev/null ; then
+if ! command -v $GTK_QUERY_MODULE > /dev/null 2>&1 ; then
     GTK_QUERY_MODULE=gtk-query-immodules-3.0
 fi
 
@@ -77,7 +77,7 @@ func_cleanup () {
     tstdir=$1
     if test -f $tstdir/ibus-daemon.pid; then
         . $tstdir/ibus-daemon.pid
-        kill $IBUS_DAEMON_PID &> /dev/null
+        kill $IBUS_DAEMON_PID > /dev/null 2>&1
     fi
     rm -fr $tstdir
 }

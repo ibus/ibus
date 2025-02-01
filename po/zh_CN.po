@@ -17,7 +17,7 @@
 # Pany <pany@fedoraproject.org>, 2019. #zanata
 # Tian Shixiong <tiansworld@fedoraproject.org>, 2019. #zanata
 # Tian Shixiong <tiansworld@gmail.com>, 2020.
-# Boyuan Yang <073plan@gmail.com>, 2020.
+# Boyuan Yang <073plan@gmail.com>, 2020, 2025.
 # Whired Planck <fungdaat31@outlook.com>, 2020.
 # Dingzhong Chen <wsxy162@gmail.com>, 2021.
 # Liu Tao <lyuutau@outlook.com>, 2021, 2023.
@@ -26,8 +26,8 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2023-08-02 17:20+0900\n"
-"PO-Revision-Date: 2023-12-27 08:36+0000\n"
-"Last-Translator: Liu Tao <lyuutau@outlook.com>\n"
+"PO-Revision-Date: 2025-02-01 00:16+0000\n"
+"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -35,7 +35,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -297,67 +297,48 @@ msgid "Custom font name for language panel"
 msgstr "自定义语言栏字体"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom theme"
-msgstr "使用自定义字体"
+msgstr "使用自定义主题"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:219
-#, fuzzy
-#| msgid "Use custom font name for language panel"
 msgid "Use custom theme name for language panel"
-msgstr "语言栏上使用自定义字体"
+msgstr "语言栏上使用自定义主题"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom theme"
-msgstr "自定义字体"
+msgstr "自定义主题"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:224
-#, fuzzy
-#| msgid "Custom font name for language panel"
 msgid "Custom theme name for language panel"
-msgstr "自定义语言栏字体"
+msgstr "自定义语言栏主题"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:228
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom icon"
-msgstr "使用自定义字体"
+msgstr "使用自定义图标"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:229
 msgid "Use custom icon name for arrow buttons on candidate window"
-msgstr ""
+msgstr "在候选词窗口中为箭头按钮使用自定义图标名称"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:233
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom icon"
-msgstr "自定义字体"
+msgstr "自定义图标"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:234
 msgid "Custom icon name for arrow buttons on candidate window"
-msgstr ""
+msgstr "在候选词窗口中用于箭头按钮的自定义图标名称"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:238 setup/setup.ui:1317
 msgid "Choose glyphs with input method's language on candidate window"
 msgstr "按照输入法语言选择候选词窗口的字形"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:239
-#, fuzzy
-#| msgid ""
-#| "Some code points have the different glyphs and Pango determines the "
-#| "glyphs from the language attribute. Pango chooses glyphs from the IBus "
-#| "engine's language if the value is true and choose them from the desktop "
-#| "locale if the value is false."
 msgid ""
 "Some code points have different glyphs and Pango determines the glyphs from "
 "the language attribute. Pango chooses glyphs from the IBus engine's language "
 "if the value is true and chooses them from the desktop locale if the value "
 "is false."
-msgstr ""
-"有些字符码位有多个不同的字形，Pango 根据语言属性确定其字形。如果该值为真，从 "
+msgstr "有些字符码位有多个不同的字形，Pango 根据语言属性确定其字形。如果该值为真，从 "
 "IBus 引擎的语言选择字形；为假，从桌面语言选择字形。"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:250
@@ -870,34 +851,24 @@ msgid ""
 msgstr "对于复用的码位，按照输入法语言选择它在候选词窗口中的字形"
 
 #: setup/setup.ui:1341
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom theme:"
-msgstr "使用自定义字体："
+msgstr "使用自定义主题："
 
 #: setup/setup.ui:1342
-#, fuzzy
-#| msgid "Choose glyphs with input method's language on candidate window"
 msgid "Choose a theme of the candidate window"
-msgstr "按照输入法语言选择候选词窗口的字形"
+msgstr "选择候选词窗口的主题"
 
 #: setup/setup.ui:1378
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom icon:"
-msgstr "使用自定义字体："
+msgstr "使用自定义图标："
 
 #: setup/setup.ui:1379
-#, fuzzy
-#| msgid "Choose glyphs with input method's language on candidate window"
 msgid "Choose a theme of the arrow buttons on the candidate window"
-msgstr "按照输入法语言选择候选词窗口的字形"
+msgstr "为候选词窗口中的箭头按钮选择主题"
 
 #: setup/setup.ui:1424
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Font and Theme</b>"
-msgstr "<b>字体和风格</b>"
+msgstr "<b>字体和主题</b>"
 
 #: setup/setup.ui:1444
 msgid "Advanced"
@@ -3272,11 +3243,11 @@ msgstr ""
 
 #: tools/main.vala:331
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
-msgstr ""
+msgstr "使用 SYSTEMD_SERVICE（Systemd 服务）文件启动或重启守护程序。"
 
 #: tools/main.vala:334
 msgid "Show debug messages."
-msgstr ""
+msgstr "显示调试信息。"
 
 #: tools/main.vala:453
 msgid "Read the system registry cache."
@@ -3366,7 +3337,7 @@ msgstr "保存面板中的 Emoji 到剪贴板"
 
 #: tools/main.vala:714
 msgid "Retrieve im-module value from GTK instance"
-msgstr ""
+msgstr "从 GTK 实例获取 im-module 取值"
 
 #: tools/main.vala:716
 msgid "Show this information"
@@ -3402,11 +3373,11 @@ msgstr ""
 
 #: ui/gtk3/application.vala:319
 msgid "ibus-daemon's arguments"
-msgstr ""
+msgstr "ibus-daemon 的参数"
 
 #: ui/gtk3/application.vala:323
 msgid "Verbose logging"
-msgstr ""
+msgstr "记录详细日志"
 
 #: ui/gtk3/emojier.vala:235
 msgid "Favorites"

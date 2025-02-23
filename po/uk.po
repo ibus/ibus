@@ -4,14 +4,14 @@
 # This file is distributed under the same license as the ibus package.
 #
 # Translators:
-# Yuri Chornoivan <yurchor@ukr.net>, 2011-2015, 2017-2020, 2021, 2022, 2023, 2024.
+# Yuri Chornoivan <yurchor@ukr.net>, 2011-2015, 2017-2020, 2021, 2022, 2023, 2024, 2025.
 # fujiwara <takao.fujiwara1@gmail.com>, 2015, 2017. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-02-03 10:58+0900\n"
-"PO-Revision-Date: 2024-02-29 13:35+0000\n"
+"PO-Revision-Date: 2025-02-20 06:38+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/uk/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.10\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -2256,7 +2256,7 @@ msgstr "Віткукі"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:773
 msgid "Todhri"
-msgstr ""
+msgstr "Тодгрі"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2417,7 +2417,7 @@ msgstr "Ганіфі рохінджа"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:865
 msgid "Garay"
-msgstr ""
+msgstr "Гарай"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2557,7 +2557,7 @@ msgstr "Грантха"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:945
 msgid "Tulu-Tigalari"
-msgstr ""
+msgstr "Тулу-тілігаларі"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2605,10 +2605,8 @@ msgstr "Такрі"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:973
-#, fuzzy
-#| msgid "Myanmar Extended-B"
 msgid "Myanmar Extended-C"
-msgstr "М’янмська розширена-B"
+msgstr "М'янмар розширений С"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2685,7 +2683,7 @@ msgstr "Розширена деванагарі-A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1017
 msgid "Sunuwar"
-msgstr ""
+msgstr "Сунувар"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2789,10 +2787,8 @@ msgstr "Керування форматами єгипетських ієрог�
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1077
-#, fuzzy
-#| msgid "Egyptian Hieroglyphs"
 msgid "Egyptian Hieroglyphs Extended-A"
-msgstr "Єгипетська ієрогліфічна"
+msgstr "Єгипетські ієрогліфи, розширена-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2806,7 +2802,7 @@ msgstr "Анатолійьска ієрогліфічна"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1085
 msgid "Gurung Khema"
-msgstr ""
+msgstr "Гурунг-хема"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2848,7 +2844,7 @@ msgstr "Пахау-хмонг"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1109
 msgid "Kirat Rai"
-msgstr ""
+msgstr "Кірат-раї"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2952,10 +2948,8 @@ msgstr "Керування форматами скоропису"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1169
-#, fuzzy
-#| msgid "Symbols for Legacy Computing"
 msgid "Symbols for Legacy Computing Supplement"
-msgstr "Застарілі символи комп'ютерних наук"
+msgstr "Застарілі символи комп'ютерних наук, додаток"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3081,7 +3075,7 @@ msgstr "Наг-мундарі"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1241
 msgid "Ol Onal"
-msgstr ""
+msgstr "Ол-онал"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3342,7 +3336,7 @@ msgstr "Не вдалося встановити зв’язок з IBus.\n"
 
 #: tools/main.vala:280 tools/main.vala:762
 msgid "IBus is running."
-msgstr ""
+msgstr "IBus запущено."
 
 #: tools/main.vala:421
 msgid "List engine name only"
@@ -3366,16 +3360,12 @@ msgid "Get global engine failed.\n"
 msgstr "Спроба отримання назви загального рушія зазнала невдачі.\n"
 
 #: tools/main.vala:684
-#, fuzzy
-#| msgid ""
-#| "Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" "
-#| "TYPE."
 msgid ""
 "Start or restart daemon with \"direct\", \"systemd\", \"kde-wayland\" or "
 "\"wayland\" TYPE."
 msgstr ""
-"Запустити або перезапустити фонову службу з ТИПом «direct», «systemd» або "
-"«kde-wayland»."
+"Запустити або перезапустити фонову службу з ТИПом «direct», «systemd», «kde-"
+"wayland» або «wayland»."
 
 #: tools/main.vala:688
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
@@ -3710,6 +3700,10 @@ msgid ""
 "is Xorg so the Wayland feature is disabled. You would be better off running "
 "ibus-daemon directly instead or %s without that option."
 msgstr ""
+"Здається, ви запустили %s з параметром «--enable-wayland-im», але ви "
+"користуєтеся сервером Xorg, тому можливості Wayland вимкнено. Замість цього, "
+"вам варто запускати ibus-daemon безпосередньо або запускати %s без цього "
+"параметра."
 
 #: ui/gtk3/panel.vala:968
 msgid "IBus Notification"
@@ -3747,7 +3741,7 @@ msgstr "IBus — інтелектуальний канал введення да
 
 #: ui/gtk3/panel.vala:1498
 msgid "Maintainers"
-msgstr ""
+msgstr "Супровідники"
 
 #: ui/gtk3/panel.vala:1502
 msgid "translator-credits"

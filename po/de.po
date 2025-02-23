@@ -17,13 +17,13 @@
 # Roman Spirgi <bigant@fedoraproject.org>, 2017. #zanata
 # Thomas Eichhorn <tomislav@posteo.de>, 2017. #zanata
 # Tobias Weise <tobias.weise@web.de>, 2017. #zanata
-# Mike FABIAN <mfabian@redhat.com>, 2020, 2021, 2022, 2023, 2024.
+# Mike FABIAN <mfabian@redhat.com>, 2020, 2021, 2022, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-02-03 10:58+0900\n"
-"PO-Revision-Date: 2024-08-30 09:21+0000\n"
+"PO-Revision-Date: 2025-02-06 11:26+0000\n"
 "Last-Translator: Mike FABIAN <mfabian@redhat.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/de/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -2274,7 +2274,7 @@ msgstr "Vithkuqi"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:773
 msgid "Todhri"
-msgstr ""
+msgstr "Todhri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2435,7 +2435,7 @@ msgstr "Hanifi Rohingya"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:865
 msgid "Garay"
-msgstr ""
+msgstr "Garay-Schrift"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2575,7 +2575,7 @@ msgstr "Grantha"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:945
 msgid "Tulu-Tigalari"
-msgstr ""
+msgstr "Tulu-Tigalari"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2623,10 +2623,8 @@ msgstr "Takri"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:973
-#, fuzzy
-#| msgid "Myanmar Extended-B"
 msgid "Myanmar Extended-C"
-msgstr "Birmanisch, erweitert-B"
+msgstr "Birmanisch, erweitert-C"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2703,7 +2701,7 @@ msgstr "Devanagari, Erweiterung A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1017
 msgid "Sunuwar"
-msgstr ""
+msgstr "Sunwar"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2807,10 +2805,8 @@ msgstr "Ägyptische Hieroglyphen-Steuerzeichen"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1077
-#, fuzzy
-#| msgid "Egyptian Hieroglyphs"
 msgid "Egyptian Hieroglyphs Extended-A"
-msgstr "Ägyptische Hieroglyphen"
+msgstr "Ägyptische Hieroglyphen, erweitert A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2824,7 +2820,7 @@ msgstr "Anatolische Hieroglyphen"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1085
 msgid "Gurung Khema"
-msgstr ""
+msgstr "Gurung Khema"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2866,7 +2862,7 @@ msgstr "Pahawh Hmong"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1109
 msgid "Kirat Rai"
-msgstr ""
+msgstr "Kirat Rai"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2970,10 +2966,8 @@ msgstr "Kurzschrift-Steuerzeichen"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1169
-#, fuzzy
-#| msgid "Symbols for Legacy Computing"
 msgid "Symbols for Legacy Computing Supplement"
-msgstr "Symbole für Retrocomputer"
+msgstr "Symbole für Retrocomputer, Ergänzung"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3099,7 +3093,7 @@ msgstr "Nag Mundari"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1241
 msgid "Ol Onal"
-msgstr ""
+msgstr "Ol Onal"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3359,7 +3353,7 @@ msgstr "Keine Verbindung zu IBus.\n"
 
 #: tools/main.vala:280 tools/main.vala:762
 msgid "IBus is running."
-msgstr ""
+msgstr "IBus läuft."
 
 #: tools/main.vala:421
 msgid "List engine name only"
@@ -3383,16 +3377,12 @@ msgid "Get global engine failed.\n"
 msgstr "Auslesen der globalen Engine fehlgeschlagen.\n"
 
 #: tools/main.vala:684
-#, fuzzy
-#| msgid ""
-#| "Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" "
-#| "TYPE."
 msgid ""
 "Start or restart daemon with \"direct\", \"systemd\", \"kde-wayland\" or "
 "\"wayland\" TYPE."
 msgstr ""
-"Starten oder Neustarten des Daemons mit dem Typ „direct“, „systemd“ oder "
-"„kde-wayland“."
+"Starten oder Neustarten des Daemons mit TYPE „direct“, „systemd“, „kde-"
+"wayland“ oder „wayland“."
 
 #: tools/main.vala:688
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
@@ -3769,7 +3759,7 @@ msgstr "IBus ist ein intelligenter Eingabe-Bus für Linux/Unix."
 
 #: ui/gtk3/panel.vala:1498
 msgid "Maintainers"
-msgstr ""
+msgstr "Maintainer"
 
 #: ui/gtk3/panel.vala:1502
 msgid "translator-credits"

@@ -19,13 +19,13 @@
 # DaeHyun Sung <sungdh86@gmail.com>, 2016-2019. (gucharmap)
 # Changwoo Ryu <cwryu@debian.org>, 2019-2020.
 # simmon <simmon@nplob.com>, 2021.
-# 김인수 <simmon@nplob.com>, 2022, 2023, 2024.
+# 김인수 <simmon@nplob.com>, 2022, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-02-03 10:58+0900\n"
-"PO-Revision-Date: 2024-06-28 17:03+0000\n"
+"PO-Revision-Date: 2025-02-23 00:21+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ko/>\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.10\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3706,12 +3706,12 @@ msgid ""
 "environment variables are unset in the desktop session."
 msgstr ""
 "IBus는 %s의 데스크탑 세션에서 호출되어야 합니다. KDE에서는, '%s' 유틸리티를 "
-"실행 할 수 있고 \"입력 장치\" -> \"가상 키보드\" 부분으로 이동하며 \"%s\" 아"
-"이콘을 선택하여 \"적용\" 누름단추를 눌러서 %s에서 IBus를 구성합니다. 다른 데"
-"스크탑 세션에서는, %s 파일의 'Exec=' 행에서 세션의 구성 파일로 복사 할 수 있"
-"습니다. \"웨이랜드 입력 방식\" 구성에 대해서 개별 문서를 참조하세요. 당신이 "
-"\"웨이랜드 입력 방식\"을 구성하기 전에, QT_IM_MODULE 및 GTK_IM_MODULE 환경 변"
-"수가 데스크탑 세션에서 설정 해제되었는지 확인해야 합니다."
+"실행 할 수 있고 \"입력 장치\" -> \"가상 키보드\" 부분으로 이동하며 \"%s\" "
+"아이콘을 선택하여 \"적용\" 누름단추를 눌러서 %s에서 IBus를 구성합니다. 다른 "
+"데스크탑 세션에서는, %s 파일의 'Exec=' 행에서 세션의 구성 파일로 복사 할 수 "
+"있습니다. \"웨이랜드 입력 방식\" 구성에 대해서 개별 문서를 참조하세요. "
+"당신이 \"웨이랜드 입력 방식\"을 구성하기 전에, QT_IM_MODULE 및 GTK_IM_MODULE "
+"환경 변수가 데스크탑 세션에서 설정이 해제되었는지 확인해야 합니다."
 
 #: ui/gtk3/panel.vala:943
 #, c-format

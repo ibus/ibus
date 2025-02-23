@@ -10,14 +10,14 @@
 # Göran Uddeborg <goeran@uddeborg.se>, 2019. #zanata, 2020, 2024.
 # Allan Nordhøy <epost@anotheragency.no>, 2020.
 # Sebastian Rasmussen <sebras@gmail.com>, 2021.
-# Luna Jernberg <bittin@reimu.nl>, 2023, 2024.
+# Luna Jernberg <bittin@reimu.nl>, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-02-03 10:58+0900\n"
-"PO-Revision-Date: 2024-07-11 20:38+0000\n"
-"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
+"PO-Revision-Date: 2025-02-06 11:26+0000\n"
+"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/sv/>\n"
 "Language: sv\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -2238,7 +2238,7 @@ msgstr "Vithkuqit"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:773
 msgid "Todhri"
-msgstr ""
+msgstr "Todhri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2399,7 +2399,7 @@ msgstr "Hanifi Rohingya"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:865
 msgid "Garay"
-msgstr ""
+msgstr "Garay"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2539,7 +2539,7 @@ msgstr "Grantha"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:945
 msgid "Tulu-Tigalari"
-msgstr ""
+msgstr "Tulu-Tigalari"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2587,10 +2587,8 @@ msgstr "Takri"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:973
-#, fuzzy
-#| msgid "Myanmar Extended-B"
 msgid "Myanmar Extended-C"
-msgstr "Utökad Myanmar-B"
+msgstr "Utökad Myanmar-C"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2667,7 +2665,7 @@ msgstr "Devanagari utökad-A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1017
 msgid "Sunuwar"
-msgstr ""
+msgstr "Sunuwar"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2771,10 +2769,8 @@ msgstr "Formatstyrning för egyptiska hieroglyfer"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1077
-#, fuzzy
-#| msgid "Egyptian Hieroglyphs"
 msgid "Egyptian Hieroglyphs Extended-A"
-msgstr "Egyptiska hieroglyfer"
+msgstr "Egyptiska hieroglyfer utökad-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2788,7 +2784,7 @@ msgstr "Anatoliska hieroglyfer"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1085
 msgid "Gurung Khema"
-msgstr ""
+msgstr "Gurung Khema"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2830,7 +2826,7 @@ msgstr "Pahaw mong"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1109
 msgid "Kirat Rai"
-msgstr ""
+msgstr "Kirat Rai"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2934,10 +2930,8 @@ msgstr "Formateringskontroll för Stenografi"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1169
-#, fuzzy
-#| msgid "Symbols for Legacy Computing"
 msgid "Symbols for Legacy Computing Supplement"
-msgstr "Symboler för föråldrade databeräkningar"
+msgstr "Symboler för föråldrade databeräkningar tillägg"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3063,7 +3057,7 @@ msgstr "Nag Mundari"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1241
 msgid "Ol Onal"
-msgstr ""
+msgstr "Ol Onal"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3324,7 +3318,7 @@ msgstr "Kan inte ansluta till IBus.\n"
 
 #: tools/main.vala:280 tools/main.vala:762
 msgid "IBus is running."
-msgstr ""
+msgstr "IBus körs."
 
 #: tools/main.vala:421
 msgid "List engine name only"
@@ -3348,16 +3342,12 @@ msgid "Get global engine failed.\n"
 msgstr "Att hämta den globala maskinen misslyckades.\n"
 
 #: tools/main.vala:684
-#, fuzzy
-#| msgid ""
-#| "Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" "
-#| "TYPE."
 msgid ""
 "Start or restart daemon with \"direct\", \"systemd\", \"kde-wayland\" or "
 "\"wayland\" TYPE."
 msgstr ""
-"Starta eller starta om demonen med \"direct\", \"systemd\" eller \"kde-"
-"wayland\" TYP."
+"Starta eller starta om demonen med \"direct\", \"systemd\" \"kde-wayland\" "
+"eller \"wayland\" TYP."
 
 #: tools/main.vala:688
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."

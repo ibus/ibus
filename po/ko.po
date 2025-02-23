@@ -2256,7 +2256,7 @@ msgstr "비트쿠크"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:773
 msgid "Todhri"
-msgstr ""
+msgstr "알바니아어"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2420,7 +2420,7 @@ msgstr "하니피 로힝야 문자"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:865
 msgid "Garay"
-msgstr ""
+msgstr "가라이(세네갈)"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2570,7 +2570,7 @@ msgstr "그랜사 문자"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:945
 msgid "Tulu-Tigalari"
-msgstr ""
+msgstr "툴루-티갈라리 문자"
 
 # 네팔에서 사용하는 네와르어의 문자(newa alphabet)
 #. TRANSLATORS: You might refer the translations from gucharmap with
@@ -2623,10 +2623,8 @@ msgstr "타크리 문자"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:973
-#, fuzzy
-#| msgid "Myanmar Extended-B"
 msgid "Myanmar Extended-C"
-msgstr "미얀마 확장영역-B"
+msgstr "미얀마 확장영역-C"
 
 # 인도
 #. TRANSLATORS: You might refer the translations from gucharmap with
@@ -2707,7 +2705,7 @@ msgstr "데바나가리 확장영역-A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1017
 msgid "Sunuwar"
-msgstr ""
+msgstr "수누와르 문자"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2812,10 +2810,8 @@ msgstr "고대 이집트 신성문자 형식 제어 문자"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1077
-#, fuzzy
-#| msgid "Egyptian Hieroglyphs"
 msgid "Egyptian Hieroglyphs Extended-A"
-msgstr "고대 이집트 신성문자"
+msgstr "고대 이집트 신성문자 확장영역-A"
 
 # 현재 터키 지역
 #. TRANSLATORS: You might refer the translations from gucharmap with
@@ -2830,7 +2826,7 @@ msgstr "아나톨리아 상형문자"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1085
 msgid "Gurung Khema"
-msgstr ""
+msgstr "구릉 케마 문자 (네팔)"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2873,7 +2869,7 @@ msgstr "파하우몽 문자"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1109
 msgid "Kirat Rai"
-msgstr ""
+msgstr "키릿 라이 문자 (인도 시킴 주)"
 
 # Oberi Okaime,The Medefaidrin script was created for an artificial language Medefaidrin
 #. TRANSLATORS: You might refer the translations from gucharmap with
@@ -2982,10 +2978,8 @@ msgstr "속기 형식 컨트롤 문자"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1169
-#, fuzzy
-#| msgid "Symbols for Legacy Computing"
 msgid "Symbols for Legacy Computing Supplement"
-msgstr "레거시 컴퓨팅 기호"
+msgstr "고전 컴퓨팅 제공용 기호 (1970~1980년대)"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3113,7 +3107,7 @@ msgstr "나그 문다리 문자"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1241
 msgid "Ol Onal"
-msgstr ""
+msgstr "올 오날(Bhumji 언어) 문자"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3377,7 +3371,7 @@ msgstr "IBus에 연결 할 수 없습니다.\n"
 
 #: tools/main.vala:280 tools/main.vala:762
 msgid "IBus is running."
-msgstr ""
+msgstr "IBUS가 동작 중입니다."
 
 #: tools/main.vala:421
 msgid "List engine name only"
@@ -3401,15 +3395,12 @@ msgid "Get global engine failed.\n"
 msgstr "전체 공통 엔진의 취득에 실패했습니다.\n"
 
 #: tools/main.vala:684
-#, fuzzy
-#| msgid ""
-#| "Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" "
-#| "TYPE."
 msgid ""
 "Start or restart daemon with \"direct\", \"systemd\", \"kde-wayland\" or "
 "\"wayland\" TYPE."
 msgstr ""
-"\"direct\", \"systemd\" 또는 \"kde-wayland\" 유형으로 시작 또는 재시작합니다."
+"\"direct\", \"systemd\", \"kde-wayland\" 또는 \"wayland\" 유형으로 시작 또는 "
+"재시작합니다."
 
 #: tools/main.vala:688
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
@@ -3777,7 +3768,7 @@ msgstr "IBus는 리눅스/유닉스를 위한 지능형 입력 버스입니다."
 
 #: ui/gtk3/panel.vala:1498
 msgid "Maintainers"
-msgstr ""
+msgstr "관리자"
 
 #: ui/gtk3/panel.vala:1502
 msgid "translator-credits"

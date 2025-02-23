@@ -11,13 +11,15 @@
 # Allan Nordhøy <epost@anotheragency.no>, 2020.
 # Sebastian Rasmussen <sebras@gmail.com>, 2021.
 # Luna Jernberg <bittin@reimu.nl>, 2023, 2024, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-02-03 10:58+0900\n"
 "PO-Revision-Date: 2025-02-06 11:26+0000\n"
-"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/sv/>\n"
 "Language: sv\n"
@@ -3721,7 +3723,7 @@ msgstr "IBus är en intelligent inmatningsbuss för Linux/Unix."
 
 #: ui/gtk3/panel.vala:1498
 msgid "Maintainers"
-msgstr ""
+msgstr "Underhållare"
 
 #: ui/gtk3/panel.vala:1502
 msgid "translator-credits"

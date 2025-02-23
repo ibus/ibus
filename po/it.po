@@ -21,13 +21,14 @@
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
 # Nathan <nathan95@live.it>, 2022.
 # Luis Pixeltux <luis.pardus@gmail.com>, 2023.
+# Salvatore Cocuzza <info@salvatorecocuzza.it>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-02-03 10:58+0900\n"
-"PO-Revision-Date: 2023-02-05 01:20+0000\n"
-"Last-Translator: Luis Pixeltux <luis.pardus@gmail.com>\n"
+"PO-Revision-Date: 2025-02-13 06:33+0000\n"
+"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/it/>\n"
 "Language: it\n"
@@ -35,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -273,10 +274,18 @@ msgid ""
 "percentage values in the range 0% to 100%, and 'a' is a floating point value "
 "in the range 0 to 1 of the alpha."
 msgstr ""
+"L'icona XKB mostra la stringa di layout e la stringa viene renderizzata con "
+"il valore RGBA. Il valore RGBA può essere 1. un nome di colore da X11, 2. un "
+"valore esadecimale nella forma '#rrggbb' dove 'r', 'g' e 'b' sono cifre "
+"esadecimali di rosso, verde e blu, 3. un colore RGB nella forma 'rgb(r,g,b)' "
+"o 4. un colore RGBA nella forma 'rgba(r,g,b,a)' dove 'r', 'g' e 'b' sono "
+"numeri interi compresi tra 0 e 255 o valori percentuali compresi tra 0% e "
+"100% e \"a\" è un valore in virgola mobile compreso tra 0 e 1 dell'alfa."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:203
 msgid "The milliseconds to show the panel icon for a property"
 msgstr ""
+"I millisecondi necessari per mostrare l'icona del pannello per una proprietà"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:204
 msgid ""
@@ -285,6 +294,11 @@ msgid ""
 "of icon-prop-key in IBusEngineDesc. If the value is 0, no delay time and the "
 "property icon is shown immediately."
 msgstr ""
+"I millisecondi necessari per mostrare l'icona del pannello dall'icona del "
+"motore all'icona della proprietà ogni volta che i motori vengono cambiati se "
+"la proprietà è specificata dal valore di icon-prop-key in IBusEngineDesc. Se "
+"il valore è 0, nessun tempo di ritardo e l'icona della proprietà viene "
+"visualizzata immediatamente."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:208
 msgid "Use custom font"
@@ -304,52 +318,43 @@ msgid "Custom font name for language panel"
 msgstr "Nome del tipo di carattere personalizzato per il pannello della lingua"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom theme"
-msgstr "Usare carattere personalizzato"
+msgstr "Utilizza un tema personalizzato"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:219
-#, fuzzy
-#| msgid "Use custom font name for language panel"
 msgid "Use custom theme name for language panel"
-msgstr "Usa un tipo di carattere personalizzato per il pannello della lingua"
+msgstr "Utilizza il nome del tema personalizzato per il pannello della lingua"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom theme"
-msgstr "Carattere personalizzato"
+msgstr "Tema personalizzato"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:224
-#, fuzzy
-#| msgid "Custom font name for language panel"
 msgid "Custom theme name for language panel"
-msgstr "Nome del tipo di carattere personalizzato per il pannello della lingua"
+msgstr "Nome del tema personalizzato per il pannello della lingua"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:228
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom icon"
-msgstr "Usare carattere personalizzato"
+msgstr "Utilizza l'icona personalizzata"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:229
 msgid "Use custom icon name for arrow buttons on candidate window"
 msgstr ""
+"Utilizza il nome dell'icona personalizzata per i pulsanti freccia nella "
+"candidate window"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:233
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom icon"
-msgstr "Carattere personalizzato"
+msgstr "Icona personalizzata"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:234
 msgid "Custom icon name for arrow buttons on candidate window"
 msgstr ""
+"Nome dell'icona personalizzata per i pulsanti freccia nella candidate window"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:238 setup/setup.ui:1317
 msgid "Choose glyphs with input method's language on candidate window"
-msgstr ""
+msgstr "Scegli i glifi con la lingua del metodo di input nella candidate window"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:239
 msgid ""
@@ -358,6 +363,10 @@ msgid ""
 "if the value is true and chooses them from the desktop locale if the value "
 "is false."
 msgstr ""
+"Alcuni punti di codice hanno glifi diversi e Pango determina i glifi "
+"dall'attributo della lingua. Pango sceglie i glifi dalla lingua del motore "
+"IBus se il valore è true e li sceglie dalla locale del desktop se il valore "
+"è false."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:250
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -404,48 +413,59 @@ msgid ""
 "You can show the favorite emojis on emoji list if this list has any "
 "characters."
 msgstr ""
+"Puoi mostrare gli emoji preferiti nell'elenco degli emoji se questo elenco "
+"contiene caratteri."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:275
 msgid "favorite emoji annotation list on emoji dialog"
 msgstr ""
+"elenco delle annotazioni emoji preferite nella finestra di dialogo emoji"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:276
 msgid "You can assign an annotation for a favorite emoji in this list."
-msgstr ""
+msgstr "Puoi assegnare un'annotazione per un'emoji preferita in questo elenco."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:280
 msgid "Whether emoji annotations can be match partially or not"
-msgstr ""
+msgstr "Se le annotazioni emoji possono corrispondere parzialmente o meno"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:281
 msgid ""
 "Whether emoji annotations can be matched with a partial string instead of "
 "the exact match or not."
 msgstr ""
+"Se le annotazioni emoji possono essere abbinate o meno a una stringa "
+"parziale anziché alla corrispondenza esatta."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:285
 msgid "Match emoji annotations with the specified length"
-msgstr ""
+msgstr "Abbina le annotazioni emoji alla lunghezza specificata"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:286
 msgid ""
 "Match emoji annotations partially with more than the specified number of "
 "characters instead of the exact match."
 msgstr ""
+"Abbina parzialmente le annotazioni emoji con un numero di caratteri "
+"superiore a quello specificato anziché la corrispondenza esatta."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:290
 msgid "Choose a condition to match emoji annotations partially"
 msgstr ""
+"Scegli una condizione per far corrispondere parzialmente le annotazioni emoji"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:291
 msgid ""
 "Choose one of the following conditions to match emoji annotations partially: "
 "0 == Prefix match, 1 == Suffix match, 2 == Containing match"
 msgstr ""
+"Scegli una delle seguenti condizioni per abbinare parzialmente le "
+"annotazioni emoji: 0 == Corrispondenza prefisso, 1 == Corrispondenza "
+"suffisso, 2 == Corrispondenza contenuto"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:295
 msgid "Load the emoji data at the time of startup"
-msgstr ""
+msgstr "Carica i dati emoji al momento dell'avvio"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:296
 msgid ""
@@ -453,10 +473,13 @@ msgid ""
 "needed to load the data. Load the emoji data when open the emoji dialog at "
 "the beginning if false."
 msgstr ""
+"Se vero, carica i dati emoji al momento dell'avvio. Per caricare i dati sono "
+"necessari circa 10 MB di memoria. Carica i dati emoji quando apri la "
+"finestra di dialogo emoji all'inizio se falso."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:300
 msgid "Load the Unicode data at the time of startup"
-msgstr ""
+msgstr "Caricare i dati Unicode al momento dell'avvio"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:301
 msgid ""
@@ -465,6 +488,10 @@ msgid ""
 "the beginning if false. The Unicode data is always loaded after the emoji "
 "data is loaded even if true."
 msgstr ""
+"Se vero, carica i dati Unicode al momento dell'avvio. Per caricare i dati "
+"sono necessari circa 15 MB di memoria. Carica i dati Unicode quando apri la "
+"finestra di dialogo emoji all'inizio se falso. I dati Unicode vengono sempre "
+"caricati dopo il caricamento dei dati emoji, anche se true."
 
 #: ibus/_config.py.in:41
 msgid ""
@@ -805,26 +832,28 @@ msgstr ""
 msgid ""
 "The shortcut keys to enable conversions of emoji annotations or Unicode names"
 msgstr ""
+"I tasti di scelta rapida per abilitare le conversioni di annotazioni emoji o "
+"nomi Unicode"
 
 #: setup/setup.ui:887
 msgid "Emoji annotation:"
 msgstr "Annotazione emoji:"
 
 #: setup/setup.ui:939
-#, fuzzy
-#| msgid "The shortcut keys for turning input method on or off"
 msgid "The shortcut keys to enable Unicode code point conversions"
-msgstr "I tasti scorciatoia per abilitare o disabilitare i metodi di input"
+msgstr ""
+"I tasti di scelta rapida per abilitare le conversioni dei punti di codice "
+"Unicode"
 
 #: setup/setup.ui:941
-#, fuzzy
-#| msgid "Code point: %s"
 msgid "Unicode code point:"
-msgstr "Punto di codice: %s"
+msgstr "Punto di codice Unicode:"
 
 #: setup/setup.ui:1025
 msgid "Set a font of Unicode candidates on the emoji dialog"
 msgstr ""
+"Imposta un carattere dei candidati Unicode nella finestra di dialogo delle "
+"emoji"
 
 #: setup/setup.ui:1027
 msgid "Unicode font:"
@@ -833,38 +862,43 @@ msgstr "Carattere Unicode:"
 #: setup/setup.ui:1050
 msgid "Set a language of emoji annotations on the emoji dialog"
 msgstr ""
+"Imposta una lingua per le annotazioni emoji nella finestra di dialogo emoji"
 
 #: setup/setup.ui:1052
 msgid "Emoji annotation language:"
-msgstr ""
+msgstr "Linguaggio annotazione emoji:"
 
 #: setup/setup.ui:1074
 msgid ""
 "Match emoji annotations partially with the following condition and more than "
 "the number of characters:"
 msgstr ""
+"Abbina parzialmente le annotazioni emoji alla seguente condizione e a un "
+"numero superiore di caratteri:"
 
 #: setup/setup.ui:1079
 msgid ""
 "If emoji annotations can be matched with a partial string instead of the "
 "exact match"
 msgstr ""
+"Se le annotazioni emoji possono essere abbinate a una stringa parziale "
+"anziché alla corrispondenza esatta"
 
 #: setup/setup.ui:1113
 msgid "Prefix match"
-msgstr ""
+msgstr "Corrispondenza del prefisso"
 
 #: setup/setup.ui:1127
 msgid "Suffix match"
-msgstr ""
+msgstr "Corrispondenza del suffisso"
 
 #: setup/setup.ui:1142
 msgid "Containing match"
-msgstr ""
+msgstr "Contenente corrispondenza"
 
 #: setup/setup.ui:1188
 msgid "Emoji"
-msgstr ""
+msgstr "Emoji"
 
 #: setup/setup.ui:1242
 msgid "<b>Keyboard Layout</b>"
@@ -879,32 +913,28 @@ msgid ""
 "Choose glyphs with the input method's language on the candidate window for "
 "the duplicated code points"
 msgstr ""
+"Scegli i glifi con la lingua del metodo di input nella candidate window per "
+"i punti di codice duplicati"
 
 #: setup/setup.ui:1341
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom theme:"
-msgstr "Usare carattere personalizzato:"
+msgstr "Utilizza tema personalizzato:"
 
 #: setup/setup.ui:1342
 msgid "Choose a theme of the candidate window"
-msgstr ""
+msgstr "Scegli un tema per la candidate window"
 
 #: setup/setup.ui:1378
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom icon:"
-msgstr "Usare carattere personalizzato:"
+msgstr "Usa icona personalizzata:"
 
 #: setup/setup.ui:1379
 msgid "Choose a theme of the arrow buttons on the candidate window"
-msgstr ""
+msgstr "Scegli un tema per i pulsanti freccia nella candidate window"
 
 #: setup/setup.ui:1424
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Font and Theme</b>"
-msgstr "<b>Tipo di carattere e stile</b>"
+msgstr "<b>Carattere e tema</b>"
 
 #: setup/setup.ui:1444
 msgid "Advanced"
@@ -912,155 +942,155 @@ msgstr "Avanzate"
 
 #: src/ibusemojigen.h:30
 msgid "Activities"
-msgstr ""
+msgstr "Attività"
 
 #: src/ibusemojigen.h:31
 msgid "Animals & Nature"
-msgstr ""
+msgstr "Animali e natura"
 
 #: src/ibusemojigen.h:32
 msgid "Component"
-msgstr ""
+msgstr "Componente"
 
 #: src/ibusemojigen.h:33
 msgid "Flags"
-msgstr ""
+msgstr "Bandiere"
 
 #: src/ibusemojigen.h:34
 msgid "Food & Drink"
-msgstr ""
+msgstr "Cibo e bevande"
 
 #: src/ibusemojigen.h:35
 msgid "Objects"
-msgstr ""
+msgstr "Oggetti"
 
 #: src/ibusemojigen.h:36
 msgid "People & Body"
-msgstr ""
+msgstr "Persone e corpo"
 
 #: src/ibusemojigen.h:37
 msgid "Smileys & Emotion"
-msgstr ""
+msgstr "Smileys & Emotion"
 
 #: src/ibusemojigen.h:38
 msgid "Symbols"
-msgstr ""
+msgstr "Simboli"
 
 #: src/ibusemojigen.h:39
 msgid "Travel & Places"
-msgstr ""
+msgstr "Viaggi e luoghi"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:33
 msgid "Basic Latin"
-msgstr ""
+msgstr "Latino di base"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:37
 msgid "Latin-1 Supplement"
-msgstr ""
+msgstr "Supplemento latino-1"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:41
 msgid "Latin Extended-A"
-msgstr ""
+msgstr "Latino esteso-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:45
 msgid "Latin Extended-B"
-msgstr ""
+msgstr "Latino esteso-B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:49
 msgid "IPA Extensions"
-msgstr ""
+msgstr "Estensioni dell'IPA"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:53
 msgid "Spacing Modifier Letters"
-msgstr ""
+msgstr "Lettere di modifica della spaziatura"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:57
 msgid "Combining Diacritical Marks"
-msgstr ""
+msgstr "Combinazione di segni diacritici"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:61
 msgid "Greek and Coptic"
-msgstr ""
+msgstr "greco e copto"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:65
 msgid "Cyrillic"
-msgstr ""
+msgstr "Cirillico"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:69
 msgid "Cyrillic Supplement"
-msgstr ""
+msgstr "Supplemento cirillico"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:73
 msgid "Armenian"
-msgstr ""
+msgstr "Armeno"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:77
 msgid "Hebrew"
-msgstr ""
+msgstr "Ebraico"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:81
 msgid "Arabic"
-msgstr ""
+msgstr "Arabo"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:85
 msgid "Syriac"
-msgstr ""
+msgstr "Siriaco"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:89
 msgid "Arabic Supplement"
-msgstr ""
+msgstr "Supplemento arabo"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:93
 msgid "Thaana"
-msgstr ""
+msgstr "Thaana"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1508,14 +1538,14 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:349
 msgid "Mathematical Operators"
-msgstr ""
+msgstr "Operatori matematici"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:353
 msgid "Miscellaneous Technical"
-msgstr ""
+msgstr "Varie tecniche"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1529,70 +1559,70 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:361
 msgid "Optical Character Recognition"
-msgstr ""
+msgstr "Riconoscimento ottico dei caratteri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:365
 msgid "Enclosed Alphanumerics"
-msgstr ""
+msgstr "Alfanumerici allegati"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:369
 msgid "Box Drawing"
-msgstr ""
+msgstr "Disegno della scatola"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:373
 msgid "Block Elements"
-msgstr ""
+msgstr "Elementi di blocco"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:377
 msgid "Geometric Shapes"
-msgstr ""
+msgstr "Forme geometriche"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:381
 msgid "Miscellaneous Symbols"
-msgstr ""
+msgstr "Simboli vari"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:385
 msgid "Dingbats"
-msgstr ""
+msgstr "Dingbats"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:389
 msgid "Miscellaneous Mathematical Symbols-A"
-msgstr ""
+msgstr "Simboli matematici vari-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:393
 msgid "Supplemental Arrows-A"
-msgstr ""
+msgstr "Frecce supplementari-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:397
 msgid "Braille Patterns"
-msgstr ""
+msgstr "Modelli Braille"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

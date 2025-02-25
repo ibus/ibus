@@ -1693,11 +1693,13 @@ _set_cursor_location_internal (IBusIMContext *ibusimcontext)
 #endif
 
     if (GDK_IS_WAYLAND_DISPLAY (display)) {
-        ibus_input_context_set_cursor_location_relative (ibusimcontext->ibuscontext,
-                                                         area.x,
-                                                         area.y,
-                                                         area.width,
-                                                         area.height);
+        area.y += area.height / 2;
+        ibus_input_context_set_cursor_location_relative (
+                ibusimcontext->ibuscontext,
+                area.x,
+                area.y,
+                area.width,
+                area.height);
 
     } else {
 #endif

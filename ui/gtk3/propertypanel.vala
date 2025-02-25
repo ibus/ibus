@@ -4,7 +4,7 @@
  *
  * Copyright(c) 2013-2016 Red Hat, Inc.
  * Copyright(c) 2013-2015 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2013-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2013-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,7 +30,9 @@ enum PanelShow {
 
 public class PropertyPanel : Gtk.Box {
     private unowned Gdk.Window m_root_window;
+#if ENABLE_XIM
     private unowned X.Display m_xdisplay;
+#endif
     private Gtk.Window m_toplevel;
     private IBus.PropList m_props;
     private IPropToolItem[] m_items;
@@ -51,12 +53,14 @@ public class PropertyPanel : Gtk.Box {
 
         set_visible(true);
 
+#if ENABLE_XIM
         var display = BindingCommon.get_xdisplay();
         if (display != null) {
             m_xdisplay = display.get_xdisplay();
             var screen = display.get_default_screen();
             m_root_window = screen.get_root_window();
         }
+#endif
 
         m_toplevel = new Gtk.Window(Gtk.WindowType.POPUP);
         m_toplevel.add_events(Gdk.EventMask.BUTTON_PRESS_MASK);
@@ -77,9 +81,11 @@ public class PropertyPanel : Gtk.Box {
             }
         });
 
+#if ENABLE_XIM
         // PropertyPanel runs before KDE5 panel runs and
         // monitor the desktop size.
         monitor_net_workarea_atom();
+#endif
     }
 
     public void set_properties(IBus.PropList props) {
@@ -315,16 +321,20 @@ public class PropertyPanel : Gtk.Box {
             cursor_right_bottom.y + allocation.height
         };
 
-        int root_width = m_root_window.get_width();
-        int root_height = m_root_window.get_height();
+        int root_width = 0;
+        int root_height = 0;
+        if (m_root_window != null) {
+            root_width = m_root_window.get_width();
+            root_height = m_root_window.get_height();
+        }
 
         int x, y;
-        if (window_right_bottom.x > root_width)
+        if (window_right_bottom.x > root_width && root_width > 0)
             x = root_width - allocation.width;
         else
             x = cursor_right_bottom.x;
 
-        if (window_right_bottom.y > root_height)
+        if (window_right_bottom.y > root_height && root_height > 0)
             y = m_cursor_location.y - allocation.height;
         else
             y = cursor_right_bottom.y;
@@ -384,6 +394,7 @@ public class PropertyPanel : Gtk.Box {
         move(x, y);
     }
 
+#if ENABLE_XIM
     private Gdk.FilterReturn root_window_filter(Gdk.XEvent gdkxevent,
                                                 Gdk.Event  event) {
         X.Event *xevent = (X.Event*) gdkxevent;
@@ -425,6 +436,7 @@ public class PropertyPanel : Gtk.Box {
         },
         GLib.Priority.DEFAULT_IDLE);
     }
+#endif
 
     private void show_with_auto_hide_timer() {
         /* Do not call gtk_window_resize() in

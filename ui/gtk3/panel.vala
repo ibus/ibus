@@ -454,6 +454,7 @@ class Panel : IBus.PanelService {
         Gdk.Window? window = null;
         Gtk.MenuPositionFunc? func = null;
         m_status_icon.set_from_icon_name("ibus-keyboard");
+#if ENABLE_XIM
         var display = BindingCommon.get_xdisplay();
         if (display == null) {
             warning("No Gdk.X11.Display");
@@ -497,6 +498,10 @@ class Panel : IBus.PanelService {
                         create_activate_menu(true),
                         area, window, func);
         });
+#else
+        warning("No Gdk.X11.Display");
+        return;
+#endif
     }
 
     private void bind_switch_shortcut() {
@@ -1570,6 +1575,7 @@ class Panel : IBus.PanelService {
         if (m_sys_menu != null)
             return m_sys_menu;
 
+#if ENABLE_XIM
         Gdk.Display display_backup = null;
         if (use_x11 && m_is_wayland) {
             var display = BindingCommon.get_xdisplay();
@@ -1579,6 +1585,7 @@ class Panel : IBus.PanelService {
                         (Gdk.Display)display);
             }
         }
+#endif
 
         // Show system menu
         Gtk.MenuItem item;
@@ -1613,13 +1620,16 @@ class Panel : IBus.PanelService {
 
         m_sys_menu.show_all();
 
+#if ENABLE_XIM
         if (display_backup != null)
             Gdk.DisplayManager.get().set_default_display(display_backup);
+#endif
 
         return m_sys_menu;
     }
 
     private Gtk.Menu create_activate_menu(bool use_x11 = false) {
+#if ENABLE_XIM
         Gdk.Display display_backup = null;
         if (use_x11 && !BindingCommon.default_is_xdisplay()) {
             var display = BindingCommon.get_xdisplay();
@@ -1629,6 +1639,7 @@ class Panel : IBus.PanelService {
                         (Gdk.Display)display);
             }
         }
+#endif
         m_ime_menu = new Gtk.Menu();
 
         // Show properties and IME switching menu
@@ -1672,8 +1683,10 @@ class Panel : IBus.PanelService {
         // Do not take focuse to avoid some focus related issues.
         m_ime_menu.set_take_focus(false);
 
+#if ENABLE_XIM
         if (display_backup != null)
             Gdk.DisplayManager.get().set_default_display(display_backup);
+#endif
         return m_ime_menu;
     }
 

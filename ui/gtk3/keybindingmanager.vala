@@ -48,6 +48,7 @@ public class KeybindingManager : GLib.Object {
             Gdk.Event.handler_set(event_handler);
     }
 
+#if ENABLE_XIM
     /**
      * Bind accelerator to given handler
      *
@@ -90,6 +91,7 @@ public class KeybindingManager : GLib.Object {
         foreach (Keybinding binding in remove_bindings)
             m_bindings.remove (binding);
     }
+#endif
 
     public static KeybindingManager get_instance (bool is_wayland_im=false) {
         if (m_instance == null)
@@ -190,6 +192,7 @@ public class KeybindingManager : GLib.Object {
         Gtk.main_do_event(event);
     }
 
+#if ENABLE_XIM
     // Get union of given modifiers and all the combination of the
     // modifiers in ignored_modifiers.
     XI.GrabModifiers[] get_grab_modifiers(uint modifiers) {
@@ -271,6 +274,7 @@ public class KeybindingManager : GLib.Object {
 
         return retval == 0;
     }
+#endif
 }
 
 /*

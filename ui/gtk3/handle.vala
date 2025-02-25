@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2011-2016 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2016-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2016-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -62,6 +62,7 @@ class Handle : Gtk.EventBox {
     }
 
     public override bool button_press_event(Gdk.EventButton event) {
+#if ENABLE_XIM
         if (!BindingCommon.default_is_xdisplay())
             return false;
         if (event.button != 1)
@@ -135,9 +136,13 @@ class Handle : Gtk.EventBox {
         m_press_pos.y = (int)event.y_root - y;
         move_begin();
         return true;
+#else
+        return false;
+#endif
     }
 
     public override bool button_release_event(Gdk.EventButton event) {
+#if ENABLE_XIM
         if (event.button != 1)
             return false;
         m_move_begined = false;
@@ -150,6 +155,9 @@ class Handle : Gtk.EventBox {
 #endif
         move_end();
         return true;
+#else
+        return false;
+#endif
     }
 
     public override bool motion_notify_event(Gdk.EventMotion event) {

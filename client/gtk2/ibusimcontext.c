@@ -2,8 +2,8 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2008-2024 Red Hat, Inc.
+ * Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -1657,6 +1657,7 @@ _set_cursor_location_internal (IBusIMContext *ibusimcontext)
     /* Translates from the surface coordinates into the widget coordinates. */
     gtk_native_get_surface_transform (native, &nx, &ny);
 
+#ifdef HAVE_XIM
     display = gtk_widget_get_display (ibusimcontext->client_window);
     if (GDK_IS_X11_DISPLAY (display)) {
         GdkSurface *surface = gtk_native_get_surface
@@ -1674,6 +1675,7 @@ _set_cursor_location_internal (IBusIMContext *ibusimcontext)
         tx = tx / scale_factor;
         ty = ty / scale_factor;
     }
+#endif
 
     area.x = p.x + nx + tx;
     area.y = p.y + ny + ty;

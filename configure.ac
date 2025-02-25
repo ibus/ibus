@@ -249,10 +249,6 @@ AC_ARG_ENABLE(xim,
 )
 AM_CONDITIONAL([ENABLE_XIM], [test x"$enable_xim" = x"yes"])
 
-if test x"$enable_xim" = x"yes"; then
-    AC_SUBST([XIM_CLI_ARG], [--xim])
-fi
-
 # --enable-wayland option.
 AC_ARG_ENABLE(wayland,
     AS_HELP_STRING([--enable-wayland],
@@ -336,6 +332,8 @@ if test x"$enable_xim" = x"yes"; then
             gtk+-2.0
         ])
     fi
+    AC_SUBST([XIM_CLI_ARG], [--xim])
+    AC_DEFINE(HAVE_XIM, 1, [Define to enable XIM])
     enable_xim="yes (enabled, use --disable-xim to disable)"
 fi
 if test x"$enable_gtk3" = x"yes"; then
@@ -687,10 +685,6 @@ AC_ARG_ENABLE(ui,
 )
 AM_CONDITIONAL([ENABLE_UI], [test x"$enable_ui" = x"yes"])
 if test x"$enable_ui" = x"yes"; then
-    # Check for x11
-    PKG_CHECK_MODULES(X11, [
-        x11
-    ])
     enable_ui="yes (enabled, use --disable-ui to disable)"
 fi
 

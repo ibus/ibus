@@ -2,7 +2,7 @@
  *
  * ibus - The Input Bus
  *
- * Copyright(c) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright(c) 2015 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -264,6 +264,7 @@ class Indicator : IBus.Service
 
 
     private Gdk.Window? query_gdk_window() {
+#if ENABLE_XIM
         if (m_indicator_window != null)
             return m_indicator_window;
 
@@ -311,6 +312,9 @@ class Indicator : IBus.Service
                 display as Gdk.X11.Display,
                 current);
         return m_indicator_window;
+#else
+        return null;
+#endif
     }
 
 

@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2018 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2018-2024 Takao Fujwiara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2018-2025 Takao Fujwiara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,7 +24,9 @@
 /* This file depends on keybindingmanager.vala */
 
 class BindingCommon {
+#if ENABLE_XIM
     public static Gdk.X11.Display m_xdisplay;
+#endif
     public static bool m_default_is_xdisplay;
     public enum KeyEventFuncType {
         ANY,
@@ -104,10 +106,12 @@ class BindingCommon {
         if (!BindingCommon.default_is_xdisplay())
             is_wayland = true;
 #endif
+#if ENABLE_XIM
         if (!is_wayland) {
             keybinding_manager.bind(switch_keysym, switch_modifiers,
                                     handler_normal);
         }
+#endif
         if (ftype == KeyEventFuncType.EMOJI_TYPING) {
             return;
         }
@@ -125,16 +129,19 @@ class BindingCommon {
                                     ftype);
         keybindings.append(keybinding);
 
+#if ENABLE_XIM
         if (!is_wayland && ftype == KeyEventFuncType.IME_SWITCHER) {
             keybinding_manager.bind(switch_keysym, switch_modifiers,
                                     handler_reverse);
         }
+#endif
         return;
     }
 
     public static void
     unbind_switch_shortcut(KeyEventFuncType      ftype,
                            GLib.List<Keybinding> keybindings) {
+#if ENABLE_XIM
         var keybinding_manager = KeybindingManager.get_instance();
 
         while (keybindings != null) {
@@ -147,6 +154,7 @@ class BindingCommon {
             }
             keybindings = keybindings.next;
         }
+#endif
     }
 
     public static void set_custom_font(GLib.Settings?       settings_panel,
@@ -258,11 +266,14 @@ class BindingCommon {
     }
 
     public static bool default_is_xdisplay() {
+#if ENABLE_XIM
         if (m_xdisplay == null)
             get_xdisplay(true);
+#endif
         return m_default_is_xdisplay;
     }
 
+#if ENABLE_XIM
     public static Gdk.X11.Display? get_xdisplay(bool check_only=false) {
         if (m_xdisplay != null)
             return m_xdisplay;
@@ -286,4 +297,5 @@ class BindingCommon {
         Gdk.set_allowed_backends("*");
         return m_xdisplay;
     }
+#endif
 }

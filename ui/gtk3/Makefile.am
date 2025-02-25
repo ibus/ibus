@@ -3,8 +3,8 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2015 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2015-2024 Takao Fujwiara <takao.fujiwara1@gmail.com>
-# Copyright (c) 2007-2020 Red Hat, Inc.
+# Copyright (c) 2015-2025 Takao Fujwiara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2007-2025 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -56,7 +56,6 @@ AM_CFLAGS = \
     @GIO2_CFLAGS@ \
     @GTHREAD2_CFLAGS@ \
     @GTK3_CFLAGS@ \
-    @X11_CFLAGS@ \
     -DG_LOG_DOMAIN=\"IBUS\" \
     -DBINDIR=\"$(bindir)\" \
     -DPKGDATADIR=\"$(pkgdatadir)\" \
@@ -72,8 +71,6 @@ AM_LDADD = \
     @GIO2_LIBS@ \
     @GTHREAD2_LIBS@ \
     @GTK3_LIBS@ \
-    @X11_LIBS@ \
-    -lXi \
     $(libibus) \
     $(NULL)
 
@@ -82,10 +79,8 @@ AM_VALAFLAGS = \
     --vapidir=$(top_srcdir)/bindings/vala \
     --pkg=posix \
     --pkg=gtk+-3.0 \
-    --pkg=gdk-x11-3.0 \
     --pkg=ibus-1.0 \
     --pkg=config \
-    --pkg=xi \
     --pkg=glibmacro \
     --pkg-config="\"$(PKG_CONFIG) --with-path=$(PKG_CONFIG_PATH)\"" \
     --target-glib="$(VALA_TARGET_GLIB_VERSION)" \
@@ -116,6 +111,23 @@ ibus_ui_gtk3_SOURCES = \
 ibus_ui_gtk3_LDADD = \
     $(AM_LDADD) \
     $(NULL)
+
+if ENABLE_XIM
+AM_CFLAGS += \
+    @X11_CFLAGS@ \
+    $(NULL)
+
+AM_LDADD += \
+    @X11_LIBS@ \
+    -lXi \
+    $(NULL)
+
+AM_VALAFLAGS += \
+    --pkg=gdk-x11-3.0 \
+    --pkg=xi \
+    -D ENABLE_XIM \
+    $(NULL)
+endif
 
 if ENABLE_LIBNOTIFY
 AM_CFLAGS += \

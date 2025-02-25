@@ -942,7 +942,7 @@ input_method_keyboard_keymap (void                      *data,
         zwp_virtual_keyboard_v1_keymap (priv->seat->virtual_keyboard,
                                         format, fd, size);
     }
-    if (priv->keymap && priv->state)
+    if (priv->keymap && priv->state && priv->state_system)
         return;
     keymap = create_system_xkb_keymap (priv->xkb_context, format, fd, size);
     if (keymap && !ibus_wayland_im_update_xkb_state (wlim, keymap))

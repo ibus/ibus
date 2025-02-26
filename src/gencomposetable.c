@@ -1,8 +1,8 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
- * Copyright (C) 2023-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2023-2025 Red Hat, Inc.
+ * Copyright (C) 2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2023 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -76,7 +76,6 @@ main (int argc, char *argv[])
     char * const *sys_lang = NULL;
     char *path = NULL;
     IBusComposeTableEx *compose_table;
-    guint16 saved_version = 0;
     char *basename = NULL;
 
     path = g_strdup ("./Compose");
@@ -98,15 +97,13 @@ main (int argc, char *argv[])
         g_debug ("Create a cache of %s", path);
     }
     g_setenv ("IBUS_COMPOSE_CACHE_DIR", ".", TRUE);
-    compose_table = ibus_compose_table_load_cache (path, &saved_version);
+    compose_table = ibus_compose_table_load_cache (path);
     if (!compose_table &&
         (compose_table = ibus_compose_table_new_with_file (path, NULL))
            == NULL) {
         g_warning ("Failed to generate the compose table.");
         return 1;
     }
-    if (saved_version > 0)
-        g_warning ("Old cache was updated.");
     g_free (path);
     basename = g_strdup_printf ("%08x.cache", compose_table->id);
     g_debug ("Saving cache id %s", basename);

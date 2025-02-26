@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
- * Copyright (C) 2016-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2016-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -55,7 +55,7 @@ IBusComposeTableEx *
          ibus_compose_table_deserialize
                                     (const char                 *contents,
                                      gsize                       length,
-                                     guint16                    *saved_version);
+                                     gboolean                   reverse_endian);
 gboolean ibus_compose_table_check   (const IBusComposeTableEx   *table,
                                      guint                      *compose_buffer,
                                      int                         n_compose,

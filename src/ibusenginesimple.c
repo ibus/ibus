@@ -90,7 +90,6 @@ guint COMPOSE_BUFFER_SIZE = 20;
 G_LOCK_DEFINE_STATIC (global_tables);
 static GSList *global_tables;
 static IBusText *updated_preedit_empty;
-static IBusComposeTableEx *en_compose_table;
 
 /* functions prototype */
 static void     ibus_engine_simple_destroy      (IBusEngineSimple   *simple);
@@ -125,11 +124,6 @@ ibus_engine_simple_class_init (IBusEngineSimpleClass *class)
 {
     IBusObjectClass *ibus_object_class = IBUS_OBJECT_CLASS (class);
     IBusEngineClass *engine_class = IBUS_ENGINE_CLASS (class);
-    GBytes *data;
-    GError *error = NULL;
-    const char *contents;
-    gsize length = 0;
-    guint16 saved_version = 0;
 
     ibus_object_class->destroy =
         (IBusObjectDestroyFunc) ibus_engine_simple_destroy;
@@ -145,31 +139,17 @@ ibus_engine_simple_class_init (IBusEngineSimpleClass *class)
                             = ibus_engine_simple_candidate_clicked;
     updated_preedit_empty = ibus_text_new_from_string ("");
     g_object_ref_sink (updated_preedit_empty);
-
-    data = g_resources_lookup_data ("/org/freedesktop/ibus/compose/sequences",
-                                    G_RESOURCE_LOOKUP_FLAGS_NONE,
-                                    &error);
-    if (error) {
-        g_warning ("Not found compose resource %s", error->message);
-        g_clear_error (&error);
-        return;
-    }
-    contents = g_bytes_get_data (data, &length);
-    en_compose_table = ibus_compose_table_deserialize (contents,
-                                                       length,
-                                                       &saved_version);
-    if (!en_compose_table && saved_version) {
-        g_warning ("Failed to parse the builtin compose due to the different "
-                   "version %u. Please rebuild IBus resource files.",
-                   saved_version);
-    }
 }
-
 
 static void
 ibus_engine_simple_init (IBusEngineSimple *simple)
 {
     IBusEngineSimplePrivate *priv;
+    GBytes *data;
+    GError *error = NULL;
+    const char *contents;
+    gsize length = 0;
+    IBusComposeTableEx *en_compose_table;
 
     priv = simple->priv = IBUS_ENGINE_SIMPLE_GET_PRIVATE (simple);
     priv->compose_buffer = g_new0 (guint, COMPOSE_BUFFER_SIZE + 1);
@@ -180,6 +160,16 @@ ibus_engine_simple_init (IBusEngineSimple *simple)
     priv->tentative_match_len = 0;
     priv->updated_preedit =
             (IBusText *)g_object_ref_sink (updated_preedit_empty);
+    data = g_resources_lookup_data ("/org/freedesktop/ibus/compose/sequences",
+                                    G_RESOURCE_LOOKUP_FLAGS_NONE,
+                                    &error);
+    if (error) {
+        g_warning ("Not found compose resource %s", error->message);
+        g_clear_error (&error);
+        return;
+    }
+    contents = g_bytes_get_data (data, &length);
+    en_compose_table = ibus_compose_table_deserialize (contents, length, FALSE);
     if (!en_compose_table) {
         g_warning ("Failed to load EN compose table");
     } else {
@@ -825,7 +815,6 @@ ibus_engine_simple_check_all_compose_table (IBusEngineSimple *simple,
     GString *output = g_string_new ("");
     gboolean success = FALSE;
     gboolean is_32bit = FALSE;
-    gboolean can_load_en_us = FALSE;
     gunichar output_char = '\0';
 
     /* GtkIMContextSimple output the first compose char in case of
@@ -837,33 +826,27 @@ ibus_engine_simple_check_all_compose_table (IBusEngineSimple *simple,
     G_LOCK (global_tables);
     tmp_list = global_tables;
     while (tmp_list) {
-        IBusComposeTableEx *compose_table = tmp_list->data;
-        if (compose_table->can_load_en_us)
-            can_load_en_us = TRUE;
-        /* en_compose_table is always appended to the last of global_tables. */
-        if ((compose_table == en_compose_table) && !can_load_en_us) {
-            tmp_list = tmp_list->next;
-            continue;
-        }
         is_32bit = FALSE;
-        if (ibus_compose_table_check (compose_table,
-                                      priv->compose_buffer,
-                                      n_compose,
-                                      &compose_finish,
-                                      &compose_match,
-                                      output,
-                                      is_32bit)) {
+        if (ibus_compose_table_check (
+            (IBusComposeTableEx *)tmp_list->data,
+            priv->compose_buffer,
+            n_compose,
+            &compose_finish,
+            &compose_match,
+            output,
+            is_32bit)) {
             success = TRUE;
             break;
         }
         is_32bit = TRUE;
-        if (ibus_compose_table_check (compose_table,
-                                      priv->compose_buffer,
-                                      n_compose,
-                                      &compose_finish,
-                                      &compose_match,
-                                      output,
-                                      is_32bit)) {
+        if (ibus_compose_table_check (
+            (IBusComposeTableEx *)tmp_list->data,
+            priv->compose_buffer,
+            n_compose,
+            &compose_finish,
+            &compose_match,
+            output,
+            is_32bit)) {
             success = TRUE;
             break;
         }
@@ -1553,7 +1536,7 @@ gboolean
 ibus_engine_simple_add_compose_file (IBusEngineSimple *simple,
                                      const gchar      *compose_file)
 {
-    g_return_val_if_fail (IBUS_IS_ENGINE_SIMPLE (simple), FALSE);
+    g_return_val_if_fail (IBUS_IS_ENGINE_SIMPLE (simple), TRUE);
 
     global_tables = ibus_compose_table_list_add_file (global_tables,
                                                       compose_file);

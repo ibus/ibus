@@ -241,14 +241,9 @@ create_engine_cb (IBusFactory *factory,
     else
         compose_path = get_compose_path ();
     if (compose_path != NULL) {
-        guint16 saved_version = 0;
         ibus_engine_simple_add_compose_file (IBUS_ENGINE_SIMPLE (m_engine),
                                              compose_path);
-        m_compose_table = ibus_compose_table_load_cache (compose_path,
-                                                         &saved_version);
-        if (m_compose_table)
-            g_assert (saved_version);
-
+        m_compose_table = ibus_compose_table_load_cache (compose_path);
     }
     g_free (compose_path);
     return m_engine;

@@ -53,7 +53,6 @@ struct _IBusComposeTableEx
     gint n_seqs;
     guint32 id;
     char *rawdata;
-    gboolean can_load_en_us;
 };
 
 
@@ -72,12 +71,8 @@ IBusComposeTableEx *
                   ibus_compose_table_new_with_file (const gchar *compose_file,
                                                     GSList
                                                                *compose_tables);
-void               ibus_compose_table_free         (IBusComposeTableEx
-                                                                *compose_table);
 IBusComposeTableEx *
-                  ibus_compose_table_load_cache    (const gchar *compose_file,
-                                                    guint16     *saved_version);
-
+                  ibus_compose_table_load_cache    (const gchar *compose_file);
 void              ibus_compose_table_save_cache    (IBusComposeTableEx
                                                                 *compose_table);
 GSList *          ibus_compose_table_list_add_array

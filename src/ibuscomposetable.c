@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* ibus - The Input Bus
  * Copyright (C) 2013-2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2013-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2013-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -1061,8 +1061,7 @@ ibus_compose_table_find (gconstpointer data1,
 
 IBusComposeTableEx *
 ibus_compose_table_deserialize (const char *contents,
-                                gsize       length,
-                                gboolean    reverse_endianness)
+                                gsize       length)
 {
     IBusComposeTableEx *retval = NULL;
     GVariantType *type;
@@ -1271,7 +1270,7 @@ ibus_compose_table_load_cache (const gchar *compose_file)
             break;
         }
 
-        retval = ibus_compose_table_deserialize (contents, length, FALSE);
+        retval = ibus_compose_table_deserialize (contents, length);
         if (retval == NULL) {
             g_warning ("Failed to load the cache file: %s", path);
         } else {

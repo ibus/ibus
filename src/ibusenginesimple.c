@@ -90,6 +90,7 @@ guint COMPOSE_BUFFER_SIZE = 20;
 G_LOCK_DEFINE_STATIC (global_tables);
 static GSList *global_tables;
 static IBusText *updated_preedit_empty;
+static IBusComposeTableEx *en_compose_table;
 
 /* functions prototype */
 static void     ibus_engine_simple_destroy      (IBusEngineSimple   *simple);
@@ -124,6 +125,10 @@ ibus_engine_simple_class_init (IBusEngineSimpleClass *class)
 {
     IBusObjectClass *ibus_object_class = IBUS_OBJECT_CLASS (class);
     IBusEngineClass *engine_class = IBUS_ENGINE_CLASS (class);
+    GBytes *data;
+    GError *error = NULL;
+    const char *contents;
+    gsize length = 0;
 
     ibus_object_class->destroy =
         (IBusObjectDestroyFunc) ibus_engine_simple_destroy;
@@ -139,17 +144,23 @@ ibus_engine_simple_class_init (IBusEngineSimpleClass *class)
                             = ibus_engine_simple_candidate_clicked;
     updated_preedit_empty = ibus_text_new_from_string ("");
     g_object_ref_sink (updated_preedit_empty);
+
+    data = g_resources_lookup_data ("/org/freedesktop/ibus/compose/sequences",
+                                    G_RESOURCE_LOOKUP_FLAGS_NONE,
+                                    &error);
+    if (error) {
+        g_warning ("Not found compose resource %s", error->message);
+        g_clear_error (&error);
+        return;
+    }
+    contents = g_bytes_get_data (data, &length);
+    en_compose_table = ibus_compose_table_deserialize (contents, length);
 }
 
 static void
 ibus_engine_simple_init (IBusEngineSimple *simple)
 {
     IBusEngineSimplePrivate *priv;
-    GBytes *data;
-    GError *error = NULL;
-    const char *contents;
-    gsize length = 0;
-    IBusComposeTableEx *en_compose_table;
 
     priv = simple->priv = IBUS_ENGINE_SIMPLE_GET_PRIVATE (simple);
     priv->compose_buffer = g_new0 (guint, COMPOSE_BUFFER_SIZE + 1);
@@ -160,16 +171,6 @@ ibus_engine_simple_init (IBusEngineSimple *simple)
     priv->tentative_match_len = 0;
     priv->updated_preedit =
             (IBusText *)g_object_ref_sink (updated_preedit_empty);
-    data = g_resources_lookup_data ("/org/freedesktop/ibus/compose/sequences",
-                                    G_RESOURCE_LOOKUP_FLAGS_NONE,
-                                    &error);
-    if (error) {
-        g_warning ("Not found compose resource %s", error->message);
-        g_clear_error (&error);
-        return;
-    }
-    contents = g_bytes_get_data (data, &length);
-    en_compose_table = ibus_compose_table_deserialize (contents, length, FALSE);
     if (!en_compose_table) {
         g_warning ("Failed to load EN compose table");
     } else {

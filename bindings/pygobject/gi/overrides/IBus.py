@@ -234,3 +234,5 @@ class Text(IBus.Text):
 
 Text = override(Text)
 __all__.append('Text')
+
+IBus.init()

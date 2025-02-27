@@ -361,8 +361,8 @@ start_daemon_with_dbus_systemd(GLib.DBusConnection connection,
 
 
 bool
-start_daemon_with_dbus_kde(GLib.DBusConnection connection,
-                           bool                verbose) {
+operate_daemon_with_dbus_kde_real(GLib.DBusConnection connection,
+                                  bool                verbose) {
     loop = new GLib.MainLoop();
     assert(loop != null);
     uint subscripion_id = connection.signal_subscribe(
@@ -413,6 +413,29 @@ start_daemon_with_dbus_kde(GLib.DBusConnection connection,
     loop.run();
     connection.signal_unsubscribe(subscripion_id);
     return true;
+}
+
+
+bool
+operate_daemon_with_dbus_kde(GLib.DBusConnection connection,
+                             bool                start,
+                             bool                verbose) {
+    if (start) {
+        return operate_daemon_with_dbus_kde_real(connection, verbose);
+    }
+    // Wait for the KeyRelease of Return key.
+    var source = new GLib.TimeoutSource.seconds(1);
+    source.attach();
+    uint id = source.get_id();
+    bool retval = false;
+    source.set_callback(() => {
+        retval = operate_daemon_with_dbus_kde_real(connection, verbose);
+        id = 0;
+        return GLib.Source.REMOVE;
+    });
+    while (id > 0)
+        GLib.MainContext.default().iteration(true);
+    return retval;
 }
 
 
@@ -637,7 +660,7 @@ bool operate_daemon_in_kde_wayland(GLib.DBusConnection connection,
         stderr.printf("%s\n", e.message);
         return false;
     }
-    if (!start_daemon_with_dbus_kde(connection, verbose))
+    if (!operate_daemon_with_dbus_kde(connection, start, verbose))
         return false;
     if (verbose) {
         stderr.printf("Succeed to %s ibus-daemon with a " +
@@ -793,6 +816,35 @@ int start_daemon(string[] argv) {
     return start_daemon_real(argv, false);
 }
 
+bool exit_daemon_with_systemd(IBus.Bus bus, bool verbose) {
+    if (systemd_service_file == null)
+        systemd_service_file = SYSTEMD_SESSION_GNOME_FILE;
+    GLib.DBusConnection? connection = get_session_bus(verbose);
+    if (connection == null)
+        return false;
+    string? object_path = get_ibus_systemd_object_path(connection, verbose);
+    if (object_path == null)
+        return false;
+    if (!is_running_daemon_via_systemd(connection,
+                                       object_path,
+                                       verbose)) {
+        return false;
+    }
+
+    // Wait for the KeyRelease of Return key.
+    var source = new GLib.TimeoutSource.seconds(1);
+    source.attach();
+    uint id = source.get_id();
+    source.set_callback(() => {
+        bus.exit(false);
+        id = 0;
+        return GLib.Source.REMOVE;
+    });
+    while (id > 0)
+        GLib.MainContext.default().iteration(true);
+    return true;
+}
+
 int exit_daemon(string[] argv) {
     const OptionEntry[] options = {
         { "type", 0, 0, OptionArg.STRING, out daemon_type,
@@ -834,6 +886,10 @@ int exit_daemon(string[] argv) {
         stderr.printf(_("Can't connect to IBus.\n"));
         return Posix.EXIT_FAILURE;
     }
+    if (exit_daemon_with_systemd(bus, verbose))
+        return Posix.EXIT_SUCCESS;
+    if (daemon_type == "systemd")
+        return Posix.EXIT_FAILURE;
     bus.exit(false);
     return Posix.EXIT_SUCCESS;
 }

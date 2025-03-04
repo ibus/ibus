@@ -15,14 +15,14 @@
 # Mateus de Melo Santos <mateusms@tutanota.com>, 2017. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
 # Cássio Rodrigo Honorato Rodrigues <cassiorhr@outlook.com>, 2019. #zanata
-# Rafael Fontenelle <rafaelff@gnome.org>, 2020, 2024.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2020, 2024, 2025.
 # Henrique Roberto Gattermann Mittelstaedt <henrique.roberto97@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2024-05-23 22:16+0900\n"
-"PO-Revision-Date: 2024-03-25 13:58+0000\n"
+"PO-Revision-Date: 2025-03-01 15:41+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/pt_BR/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.10.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -2432,16 +2432,14 @@ msgstr "Símbolos numéricos Rumi"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:865
 msgid "Yezidi"
-msgstr ""
+msgstr "Iazidis"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:869
-#, fuzzy
-#| msgid "Arabic Extended-A"
 msgid "Arabic Extended-C"
-msgstr "Árabe estendido A"
+msgstr "Árabe estendido C"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2625,7 +2623,7 @@ msgstr "Warang Citi"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:973
 msgid "Dives Akuru"
-msgstr ""
+msgstr "Dives Akuru"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

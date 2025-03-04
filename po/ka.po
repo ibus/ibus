@@ -4,13 +4,13 @@
 # This file is distributed under the same license as the ibus package.
 #
 # Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2022, 2023, 2024.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.26\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2024-02-28 19:10+0900\n"
-"PO-Revision-Date: 2024-03-03 14:35+0000\n"
+"PO-Revision-Date: 2025-03-04 00:33+0000\n"
 "Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
 "memory@weblate.org>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/ibus/"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.10.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3208,7 +3208,7 @@ msgstr ""
 
 #: tools/main.vala:534 tools/main.vala:617
 msgid "Show debug messages."
-msgstr ""
+msgstr "გამართვის შეტყობინებების ჩვენება"
 
 #: tools/main.vala:613
 msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."

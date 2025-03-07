@@ -736,7 +736,7 @@ bus_input_context_class_init (BusInputContextClass *class)
             G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
     g_signal_set_va_marshaller (context_signals[REQUEST_ENGINE],
                                 G_TYPE_FROM_CLASS (class),
-                                bus_marshal_VOID__STRINGv);
+                                bus_marshal_OBJECT__STRINGv);
 
     context_signals[SET_CONTENT_TYPE] =
         g_signal_new (I_("set-content-type"),

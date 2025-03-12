@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2022 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -61,6 +61,8 @@ struct _BusEngineProxy {
     IBusPropList *prop_list;
     gboolean has_focus_id;
     gboolean has_active_surrounding_text;
+    gchar *object_path;
+    gchar *client;
 };
 
 struct _BusEngineProxyClass {
@@ -1391,6 +1393,8 @@ _get_has_focus_id_cb (GObject        *object,
             hash_table,
             (gpointer)ibus_engine_desc_get_name (engine->desc),
             value);
+        if (engine->has_focus)
+            g_signal_emit (engine, engine_signals[REQUIRE_SURROUNDING_TEXT], 0);
     }
     g_hash_table_unref (hash_table);
 }
@@ -1436,6 +1440,18 @@ _get_active_surrounding_text_cb (GObject        *object,
             hash_table,
             (gpointer)ibus_engine_desc_get_name (engine->desc),
             value);
+        if (engine->has_focus_id && engine->object_path) {
+            gchar *object_path = g_strdup (engine->object_path);
+            gchar *client = g_strdup (engine->client);
+
+            engine->has_focus = FALSE;
+            /* Send the FocusIn D-Bus signal again after the delayed FocusId
+             * D-Bus property.
+             */
+            bus_engine_proxy_focus_in (engine, object_path, client);
+            g_free (object_path);
+            g_free (client);
+        }
     }
     g_hash_table_unref (hash_table);
 }
@@ -1479,9 +1495,13 @@ bus_engine_proxy_focus_in (BusEngineProxy *engine,
                            const gchar    *client)
 {
     g_assert (BUS_IS_ENGINE_PROXY (engine));
-    if (engine->has_focus)
+    if (engine->has_focus && !g_strcmp0 (object_path, engine->object_path))
         return;
     engine->has_focus = TRUE;
+    g_free (engine->object_path);
+    g_free (engine->client);
+    engine->object_path = g_strdup (object_path);
+    engine->client = g_strdup (client);
     if (engine->has_active_surrounding_text)
         g_signal_emit (engine, engine_signals[REQUIRE_SURROUNDING_TEXT], 0);
     if (engine->has_focus_id) {
@@ -1513,6 +1533,8 @@ bus_engine_proxy_focus_out (BusEngineProxy *engine,
     if (!engine->has_focus)
         return;
     engine->has_focus = FALSE;
+    g_clear_pointer (&engine->object_path, g_free);
+    g_clear_pointer (&engine->client, g_free);
     if (engine->has_focus_id) {
         g_dbus_proxy_call ((GDBusProxy *)engine,
                            "FocusOutId",

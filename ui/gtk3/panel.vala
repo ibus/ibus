@@ -173,7 +173,8 @@ class Panel : IBus.PanelService {
     }
 
     private CandidatePanel candidate_panel_new(bool no_wayland_panel) {
-        CandidatePanel candidate_panel = new CandidatePanel(no_wayland_panel);
+        CandidatePanel candidate_panel = new CandidatePanel(m_is_wayland,
+                                                            no_wayland_panel);
         candidate_panel.page_up.connect((w) => this.page_up());
         candidate_panel.page_down.connect((w) => this.page_down());
         candidate_panel.cursor_up.connect((w) => this.cursor_up());
@@ -190,7 +191,7 @@ class Panel : IBus.PanelService {
     }
 
     private Switcher switcher_new(bool no_wayland_panel) {
-        Switcher switcher = new Switcher(no_wayland_panel);
+        Switcher switcher = new Switcher(m_is_wayland, no_wayland_panel);
 #if USE_GDK_WAYLAND
         switcher.realize_surface.connect(
                 (w, s) => this.realize_surface(s));

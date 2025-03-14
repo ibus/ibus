@@ -36,9 +36,10 @@ public class CandidatePanel : Gtk.Box{
 
     private Pango.Attribute m_language_attribute;
     private uint m_update_id;
+    private bool m_is_wayland;
+    private bool m_no_wayland_panel;
 
 #if USE_GDK_WAYLAND
-    private bool m_no_wayland_panel;
     private bool m_hide_after_show;
     private uint m_prev_page_size;
     private uint m_prev_ncandidates;
@@ -48,6 +49,7 @@ public class CandidatePanel : Gtk.Box{
     private uint m_set_preedit_text_id;
     private uint m_set_auxiliary_text_id;
     private uint m_set_lookup_table_id;
+    private bool m_first_set_lookup_table;
 #endif
 
     public signal void cursor_up();
@@ -64,7 +66,8 @@ public class CandidatePanel : Gtk.Box{
     public signal void realize_surface(void *surface);
 #endif
 
-    public CandidatePanel(bool no_wayland_panel) {
+    public CandidatePanel(bool is_wayland,
+                          bool no_wayland_panel) {
         // Call base class constructor
         GLib.Object(
             name : "IBusCandidate",
@@ -72,9 +75,8 @@ public class CandidatePanel : Gtk.Box{
             visible: true
         );
 
-#if USE_GDK_WAYLAND
+        m_is_wayland = is_wayland;
         m_no_wayland_panel = no_wayland_panel;
-#endif
         m_toplevel = new Gtk.Window(Gtk.WindowType.POPUP);
         m_toplevel.add_events(Gdk.EventMask.BUTTON_PRESS_MASK);
         m_toplevel.button_press_event.connect((w, e) => {
@@ -87,7 +89,7 @@ public class CandidatePanel : Gtk.Box{
             adjust_window_position(w);
         });
 #if USE_GDK_WAYLAND
-        if (!BindingCommon.default_is_xdisplay()) {
+        if (m_is_wayland) {
             m_toplevel.realize.connect((w) => {
                 realize_window(true);
             });
@@ -201,6 +203,10 @@ public class CandidatePanel : Gtk.Box{
     }
 
     public void set_preedit_text(IBus.Text? text, uint cursor) {
+        if (!m_is_wayland) {
+            set_preedit_text_real(text, cursor);
+            return;
+        }
 #if USE_GDK_WAYLAND
         if (m_set_preedit_text_id > 0)
             GLib.Source.remove(m_set_preedit_text_id);
@@ -238,6 +244,10 @@ public class CandidatePanel : Gtk.Box{
     }
 
     public void set_auxiliary_text(IBus.Text? text) {
+        if (!m_is_wayland) {
+            set_auxiliary_text_real(text);
+            return;
+        }
 #if USE_GDK_WAYLAND
         if (m_set_auxiliary_text_id > 0)
             GLib.Source.remove(m_set_auxiliary_text_id);
@@ -269,6 +279,10 @@ public class CandidatePanel : Gtk.Box{
     }
 
     public void set_lookup_table(IBus.LookupTable? table) {
+        if (!m_is_wayland) {
+            set_lookup_table_real(table);
+            return;
+        }
 #if USE_GDK_WAYLAND
         if (m_set_lookup_table_id > 0) {
             if (table == null ||
@@ -282,14 +296,25 @@ public class CandidatePanel : Gtk.Box{
             }
         }
         if (table != null) {
+            if (m_prev_ncandidates == 0)
+                m_first_set_lookup_table = true;
             m_prev_page_size = table.get_page_size();
             m_prev_ncandidates = table.get_number_of_candidates();
             m_prev_cursor = table.get_cursor_pos();
             m_prev_cursor_in_page = table.get_cursor_in_page();
             m_prev_show_cursor = table.is_cursor_visible();
+        } else {
+            m_prev_page_size = m_prev_ncandidates = m_prev_cursor =
+                    m_prev_cursor_in_page = 0;
+            m_prev_show_cursor = false;
         }
         // FIXME: Too many PreeditText D-Bus signal happens in Wayland.
         m_set_lookup_table_id = Timeout.add(100,
+                                            // FIXME: If m_set_lookup_table_id
+                                            // == 0, delete the queued timed
+                                            // callbacks to avoid the last
+                                            // reverse cursor move after the
+                                            // key release.
                                             () => {
                                                 m_set_lookup_table_id = 0;
                                                 set_lookup_table_real(table);
@@ -353,9 +378,33 @@ public class CandidatePanel : Gtk.Box{
     }
 
     private void update() {
+        if (!m_is_wayland) {
+            update_real();
+            return;
+        }
+#if USE_GDK_WAYLAND
+        // Show the first lookup table immediately with the Wayland
+        // input-method protocol because keeping pressing the space key
+        // causes many update() and the timed update_real() is not called
+        // until the space key is released.
+        if (m_first_set_lookup_table) {
+            m_first_set_lookup_table = false;
+            if (m_update_id > 0) {
+                GLib.Source.remove(m_update_id);
+                m_update_id = 0;
+            }
+            update_real();
+            return;
+        }
+#endif
         if (m_update_id > 0)
             GLib.Source.remove(m_update_id);
-        // set_lookup_table() and set_preedit_text() happens sequentially.
+        // - set_lookup_table() and set_preedit_text() happens sequentially.
+        // - Hide CandidatePanel after a candidate is committed with Emojier
+        // and xterm without the Wayland panel in the Wayland input-method V2.
+        // - Don't show the hidden lookup table unexpectedly again after
+        // a candidate is committed with the Wayland applications in the
+        // Wayland input-method V2.
         m_update_id = Timeout.add(100,
                                   () => {
                                       m_update_id = 0;
@@ -436,7 +485,7 @@ public class CandidatePanel : Gtk.Box{
 
     public new void hide() {
 #if USE_GDK_WAYLAND
-        if (!BindingCommon.default_is_xdisplay())
+        if (m_is_wayland)
             realize_surface(null);
 #endif
         m_toplevel.hide();

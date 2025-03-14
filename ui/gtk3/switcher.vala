@@ -96,6 +96,7 @@ class Switcher : Gtk.Window {
     private double m_mouse_init_x;
     private double m_mouse_init_y;
     private bool   m_mouse_moved;
+    private bool   m_is_wayland;
     private bool   m_no_wayland_panel;
     private GLib.HashTable<string, string> m_xkb_languages =
             new GLib.HashTable<string, string>(GLib.str_hash,
@@ -106,16 +107,19 @@ class Switcher : Gtk.Window {
     public signal void realize_surface(void *surface);
 #endif
 
-    public Switcher(bool no_wayland_panel) {
+    public Switcher(bool is_wayland,
+                    bool no_wayland_panel) {
         GLib.Object(
             type : Gtk.WindowType.POPUP,
-            events : Gdk.EventMask.KEY_PRESS_MASK | Gdk.EventMask.KEY_RELEASE_MASK,
+            events : Gdk.EventMask.KEY_PRESS_MASK |
+                     Gdk.EventMask.KEY_RELEASE_MASK,
             window_position : Gtk.WindowPosition.CENTER,
             accept_focus : true,
             decorated : false,
             modal : true,
             focus_visible : true
         );
+        m_is_wayland = is_wayland;
         m_no_wayland_panel = no_wayland_panel;
         Gtk.Box vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         add(vbox);
@@ -139,7 +143,7 @@ class Switcher : Gtk.Window {
         vbox.pack_end(m_label, false, false, 0);
 
 #if USE_GDK_WAYLAND
-        if (!BindingCommon.default_is_xdisplay()) {
+        if (m_is_wayland) {
             this.realize.connect((w) => {
                 realize_window(true);
             });
@@ -381,12 +385,8 @@ class Switcher : Gtk.Window {
                     return false;
                 }
                 m_mouse_moved = true;
-#if USE_GDK_WAYLAND
-                if (BindingCommon.default_is_xdisplay())
+                if (!m_is_wayland)
                     button.grab_focus();
-#else
-                button.grab_focus();
-#endif
                 m_selected_engine = index;
                 return false;
             });
@@ -571,7 +571,7 @@ class Switcher : Gtk.Window {
         // if e.type == Gdk.EventType.KEY_RELEASE, m_loop is already null.
         // m_loop is always null in Wayland but this signal is not emitted
         // when the Wayland panel protocol is enabled.
-        if (m_loop == null && !m_no_wayland_panel)
+        if (m_loop == null && !m_is_wayland)
             return Gdk.EVENT_PROPAGATE;
 
         if (m_popup_delay_time > 0) {
@@ -582,9 +582,9 @@ class Switcher : Gtk.Window {
         }
 
         m_result = (int)m_selected_engine;
-        if (!m_no_wayland_panel) {
+        if (!m_is_wayland) {
             m_loop.quit();
-        } else {
+        } else if (m_no_wayland_panel) {
             // Switcher without the Wayland panel protocol can return
             // the m_result_engine immediately in Wayland without waiting
             // for the focus-in event due to a virtual input context in
@@ -592,6 +592,9 @@ class Switcher : Gtk.Window {
             GLib.assert(m_result < m_engines.length);
             m_result_engine = m_engines[m_result];
             hide();
+        } else {
+            // Switcher should not get focus with the Wayland panel protocol.
+            GLib.assert_not_reached();
         }
         return Gdk.EVENT_STOP;
     }

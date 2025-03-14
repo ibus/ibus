@@ -1332,6 +1332,17 @@ _process_key_event_repeat_delay_cb (gpointer user_data)
     /* The key release event was sent to non-Wayland apps likes xterm. */
     if (!priv->ibuscontext) {
         event->count_cb_id = 0;
+        /* Stop the infinite Return keys in non-Wayland apps likes xterm in
+         * the Sway desktop session.
+         * But priv->context in NULL in the Wayland input-method V1 here.
+         */
+        if (priv->version != INPUT_METHOD_V1) {
+            ibus_wayland_im_key(event->wlim,
+                                event->serial,
+                                event->time + priv->repeat_delay,
+                                event->key,
+                                WL_KEYBOARD_KEY_STATE_RELEASED);
+        }
         return G_SOURCE_REMOVE;
     }
     /* The focus is changed. */

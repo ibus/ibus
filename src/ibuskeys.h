@@ -60,7 +60,7 @@ guint            ibus_keyval_from_name  (const gchar    *keyval_name);
  * 
  * Returns: the corresponding IBus key symbol, if one exists.
  *          or, if there is no corresponding symbol,
- *          wc | 0x01000000
+ *          `wc | 0x01000000`
  **/
 guint            ibus_unicode_to_keyval (gunichar        wc);
 

@@ -370,6 +370,10 @@ ibus_engine_simple_update_preedit_text (IBusEngineSimple *simple)
                             g_string_append_c (s, ' ');
                         g_string_append_unichar (s, ch);
                     }
+                } else if (keysym >= 0x0100fdd0 && keysym <= 0x0100fdd9) {
+                    /* A BEPOs pseudo deadkey */
+                    ch = 0x00B7;
+                    g_string_append_unichar (s, ch);
                 } else {
                     ch = ibus_keyval_to_unicode (keysym);
                     if (ch) {

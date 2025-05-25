@@ -29,11 +29,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
                 valign : Gtk.Align.FILL
             );
             this.motion_notify_event.connect((e) => {
-#if VALA_0_24
                 Gdk.EventMotion pe = e;
-#else
-                Gdk.EventMotion *pe = &e;
-#endif
                 if (m_mouse_x == pe.x_root && m_mouse_y == pe.y_root)
                     return false;
                 m_mouse_x = pe.x_root;
@@ -1516,11 +1512,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
                     return false;
                 if (m_lookup_table.get_cursor_pos() == index)
                     return false;
-#if VALA_0_24
                 Gdk.EventMotion pe = e;
-#else
-                Gdk.EventMotion *pe = &e;
-#endif
                 if (m_mouse_x == pe.x_root && m_mouse_y == pe.y_root)
                     return false;
                 m_mouse_x = pe.x_root;
@@ -1964,17 +1956,10 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         // Use get_monitor_geometry() instead of get_monitor_area().
         // get_monitor_area() excludes docks, but the lookup window should be
         // shown over them.
-#if VALA_0_34
         Gdk.Monitor monitor = Gdk.Display.get_default().get_monitor_at_point(
                 m_cursor_location.x,
                 m_cursor_location.y);
         monitor_area = monitor.get_geometry();
-#else
-        Gdk.Screen screen = Gdk.Screen.get_default();
-        int monitor_num = screen.get_monitor_at_point(m_cursor_location.x,
-                                                      m_cursor_location.y);
-        screen.get_monitor_geometry(monitor_num, out monitor_area);
-#endif
         return monitor_area;
     }
 
@@ -2268,24 +2253,12 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         present_centralize(event);
 
         Gdk.Device pointer;
-#if VALA_0_34
         Gdk.Seat seat = event.get_seat();
         if (seat == null) {
             var display = get_display();
             seat = display.get_default_seat();
         }
         pointer = seat.get_pointer();
-#else
-        Gdk.Device device = event.get_device();
-        if (device == null) {
-            var display = get_display();
-            device = display.list_devices().data;
-        }
-        if (device.get_source() == Gdk.InputSource.KEYBOARD)
-            pointer = device.get_associated_device();
-        else
-            pointer = device;
-#endif
         pointer.get_position_double(null,
                                     out m_mouse_x,
                                     out m_mouse_y);
@@ -2521,17 +2494,10 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         get_allocation(out allocation);
         Gdk.Rectangle monitor_area;
         Gdk.Rectangle work_area;
-#if VALA_0_34
         Gdk.Display display = get_display();
         Gdk.Monitor monitor = display.get_monitor_at_window(this.get_window());
         monitor_area = monitor.get_geometry();
         work_area = monitor.get_workarea();
-#else
-        Gdk.Screen screen = Gdk.Screen.get_default();
-        int monitor_num = screen.get_monitor_at_window(this.get_window());
-        screen.get_monitor_geometry(monitor_num, out monitor_area);
-        work_area = screen.get_monitor_workarea(monitor_num);
-#endif
         int x = (monitor_area.x + monitor_area.width - allocation.width)/2;
         int y = (monitor_area.y + monitor_area.height
                  - allocation.height)/2;

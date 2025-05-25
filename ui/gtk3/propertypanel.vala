@@ -359,15 +359,10 @@ public class PropertyPanel : Gtk.Box {
         m_toplevel.get_allocation(out allocation);
 
         Gdk.Rectangle monitor_area;
-#if VALA_0_34
         // gdk_screen_get_monitor_workarea() no longer return the correct
         // area from "_NET_WORKAREA" atom in GTK 3.22
         Gdk.Monitor monitor = Gdk.Display.get_default().get_monitor(0);
         monitor_area = monitor.get_workarea();
-#else
-        Gdk.Screen screen = Gdk.Screen.get_default();
-        monitor_area = screen.get_monitor_workarea(0);
-#endif
         int monitor_right = monitor_area.x + monitor_area.width;
         int monitor_bottom = monitor_area.y + monitor_area.height;
         int x, y;
@@ -524,15 +519,10 @@ public class PropMenu : Gtk.Menu, IPropToolItem {
     public new void popup(uint       button,
                           uint32     activate_time,
                           Gtk.Widget widget) {
-#if VALA_0_34
         base.popup_at_widget(widget,
                              Gdk.Gravity.SOUTH_WEST,
                              Gdk.Gravity.NORTH_WEST,
                              null);
-#else
-        m_parent_button = widget;
-        base.popup(null, null, menu_position, button, activate_time);
-#endif
     }
 
     public override void destroy() {
@@ -590,57 +580,6 @@ public class PropMenu : Gtk.Menu, IPropToolItem {
             }
         }
     }
-
-#if !VALA_0_34
-    private void menu_position(Gtk.Menu menu,
-                               out int  x,
-                               out int  y,
-                               out bool push_in) {
-        var button = m_parent_button;
-        var screen = button.get_screen();
-        var monitor = screen.get_monitor_at_window(button.get_window());
-
-        Gdk.Rectangle monitor_location;
-        screen.get_monitor_geometry(monitor, out monitor_location);
-
-        button.get_window().get_origin(out x, out y);
-
-        Gtk.Allocation button_allocation;
-        button.get_allocation(out button_allocation);
-
-        x += button_allocation.x;
-        y += button_allocation.y;
-
-        int menu_width;
-        int menu_height;
-        menu.get_size_request(out menu_width, out menu_height);
-
-        if (x + menu_width >= monitor_location.width)
-            x -= menu_width - button_allocation.width;
-        else if (x - menu_width <= 0)
-            ;
-        else {
-            if (x <= monitor_location.width * 3 / 4)
-                ;
-            else
-                x -= menu_width - button_allocation.width;
-        }
-
-        if (y + button_allocation.height + menu_width
-                >= monitor_location.height)
-            y -= menu_height;
-        else if (y - menu_height <= 0)
-            y += button_allocation.height;
-        else {
-            if (y <= monitor_location.height * 3 / 4)
-                y += button_allocation.height;
-            else
-                y -= menu_height;
-        }
-
-        push_in = false;
-    }
-#endif
 }
 
 public class PropToolButton : Gtk.ToolButton, IPropToolItem {

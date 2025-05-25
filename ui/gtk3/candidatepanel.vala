@@ -508,17 +508,10 @@ public class CandidatePanel : Gtk.Box{
         // Use get_monitor_geometry() instead of get_monitor_area().
         // get_monitor_area() excludes docks, but the lookup window should be
         // shown over them.
-#if VALA_0_34
         Gdk.Monitor monitor = window.get_display().get_monitor_at_point(
                 m_cursor_location.x,
                 m_cursor_location.y);
         monitor_area = monitor.get_geometry();
-#else
-        Gdk.Screen screen = Gdk.Screen.get_default();
-        int monitor_num = screen.get_monitor_at_point(m_cursor_location.x,
-                                                      m_cursor_location.y);
-        screen.get_monitor_geometry(monitor_num, out monitor_area);
-#endif
         return monitor_area;
     }
 

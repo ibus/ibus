@@ -1982,6 +1982,11 @@ ibus_keysym_to_unicode (guint     keysym,
                 return combined_unicode;                                      \
             else                                                              \
                 return isolated_unicode
+#define CASE_KEYSYM(keysym_val, unicode)                                      \
+        case keysym_val:                                                      \
+            if (need_space)                                                   \
+                *need_space = FALSE;                                          \
+            return unicode
     switch (keysym) {
 #ifdef IBUS_ENGLISH_DEAD_KEY
     CASE (a, 0x0363, 1);
@@ -2048,16 +2053,18 @@ ibus_keysym_to_unicode (guint     keysym,
     CASE         (stroke,                       0x0335, 1);
     CASE_COMBINE (tilde,                        0x0303, 0x007E, 0);
     CASE_COMBINE (voiced_sound,                 0x3099, 0x309B, 0);
-    case IBUS_KEY_Multi_key:
-        if (need_space)
-            *need_space = FALSE;
-        /* We only show the Compose key visibly when it is the
-         * only glyph in the preedit, or when it occurs in the
-         * middle of the sequence. Sadly, the official character,
-         * U+2384, COMPOSITION SYMBOL, is bit too distracting, so
-         * we use U+00B7, MIDDLE DOT.
-         */
-        return 0x00B7;
+    /* We only show the Compose key visibly when it is the
+     * only glyph in the preedit, or when it occurs in the
+     * middle of the sequence. Sadly, the official character,
+     * U+2384, COMPOSITION SYMBOL, is bit too distracting, so
+     * we use U+00B7, MIDDLE DOT.
+     */
+    CASE_KEYSYM(IBUS_KEY_Multi_key, 0x00B7);
+    /* Refer (BEPO, AFNOR) comments in /usr/share/X11/xkb/symbols/fr file. */
+    CASE_KEYSYM(0x0100FDD4, 0x00DF); /* ß */
+    CASE_KEYSYM(0x0100FDD5, 0x1D49); /* ᵉ */
+    CASE_KEYSYM(0x0100FDD7, 0x221E); /* ∞ */
+    CASE_KEYSYM(0x0100FDD8, 0x2015); /* ― */
     default:;
         if (need_space)
             *need_space = FALSE;
@@ -2065,4 +2072,5 @@ ibus_keysym_to_unicode (guint     keysym,
     return 0x0;
 #undef CASE
 #undef CASE_COMBINE
+#undef CASE_KEYSYM
 }

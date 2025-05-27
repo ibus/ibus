@@ -957,11 +957,13 @@ ibus_wayland_seat_destroy (gpointer data)
 {
     IBusWaylandSeat *seat = (IBusWaylandSeat *)data;
     g_return_if_fail (seat);
-    g_free (seat->name);
-    zwp_input_popup_surface_v2_destroy (seat->input_popup_surface);
-    zwp_virtual_keyboard_v1_destroy (seat->virtual_keyboard);
-    zwp_input_method_keyboard_grab_v2_destroy (seat->keyboard_v2);
-    zwp_input_method_v2_destroy (seat->input_method_v2);
+    g_clear_pointer (&seat->name, g_free);
+    g_clear_pointer (&seat->input_popup_surface,
+                     zwp_input_popup_surface_v2_destroy);
+    g_clear_pointer (&seat->virtual_keyboard, zwp_virtual_keyboard_v1_destroy);
+    g_clear_pointer (&seat->keyboard_v2,
+                     zwp_input_method_keyboard_grab_v2_destroy);
+    g_clear_pointer (&seat->input_method_v2, zwp_input_method_v2_destroy);
     g_slice_free (IBusWaylandSeat, seat);
 }
 
@@ -1332,17 +1334,6 @@ _process_key_event_repeat_delay_cb (gpointer user_data)
     /* The key release event was sent to non-Wayland apps likes xterm. */
     if (!priv->ibuscontext) {
         event->count_cb_id = 0;
-        /* Stop the infinite Return keys in non-Wayland apps likes xterm in
-         * the Sway desktop session.
-         * But priv->context in NULL in the Wayland input-method V1 here.
-         */
-        if (priv->version != INPUT_METHOD_V1) {
-            ibus_wayland_im_key(event->wlim,
-                                event->serial,
-                                event->time + priv->repeat_delay,
-                                event->key,
-                                WL_KEYBOARD_KEY_STATE_RELEASED);
-        }
         return G_SOURCE_REMOVE;
     }
     /* The focus is changed. */
@@ -1818,6 +1809,9 @@ input_method_activate (void                               *data,
                                   wlim);
         break;
     case INPUT_METHOD_V2:
+        priv->seat->virtual_keyboard =
+                zwp_virtual_keyboard_manager_v1_create_virtual_keyboard (
+                        _virtual_keyboard_manager, priv->seat->seat);
         priv->seat->keyboard_v2 = zwp_input_method_v2_grab_keyboard (
                 input_method->u.input_method_v2);
         zwp_input_method_keyboard_grab_v2_add_listener (
@@ -1904,8 +1898,14 @@ input_method_deactivate (void                               *data,
         }
         break;
     case INPUT_METHOD_V2:
-        if (priv->seat->keyboard_v2)
-            zwp_input_method_keyboard_grab_v2_release (priv->seat->keyboard_v2);
+        if (priv->seat->keyboard_v2) {
+            g_clear_pointer (&priv->seat->keyboard_v2,
+                             zwp_input_method_keyboard_grab_v2_release);
+        }
+        if (priv->seat->virtual_keyboard) {
+            g_clear_pointer (&priv->seat->virtual_keyboard,
+                             zwp_virtual_keyboard_v1_destroy);
+        }
         break;
     default:
         g_assert_not_reached ();
@@ -2120,10 +2120,6 @@ registry_handle_global (void               *data,
                             seat->seat);
             zwp_input_method_v2_add_listener (seat->input_method_v2,
                                               &input_method_listener_v2, wlim);
-            seat->virtual_keyboard =
-                    zwp_virtual_keyboard_manager_v1_create_virtual_keyboard (
-                            _virtual_keyboard_manager,
-                            seat->seat);
         }
         priv->seat = seat;
     } else if (!g_strcmp0 (interface,
@@ -2360,10 +2356,6 @@ ibus_wayland_im_constructor (GType                  type,
                 seat->seat);
         zwp_input_method_v2_add_listener (seat->input_method_v2,
                                           &input_method_listener_v2, wlim);
-        seat->virtual_keyboard =
-                zwp_virtual_keyboard_manager_v1_create_virtual_keyboard (
-                        _virtual_keyboard_manager,
-                        seat->seat);
     }
     if ((!seat || !seat->input_method_v2) && !priv->input_method_v1) {
         g_error ("No input_method global\n");

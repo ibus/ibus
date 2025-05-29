@@ -3,8 +3,8 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2015 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
-# Copyright (c) 2007-2017 Red Hat, Inc.
+# Copyright (c) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2007-2025 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -93,6 +93,7 @@ ibus_sources =              \
     ibuskeys.c              \
     ibuskeyuni.c            \
     ibuslookuptable.c       \
+    ibusmessage.c           \
     ibusobject.c            \
     ibusobservedpath.c      \
     ibuspanelservice.c      \
@@ -151,6 +152,7 @@ ibus_headers =              \
     ibuskeysyms-compat.h    \
     ibuskeysyms.h           \
     ibuslookuptable.h       \
+    ibusmessage.h           \
     ibusobject.h            \
     ibusobservedpath.h      \
     ibuspanelservice.h      \

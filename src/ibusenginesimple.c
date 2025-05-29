@@ -3,7 +3,7 @@
 /* ibus - The Input Bus
  * Copyright (C) 2014 Peng Huang <shawn.p.huang@gmail.com>
  * Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2014-2017 Red Hat, Inc.
+ * Copyright (C) 2014-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,6 +36,7 @@
 
 #include <memory.h>
 #include <stdlib.h>
+#include <glib/gi18n-lib.h>
 
 #define IBUS_ENGINE_SIMPLE_GET_PRIVATE(o)  \
    ((IBusEngineSimplePrivate *)ibus_engine_simple_get_instance_private (o))
@@ -202,6 +203,27 @@ ibus_engine_simple_destroy (IBusEngineSimple *simple)
 
     IBUS_OBJECT_CLASS(ibus_engine_simple_parent_class)->destroy (
         IBUS_OBJECT (simple));
+}
+
+static void
+ibus_engine_simple_send_message_with_code (IBusEngineSimple *simple,
+                                           IBusEngineMsgCode code)
+{
+    IBusMessage *message;
+
+    g_return_if_fail (IBUS_IS_ENGINE_SIMPLE (simple));
+    message = ibus_message_new (
+            IBUS_MESSAGE_DOMAIN_ENGINE,
+            code,
+            _("Detect unregistered character in your compose sequence"),
+            _("The character you just input is not recognized as a valid " \
+              "part of the currently active compose sequence and the " \
+              "character was cancelled. Try inputting the correct character " \
+              "to the compose sequence again, or press Escape key to " \
+              "terminate whole the compose sequence."),
+             "timeout", 5,
+             NULL);
+    ibus_engine_send_message (IBUS_ENGINE (simple), message);
 }
 
 static void
@@ -677,7 +699,9 @@ no_sequence_matches (IBusEngineSimple *simple,
         priv->compose_buffer[0] = 0;
         if (n_compose > 1) {
             /* Invalid sequence */
-            /* FIXME beep_window (event->window); */
+            ibus_engine_simple_send_message_with_code (
+                    simple,
+                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
             ibus_engine_simple_update_preedit_text (simple);
             return TRUE;
         }
@@ -948,7 +972,9 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
                 priv->modifiers_dropped = TRUE;
             } else {
                 /* invalid hex sequence */
-                /* FIXME beep_window (event->window); */
+                ibus_engine_simple_send_message_with_code (
+                        simple,
+                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
                 g_string_set_size (priv->tentative_match, 0);
                 g_clear_pointer (&priv->tentative_emoji, g_free);
                 priv->in_hex_sequence = FALSE;
@@ -971,7 +997,9 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
                 priv->modifiers_dropped = TRUE;
             } else {
                 /* invalid hex sequence */
-                /* FIXME beep_window (event->window); */
+                ibus_engine_simple_send_message_with_code (
+                        simple,
+                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
                 g_string_set_size (priv->tentative_match, 0);
                 g_clear_pointer (&priv->tentative_emoji, g_free);
                 priv->in_hex_sequence = FALSE;
@@ -1020,7 +1048,9 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
         }
         else if (is_hex_end) {
             /* invalid hex sequence */
-            /* FIXME beep_window (event->window); */
+            ibus_engine_simple_send_message_with_code (
+                    simple,
+                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
             g_string_set_size (priv->tentative_match, 0);
             g_clear_pointer (&priv->tentative_emoji, g_free);
             priv->in_hex_sequence = FALSE;
@@ -1119,7 +1149,9 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
         else {
             /* invalid hex sequence */
             if (n_compose > 0) {
-                /* FIXME beep_window (event->window); */
+                ibus_engine_simple_send_message_with_code (
+                        simple,
+                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
                 g_string_set_size (priv->tentative_match, 0);
                 priv->in_hex_sequence = FALSE;
                 priv->compose_buffer[0] = 0;
@@ -1184,7 +1216,9 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
             return TRUE;
         } else if (!is_hex_end) {
             /* non-hex character in hex sequence */
-            /* FIXME beep_window (event->window); */
+            ibus_engine_simple_send_message_with_code (
+                    simple,
+                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
             return TRUE;
         }
     } else if (priv->in_emoji_sequence) {
@@ -1243,15 +1277,18 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
                     return TRUE;
                 } else {
                     /* invalid hex sequence */
-                    /* FIXME beep_window (event->window); */
+                    ibus_engine_simple_send_message_with_code (
+                            simple,
+                            IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
                     g_string_set_size (priv->tentative_match, 0);
                     priv->in_hex_sequence = FALSE;
                     priv->compose_buffer[0] = 0;
                 }
+            } else if (!check_hex (simple, n_compose)) {
+                ibus_engine_simple_send_message_with_code (
+                        simple,
+                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
             }
-            else if (!check_hex (simple, n_compose))
-                /* FIXME beep_window (event->window); */
-                ;
             ibus_engine_simple_update_preedit_text (simple);
 
             return TRUE;
@@ -1343,7 +1380,9 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
 
             n_compose = n_compose_prev;
             g_assert (n_compose < (COMPOSE_BUFFER_SIZE + 1));
-            /* FIXME beep_window (event->window); */
+            ibus_engine_simple_send_message_with_code (
+                    simple,
+                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
             backup_char = priv->compose_buffer[n_compose];
             priv->compose_buffer[n_compose] = 0;
             if (ibus_engine_simple_check_all_compose_table (simple, n_compose))

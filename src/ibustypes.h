@@ -358,5 +358,19 @@ typedef enum
         IBUS_SUPER_MASK |                       \
         IBUS_HYPER_MASK |                       \
         IBUS_META_MASK))
+/**
+ * IBusMessageDomain:
+ * @IBUS_MESSAGE_ENGINE: The message domain for Engine messages
+ * @IBUS_MESSAGE_PANEL: The message domain for Panel messages
+ *
+ * Since: 1.5.33
+ * Stability: Unstable
+ */
+typedef enum
+{
+  IBUS_MESSAGE_DOMAIN_NONE,
+  IBUS_MESSAGE_DOMAIN_ENGINE,
+  IBUS_MESSAGE_DOMAIN_PANEL
+} IBusMessageDomain;
 
 #endif

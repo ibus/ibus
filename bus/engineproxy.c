@@ -95,6 +95,7 @@ enum {
     REGISTER_PROPERTIES,
     UPDATE_PROPERTY,
     PANEL_EXTENSION,
+    SEND_MESSAGE,
     LAST_SIGNAL,
 };
 
@@ -458,6 +459,20 @@ bus_engine_proxy_class_init (BusEngineProxyClass *class)
                                 G_TYPE_FROM_CLASS (class),
                                 bus_marshal_VOID__OBJECTv);
 
+    engine_signals[SEND_MESSAGE] =
+        g_signal_new (I_("send-message"),
+            G_TYPE_FROM_CLASS (class),
+            G_SIGNAL_RUN_LAST,
+            0,
+            NULL, NULL,
+            bus_marshal_VOID__VARIANT,
+            G_TYPE_NONE,
+            1,
+            G_TYPE_VARIANT);
+    g_signal_set_va_marshaller (engine_signals[SEND_MESSAGE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VARIANTv);
+
     text_empty = ibus_text_new_from_static_string ("");
     g_object_ref_sink (text_empty);
 
@@ -594,7 +609,7 @@ bus_engine_proxy_g_signal (GDBusProxy  *proxy,
 
     gint i;
     for (i = 0; i < G_N_ELEMENTS (signals); i++) {
-        if (g_strcmp0 (signal_name, signals[i].signal_name) == 0) {
+        if (!g_strcmp0 (signal_name, signals[i].signal_name)) {
             g_signal_emit (engine, engine_signals[signals[i].signal_id], 0);
             return;
         }
@@ -603,7 +618,7 @@ bus_engine_proxy_g_signal (GDBusProxy  *proxy,
     /* Handle D-Bus signals with parameters. Deserialize them and emit a glib
      * signal.
      */
-    if (g_strcmp0 (signal_name, "CommitText") == 0) {
+    if (!g_strcmp0 (signal_name, "CommitText")) {
         GVariant *arg0 = NULL;
         g_variant_get (parameters, "(v)", &arg0);
         g_return_if_fail (arg0 != NULL);
@@ -616,7 +631,7 @@ bus_engine_proxy_g_signal (GDBusProxy  *proxy,
         return;
     }
 
-    if (g_strcmp0 (signal_name, "ForwardKeyEvent") == 0) {
+    if (!g_strcmp0 (signal_name, "ForwardKeyEvent")) {
         guint32 keyval = 0;
         guint32 keycode = 0;
         guint32 states = 0;
@@ -631,7 +646,7 @@ bus_engine_proxy_g_signal (GDBusProxy  *proxy,
         return;
     }
 
-    if (g_strcmp0 (signal_name, "DeleteSurroundingText") == 0) {
+    if (!g_strcmp0 (signal_name, "DeleteSurroundingText")) {
         gint  offset_from_cursor = 0;
         guint nchars = 0;
         g_variant_get (parameters, "(iu)", &offset_from_cursor, &nchars);
@@ -642,7 +657,7 @@ bus_engine_proxy_g_signal (GDBusProxy  *proxy,
         return;
     }
 
-    if (g_strcmp0 (signal_name, "UpdatePreeditText") == 0) {
+    if (!g_strcmp0 (signal_name, "UpdatePreeditText")) {
         GVariant *arg0 = NULL;
         guint cursor_pos = 0;
         gboolean visible = FALSE;
@@ -664,7 +679,7 @@ bus_engine_proxy_g_signal (GDBusProxy  *proxy,
         return;
     }
 
-    if (g_strcmp0 (signal_name, "UpdateAuxiliaryText") == 0) {
+    if (!g_strcmp0 (signal_name, "UpdateAuxiliaryText")) {
         GVariant *arg0 = NULL;
         gboolean visible = FALSE;
 
@@ -684,7 +699,7 @@ bus_engine_proxy_g_signal (GDBusProxy  *proxy,
         return;
     }
 
-    if (g_strcmp0 (signal_name, "UpdateLookupTable") == 0) {
+    if (!g_strcmp0 (signal_name, "UpdateLookupTable")) {
         GVariant *arg0 = NULL;
         gboolean visible = FALSE;
 
@@ -705,7 +720,7 @@ bus_engine_proxy_g_signal (GDBusProxy  *proxy,
         return;
     }
 
-    if (g_strcmp0 (signal_name, "RegisterProperties") == 0) {
+    if (!g_strcmp0 (signal_name, "RegisterProperties")) {
         GVariant *arg0 = NULL;
         g_variant_get (parameters, "(v)", &arg0);
         g_return_if_fail (arg0 != NULL);
@@ -723,7 +738,7 @@ bus_engine_proxy_g_signal (GDBusProxy  *proxy,
         return;
     }
 
-    if (g_strcmp0 (signal_name, "UpdateProperty") == 0) {
+    if (!g_strcmp0 (signal_name, "UpdateProperty")) {
         GVariant *arg0 = NULL;
         g_variant_get (parameters, "(v)", &arg0);
         g_return_if_fail (arg0 != NULL);
@@ -738,7 +753,7 @@ bus_engine_proxy_g_signal (GDBusProxy  *proxy,
         return;
     }
 
-    if (g_strcmp0 (signal_name, "PanelExtension") == 0) {
+    if (!g_strcmp0 (signal_name, "PanelExtension")) {
         GVariant *arg0 = NULL;
         g_variant_get (parameters, "(v)", &arg0);
         g_return_if_fail (arg0 != NULL);
@@ -749,6 +764,11 @@ bus_engine_proxy_g_signal (GDBusProxy  *proxy,
         g_return_if_fail (event != NULL);
         g_signal_emit (engine, engine_signals[PANEL_EXTENSION], 0, event);
         _g_object_unref_if_floating (event);
+        return;
+    }
+
+    if (!g_strcmp0 (signal_name, "SendMessage")) {
+        g_signal_emit (engine, engine_signals[SEND_MESSAGE], 0, parameters);
         return;
     }
 

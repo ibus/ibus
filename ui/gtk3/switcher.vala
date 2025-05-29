@@ -235,7 +235,6 @@ class Switcher : Gtk.Window {
         }
 
         Gdk.Device pointer;
-#if VALA_0_34
         Gdk.Seat seat = event.get_seat();
         if (seat == null) {
             var display = get_display();
@@ -262,54 +261,6 @@ class Switcher : Gtk.Window {
                            null);
         if (status != Gdk.GrabStatus.SUCCESS)
             warning("Grab pointer failed! status = %d", status);
-#else
-        Gdk.Device device = event.get_device();
-        if (device == null) {
-            var display = get_display();
-            var device_manager = display.get_device_manager();
-/* The macro VALA_X_Y supports even numbers.
- * http://git.gnome.org/browse/vala/commit/?id=294b374af6
- */
-#if VALA_0_16
-            device = device_manager.list_devices(Gdk.DeviceType.MASTER).data;
-#else
-            unowned GLib.List<Gdk.Device> devices =
-                    device_manager.list_devices(Gdk.DeviceType.MASTER);
-            device = devices.data;
-#endif
-        }
-
-        Gdk.Device keyboard;
-        if (device.get_source() == Gdk.InputSource.KEYBOARD) {
-            keyboard = device;
-            pointer = device.get_associated_device();
-        } else {
-            pointer = device;
-            keyboard = device.get_associated_device();
-        }
-
-        Gdk.GrabStatus status;
-        // Grab all keyboard events
-        status = keyboard.grab(get_window(),
-                               Gdk.GrabOwnership.NONE,
-                               true,
-                               Gdk.EventMask.KEY_PRESS_MASK |
-                               Gdk.EventMask.KEY_RELEASE_MASK,
-                               null,
-                               Gdk.CURRENT_TIME);
-        if (status != Gdk.GrabStatus.SUCCESS)
-            warning("Grab keyboard failed! status = %d", status);
-        // Grab all pointer events
-        status = pointer.grab(get_window(),
-                              Gdk.GrabOwnership.NONE,
-                              true,
-                              Gdk.EventMask.BUTTON_PRESS_MASK |
-                              Gdk.EventMask.BUTTON_RELEASE_MASK,
-                              null,
-                              Gdk.CURRENT_TIME);
-        if (status != Gdk.GrabStatus.SUCCESS)
-            warning("Grab pointer failed! status = %d", status);
-#endif
 
         // Probably we can delete m_popup_delay_time in 1.6
         pointer.get_position_double(null,
@@ -322,12 +273,7 @@ class Switcher : Gtk.Window {
         m_loop.run();
         m_loop = null;
 
-#if VALA_0_34
         seat.ungrab();
-#else
-        keyboard.ungrab(Gdk.CURRENT_TIME);
-        pointer.ungrab(Gdk.CURRENT_TIME);
-#endif
 
         hide();
         // Make sure the switcher is hidden before returning from this function.
@@ -372,11 +318,7 @@ class Switcher : Gtk.Window {
                 return true;
             });
             button.motion_notify_event.connect((e) => {
-#if VALA_0_24
                 Gdk.EventMotion pe = e;
-#else
-                Gdk.EventMotion *pe = &e;
-#endif
                 if (m_selected_engine == index)
                     return false;
                 if (!m_mouse_moved &&
@@ -414,21 +356,12 @@ class Switcher : Gtk.Window {
 
         Gdk.Display display = Gdk.Display.get_default();
         int screen_width = 0;
-#if VALA_0_34
         // display.get_monitor_at_window() is null because of unrealized window
         Gdk.Monitor monitor = display.get_primary_monitor();
         if (monitor == null)
             return;
         Gdk.Rectangle area = monitor.get_geometry();
         screen_width = area.width;
-#else
-        Gdk.Screen screen = (display != null) ?
-                display.get_default_screen() : null;
-
-        if (screen != null) {
-            screen_width = screen.get_width();
-        }
-#endif
 
         if (screen_width > 0 && max_label_width > (screen_width / 4)) {
             max_label_width = screen_width / 4;
@@ -503,14 +436,7 @@ class Switcher : Gtk.Window {
     public override bool key_press_event(Gdk.EventKey e) {
         bool retval = Gdk.EVENT_STOP;
 
-/* Gdk.EventKey is changed to the pointer.
- * https://git.gnome.org/browse/vala/commit/?id=598942f1
- */
-#if VALA_0_24
         Gdk.EventKey pe = e;
-#else
-        Gdk.EventKey *pe = &e;
-#endif
 
         if (m_popup_delay_time > 0) {
             restore_window_position("pressed");
@@ -557,11 +483,7 @@ class Switcher : Gtk.Window {
     }
 
     public override bool key_release_event(Gdk.EventKey e) {
-#if VALA_0_24
         Gdk.EventKey pe = e;
-#else
-        Gdk.EventKey *pe = &e;
-#endif
 
         if (KeybindingManager.primary_modifier_still_pressed((Gdk.Event) pe,
             m_primary_modifier)) {

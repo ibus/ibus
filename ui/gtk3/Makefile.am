@@ -97,6 +97,7 @@ ibus_ui_gtk3_SOURCES = \
     handle.vala \
     iconwidget.vala \
     keybindingmanager.vala \
+    message.vala \
     panel.vala \
     pango.vala \
     property.vala \

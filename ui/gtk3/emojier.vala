@@ -2,7 +2,7 @@
  *
  * ibus - The Input Bus
  *
- * Copyright (c) 2017-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (c) 2017-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,11 +29,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
                 valign : Gtk.Align.FILL
             );
             this.motion_notify_event.connect((e) => {
-#if VALA_0_24
                 Gdk.EventMotion pe = e;
-#else
-                Gdk.EventMotion *pe = &e;
-#endif
                 if (m_mouse_x == pe.x_root && m_mouse_y == pe.y_root)
                     return false;
                 m_mouse_x = pe.x_root;
@@ -227,8 +223,6 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         BACKWARD,
     }
 
-    public bool is_wayland { get; set; }
-
     public const uint BUTTON_CLOSE_BUTTON = 1000;
 
     private const uint EMOJI_GRID_PAGE = 10;
@@ -272,6 +266,8 @@ public class IBusEmojier : Gtk.ApplicationWindow {
     private static bool m_loaded_unicode = false;
     private static string m_warning_message = "";
 
+    private bool m_is_wayland;
+    private bool m_is_gnome = false;
     private ThemedRGBA m_rgba;
     private Gtk.Box m_vbox;
     /* If emojier is emoji category list or Unicode category list,
@@ -316,6 +312,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
     private uint m_unicode_progress_id;
     private Gtk.Label m_unicode_percent_label;
     private double m_unicode_percent;
+    private ulong m_unicode_deserialize_unicode_signal_id;
     private Gdk.Rectangle m_cursor_location;
     private bool m_is_up_side_down = false;
     private uint m_redraw_window_id;
@@ -325,12 +322,14 @@ public class IBusEmojier : Gtk.ApplicationWindow {
     public signal void candidate_clicked(uint index, uint button, uint state);
     public signal void commit_text(string text);
     public signal void cancel();
+    public signal void send_message(IBus.Message message);
 
     public IBusEmojier(bool is_wayland) {
         GLib.Object(
             type : Gtk.WindowType.POPUP
         );
-        this.is_wayland = is_wayland;
+        m_is_wayland = is_wayland;
+        m_is_gnome = is_gnome();
 
         // GLib.ActionEntry accepts const variables only.
         var action = new GLib.SimpleAction.stateful(
@@ -383,6 +382,23 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         get_load_progress_object();
     }
 
+
+    private bool is_gnome() {
+        unowned string? desktop =
+            Environment.get_variable("XDG_CURRENT_DESKTOP");
+        if (desktop == "GNOME")
+            return true;
+        /* If ibus-dameon is launched from systemd, XDG_CURRENT_DESKTOP
+         * environment variable could be set after ibus-dameon would be
+         * launched and XDG_CURRENT_DESKTOP could be "(null)".
+         * But XDG_SESSION_DESKTOP can be set with systemd's PAM.
+         */
+        if (desktop == null || desktop == "(null)")
+            desktop = Environment.get_variable("XDG_SESSION_DESKTOP");
+        if (desktop == "gnome")
+            return true;
+        return false;
+    }
 
     private static void reload_emoji_dict() {
         init_emoji_dict();
@@ -1182,9 +1198,13 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         hbox.pack_start(m_unicode_percent_label, false, true, 0);
         hbox.show_all();
 
-        m_unicode_progress_object.deserialize_unicode.connect((i, n) => {
-            m_unicode_percent = (double)i / n;
-        });
+        if (m_unicode_deserialize_unicode_signal_id == 0) {
+            m_unicode_deserialize_unicode_signal_id =
+                    m_unicode_progress_object.deserialize_unicode.connect(
+                            (i, n) => {
+                                m_unicode_percent = (double)i / n;
+                    });
+        }
         if (m_unicode_progress_id > 0) {
             GLib.Source.remove(m_unicode_progress_id);
         }
@@ -1200,6 +1220,18 @@ public class IBusEmojier : Gtk.ApplicationWindow {
             }
             return !m_loaded_unicode;
         });
+    }
+
+
+    private void show_unicode_popup(int progress) {
+        var message = new IBus.Message(IBus.MessageDomain.PANEL,
+                                       IBus.PanelServiceMsgCode.LOADING_UNICODE,
+                                       _("IBus Emoji initialization"),
+                                       _("Loading a Unicode dictionary:"),
+                                       "timeout", 3,
+                                       "progress", progress,
+                                       "serial", 50001);
+        send_message(message);
     }
 
 
@@ -1236,7 +1268,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
     }
 
 
-    private static GLib.SList<string>?
+    private GLib.SList<string>?
     lookup_emojis_from_annotation(string annotation) {
         GLib.SList<string>? total_emojis = null;
         unowned GLib.SList<string>? sub_emojis = null;
@@ -1314,6 +1346,17 @@ public class IBusEmojier : Gtk.ApplicationWindow {
                 }
             }
         }
+        if (!m_loaded_unicode && m_unicode_deserialize_unicode_signal_id == 0) {
+            m_unicode_deserialize_unicode_signal_id =
+                    m_unicode_progress_object.deserialize_unicode.connect(
+                            (i, n) => {
+                                m_unicode_percent = (double)i / n;
+                                show_unicode_popup(
+                                        (int)(m_unicode_percent * 100));
+                    });
+        }
+        if (!m_loaded_unicode)
+            show_unicode_popup(0);
         return total_emojis;
     }
 
@@ -1516,11 +1559,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
                     return false;
                 if (m_lookup_table.get_cursor_pos() == index)
                     return false;
-#if VALA_0_24
                 Gdk.EventMotion pe = e;
-#else
-                Gdk.EventMotion *pe = &e;
-#endif
                 if (m_mouse_x == pe.x_root && m_mouse_y == pe.y_root)
                     return false;
                 m_mouse_x = pe.x_root;
@@ -1786,7 +1825,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
 
 
     private void start_rebuild_gui(bool initial_launching) {
-        if (!this.is_wayland)
+        if (!m_is_wayland)
             return;
         if (!initial_launching && !base.get_visible())
             return;
@@ -1964,17 +2003,10 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         // Use get_monitor_geometry() instead of get_monitor_area().
         // get_monitor_area() excludes docks, but the lookup window should be
         // shown over them.
-#if VALA_0_34
         Gdk.Monitor monitor = Gdk.Display.get_default().get_monitor_at_point(
                 m_cursor_location.x,
                 m_cursor_location.y);
         monitor_area = monitor.get_geometry();
-#else
-        Gdk.Screen screen = Gdk.Screen.get_default();
-        int monitor_num = screen.get_monitor_at_point(m_cursor_location.x,
-                                                      m_cursor_location.y);
-        screen.get_monitor_geometry(monitor_num, out monitor_area);
-#endif
         return monitor_area;
     }
 
@@ -2175,17 +2207,23 @@ public class IBusEmojier : Gtk.ApplicationWindow {
 
 
     public IBus.Text get_title_text() {
+        if (!m_loaded_unicode && m_is_gnome) {
+            unichar c = 0x26A0;
+            return new IBus.Text.from_string("%s%s %u%%".printf(
+                    c.to_string(),
+                    _("Loading a Unicode dictionary:"),
+                    (uint)(m_unicode_percent * 100)));
+        }
         var language = _(IBus.get_language_name(m_current_lang_id));
         uint ncandidates = this.get_number_of_candidates();
         string main_title = _("Emoji Choice");
         if (m_show_unicode)
             main_title = _("Unicode Choice");
-        var text = new IBus.Text.from_string(
-                "%s (%s) (%u / %u)".printf(
-                        main_title,
-                        language,
-                        this.get_cursor_pos() + 1,
-                        ncandidates));
+        var text = new IBus.Text.from_string("%s (%s) (%u / %u)".printf(
+                main_title,
+                language,
+                this.get_cursor_pos() + 1,
+                ncandidates));
         int char_count = text.text.char_count();
         int start_index = -1;
         unowned string title = text.text;
@@ -2268,24 +2306,12 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         present_centralize(event);
 
         Gdk.Device pointer;
-#if VALA_0_34
         Gdk.Seat seat = event.get_seat();
         if (seat == null) {
             var display = get_display();
             seat = display.get_default_seat();
         }
         pointer = seat.get_pointer();
-#else
-        Gdk.Device device = event.get_device();
-        if (device == null) {
-            var display = get_display();
-            device = display.list_devices().data;
-        }
-        if (device.get_source() == Gdk.InputSource.KEYBOARD)
-            pointer = device.get_associated_device();
-        else
-            pointer = device;
-#endif
         pointer.get_position_double(null,
                                     out m_mouse_x,
                                     out m_mouse_y);
@@ -2521,17 +2547,10 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         get_allocation(out allocation);
         Gdk.Rectangle monitor_area;
         Gdk.Rectangle work_area;
-#if VALA_0_34
         Gdk.Display display = get_display();
         Gdk.Monitor monitor = display.get_monitor_at_window(this.get_window());
         monitor_area = monitor.get_geometry();
         work_area = monitor.get_workarea();
-#else
-        Gdk.Screen screen = Gdk.Screen.get_default();
-        int monitor_num = screen.get_monitor_at_window(this.get_window());
-        screen.get_monitor_geometry(monitor_num, out monitor_area);
-        work_area = screen.get_monitor_workarea(monitor_num);
-#endif
         int x = (monitor_area.x + monitor_area.width - allocation.width)/2;
         int y = (monitor_area.y + monitor_area.height
                  - allocation.height)/2;

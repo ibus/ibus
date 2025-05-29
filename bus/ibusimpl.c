@@ -471,6 +471,19 @@ _panel_forward_process_key_event_cb (BusPanelProxy *panel,
 }
 
 static void
+_panel_send_message_cb (BusPanelProxy *panel,
+                        GVariant      *parameters,
+                        BusIBusImpl   *ibus)
+{
+    if (!ibus->panel) {
+        g_warning ("Panel is not running.");
+        return;
+    }
+    g_return_if_fail (BUS_IS_PANEL_PROXY (ibus->panel));
+    bus_panel_proxy_send_message_received (ibus->panel, parameters);
+}
+
+static void
 _registry_changed_cb (IBusRegistry *registry,
                       BusIBusImpl  *ibus)
 {
@@ -556,26 +569,29 @@ _dbus_name_owner_changed_cb (BusDBusImpl   *dbus,
                               G_CALLBACK (
                                       _panel_panel_extension_register_keys_cb),
                               ibus);
-            g_signal_connect (
-                    *panel,
-                    "update-preedit-text-received",
-                    G_CALLBACK (_panel_update_preedit_text_received_cb),
-                    ibus);
-            g_signal_connect (
-                    *panel,
-                    "update-lookup-table-received",
-                    G_CALLBACK (_panel_update_lookup_table_received_cb),
-                    ibus);
-            g_signal_connect (
-                    *panel,
-                    "update-auxiliary-text-received",
-                    G_CALLBACK (_panel_update_auxiliary_text_received_cb),
-                    ibus);
-            g_signal_connect (
-                    *panel,
-                    "forward-process-key-event",
-                    G_CALLBACK (_panel_forward_process_key_event_cb),
-                    ibus);
+            g_signal_connect (*panel,
+                              "update-preedit-text-received",
+                              G_CALLBACK (
+                                      _panel_update_preedit_text_received_cb),
+                              ibus);
+            g_signal_connect (*panel,
+                              "update-lookup-table-received",
+                              G_CALLBACK (
+                                      _panel_update_lookup_table_received_cb),
+                              ibus);
+            g_signal_connect (*panel,
+                              "update-auxiliary-text-received",
+                              G_CALLBACK (
+                                      _panel_update_auxiliary_text_received_cb),
+                              ibus);
+            g_signal_connect (*panel,
+                              "forward-process-key-event",
+                              G_CALLBACK (_panel_forward_process_key_event_cb),
+                              ibus);
+            g_signal_connect (*panel,
+                              "send-message",
+                              G_CALLBACK (_panel_send_message_cb),
+                              ibus);
 
             if (ibus->focused_context != NULL) {
                 context = ibus->focused_context;
@@ -849,11 +865,20 @@ _context_panel_extension_cb (BusInputContext    *context,
     bus_ibus_impl_set_panel_extension_mode (ibus, event);
 }
 
+static void
+_context_send_message_cb (BusInputContext *context,
+                          GVariant        *parameters,
+                          BusIBusImpl     *ibus)
+{
+    _panel_send_message_cb (ibus->panel, parameters, ibus);
+}
+
 const static struct {
     const gchar *name;
     GCallback    callback;
 } context_signals [] = {
-    { "panel-extension",             G_CALLBACK (_context_panel_extension_cb) }
+    { "panel-extension",             G_CALLBACK (_context_panel_extension_cb) },
+    { "send-message",                G_CALLBACK (_context_send_message_cb) }
 };
 
 /**

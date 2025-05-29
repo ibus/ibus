@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2018 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2018-2024 Takao Fujwiara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2018-2025 Takao Fujwiara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -632,6 +632,8 @@ class PanelBinding : IBus.PanelService {
                     m_emojier.key_press_cursor_horizontal(Gdk.Key.Right, 0);
             } else {
                 m_emojier.set_annotation(annotation);
+                var text = m_emojier.get_title_text();
+                show_candidate = (text.text.get_char() == 0x26A0);
             }
         }
         convert_preedit_text();
@@ -738,10 +740,11 @@ class PanelBinding : IBus.PanelService {
     private void show_wayland_lookup_table(IBus.Text text) {
         m_wayland_lookup_table_is_visible = true;
         var table = m_emojier.get_one_dimension_lookup_table();
+        bool do_show_auxiliary_text = (text.text.get_char() == 0x26A0);
         uint ncandidates = table.get_number_of_candidates();
         update_auxiliary_text_received(
                 text,
-                ncandidates > 0 ? true : false);
+                do_show_auxiliary_text ? true : ncandidates > 0 ? true : false);
         update_lookup_table_received(
                 table,
                 ncandidates > 0 ? true : false);
@@ -901,6 +904,9 @@ class PanelBinding : IBus.PanelService {
                         "is-enabled", false,
                         "is-extension", true);
                 panel_extension(close_event);
+            });
+            m_emojier.send_message.connect((m) => {
+                send_message(m);
             });
         }
         m_emojier.reset();

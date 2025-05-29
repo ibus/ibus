@@ -3,7 +3,7 @@
 /* ibus - The Input Bus
  * Copyright (C) 2014 Peng Huang <shawn.p.huang@gmail.com>
  * Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2014-2017 Red Hat, Inc.
+ * Copyright (C) 2014-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,6 +36,7 @@
 
 #include <memory.h>
 #include <stdlib.h>
+#include <glib/gi18n-lib.h>
 
 #define IBUS_ENGINE_SIMPLE_GET_PRIVATE(o)  \
    ((IBusEngineSimplePrivate *)ibus_engine_simple_get_instance_private (o))
@@ -74,6 +75,7 @@ struct _IBusEngineSimplePrivate {
     GString            *tentative_match;
     int                 tentative_match_len;
     char               *tentative_emoji;
+    char               *client;
 
     guint               hex_mode_enabled : 1;
     guint               in_hex_sequence : 1;
@@ -84,6 +86,8 @@ struct _IBusEngineSimplePrivate {
     IBusLookupTable    *lookup_table;
     gboolean            lookup_table_visible;
     IBusText           *updated_preedit;
+    gboolean            do_inform_user_error;
+    guint               inform_user_error_timeout_id;
 };
 
 guint COMPOSE_BUFFER_SIZE = 20;
@@ -95,7 +99,13 @@ static IBusComposeTableEx *en_compose_table;
 /* functions prototype */
 static void     ibus_engine_simple_destroy      (IBusEngineSimple   *simple);
 static void     ibus_engine_simple_focus_in     (IBusEngine         *engine);
+static void     ibus_engine_simple_focus_in_id  (IBusEngine         *engine,
+                                                 const gchar
+                                                                   *object_path,
+                                                 const gchar        *client);
 static void     ibus_engine_simple_focus_out    (IBusEngine         *engine);
+static void     ibus_engine_simple_focus_out_id (IBusEngine         *engine,
+                                                 const gchar        *client);
 static void     ibus_engine_simple_reset        (IBusEngine         *engine);
 static gboolean ibus_engine_simple_process_key_event
                                                 (IBusEngine         *engine,
@@ -134,7 +144,11 @@ ibus_engine_simple_class_init (IBusEngineSimpleClass *class)
         (IBusObjectDestroyFunc) ibus_engine_simple_destroy;
 
     engine_class->focus_in  = ibus_engine_simple_focus_in;
+    engine_class->focus_in_id
+                            = ibus_engine_simple_focus_in_id;
     engine_class->focus_out = ibus_engine_simple_focus_out;
+    engine_class->focus_out_id
+                            = ibus_engine_simple_focus_out_id;
     engine_class->reset     = ibus_engine_simple_reset;
     engine_class->process_key_event
                             = ibus_engine_simple_process_key_event;
@@ -156,6 +170,22 @@ ibus_engine_simple_class_init (IBusEngineSimpleClass *class)
     contents = g_bytes_get_data (data, &length);
     en_compose_table = ibus_compose_table_deserialize (contents, length);
 }
+
+
+static gboolean
+inform_user_error_timeout_cb (gpointer user_data)
+{
+    IBusEngineSimple *simple = (IBusEngineSimple *)user_data;
+    IBusEngineSimplePrivate *priv;
+
+    g_return_val_if_fail (IBUS_IS_ENGINE_SIMPLE (simple), G_SOURCE_REMOVE);
+    priv = simple->priv;
+    priv->do_inform_user_error = FALSE;
+    priv->inform_user_error_timeout_id = 0;
+    ibus_engine_show_preedit_text ((IBusEngine *)simple);
+    return G_SOURCE_REMOVE;
+}
+
 
 static void
 ibus_engine_simple_init (IBusEngineSimple *simple)
@@ -204,18 +234,82 @@ ibus_engine_simple_destroy (IBusEngineSimple *simple)
         IBUS_OBJECT (simple));
 }
 
+
+static void
+ibus_engine_simple_send_message_with_code (IBusEngineSimple *simple,
+                                           IBusEngineMsgCode code)
+{
+    IBusEngineSimplePrivate *priv;
+    IBusMessage *message;
+
+    g_return_if_fail (IBUS_IS_ENGINE_SIMPLE (simple));
+
+    priv = simple->priv;
+    priv->do_inform_user_error = TRUE;
+    message = ibus_message_new (
+            IBUS_MESSAGE_DOMAIN_ENGINE,
+            code,
+            _("Detect unregistered character in your compose sequence"),
+            _("The character you just input is not recognized as a valid " \
+              "part of the currently active compose sequence and the " \
+              "character was cancelled. Try inputting the correct character " \
+              "to the compose sequence again, or press Escape key to " \
+              "terminate whole the compose sequence."),
+             "timeout", 5,
+             NULL);
+    ibus_engine_send_message (IBUS_ENGINE (simple), message);
+}
+
+
 static void
 ibus_engine_simple_focus_in (IBusEngine *engine)
 {
+    ibus_engine_simple_focus_in_id (engine, NULL, NULL);
+}
+
+
+static void
+ibus_engine_simple_focus_in_id (IBusEngine  *engine,
+                                const gchar *object_path,
+                                const gchar *client)
+{
+    /* Do not enable IBusEngine:has-focus-id in the IBusEngineSimple's
+     * constructor because the property should be enabled by the inherited
+     * engine. E.g. IBusEngineHangul disables it.
+     * The property is handled by ibusengine.c:_ibus_engine_has_focus_id();
+     */
+    if (IBUS_IS_ENGINE_SIMPLE (engine)) {
+        IBusEngineSimple *simple = IBUS_ENGINE_SIMPLE (engine);
+        g_free (simple->priv->client);
+        simple->priv->client = g_strdup (client);
+    } else {
+        g_warning ("IBUS_IS_ENGINE_SIMPLE(engine) in %s", G_STRFUNC);
+    }
     IBUS_ENGINE_CLASS (ibus_engine_simple_parent_class)->focus_in (engine);
 }
+
 
 static void
 ibus_engine_simple_focus_out (IBusEngine *engine)
 {
-    ibus_engine_simple_reset (engine);
+    ibus_engine_simple_focus_out_id (engine, NULL);
+}
+
+
+static void
+ibus_engine_simple_focus_out_id (IBusEngine  *engine,
+                                 const gchar *object_path)
+{
+    if (IBUS_IS_ENGINE_SIMPLE (engine)) {
+        IBusEngineSimple *simple = IBUS_ENGINE_SIMPLE (engine);
+        g_clear_pointer (&simple->priv->client, g_free);
+        ibus_engine_simple_reset (engine);
+    } else {
+        g_warning ("IBUS_IS_ENGINE_SIMPLE(engine) in %s", G_STRFUNC);
+    }
     IBUS_ENGINE_CLASS (ibus_engine_simple_parent_class)->focus_out (engine);
 }
+
 
 static void
 ibus_engine_simple_reset (IBusEngine *engine)
@@ -237,10 +331,16 @@ ibus_engine_simple_reset (IBusEngine *engine)
         priv->tentative_match_len = 0;
     }
     ibus_engine_hide_preedit_text ((IBusEngine *)simple);
+    priv->do_inform_user_error = FALSE;
+    if (priv->inform_user_error_timeout_id) {
+        g_source_remove (priv->inform_user_error_timeout_id);
+        priv->inform_user_error_timeout_id = 0;
+    }
     g_object_unref (priv->updated_preedit);
     priv->updated_preedit =
             (IBusText *)g_object_ref_sink (updated_preedit_empty);
 }
+
 
 static void
 ibus_engine_simple_commit_char (IBusEngineSimple *simple,
@@ -303,6 +403,7 @@ ibus_engine_simple_commit_str (IBusEngineSimple *simple,
             ibus_text_new_from_string (backup_str));
     g_free (backup_str);
 }
+
 
 static void
 ibus_engine_simple_update_preedit_text (IBusEngineSimple *simple)
@@ -404,6 +505,11 @@ ibus_engine_simple_update_preedit_text (IBusEngineSimple *simple)
             g_object_unref (priv->updated_preedit);
             priv->updated_preedit =
                     (IBusText *)g_object_ref_sink (updated_preedit_empty);
+            priv->do_inform_user_error = FALSE;
+            if (priv->inform_user_error_timeout_id) {
+                g_source_remove (priv->inform_user_error_timeout_id);
+                priv->inform_user_error_timeout_id = 0;
+            }
         }
     } else if (s->len >= G_MAXINT) {
         g_warning ("%s is too long compose length: %lu", s->str, s->len);
@@ -411,9 +517,30 @@ ibus_engine_simple_update_preedit_text (IBusEngineSimple *simple)
         guint len = (guint)g_utf8_strlen (s->str, -1);
         IBusText *text = ibus_text_new_from_string (s->str);
         ibus_text_append_attribute (text,
-                IBUS_ATTR_TYPE_UNDERLINE, IBUS_ATTR_UNDERLINE_SINGLE, 0, len);
+                                    IBUS_ATTR_TYPE_UNDERLINE,
+                                    IBUS_ATTR_UNDERLINE_SINGLE,
+                                    0,
+                                    len);
         g_object_ref_sink (text);
-        ibus_engine_update_preedit_text ((IBusEngine *)simple, text, len, TRUE);
+        /* gnome-shell does not handle "SendMessageReceived" D-Bus method yet.
+         * Seems other Wayland desktops do not implement xdg-system-bell
+         * Wayland protocol yet.
+         */
+        if (priv->do_inform_user_error && priv->client &&
+            (!g_ascii_strncasecmp (priv->client, "gnome-shell", 11) ||
+             !g_ascii_strncasecmp (priv->client, "wayland", 7))
+           ) {
+            ibus_engine_hide_preedit_text ((IBusEngine *)simple);
+            if (priv->inform_user_error_timeout_id)
+                g_source_remove (priv->inform_user_error_timeout_id);
+            priv->inform_user_error_timeout_id =
+                    g_timeout_add (500,
+                                   inform_user_error_timeout_cb,
+                                   simple);
+        } else {
+            ibus_engine_update_preedit_text ((IBusEngine *)simple,
+                                             text, len, TRUE);
+        }
         g_object_unref (priv->updated_preedit);
         priv->updated_preedit = text;
     }
@@ -437,6 +564,7 @@ ibus_engine_simple_update_preedit_text (IBusEngineSimple *simple)
  * digits, and enter the digits without modifiers.
  */
 #define HEX_MOD_MASK (IBUS_CONTROL_MASK | IBUS_SHIFT_MASK)
+
 
 static gboolean
 check_hex (IBusEngineSimple *simple,
@@ -501,6 +629,7 @@ check_hex (IBusEngineSimple *simple,
     return TRUE;
 }
 
+
 static IBusEngineDict *
 load_emoji_dict (void)
 {
@@ -523,6 +652,7 @@ load_emoji_dict (void)
 
     return emoji_dict;
 }
+
 
 static gboolean
 check_emoji_table (IBusEngineSimple       *simple,
@@ -677,7 +807,9 @@ no_sequence_matches (IBusEngineSimple *simple,
         priv->compose_buffer[0] = 0;
         if (n_compose > 1) {
             /* Invalid sequence */
-            /* FIXME beep_window (event->window); */
+            ibus_engine_simple_send_message_with_code (
+                    simple,
+                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
             ibus_engine_simple_update_preedit_text (simple);
             return TRUE;
         }
@@ -703,6 +835,7 @@ no_sequence_matches (IBusEngineSimple *simple,
     return FALSE;
 }
 
+
 static gboolean
 is_hex_keyval (guint keyval)
 {
@@ -711,6 +844,7 @@ is_hex_keyval (guint keyval)
   return g_unichar_isxdigit (ch);
 }
 
+
 static gboolean
 is_graph_keyval (guint keyval)
 {
@@ -718,6 +852,7 @@ is_graph_keyval (guint keyval)
 
   return g_unichar_isgraph (ch);
 }
+
 
 static void
 ibus_engine_simple_update_lookup_and_aux_table (IBusEngineSimple *simple)
@@ -744,6 +879,7 @@ ibus_engine_simple_update_lookup_and_aux_table (IBusEngineSimple *simple)
                                      priv->lookup_table_visible);
 }
 
+
 static gboolean
 ibus_engine_simple_if_in_range_of_lookup_table (IBusEngineSimple *simple,
                                                 guint             keyval)
@@ -769,6 +905,7 @@ ibus_engine_simple_if_in_range_of_lookup_table (IBusEngineSimple *simple,
         return FALSE;
     return TRUE;
 }
+
 
 static void
 ibus_engine_simple_set_number_on_lookup_table (IBusEngineSimple *simple,
@@ -862,8 +999,9 @@ ibus_engine_simple_check_all_compose_table (IBusEngineSimple *simple,
                 if (is_32bit) {
                     ibus_engine_simple_commit_str (simple, output->str);
                 } else {
-                    ibus_engine_simple_commit_char (simple,
-                                                    g_utf8_get_char (output->str));
+                    ibus_engine_simple_commit_char (
+                            simple,
+                            g_utf8_get_char (output->str));
                 }
             }
             ibus_engine_simple_update_preedit_text (simple);
@@ -927,8 +1065,10 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
     guint printable_keyval;
     int i;
 
-    while (n_compose <= COMPOSE_BUFFER_SIZE && priv->compose_buffer[n_compose] != 0)
+    while (n_compose <= COMPOSE_BUFFER_SIZE &&
+           priv->compose_buffer[n_compose] != 0) {
         n_compose++;
+    }
     if (n_compose > COMPOSE_BUFFER_SIZE) {
         g_warning ("copmose table buffer is full.");
         n_compose = COMPOSE_BUFFER_SIZE;
@@ -948,7 +1088,9 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
                 priv->modifiers_dropped = TRUE;
             } else {
                 /* invalid hex sequence */
-                /* FIXME beep_window (event->window); */
+                ibus_engine_simple_send_message_with_code (
+                        simple,
+                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
                 g_string_set_size (priv->tentative_match, 0);
                 g_clear_pointer (&priv->tentative_emoji, g_free);
                 priv->in_hex_sequence = FALSE;
@@ -971,7 +1113,9 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
                 priv->modifiers_dropped = TRUE;
             } else {
                 /* invalid hex sequence */
-                /* FIXME beep_window (event->window); */
+                ibus_engine_simple_send_message_with_code (
+                        simple,
+                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
                 g_string_set_size (priv->tentative_match, 0);
                 g_clear_pointer (&priv->tentative_emoji, g_free);
                 priv->in_hex_sequence = FALSE;
@@ -1020,7 +1164,9 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
         }
         else if (is_hex_end) {
             /* invalid hex sequence */
-            /* FIXME beep_window (event->window); */
+            ibus_engine_simple_send_message_with_code (
+                    simple,
+                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
             g_string_set_size (priv->tentative_match, 0);
             g_clear_pointer (&priv->tentative_emoji, g_free);
             priv->in_hex_sequence = FALSE;
@@ -1119,7 +1265,9 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
         else {
             /* invalid hex sequence */
             if (n_compose > 0) {
-                /* FIXME beep_window (event->window); */
+                ibus_engine_simple_send_message_with_code (
+                        simple,
+                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
                 g_string_set_size (priv->tentative_match, 0);
                 priv->in_hex_sequence = FALSE;
                 priv->compose_buffer[0] = 0;
@@ -1184,7 +1332,9 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
             return TRUE;
         } else if (!is_hex_end) {
             /* non-hex character in hex sequence */
-            /* FIXME beep_window (event->window); */
+            ibus_engine_simple_send_message_with_code (
+                    simple,
+                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
             return TRUE;
         }
     } else if (priv->in_emoji_sequence) {
@@ -1243,15 +1393,18 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
                     return TRUE;
                 } else {
                     /* invalid hex sequence */
-                    /* FIXME beep_window (event->window); */
+                    ibus_engine_simple_send_message_with_code (
+                            simple,
+                            IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
                     g_string_set_size (priv->tentative_match, 0);
                     priv->in_hex_sequence = FALSE;
                     priv->compose_buffer[0] = 0;
                 }
+            } else if (!check_hex (simple, n_compose)) {
+                ibus_engine_simple_send_message_with_code (
+                        simple,
+                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
             }
-            else if (!check_hex (simple, n_compose))
-                /* FIXME beep_window (event->window); */
-                ;
             ibus_engine_simple_update_preedit_text (simple);
 
             return TRUE;
@@ -1343,7 +1496,9 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
 
             n_compose = n_compose_prev;
             g_assert (n_compose < (COMPOSE_BUFFER_SIZE + 1));
-            /* FIXME beep_window (event->window); */
+            ibus_engine_simple_send_message_with_code (
+                    simple,
+                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
             backup_char = priv->compose_buffer[n_compose];
             priv->compose_buffer[n_compose] = 0;
             if (ibus_engine_simple_check_all_compose_table (simple, n_compose))
@@ -1356,6 +1511,7 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
     return no_sequence_matches (simple, n_compose, keyval, keycode, modifiers);
 }
 
+
 static void
 ibus_engine_simple_page_down (IBusEngine *engine)
 {
@@ -1367,6 +1523,7 @@ ibus_engine_simple_page_down (IBusEngine *engine)
     ibus_engine_simple_update_lookup_and_aux_table (simple);
 }
 
+
 static void
 ibus_engine_simple_page_up (IBusEngine *engine)
 {
@@ -1377,6 +1534,7 @@ ibus_engine_simple_page_up (IBusEngine *engine)
     ibus_lookup_table_page_up (priv->lookup_table);
     ibus_engine_simple_update_lookup_and_aux_table (simple);
 }
+
 
 static void
 ibus_engine_simple_candidate_clicked (IBusEngine *engine,
@@ -1401,6 +1559,7 @@ ibus_engine_simple_candidate_clicked (IBusEngine *engine,
     ibus_engine_simple_set_number_on_lookup_table (simple, keyval, n_compose);
 }
 
+
 void
 ibus_engine_simple_add_table (IBusEngineSimple *simple,
                               const guint16    *data,
@@ -1414,6 +1573,7 @@ ibus_engine_simple_add_table (IBusEngineSimple *simple,
                                                        max_seq_len,
                                                        n_seqs);
 }
+
 
 gboolean
 ibus_engine_simple_add_table_by_locale (IBusEngineSimple *simple,
@@ -1532,6 +1692,7 @@ ibus_engine_simple_add_table_by_locale (IBusEngineSimple *simple,
 
     return retval;
 }
+
 
 gboolean
 ibus_engine_simple_add_compose_file (IBusEngineSimple *simple,

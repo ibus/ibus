@@ -2,8 +2,8 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2012-2022 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2008-2022 Red Hat, Inc.
+ * Copyright (C) 2012-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -43,6 +43,7 @@
 #include "ibusservice.h"
 #include "ibusattribute.h"
 #include "ibuslookuptable.h"
+#include "ibusmessage.h"
 #include "ibusproplist.h"
 
 /*
@@ -64,6 +65,24 @@
     (G_TYPE_INSTANCE_GET_CLASS ((obj), IBUS_TYPE_ENGINE, IBusEngineClass))
 
 G_BEGIN_DECLS
+
+/**
+ * IBusEngineMsgCode:
+ * @IBUS_ENGINE_MSG_CODE_GENERAL: Generic message for Engine
+ * @IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE: User's typing failure
+ *         against the definition of the compose files.
+ *
+ * Message codes in the `IBusMessageDomain` domain for Engine
+ * See also #IBusMessage, ibus_engine_send_message()
+ *
+ * Since: 1.5.33
+ * Stability: Unstable
+ */
+typedef enum
+{
+  IBUS_ENGINE_MSG_CODE_GENERAL,
+  IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE
+} IBusEngineMsgCode;
 
 typedef struct _IBusEngine IBusEngine;
 typedef struct _IBusEngineClass IBusEngineClass;
@@ -469,5 +488,18 @@ void ibus_engine_get_content_type       (IBusEngine         *engine,
  */
 const gchar *ibus_engine_get_name       (IBusEngine         *engine);
 
+/**
+ * ibus_engine_send_message:
+ * @engine: An #IBusEngine.
+ * @message: An #IBusMessage.
+ *
+ * Send a message to the Engine for the focus-less notification popup.
+ * This is used for the user errors in Wayland mainly but in Xorg too.
+ *
+ * Since: 1.5.33
+ * Stability: Unstable
+ */
+void         ibus_engine_send_message   (IBusEngine         *engine,
+                                         IBusMessage        *message);
 G_END_DECLS
 #endif

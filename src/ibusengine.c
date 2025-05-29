@@ -3,7 +3,7 @@
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
  * Copyright (C) 2018-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2008-2021 Red Hat, Inc.
+ * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,6 +33,8 @@
 
 #define IBUS_ENGINE_GET_PRIVATE(o)  \
    ((IBusEnginePrivate *)ibus_engine_get_instance_private (o))
+
+extern GType   ibus_engine_simple_get_type       (void);
 
 enum {
     PROCESS_KEY_EVENT,
@@ -301,6 +303,13 @@ static const gchar introspection_xml[] =
     "    </signal>"
     "    <signal name='PanelExtension'>"
     "      <arg type='v' name='data' />"
+    "    </signal>"
+    "    <signal name='SendMessage'>"
+    "      <arg type='v' name='message' />"
+    "      <annotation name='org.gtk.GDBus.Since'\n"
+    "          value='1.5.33' />\n"
+    "      <annotation name='org.gtk.GDBus.DocString'\n"
+    "          value='Stability: Unstable' />\n"
     "    </signal>"
     /* FIXME properties */
     "    <property name='ContentType' type='(uu)' access='write' />"
@@ -1537,7 +1546,21 @@ _ibus_engine_has_focus_id (IBusEngine      *engine,
                            GDBusConnection *connection,
                            GError         **error)
 {
-    GVariant *retval = g_variant_new_boolean (engine->priv->has_focus_id);
+    GVariant *retval;
+
+#ifndef IBUS_TYPE_ENGINE_SIMPLE
+#define IBUS_TYPE_ENGINE_SIMPLE (ibus_engine_simple_get_type ())
+#define __IBUS_SET_LOCAL_ENGINE_SIMPLE
+#endif
+    /* Should not use IBUS_IS_ENGINE_SIMPLE() not to effect the inherited
+     * class.*/
+    if (G_OBJECT_TYPE (engine) == IBUS_TYPE_ENGINE_SIMPLE)
+        engine->priv->has_focus_id = TRUE;
+#ifdef __IBUS_SET_LOCAL_ENGINE_SIMPLE
+#undef __IBUS_SET_LOCAL_ENGINE_SIMPLE
+#undef IBUS_TYPE_ENGINE_SIMPLE
+#endif
+    retval = g_variant_new_boolean (engine->priv->has_focus_id);
     g_assert (retval);
     return retval;
 }
@@ -1812,12 +1835,17 @@ ibus_engine_emit_signal (IBusEngine  *engine,
                          const gchar *signal_name,
                          GVariant    *parameters)
 {
+    GError *error = NULL;
     ibus_service_emit_signal ((IBusService *)engine,
                               NULL,
                               IBUS_INTERFACE_ENGINE,
                               signal_name,
                               parameters,
-                              NULL);
+                              &error);
+    if (error) {
+        g_warning ("Failed to emit %s signal: %s", signal_name, error->message);
+        g_error_free (error);
+    }
 }
 
 static void
@@ -2198,4 +2226,21 @@ ibus_engine_get_name (IBusEngine *engine)
 {
     g_return_val_if_fail (IBUS_IS_ENGINE (engine), NULL);
     return engine->priv->engine_name;
+}
+
+void
+ibus_engine_send_message (IBusEngine  *engine,
+                          IBusMessage *message)
+{
+    GVariant *variant;
+
+    g_return_if_fail (IBUS_IS_ENGINE (engine));
+    g_return_if_fail (IBUS_IS_MESSAGE (message));
+    variant = ibus_serializable_serialize ((IBusSerializable *)message);
+    ibus_engine_emit_signal (engine,
+                             "SendMessage",
+                              g_variant_new ("(v)", variant));
+    if (g_object_is_floating (message)) {
+        g_object_unref (message);
+    }
 }

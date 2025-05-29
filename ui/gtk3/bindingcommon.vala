@@ -76,17 +76,10 @@ class BindingCommon {
                 Gdk.ModifierType.HYPER_MASK |
                 Gdk.ModifierType.META_MASK);
         if ((switch_modifiers & VIRTUAL_MODIFIERS) != 0) {
-        // workaround a bug in gdk vapi vala > 0.18
-        // https://bugzilla.gnome.org/show_bug.cgi?id=677559
-#if VALA_0_18
+            // workaround a bug in gdk vapi vala > 0.18
+            // https://bugzilla.gnome.org/show_bug.cgi?id=677559
             Gdk.Keymap.get_for_display(Gdk.Display.get_default()
                     ).map_virtual_modifiers(ref switch_modifiers);
-#else
-            if ((switch_modifiers & Gdk.ModifierType.SUPER_MASK) != 0)
-                switch_modifiers |= Gdk.ModifierType.MOD4_MASK;
-            if ((switch_modifiers & Gdk.ModifierType.HYPER_MASK) != 0)
-                switch_modifiers |= Gdk.ModifierType.MOD4_MASK;
-#endif
             switch_modifiers &= ~VIRTUAL_MODIFIERS;
         }
 

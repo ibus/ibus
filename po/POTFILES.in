@@ -43,6 +43,7 @@ src/ibusbus.c
 src/ibusconfig.c
 src/ibusemojigen.h
 src/ibusengine.c
+src/ibusenginesimple.c
 src/ibusfactory.c
 src/ibushotkey.c
 src/ibusinputcontext.c

@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2018 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2018-2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2018-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -99,6 +99,7 @@ class ExtensionGtk : Gtk.Application {
     private void bus_disconnected(IBus.Bus bus) {
         debug("connection is lost.");
         Gtk.main_quit();
+        this.quit();
     }
 
     private void bus_connected(IBus.Bus bus) {

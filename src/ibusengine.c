@@ -3,7 +3,7 @@
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
  * Copyright (C) 2018-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2008-2021 Red Hat, Inc.
+ * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -301,6 +301,13 @@ static const gchar introspection_xml[] =
     "    </signal>"
     "    <signal name='PanelExtension'>"
     "      <arg type='v' name='data' />"
+    "    </signal>"
+    "    <signal name='SendMessage'>"
+    "      <arg type='v' name='message' />"
+    "      <annotation name='org.gtk.GDBus.Since'\n"
+    "          value='1.5.33' />\n"
+    "      <annotation name='org.gtk.GDBus.DocString'\n"
+    "          value='Stability: Unstable' />\n"
     "    </signal>"
     /* FIXME properties */
     "    <property name='ContentType' type='(uu)' access='write' />"
@@ -1812,12 +1819,17 @@ ibus_engine_emit_signal (IBusEngine  *engine,
                          const gchar *signal_name,
                          GVariant    *parameters)
 {
+    GError *error = NULL;
     ibus_service_emit_signal ((IBusService *)engine,
                               NULL,
                               IBUS_INTERFACE_ENGINE,
                               signal_name,
                               parameters,
-                              NULL);
+                              &error);
+    if (error) {
+        g_warning ("Failed to emit %s signal: %s", signal_name, error->message);
+        g_error_free (error);
+    }
 }
 
 static void
@@ -2198,4 +2210,21 @@ ibus_engine_get_name (IBusEngine *engine)
 {
     g_return_val_if_fail (IBUS_IS_ENGINE (engine), NULL);
     return engine->priv->engine_name;
+}
+
+void
+ibus_engine_send_message (IBusEngine  *engine,
+                          IBusMessage *message)
+{
+    GVariant *variant;
+
+    g_return_if_fail (IBUS_IS_ENGINE (engine));
+    g_return_if_fail (IBUS_IS_MESSAGE (message));
+    variant = ibus_serializable_serialize ((IBusSerializable *)message);
+    ibus_engine_emit_signal (engine,
+                             "SendMessage",
+                              g_variant_new ("(v)", variant));
+    if (g_object_is_floating (message)) {
+        g_object_unref (message);
+    }
 }

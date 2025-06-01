@@ -3,7 +3,7 @@
 /* ibus - The Input Bus
  * Copyright (c) 2009-2014 Google Inc. All rights reserved.
  * Copyright (C) 2010-2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2017-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2017-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -60,6 +60,7 @@ enum {
     PROCESS_KEY_EVENT,
     COMMIT_TEXT_RECEIVED,
     CANDIDATE_CLICKED_LOOKUP_TABLE,
+    SEND_MESSAGE_RECEIVED,
     LAST_SIGNAL,
 };
 
@@ -240,6 +241,13 @@ static const gchar introspection_xml[] =
     "    <method name='CommitTextReceived'>"
     "      <arg direction='in' type='v' name='text' />"
     "    </method>"
+    "    <method name='SendMessageReceived'>"
+    "      <arg direction='in' type='v' name='message' />"
+    "      <annotation name='org.gtk.GDBus.Since'\n"
+    "          value='1.5.33' />\n"
+    "      <annotation name='org.gtk.GDBus.DocString'\n"
+    "          value='Stability: Unstable' />\n"
+    "    </method>"
     /* Signals */
     "    <signal name='CursorUp' />"
     "    <signal name='CursorDown' />"
@@ -266,9 +274,9 @@ static const gchar introspection_xml[] =
     "    <signal name='PanelExtension'>"
     "      <arg type='v' name='event' />"
     "    </signal>"
-    "    <method name='PanelExtensionRegisterKeys'>"
+    "    <signal name='PanelExtensionRegisterKeys'>"
     "      <arg type='v' name='data' />"
-    "    </method>"
+    "    </signal>"
     "    <signal name='UpdatePreeditTextReceived'>"
     "      <arg type='v' name='text' />"
     "      <arg type='u' name='cursor_pos' />"
@@ -286,6 +294,17 @@ static const gchar introspection_xml[] =
     "      <arg type='u' name='keyval' />"
     "      <arg type='u' name='keycode' />"
     "      <arg type='u' name='state' />"
+    "      <annotation name='org.gtk.GDBus.Since'\n"
+    "          value='1.5.32' />\n"
+    "      <annotation name='org.gtk.GDBus.DocString'\n"
+    "          value='Stability: Unstable' />\n"
+    "    </signal>"
+    "    <signal name='SendMessage'>"
+    "      <arg type='v' name='message' />"
+    "      <annotation name='org.gtk.GDBus.Since'\n"
+    "          value='1.5.33' />\n"
+    "      <annotation name='org.gtk.GDBus.DocString'\n"
+    "          value='Stability: Unstable' />\n"
     "    </signal>"
     "  </interface>"
     "</node>";
@@ -1006,7 +1025,7 @@ ibus_panel_service_class_init (IBusPanelServiceClass *class)
     /**
      * IBusPanelService::commit-text-received:
      * @panel: An #IBusPanelService
-     * @text: A #IBusText
+     * @text: An #IBusText
      *
      * Emitted when the client application get the ::commit-text-received.
      * Implement the member function
@@ -1027,6 +1046,20 @@ ibus_panel_service_class_init (IBusPanelServiceClass *class)
             1,
             IBUS_TYPE_TEXT);
 
+    /**
+     * IBusPanelService::candidate-clicked-lookup-table:
+     * @panel: An #IBusPanelService
+     * @text: An #IBusText
+     *
+     * Emitted when the client application get the
+     * ::candidate-clicked-lookup-table.
+     * Implement the member function
+     * IBusPanelServiceClass::candidate_cllicked_lookup_table in extended class
+     * to receive this signal.
+     *
+     * <note><para>Argument @user_data is ignored in this function.</para>
+     * </note>
+     */
     panel_signals[CANDIDATE_CLICKED_LOOKUP_TABLE] =
         g_signal_new (I_("candidate-clicked-lookup-table"),
             G_TYPE_FROM_CLASS (gobject_class),
@@ -1040,6 +1073,31 @@ ibus_panel_service_class_init (IBusPanelServiceClass *class)
             G_TYPE_UINT,
             G_TYPE_UINT,
             G_TYPE_UINT);
+
+    /**
+     * IBusPanelService::send-message-received:
+     * @panel: An #IBusPanelService
+     * @message: An #IBusMessage
+     *
+     * Emitted when the client application get the ::send-meeeage-received.
+     * Implement the member function
+     *
+     * <note><para>Argument @user_data is ignored in this function.</para>
+     * </note>
+     *
+     * Since: 1.5.33
+     * Stability: Unstable
+     */
+    panel_signals[SEND_MESSAGE_RECEIVED] =
+        g_signal_new (I_("send-message-received"),
+            G_TYPE_FROM_CLASS (gobject_class),
+            G_SIGNAL_RUN_LAST,
+            0,
+            NULL, NULL,
+            _ibus_marshal_VOID__OBJECT,
+            G_TYPE_NONE,
+            1,
+            IBUS_TYPE_MESSAGE);
 }
 
 static void
@@ -1310,6 +1368,26 @@ ibus_panel_service_service_method_call (IBusService           *service,
                        index, button, state);
         return;
     }
+    if (g_strcmp0 (method_name, "SendMessageReceived") == 0) {
+        GVariant *arg0 = NULL;
+        IBusMessage *message = NULL;
+        g_variant_get (parameters, "(v)", &arg0);
+        if (arg0) {
+            message = (IBusMessage *)ibus_serializable_deserialize (arg0);
+            g_variant_unref (arg0);
+        }
+        if (!message) {
+            g_dbus_method_invocation_return_error (
+                    invocation,
+                    G_DBUS_ERROR,
+                    G_DBUS_ERROR_FAILED,
+                    "SendMessageReceived method gives NULL");
+            return;
+        }
+        g_signal_emit (panel, panel_signals[SEND_MESSAGE_RECEIVED], 0, message);
+        _g_object_unref_if_floating (message);
+        return;
+    }
 
 
     const static struct {
@@ -1510,7 +1588,7 @@ ibus_panel_service_candidate_clicked (IBusPanelService *panel,
                                       guint             state)
 {
     g_return_if_fail (IBUS_IS_PANEL_SERVICE (panel));
-    ibus_service_emit_signal ((IBusService *) panel,
+    ibus_service_emit_signal ((IBusService *)panel,
                               NULL,
                               IBUS_INTERFACE_PANEL,
                               "CandidateClicked",
@@ -1524,7 +1602,7 @@ ibus_panel_service_property_activate (IBusPanelService *panel,
                                       guint             prop_state)
 {
     g_return_if_fail (IBUS_IS_PANEL_SERVICE (panel));
-    ibus_service_emit_signal ((IBusService *) panel,
+    ibus_service_emit_signal ((IBusService *)panel,
                               NULL,
                               IBUS_INTERFACE_PANEL,
                               "PropertyActivate",
@@ -1537,7 +1615,7 @@ ibus_panel_service_property_show (IBusPanelService *panel,
                                   const gchar      *prop_name)
 {
     g_return_if_fail (IBUS_IS_PANEL_SERVICE (panel));
-    ibus_service_emit_signal ((IBusService *) panel,
+    ibus_service_emit_signal ((IBusService *)panel,
                               NULL,
                               IBUS_INTERFACE_PANEL,
                               "PropertyShow",
@@ -1550,7 +1628,7 @@ ibus_panel_service_property_hide (IBusPanelService *panel,
                                   const gchar      *prop_name)
 {
     g_return_if_fail (IBUS_IS_PANEL_SERVICE (panel));
-    ibus_service_emit_signal ((IBusService *) panel,
+    ibus_service_emit_signal ((IBusService *)panel,
                               NULL,
                               IBUS_INTERFACE_PANEL,
                               "PropertyHide",
@@ -1567,7 +1645,7 @@ ibus_panel_service_commit_text (IBusPanelService *panel,
     g_return_if_fail (IBUS_IS_TEXT (text));
 
     variant = ibus_serializable_serialize ((IBusSerializable *)text);
-    ibus_service_emit_signal ((IBusService *) panel,
+    ibus_service_emit_signal ((IBusService *)panel,
                               NULL,
                               IBUS_INTERFACE_PANEL,
                               "CommitText",
@@ -1588,7 +1666,7 @@ ibus_panel_service_panel_extension (IBusPanelService   *panel,
     g_return_if_fail (IBUS_IS_EXTENSION_EVENT (event));
 
     variant = ibus_serializable_serialize ((IBusSerializable *)event);
-    ibus_service_emit_signal ((IBusService *) panel,
+    ibus_service_emit_signal ((IBusService *)panel,
                               NULL,
                               IBUS_INTERFACE_PANEL,
                               "PanelExtension",
@@ -1662,7 +1740,7 @@ ibus_panel_service_update_preedit_text_received (IBusPanelService *panel,
 
     variant = ibus_serializable_serialize ((IBusSerializable *)text);
     g_return_if_fail (variant);
-    ibus_service_emit_signal ((IBusService *) panel,
+    ibus_service_emit_signal ((IBusService *)panel,
                               NULL,
                               IBUS_INTERFACE_PANEL,
                               "UpdatePreeditTextReceived",
@@ -1686,7 +1764,7 @@ ibus_panel_service_update_auxiliary_text_received (IBusPanelService *panel,
 
     variant = ibus_serializable_serialize ((IBusSerializable *)text);
     g_return_if_fail (variant);
-    ibus_service_emit_signal ((IBusService *) panel,
+    ibus_service_emit_signal ((IBusService *)panel,
                               NULL,
                               IBUS_INTERFACE_PANEL,
                               "UpdateAuxiliaryTextReceived",
@@ -1711,7 +1789,7 @@ ibus_panel_service_update_lookup_table_received (IBusPanelService *panel,
 
     variant = ibus_serializable_serialize ((IBusSerializable *)table);
     g_return_if_fail (variant);
-    ibus_service_emit_signal ((IBusService *) panel,
+    ibus_service_emit_signal ((IBusService *)panel,
                               NULL,
                               IBUS_INTERFACE_PANEL,
                               "UpdateLookupTableReceived",
@@ -1731,13 +1809,35 @@ ibus_panel_service_forward_process_key_event (IBusPanelService *panel,
                                               guint32           state)
 {
     g_return_if_fail (IBUS_IS_PANEL_SERVICE (panel));
-    ibus_service_emit_signal ((IBusService *) panel,
+    ibus_service_emit_signal ((IBusService *)panel,
                               NULL,
                               IBUS_INTERFACE_PANEL,
                               "ForwardProcessKeyEvent",
                               g_variant_new ("(uuu)",
                                               keyval, keycode, state),
                               NULL);
+}
+
+void
+ibus_panel_service_send_message (IBusPanelService *panel,
+                                 IBusMessage      *message)
+{
+    GVariant *variant;
+    GError *error = NULL;
+
+    g_return_if_fail (IBUS_IS_PANEL_SERVICE (panel));
+    g_return_if_fail (IBUS_IS_MESSAGE (message));
+    variant = ibus_serializable_serialize ((IBusSerializable *)message);
+    ibus_service_emit_signal ((IBusService *)panel,
+                              NULL,
+                              IBUS_INTERFACE_PANEL,
+                              "SendMessage",
+                              g_variant_new ("(v)", variant),
+                              &error);
+    if (error) {
+        g_warning ("Error in %s: %s", G_STRFUNC, error->message);
+        g_error_free (error);
+    }
 }
 
 #define DEFINE_FUNC(name, Name)                             \

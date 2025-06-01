@@ -93,6 +93,10 @@ class Panel : IBus.PanelService {
     private ulong m_registered_status_notifier_item_id;
     private unowned FileStream m_log;
     private bool m_verbose;
+    private GLib.HashTable<uint, MessageDialog> m_popup_dialogs =
+            new GLib.HashTable<uint, MessageDialog>(GLib.direct_hash,
+                                                    GLib.direct_equal);
+    private uint m_popup_dialog_index;
 
     private GLib.List<BindingCommon.Keybinding> m_keybindings =
             new GLib.List<BindingCommon.Keybinding>();
@@ -246,12 +250,12 @@ class Panel : IBus.PanelService {
         m_settings_panel = new GLib.Settings("org.freedesktop.ibus.panel");
 
         m_settings_general.changed["preload-engines"].connect((key) => {
-                update_engines(m_settings_general.get_strv(key),
-                               null);
+            update_engines(m_settings_general.get_strv(key),
+                           null);
         });
 
         m_settings_general.changed["switcher-delay-time"].connect((key) => {
-                set_switcher_delay_time();
+            set_switcher_delay_time();
         });
 
         m_settings_general.changed["use-system-keyboard-layout"].connect(
@@ -260,72 +264,72 @@ class Panel : IBus.PanelService {
         });
 
         m_settings_general.changed["embed-preedit-text"].connect((key) => {
-                set_embed_preedit_text();
+            set_embed_preedit_text();
         });
 
         m_settings_general.changed["use-global-engine"].connect((key) => {
-                set_use_global_engine();
+            set_use_global_engine();
         });
 
         m_settings_general.changed["use-xmodmap"].connect((key) => {
-                set_use_xmodmap();
+            set_use_xmodmap();
         });
 
         m_settings_hotkey.changed["triggers"].connect((key) => {
-                BindingCommon.unbind_switch_shortcut(
-                        BindingCommon.KeyEventFuncType.IME_SWITCHER,
-                        m_keybindings);
-                m_keybindings = null;
-                bind_switch_shortcut();
+            BindingCommon.unbind_switch_shortcut(
+                    BindingCommon.KeyEventFuncType.IME_SWITCHER,
+                    m_keybindings);
+            m_keybindings = null;
+            bind_switch_shortcut();
         });
 
         m_settings_panel.changed["custom-font"].connect((key) => {
-                BindingCommon.set_custom_font(m_settings_panel,
-                                              null,
-                                              ref m_css_provider);
+            BindingCommon.set_custom_font(m_settings_panel,
+                                          null,
+                                          ref m_css_provider);
         });
 
         m_settings_panel.changed["use-custom-font"].connect((key) => {
-                BindingCommon.set_custom_font(m_settings_panel,
-                                              null,
-                                              ref m_css_provider);
+            BindingCommon.set_custom_font(m_settings_panel,
+                                          null,
+                                          ref m_css_provider);
         });
 
         m_settings_panel.changed["custom-theme"].connect((key) => {
-                BindingCommon.set_custom_theme(m_settings_panel);
+            BindingCommon.set_custom_theme(m_settings_panel);
         });
 
         m_settings_panel.changed["use-custom-theme"].connect((key) => {
-                BindingCommon.set_custom_theme(m_settings_panel);
+            BindingCommon.set_custom_theme(m_settings_panel);
         });
 
         m_settings_panel.changed["custom-icon"].connect((key) => {
-                BindingCommon.set_custom_icon(m_settings_panel);
+            BindingCommon.set_custom_icon(m_settings_panel);
         });
 
         m_settings_panel.changed["use-custom-icon"].connect((key) => {
-                BindingCommon.set_custom_icon(m_settings_panel);
+            BindingCommon.set_custom_icon(m_settings_panel);
         });
 
         m_settings_panel.changed["use-glyph-from-engine-lang"].connect((key) =>
         {
-                set_use_glyph_from_engine_lang();
+            set_use_glyph_from_engine_lang();
         });
 
         m_settings_panel.changed["show-icon-on-systray"].connect((key) => {
-                set_show_icon_on_systray(true);
+            set_show_icon_on_systray(true);
         });
 
         m_settings_panel.changed["lookup-table-orientation"].connect((key) => {
-                set_lookup_table_orientation();
+            set_lookup_table_orientation();
         });
 
         m_settings_panel.changed["show"].connect((key) => {
-                set_show_property_panel();
+            set_show_property_panel();
         });
 
         m_settings_panel.changed["timeout"].connect((key) => {
-                set_timeout_property_panel();
+            set_timeout_property_panel();
         });
 
         m_settings_panel.changed["follow-input-cursor-when-always-shown"]
@@ -334,11 +338,27 @@ class Panel : IBus.PanelService {
         });
 
         m_settings_panel.changed["xkb-icon-rgba"].connect((key) => {
-                set_xkb_icon_rgba();
+            set_xkb_icon_rgba();
         });
 
         m_settings_panel.changed["property-icon-delay-time"].connect((key) => {
-                set_property_icon_delay_time();
+            set_property_icon_delay_time();
+        });
+
+        this.send_message_received.connect((o, m) => {
+            uint domain = m.get_domain();
+            switch (domain) {
+            case IBus.MessageDomain.ENGINE:
+                set_message_engine(m);
+                break;
+            case IBus.MessageDomain.PANEL:
+                set_message_panel(m);
+                break;
+            default:
+                warning("SendMessageReceived does not support the domain %u",
+                        domain);
+                break;
+            }
         });
     }
 
@@ -852,6 +872,67 @@ class Panel : IBus.PanelService {
     private void set_property_icon_delay_time() {
         m_property_icon_delay_time =
                 m_settings_panel.get_int("property-icon-delay-time");
+    }
+
+
+    private void set_message_engine(IBus.Message message) {
+        uint code = message.get_code();
+        switch (code) {
+        case IBus.EngineMsgCode.INVALID_COMPOSE_SEQUENCE:
+            set_message_engine_invalid_compose(message);
+            break;
+        default:
+            set_message_general(message);
+            break;
+        }
+    }
+
+
+    private void set_message_engine_invalid_compose(IBus.Message message) {
+        var display = Gdk.Display.get_default();
+        display.beep();
+    }
+
+
+    private void set_message_panel(IBus.Message message) {
+        uint code = message.get_code();
+        switch (code) {
+        case IBus.PanelServiceMsgCode.LOADING_UNICODE:
+            set_message_general(message);
+            break;
+        }
+    }
+
+
+    private void set_message_general(IBus.Message message) {
+        MessageDialog popup = null;
+        uint serial = message.get_serial();
+        if (serial != 0)
+            popup = m_popup_dialogs.lookup(serial);
+        else
+            serial = m_popup_dialog_index++ + 20000;
+        if (popup != null) {
+            popup.update_message(message);
+        } else {
+            popup = new MessageDialog(m_is_wayland,
+#if USE_GDK_WAYLAND
+                                      m_wayland_object_path == null,
+#else
+                                      true,
+#endif
+                                      message);
+            popup.close.connect((w) => {
+                popup.hide();
+                m_popup_dialogs.remove(serial);
+                popup = null;
+            });
+#if USE_GDK_WAYLAND
+            popup.realize_surface.connect(
+                    (w, s) => this.realize_surface(s));
+#endif
+            m_popup_dialogs.insert(serial, popup);
+            popup.show();
+        }
     }
 
 

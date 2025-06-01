@@ -165,6 +165,7 @@ enum {
     REQUEST_ENGINE,
     SET_CONTENT_TYPE,
     PANEL_EXTENSION,
+    SEND_MESSAGE,
     LAST_SIGNAL,
 };
 
@@ -766,6 +767,20 @@ bus_input_context_class_init (BusInputContextClass *class)
     g_signal_set_va_marshaller (context_signals[PANEL_EXTENSION],
                                 G_TYPE_FROM_CLASS (class),
                                 bus_marshal_VOID__OBJECTv);
+
+    context_signals[SEND_MESSAGE] =
+        g_signal_new (I_("send-message"),
+            G_TYPE_FROM_CLASS (class),
+            G_SIGNAL_RUN_LAST,
+            0,
+            NULL, NULL,
+            bus_marshal_VOID__VARIANT,
+            G_TYPE_NONE,
+            1,
+            G_TYPE_VARIANT);
+    g_signal_set_va_marshaller (context_signals[SEND_MESSAGE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VARIANTv);
 
     text_empty = ibus_text_new_from_string ("");
     g_object_ref_sink (text_empty);
@@ -2789,6 +2804,20 @@ _engine_panel_extension_cb (BusEngineProxy     *engine,
     g_signal_emit (context, context_signals[PANEL_EXTENSION], 0, event);
 }
 
+/**
+ * _engine_send_message_cb:
+ *
+ * A function to be called when "send-message" glib signal is sent
+ * from the engine object.
+ */
+static void
+_engine_send_message_cb (BusEngineProxy  *engine,
+                         GVariant        *parameters,
+                         BusInputContext *context)
+{
+    g_signal_emit (context, context_signals[SEND_MESSAGE], 0, parameters);
+}
+
 static void
 _engine_show_preedit_text_cb (BusEngineProxy  *engine,
                               BusInputContext *context)
@@ -2978,6 +3007,7 @@ const static struct {
     { "register-properties",      G_CALLBACK (_engine_register_properties_cb) },
     { "update-property",          G_CALLBACK (_engine_update_property_cb) },
     { "panel-extension",          G_CALLBACK (_engine_panel_extension_cb) },
+    { "send-message",             G_CALLBACK (_engine_send_message_cb) },
     { "destroy",                  G_CALLBACK (_engine_destroy_cb) }
 };
 
@@ -3549,9 +3579,9 @@ bus_input_context_forward_process_key_event (BusInputContext *context,
                                              guint            keycode,
                                              guint            modifiers)
 {
-    ProcessKeyEventData *data = g_slice_new0 (ProcessKeyEventData);
     g_assert (BUS_IS_INPUT_CONTEXT (context));
     if (context->has_focus && context->engine && context->fake == FALSE) {
+        ProcessKeyEventData *data = g_slice_new0 (ProcessKeyEventData);
         data->context = g_object_ref (context);
         data->keyval = keyval;
         data->keycode = keycode;
@@ -3564,7 +3594,5 @@ bus_input_context_forward_process_key_event (BusInputContext *context,
                 (GAsyncReadyCallback)
                         _forward_process_key_event_reply_cb,
                 data);
-    } else {
-        g_slice_free (ProcessKeyEventData, data);
     }
 }

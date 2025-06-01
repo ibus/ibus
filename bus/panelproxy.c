@@ -2,8 +2,8 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2017-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2008-2024 Red Hat, Inc.
+ * Copyright (C) 2017-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -57,6 +57,7 @@ enum {
     UPDATE_LOOKUP_TABLE_RECEIVED,
     UPDATE_AUXILIARY_TEXT_RECEIVED,
     FORWARD_PROCESS_KEY_EVENT,
+    SEND_MESSAGE,
     LAST_SIGNAL
 };
 
@@ -366,6 +367,19 @@ bus_panel_proxy_class_init (BusPanelProxyClass *class)
     g_signal_set_va_marshaller (panel_signals[FORWARD_PROCESS_KEY_EVENT],
                                 G_TYPE_FROM_CLASS (class),
                                 bus_marshal_VOID__UINT_UINT_UINTv);
+
+    panel_signals[SEND_MESSAGE] =
+        g_signal_new (I_("send-message"),
+            G_TYPE_FROM_CLASS (class),
+            G_SIGNAL_RUN_LAST,
+            0,
+            NULL, NULL,
+            bus_marshal_VOID__VARIANT,
+            G_TYPE_NONE, 1,
+            G_TYPE_VARIANT);
+    g_signal_set_va_marshaller (panel_signals[SEND_MESSAGE],
+                                G_TYPE_FROM_CLASS (class),
+                                bus_marshal_VOID__VARIANTv);
 }
 
 static void
@@ -548,6 +562,11 @@ bus_panel_proxy_g_signal (GDBusProxy  *proxy,
         g_variant_get (parameters, "(uuu)", &keyval, &keycode, &modifiers);
         g_signal_emit (panel, panel_signals[FORWARD_PROCESS_KEY_EVENT], 0,
                        keyval, keycode, modifiers);
+        return;
+    }
+
+    if (g_strcmp0 ("SendMessage", signal_name) == 0) {
+        g_signal_emit (panel, panel_signals[SEND_MESSAGE], 0, parameters);
         return;
     }
 
@@ -1167,6 +1186,20 @@ bus_panel_proxy_candidate_clicked_lookup_table (BusPanelProxy *panel,
     g_dbus_proxy_call ((GDBusProxy *)panel,
                        "CandidateClickedLookupTable",
                        g_variant_new ("(uuu)", index, button, state),
+                       G_DBUS_CALL_FLAGS_NONE,
+                       -1, NULL, NULL, NULL);
+}
+
+void
+bus_panel_proxy_send_message_received (BusPanelProxy *panel,
+                                       GVariant      *parameters)
+{
+    g_assert (BUS_IS_PANEL_PROXY (panel));
+    g_assert (parameters);
+
+    g_dbus_proxy_call ((GDBusProxy *)panel,
+                       "SendMessageReceived",
+                       g_variant_ref (parameters),
                        G_DBUS_CALL_FLAGS_NONE,
                        -1, NULL, NULL, NULL);
 }

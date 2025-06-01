@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2018 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2018-2024 Takao Fujwiara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2018-2025 Takao Fujwiara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -901,6 +901,9 @@ class PanelBinding : IBus.PanelService {
                         "is-enabled", false,
                         "is-extension", true);
                 panel_extension(close_event);
+            });
+            m_emojier.send_message.connect((m) => {
+                send_message(m);
             });
         }
         m_emojier.reset();

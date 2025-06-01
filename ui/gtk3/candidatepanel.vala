@@ -491,6 +491,11 @@ public class CandidatePanel : Gtk.Box{
         m_toplevel.hide();
     }
 
+    /**
+     * move:
+     * @x: left position of the #CandidatePanel
+     * @y: top position of the #CandidatePanel
+     */
     private void move(int x, int y) {
         m_toplevel.move(x, y);
     }
@@ -502,21 +507,15 @@ public class CandidatePanel : Gtk.Box{
             adjust_window_position_vertical(window);
     }
 
-    private Gdk.Rectangle get_monitor_geometry(Gtk.Widget window) {
-        Gdk.Rectangle monitor_area = { 0, };
-
-        // Use get_monitor_geometry() instead of get_monitor_area().
-        // get_monitor_area() excludes docks, but the lookup window should be
-        // shown over them.
-        Gdk.Monitor monitor = window.get_display().get_monitor_at_point(
-                m_cursor_location.x,
-                m_cursor_location.y);
-        monitor_area = monitor.get_geometry();
-        return monitor_area;
-    }
-
+    /**
+     * adjust_window_position_horizontal:
+     * @window: A Gtk.Widget of the toplevel window.
+     *
+     * Horizontal writing mode but not the horizontal lookup table
+     * when the allocation is emmitted.
+     */
     private void adjust_window_position_horizontal(Gtk.Widget window) {
-        Gdk.Point cursor_right_bottom = {
+        Gdk.Point cursor_left_bottom = {
                 m_cursor_location.x,
                 m_cursor_location.y + m_cursor_location.height
         };
@@ -524,8 +523,8 @@ public class CandidatePanel : Gtk.Box{
         Gtk.Allocation allocation;
         m_toplevel.get_allocation(out allocation);
         Gdk.Point window_right_bottom = {
-            cursor_right_bottom.x + allocation.width,
-            cursor_right_bottom.y + allocation.height
+            cursor_left_bottom.x + allocation.width,
+            cursor_left_bottom.y + allocation.height
         };
 
         Gdk.Rectangle monitor_area = get_monitor_geometry(window);
@@ -536,20 +535,27 @@ public class CandidatePanel : Gtk.Box{
         if (window_right_bottom.x > monitor_right)
             x = monitor_right - allocation.width;
         else
-            x = cursor_right_bottom.x;
+            x = cursor_left_bottom.x;
         if (x < 0)
             x = 0;
 
         if (window_right_bottom.y > monitor_bottom)
             y = m_cursor_location.y - allocation.height;
         else
-            y = cursor_right_bottom.y;
+            y = cursor_left_bottom.y;
         if (y < 0)
             y = 0;
 
         move(x, y);
     }
 
+    /**
+     * adjust_window_position_vertical:
+     * @window: A Gtk.Widget of the toplevel window.
+     *
+     * Vertical writing mode but not the vertical lookup table
+     * when the allocation is emmitted.
+     */
     private void adjust_window_position_vertical(Gtk.Widget window) {
         /* Not sure in which top or left cursor appears
          * in the vertical writing mode.
@@ -609,6 +615,19 @@ public class CandidatePanel : Gtk.Box{
             y = 0;
 
         move(x, y);
+    }
+
+    private Gdk.Rectangle get_monitor_geometry(Gtk.Widget window) {
+        Gdk.Rectangle monitor_area = { 0, };
+
+        // Use get_monitor_geometry() instead of get_monitor_area().
+        // get_monitor_area() excludes docks, but the lookup window should be
+        // shown over them.
+        Gdk.Monitor monitor = window.get_display().get_monitor_at_point(
+                m_cursor_location.x,
+                m_cursor_location.y);
+        monitor_area = monitor.get_geometry();
+        return monitor_area;
     }
 
 #if USE_GDK_WAYLAND

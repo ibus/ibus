@@ -223,8 +223,6 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         BACKWARD,
     }
 
-    public bool is_wayland { get; set; }
-
     public const uint BUTTON_CLOSE_BUTTON = 1000;
 
     private const uint EMOJI_GRID_PAGE = 10;
@@ -268,6 +266,8 @@ public class IBusEmojier : Gtk.ApplicationWindow {
     private static bool m_loaded_unicode = false;
     private static string m_warning_message = "";
 
+    private bool m_is_wayland;
+    private bool m_is_gnome = false;
     private ThemedRGBA m_rgba;
     private Gtk.Box m_vbox;
     /* If emojier is emoji category list or Unicode category list,
@@ -328,7 +328,8 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         GLib.Object(
             type : Gtk.WindowType.POPUP
         );
-        this.is_wayland = is_wayland;
+        m_is_wayland = is_wayland;
+        m_is_gnome = is_gnome();
 
         // GLib.ActionEntry accepts const variables only.
         var action = new GLib.SimpleAction.stateful(
@@ -381,6 +382,23 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         get_load_progress_object();
     }
 
+
+    private bool is_gnome() {
+        unowned string? desktop =
+            Environment.get_variable("XDG_CURRENT_DESKTOP");
+        if (desktop == "GNOME")
+            return true;
+        /* If ibus-dameon is launched from systemd, XDG_CURRENT_DESKTOP
+         * environment variable could be set after ibus-dameon would be
+         * launched and XDG_CURRENT_DESKTOP could be "(null)".
+         * But XDG_SESSION_DESKTOP can be set with systemd's PAM.
+         */
+        if (desktop == null || desktop == "(null)")
+            desktop = Environment.get_variable("XDG_SESSION_DESKTOP");
+        if (desktop == "gnome")
+            return true;
+        return false;
+    }
 
     private static void reload_emoji_dict() {
         init_emoji_dict();
@@ -1807,7 +1825,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
 
 
     private void start_rebuild_gui(bool initial_launching) {
-        if (!this.is_wayland)
+        if (!m_is_wayland)
             return;
         if (!initial_launching && !base.get_visible())
             return;
@@ -2189,17 +2207,23 @@ public class IBusEmojier : Gtk.ApplicationWindow {
 
 
     public IBus.Text get_title_text() {
+        if (!m_loaded_unicode && m_is_gnome) {
+            unichar c = 0x26A0;
+            return new IBus.Text.from_string("%s%s %u%%".printf(
+                    c.to_string(),
+                    _("Loading a Unicode dictionary:"),
+                    (uint)(m_unicode_percent * 100)));
+        }
         var language = _(IBus.get_language_name(m_current_lang_id));
         uint ncandidates = this.get_number_of_candidates();
         string main_title = _("Emoji Choice");
         if (m_show_unicode)
             main_title = _("Unicode Choice");
-        var text = new IBus.Text.from_string(
-                "%s (%s) (%u / %u)".printf(
-                        main_title,
-                        language,
-                        this.get_cursor_pos() + 1,
-                        ncandidates));
+        var text = new IBus.Text.from_string("%s (%s) (%u / %u)".printf(
+                main_title,
+                language,
+                this.get_cursor_pos() + 1,
+                ncandidates));
         int char_count = text.text.char_count();
         int start_index = -1;
         unowned string title = text.text;

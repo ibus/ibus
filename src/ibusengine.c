@@ -34,6 +34,8 @@
 #define IBUS_ENGINE_GET_PRIVATE(o)  \
    ((IBusEnginePrivate *)ibus_engine_get_instance_private (o))
 
+extern GType   ibus_engine_simple_get_type       (void);
+
 enum {
     PROCESS_KEY_EVENT,
     FOCUS_IN,
@@ -1544,7 +1546,21 @@ _ibus_engine_has_focus_id (IBusEngine      *engine,
                            GDBusConnection *connection,
                            GError         **error)
 {
-    GVariant *retval = g_variant_new_boolean (engine->priv->has_focus_id);
+    GVariant *retval;
+
+#ifndef IBUS_TYPE_ENGINE_SIMPLE
+#define IBUS_TYPE_ENGINE_SIMPLE (ibus_engine_simple_get_type ())
+#define __IBUS_SET_LOCAL_ENGINE_SIMPLE
+#endif
+    /* Should not use IBUS_IS_ENGINE_SIMPLE() not to effect the inherited
+     * class.*/
+    if (G_OBJECT_TYPE (engine) == IBUS_TYPE_ENGINE_SIMPLE)
+        engine->priv->has_focus_id = TRUE;
+#ifdef __IBUS_SET_LOCAL_ENGINE_SIMPLE
+#undef __IBUS_SET_LOCAL_ENGINE_SIMPLE
+#undef IBUS_TYPE_ENGINE_SIMPLE
+#endif
+    retval = g_variant_new_boolean (engine->priv->has_focus_id);
     g_assert (retval);
     return retval;
 }

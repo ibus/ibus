@@ -40,9 +40,11 @@ setup/keyboardshortcut.py
 setup/main.py
 setup/setup.ui
 src/ibusbus.c
+src/ibuscomposetable.c
 src/ibusconfig.c
 src/ibusemojigen.h
 src/ibusengine.c
+src/ibusenginesimple.c
 src/ibusfactory.c
 src/ibushotkey.c
 src/ibusinputcontext.c

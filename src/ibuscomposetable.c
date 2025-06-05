@@ -24,6 +24,7 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <glib/gi18n-lib.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -38,7 +39,7 @@
 
 
 #define IBUS_COMPOSE_TABLE_MAGIC "IBusComposeTable"
-#define IBUS_COMPOSE_TABLE_VERSION (4)
+#define IBUS_COMPOSE_TABLE_VERSION (5)
 #define IBUS_MAX_COMPOSE_ALGORITHM_LEN 9
 
 typedef struct {
@@ -283,10 +284,15 @@ expand_include_path (const char *include_path) {
                 break;
             }
             case 'L': /* locale compose file */
-                g_warning ("while handling XCompose include target %s, found "
-                          "redundant %%L include; the include has been "
-                          "ignored", include_path);
-                goto fail;
+                out = g_strdup ("%L");
+                head = i + 2;
+                while (*head || *head == ' ' || *head == '\t') head++;
+                if (*head != '\0') {
+                    g_warning ("\"%s\" after \"%%L\" is not supported in "
+                               "XCompose include target.", head);
+                    goto fail;
+                }
+                break;
             case 'S': /* system compose dir */
                 o = out;
                 former = g_strndup (head, i - head);
@@ -413,7 +419,8 @@ get_en_compose_file (void)
 
 static GList *
 ibus_compose_list_parse_file (const char *compose_file,
-                              int        *max_compose_len)
+                              int        *max_compose_len,
+                              gboolean   *can_load_en_us)
 {
     char *contents = NULL;
     char **lines = NULL;
@@ -423,6 +430,7 @@ ibus_compose_list_parse_file (const char *compose_file,
     int i;
 
     g_assert (max_compose_len);
+    g_assert (can_load_en_us);
 
     if (!g_file_get_contents (compose_file, &contents, &length, &error)) {
         g_error ("%s", error->message);
@@ -438,6 +446,11 @@ ibus_compose_list_parse_file (const char *compose_file,
         parse_compose_line (&compose_list, lines[i], &compose_len, &include);
         if (*max_compose_len < compose_len)
             *max_compose_len = compose_len;
+        if (!g_strcmp0 (include, "%L")) {
+            *can_load_en_us = TRUE;
+            g_clear_pointer (&include, g_free);
+            continue;
+        }
         if (include && *include) {
             GStatBuf buf_include = { 0, };
             GStatBuf buf_parent = { 0, };
@@ -486,7 +499,8 @@ ibus_compose_list_parse_file (const char *compose_file,
         if (include && *include) {
             GList *rest = ibus_compose_list_parse_file (
                     include,
-                    max_compose_len);
+                    max_compose_len,
+                    can_load_en_us);
             if (rest) {
                 compose_list = g_list_concat (compose_list, rest);
             }
@@ -504,13 +518,16 @@ ibus_compose_list_check_duplicated_with_en (GList  *compose_list,
                                             int     max_compose_len,
                                             GSList *compose_tables)
 {
+    guint *keysyms;
+    GString *output;
     GList *list;
-    static guint *keysyms;
     GList *removed_list = NULL;
     IBusComposeData *compose_data;
-    GString *output = g_string_new ("");
 
+    if (!compose_list)
+        return NULL;
     keysyms = g_new (guint, max_compose_len + 1);
+    output = g_string_new ("");
 
     for (list = compose_list; list != NULL; list = list->next) {
         int i;
@@ -694,6 +711,8 @@ ibus_compose_list_check_duplicated_with_own (GList  *compose_list,
     int i;
     GList *removed_list = NULL;
 
+    if (!compose_list)
+        return NULL;
     for (list = compose_list; list != NULL; list = list->next) {
         gboolean is_different_value = FALSE;
         if (!list->next)
@@ -921,6 +940,7 @@ ibus_compose_table_serialize (IBusComposeTableEx *compose_table,
     guint16 max_seq_len;
     guint16 index_stride;
     guint16 n_seqs;
+    guint8 compose_type = 0;
     gsize n_seqs_32bit = 0;
     gsize second_size = 0;
     GVariant *variant_data = NULL;
@@ -934,8 +954,9 @@ ibus_compose_table_serialize (IBusComposeTableEx *compose_table,
     max_seq_len = compose_table->max_seq_len;
     index_stride = max_seq_len + 2;
     n_seqs = compose_table->n_seqs;
+    compose_type = compose_table->can_load_en_us ? 1 : 0;
 
-    g_return_val_if_fail (max_seq_len, NULL);
+    g_return_val_if_fail (max_seq_len || compose_type, NULL);
 
     if (n_seqs) {
         g_return_val_if_fail (compose_table->data, NULL);
@@ -965,7 +986,7 @@ ibus_compose_table_serialize (IBusComposeTableEx *compose_table,
         n_seqs_32bit = compose_table->priv->first_n_seqs;
         second_size = compose_table->priv->second_size;
     }
-    if (!n_seqs && !n_seqs_32bit) {
+    if (!n_seqs && !n_seqs_32bit && !compose_type) {
         g_warning ("ComposeTable has not key sequences.");
         goto out_serialize;
     } else if (n_seqs_32bit && !second_size) {
@@ -1028,7 +1049,7 @@ ibus_compose_table_serialize (IBusComposeTableEx *compose_table,
                 sizeof (guint32));
         g_assert (variant_data_32bit_first && variant_data_32bit_second);
     }
-    variant_table = g_variant_new ("(sqqqqqvvv)",
+    variant_table = g_variant_new ("(sqqqqqvvvy)",
                                    header,
                                    version,
                                    max_seq_len,
@@ -1037,7 +1058,8 @@ ibus_compose_table_serialize (IBusComposeTableEx *compose_table,
                                    second_size,
                                    variant_data,
                                    variant_data_32bit_first,
-                                   variant_data_32bit_second);
+                                   variant_data_32bit_second,
+                                   compose_type);
     return g_variant_ref_sink (variant_table);
 
 out_serialize:
@@ -1061,7 +1083,8 @@ ibus_compose_table_find (gconstpointer data1,
 
 IBusComposeTableEx *
 ibus_compose_table_deserialize (const char *contents,
-                                gsize       length)
+                                gsize       length,
+                                guint16    *saved_version)
 {
     IBusComposeTableEx *retval = NULL;
     GVariantType *type;
@@ -1070,9 +1093,9 @@ ibus_compose_table_deserialize (const char *contents,
     GVariant *variant_data_32bit_second = NULL;
     GVariant *variant_table = NULL;
     const char *header = NULL;
-    guint16 version = 0;
     guint16 max_seq_len = 0;
     guint16 n_seqs = 0;
+    guint8 compose_type = 0;
     guint16 n_seqs_32bit = 0;
     guint16 second_size = 0;
     guint16 index_stride;
@@ -1083,7 +1106,9 @@ ibus_compose_table_deserialize (const char *contents,
 
     g_return_val_if_fail (contents != NULL, NULL);
     g_return_val_if_fail (length > 0, NULL);
+    g_assert (saved_version);
 
+    *saved_version = 0;
     /* Check the cache version at first before load whole the file content. */
     type = g_variant_type_new ("(sq)");
     variant_table = g_variant_new_from_data (type,
@@ -1100,25 +1125,24 @@ ibus_compose_table_deserialize (const char *contents,
     }
 
     g_variant_ref_sink (variant_table);
-    g_variant_get (variant_table, "(&sq)", &header, &version);
+    g_variant_get (variant_table, "(&sq)", &header, saved_version);
 
     if (g_strcmp0 (header, IBUS_COMPOSE_TABLE_MAGIC) != 0) {
         g_warning ("cache is not IBusComposeTable.");
         goto out_load_cache;
     }
 
-    if (version != IBUS_COMPOSE_TABLE_VERSION) {
+    if (*saved_version != IBUS_COMPOSE_TABLE_VERSION) {
         g_warning ("cache version is different: %u != %u",
-                   version, IBUS_COMPOSE_TABLE_VERSION);
+                   *saved_version, IBUS_COMPOSE_TABLE_VERSION);
         goto out_load_cache;
     }
 
-    version = 0;
     header = NULL;
     g_variant_unref (variant_table);
     variant_table = NULL;
 
-    type = g_variant_type_new ("(sqqqqqvvv)");
+    type = g_variant_type_new ("(sqqqqqvvvy)");
     variant_table = g_variant_new_from_data (type,
                                              contents,
                                              length,
@@ -1133,7 +1157,7 @@ ibus_compose_table_deserialize (const char *contents,
     }
 
     g_variant_ref_sink (variant_table);
-    g_variant_get (variant_table, "(&sqqqqqvvv)",
+    g_variant_get (variant_table, "(&sqqqqqvvvy)",
                    NULL,
                    NULL,
                    &max_seq_len,
@@ -1142,12 +1166,15 @@ ibus_compose_table_deserialize (const char *contents,
                    &second_size,
                    &variant_data,
                    &variant_data_32bit_first,
-                   &variant_data_32bit_second);
+                   &variant_data_32bit_second,
+                   &compose_type);
 
     if (max_seq_len == 0 || (n_seqs == 0 && n_seqs_32bit == 0)) {
-        g_warning ("cache size is not correct %d %d %d",
-                   max_seq_len, n_seqs, n_seqs_32bit);
-        goto out_load_cache;
+        if (!compose_type) {
+            g_warning ("cache size is not correct %d %d %d",
+                       max_seq_len, n_seqs, n_seqs_32bit);
+            goto out_load_cache;
+        }
     }
 
     if (n_seqs && variant_data) {
@@ -1168,6 +1195,7 @@ ibus_compose_table_deserialize (const char *contents,
         retval->data = data;
     retval->max_seq_len = max_seq_len;
     retval->n_seqs = n_seqs;
+    retval->can_load_en_us = compose_type ? TRUE : FALSE;
 
     if (n_seqs_32bit && !second_size) {
         g_warning ("32bit key sequences are loaded but the values " \
@@ -1192,7 +1220,7 @@ ibus_compose_table_deserialize (const char *contents,
             goto out_load_cache;
         }
     }
-    if (!data && !data_32bit_first) {
+    if (!data && !data_32bit_first && !compose_type) {
         g_warning ("cache data is null.");
         goto out_load_cache;
     }
@@ -1235,7 +1263,8 @@ out_load_cache:
 
 
 IBusComposeTableEx *
-ibus_compose_table_load_cache (const gchar *compose_file)
+ibus_compose_table_load_cache (const gchar *compose_file,
+                               guint16     *saved_version)
 {
     IBusComposeTableEx *retval = NULL;
     guint32 hash;
@@ -1246,6 +1275,8 @@ ibus_compose_table_load_cache (const gchar *compose_file)
     gsize length = 0;
     GError *error = NULL;
 
+    g_assert (saved_version);
+    *saved_version = 0;
     do {
         hash = g_str_hash (compose_file);
         if ((path = ibus_compose_hash_get_cache_path (hash)) == NULL)
@@ -1270,7 +1301,9 @@ ibus_compose_table_load_cache (const gchar *compose_file)
             break;
         }
 
-        retval = ibus_compose_table_deserialize (contents, length);
+        retval = ibus_compose_table_deserialize (contents,
+                                                 length,
+                                                 saved_version);
         if (retval == NULL) {
             g_warning ("Failed to load the cache file: %s", path);
         } else {
@@ -1369,7 +1402,7 @@ ibus_compose_table_new_with_list (GList   *compose_list,
     IBusComposeData *compose_data = NULL;
     IBusComposeTableEx *retval = NULL;
 
-    g_return_val_if_fail (compose_list != NULL, NULL);
+    g_return_val_if_fail (compose_list, NULL);
 
     s_size_total = g_list_length (compose_list);
     s_size_16bit = s_size_total;
@@ -1498,6 +1531,7 @@ ibus_compose_table_new_with_list (GList   *compose_list,
     retval->n_seqs = s_size_16bit;
     retval->id = hash;
     retval->rawdata = rawdata;
+    retval->can_load_en_us = FALSE;
     if (s_size_total > s_size_16bit) {
         retval->priv = g_new0 (IBusComposeTablePrivate, 1);
         retval->priv->data_first = ibus_compose_seqs_32bit_first;
@@ -1515,6 +1549,8 @@ ibus_compose_table_new_with_file (const gchar *compose_file,
                                   GSList      *compose_tables)
 {
     GList *compose_list = NULL;
+    gboolean can_load_en_us = FALSE;
+    gboolean can_load_en_us_by_any = FALSE;
     IBusComposeTableEx *compose_table;
     int max_compose_len = 0;
     int n_index_stride = 0;
@@ -1522,13 +1558,29 @@ ibus_compose_table_new_with_file (const gchar *compose_file,
     g_assert (compose_file != NULL);
 
     compose_list = ibus_compose_list_parse_file (compose_file,
-                                                 &max_compose_len);
-    if (compose_list == NULL)
+                                                 &max_compose_len,
+                                                 &can_load_en_us);
+    if (compose_list == NULL && !can_load_en_us)
         return NULL;
     n_index_stride = max_compose_len + 2;
-    compose_list = ibus_compose_list_check_duplicated_with_en (compose_list,
-                                                               max_compose_len,
-                                                               compose_tables);
+    can_load_en_us_by_any = can_load_en_us;
+    if (!can_load_en_us_by_any) {
+        GSList *l = compose_tables;
+        while (l) {
+            IBusComposeTableEx *table = l->data;
+            if (table->can_load_en_us) {
+                can_load_en_us_by_any = TRUE;
+                break;
+            }
+            l = l->next;
+        }
+    }
+    if (can_load_en_us_by_any) {
+        compose_list = ibus_compose_list_check_duplicated_with_en (
+                compose_list,
+                max_compose_len,
+                compose_tables);
+    }
     compose_list = g_list_sort_with_data (
             compose_list,
             (GCompareDataFunc) ibus_compose_data_compare,
@@ -1539,8 +1591,19 @@ ibus_compose_table_new_with_file (const gchar *compose_file,
             max_compose_len);
 
     if (compose_list == NULL) {
-        g_warning ("compose file %s does not include any keys besides keys "
-                   "in en-us compose file", compose_file);
+        g_message ("compose file %s does not include any keys besides keys "
+                   "in en-us compose file.\n", compose_file);
+        if (can_load_en_us) {
+            if (!(compose_table = g_new0 (IBusComposeTableEx, 1))) {
+                g_warning ("Failed to alloc IBusComposeTableEx for %s.",
+                            compose_file);
+            } else {
+                compose_table->id = g_str_hash (compose_file);
+                compose_table->can_load_en_us = can_load_en_us;
+                return compose_table;
+            }
+        }
+
         return NULL;
     }
 
@@ -1552,11 +1615,80 @@ ibus_compose_table_new_with_file (const gchar *compose_file,
             max_compose_len,
             n_index_stride,
             g_str_hash (compose_file));
+    if (compose_table)
+        compose_table->can_load_en_us = can_load_en_us;
 
     g_list_free_full (compose_list,
                       (GDestroyNotify) ibus_compose_list_element_free);
 
     return compose_table;
+}
+
+
+void
+ibus_compose_table_free (IBusComposeTableEx *compose_table)
+{
+    g_return_if_fail (compose_table);
+    g_clear_pointer (&compose_table->priv, g_free);
+    compose_table->data = NULL;
+    compose_table->max_seq_len = 0;
+    compose_table->n_seqs = 0;
+    compose_table->id = 0;
+    g_clear_pointer (&compose_table->rawdata, g_free);
+    compose_table->can_load_en_us = FALSE;
+    g_free (compose_table);
+
+}
+
+
+static gboolean
+rewrite_compose_file (const char *compose_file)
+{
+    static const char *prefix =
+            "# IBus has rewritten this file to add the line:\n"
+            "\n"
+            "include \"%L\"\n"
+            "\n"
+            "# This is necessary to add your own Compose sequences\n"
+            "# in addition to the builtin sequences of IBus. If this\n"
+            "# is not what you want, just remove that line.\n"
+            "#\n"
+            "# A backup of the previous file contents has been made.\n"
+            "\n"
+            "\n";
+
+    char *content = NULL;
+    gsize content_len;
+    GFile *file = NULL;
+    GOutputStream *stream = NULL;
+    gboolean ret = FALSE;
+
+    if (!g_file_get_contents (compose_file, &content, &content_len, NULL))
+        goto out;
+
+    file = g_file_new_for_path (compose_file);
+    stream = G_OUTPUT_STREAM (g_file_replace (file, NULL, TRUE, 0, NULL, NULL));
+
+    if (stream == NULL)
+        goto out;
+
+    if (!g_output_stream_write (stream, prefix, strlen (prefix), NULL, NULL))
+        goto out;
+
+    if (!g_output_stream_write (stream, content, content_len, NULL, NULL))
+        goto out;
+
+    if (!g_output_stream_close (stream, NULL, NULL))
+        goto out;
+
+    ret = TRUE;
+
+out:
+    g_clear_object (&stream);
+    g_clear_object (&file);
+    g_clear_pointer (&content, g_free);
+
+    return ret;
 }
 
 
@@ -1609,13 +1741,17 @@ ibus_compose_table_list_add_array (GSList        *compose_tables,
 
 GSList *
 ibus_compose_table_list_add_file (GSList      *compose_tables,
-                                  const gchar *compose_file)
+                                  const gchar *compose_file,
+                                  GError     **error)
 {
     guint32 hash;
     IBusComposeTableEx *compose_table;
+    guint16 saved_version = 0;
 
-    g_return_val_if_fail (compose_file != NULL, compose_tables);
+    g_return_val_if_fail (compose_file, compose_tables);
+    g_assert (error);
 
+    *error = NULL;
     hash = g_str_hash (compose_file);
     if (g_slist_find_custom (compose_tables,
                              GINT_TO_POINTER (hash),
@@ -1623,15 +1759,61 @@ ibus_compose_table_list_add_file (GSList      *compose_tables,
         return compose_tables;
     }
 
-    compose_table = ibus_compose_table_load_cache (compose_file);
+    compose_table = ibus_compose_table_load_cache (compose_file,
+                                                   &saved_version);
     if (compose_table != NULL)
         return g_slist_prepend (compose_tables, compose_table);
 
-   if ((compose_table = ibus_compose_table_new_with_file (compose_file,
-                                                          compose_tables))
+parse:
+    if ((compose_table = ibus_compose_table_new_with_file (compose_file,
+                                                           compose_tables))
            == NULL) {
-       return compose_tables;
-   }
+        return compose_tables;
+    }
+    if (saved_version > 0 && saved_version < 5 &&
+        !compose_table->can_load_en_us && compose_table->n_seqs < 100) {
+        if (rewrite_compose_file (compose_file)) {
+            g_assert ((*error) == NULL);
+            *error = g_error_new (
+                    IBUS_COMPOSE_ERROR,
+                    IBUS_ENGINE_MSG_CODE_UPDATE_COMPOSE_TABLE,
+                    _("Since IBus 1.5.33, Compose files replace the "
+                    "builtin\n"
+                    "compose sequences. To keep them and add your own\n"
+                    "sequences on top, the line:\n"
+                    "\n"
+                    "  include \"%%L\"\n"
+                    "\n"
+                    "has been added to the Compose file:\n%s.\n"),
+                    compose_file);
+            ibus_compose_table_free (compose_table);
+            goto parse;
+        } else {
+            gchar *error_message1;
+            gchar *error_message2;
+            if (*error) {
+                error_message1 = g_strdup_printf ("%s\n", (*error)->message);
+                g_error_free (*error);
+            } else {
+                error_message1 = g_strdup ("");
+            }
+            error_message2 = g_strdup_printf (
+                    _("Since IBus 1.5.33, Compose files replace the "
+                    "builtin\n"
+                    "compose sequences. To keep them and add your own\n"
+                    "sequences on top, you need to add the line:\n"
+                    "\n"
+                    "  include \"%%L\"\n"
+                    "\n"
+                    "to the Compose file:\n%s."), compose_file);
+            *error = g_error_new (
+                    IBUS_COMPOSE_ERROR,
+                    IBUS_ENGINE_MSG_CODE_UPDATE_COMPOSE_TABLE,
+                    "%s%s", error_message1, error_message2);
+            g_free (error_message1);
+            g_free (error_message2);
+        }
+    }
 
     ibus_compose_table_save_cache (compose_table);
     return g_slist_prepend (compose_tables, compose_table);
@@ -2090,4 +2272,11 @@ ibus_keysym_to_unicode_with_layout (guint                      keysym,
     }
 #undef CASE_KEYSYM
     return ibus_keysym_to_unicode (keysym, combining, need_space);
+}
+
+
+GQuark
+ibus_compose_error_quark (void)
+{
+  return g_quark_from_static_string ("ibus-compose-error-quark");
 }

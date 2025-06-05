@@ -71,6 +71,8 @@ G_BEGIN_DECLS
  * @IBUS_ENGINE_MSG_CODE_GENERAL: Generic message for Engine
  * @IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE: User's typing failure
  *         against the definition of the compose files.
+ * @IBUS_ENGINE_MSG_CODE_UPDATE_COMPOSE_TABLE: Notification about new
+ * behaviors or attentions when the compose table version is changed.
  *
  * Message codes in the `IBusMessageDomain` domain for Engine
  * See also #IBusMessage, ibus_engine_send_message()
@@ -81,7 +83,8 @@ G_BEGIN_DECLS
 typedef enum
 {
   IBUS_ENGINE_MSG_CODE_GENERAL,
-  IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE
+  IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE,
+  IBUS_ENGINE_MSG_CODE_UPDATE_COMPOSE_TABLE
 } IBusEngineMsgCode;
 
 typedef struct _IBusEngine IBusEngine;

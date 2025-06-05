@@ -26,6 +26,15 @@
 
 G_BEGIN_DECLS
 
+/**
+ * IBUS_COMPOSE_ERROR:
+ *
+ * The `GQuark` used for `IBusComposeTableEx` errors.
+ *
+ * Since: 1.5.33
+ */
+#define IBUS_COMPOSE_ERROR (ibus_compose_error_quark ())
+
 /* Checks if a keysym is a dead key. Dead key keysym values are defined in
  * ibuskeysyms.h and the first is GDK_KEY_dead_grave.
  */
@@ -42,6 +51,13 @@ struct _IBusComposeTablePrivate
 };
 
 
+/**
+ * ibus_compose_error_quark:
+ *
+ * Since: 1.5.33
+ * Stability: Unstable
+ */
+GQuark   ibus_compose_error_quark   (void);
 guint    ibus_compose_key_flag      (guint                       key);
 gboolean ibus_check_algorithmically (const guint                *compose_buffer,
                                      int                         n_compose,
@@ -54,7 +70,8 @@ GVariant *
 IBusComposeTableEx *
          ibus_compose_table_deserialize
                                     (const char                 *contents,
-                                     gsize                       length);
+                                     gsize                       length,
+                                     guint16                    *saved_version);
 gboolean ibus_compose_table_check   (const IBusComposeTableEx   *table,
                                      guint                      *compose_buffer,
                                      int                         n_compose,

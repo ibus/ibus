@@ -139,6 +139,7 @@ ibus_engine_simple_class_init (IBusEngineSimpleClass *class)
     GError *error = NULL;
     const char *contents;
     gsize length = 0;
+    guint16 saved_version = 0;
 
     ibus_object_class->destroy =
         (IBusObjectDestroyFunc) ibus_engine_simple_destroy;
@@ -168,7 +169,14 @@ ibus_engine_simple_class_init (IBusEngineSimpleClass *class)
         return;
     }
     contents = g_bytes_get_data (data, &length);
-    en_compose_table = ibus_compose_table_deserialize (contents, length);
+    en_compose_table = ibus_compose_table_deserialize (contents,
+                                                       length,
+                                                       &saved_version);
+    if (!en_compose_table && saved_version) {
+        g_warning ("Failed to parse the builtin compose due to the different "
+                   "version %u. Please rebuild IBus resource files.",
+                   saved_version);
+    }
 }
 
 
@@ -237,7 +245,8 @@ ibus_engine_simple_destroy (IBusEngineSimple *simple)
 
 static void
 ibus_engine_simple_send_message_with_code (IBusEngineSimple *simple,
-                                           IBusEngineMsgCode code)
+                                           IBusEngineMsgCode code,
+                                           GError           *error)
 {
     IBusEngineSimplePrivate *priv;
     IBusMessage *message;
@@ -245,18 +254,33 @@ ibus_engine_simple_send_message_with_code (IBusEngineSimple *simple,
     g_return_if_fail (IBUS_IS_ENGINE_SIMPLE (simple));
 
     priv = simple->priv;
-    priv->do_inform_user_error = TRUE;
-    message = ibus_message_new (
-            IBUS_MESSAGE_DOMAIN_ENGINE,
-            code,
-            _("Detect unregistered character in your compose sequence"),
-            _("The character you just input is not recognized as a valid " \
-              "part of the currently active compose sequence and the " \
-              "character was cancelled. Try inputting the correct character " \
-              "to the compose sequence again, or press Escape key to " \
-              "terminate whole the compose sequence."),
-             "timeout", 5,
-             NULL);
+    switch (code) {
+    case IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE:
+        priv->do_inform_user_error = TRUE;
+        message = ibus_message_new (
+                IBUS_MESSAGE_DOMAIN_ENGINE,
+                code,
+                _("Detect unregistered character in your compose sequence"),
+                _("The character you just input is not recognized as a valid " \
+                  "part of the currently active compose sequence and the " \
+                  "character was cancelled. Try inputting the correct " \
+                  "character to the compose sequence again, or press Escape " \
+                  "key to terminate whole the compose sequence."),
+                  "timeout", 5,
+                  NULL);
+        break;
+    case IBUS_ENGINE_MSG_CODE_UPDATE_COMPOSE_TABLE:
+        message = ibus_message_new (
+                IBUS_MESSAGE_DOMAIN_ENGINE,
+                code,
+                _("Compose file update"),
+                error ? error->message : "",
+                "timeout", 120,
+                NULL);
+        break;
+    default:
+        g_assert_not_reached ();
+    }
     ibus_engine_send_message (IBUS_ENGINE (simple), message);
 }
 
@@ -472,15 +496,59 @@ ibus_engine_simple_update_preedit_text (IBusEngineSimple *simple)
                         g_string_append_unichar (s, ch);
                     }
                 } else {
+                    guint unknown_ch = 0;
                     ch = ibus_keyval_to_unicode (keysym);
                     if (ch) {
-                        g_string_append_unichar(s, ch);
+                        /* Should provide ibus_unicode_get_script() for
+                         * other IBus engines?
+                         */
+                        if (g_unichar_get_script (ch) !=
+                            G_UNICODE_SCRIPT_UNKNOWN) {
+                            g_string_append_unichar(s, ch);
+                        } else {
+                            unknown_ch = ch;
+                        }
                     /* Can send Unicode char as keysym with <Uxxxx> format
                      * in comopse sequences and should not warn this case.
                      */
-                    } else if (g_unichar_validate (keysym)) {
-                        ch = keysym;
-                        g_string_append_unichar(s, ch);
+                    } else if (g_unichar_validate (keysym & 0xffff)) {
+                        ch = keysym & 0xffff;
+                        if (g_unichar_get_script (ch) !=
+                            G_UNICODE_SCRIPT_UNKNOWN) {
+                            g_string_append_unichar(s, ch);
+                        } else {
+                            unknown_ch = ch;
+                        }
+                    }
+                    if (unknown_ch) {
+                        gchar *name = NULL;
+                        gchar *layout = NULL;
+                        gchar *layout_end;
+                        g_object_get (simple, "engine-name", &name, NULL);
+                        if (!g_ascii_strncasecmp (name, "xkb:", 4)) {
+                            layout_end = name + 4;
+                            while (*layout_end && *layout_end != ':')
+                                layout_end++;
+                            if (*layout_end == ':') {
+                                layout = g_strndup (name + 4,
+                                                    layout_end - name - 4);
+                            }
+                        } else {
+                            g_warning ("Unexpected engine is used: %s", name);
+                        }
+                        g_free (name);
+                        if (layout) {
+                            ch = ibus_keysym_to_unicode_with_layout (keysym,
+                                                                     FALSE,
+                                                                     NULL,
+                                                                     layout,
+                                                                     NULL);
+                            g_free (layout);
+                        }
+                        if (ch)
+                            g_string_append_unichar(s, ch);
+                        else
+                            g_string_append_unichar(s, 0x00b7); /* · */
                     }
                 }
                 if (!ch) {
@@ -809,7 +877,8 @@ no_sequence_matches (IBusEngineSimple *simple,
             /* Invalid sequence */
             ibus_engine_simple_send_message_with_code (
                     simple,
-                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
+                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE,
+                    NULL);
             ibus_engine_simple_update_preedit_text (simple);
             return TRUE;
         }
@@ -953,6 +1022,7 @@ ibus_engine_simple_check_all_compose_table (IBusEngineSimple *simple,
     GString *output = g_string_new ("");
     gboolean success = FALSE;
     gboolean is_32bit = FALSE;
+    gboolean can_load_en_us = FALSE;
     gunichar output_char = '\0';
 
     /* GtkIMContextSimple output the first compose char in case of
@@ -964,27 +1034,40 @@ ibus_engine_simple_check_all_compose_table (IBusEngineSimple *simple,
     G_LOCK (global_tables);
     tmp_list = global_tables;
     while (tmp_list) {
+        IBusComposeTableEx *compose_table = tmp_list->data;
+        if (compose_table->can_load_en_us)
+            can_load_en_us = TRUE;
+        /* If global_tables includes en_compose_table only, i.e. no user
+         * or locale compose tables, en_compose_table is used.
+         * If not, en_compose_table is used in case one of the other compose
+         * tables has can_load_en_us = %TRUE, i.e. the table file has
+         * the line of 'include "%L"'.
+         * en_compose_table is always appended to the last of global_tables.
+         */
+        if ((compose_table == en_compose_table) && global_tables->next != NULL
+            && !can_load_en_us) {
+            tmp_list = tmp_list->next;
+            continue;
+        }
         is_32bit = FALSE;
-        if (ibus_compose_table_check (
-            (IBusComposeTableEx *)tmp_list->data,
-            priv->compose_buffer,
-            n_compose,
-            &compose_finish,
-            &compose_match,
-            output,
-            is_32bit)) {
+        if (ibus_compose_table_check (compose_table,
+                                      priv->compose_buffer,
+                                      n_compose,
+                                      &compose_finish,
+                                      &compose_match,
+                                      output,
+                                      is_32bit)) {
             success = TRUE;
             break;
         }
         is_32bit = TRUE;
-        if (ibus_compose_table_check (
-            (IBusComposeTableEx *)tmp_list->data,
-            priv->compose_buffer,
-            n_compose,
-            &compose_finish,
-            &compose_match,
-            output,
-            is_32bit)) {
+        if (ibus_compose_table_check (compose_table,
+                                      priv->compose_buffer,
+                                      n_compose,
+                                      &compose_finish,
+                                      &compose_match,
+                                      output,
+                                      is_32bit)) {
             success = TRUE;
             break;
         }
@@ -1090,7 +1173,8 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
                 /* invalid hex sequence */
                 ibus_engine_simple_send_message_with_code (
                         simple,
-                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
+                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE,
+                        NULL);
                 g_string_set_size (priv->tentative_match, 0);
                 g_clear_pointer (&priv->tentative_emoji, g_free);
                 priv->in_hex_sequence = FALSE;
@@ -1115,7 +1199,8 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
                 /* invalid hex sequence */
                 ibus_engine_simple_send_message_with_code (
                         simple,
-                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
+                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE,
+                        NULL);
                 g_string_set_size (priv->tentative_match, 0);
                 g_clear_pointer (&priv->tentative_emoji, g_free);
                 priv->in_hex_sequence = FALSE;
@@ -1166,7 +1251,8 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
             /* invalid hex sequence */
             ibus_engine_simple_send_message_with_code (
                     simple,
-                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
+                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE,
+                    NULL);
             g_string_set_size (priv->tentative_match, 0);
             g_clear_pointer (&priv->tentative_emoji, g_free);
             priv->in_hex_sequence = FALSE;
@@ -1267,7 +1353,8 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
             if (n_compose > 0) {
                 ibus_engine_simple_send_message_with_code (
                         simple,
-                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
+                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE,
+                        NULL);
                 g_string_set_size (priv->tentative_match, 0);
                 priv->in_hex_sequence = FALSE;
                 priv->compose_buffer[0] = 0;
@@ -1334,7 +1421,8 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
             /* non-hex character in hex sequence */
             ibus_engine_simple_send_message_with_code (
                     simple,
-                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
+                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE,
+                    NULL);
             return TRUE;
         }
     } else if (priv->in_emoji_sequence) {
@@ -1395,7 +1483,8 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
                     /* invalid hex sequence */
                     ibus_engine_simple_send_message_with_code (
                             simple,
-                            IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
+                            IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE,
+                            NULL);
                     g_string_set_size (priv->tentative_match, 0);
                     priv->in_hex_sequence = FALSE;
                     priv->compose_buffer[0] = 0;
@@ -1403,7 +1492,8 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
             } else if (!check_hex (simple, n_compose)) {
                 ibus_engine_simple_send_message_with_code (
                         simple,
-                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
+                        IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE,
+                        NULL);
             }
             ibus_engine_simple_update_preedit_text (simple);
 
@@ -1498,7 +1588,8 @@ ibus_engine_simple_process_key_event (IBusEngine *engine,
             g_assert (n_compose < (COMPOSE_BUFFER_SIZE + 1));
             ibus_engine_simple_send_message_with_code (
                     simple,
-                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE);
+                    IBUS_ENGINE_MSG_CODE_INVALID_COMPOSE_SEQUENCE,
+                    NULL);
             backup_char = priv->compose_buffer[n_compose];
             priv->compose_buffer[n_compose] = 0;
             if (ibus_engine_simple_check_all_compose_table (simple, n_compose))
@@ -1698,9 +1789,19 @@ gboolean
 ibus_engine_simple_add_compose_file (IBusEngineSimple *simple,
                                      const gchar      *compose_file)
 {
-    g_return_val_if_fail (IBUS_IS_ENGINE_SIMPLE (simple), TRUE);
+    GError *error = NULL;
+
+    g_return_val_if_fail (IBUS_IS_ENGINE_SIMPLE (simple), FALSE);
 
     global_tables = ibus_compose_table_list_add_file (global_tables,
-                                                      compose_file);
+                                                      compose_file,
+                                                      &error);
+    if (error) {
+        g_warning ("\n%s\n", error->message);
+        ibus_engine_simple_send_message_with_code (simple,
+                                                   error->code,
+                                                   error);
+        g_error_free (error);
+    }
     return TRUE;
 }

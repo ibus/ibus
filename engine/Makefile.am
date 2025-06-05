@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2010-2016, Google Inc. All rights reserved.
 # Copyright (c) 2007-2016 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2013-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2013-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -24,76 +24,83 @@
 libibus = $(top_builddir)/src/libibus-@IBUS_API_VERSION@.la
 
 AM_CPPFLAGS = \
-	-I$(top_srcdir)/src \
-	-I$(top_builddir)/src \
-	$(NULL)
+    -I$(top_srcdir)/src \
+    -I$(top_builddir)/src \
+    $(NULL)
 
 AM_CFLAGS = \
-	@GLIB2_CFLAGS@ \
-	@GIO2_CFLAGS@ \
-	@GTHREAD2_CFLAGS@ \
-	-DG_LOG_DOMAIN=\"IBUS\" \
-	-DPKGDATADIR=\"$(pkgdatadir)\" \
-	-DLIBEXECDIR=\"$(libexecdir)\" \
-	-DBINDIR=\"@bindir@\" \
+    @GLIB2_CFLAGS@ \
+    @GIO2_CFLAGS@ \
+    @GTHREAD2_CFLAGS@ \
+    -DG_LOG_DOMAIN=\"IBUS\" \
+    -DPKGDATADIR=\"$(pkgdatadir)\" \
+    -DLIBEXECDIR=\"$(libexecdir)\" \
+    -DBINDIR=\"@bindir@\" \
     -DIBUS_DISABLE_DEPRECATED \
-	-Wno-unused-variable \
-	-Wno-unused-but-set-variable \
-	-Wno-unused-function \
-	$(NULL)
+    -Wno-unused-variable \
+    -Wno-unused-but-set-variable \
+    -Wno-unused-function \
+    $(NULL)
 
 AM_LDADD = \
-	@GOBJECT2_LIBS@ \
-	@GLIB2_LIBS@ \
-	@GIO2_LIBS@ \
-	@GTHREAD2_LIBS@ \
-	$(libibus) \
-	$(NULL)
+    @GOBJECT2_LIBS@ \
+    @GLIB2_LIBS@ \
+    @GIO2_LIBS@ \
+    @GTHREAD2_LIBS@ \
+    $(libibus) \
+    $(NULL)
 
 AM_VALAFLAGS = \
-	--vapidir=$(top_builddir)/bindings/vala \
-	--pkg=ibus-1.0 \
+    --vapidir=$(top_builddir)/bindings/vala \
+    --pkg=ibus-1.0 \
     --pkg-config="\"$(PKG_CONFIG) --with-path=$(PKG_CONFIG_PATH)\"" \
-	--target-glib="$(VALA_TARGET_GLIB_VERSION)" \
-	$(NULL)
+    --target-glib="$(VALA_TARGET_GLIB_VERSION)" \
+    $(NULL)
+
+TESTS =
+
+if ENABLE_PYGNOME_DESKTOP
+TESTS += test-gnome.py
+endif
 
 libexec_PROGRAMS = \
-	ibus-engine-simple \
-	$(NULL)
+    ibus-engine-simple \
+    $(NULL)
 
 ibus_engine_simple_SOURCES = \
-	main.vala \
-	$(NULL)
+    main.vala \
+    $(NULL)
 ibus_engine_simple_CFLAGS = \
-	$(AM_CFLAGS) \
-	$(NULL)
+    $(AM_CFLAGS) \
+    $(NULL)
 ibus_engine_simple_LDADD = \
-	$(AM_LDADD) \
-	$(NULL)
+    $(AM_LDADD) \
+    $(NULL)
 ibus_engine_simple_DEPENDENCIES = \
-	$(libibus) \
-	$(NULL)
+    $(libibus) \
+    $(NULL)
 
 component_DATA = \
-	simple.xml \
-	$(NULL)
+    simple.xml \
+    $(NULL)
 
 componentdir = $(pkgdatadir)/component
 
 MAINTAINERCLEANFILES = \
-	simple.xml.in \
-	$(NULL)
+    simple.xml.in \
+    $(NULL)
 
 CLEANFILES = \
-	simple.xml \
-	$(NULL)
+    simple.xml \
+    $(NULL)
 
 EXTRA_DIST = \
-	denylist.txt \
-	gensimple.py \
-	iso639converter.py \
-	simple.xml.in \
-	$(NULL)
+    denylist.txt \
+    gensimple.py \
+    iso639converter.py \
+    simple.xml.in \
+    test-gnome.py \
+    $(NULL)
 
 simple.xml: simple.xml.in
 	$(AM_V_GEN) sed \

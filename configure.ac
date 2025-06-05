@@ -601,6 +601,20 @@ AC_ARG_WITH(gtk4-im-module-dir,
 )
 AC_SUBST(GTK4_IM_MODULEDIR)
 
+AC_MSG_CHECKING([for $PYTHON GI GnomeDesktop module])
+if AC_RUN_LOG([$PYTHON -c "def _configure_test():
+    from gi import require_version as gi_require_version
+    gi_require_version('GnomeDesktop', '4.0')
+    from gi.repository import GnomeDesktop
+_configure_test()"]); then
+    enable_pygnome_desktop="yes"
+else
+    enable_pygnome_desktop="no"
+fi
+AC_MSG_RESULT([$enable_pygnome_desktop])
+AM_CONDITIONAL([ENABLE_PYGNOME_DESKTOP],
+               [test x"$enable_pygnome_desktop" = x"yes"])
+
 if test x"$enable_python" = x"yes"; then
     # Check for dbus-python.
     AC_ARG_ENABLE(dbus-python-check,
@@ -941,6 +955,7 @@ Build options:
   PYTHON                        $PYTHON
   PYTHON2                       $PYTHON2
   Python overrides dir          $pyoverridesdir
+  Python GI GnomeDesktop module $enable_pygnome_desktop
   Enable python2                $enable_python2
   Gtk2 immodule dir             $GTK2_IM_MODULEDIR
   Gtk3 immodule dir             $GTK3_IM_MODULEDIR

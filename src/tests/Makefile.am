@@ -3,7 +3,7 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2015 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # Copyright (c) 2007-2018 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
@@ -77,6 +77,10 @@ TESTS_C += ibus-compose
 if ENABLE_XTEST
 TESTS_C += ibus-keypress
 endif
+endif
+
+if ENABLE_GTK4
+TESTS_C += ibus-keyval
 endif
 
 TESTS_ENVIRONMENT = \
@@ -223,6 +227,10 @@ ibus_keypress_CFLAGS = @GTK3_CFLAGS@ @XTEST_CFLAGS@
 ibus_keypress_LDADD = $(prog_ldadd) @GTK3_LIBS@ @XTEST_LIBS@
 endif
 endif
+
+ibus_keyval_SOURCES = ibus-keyval.c
+ibus_keyval_CFLAGS = @GTK4_CFLAGS@
+ibus_keyval_LDADD = $(prog_ldadd) @GTK4_LIBS@
 
 ibus_registry_SOURCES = ibus-registry.c
 ibus_registry_LDADD = $(prog_ldadd)

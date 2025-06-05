@@ -2058,11 +2058,36 @@ ibus_keysym_to_unicode (guint     keysym,
          * we use U+00B7, MIDDLE DOT.
          */
         return 0x00B7;
-    default:;
+    default:
         if (need_space)
             *need_space = FALSE;
     }
     return 0x0;
 #undef CASE
 #undef CASE_COMBINE
+}
+
+gunichar
+ibus_keysym_to_unicode_with_layout (guint                      keysym,
+                                    gboolean                   combining,
+                                    gboolean                  *need_space,
+                                    const gchar               *layout,
+                                    G_GNUC_UNUSED const gchar *variant) {
+#define CASE_KEYSYM(keysym_val, unicode)                                      \
+        case keysym_val:                                                      \
+            if (need_space)                                                   \
+                *need_space = FALSE;                                          \
+            return unicode
+    /* Refer (BEPO, AFNOR) comments in /usr/share/X11/xkb/symbols/fr file. */
+    if (!g_ascii_strncasecmp (layout, "fr", 2)) {
+        switch (keysym) {
+            CASE_KEYSYM(0x0100FDD4, 0x00DF); /* ß */
+            CASE_KEYSYM(0x0100FDD5, 0x1D49); /* ᵉ */
+            CASE_KEYSYM(0x0100FDD7, 0x221E); /* ∞ */
+            CASE_KEYSYM(0x0100FDD8, 0x2015); /* ― */
+            default:;
+        }
+    }
+#undef CASE_KEYSYM
+    return ibus_keysym_to_unicode (keysym, combining, need_space);
 }

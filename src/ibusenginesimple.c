@@ -472,15 +472,59 @@ ibus_engine_simple_update_preedit_text (IBusEngineSimple *simple)
                         g_string_append_unichar (s, ch);
                     }
                 } else {
+                    guint unknown_ch = 0;
                     ch = ibus_keyval_to_unicode (keysym);
                     if (ch) {
-                        g_string_append_unichar(s, ch);
+                        /* Should provide ibus_unicode_get_script() for
+                         * other IBus engines?
+                         */
+                        if (g_unichar_get_script (ch) !=
+                            G_UNICODE_SCRIPT_UNKNOWN) {
+                            g_string_append_unichar(s, ch);
+                        } else {
+                            unknown_ch = ch;
+                        }
                     /* Can send Unicode char as keysym with <Uxxxx> format
                      * in comopse sequences and should not warn this case.
                      */
-                    } else if (g_unichar_validate (keysym)) {
-                        ch = keysym;
-                        g_string_append_unichar(s, ch);
+                    } else if (g_unichar_validate (keysym & 0xffff)) {
+                        ch = keysym & 0xffff;
+                        if (g_unichar_get_script (ch) !=
+                            G_UNICODE_SCRIPT_UNKNOWN) {
+                            g_string_append_unichar(s, ch);
+                        } else {
+                            unknown_ch = ch;
+                        }
+                    }
+                    if (unknown_ch) {
+                        gchar *name = NULL;
+                        gchar *layout = NULL;
+                        gchar *layout_end;
+                        g_object_get (simple, "engine-name", &name, NULL);
+                        if (!g_ascii_strncasecmp (name, "xkb:", 4)) {
+                            layout_end = name + 4;
+                            while (*layout_end && *layout_end != ':')
+                                layout_end++;
+                            if (*layout_end == ':') {
+                                layout = g_strndup (name + 4,
+                                                    layout_end - name - 4);
+                            }
+                        } else {
+                            g_warning ("Unexpected engine is used: %s", name);
+                        }
+                        g_free (name);
+                        if (layout) {
+                            ch = ibus_keysym_to_unicode_with_layout (keysym,
+                                                                     FALSE,
+                                                                     NULL,
+                                                                     layout,
+                                                                     NULL);
+                            g_free (layout);
+                        }
+                        if (ch)
+                            g_string_append_unichar(s, ch);
+                        else
+                            g_string_append_unichar(s, 0x00b7); /* · */
                     }
                 }
                 if (!ch) {

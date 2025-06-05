@@ -65,6 +65,18 @@ gboolean ibus_compose_table_check   (const IBusComposeTableEx   *table,
 gunichar ibus_keysym_to_unicode     (guint                       keysym,
                                      gboolean                    combining,
                                      gboolean                   *need_space);
+/**
+ * ibus_keysym_to_unicode_with_layout:
+ *
+ * Since: 1.5.33
+ * Stability: Unstable
+ */
+gunichar ibus_keysym_to_unicode_with_layout
+                                    (guint                       keysym,
+                                     gboolean                    combining,
+                                     gboolean                   *need_space,
+                                     const gchar                *layout,
+                                     G_GNUC_UNUSED const gchar  *variant);
 
 G_END_DECLS
 

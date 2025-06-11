@@ -1594,6 +1594,24 @@ ibus_im_context_set_client_window (GtkIMContext *context,
 #endif
 }
 
+static gboolean
+_is_cinnamon_desktop (void)
+{
+    static gint is_cinnamon = -1;
+    
+    if (is_cinnamon == -1) {
+        const gchar *desktop = g_getenv ("XDG_CURRENT_DESKTOP");
+        if (desktop && g_ascii_strcasecmp (desktop, "cinnamon") == 0) {
+            is_cinnamon = 1;
+        } else {
+            const gchar *session = g_getenv ("XDG_SESSION_DESKTOP");
+            is_cinnamon = (session && g_ascii_strcasecmp (session, "cinnamon") == 0) ? 1 : 0;
+        }
+    }
+    
+    return is_cinnamon == 1;
+}
+
 static void
 _set_rect_scale_factor_with_window (GdkRectangle *area,
 #if GTK_CHECK_VERSION (3, 98, 4)
@@ -1615,6 +1633,15 @@ _set_rect_scale_factor_with_window (GdkRectangle *area,
 
     scale_factor = gdk_window_get_scale_factor (window);
 #endif
+
+    /* Cinnamon already handles HiDPI scaling correctly for cursor locations,
+     * so we should not apply additional scaling to avoid candidate window
+     * positioning issues. */
+    if (_is_cinnamon_desktop () && scale_factor > 1) {
+        /* Don't apply scaling in Cinnamon HiDPI environment */
+        return;
+    }
+
     area->x *= scale_factor;
     area->y *= scale_factor;
     area->width *= scale_factor;

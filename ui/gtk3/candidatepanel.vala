@@ -214,7 +214,6 @@ public class CandidatePanel : Gtk.Box{
         m_set_preedit_text_id =
                 Timeout.add(100,
                             () => {
-                                //warning("test set_preedit_text_real");
                                 m_set_preedit_text_id = 0;
                                 set_preedit_text_real(text, cursor);
                                 return Source.REMOVE;
@@ -480,7 +479,11 @@ public class CandidatePanel : Gtk.Box{
     }
 
     public new void show() {
-        m_toplevel.show_all();
+        // m_toplevel.show_all() changes m_candidate_area.get_visible()
+        // in update_real() so show() is just used. Using no_show_all
+        // property for m_candidate_area would introduce the more
+        // complicated logic.
+        m_toplevel.show();
     }
 
     public new void hide() {

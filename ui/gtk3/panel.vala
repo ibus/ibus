@@ -218,7 +218,7 @@ class Panel : IBus.PanelService {
 
 #if USE_GDK_WAYLAND
     private CandidatePanel get_active_candidate_panel() {
-        if (m_wayland_object_path == null) {
+        if (m_is_wayland && m_wayland_object_path == null) {
             if (m_candidate_panel_x11 == null) {
                 m_candidate_panel_x11 = candidate_panel_new(true);
                 set_use_glyph_from_engine_lang();
@@ -233,7 +233,7 @@ class Panel : IBus.PanelService {
     }
 
     private Switcher get_active_switcher() {
-        if (m_wayland_object_path == null) {
+        if (m_is_wayland && m_wayland_object_path == null) {
             if (m_switcher_x11 == null)
                 m_switcher_x11 = switcher_new(true);
             return m_switcher_x11;

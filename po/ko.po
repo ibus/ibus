@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2025-02-03 10:58+0900\n"
+"POT-Creation-Date: 2025-06-01 21:56+0900\n"
 "PO-Revision-Date: 2025-02-23 00:21+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/ibus/"
@@ -497,7 +497,7 @@ msgstr "확인(_O)"
 msgid "More…"
 msgstr "더 보기…"
 
-#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1590
+#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1674
 msgid "About"
 msgstr "정보"
 
@@ -538,11 +538,11 @@ msgstr "_추가"
 msgid "Input Method"
 msgstr "입력기"
 
-#: setup/ibus-setup.desktop:3 setup/setup.ui:81
+#: setup/ibus-setup.desktop:2 setup/setup.ui:81
 msgid "IBus Preferences"
 msgstr "IBus 환경설정"
 
-#: setup/ibus-setup.desktop:4
+#: setup/ibus-setup.desktop:3
 msgid "Set IBus Preferences"
 msgstr "IBus 환경설정을 지정합니다"
 
@@ -905,6 +905,32 @@ msgstr "<b>글꼴과 테마</b>"
 msgid "Advanced"
 msgstr "고급"
 
+#: src/ibuscomposetable.c:1780
+#, c-format
+msgid ""
+"Since IBus 1.5.33, Compose files replace the builtin\n"
+"compose sequences. To keep them and add your own\n"
+"sequences on top, the line:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"has been added to the Compose file:\n"
+"%s.\n"
+msgstr ""
+
+#: src/ibuscomposetable.c:1801
+#, c-format
+msgid ""
+"Since IBus 1.5.33, Compose files replace the builtin\n"
+"compose sequences. To keep them and add your own\n"
+"sequences on top, you need to add the line:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"to the Compose file:\n"
+"%s."
+msgstr ""
+
 #: src/ibusemojigen.h:30
 msgid "Activities"
 msgstr "활동"
@@ -944,6 +970,22 @@ msgstr "기호"
 #: src/ibusemojigen.h:39
 msgid "Travel & Places"
 msgstr "여행 및 장소"
+
+#: src/ibusenginesimple.c:263
+msgid "Detect unregistered character in your compose sequence"
+msgstr ""
+
+#: src/ibusenginesimple.c:264
+msgid ""
+"The character you just input is not recognized as a valid part of the "
+"currently active compose sequence and the character was cancelled. Try "
+"inputting the correct character to the compose sequence again, or press "
+"Escape key to terminate whole the compose sequence."
+msgstr ""
+
+#: src/ibusenginesimple.c:276
+msgid "Compose file update"
+msgstr ""
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3364,37 +3406,37 @@ msgstr ""
 "im-모듈 유형을 \"gtk2\",  \"gtk3\" 또는 \"gtk4\"로 설정합니다. 기본값은 "
 "\"gtk3\"입니다."
 
-#: tools/main.vala:270 tools/main.vala:437 tools/main.vala:753
-#: tools/main.vala:833
+#: tools/main.vala:271 tools/main.vala:462 tools/main.vala:778
+#: tools/main.vala:887
 msgid "Can't connect to IBus.\n"
 msgstr "IBus에 연결 할 수 없습니다.\n"
 
-#: tools/main.vala:280 tools/main.vala:762
+#: tools/main.vala:282 tools/main.vala:787
 msgid "IBus is running."
 msgstr "IBUS가 동작 중입니다."
 
-#: tools/main.vala:421
+#: tools/main.vala:446
 msgid "List engine name only"
 msgstr "엔진 이름만 나열합니다"
 
-#: tools/main.vala:463
+#: tools/main.vala:488
 #, c-format
 msgid "language: %s\n"
 msgstr "언어: %s\n"
 
-#: tools/main.vala:533
+#: tools/main.vala:558
 msgid "No engine is set.\n"
 msgstr "설정된 엔진이 없습니다.\n"
 
-#: tools/main.vala:541
+#: tools/main.vala:566
 msgid "Set global engine failed.\n"
 msgstr "전역 엔진 설정이 실패했습니다.\n"
 
-#: tools/main.vala:546
+#: tools/main.vala:571
 msgid "Get global engine failed.\n"
 msgstr "전체 공통 엔진의 취득에 실패했습니다.\n"
 
-#: tools/main.vala:684
+#: tools/main.vala:709
 msgid ""
 "Start or restart daemon with \"direct\", \"systemd\", \"kde-wayland\" or "
 "\"wayland\" TYPE."
@@ -3402,114 +3444,114 @@ msgstr ""
 "\"direct\", \"systemd\", \"kde-wayland\" 또는 \"wayland\" 유형으로 시작 또는 "
 "재시작합니다."
 
-#: tools/main.vala:688
+#: tools/main.vala:713
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
 msgstr "SYSTEMD_SERVICE 파일로 데몬을 시작 또는 재시작합니다."
 
-#: tools/main.vala:691 tools/main.vala:802
+#: tools/main.vala:716 tools/main.vala:856
 msgid "Show debug messages."
 msgstr "디버그 메세지를 표시합니다."
 
-#: tools/main.vala:798
+#: tools/main.vala:852
 msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
 msgstr "\"direct\" 또는 \"kde-wayland\" 유형으로 데몬을 종료합니다."
 
-#: tools/main.vala:850
+#: tools/main.vala:908
 msgid "Read the system registry cache."
 msgstr "시스템 레지스트리 캐쉬를 읽어 들입니다."
 
-#: tools/main.vala:852
+#: tools/main.vala:910
 msgid "Read the registry cache FILE."
 msgstr "레지스트리 캐쉬 파일을 읽어 들입니다."
 
-#: tools/main.vala:870 tools/main.vala:875
+#: tools/main.vala:928 tools/main.vala:933
 msgid "The registry cache is invalid.\n"
 msgstr "레지스트리 캐쉬가 잘못되었습니다.\n"
 
-#: tools/main.vala:891
+#: tools/main.vala:949
 msgid "Write the system registry cache."
 msgstr "시스템 레지스트리 캐쉬를 씁니다."
 
-#: tools/main.vala:893
+#: tools/main.vala:951
 msgid "Write the registry cache FILE."
 msgstr "레지스트리 캐쉬 파일을 씁니다."
 
-#: tools/main.vala:931
+#: tools/main.vala:989
 msgid ""
 "Use engine schema paths instead of ibus core, which can be comma-separated "
 "values."
 msgstr ""
 "IBus 코어 대신 엔진 스키마 경로를 사용합니다. 쉼표로 구분한 경로 값 목록."
 
-#: tools/main.vala:1020
+#: tools/main.vala:1078
 msgid "Resetting…"
 msgstr "재설정 중…"
 
-#: tools/main.vala:1038
+#: tools/main.vala:1096
 msgid "Done"
 msgstr "완료"
 
-#: tools/main.vala:1096
+#: tools/main.vala:1154
 msgid "Set or get engine"
 msgstr "엔진을 설정하거나 가져오기"
 
-#: tools/main.vala:1097
+#: tools/main.vala:1155
 msgid "Exit ibus-daemon"
 msgstr "ibus-daemon 끝내기"
 
-#: tools/main.vala:1098
+#: tools/main.vala:1156
 msgid "Show available engines"
 msgstr "존재하는 엔진 표시"
 
-#: tools/main.vala:1099
+#: tools/main.vala:1157
 msgid "(Not implemented)"
 msgstr "(구현 안함)"
 
-#: tools/main.vala:1100
+#: tools/main.vala:1158
 msgid "Restart ibus-daemon"
 msgstr "ibus-daemon 다시 시작"
 
-#: tools/main.vala:1101
+#: tools/main.vala:1159
 msgid "Start ibus-daemon"
 msgstr "ibus-daemon을 시작합니다"
 
-#: tools/main.vala:1102 ui/gtk3/application.vala:334
+#: tools/main.vala:1160 ui/gtk3/application.vala:336
 msgid "Show version"
 msgstr "버전 보기"
 
-#: tools/main.vala:1103
+#: tools/main.vala:1161
 msgid "Show the content of registry cache"
 msgstr "레지스트리 캐쉬의 내용 표시"
 
-#: tools/main.vala:1104
+#: tools/main.vala:1162
 msgid "Create registry cache"
 msgstr "레지스트리 캐시 생성"
 
-#: tools/main.vala:1105
+#: tools/main.vala:1163
 msgid "Print the D-Bus address of ibus-daemon"
 msgstr "ibus-daemon의 D-Bus 주소 출력"
 
-#: tools/main.vala:1106
+#: tools/main.vala:1164
 msgid "Show the configuration values"
 msgstr "설정 값을 표시합니다"
 
-#: tools/main.vala:1107
+#: tools/main.vala:1165
 msgid "Reset the configuration values"
 msgstr "설정 값을 재설정합니다"
 
-#: tools/main.vala:1109
+#: tools/main.vala:1167
 msgid "Save emoji on dialog to clipboard"
 msgstr "대화창의 이모지를 클립보드에 저장"
 
-#: tools/main.vala:1111
+#: tools/main.vala:1169
 msgid "Retrieve im-module value from GTK instance"
 msgstr "GTK 사례에서 im-모듈 값을 검색합니다"
 
-#: tools/main.vala:1113
+#: tools/main.vala:1171
 msgid "Show this information"
 msgstr "도움말 정보 표시"
 
-#: tools/main.vala:1120
+#: tools/main.vala:1178
 #, c-format
 msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
@@ -3518,118 +3560,125 @@ msgstr ""
 "사용법: %s <명령> [옵션...]\n"
 "\n"
 
-#: tools/main.vala:1121
+#: tools/main.vala:1179
 msgid "Commands:\n"
 msgstr "명령:\n"
 
-#: tools/main.vala:1151
+#: tools/main.vala:1209
 #, c-format
 msgid "%s is unknown command!\n"
 msgstr "%s는 알 수 없는 명령입니다!\n"
 
-#: ui/gtk3/application.vala:339
+#: ui/gtk3/application.vala:341
 msgid "Connect Wayland input method protocol"
 msgstr "웨이랜드 입력 방식 통신규약을 연결합니다"
 
-#: ui/gtk3/application.vala:343
+#: ui/gtk3/application.vala:345
 msgid "Execute ibus-daemon if it's not running"
 msgstr "만약 동작하지 않으면 ibus-데몬을 실행합니다"
 
-#: ui/gtk3/application.vala:347
+#: ui/gtk3/application.vala:349
 msgid "ibus-daemon's arguments"
 msgstr "ibus-데몬의 인수"
 
-#: ui/gtk3/application.vala:351
+#: ui/gtk3/application.vala:353
 msgid "Verbose logging"
 msgstr "상세한 로깅"
 
-#: ui/gtk3/emojier.vala:235
+#: ui/gtk3/emojier.vala:276
 msgid "Favorites"
 msgstr "자주 사용"
 
-#: ui/gtk3/emojier.vala:236
+#: ui/gtk3/emojier.vala:277
 msgid "Others"
 msgstr "기타"
 
-#: ui/gtk3/emojier.vala:237
+#: ui/gtk3/emojier.vala:278
 msgid "Open Unicode choice"
 msgstr "유니코드 선택 열기"
 
-#: ui/gtk3/emojier.vala:1000
+#: ui/gtk3/emojier.vala:1063
 msgid "Bring back emoji choice"
 msgstr "이모지 선택으로 돌아가기"
 
-#: ui/gtk3/emojier.vala:1103
+#: ui/gtk3/emojier.vala:1166
 msgid "Page Down"
 msgstr "다음 페이지"
 
-#: ui/gtk3/emojier.vala:1114
+#: ui/gtk3/emojier.vala:1177
 msgid "Page Up"
 msgstr "이전 페이지"
 
-#: ui/gtk3/emojier.vala:1117
+#: ui/gtk3/emojier.vala:1180
 msgid "Show emoji variants"
 msgstr "이모지 변종 보기"
 
-#: ui/gtk3/emojier.vala:1118
+#: ui/gtk3/emojier.vala:1181
 msgid "Close"
 msgstr "닫기"
 
-#: ui/gtk3/emojier.vala:1124
+#: ui/gtk3/emojier.vala:1187
 msgid "Menu"
 msgstr "메뉴"
 
-#: ui/gtk3/emojier.vala:1135
+#: ui/gtk3/emojier.vala:1198
 msgid "Click to view a warning message"
 msgstr "경고 메시지를 보려면 누르십시오"
 
-#: ui/gtk3/emojier.vala:1179
+#: ui/gtk3/emojier.vala:1242 ui/gtk3/emojier.vala:1277
+#: ui/gtk3/emojier.vala:2284
 msgid "Loading a Unicode dictionary:"
 msgstr "유니코드 사전 읽어들이는 중:"
 
-#: ui/gtk3/emojier.vala:1425
+#: ui/gtk3/emojier.vala:1276
+#, fuzzy
+#| msgid "IBus Notification"
+msgid "IBus Emoji initialization"
+msgstr "IBus 알림"
+
+#: ui/gtk3/emojier.vala:1538
 #, c-format
 msgid "Code point: %s"
 msgstr "코드값: %s"
 
-#: ui/gtk3/emojier.vala:1431
+#: ui/gtk3/emojier.vala:1544
 msgid "Has emoji variants"
 msgstr "이모지 변종 있음"
 
-#: ui/gtk3/emojier.vala:1599 ui/gtk3/emojier.vala:1612
+#: ui/gtk3/emojier.vala:1708 ui/gtk3/emojier.vala:1721
 #, c-format
 msgid "Description: %s"
 msgstr "설명: %s"
 
-#: ui/gtk3/emojier.vala:1599
+#: ui/gtk3/emojier.vala:1708
 msgid "None"
 msgstr "없음"
 
-#: ui/gtk3/emojier.vala:1623
+#: ui/gtk3/emojier.vala:1732
 #, c-format
 msgid "Annotations: %s"
 msgstr "주석: %s"
 
-#: ui/gtk3/emojier.vala:1649
+#: ui/gtk3/emojier.vala:1758
 #, c-format
 msgid "Name: %s"
 msgstr "이름: %s"
 
-#: ui/gtk3/emojier.vala:1657
+#: ui/gtk3/emojier.vala:1766
 #, c-format
 msgid "Alias: %s"
 msgstr "다른 이름: %s"
 
-#: ui/gtk3/emojier.vala:2180 ui/gtk3/ibus-extension-gtk3.desktop.in:3
-#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1551
+#: ui/gtk3/emojier.vala:2289 ui/gtk3/ibus-extension-gtk3.desktop.in:2
+#: ui/gtk3/ibus-ui-emojier.desktop.in:2 ui/gtk3/panel.vala:1633
 msgid "Emoji Choice"
 msgstr "이모지 선택"
 
-#: ui/gtk3/emojier.vala:2182
+#: ui/gtk3/emojier.vala:2291
 msgid "Unicode Choice"
 msgstr "유니코드 선택"
 
-#: ui/gtk3/emojier.vala:2484
+#: ui/gtk3/emojier.vala:2580
 msgid ""
 "Failed to get the current text application. Please re-focus your "
 "application. E.g. Press Esc key several times to release the emoji typing "
@@ -3681,11 +3730,11 @@ msgstr "지정한 정수 값 길이만큼 일치"
 msgid "Match with the condition of the specified integer"
 msgstr "지정된 정수의 조건과 일치"
 
-#: ui/gtk3/panel.vala:420 ui/gtk3/panel.vala:443
+#: ui/gtk3/panel.vala:441 ui/gtk3/panel.vala:464
 msgid "IBus Panel"
 msgstr "IBus 패널"
 
-#: ui/gtk3/panel.vala:421
+#: ui/gtk3/panel.vala:442
 msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
@@ -3693,27 +3742,37 @@ msgstr ""
 "당신은 패널 아이콘에서 마우스 가운데 누름단추를 눌러서 활성화 메뉴와 컨텍스"
 "를 전환 할 수 있습니다."
 
-#: ui/gtk3/panel.vala:921
-#, c-format
+#: ui/gtk3/panel.vala:1008
+#, fuzzy, c-format
+#| msgid ""
+#| "IBus should be called from the desktop session in %s. For KDE, you can "
+#| "launch '%s' utility and go to \"Input Devices\" -> \"Virtual Keyboard\" "
+#| "section and select \"%s\" icon and click \"Apply\" button to configure "
+#| "IBus in %s. For other desktop sessions, you can copy the 'Exec=' line in "
+#| "%s file to a configuration file of the session. Please refer each "
+#| "document about the \"Wayland input method\" configuration. Before you "
+#| "configure the \"Wayland input method\", you should make sure that "
+#| "QT_IM_MODULE and GTK_IM_MODULE environment variables are unset in the "
+#| "desktop session."
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
-"launch '%s' utility and go to \"Input Devices\" -> \"Virtual Keyboard\" "
-"section and select \"%s\" icon and click \"Apply\" button to configure IBus "
-"in %s. For other desktop sessions, you can copy the 'Exec=' line in %s file "
-"to a configuration file of the session. Please refer each document about the "
-"\"Wayland input method\" configuration. Before you configure the \"Wayland "
-"input method\", you should make sure that QT_IM_MODULE and GTK_IM_MODULE "
-"environment variables are unset in the desktop session."
+"launch '%s' utility and go to \"Input & Output\" -> \"Keyboard\" -> "
+"\"Virtual Keyboard\" section and select \"%s\" icon and click \"Apply\" "
+"button to configure IBus in %s. For other desktop sessions, you can run "
+"\"%s\" command. Please refer each document about the \"Wayland input "
+"method\" configuration. Before you configure the \"Wayland input method\", "
+"you should make sure that QT_IM_MODULE and GTK_IM_MODULE environment "
+"variables are unset in the desktop session."
 msgstr ""
 "IBus는 %s의 데스크탑 세션에서 호출되어야 합니다. KDE에서는, '%s' 유틸리티를 "
-"실행 할 수 있고 \"입력 장치\" -> \"가상 키보드\" 부분으로 이동하며 \"%s\" "
-"아이콘을 선택하여 \"적용\" 누름단추를 눌러서 %s에서 IBus를 구성합니다. 다른 "
-"데스크탑 세션에서는, %s 파일의 'Exec=' 행에서 세션의 구성 파일로 복사 할 수 "
-"있습니다. \"웨이랜드 입력 방식\" 구성에 대해서 개별 문서를 참조하세요. "
-"당신이 \"웨이랜드 입력 방식\"을 구성하기 전에, QT_IM_MODULE 및 GTK_IM_MODULE "
-"환경 변수가 데스크탑 세션에서 설정이 해제되었는지 확인해야 합니다."
+"실행 할 수 있고 \"입력 장치\" -> \"가상 키보드\" 부분으로 이동하며 \"%s\" 아"
+"이콘을 선택하여 \"적용\" 누름단추를 눌러서 %s에서 IBus를 구성합니다. 다른 데"
+"스크탑 세션에서는, %s 파일의 'Exec=' 행에서 세션의 구성 파일로 복사 할 수 있"
+"습니다. \"웨이랜드 입력 방식\" 구성에 대해서 개별 문서를 참조하세요. 당신이 "
+"\"웨이랜드 입력 방식\"을 구성하기 전에, QT_IM_MODULE 및 GTK_IM_MODULE 환경 변"
+"수가 데스크탑 세션에서 설정이 해제되었는지 확인해야 합니다."
 
-#: ui/gtk3/panel.vala:943
+#: ui/gtk3/panel.vala:1029
 #, c-format
 msgid ""
 "Please unset QT_IM_MODULE and GTK_IM_MODULE environment variables and 'ibus-"
@@ -3723,7 +3782,7 @@ msgstr ""
 "QT_IM_MODULE과 GTK_IM_Module 환경 변수 및 'ibus-데몬' 설정을 해제해 주세요 "
 "-- 판넬 비활성화는 %s 구성 요소의 하위 프로세스로 실행되어야 합니다."
 
-#: ui/gtk3/panel.vala:952
+#: ui/gtk3/panel.vala:1038
 #, c-format
 msgid ""
 "Seems you run %s with '--enable-wayland-im' option but your display server "
@@ -3734,11 +3793,11 @@ msgstr ""
 "버가 Xorg이고 웨이랜드 기능이 비활성화되어 있습니다. 대신 ibus-daemon을 직접 "
 "실행하거나 해당 옵션 없이 %s를 실행하는 것이 낫습니다."
 
-#: ui/gtk3/panel.vala:968
+#: ui/gtk3/panel.vala:1054
 msgid "IBus Notification"
 msgstr "IBus 알림"
 
-#: ui/gtk3/panel.vala:1327
+#: ui/gtk3/panel.vala:1413
 #, c-format
 msgid ""
 "Your configured input method %s does not exist in IBus input methods so "
@@ -3747,14 +3806,14 @@ msgstr ""
 "당신이 구성한 입력 방식 %s가 IBUS 입력 방식에 없으므로 당신의 입력 방식 대신"
 "에 \"US\" 키보드 배열로 구성되었습니다."
 
-#: ui/gtk3/panel.vala:1332
+#: ui/gtk3/panel.vala:1418
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
 msgstr ""
 "당신이 구성한 입력 방식 중에 하나 이상이 IBus 입력 방식에 존재하지 않습니다."
 
-#: ui/gtk3/panel.vala:1335
+#: ui/gtk3/panel.vala:1421
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
@@ -3762,33 +3821,33 @@ msgstr ""
 "`ibus-setup` 명령을 실행하고 \"입력기\" 탭을 연 다음 입력기를 다시 구성하십시"
 "오."
 
-#: ui/gtk3/panel.vala:1493
+#: ui/gtk3/panel.vala:1579
 msgid "IBus is an intelligent input bus for Linux/Unix."
 msgstr "IBus는 리눅스/유닉스를 위한 지능형 입력 버스입니다."
 
-#: ui/gtk3/panel.vala:1498
+#: ui/gtk3/panel.vala:1584
 msgid "Maintainers"
 msgstr "관리자"
 
-#: ui/gtk3/panel.vala:1502
+#: ui/gtk3/panel.vala:1588
 msgid "translator-credits"
 msgstr "김인수 <simmon@nplob.com>"
 
-#: ui/gtk3/panel.vala:1543
+#: ui/gtk3/panel.vala:1625
 msgid "Preferences"
 msgstr "환경설정"
 
-#: ui/gtk3/panel.vala:1596
+#: ui/gtk3/panel.vala:1680
 msgid "Restart"
 msgstr "다시 시작"
 
-#: ui/gtk3/panel.vala:1605
+#: ui/gtk3/panel.vala:1689
 msgid "Quit"
 msgstr "끝내기"
 
 #. Translators: If your locale is RTL, the msgstr is "default:RTL".
 #. * Otherwise the msgstr is "default:LTR".
-#: ui/gtk3/propertypanel.vala:367 ui/gtk3/propertypanel.vala:375
+#: ui/gtk3/propertypanel.vala:372 ui/gtk3/propertypanel.vala:380
 msgid "default:LTR"
 msgstr "default:LTR"
 

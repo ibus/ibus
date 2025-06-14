@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-02-03 10:58+0900\n"
-"PO-Revision-Date: 2025-02-15 11:38+0000\n"
+"PO-Revision-Date: 2025-05-25 19:52+0000\n"
 "Last-Translator: ButterflyOfFire "
 "<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/ibus/"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.11.3\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -179,7 +179,7 @@ msgstr ""
 #: data/dconf/org.freedesktop.ibus.gschema.xml:165
 #: data/dconf/org.freedesktop.ibus.gschema.xml:169
 msgid "Language panel position"
-msgstr ""
+msgstr "Adeg n ufeggag n tutlayt"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:173
 msgid "Follow the input cursor in case the panel is always shown"
@@ -518,7 +518,7 @@ msgstr ""
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
-msgstr ""
+msgstr "Ttxil-k sit ɣef tqeffalt (neɣ taggayt n tqeffalin)"
 
 #: setup/main.py:122 setup/main.py:662
 msgid "Use shortcut with shift to switch to the previous input method"
@@ -591,7 +591,7 @@ msgstr ""
 
 #: setup/setup.ui:54
 msgid "Always"
-msgstr ""
+msgstr "Yal tikkelt"
 
 #: setup/setup.ui:125
 msgid "The shortcut keys for switching to next input method in the list"
@@ -624,7 +624,7 @@ msgstr "Sermed:"
 
 #: setup/setup.ui:303
 msgid "Disable:"
-msgstr ""
+msgstr "Kkes armad:"
 
 #: setup/setup.ui:357 setup/setup.ui:995
 msgid "<b>Keyboard Shortcuts</b>"
@@ -648,7 +648,7 @@ msgstr ""
 
 #: setup/setup.ui:435
 msgid "Language panel position:"
-msgstr ""
+msgstr "Adeg n ufeggag n tutlayt:"
 
 #: setup/setup.ui:506
 msgid "Show input method's name on language bar when check the checkbox"
@@ -981,14 +981,14 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:97
 msgid "NKo"
-msgstr ""
+msgstr "NKo"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:101
 msgid "Samaritan"
-msgstr ""
+msgstr "Samaritan"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3415,7 +3415,7 @@ msgstr ""
 
 #: ui/gtk3/emojier.vala:236
 msgid "Others"
-msgstr ""
+msgstr "Wiyyaḍ"
 
 #: ui/gtk3/emojier.vala:237
 msgid "Open Unicode choice"
@@ -3439,11 +3439,11 @@ msgstr ""
 
 #: ui/gtk3/emojier.vala:1118
 msgid "Close"
-msgstr ""
+msgstr "Mdel"
 
 #: ui/gtk3/emojier.vala:1124
 msgid "Menu"
-msgstr ""
+msgstr "Umuɣ"
 
 #: ui/gtk3/emojier.vala:1135
 msgid "Click to view a warning message"
@@ -3469,7 +3469,7 @@ msgstr ""
 
 #: ui/gtk3/emojier.vala:1599
 msgid "None"
-msgstr "Ula yiwen"
+msgstr "Ula yiwet"
 
 #: ui/gtk3/emojier.vala:1623
 #, c-format
@@ -3616,7 +3616,7 @@ msgstr ""
 
 #: ui/gtk3/panel.vala:1502
 msgid "translator-credits"
-msgstr ""
+msgstr "Athmane MOKRAOUI <butterflyoffire@protonmail.com>"
 
 #: ui/gtk3/panel.vala:1543
 msgid "Preferences"
@@ -3624,11 +3624,11 @@ msgstr ""
 
 #: ui/gtk3/panel.vala:1596
 msgid "Restart"
-msgstr ""
+msgstr "Ales asekker"
 
 #: ui/gtk3/panel.vala:1605
 msgid "Quit"
-msgstr ""
+msgstr "Ffeɣ"
 
 #. Translators: If your locale is RTL, the msgstr is "default:RTL".
 #. * Otherwise the msgstr is "default:LTR".

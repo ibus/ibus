@@ -15,13 +15,14 @@
 # Emmanuel Nedelec <nednet@wanadoo.fr>, 2017. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2015, 2017-2019. #zanata
 # elmerys <contact@zle.fr>, 2018. #zanata
+# Léane GRASSER <leane.grasser@proton.me>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2024-05-23 22:16+0900\n"
-"PO-Revision-Date: 2024-09-11 06:38+0000\n"
-"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
+"PO-Revision-Date: 2025-04-23 18:14+0000\n"
+"Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/fr/>\n"
 "Language: fr\n"
@@ -29,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.11\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -2662,7 +2663,7 @@ msgstr "Soyombo"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:989
 msgid "Unified Canadian Aboriginal Syllabics Extended-A"
-msgstr "Syllabaires canadiens autochtones unifiés étendus-A"
+msgstr "Syllabaires canadiens autochtones unifiés étendus A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3284,6 +3285,8 @@ msgstr "Area-B Zone à usage privé supplémentaire"
 msgid ""
 "Set im-module TYPE to \"gtk2\",  \"gtk3\" or \"gtk4\". Default is \"gtk3\"."
 msgstr ""
+"Définir le TYPE im-module sur \"gtk2\", \"gtk3\" ou \"gtk4\". La valeur par "
+"défaut est \"gtk3\"."
 
 #: tools/main.vala:311
 msgid "List engine name only"
@@ -3314,10 +3317,12 @@ msgstr "Échec de la récupération du moteur global.\n"
 msgid ""
 "Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" TYPE."
 msgstr ""
+"Démarrer ou redémarrer le démon avec le TYPE \"direct\", \"systemd\" ou "
+"\"kde-wayland\"."
 
 #: tools/main.vala:577
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
-msgstr ""
+msgstr "Démarrer ou redémarrer le démon avec le fichier SYSTEMD_SERVICE."
 
 #: tools/main.vala:580 tools/main.vala:674
 msgid "Show debug messages."
@@ -3325,7 +3330,7 @@ msgstr "Afficher les messages de débogage."
 
 #: tools/main.vala:670
 msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
-msgstr ""
+msgstr "Quitter le démon avec le TYPE \"direct\" ou \"kde-wayland\"."
 
 #: tools/main.vala:722
 msgid "Read the system registry cache."
@@ -3417,7 +3422,7 @@ msgstr "Copie l’émoticône dans la boite de dialogue vers le presse-papier"
 
 #: tools/main.vala:983
 msgid "Retrieve im-module value from GTK instance"
-msgstr ""
+msgstr "Récupérer la valeur im-module à partir de l'instance GTK"
 
 #: tools/main.vala:985
 msgid "Show this information"
@@ -3442,21 +3447,20 @@ msgid "%s is unknown command!\n"
 msgstr "%s n’est pas une commande connue !\n"
 
 #: ui/gtk3/application.vala:322
-#, fuzzy
 msgid "Connect Wayland input method protocol"
-msgstr "Sélectionnez une méthode d’entrée"
+msgstr "Connecter le protocole Wayland input-method"
 
 #: ui/gtk3/application.vala:326
 msgid "Execute ibus-daemon if it's not running"
-msgstr ""
+msgstr "Exécuter ibus-daemon s'il n'est pas encore en cours d'exécution"
 
 #: ui/gtk3/application.vala:330
 msgid "ibus-daemon's arguments"
-msgstr ""
+msgstr "Arguments de ibus-daemon"
 
 #: ui/gtk3/application.vala:334
 msgid "Verbose logging"
-msgstr ""
+msgstr "Sortie détaillée"
 
 #: ui/gtk3/emojier.vala:235
 msgid "Favorites"
@@ -3608,6 +3612,8 @@ msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
 msgstr ""
+"Vous pouvez activer/désactiver le menu d'activation et le menu contextuel en "
+"effectuant un clic milieu sur l'icône du panneau."
 
 #: ui/gtk3/panel.vala:853
 #, c-format
@@ -3621,6 +3627,16 @@ msgid ""
 "input method\", you should make sure that QT_IM_MODULE and GTK_IM_MODULE "
 "environment variables are unset in the desktop session."
 msgstr ""
+"IBus devrait être appelé par la session de bureau dans %s. Pour KDE, vous "
+"pouvez lancer l'utilitaire \"%s\", accéder à la section "
+"\"Périphériques de saisie\" > \"Clavier virtuel\", sélectionner l'icône "
+"\"%s\" et cliquer sur le bouton Appliquer pour configurer IBus dans %s. Pour "
+"les autres sessions de bureau, vous pouvez copier la ligne \"Exec=\" du "
+"fichier %s dans un fichier de configuration de la session. Référez-vous au "
+"document concernant la configuration d'une méthode de saisie dans Wayland. "
+"Avant de configurer la méthode de saisie Wayland, assurez-vous que les "
+"variables d'environnement QT_IM_MODULE et GTK_IM_MODULE ne sont pas définies "
+"dans la session de bureau."
 
 #: ui/gtk3/panel.vala:875
 #, c-format
@@ -3629,6 +3645,9 @@ msgid ""
 "daemon --panel disable' should be executed as a child process of %s "
 "component."
 msgstr ""
+"Veuillez supprimer la définition des variables d'environnement QT_IM_MODULE "
+"et GTK_IM_MODULE et \"ibus-daemon --panel disable\" doit être exécuté en "
+"tant que sous-processus d'un composant %s."
 
 #: ui/gtk3/panel.vala:884
 #, c-format
@@ -3637,10 +3656,14 @@ msgid ""
 "is Xorg so the Wayland feature is disabled. You would be better off running "
 "ibus-daemon directly instead or %s without that option."
 msgstr ""
+"Il semble que vous avez exécuté %s avec l'option '--enable-wayland-im', mais "
+"votre serveur d'affichage est Xorg et les fonctionnalités Wayland sont donc "
+"désactivées. Exécutez plutôt directement ibus-daemon, ou exécutez %s sans "
+"cette option."
 
 #: ui/gtk3/panel.vala:900
 msgid "IBus Notification"
-msgstr ""
+msgstr "Notification IBus"
 
 #: ui/gtk3/panel.vala:1252
 #, c-format

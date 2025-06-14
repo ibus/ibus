@@ -889,6 +889,30 @@ AC_SUBST(XKBCONFIG_BASE)
 
 AC_SUBST([GDBUS_CODEGEN], [`$PKG_CONFIG --variable gdbus_codegen gio-2.0`])
 
+OUTPUT_TAIL=''
+HAS_OUTPUT_TAIL=0
+AS_IF([test x"$enable_ui" != x"no" &&
+       test -f "$ac_confdir/ui/gtk3/application.c"
+      ],
+      [AS_IF([test x"$enable_appindicator" = x"no" ||
+              test x"$enable_xim" = x"no" ||
+              test x"$enable_gdk3_wayland" != x"yes" ||
+              test x"$enable_emoji_dict" == x"no"
+             ],
+             [OUTPUT_TAIL="$OUTPUT_TAIL
+You invoked the \`configure\` script with either disabled appinicator, xim,
+gdk3_wayland or emoji_dict option so you have to run
+\`make -C ui/gtk3 maintainer-clean-generic\` to regenerate C files with VALA
+before run \`make\`.
+"
+              HAS_OUTPUT_TAIL=1
+             ],
+             [])
+      ],
+      []
+)
+
+
 # OUTPUT files
 AC_CONFIG_FILES([
 po/Makefile.in
@@ -992,4 +1016,7 @@ Build options:
   Run test cases                $enable_tests
   Install tests                 $enable_install_tests
 ])
-
+AS_IF([test $HAS_OUTPUT_TAIL -eq 1],
+      [AC_MSG_WARN([$OUTPUT_TAIL])],
+      []
+)

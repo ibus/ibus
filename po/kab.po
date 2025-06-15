@@ -10,9 +10,9 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-02-03 10:58+0900\n"
-"PO-Revision-Date: 2025-05-26 07:36+0000\n"
-"Last-Translator: Moonshadow "
-"<starlight@users.noreply.translate.fedoraproject.org>\n"
+"PO-Revision-Date: 2025-06-13 16:37+0000\n"
+"Last-Translator: ButterflyOfFire "
+"<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/kab/>\n"
 "Language: kab\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.11.3\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -789,7 +789,7 @@ msgstr "Imujit"
 
 #: setup/setup.ui:1242
 msgid "<b>Keyboard Layout</b>"
-msgstr ""
+msgstr "<b>Tamudemt n unasiw</b>"
 
 #: setup/setup.ui:1290
 msgid "<b>Global input method settings</b>"
@@ -3316,7 +3316,7 @@ msgstr ""
 
 #: tools/main.vala:1038
 msgid "Done"
-msgstr ""
+msgstr "Immed"
 
 #: tools/main.vala:1096
 msgid "Set or get engine"

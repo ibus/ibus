@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2025-02-06 11:26+0000\n"
+"PO-Revision-Date: 2025-06-14 10:15+0000\n"
 "Last-Translator: Mike FABIAN <mfabian@redhat.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/de/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -946,6 +946,14 @@ msgid ""
 "has been added to the Compose file:\n"
 "%s.\n"
 msgstr ""
+"Seit IBus 1.5.33 ersetzen Compose-Dateien die eingebauten\n"
+"Compose-Sequenzen. Um diese beizubehalten und zusätzlich\n"
+"eigene Sequenzen hinzuzufügen, wurde die Zeile:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"in die Compose-Datei eingefügt:\n"
+"%s.\n"
 
 #: src/ibuscomposetable.c:1801
 #, c-format
@@ -959,6 +967,14 @@ msgid ""
 "to the Compose file:\n"
 "%s."
 msgstr ""
+"Seit IBus 1.5.33 ersetzen Compose-Dateien die eingebauten\n"
+"Compose-Sequenzen. Um diese beizubehalten und zusätzlich\n"
+"eigene Sequenzen zu verwenden, müssen Sie die Zeile:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"in die Compose-Datei einfügen:\n"
+"%s."
 
 #: src/ibusemojigen.h:30
 msgid "Activities"
@@ -1002,7 +1018,7 @@ msgstr "Reisen & Orte"
 
 #: src/ibusenginesimple.c:263
 msgid "Detect unregistered character in your compose sequence"
-msgstr ""
+msgstr "In deiner Compose-Sequenz wurde ein nicht registriertes Zeichen erkannt"
 
 #: src/ibusenginesimple.c:264
 msgid ""
@@ -1011,10 +1027,14 @@ msgid ""
 "inputting the correct character to the compose sequence again, or press "
 "Escape key to terminate whole the compose sequence."
 msgstr ""
+"Das soeben eingegebene Zeichen wird nicht als gültiger Teil der aktuell "
+"aktiven Compose-Sequenz erkannt und wurde verworfen. Versuchen Sie, das "
+"korrekte Zeichen erneut in die Compose-Sequenz einzugeben, oder drücken Sie "
+"die Escape-Taste, um die gesamte Compose-Sequenz abzubrechen."
 
 #: src/ibusenginesimple.c:276
 msgid "Compose file update"
-msgstr ""
+msgstr "Aktualisierung der Compose-Datei"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3614,10 +3634,8 @@ msgid "Loading a Unicode dictionary:"
 msgstr "Lade ein Unicodewörterbuch:"
 
 #: ui/gtk3/emojier.vala:1276
-#, fuzzy
-#| msgid "IBus Notification"
 msgid "IBus Emoji initialization"
-msgstr "IBus Benachrichtigung"
+msgstr "IBus-Emoji-Initialisierung"
 
 #: ui/gtk3/emojier.vala:1538
 #, c-format
@@ -3727,17 +3745,7 @@ msgstr ""
 "der mittleren Maustaste auf das Panel-Symbol klickst."
 
 #: ui/gtk3/panel.vala:1008
-#, fuzzy, c-format
-#| msgid ""
-#| "IBus should be called from the desktop session in %s. For KDE, you can "
-#| "launch '%s' utility and go to \"Input Devices\" -> \"Virtual Keyboard\" "
-#| "section and select \"%s\" icon and click \"Apply\" button to configure "
-#| "IBus in %s. For other desktop sessions, you can copy the 'Exec=' line in "
-#| "%s file to a configuration file of the session. Please refer each "
-#| "document about the \"Wayland input method\" configuration. Before you "
-#| "configure the \"Wayland input method\", you should make sure that "
-#| "QT_IM_MODULE and GTK_IM_MODULE environment variables are unset in the "
-#| "desktop session."
+#, c-format
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
 "launch '%s' utility and go to \"Input & Output\" -> \"Keyboard\" -> "
@@ -3749,15 +3757,14 @@ msgid ""
 "variables are unset in the desktop session."
 msgstr ""
 "IBus sollte innerhalb der Desktop-Sitzung in %s aufgerufen werden. Für KDE "
-"kannst du das '%s'-Dienstprogramm starten und zu \"Eingabegeräte\" -> "
-"\"Virtuelle Tastatur\" navigieren. Wähle dort das \"%s\"-Symbol aus und "
-"klicke auf die Schaltfläche \"Anwenden\", um IBus in %s zu konfigurieren. "
-"Für andere Desktop-Sitzungen kannst du die Zeile 'Exec=' in der Datei %s in "
-"eine Konfigurationsdatei der Sitzung kopieren. Bitte siehe das entsprechende "
-"Dokument zur Konfiguration der \"Wayland-Eingabemethode\". Bevor du die "
-"\"Wayland-Eingabemethode\" konfigurierst, stelle sicher, dass die "
-"Umgebungsvariablen QT_IM_MODULE und GTK_IM_MODULE in der Desktop-Sitzung "
-"nicht gesetzt sind."
+"kannst du das '%s'-Dienstprogramm starten und zu \"Eingabe & Ausgabe\" -> "
+"\"Tastatur\" -> \"Virtuelle Tastatur\" navigieren. Wähle dort das \"%s\"-"
+"Symbol aus und klicke auf die Schaltfläche \"Anwenden\", um IBus in %s zu "
+"konfigurieren. Für andere Desktop-Sitzungen benutze das \"%s\" Kommando. "
+"Weitere Details findest Du in der Dokumentation zur Konfiguration der "
+"\"Wayland-Eingabemethode\". Bevor du die \"Wayland-Eingabemethode\" "
+"konfigurierst, stelle sicher, dass die Umgebungsvariablen QT_IM_MODULE und "
+"GTK_IM_MODULE in der Desktop-Sitzung nicht gesetzt sind."
 
 #: ui/gtk3/panel.vala:1029
 #, c-format

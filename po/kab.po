@@ -4,14 +4,15 @@
 # This file is distributed under the same license as the ibus package.
 #
 # ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025.
+# Moonshadow <starlight@users.noreply.translate.fedoraproject.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-02-03 10:58+0900\n"
-"PO-Revision-Date: 2025-05-25 19:52+0000\n"
-"Last-Translator: ButterflyOfFire "
-"<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
+"PO-Revision-Date: 2025-05-26 07:36+0000\n"
+"Last-Translator: Moonshadow "
+"<starlight@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/kab/>\n"
 "Language: kab\n"
@@ -503,7 +504,7 @@ msgstr ""
 #. apply button
 #: setup/keyboardshortcut.py:130
 msgid "_Apply"
-msgstr ""
+msgstr "Snes (_A)"
 
 #. delete button
 #: setup/keyboardshortcut.py:136
@@ -688,7 +689,7 @@ msgstr ""
 
 #: setup/setup.ui:712
 msgid "_Up"
-msgstr ""
+msgstr "_Usawen"
 
 #: setup/setup.ui:719
 msgid "Move up the selected input method in the enabled input methods list"
@@ -696,7 +697,7 @@ msgstr ""
 
 #: setup/setup.ui:730
 msgid "_Down"
-msgstr ""
+msgstr "Ukessar (_D)"
 
 #: setup/setup.ui:737
 msgid "Move down the selected input method in the enabled input methods"

@@ -5,6 +5,7 @@
 : ${srcdir:=.}
 : ${SAVE_DIST_FILES:=0}
 : ${MAKE:=make}
+: ${GTKDOCIZE:=gtkdocize}
 
 olddir=$(pwd)
 # shellcheck disable=SC2016
@@ -33,7 +34,12 @@ cd "$srcdir"
     exit 1
 }
 
-(test $(grep -q "^GTK_DOC_CHECK" configure.ac)) || {
+CONFIGFLAGS="$@"
+(test "x$NOCONFIGURE" = "x" ) &&
+$(grep -q "^GTK_DOC_CHECK" configure.ac) && {
+    # $WANT_GTK_DOC: If the source files require gtk-doc
+    # Specify "--disable-gtk-doc" option for autogen.sh if you wish to disable
+    # the gtk-doc builds.
     WANT_GTK_DOC=1
     FEDORA_PKG2="$FEDORA_PKG2 gtk-doc"
 }
@@ -54,16 +60,57 @@ cd "$srcdir"
     }
 }
 
-CONFIGFLAGS="$@"
 (test "$#" = 0 -a "x$NOCONFIGURE" = "x" ) && {
     echo "*** WARNING: I am going to run 'configure' with no arguments." >&2
     echo "*** If you wish to pass any to it, please specify them on the" >&2
     echo "*** '$0' command line." >&2
     echo "" >&2
-    (test $WANT_GTK_DOC -eq 1) && CONFIGFLAGS="--enable-gtk-doc $@"
 }
 
-(test $WANT_GTK_DOC -eq 1) && gtkdocize --copy
+(test "x$NOCONFIGURE" = "x" ) && {
+    $(echo "x$CONFIGFLAGS" | grep -q disable-gtk-doc) || {
+        (test $WANT_GTK_DOC -eq 1) && CONFIGFLAGS="--enable-gtk-doc $@"
+        (test -f ./m4/gtk-doc-dummy.m4) && $(rm ./m4/gtk-doc-dummy.m4)
+    }
+}
+
+# If $WANT_GTK_DOC is 1, gtkdocize should run basically. You could apply
+# GTKDOCIZE=echo for the workaround if you disable to run dtkdocize likes
+# autoreconf.
+(test $WANT_GTK_DOC -eq 1) && $GTKDOCIZE --copy
+
+(test "x$NOCONFIGURE" = "x" ) &&
+$(echo "x$CONFIGFLAGS" | grep -q disable-gtk-doc) &&
+(test ! -f ./m4/gtk-doc.m4 ) && {
+    # The license of gtk-doc.make and m4/gtk-doc.m4 is GPL but not LGPL
+    # and IBus does not save the static files.
+    cat > ./gtk-doc.make <<_EOF_MAKE
+    EXTRA_DIST=
+    CLEANFILES=
+_EOF_MAKE
+    cat > ./m4/gtk-doc-dummy.m4 <<_EOF_M4
+AC_DEFUN([GTK_DOC_CHECK],
+[
+    have_gtk_doc=no
+    AC_MSG_CHECKING([for gtk-doc])
+    AC_MSG_RESULT($have_gtk_doc)
+
+    dnl enable/disable documentation building
+    AC_ARG_ENABLE([gtk-doc],
+    AS_HELP_STRING([--enable-gtk-doc],
+                   [use gtk-doc to build documentation [[default=no]]]),,
+    [enable_gtk_doc=no])
+
+    AC_MSG_CHECKING([whether to build gtk-doc documentation])
+    AC_MSG_RESULT($enable_gtk_doc)
+    AM_CONDITIONAL([ENABLE_GTK_DOC], [test "x$enable_gtk_doc" = "xyes"])
+
+    if test "x$enable_gtk_doc" = "xyes" && test "$have_gtk_doc" = "no"; then
+        AC_MSG_ERROR([Something wrong in the build.])
+    fi
+])
+_EOF_M4
+}
 
 ACLOCAL_FLAGS="$ACLOCAL_FLAGS -I m4" REQUIRED_AUTOMAKE_VERSION=1.11 \
 autoreconf --verbose --force --install || exit 1

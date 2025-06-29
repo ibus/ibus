@@ -11,9 +11,9 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2025-06-13 16:37+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2025-06-13 16:43+0000\n"
+"Last-Translator: ButterflyOfFire "
+"<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/kab/>\n"
 "Language: kab\n"
@@ -457,12 +457,12 @@ msgstr "Tutlayt: %s\n"
 #: setup/engineabout.py:75
 #, python-format
 msgid "Keyboard layout: %s\n"
-msgstr ""
+msgstr "Tamudemt n unasiw: %s\n"
 
 #: setup/engineabout.py:78
 #, python-format
 msgid "Author: %s\n"
-msgstr ""
+msgstr "Ameskar: %s\n"
 
 #: setup/engineabout.py:81
 msgid "Description:\n"
@@ -3568,7 +3568,7 @@ msgstr ""
 
 #: ui/gtk3/emojierapp.vala:127
 msgid "FONT"
-msgstr ""
+msgstr "TASEFSIT"
 
 #. TRANSLATORS: "LANG" should be capital and translatable.
 #. * It's used for an argument command --lang=LANG

@@ -22,9 +22,8 @@ msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2025-06-29 11:04+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2025-06-29 21:05+0000\n"
+"Last-Translator: naly zzwd <xeanhort007@gmail.com>\n"
 "Language-Team: Catalan <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ca/>\n"
 "Language: ca\n"
@@ -992,8 +991,9 @@ msgid "Travel & Places"
 msgstr "Viatges i llocs"
 
 #: src/ibusenginesimple.c:263
+#, fuzzy
 msgid "Detect unregistered character in your compose sequence"
-msgstr ""
+msgstr "Detecta caràcters no registrats a la vostra seqüència de redacció"
 
 #: src/ibusenginesimple.c:264
 msgid ""
@@ -2300,7 +2300,7 @@ msgstr "Albanès caucasià"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:769
 msgid "Vithkuqi"
-msgstr ""
+msgstr "Vithkuqi"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2713,7 +2713,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1005
 msgid "Unified Canadian Aboriginal Syllabics Extended-A"
-msgstr "Sil·làbics d'aborígens canadencs unificat ampliat"
+msgstr "Sil·làbics d'aborígens canadencs unificat Ampliat-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2838,10 +2838,8 @@ msgstr "Controls de Format dels Jeroglífics Egipcis"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1077
-#, fuzzy
-#| msgid "Egyptian Hieroglyphs"
 msgid "Egyptian Hieroglyphs Extended-A"
-msgstr "Jeroglífics egipcis Ampliació-A"
+msgstr "Jeroglífics Egipcis Ampliació-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3379,6 +3377,8 @@ msgstr "Àrea B d'ús privat suplementari"
 msgid ""
 "Set im-module TYPE to \"gtk2\",  \"gtk3\" or \"gtk4\". Default is \"gtk3\"."
 msgstr ""
+"Estableix im-module TYPE a \"gtk2\", \"gtk3\" o \"gtk4\".  Per defecte és "
+"\"gtk3\"."
 
 #: tools/main.vala:271 tools/main.vala:462 tools/main.vala:778
 #: tools/main.vala:887
@@ -3387,7 +3387,7 @@ msgstr "No es pot connectar amb l'IBus.\n"
 
 #: tools/main.vala:282 tools/main.vala:787
 msgid "IBus is running."
-msgstr ""
+msgstr "IBus s'està executant."
 
 #: tools/main.vala:446
 msgid "List engine name only"
@@ -3415,14 +3415,16 @@ msgid ""
 "Start or restart daemon with \"direct\", \"systemd\", \"kde-wayland\" or "
 "\"wayland\" TYPE."
 msgstr ""
+"Inicia o reinicia el dimoni amb el TYPE \"direct\", \"systemd\", "
+"\"kde-wayland\" o \"wayland\"."
 
 #: tools/main.vala:713
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
-msgstr ""
+msgstr "Inicia o reinicia el dimoni amb el fitxer SYSTEMD_SERVICE."
 
 #: tools/main.vala:716 tools/main.vala:856
 msgid "Show debug messages."
-msgstr ""
+msgstr "Mostra missatges de depuració."
 
 #: tools/main.vala:852
 msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
@@ -3518,7 +3520,7 @@ msgstr "Desa l'emoji del diàleg al porta-retalls"
 
 #: tools/main.vala:1169
 msgid "Retrieve im-module value from GTK instance"
-msgstr ""
+msgstr "Recupera el valor de im-module de la instància GTK"
 
 #: tools/main.vala:1171
 msgid "Show this information"
@@ -3710,6 +3712,8 @@ msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
 msgstr ""
+"Podeu commutar entre el menú d'activació i el de context fent clic al botó "
+"central del ratolí a la icona del tauler."
 
 #: ui/gtk3/panel.vala:1008
 #, c-format
@@ -3731,6 +3735,9 @@ msgid ""
 "daemon --panel disable' should be executed as a child process of %s "
 "component."
 msgstr ""
+"Desactiveu les variables d'entorn QT_IM_MODULE i GTK_IM_MODULE, i 'ibus-"
+"daemon --panel disable' s'hauria d'executar com a un procés fill del "
+"component %s."
 
 #: ui/gtk3/panel.vala:1038
 #, c-format
@@ -3742,7 +3749,7 @@ msgstr ""
 
 #: ui/gtk3/panel.vala:1054
 msgid "IBus Notification"
-msgstr ""
+msgstr "Notificació IBus"
 
 #: ui/gtk3/panel.vala:1413
 #, c-format
@@ -3750,18 +3757,25 @@ msgid ""
 "Your configured input method %s does not exist in IBus input methods so "
 "\"US\" layout was configured instead of your input method."
 msgstr ""
+"El vostre mètode d'entrada configurat %s no existeix als mètodes d'entrada "
+"IBus, de manera que s'ha configurat el disseny \"US\" en comptes del vostre "
+"mètode d'entrada."
 
 #: ui/gtk3/panel.vala:1418
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
 msgstr ""
+"Almenys un dels vostres mètodes d'entrada configurats no existeix als "
+"mètodes d'entrada IBus."
 
 #: ui/gtk3/panel.vala:1421
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
 msgstr ""
+"Executeu la comanda `ibus-setup`, obriu la pestanya \"Mètode d'entrada\", i "
+"torneu a configurar els vostres mètodes d'entrada."
 
 #: ui/gtk3/panel.vala:1579
 msgid "IBus is an intelligent input bus for Linux/Unix."

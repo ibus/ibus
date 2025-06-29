@@ -25,13 +25,14 @@
 # Máximo Castañeda Riloba <mcrcctm@gmail.com>, 2019. #zanata
 # Emilio Herrera <ehespinosa57@gmail.com>, 2020, 2021, 2022.
 # Adolfo Jayme Barrientos <fitoschido@gmail.com>, 2020.
+# Javier Francisco <fserrador@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2020-09-03 21:21+0900\n"
-"PO-Revision-Date: 2022-09-09 16:19+0000\n"
-"Last-Translator: Emilio Herrera <ehespinosa57@gmail.com>\n"
+"PO-Revision-Date: 2025-04-06 20:16+0000\n"
+"Last-Translator: Javier Francisco <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/es/>\n"
 "Language: es\n"
@@ -39,7 +40,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -121,7 +122,7 @@ msgstr "Insertar texto preeditado"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:48
 msgid "Embed Preedit Text in Application Window"
-msgstr "Insertar texto previamente editado en la ventana de la aplicación"
+msgstr "Insertar texto pre-editado en la Ventana de Aplicación"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:52
 msgid "Use global input method"
@@ -160,7 +161,7 @@ msgstr "Atajo de teclado para encender o apagar el método de entrada"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:75
 msgid "Trigger shortcut keys for gtk_accelerator_parse"
-msgstr "Activador de llaves de atajos para leer gtk_accelerator "
+msgstr "Activador de llaves de atajos para leer gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:80
 msgid "Enable shortcut keys"
@@ -278,13 +279,13 @@ msgid ""
 "percentage values in the range 0% to 100%, and 'a' is a floating point value "
 "in the range 0 to 1 of the alpha."
 msgstr ""
-"El ícono XKB muestra la cadena de diseño que se renderiza con el valor RGBA. "
-"El valor RGBA puede ser 1. un color de X11, 2. un valor hexa en la forma "
-"'#rrggbb' donde 'r', 'g' y 'b' son dígitos hexa para el rojo, verde y azul, "
-"3. un color RGB en elformato 'rgb(r,g,b)' o 4. Un color RGBA en el formato "
+"El icono XKB muestra la cadena de diseño que se analiza con el valor RGBA. "
+"El valor RGBA puede ser 1. un color de X11, 2. un valor hexa en la forma '#"
+"rrggbb' donde 'r', 'g' y 'b' son dígitos hexa para el rojo, verde y azul, 3. "
+"un color RGB en el formato 'rgb(r,g,b)' o 4. Un color RGBA en el formato "
 "'rgba(r,g,b,a)' donde 'r', 'g', y 'b' son o bien enteros en el rango de 0 a "
-"255 o valores de porcentaje en el rango de 0% a 100%, y  'a' es un valor de "
-"punto flotante en el rango de 0 a 1 para el alfa."
+"255 o valores de porcentaje en el intervalo de 0% a 100%, y 'a' es un valor "
+"de punto flotante en el rango de 0 a 1 para el alfa."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:155
 msgid "The milliseconds to show the panel icon for a property"
@@ -351,7 +352,7 @@ msgstr "Atajos de teclado de emoji para gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:188
 msgid "The shortcut keys for turning emoji typing on or off"
-msgstr "Los atajos de teclado para activar y desactivar la escritura de emoji"
+msgstr "Los atajos de teclado para activar y desactivar la escritura de emoyi"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:193
 msgid "Custom font name for emoji characters on emoji dialog"
@@ -360,7 +361,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:197
 msgid "Default language for emoji dictionary"
-msgstr "Idioma predeterminado para el diccionario de emoji"
+msgstr "Idioma predeterminado para el diccionario de emoyi"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:198
 msgid ""
@@ -384,7 +385,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:207
 msgid "favorite emoji annotation list on emoji dialog"
-msgstr "lista de anotaciones de emoji favoritos en el diálogo de emoji"
+msgstr "lista de anotaciones de emoyi favoritos en el diálogo de emoyi"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:208
 msgid "You can assign an annotation for a favorite emoji in this list."
@@ -393,7 +394,7 @@ msgstr "Puede poner anotaciones a sus emoji favoritos en esta lista."
 #: data/dconf/org.freedesktop.ibus.gschema.xml:212
 msgid "Whether emoji annotations can be match partially or not"
 msgstr ""
-"Si se permiten o no las coincidencias parciales en las anotaciones de emoji"
+"Si se permiten o no las coincidencias parciales en las anotaciones de emoyi"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:213
 msgid ""
@@ -401,12 +402,12 @@ msgid ""
 "the exact match or not."
 msgstr ""
 "Si se puede obtener una coincidencia parcial en la búsqueda de anotaciones "
-"de emoji en lugar de una exacta."
+"de emoyi en lugar de una exacta."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:217
 msgid "Match emoji annotations with the specified length"
 msgstr ""
-"Realizar búsquedas en las anotaciones de emoji con la longitud de texto "
+"Realizar búsquedas en las anotaciones de emoyi con la longitud de texto "
 "indicada"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
@@ -415,12 +416,12 @@ msgid ""
 "characters instead of the exact match."
 msgstr ""
 "Obtener coincidencias parciales en lugar de exactas en las anotaciones de "
-"emoji que tengan más que el número de caracteres indicado "
+"emoyi que tengan más que el número de caracteres indicado."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:222
 msgid "Choose a condition to match emoji annotations partially"
 msgstr ""
-"Elija una condición para las coincidencias parciales de anotaciones de emoji"
+"Elija una condición para las coincidencias parciales de anotaciones de emoyi"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
 msgid ""
@@ -428,12 +429,12 @@ msgid ""
 "0 == Prefix match, 1 == Suffix match, 2 == Containing match"
 msgstr ""
 "Elija una de estas condiciones para las coincidencias parciales de "
-"anotaciones de emoji: 0 == inicio del texto, 1 == final del texto, 2 == "
-"contiene el texto."
+"anotaciones de emoyi: 0 == inicio del texto, 1 == final del texto, 2 == "
+"contiene coincidencia"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:227
 msgid "Load the emoji data at the time of startup"
-msgstr "Cargar los datos de emoji al inicio"
+msgstr "Cargar los datos de emoyi al inicio"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:228
 msgid ""
@@ -441,8 +442,8 @@ msgid ""
 "needed to load the data. Load the emoji data when open the emoji dialog at "
 "the beginning if false."
 msgstr ""
-"Cargar los datos de emoji al inicio. Se necesitan alrededor de 10MB. Si está "
-"desactivado, se cargarán al abrir el cuadro de selección de emoji."
+"Cargar los datos de emoyi al inicio. Se necesitan alrededor de 10MB. Si está "
+"desactivado, se cargarán al abrir el cuadro de selección de emoyi."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:232
 msgid "Load the Unicode data at the time of startup"
@@ -465,8 +466,8 @@ msgid ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
 msgstr ""
-"Copyright (c) 2007–2010 Peng Huang\n"
-"Copyright (c) 2007–2010 Red Hat, Inc."
+"© 2007–2010 Peng Huang\n"
+"© 2007–2010 Red Hat, Inc."
 
 #: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
@@ -487,7 +488,7 @@ msgstr "_Aceptar"
 
 #: setup/emojilang.py:235 setup/enginedialog.py:205
 msgid "More…"
-msgstr "Más..."
+msgstr "Más…"
 
 #: setup/engineabout.py:37 setup/setup.ui:1368 ui/gtk3/panel.vala:1162
 msgid "About"
@@ -574,7 +575,7 @@ msgstr "Por favor, presione una tecla (o una combinación de teclas)"
 
 #: setup/main.py:121 setup/main.py:588
 msgid "Use shortcut with shift to switch to the previous input method"
-msgstr "Usar atajos con  shift para cambiar al método anterior de entrada"
+msgstr "Usar atajos con Mayús. para cambiar al método de entrada anterior"
 
 #: setup/main.py:515
 msgid "The IBus daemon is not running. Do you wish to start it?"
@@ -852,7 +853,7 @@ msgid ""
 "exact match"
 msgstr ""
 "Si se puede obtener una coincidencia parcial en lugar de exacta en la "
-"búsqueda de anotaciones de emoji."
+"búsqueda de anotaciones de emoji"
 
 #: setup/setup.ui:1101
 msgid "Prefix match"
@@ -2689,7 +2690,7 @@ msgstr "Mro"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1033
 msgid "Bassa Vah"
-msgstr "Vah"
+msgstr "Bassa Vah"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2738,16 +2739,14 @@ msgstr "Tangut, componentes"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1061
 msgid "Khitan Small Script"
-msgstr ""
+msgstr "Khitan Small Script"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1065
-#, fuzzy
-#| msgid "Kana Supplement"
 msgid "Tangut Supplement"
-msgstr "Kana (suplemento)"
+msgstr "Tangut (suplemento)"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2768,7 +2767,7 @@ msgstr "Kana extendido-A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1077
 msgid "Small Kana Extension"
-msgstr ""
+msgstr "Extensión pequeña de Kana"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2859,14 +2858,14 @@ msgstr "Glagolítico (suplemento)"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1129
 msgid "Nyiakeng Puachue Hmong"
-msgstr ""
+msgstr "Nyiakeng Puachue Hmong"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1133
 msgid "Wancho"
-msgstr ""
+msgstr "Wancho"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2894,7 +2893,7 @@ msgstr "Números índicos siyah"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1149
 msgid "Ottoman Siyaq Numbers"
-msgstr ""
+msgstr "Números Siyaq otomanos"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3006,14 +3005,14 @@ msgstr "Símbolos de ajedrez"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1213
 msgid "Symbols and Pictographs Extended-A"
-msgstr ""
+msgstr "Símbolos y Pictogramas Extendidos-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1217
 msgid "Symbols for Legacy Computing"
-msgstr ""
+msgstr "Símbolos y Herencias de Computación"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3061,10 +3060,8 @@ msgstr "CJK, ideogramas de compatibilidad (suplemento)"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1245
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension G"
-msgstr "CJK, ideogramas unificados extensión A"
+msgstr "CJK, ideogramas unificados extensión G"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3147,7 +3144,7 @@ msgstr "Usar rutas de esquema del motor en lugar del núcleo ibus."
 
 #: tools/main.vala:381
 msgid "Resetting…"
-msgstr "Restableciendo..."
+msgstr "Restableciendo…"
 
 #: tools/main.vala:399
 msgid "Done"
@@ -3211,17 +3208,17 @@ msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
 "\n"
 msgstr ""
-"Uso: %s COMANDO [OPCIÓN...]\n"
+"Modo de empleo: %s INSTRUCCIÓN [OPCIÓN...]\n"
 "\n"
 
 #: tools/main.vala:465
 msgid "Commands:\n"
-msgstr "Comandos:\n"
+msgstr "Instrucciones:\n"
 
 #: tools/main.vala:494
 #, c-format
 msgid "%s is unknown command!\n"
-msgstr "¡%s es un comando desconocido!\n"
+msgstr "¡%s es una instrucción desconocida!\n"
 
 #: ui/gtk3/emojier.vala:233
 msgid "Favorites"
@@ -3336,7 +3333,7 @@ msgstr "«TIPODELETRA» para los emoyis en el diálogo de emoyis"
 
 #: ui/gtk3/emojierapp.vala:127
 msgid "FONT"
-msgstr "TIPODELETRA"
+msgstr "TIPOGRAFÍA"
 
 #. TRANSLATORS: "LANG" should be capital and translatable.
 #. * It's used for an argument command --lang=LANG
@@ -3344,7 +3341,7 @@ msgstr "TIPODELETRA"
 #: ui/gtk3/emojierapp.vala:132
 msgid "\"LANG\" for annotations on emoji dialog. E.g. \"en\""
 msgstr ""
-"IDIOMA para las anotaciones en el cuadro de diálogo de emoji (p.ej.: \"es\")."
+"\"LANG\" para las anotaciones en el cuadro de diálogo de emoji p.ej.: \"es\""
 
 #: ui/gtk3/emojierapp.vala:133
 msgid "LANG"

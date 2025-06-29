@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2025-04-23 18:14+0000\n"
+"PO-Revision-Date: 2025-06-16 14:06+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/fr/>\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.11\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -957,6 +957,15 @@ msgid ""
 "has been added to the Compose file:\n"
 "%s.\n"
 msgstr ""
+"À partir de IBus 1.5.33, les fichiers Compose\n"
+"remplacent les séquences de composition. Pour les\n"
+"conserver et ajouter vos propres séquences, la\n"
+"ligne :\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"a été ajoutée au fichier Compose :\n"
+"%s.\n"
 
 #: src/ibuscomposetable.c:1801
 #, c-format
@@ -970,6 +979,15 @@ msgid ""
 "to the Compose file:\n"
 "%s."
 msgstr ""
+"À partir de IBus 1.5.33, les fichiers Compose\n"
+"remplacent les séquences de composition. Pour les\n"
+"conserver et ajouter vos propres séquences, vous\n"
+"devez ajouter la ligne\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"au fichier Compose :\n"
+"%s."
 
 #: src/ibusemojigen.h:30
 msgid "Activities"
@@ -1013,7 +1031,7 @@ msgstr "Voyages & lieux"
 
 #: src/ibusenginesimple.c:263
 msgid "Detect unregistered character in your compose sequence"
-msgstr ""
+msgstr "Détecter un caractère non enregistré dans votre séquence de composition"
 
 #: src/ibusenginesimple.c:264
 msgid ""
@@ -1022,10 +1040,15 @@ msgid ""
 "inputting the correct character to the compose sequence again, or press "
 "Escape key to terminate whole the compose sequence."
 msgstr ""
+"Le caractère que vous venez de saisir n'est pas reconnu comme étant valide "
+"dans le contexte de la séquence de composition actuelle, et vient d'être "
+"annulé. Essayez de saisir un caractère correct pour cette séquence de "
+"composition, ou appuyez sur Échap pour mettre fin à la séquence de "
+"composition toute entière."
 
 #: src/ibusenginesimple.c:276
 msgid "Compose file update"
-msgstr ""
+msgstr "Mise à jour d'un fichier Compose"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1998,7 +2021,7 @@ msgstr "Javanais"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:585
 msgid "Myanmar Extended-B"
-msgstr "Myanmar étendu-B"
+msgstr "Myanmar étendu B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2012,7 +2035,7 @@ msgstr "Cham"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:593
 msgid "Myanmar Extended-A"
-msgstr "Myanmar étendu-A"
+msgstr "Myanmar étendu A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2327,7 +2350,7 @@ msgstr "Vithkuqi"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:773
 msgid "Todhri"
-msgstr ""
+msgstr "Todhri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2488,7 +2511,7 @@ msgstr "Hanifi Rohingya"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:865
 msgid "Garay"
-msgstr ""
+msgstr "Garay"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2628,7 +2651,7 @@ msgstr "Grantha"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:945
 msgid "Tulu-Tigalari"
-msgstr ""
+msgstr "Tulu-Tigalari"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2676,10 +2699,8 @@ msgstr "Takrî"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:973
-#, fuzzy
-#| msgid "Myanmar Extended-B"
 msgid "Myanmar Extended-C"
-msgstr "Myanmar étendu-B"
+msgstr "Myanmar étendu C"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2756,7 +2777,7 @@ msgstr "Devanagari étendu-A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1017
 msgid "Sunuwar"
-msgstr ""
+msgstr "Sunuwar"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2860,10 +2881,8 @@ msgstr "Réglages du format hiéroglyphes égyptiens"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1077
-#, fuzzy
-#| msgid "Egyptian Hieroglyphs"
 msgid "Egyptian Hieroglyphs Extended-A"
-msgstr "Hiéroglyphes égyptiens"
+msgstr "Hiéroglyphes égyptiens étendus A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2877,7 +2896,7 @@ msgstr "Hiéroglyphes hittites"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1085
 msgid "Gurung Khema"
-msgstr ""
+msgstr "Gurung Khema"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2919,7 +2938,7 @@ msgstr "Pahawh Hmong"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1109
 msgid "Kirat Rai"
-msgstr ""
+msgstr "Kirat Rai"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3023,10 +3042,8 @@ msgstr "Réglages du format abrégé"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1169
-#, fuzzy
-#| msgid "Symbols for Legacy Computing"
 msgid "Symbols for Legacy Computing Supplement"
-msgstr "Symboles pour informatique ancienne"
+msgstr "Supplément de symboles pour l'informatique ancienne"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3152,7 +3169,7 @@ msgstr "Nag mundari"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1241
 msgid "Ol Onal"
-msgstr ""
+msgstr "Ol Onal"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3413,7 +3430,7 @@ msgstr "Connexion à IBus impossible.\n"
 
 #: tools/main.vala:282 tools/main.vala:787
 msgid "IBus is running."
-msgstr ""
+msgstr "IBus est en cours d'exécution."
 
 #: tools/main.vala:446
 msgid "List engine name only"
@@ -3437,16 +3454,12 @@ msgid "Get global engine failed.\n"
 msgstr "Échec de la récupération du moteur global.\n"
 
 #: tools/main.vala:709
-#, fuzzy
-#| msgid ""
-#| "Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" "
-#| "TYPE."
 msgid ""
 "Start or restart daemon with \"direct\", \"systemd\", \"kde-wayland\" or "
 "\"wayland\" TYPE."
 msgstr ""
 "Démarrer ou redémarrer le démon avec le TYPE \"direct\", \"systemd\" ou "
-"\"kde-wayland\"."
+"\"kde-wayland\", ou \"wayland\"."
 
 #: tools/main.vala:713
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
@@ -3636,10 +3649,8 @@ msgid "Loading a Unicode dictionary:"
 msgstr "Chargement d’un dictionnaire Unicode :"
 
 #: ui/gtk3/emojier.vala:1276
-#, fuzzy
-#| msgid "IBus Notification"
 msgid "IBus Emoji initialization"
-msgstr "Notification IBus"
+msgstr "Initialisation d'IBus Emoji en cours"
 
 #: ui/gtk3/emojier.vala:1538
 #, c-format
@@ -3751,17 +3762,7 @@ msgstr ""
 "effectuant un clic milieu sur l'icône du panneau."
 
 #: ui/gtk3/panel.vala:1008
-#, fuzzy, c-format
-#| msgid ""
-#| "IBus should be called from the desktop session in %s. For KDE, you can "
-#| "launch '%s' utility and go to \"Input Devices\" -> \"Virtual Keyboard\" "
-#| "section and select \"%s\" icon and click \"Apply\" button to configure "
-#| "IBus in %s. For other desktop sessions, you can copy the 'Exec=' line in "
-#| "%s file to a configuration file of the session. Please refer each "
-#| "document about the \"Wayland input method\" configuration. Before you "
-#| "configure the \"Wayland input method\", you should make sure that "
-#| "QT_IM_MODULE and GTK_IM_MODULE environment variables are unset in the "
-#| "desktop session."
+#, c-format
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
 "launch '%s' utility and go to \"Input & Output\" -> \"Keyboard\" -> "
@@ -3773,14 +3774,14 @@ msgid ""
 "variables are unset in the desktop session."
 msgstr ""
 "IBus devrait être appelé par la session de bureau dans %s. Pour KDE, vous "
-"pouvez lancer l'utilitaire \"%s\", accéder à la section \"Périphériques de "
-"saisie\" > \"Clavier virtuel\", sélectionner l'icône \"%s\" et cliquer sur "
-"le bouton Appliquer pour configurer IBus dans %s. Pour les autres sessions "
-"de bureau, vous pouvez copier la ligne \"Exec=\" du fichier %s dans un "
-"fichier de configuration de la session. Référez-vous au document concernant "
-"la configuration d'une méthode de saisie dans Wayland. Avant de configurer "
-"la méthode de saisie Wayland, assurez-vous que les variables d'environnement "
-"QT_IM_MODULE et GTK_IM_MODULE ne sont pas définies dans la session de bureau."
+"pouvez lancer l'utilitaire \"%s\", accéder à la section \"Entrée et sortie\" "
+"> \"Clavier\" > \"Clavier virtuel\", sélectionner l'icône \"%s\" et cliquer "
+"sur le bouton \"Appliquer\" pour configurer IBus dans %s. Pour les autres "
+"sessions de bureau, vous pouvez exécuter la commande \"%s\". Référez-vous au "
+"document concernant la configuration d'une méthode de saisie dans Wayland. "
+"Avant de configurer la méthode de saisie Wayland, assurez-vous que les "
+"variables d'environnement QT_IM_MODULE et GTK_IM_MODULE ne sont pas définies "
+"dans la session de bureau."
 
 #: ui/gtk3/panel.vala:1029
 #, c-format
@@ -3841,7 +3842,7 @@ msgstr "IBus est un IME intelligent pour Linux/Unix."
 
 #: ui/gtk3/panel.vala:1584
 msgid "Maintainers"
-msgstr ""
+msgstr "Mainteneur·ses"
 
 #: ui/gtk3/panel.vala:1588
 msgid "translator-credits"

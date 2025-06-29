@@ -5,14 +5,15 @@
 #
 # ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025.
 # Moonshadow <starlight@users.noreply.translate.fedoraproject.org>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-02-03 10:58+0900\n"
 "PO-Revision-Date: 2025-06-13 16:37+0000\n"
-"Last-Translator: ButterflyOfFire "
-"<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/kab/>\n"
 "Language: kab\n"
@@ -479,7 +480,7 @@ msgstr "Rnu (_A)"
 #. create im name & icon column
 #: setup/enginetreeview.py:69 setup/setup.ui:850
 msgid "Input Method"
-msgstr ""
+msgstr "Tarrayt n usekcem"
 
 #: setup/ibus-setup.desktop:3 setup/setup.ui:81
 msgid "IBus Preferences"
@@ -3208,7 +3209,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1369
 msgid "Tags"
-msgstr ""
+msgstr "Tibzimin"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3621,7 +3622,7 @@ msgstr "Athmane MOKRAOUI <butterflyoffire@protonmail.com>"
 
 #: ui/gtk3/panel.vala:1543
 msgid "Preferences"
-msgstr ""
+msgstr "Imenyafen"
 
 #: ui/gtk3/panel.vala:1596
 msgid "Restart"

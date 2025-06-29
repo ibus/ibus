@@ -17,9 +17,8 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2025-02-06 11:26+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2025-06-18 10:53+0000\n"
+"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/sv/>\n"
 "Language: sv\n"
@@ -27,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.12.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -912,6 +911,14 @@ msgid ""
 "has been added to the Compose file:\n"
 "%s.\n"
 msgstr ""
+"Sedan IBus 1.5.33 ersätter Compose-filer dom inbyggda\n"
+"compose sekvenserna. För att behålla dem och lägga till dina egna\n"
+"sekvenser överst, på raden:\n"
+"\n"
+"--include \"%%L\"\n"
+"\n"
+"har lagts till i Compose-filen:\n"
+"%s\n"
 
 #: src/ibuscomposetable.c:1801
 #, c-format
@@ -925,6 +932,14 @@ msgid ""
 "to the Compose file:\n"
 "%s."
 msgstr ""
+"Sedan IBus 1.5.33 ersätter Compose-filer dom inbyggda\n"
+"compose sekvenserna. För att behålla dem och lägga till dina egna\n"
+"sekvenser överst måste du lägga till raden:\n"
+"\n"
+"--include \"%%L\"\n"
+"\n"
+"till i Compose-filen:\n"
+"%s."
 
 #: src/ibusemojigen.h:30
 msgid "Activities"
@@ -968,7 +983,7 @@ msgstr "Resor & platser"
 
 #: src/ibusenginesimple.c:263
 msgid "Detect unregistered character in your compose sequence"
-msgstr ""
+msgstr "Identifiera oregistrerade tecken i din skrivsekvens"
 
 #: src/ibusenginesimple.c:264
 msgid ""
@@ -977,10 +992,14 @@ msgid ""
 "inputting the correct character to the compose sequence again, or press "
 "Escape key to terminate whole the compose sequence."
 msgstr ""
+"Tecknet du just matade in känns inte igen som en giltig del av den aktiva "
+"skrivsekvensen och tecknet avbröts. Försök att mata in rätt tecken i "
+"skrivsekvensen igen, eller tryck på Escape-tangenten för att avsluta hela "
+"skrivsekvensen."
 
 #: src/ibusenginesimple.c:276
 msgid "Compose file update"
-msgstr ""
+msgstr "Compose fil uppdatering"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3581,10 +3600,8 @@ msgid "Loading a Unicode dictionary:"
 msgstr "Laddar en Unicode-ordbok:"
 
 #: ui/gtk3/emojier.vala:1276
-#, fuzzy
-#| msgid "IBus Notification"
 msgid "IBus Emoji initialization"
-msgstr "IBus avisering"
+msgstr "IBus Emoji-initialisering"
 
 #: ui/gtk3/emojier.vala:1538
 #, c-format
@@ -3693,17 +3710,7 @@ msgstr ""
 "musens mittknapp på panelikonen."
 
 #: ui/gtk3/panel.vala:1008
-#, fuzzy, c-format
-#| msgid ""
-#| "IBus should be called from the desktop session in %s. For KDE, you can "
-#| "launch '%s' utility and go to \"Input Devices\" -> \"Virtual Keyboard\" "
-#| "section and select \"%s\" icon and click \"Apply\" button to configure "
-#| "IBus in %s. For other desktop sessions, you can copy the 'Exec=' line in "
-#| "%s file to a configuration file of the session. Please refer each "
-#| "document about the \"Wayland input method\" configuration. Before you "
-#| "configure the \"Wayland input method\", you should make sure that "
-#| "QT_IM_MODULE and GTK_IM_MODULE environment variables are unset in the "
-#| "desktop session."
+#, c-format
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
 "launch '%s' utility and go to \"Input & Output\" -> \"Keyboard\" -> "
@@ -3715,11 +3722,10 @@ msgid ""
 "variables are unset in the desktop session."
 msgstr ""
 "IBus bör anropas från skrivbordssessionen i %s. För KDE kan du starta "
-"verktyget '%s' och gå till avsnittet \"Indataenheter\" -> \"Virtuella "
-"tangentbord\" och välj ikonen \"%s\" och klicka på knappen \"Använd\" för "
-"att konfigurera IBus i %s. För andra skrivbordssessioner kan du kopiera "
-"raden 'Exec=' i %s-filen till en konfigurationsfil för sessionen. Se varje "
-"dokument om konfigurationen \"Wayland inmatningsmetoder\". Innan du "
+"verktyget '%s' och gå till avsnittet \"Indata & Utdata\" -> \"Tangentbord\" "
+"och välj ikonen \"%s\" och klicka på knappen \"Använd\" för att konfigurera "
+"IBus i %s. För andra skrivbordssessioner kan du köra kommandot \"%s\". Se "
+"varje dokument om konfigurationen \"Wayland inmatningsmetoder\". Innan du "
 "konfigurerar \"Wayland-inmatningsmetoden\" bör du se till att "
 "miljövariablerna QT_IM_MODULE och GTK_IM_MODULE är inställda i "
 "skrivbordssessionen."

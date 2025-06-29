@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2025-03-01 15:41+0000\n"
+"PO-Revision-Date: 2025-06-26 02:25+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/pt_BR/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -943,6 +943,14 @@ msgid ""
 "has been added to the Compose file:\n"
 "%s.\n"
 msgstr ""
+"Desde o IBus 1.5.33, os arquivos Compose substituem as sequências\n"
+"de composição embutidos. Para mantê-las e adicionar suas próprias\n"
+"sequências por cima, a linha:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"foi adicionada ao arquivo Compose:\n"
+"%s.\n"
 
 #: src/ibuscomposetable.c:1801
 #, c-format
@@ -956,6 +964,14 @@ msgid ""
 "to the Compose file:\n"
 "%s."
 msgstr ""
+"Desde o IBus 1.5.33, os arquivos Compose substituem as sequências\n"
+"composições embutidas. Para mantê-las e adicionar suas próprias\n"
+"sequências, você precisa adicionar a linha:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"ao arquivo Compose:\n"
+"%s."
 
 #: src/ibusemojigen.h:30
 msgid "Activities"
@@ -999,7 +1015,7 @@ msgstr "Viagem & lugares"
 
 #: src/ibusenginesimple.c:263
 msgid "Detect unregistered character in your compose sequence"
-msgstr ""
+msgstr "Detecta caracteres não registrados em sua sequência de composição"
 
 #: src/ibusenginesimple.c:264
 msgid ""
@@ -1008,10 +1024,14 @@ msgid ""
 "inputting the correct character to the compose sequence again, or press "
 "Escape key to terminate whole the compose sequence."
 msgstr ""
+"O caractere que você acabou de inserir não é reconhecido como uma parte "
+"válida da sequência de composição ativa e foi cancelado. Tente inserir o "
+"caractere correto na sequência de composição novamente ou pressione a tecla "
+"Escape para encerrar toda a sequência de composição."
 
 #: src/ibusenginesimple.c:276
 msgid "Compose file update"
-msgstr ""
+msgstr "Atualização do arquivo Compose"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2313,7 +2333,7 @@ msgstr "Vithkuqi"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:773
 msgid "Todhri"
-msgstr ""
+msgstr "Todhri"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2474,7 +2494,7 @@ msgstr "Hanifi de Rohingya"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:865
 msgid "Garay"
-msgstr ""
+msgstr "Garay"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2515,17 +2535,15 @@ msgstr "Sogdiano"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:889
-#, fuzzy
-#| msgid "Old Turkic"
 msgid "Old Uyghur"
-msgstr "Turco antigo"
+msgstr "Uigur antigo"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:893
 msgid "Chorasmian"
-msgstr ""
+msgstr "Corásmio"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2616,7 +2634,7 @@ msgstr "Grantha"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:945
 msgid "Tulu-Tigalari"
-msgstr ""
+msgstr "Tulu-Tigalari"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2664,10 +2682,8 @@ msgstr "Takri"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:973
-#, fuzzy
-#| msgid "Myanmar Extended-B"
 msgid "Myanmar Extended-C"
-msgstr "Birmanês estendido-B"
+msgstr "Birmanês estendido-C"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2722,10 +2738,8 @@ msgstr "Soyombo"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1005
-#, fuzzy
-#| msgid "Unified Canadian Aboriginal Syllabics Extended"
 msgid "Unified Canadian Aboriginal Syllabics Extended-A"
-msgstr "Sílabas estendidas unificadas dos aborígenes canadenses"
+msgstr "Sílabas estendidas-A unificadas dos aborígenes canadenses"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2738,17 +2752,15 @@ msgstr "Pau Cin Hau"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1013
-#, fuzzy
-#| msgid "Devanagari Extended"
 msgid "Devanagari Extended-A"
-msgstr "Devanágari estendido"
+msgstr "Devanágari estendido-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1017
 msgid "Sunuwar"
-msgstr ""
+msgstr "Sunuwar"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2790,16 +2802,14 @@ msgstr "Makassar"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1041
 msgid "Kawi"
-msgstr ""
+msgstr "Kawi"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1045
-#, fuzzy
-#| msgid "Latin-1 Supplement"
 msgid "Lisu Supplement"
-msgstr "Latim-1 suplemento"
+msgstr "Lisu suplemento"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2834,7 +2844,7 @@ msgstr "Cuneiforme pré-dinástico"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1065
 msgid "Cypro-Minoan"
-msgstr ""
+msgstr "Cipro-minoico"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2854,10 +2864,8 @@ msgstr "Controles de formato de hieróglifos egípcios"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1077
-#, fuzzy
-#| msgid "Egyptian Hieroglyphs"
 msgid "Egyptian Hieroglyphs Extended-A"
-msgstr "Hieróglifos egípcios"
+msgstr "Hieróglifos egípcios estendido-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2871,7 +2879,7 @@ msgstr "Hieróglifos da anatólia"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1085
 msgid "Gurung Khema"
-msgstr ""
+msgstr "Gurung Khema"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2891,10 +2899,8 @@ msgstr "Mro"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1097
-#, fuzzy
-#| msgid "Tangut"
 msgid "Tangsa"
-msgstr "Tangut"
+msgstr "Tangsa"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2915,7 +2921,7 @@ msgstr "Pahawh Hmong"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1109
 msgid "Kirat Rai"
-msgstr ""
+msgstr "Kirat Rai"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2957,25 +2963,21 @@ msgstr "Componentes tangut"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1133
 msgid "Khitan Small Script"
-msgstr ""
+msgstr "Sistema de escrita Kitan"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1137
-#, fuzzy
-#| msgid "Kana Supplement"
 msgid "Tangut Supplement"
-msgstr "Suplemento kana"
+msgstr "Suplemento tangut"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1141
-#, fuzzy
-#| msgid "Kana Extended-A"
 msgid "Kana Extended-B"
-msgstr "Kana estendido-A"
+msgstr "Kana estendido-B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
-"POT-Creation-Date: 2025-02-03 10:58+0900\n"
+"POT-Creation-Date: 2025-06-01 21:56+0900\n"
 "PO-Revision-Date: 2025-02-08 13:09+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/ibus/"
@@ -498,7 +498,7 @@ msgstr "_OK"
 msgid "More…"
 msgstr "Więcej…"
 
-#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1590
+#: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1674
 msgid "About"
 msgstr "O programie"
 
@@ -539,11 +539,11 @@ msgstr "_Dodaj"
 msgid "Input Method"
 msgstr "Metoda wprowadzania"
 
-#: setup/ibus-setup.desktop:3 setup/setup.ui:81
+#: setup/ibus-setup.desktop:2 setup/setup.ui:81
 msgid "IBus Preferences"
 msgstr "Preferencje usługi IBus"
 
-#: setup/ibus-setup.desktop:4
+#: setup/ibus-setup.desktop:3
 msgid "Set IBus Preferences"
 msgstr "Ustawianie preferencji usługi IBus"
 
@@ -909,6 +909,32 @@ msgstr "<b>Czcionka i motyw</b>"
 msgid "Advanced"
 msgstr "Zaawansowane"
 
+#: src/ibuscomposetable.c:1780
+#, c-format
+msgid ""
+"Since IBus 1.5.33, Compose files replace the builtin\n"
+"compose sequences. To keep them and add your own\n"
+"sequences on top, the line:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"has been added to the Compose file:\n"
+"%s.\n"
+msgstr ""
+
+#: src/ibuscomposetable.c:1801
+#, c-format
+msgid ""
+"Since IBus 1.5.33, Compose files replace the builtin\n"
+"compose sequences. To keep them and add your own\n"
+"sequences on top, you need to add the line:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"to the Compose file:\n"
+"%s."
+msgstr ""
+
 #: src/ibusemojigen.h:30
 msgid "Activities"
 msgstr "Sport"
@@ -948,6 +974,22 @@ msgstr "Symbole"
 #: src/ibusemojigen.h:39
 msgid "Travel & Places"
 msgstr "Podróże i miejsca"
+
+#: src/ibusenginesimple.c:263
+msgid "Detect unregistered character in your compose sequence"
+msgstr ""
+
+#: src/ibusenginesimple.c:264
+msgid ""
+"The character you just input is not recognized as a valid part of the "
+"currently active compose sequence and the character was cancelled. Try "
+"inputting the correct character to the compose sequence again, or press "
+"Escape key to terminate whole the compose sequence."
+msgstr ""
+
+#: src/ibusenginesimple.c:276
+msgid "Compose file update"
+msgstr ""
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3322,37 +3364,37 @@ msgstr ""
 "Ustawia TYP modułu metody wprowadzania na „gtk2”, „gtk3” lub „gtk4”. "
 "Domyślnie to „gtk3”."
 
-#: tools/main.vala:270 tools/main.vala:437 tools/main.vala:753
-#: tools/main.vala:833
+#: tools/main.vala:271 tools/main.vala:462 tools/main.vala:778
+#: tools/main.vala:887
 msgid "Can't connect to IBus.\n"
 msgstr "Nie można połączyć z usługą IBus.\n"
 
-#: tools/main.vala:280 tools/main.vala:762
+#: tools/main.vala:282 tools/main.vala:787
 msgid "IBus is running."
 msgstr "Usługa IBus jest uruchomiona."
 
-#: tools/main.vala:421
+#: tools/main.vala:446
 msgid "List engine name only"
 msgstr "Wyświetla tylko nazwę mechanizmu"
 
-#: tools/main.vala:463
+#: tools/main.vala:488
 #, c-format
 msgid "language: %s\n"
 msgstr "język: %s\n"
 
-#: tools/main.vala:533
+#: tools/main.vala:558
 msgid "No engine is set.\n"
 msgstr "Nie ustawiono żadnego mechanizmu.\n"
 
-#: tools/main.vala:541
+#: tools/main.vala:566
 msgid "Set global engine failed.\n"
 msgstr "Ustawienie globalnego mechanizmu się nie powiodło.\n"
 
-#: tools/main.vala:546
+#: tools/main.vala:571
 msgid "Get global engine failed.\n"
 msgstr "Uzyskanie globalnego mechanizmu się nie powiodło.\n"
 
-#: tools/main.vala:684
+#: tools/main.vala:709
 msgid ""
 "Start or restart daemon with \"direct\", \"systemd\", \"kde-wayland\" or "
 "\"wayland\" TYPE."
@@ -3360,39 +3402,39 @@ msgstr ""
 "Uruchamia lub ponownie uruchamia usługę z TYPEM „direct”, „systemd”, „kde-"
 "wayland” lub „wayland”."
 
-#: tools/main.vala:688
+#: tools/main.vala:713
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
 msgstr "Uruchamia lub ponownie uruchamia usługę z plikiem USŁUGA_SYSTEMD."
 
-#: tools/main.vala:691 tools/main.vala:802
+#: tools/main.vala:716 tools/main.vala:856
 msgid "Show debug messages."
 msgstr "Wyświetla komunikaty debugowania."
 
-#: tools/main.vala:798
+#: tools/main.vala:852
 msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
 msgstr "Kończy działanie usługi z TYPEM „direct” lub „kde-wayland”."
 
-#: tools/main.vala:850
+#: tools/main.vala:908
 msgid "Read the system registry cache."
 msgstr "Odczytuje pamięć podręczną rejestru systemu."
 
-#: tools/main.vala:852
+#: tools/main.vala:910
 msgid "Read the registry cache FILE."
 msgstr "Odczytuje PLIK pamięci podręcznej rejestru."
 
-#: tools/main.vala:870 tools/main.vala:875
+#: tools/main.vala:928 tools/main.vala:933
 msgid "The registry cache is invalid.\n"
 msgstr "Pamięć podręczna rejestru jest nieprawidłowa.\n"
 
-#: tools/main.vala:891
+#: tools/main.vala:949
 msgid "Write the system registry cache."
 msgstr "Zapisuje pamięć podręczną rejestru systemu."
 
-#: tools/main.vala:893
+#: tools/main.vala:951
 msgid "Write the registry cache FILE."
 msgstr "Zapisuje PLIK pamięci podręcznej systemu."
 
-#: tools/main.vala:931
+#: tools/main.vala:989
 msgid ""
 "Use engine schema paths instead of ibus core, which can be comma-separated "
 "values."
@@ -3400,75 +3442,75 @@ msgstr ""
 "Używa ścieżek schematu mechanizmu zamiast rdzenia IBus, które mogą być "
 "wartościami oddzielonymi przecinkami."
 
-#: tools/main.vala:1020
+#: tools/main.vala:1078
 msgid "Resetting…"
 msgstr "Przywracanie…"
 
-#: tools/main.vala:1038
+#: tools/main.vala:1096
 msgid "Done"
 msgstr "Gotowe"
 
-#: tools/main.vala:1096
+#: tools/main.vala:1154
 msgid "Set or get engine"
 msgstr "Ustawia lub uzyskuje mechanizm"
 
-#: tools/main.vala:1097
+#: tools/main.vala:1155
 msgid "Exit ibus-daemon"
 msgstr "Kończy działanie usługi ibus-daemon"
 
-#: tools/main.vala:1098
+#: tools/main.vala:1156
 msgid "Show available engines"
 msgstr "Wyświetla dostępne mechanizmy"
 
-#: tools/main.vala:1099
+#: tools/main.vala:1157
 msgid "(Not implemented)"
 msgstr "(Niezaimplementowane)"
 
-#: tools/main.vala:1100
+#: tools/main.vala:1158
 msgid "Restart ibus-daemon"
 msgstr "Ponownie uruchamia usługę ibus-daemon"
 
-#: tools/main.vala:1101
+#: tools/main.vala:1159
 msgid "Start ibus-daemon"
 msgstr "Uruchamia usługę ibus-daemon"
 
-#: tools/main.vala:1102 ui/gtk3/application.vala:334
+#: tools/main.vala:1160 ui/gtk3/application.vala:336
 msgid "Show version"
 msgstr "Wyświetla wersję"
 
-#: tools/main.vala:1103
+#: tools/main.vala:1161
 msgid "Show the content of registry cache"
 msgstr "Wyświetla zawartość pamięci podręcznej rejestru"
 
-#: tools/main.vala:1104
+#: tools/main.vala:1162
 msgid "Create registry cache"
 msgstr "Tworzy pamięć podręczną rejestru"
 
-#: tools/main.vala:1105
+#: tools/main.vala:1163
 msgid "Print the D-Bus address of ibus-daemon"
 msgstr "Wyświetla adres D-Bus usługi ibus-daemon"
 
-#: tools/main.vala:1106
+#: tools/main.vala:1164
 msgid "Show the configuration values"
 msgstr "Wyświetla wartości konfiguracji"
 
-#: tools/main.vala:1107
+#: tools/main.vala:1165
 msgid "Reset the configuration values"
 msgstr "Przywraca wartości konfiguracji"
 
-#: tools/main.vala:1109
+#: tools/main.vala:1167
 msgid "Save emoji on dialog to clipboard"
 msgstr "Zapisuje emoji w oknie do schowka"
 
-#: tools/main.vala:1111
+#: tools/main.vala:1169
 msgid "Retrieve im-module value from GTK instance"
 msgstr "Odbiera wartość modułu metody wprowadzania z wystąpienia GTK"
 
-#: tools/main.vala:1113
+#: tools/main.vala:1171
 msgid "Show this information"
 msgstr "Wyświetla tę informację"
 
-#: tools/main.vala:1120
+#: tools/main.vala:1178
 #, c-format
 msgid ""
 "Usage: %s COMMAND [OPTION...]\n"
@@ -3477,118 +3519,125 @@ msgstr ""
 "Użycie: %s POLECENIE [OPCJA…]\n"
 "\n"
 
-#: tools/main.vala:1121
+#: tools/main.vala:1179
 msgid "Commands:\n"
 msgstr "Polecenia:\n"
 
-#: tools/main.vala:1151
+#: tools/main.vala:1209
 #, c-format
 msgid "%s is unknown command!\n"
 msgstr "%s jest nieznanym poleceniem.\n"
 
-#: ui/gtk3/application.vala:339
+#: ui/gtk3/application.vala:341
 msgid "Connect Wayland input method protocol"
 msgstr "Łączy protokół metody wprowadzania Wayland"
 
-#: ui/gtk3/application.vala:343
+#: ui/gtk3/application.vala:345
 msgid "Execute ibus-daemon if it's not running"
 msgstr "Wykonuje usługę ibus-daemon, jeśli nie jest uruchomiona"
 
-#: ui/gtk3/application.vala:347
+#: ui/gtk3/application.vala:349
 msgid "ibus-daemon's arguments"
 msgstr "Parametry usługi ibus-daemon"
 
-#: ui/gtk3/application.vala:351
+#: ui/gtk3/application.vala:353
 msgid "Verbose logging"
 msgstr "Więcej komunikatów dziennika"
 
-#: ui/gtk3/emojier.vala:235
+#: ui/gtk3/emojier.vala:276
 msgid "Favorites"
 msgstr "Ulubione"
 
-#: ui/gtk3/emojier.vala:236
+#: ui/gtk3/emojier.vala:277
 msgid "Others"
 msgstr "Inne"
 
-#: ui/gtk3/emojier.vala:237
+#: ui/gtk3/emojier.vala:278
 msgid "Open Unicode choice"
 msgstr "Otwórz wybór unikodu"
 
-#: ui/gtk3/emojier.vala:1000
+#: ui/gtk3/emojier.vala:1063
 msgid "Bring back emoji choice"
 msgstr "Wróć do wyboru emoji"
 
-#: ui/gtk3/emojier.vala:1103
+#: ui/gtk3/emojier.vala:1166
 msgid "Page Down"
 msgstr "Strona w dół"
 
-#: ui/gtk3/emojier.vala:1114
+#: ui/gtk3/emojier.vala:1177
 msgid "Page Up"
 msgstr "Strona w górę"
 
-#: ui/gtk3/emojier.vala:1117
+#: ui/gtk3/emojier.vala:1180
 msgid "Show emoji variants"
 msgstr "Wyświetlanie wariantów emoji"
 
-#: ui/gtk3/emojier.vala:1118
+#: ui/gtk3/emojier.vala:1181
 msgid "Close"
 msgstr "Zamknij"
 
-#: ui/gtk3/emojier.vala:1124
+#: ui/gtk3/emojier.vala:1187
 msgid "Menu"
 msgstr "Menu"
 
-#: ui/gtk3/emojier.vala:1135
+#: ui/gtk3/emojier.vala:1198
 msgid "Click to view a warning message"
 msgstr "Kliknięcie wyświetli komunikat ostrzeżenia"
 
-#: ui/gtk3/emojier.vala:1179
+#: ui/gtk3/emojier.vala:1242 ui/gtk3/emojier.vala:1277
+#: ui/gtk3/emojier.vala:2284
 msgid "Loading a Unicode dictionary:"
 msgstr "Wczytywanie słownika unikodu:"
 
-#: ui/gtk3/emojier.vala:1425
+#: ui/gtk3/emojier.vala:1276
+#, fuzzy
+#| msgid "IBus Notification"
+msgid "IBus Emoji initialization"
+msgstr "Powiadomienie IBus"
+
+#: ui/gtk3/emojier.vala:1538
 #, c-format
 msgid "Code point: %s"
 msgstr "Kod znaku: %s"
 
-#: ui/gtk3/emojier.vala:1431
+#: ui/gtk3/emojier.vala:1544
 msgid "Has emoji variants"
 msgstr "Ma warianty emoji"
 
-#: ui/gtk3/emojier.vala:1599 ui/gtk3/emojier.vala:1612
+#: ui/gtk3/emojier.vala:1708 ui/gtk3/emojier.vala:1721
 #, c-format
 msgid "Description: %s"
 msgstr "Opis: %s"
 
-#: ui/gtk3/emojier.vala:1599
+#: ui/gtk3/emojier.vala:1708
 msgid "None"
 msgstr "Brak"
 
-#: ui/gtk3/emojier.vala:1623
+#: ui/gtk3/emojier.vala:1732
 #, c-format
 msgid "Annotations: %s"
 msgstr "Uwagi: %s"
 
-#: ui/gtk3/emojier.vala:1649
+#: ui/gtk3/emojier.vala:1758
 #, c-format
 msgid "Name: %s"
 msgstr "Nazwa: %s"
 
-#: ui/gtk3/emojier.vala:1657
+#: ui/gtk3/emojier.vala:1766
 #, c-format
 msgid "Alias: %s"
 msgstr "Alias: %s"
 
-#: ui/gtk3/emojier.vala:2180 ui/gtk3/ibus-extension-gtk3.desktop.in:3
-#: ui/gtk3/ibus-ui-emojier.desktop.in:3 ui/gtk3/panel.vala:1551
+#: ui/gtk3/emojier.vala:2289 ui/gtk3/ibus-extension-gtk3.desktop.in:2
+#: ui/gtk3/ibus-ui-emojier.desktop.in:2 ui/gtk3/panel.vala:1633
 msgid "Emoji Choice"
 msgstr "Wybór emoji"
 
-#: ui/gtk3/emojier.vala:2182
+#: ui/gtk3/emojier.vala:2291
 msgid "Unicode Choice"
 msgstr "Wybór unikodu"
 
-#: ui/gtk3/emojier.vala:2484
+#: ui/gtk3/emojier.vala:2580
 msgid ""
 "Failed to get the current text application. Please re-focus your "
 "application. E.g. Press Esc key several times to release the emoji typing "
@@ -3640,11 +3689,11 @@ msgstr "Dopasowywanie o podanej długości jako liczba całkowita"
 msgid "Match with the condition of the specified integer"
 msgstr "Dopasowywanie o podanym warunku jako liczba całkowita"
 
-#: ui/gtk3/panel.vala:420 ui/gtk3/panel.vala:443
+#: ui/gtk3/panel.vala:441 ui/gtk3/panel.vala:464
 msgid "IBus Panel"
 msgstr "Panel IBus"
 
-#: ui/gtk3/panel.vala:421
+#: ui/gtk3/panel.vala:442
 msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
@@ -3652,17 +3701,27 @@ msgstr ""
 "Można przełączać menu aktywacji i kontekstowe klikając ikonę na panelu "
 "środkowym przyciskiem myszy."
 
-#: ui/gtk3/panel.vala:921
-#, c-format
+#: ui/gtk3/panel.vala:1008
+#, fuzzy, c-format
+#| msgid ""
+#| "IBus should be called from the desktop session in %s. For KDE, you can "
+#| "launch '%s' utility and go to \"Input Devices\" -> \"Virtual Keyboard\" "
+#| "section and select \"%s\" icon and click \"Apply\" button to configure "
+#| "IBus in %s. For other desktop sessions, you can copy the 'Exec=' line in "
+#| "%s file to a configuration file of the session. Please refer each "
+#| "document about the \"Wayland input method\" configuration. Before you "
+#| "configure the \"Wayland input method\", you should make sure that "
+#| "QT_IM_MODULE and GTK_IM_MODULE environment variables are unset in the "
+#| "desktop session."
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
-"launch '%s' utility and go to \"Input Devices\" -> \"Virtual Keyboard\" "
-"section and select \"%s\" icon and click \"Apply\" button to configure IBus "
-"in %s. For other desktop sessions, you can copy the 'Exec=' line in %s file "
-"to a configuration file of the session. Please refer each document about the "
-"\"Wayland input method\" configuration. Before you configure the \"Wayland "
-"input method\", you should make sure that QT_IM_MODULE and GTK_IM_MODULE "
-"environment variables are unset in the desktop session."
+"launch '%s' utility and go to \"Input & Output\" -> \"Keyboard\" -> "
+"\"Virtual Keyboard\" section and select \"%s\" icon and click \"Apply\" "
+"button to configure IBus in %s. For other desktop sessions, you can run "
+"\"%s\" command. Please refer each document about the \"Wayland input "
+"method\" configuration. Before you configure the \"Wayland input method\", "
+"you should make sure that QT_IM_MODULE and GTK_IM_MODULE environment "
+"variables are unset in the desktop session."
 msgstr ""
 "Usługa IBus w systemie %s powinna być wywoływana z sesji środowiska. W KDE "
 "można uruchomić narzędzie „%s”, przejść do sekcji „Urządzenia wejściowe” → "
@@ -3674,7 +3733,7 @@ msgstr ""
 "zmienna środowiskowa QT_IM_MODULE lub GTK_IM_MODULE nie jest ustawiona "
 "w sesji środowiska."
 
-#: ui/gtk3/panel.vala:943
+#: ui/gtk3/panel.vala:1029
 #, c-format
 msgid ""
 "Please unset QT_IM_MODULE and GTK_IM_MODULE environment variables and 'ibus-"
@@ -3684,7 +3743,7 @@ msgstr ""
 "Proszę usunąć zmienne środowiskowe QT_IM_MODULE i GTK_IM_MODULE oraz "
 "wykonywać „ibus-daemon --panel disable” jako proces potomny składnika %s."
 
-#: ui/gtk3/panel.vala:952
+#: ui/gtk3/panel.vala:1038
 #, c-format
 msgid ""
 "Seems you run %s with '--enable-wayland-im' option but your display server "
@@ -3695,11 +3754,11 @@ msgstr ""
 "wyświetlania to Xorg, więc funkcja Wayland jest wyłączona. Lepiej jest "
 "zamiast tego uruchamiać usługę ibus-daemon bezpośrednio lub %s bez tej opcji."
 
-#: ui/gtk3/panel.vala:968
+#: ui/gtk3/panel.vala:1054
 msgid "IBus Notification"
 msgstr "Powiadomienie IBus"
 
-#: ui/gtk3/panel.vala:1327
+#: ui/gtk3/panel.vala:1413
 #, c-format
 msgid ""
 "Your configured input method %s does not exist in IBus input methods so "
@@ -3708,7 +3767,7 @@ msgstr ""
 "Skonfigurowana metoda wprowadzania %s nie istnieje w metodach wprowadzania "
 "usługi IBus, więc zamiast niej skonfigurowano układ „US”."
 
-#: ui/gtk3/panel.vala:1332
+#: ui/gtk3/panel.vala:1418
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
@@ -3716,7 +3775,7 @@ msgstr ""
 "Co najmniej jedna ze skonfigurowanych metod wprowadzania nie istnieje "
 "w metodach wprowadzania usługi IBus."
 
-#: ui/gtk3/panel.vala:1335
+#: ui/gtk3/panel.vala:1421
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
@@ -3724,33 +3783,33 @@ msgstr ""
 "Proszę wykonać polecenie „ibus-setup”, otworzyć kartę „Metoda wprowadzania” "
 "i ponownie skonfigurować metody wprowadzania."
 
-#: ui/gtk3/panel.vala:1493
+#: ui/gtk3/panel.vala:1579
 msgid "IBus is an intelligent input bus for Linux/Unix."
 msgstr "IBus jest inteligentną magistralą wprowadzania dla systemu Linux/UNIX."
 
-#: ui/gtk3/panel.vala:1498
+#: ui/gtk3/panel.vala:1584
 msgid "Maintainers"
 msgstr "Opiekunowie"
 
-#: ui/gtk3/panel.vala:1502
+#: ui/gtk3/panel.vala:1588
 msgid "translator-credits"
 msgstr "Piotr Drąg <piotrdrag@gmail.com>, 2009-2024"
 
-#: ui/gtk3/panel.vala:1543
+#: ui/gtk3/panel.vala:1625
 msgid "Preferences"
 msgstr "Preferencje"
 
-#: ui/gtk3/panel.vala:1596
+#: ui/gtk3/panel.vala:1680
 msgid "Restart"
 msgstr "Uruchom ponownie"
 
-#: ui/gtk3/panel.vala:1605
+#: ui/gtk3/panel.vala:1689
 msgid "Quit"
 msgstr "Zakończ"
 
 #. Translators: If your locale is RTL, the msgstr is "default:RTL".
 #. * Otherwise the msgstr is "default:LTR".
-#: ui/gtk3/propertypanel.vala:367 ui/gtk3/propertypanel.vala:375
+#: ui/gtk3/propertypanel.vala:372 ui/gtk3/propertypanel.vala:380
 msgid "default:LTR"
 msgstr "default:LTR"
 

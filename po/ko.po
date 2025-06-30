@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2025-02-23 00:21+0000\n"
+"PO-Revision-Date: 2025-06-14 03:51+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ko/>\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -917,6 +917,15 @@ msgid ""
 "has been added to the Compose file:\n"
 "%s.\n"
 msgstr ""
+"IBus 1.5.33 이후에, Compose 파일은 내장된\n"
+"compose sequences로 대체합니다. 이를 유지하고\n"
+"다음 행의 맨 위에 자신의 sequences를 추가하세요:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"다음과 같이 Compose 파일에 추가되었습니다:\n"
+"\n"
+"%s.\n"
 
 #: src/ibuscomposetable.c:1801
 #, c-format
@@ -930,6 +939,14 @@ msgid ""
 "to the Compose file:\n"
 "%s."
 msgstr ""
+"IBus 1.5.33 이후에, Compose 파일은 내장된\n"
+"compose sequences로 대체합니다. 이를 유지하고\n"
+"맨 위에 자신의 sequences를 추가하려면, 다음과 같이 행을 추가해야 합니다:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"다음과 같은 Compose 파일로:\n"
+"%s."
 
 #: src/ibusemojigen.h:30
 msgid "Activities"
@@ -973,7 +990,7 @@ msgstr "여행 및 장소"
 
 #: src/ibusenginesimple.c:263
 msgid "Detect unregistered character in your compose sequence"
-msgstr ""
+msgstr "자신의 compse sequence에서 미등록 문자를 탐지합니다"
 
 #: src/ibusenginesimple.c:264
 msgid ""
@@ -982,10 +999,13 @@ msgid ""
 "inputting the correct character to the compose sequence again, or press "
 "Escape key to terminate whole the compose sequence."
 msgstr ""
+"당신이 방금 입력한 문자는 현재 활성화된 compose sequence의 유효한 일부로 "
+"인식되지 않았고 문자는 취소되었습니다. 정확한 문자를 다시 compose sequence로 "
+"입력을 시도하거나, Escape 키를 눌러 모든 compose sequence를 종료하세요."
 
 #: src/ibusenginesimple.c:276
 msgid "Compose file update"
-msgstr ""
+msgstr "Compose 파일 최신화"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3631,10 +3651,8 @@ msgid "Loading a Unicode dictionary:"
 msgstr "유니코드 사전 읽어들이는 중:"
 
 #: ui/gtk3/emojier.vala:1276
-#, fuzzy
-#| msgid "IBus Notification"
 msgid "IBus Emoji initialization"
-msgstr "IBus 알림"
+msgstr "IBus 이모지 초기화"
 
 #: ui/gtk3/emojier.vala:1538
 #, c-format
@@ -3743,17 +3761,7 @@ msgstr ""
 "를 전환 할 수 있습니다."
 
 #: ui/gtk3/panel.vala:1008
-#, fuzzy, c-format
-#| msgid ""
-#| "IBus should be called from the desktop session in %s. For KDE, you can "
-#| "launch '%s' utility and go to \"Input Devices\" -> \"Virtual Keyboard\" "
-#| "section and select \"%s\" icon and click \"Apply\" button to configure "
-#| "IBus in %s. For other desktop sessions, you can copy the 'Exec=' line in "
-#| "%s file to a configuration file of the session. Please refer each "
-#| "document about the \"Wayland input method\" configuration. Before you "
-#| "configure the \"Wayland input method\", you should make sure that "
-#| "QT_IM_MODULE and GTK_IM_MODULE environment variables are unset in the "
-#| "desktop session."
+#, c-format
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
 "launch '%s' utility and go to \"Input & Output\" -> \"Keyboard\" -> "
@@ -3765,12 +3773,12 @@ msgid ""
 "variables are unset in the desktop session."
 msgstr ""
 "IBus는 %s의 데스크탑 세션에서 호출되어야 합니다. KDE에서는, '%s' 유틸리티를 "
-"실행 할 수 있고 \"입력 장치\" -> \"가상 키보드\" 부분으로 이동하며 \"%s\" 아"
-"이콘을 선택하여 \"적용\" 누름단추를 눌러서 %s에서 IBus를 구성합니다. 다른 데"
-"스크탑 세션에서는, %s 파일의 'Exec=' 행에서 세션의 구성 파일로 복사 할 수 있"
-"습니다. \"웨이랜드 입력 방식\" 구성에 대해서 개별 문서를 참조하세요. 당신이 "
-"\"웨이랜드 입력 방식\"을 구성하기 전에, QT_IM_MODULE 및 GTK_IM_MODULE 환경 변"
-"수가 데스크탑 세션에서 설정이 해제되었는지 확인해야 합니다."
+"실행 할 수 있고 \"입력&출력\" -> \"가상 키보드\" 부분으로 이동하며 \"%s\" "
+"아이콘을 선택하여 \"적용\" 누름단추를 눌러 %s의 IBus를 구성합니다. 다른 "
+"데스크탑 세션을 위해, 당신은 \"%s\" 명령을 실행 할 수 있습니다. "
+"\"웨이랜드 입력 방식\" 구성에 대해서 개별 문서를 참조하세요. 당신이 "
+"\"웨이랜드 입력 방식\"을 구성하기 전에, QT_IM_MODULE 및 GTK_IM_MODULE 환경 "
+"변수가 데스크탑 세션에서 설정이 해제되었는지 확인해야 합니다."
 
 #: ui/gtk3/panel.vala:1029
 #, c-format

@@ -4,13 +4,14 @@
 # This file is distributed under the same license as the ibus package.
 #
 # Giannis Antypas <gianni.antypas@gmail.com>, 2024.
+# Jim Spentzos <jimspentzos2000@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2024-09-07 16:38+0000\n"
-"Last-Translator: Giannis Antypas <gianni.antypas@gmail.com>\n"
+"PO-Revision-Date: 2025-06-30 11:03+0000\n"
+"Last-Translator: Jim Spentzos <jimspentzos2000@gmail.com>\n"
 "Language-Team: Greek <https://translate.fedoraproject.org/projects/ibus/ibus/"
 "el/>\n"
 "Language: el\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -1696,14 +1697,14 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:465
 msgid "Hiragana"
-msgstr ""
+msgstr "Χιραγκάνα"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:469
 msgid "Katakana"
-msgstr ""
+msgstr "Κατακάνα"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3526,10 +3527,8 @@ msgid "Loading a Unicode dictionary:"
 msgstr "Φόρτωση ενός λεξικού Unicode:"
 
 #: ui/gtk3/emojier.vala:1276
-#, fuzzy
-#| msgid "IBus Notification"
 msgid "IBus Emoji initialization"
-msgstr "Ειδοποίηση IBus"
+msgstr "Αρχικοποίηση emoji IBus"
 
 #: ui/gtk3/emojier.vala:1538
 #, c-format

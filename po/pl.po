@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2025-02-08 13:09+0000\n"
+"PO-Revision-Date: 2025-06-15 16:12+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/pl/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -921,6 +921,14 @@ msgid ""
 "has been added to the Compose file:\n"
 "%s.\n"
 msgstr ""
+"Od wersji IBus 1.5.33, pliki Compose zastępują wbudowane\n"
+"sekwencje składania. Aby je zachować i dodać własne\n"
+"sekwencje na ich podstawie, wiersz:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"został dodany do pliku Compose:\n"
+"%s.\n"
 
 #: src/ibuscomposetable.c:1801
 #, c-format
@@ -934,6 +942,14 @@ msgid ""
 "to the Compose file:\n"
 "%s."
 msgstr ""
+"Od wersji IBus 1.5.33, pliki Compose zastępują wbudowane\n"
+"sekwencje składania. Aby je zachować i dodać własne\n"
+"sekwencje na ich podstawie, należy dodać wiersz:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"do pliku Compose:\n"
+"%s."
 
 #: src/ibusemojigen.h:30
 msgid "Activities"
@@ -977,7 +993,7 @@ msgstr "Podróże i miejsca"
 
 #: src/ibusenginesimple.c:263
 msgid "Detect unregistered character in your compose sequence"
-msgstr ""
+msgstr "Wykryto niezarejestrowany znak w sekwencji składania"
 
 #: src/ibusenginesimple.c:264
 msgid ""
@@ -986,10 +1002,14 @@ msgid ""
 "inputting the correct character to the compose sequence again, or press "
 "Escape key to terminate whole the compose sequence."
 msgstr ""
+"Wprowadzony znak nie został rozpoznany jako prawidłowa część obecnie "
+"aktywnej sekwencji składania i został anulowany. Proszę spróbować ponownie "
+"wprowadzić poprawny znak do sekwencji składania lub nacisnąć klawisz Esc, "
+"aby zakończyć całą sekwencję."
 
 #: src/ibusenginesimple.c:276
 msgid "Compose file update"
-msgstr ""
+msgstr "Aktualizacja pliku Compose"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3590,10 +3610,8 @@ msgid "Loading a Unicode dictionary:"
 msgstr "Wczytywanie słownika unikodu:"
 
 #: ui/gtk3/emojier.vala:1276
-#, fuzzy
-#| msgid "IBus Notification"
 msgid "IBus Emoji initialization"
-msgstr "Powiadomienie IBus"
+msgstr "Inicjacja emoji usługi IBus"
 
 #: ui/gtk3/emojier.vala:1538
 #, c-format
@@ -3702,17 +3720,7 @@ msgstr ""
 "środkowym przyciskiem myszy."
 
 #: ui/gtk3/panel.vala:1008
-#, fuzzy, c-format
-#| msgid ""
-#| "IBus should be called from the desktop session in %s. For KDE, you can "
-#| "launch '%s' utility and go to \"Input Devices\" -> \"Virtual Keyboard\" "
-#| "section and select \"%s\" icon and click \"Apply\" button to configure "
-#| "IBus in %s. For other desktop sessions, you can copy the 'Exec=' line in "
-#| "%s file to a configuration file of the session. Please refer each "
-#| "document about the \"Wayland input method\" configuration. Before you "
-#| "configure the \"Wayland input method\", you should make sure that "
-#| "QT_IM_MODULE and GTK_IM_MODULE environment variables are unset in the "
-#| "desktop session."
+#, c-format
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
 "launch '%s' utility and go to \"Input & Output\" -> \"Keyboard\" -> "
@@ -3724,14 +3732,13 @@ msgid ""
 "variables are unset in the desktop session."
 msgstr ""
 "Usługa IBus w systemie %s powinna być wywoływana z sesji środowiska. W KDE "
-"można uruchomić narzędzie „%s”, przejść do sekcji „Urządzenia wejściowe” → "
-"„Klawiatura wirtualna”, kliknąć ikonę „%s” i przycisk „Zastosuj”, aby "
-"skonfigurować usługę IBus w systemie %s. W innych sesjach środowiska można "
-"skopiować wiersz „Exec=” z pliku %s do pliku konfiguracji danej sesji. "
-"Więcej informacji o konfiguracji metody wprowadzania Wayland można znaleźć "
-"w dokumentacji środowiska. Przed jej skonfigurowaniem należy się upewnić, że "
-"zmienna środowiskowa QT_IM_MODULE lub GTK_IM_MODULE nie jest ustawiona "
-"w sesji środowiska."
+"można uruchomić narzędzie „%s”, przejść do sekcji „Wejście i wyjście” → "
+"„Klawiatura” → „Klawiatura wirtualna”, kliknąć ikonę „%s” i przycisk "
+"„Zastosuj”, aby skonfigurować usługę IBus w systemie %s. W innych sesjach "
+"środowiska można wykonać polecenie „%s”. Więcej informacji o konfiguracji "
+"metody wprowadzania Wayland można znaleźć w dokumentacji środowiska. Przed "
+"jej skonfigurowaniem należy się upewnić, że zmienna środowiskowa "
+"QT_IM_MODULE lub GTK_IM_MODULE nie jest ustawiona w sesji środowiska."
 
 #: ui/gtk3/panel.vala:1029
 #, c-format
@@ -3793,7 +3800,7 @@ msgstr "Opiekunowie"
 
 #: ui/gtk3/panel.vala:1588
 msgid "translator-credits"
-msgstr "Piotr Drąg <piotrdrag@gmail.com>, 2009-2024"
+msgstr "Piotr Drąg <piotrdrag@gmail.com>, 2009-2025"
 
 #: ui/gtk3/panel.vala:1625
 msgid "Preferences"

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2025-02-20 06:38+0000\n"
+"PO-Revision-Date: 2025-06-14 08:59+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/uk/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -928,6 +928,14 @@ msgid ""
 "has been added to the Compose file:\n"
 "%s.\n"
 msgstr ""
+"Починаючи з IBus 1.5.33, файли композицій замінили вбудовані\n"
+"послідовності композицій. Щоб зберегти вбудовані послідовності і\n"
+"додати до них власні послідовності, було додано такий рядок:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"до файла композицій:\n"
+"%s.\n"
 
 #: src/ibuscomposetable.c:1801
 #, c-format
@@ -941,6 +949,14 @@ msgid ""
 "to the Compose file:\n"
 "%s."
 msgstr ""
+"Починаючи з IBus 1.5.33, файли композицій замінили вбудовані\n"
+"послідовності композицій. Щоб зберегти послідовності і додати до\n"
+"них власні послідовності, вам слід додати рядок:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"до файла композицій:\n"
+"%s."
 
 #: src/ibusemojigen.h:30
 msgid "Activities"
@@ -984,7 +1000,7 @@ msgstr "Подорожі і місця"
 
 #: src/ibusenginesimple.c:263
 msgid "Detect unregistered character in your compose sequence"
-msgstr ""
+msgstr "Виявляти незареєстрований символ у вашій послідовності композиції"
 
 #: src/ibusenginesimple.c:264
 msgid ""
@@ -993,10 +1009,14 @@ msgid ""
 "inputting the correct character to the compose sequence again, or press "
 "Escape key to terminate whole the compose sequence."
 msgstr ""
+"Символ, який ви щойно ввели, не розпізнано як коректну частину поточної "
+"активної послідовності композиції, і його було скасовано. Спробуйте ще раз "
+"ввести правильний символ у послідовність композиції або натисніть клавішу "
+"Escape, щоб завершити всю послідовність композиції."
 
 #: src/ibusenginesimple.c:276
 msgid "Compose file update"
-msgstr ""
+msgstr "Оновлення файла композиції"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3597,10 +3617,8 @@ msgid "Loading a Unicode dictionary:"
 msgstr "Завантаження словника Unicode:"
 
 #: ui/gtk3/emojier.vala:1276
-#, fuzzy
-#| msgid "IBus Notification"
 msgid "IBus Emoji initialization"
-msgstr "Сповіщення IBus"
+msgstr "Ініціалізація емодзі IBus"
 
 #: ui/gtk3/emojier.vala:1538
 #, c-format
@@ -3710,17 +3728,7 @@ msgstr ""
 "кнопкою миші на піктограмі панелі."
 
 #: ui/gtk3/panel.vala:1008
-#, fuzzy, c-format
-#| msgid ""
-#| "IBus should be called from the desktop session in %s. For KDE, you can "
-#| "launch '%s' utility and go to \"Input Devices\" -> \"Virtual Keyboard\" "
-#| "section and select \"%s\" icon and click \"Apply\" button to configure "
-#| "IBus in %s. For other desktop sessions, you can copy the 'Exec=' line in "
-#| "%s file to a configuration file of the session. Please refer each "
-#| "document about the \"Wayland input method\" configuration. Before you "
-#| "configure the \"Wayland input method\", you should make sure that "
-#| "QT_IM_MODULE and GTK_IM_MODULE environment variables are unset in the "
-#| "desktop session."
+#, c-format
 msgid ""
 "IBus should be called from the desktop session in %s. For KDE, you can "
 "launch '%s' utility and go to \"Input & Output\" -> \"Keyboard\" -> "
@@ -3732,14 +3740,14 @@ msgid ""
 "variables are unset in the desktop session."
 msgstr ""
 "IBus має бути викликано зі стільничного сеансу у %s. У KDE ви можете "
-"запустити допоміжну програму «%s» і перейти до розділу «Пристрої введення» -"
-"> «Віртуальна клавіатура», вибрати піктограму «%s» і натиснуто кнопку "
-"«Застосувати» для налаштовування IBus у %s. В інших стільничних сеансах ви "
-"можете скопіювати рядок «Exec=» з файла %s до файла налаштувань сеансу. Будь "
-"ласка, зверніться до документації щодо налаштовування «Способу введення "
-"Wayland». До налаштовування «Способу введення Wayland» вам слід "
-"переконатися, що у стільничному середовищі скасовано встановлення змінних "
-"QT_IM_MODULE і GTK_IM_MODULE."
+"запустити допоміжну програму «%s» і перейти до розділу «Введення і виведення»"
+" -> «Клавіатура» -> «Віртуальна клавіатура», вибрати піктограму «%s» і "
+"натиснуто кнопку «Застосувати» для налаштовування IBus у %s. В інших "
+"стільничних сеансах ви можете віддати команду «%s». Будь ласка, зверніться "
+"до документації щодо налаштовування «Способу введення Wayland». До "
+"налаштовування «Способу введення Wayland» вам слід переконатися, що у "
+"стільничному середовищі скасовано встановлення змінних QT_IM_MODULE і "
+"GTK_IM_MODULE."
 
 #: ui/gtk3/panel.vala:1029
 #, c-format

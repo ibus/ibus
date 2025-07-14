@@ -428,6 +428,59 @@ ibus_engine_simple_commit_str (IBusEngineSimple *simple,
     g_free (backup_str);
 }
 
+static gboolean
+check_compose_sequence (guint   *keys,
+                        int      n_keys,
+                        GString *output)
+{
+    gboolean compose_finish = FALSE;
+    gboolean compose_match = FALSE;
+    GSList *tmp_list = global_tables;
+    gboolean is_32bit = FALSE;
+    gboolean can_load_en_us = FALSE;
+
+    while (tmp_list) {
+        IBusComposeTableEx *compose_table = tmp_list->data;
+        if (compose_table->can_load_en_us)
+            can_load_en_us = TRUE;
+        /* If global_tables includes en_compose_table only, i.e. no user
+         * or locale compose tables, en_compose_table is used.
+         * If not, en_compose_table is used in case one of the other compose
+         * tables has can_load_en_us = %TRUE, i.e. the table file has
+         * the line of 'include "%L"'.
+         * en_compose_table is always appended to the last of global_tables.
+         */
+        if ((compose_table == en_compose_table) && global_tables->next != NULL
+            && !can_load_en_us) {
+            tmp_list = tmp_list->next;
+            continue;
+        }
+        is_32bit = FALSE;
+        if (ibus_compose_table_check (compose_table,
+                                      keys,
+                                      n_keys,
+                                      &compose_finish,
+                                      &compose_match,
+                                      output,
+                                      is_32bit)) {
+            if (compose_finish && compose_match)
+                return TRUE;
+        }
+        is_32bit = TRUE;
+        if (ibus_compose_table_check (compose_table,
+                                      keys,
+                                      n_keys,
+                                      &compose_finish,
+                                      &compose_match,
+                                      output,
+                                      is_32bit)) {
+            if (compose_finish && compose_match)
+                return TRUE;
+        }
+        tmp_list = tmp_list->next;
+    }
+    return FALSE;
+}
 
 static void
 ibus_engine_simple_update_preedit_text (IBusEngineSimple *simple)
@@ -465,13 +518,29 @@ ibus_engine_simple_update_preedit_text (IBusEngineSimple *simple)
         if (priv->tentative_match->len > 0 && priv->compose_buffer[0] != 0) {
             g_string_append (s, priv->tentative_match->str);
         } else {
+            GString *compose_output;
+            compose_output = g_string_new("");
             for (i = 0; priv->compose_buffer[i]; ++i) {
                 guint keysym = priv->compose_buffer[i];
                 gboolean show_keysym = TRUE;
                 gboolean need_space = FALSE;
                 gunichar ch;
-
-                if (keysym == IBUS_KEY_Multi_key) {
+                guint test_sequences[][3] = {
+                    {keysym, 0x010025cc, 0}, // ◌ U+25CC DOTTED CIRCLE
+                    {keysym, IBUS_KEY_space, 0}
+                };
+                gboolean success = FALSE;
+                g_string_truncate (compose_output, 0);
+                for (int seq = 0; seq < G_N_ELEMENTS(test_sequences); seq++) {
+                    if (check_compose_sequence(test_sequences[seq], 2, compose_output)) {
+                        success = TRUE;
+                        break;
+                    }
+                }
+                if (success) {
+                    g_string_append (s, compose_output->str);
+                }
+                else if (keysym == IBUS_KEY_Multi_key) {
                     /* We only show the Compose key visibly when it is the
                      * only glyph in the preedit, or when it occurs in the
                      * middle of the sequence. Sadly, the official character,
@@ -551,12 +620,13 @@ ibus_engine_simple_update_preedit_text (IBusEngineSimple *simple)
                             g_string_append_unichar(s, 0x00b7); /* · */
                     }
                 }
-                if (!ch) {
+                if (!success && !ch) {
                     g_warning (
                         "Not found alternative character of compose key 0x%X",
                         priv->compose_buffer[i]);
                 }
             }
+            g_string_free (compose_output, TRUE);
         }
     }
 

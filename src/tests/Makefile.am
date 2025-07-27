@@ -74,8 +74,20 @@ endif
 
 if ENABLE_GTK3_OR_4
 TESTS_C += ibus-compose
-if ENABLE_XTEST
+if ENABLE_LIBEVDEV
 TESTS_C += ibus-keypress
+noinst_PROGRAMS += \
+    uinput-replay \
+    $(NULL)
+noinst_SCRIPTS += \
+    ibus-build-sudoers \
+    uinput-replay-test.sh \
+    $(NULL)
+CLEANFILES += \
+    ibus-sudoers \
+    ibus-build-sudoers \
+    uinput-replay-test.sh \
+    $(NULL)
 endif
 endif
 
@@ -98,13 +110,15 @@ test_metas_in = meta.test.in
 
 if ENABLE_INSTALL_TESTS
 bin_SCRIPTS = ibus-desktop-testing-runner
-test_execs = $(TESTS:ibus-compose=ibus-compose-locales)
-test_metas = $(addsuffix .test, $(test_execs))
+_test_execs = $(TESTS:ibus-compose=ibus-compose-locales)
+test_execs = $(_test_execs)
+test_metas = $(addsuffix .test, $(_test_execs))
 test_sources_DATA = \
     $(test_metas) \
     ibus-compose.basic \
     ibus-compose.emoji \
     ibus-compose.env \
+    libinput-test.yml \
     $(NULL)
 test_sourcesdir = $(datadir)/installed-tests/ibus
 
@@ -118,10 +132,20 @@ CLEANFILES += \
 test_execs_PROGRAMS = $(TESTS_C)
 test_execs_SCRIPTS = $(TESTS_SCRIPT)
 if ENABLE_GTK3_OR_4
-test_execs_SCRIPTS += ibus-compose-locales
-CLEANFILES += \
-    ibus-compose-locales \
+if ENABLE_LIBEVDEV
+test_execs_PROGRAMS += \
+    uinput-replay \
     $(NULL)
+test_execs += \
+    uinput-replay-test.sh \
+    uinput-replay \
+    $(NULL)
+test_execs_SCRIPTS += uinput-replay-test.sh
+sudo_DATA= ibus-sudoers
+sudodir = /etc/sudoers.d
+endif
+test_execs_SCRIPTS += ibus-compose-locales
+CLEANFILES += ibus-compose-locales
 endif
 test_execsdir = $(libexecdir)/installed-tests/ibus
 libexec_SCRIPTS = \
@@ -147,6 +171,38 @@ $(test_metas): $(test_metas_in)
 ibus-compose-locales: ibus-compose-locales.in
 	SRCDIR=$(test_sourcesdir); \
 	sed -e "s|@SRCDIR[@]|$$SRCDIR|g" $< > $@.tmp; \
+	chmod a+x $@.tmp; \
+	mv $@.tmp $@; \
+	$(NULL)
+
+%.sh: %.sh.in
+	sed -e "s|@builddir[@]|$(builddir)|g" \
+	    -e "s|@libexecdir[@]|$(libexecdir)|g" \
+	    -e "s|@srcdir[@]|$(srcdir)|g" \
+	    -e "s|@test_execsdir[@]|$(test_execsdir)|g" \
+	    -e "s|@test_sourcesdir[@]|$(test_sourcesdir)|g" \
+	$< > $@.tmp; \
+	chmod a+x $@.tmp; \
+	mv $@.tmp $@; \
+	$(NULL)
+
+# SUDO file should not have the file extension.
+ibus-sudoers: ibus-sudoers.conf.in
+	USER=itestuser; \
+	sed -e "s|@USER[@]|$$USER|g" \
+	    -e "s|@test_execsdir[@]|$(test_execsdir)|g" \
+	    -e "/@abs_top_builddir[@]/d" \
+	$< > $@.tmp; \
+	mv $@.tmp $@; \
+	$(NULL)
+
+# SUDO file should not have the file extension.
+ibus-build-sudoers: ibus-sudoers.conf.in uinput-replay
+	USER=$(shell $(builddir)/uinput-replay --username); \
+	sed -e "s|@USER[@]|$$USER|g" \
+	    -e "s|@test_execsdir[@]|$(test_execsdir)|g" \
+	    -e "s|@abs_top_builddir[@]|$(abs_top_builddir)|g" \
+	$< > $@.tmp; \
 	mv $@.tmp $@; \
 	$(NULL)
 
@@ -156,6 +212,7 @@ ibus-desktop-testing-autostart: ibus-desktop-testing-autostart.in
 	    -e "s|@INSTALLEDDIR[@]|$$INSTALLEDDIR|g" \
 	    -e "s|@LIBEXECDIR[@]|$(libexecdir)|g" \
 	    $< > $@.tmp; \
+	chmod a+x $@.tmp; \
 	mv $@.tmp $@; \
 	$(NULL)
 
@@ -165,6 +222,7 @@ ibus-desktop-testing-runner: ibus-desktop-testing-runner.in
 	    -e "s|@INSTALLEDDIR[@]|$$INSTALLEDDIR|g" \
 	    -e "s|@LIBEXECDIR[@]|$(libexecdir)|g" \
 	    $< > $@.tmp; \
+	chmod a+x $@.tmp; \
 	mv $@.tmp $@; \
 	$(NULL)
 
@@ -180,6 +238,9 @@ EXTRA_DIST = \
     ibus-desktop-testing-autostart.in \
     ibus-desktop-testing-module \
     ibus-desktop-testing-runner.in \
+    ibus-sudoers.conf.in \
+    libinput-test.yml \
+    uinput-replay-test.sh.in \
     $(NULL)
 
 ibus_bus_SOURCES = ibus-bus.c
@@ -217,14 +278,18 @@ ibus_inputcontext_create_LDADD = $(prog_ldadd)
 ibus_keynames_SOURCES = ibus-keynames.c
 ibus_keynames_LDADD = $(prog_ldadd)
 
+uinput_replay_SOURCES = uinput-replay.c
+uinput_replay_CFLAGS = @GLIB2_CFLAGS@ @LIBEVDEV_CFLAGS@
+uinput_replay_LDADD = @GLIB2_LIBS@ @LIBEVDEV_LIBS@
+
 ibus_keypress_SOURCES = ibus-keypress.c
 if ENABLE_GTK4
-ibus_keypress_CFLAGS = @GTK4_CFLAGS@ @XTEST_CFLAGS@
-ibus_keypress_LDADD = $(prog_ldadd) @GTK4_LIBS@ @XTEST_LIBS@
+ibus_keypress_CFLAGS = @GTK4_CFLAGS@
+ibus_keypress_LDADD = @GTK4_LIBS@ $(prog_ldadd)
 else
 if ENABLE_GTK3
-ibus_keypress_CFLAGS = @GTK3_CFLAGS@ @XTEST_CFLAGS@
-ibus_keypress_LDADD = $(prog_ldadd) @GTK3_LIBS@ @XTEST_LIBS@
+ibus_keypress_CFLAGS = @GTK3_CFLAGS@
+ibus_keypress_LDADD = @GTK3_LIBS@ $(prog_ldadd)
 endif
 endif
 

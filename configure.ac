@@ -735,12 +735,12 @@ if test x"$enable_libnotify" = x"yes"; then
     enable_libnotify="yes (enabled, use --disable-libnotify to disable)"
 fi
 
-PKG_CHECK_MODULES(XTEST,
-    [x11 xtst],
-    [enable_xtest=yes],
-    [enable_xtest=no]
+PKG_CHECK_MODULES(LIBEVDEV,
+    [libevdev],
+    [enable_libevdev=yes],
+    [enable_libevdev=no]
 )
-AM_CONDITIONAL([ENABLE_XTEST], [test x"$enable_xtest" = x"yes"])
+AM_CONDITIONAL([ENABLE_LIBEVDEV], [test x"$enable_libevdev" = x"yes"])
 
 PKG_CHECK_MODULES(XFIXES,
     [x11 xfixes >= 6],

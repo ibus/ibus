@@ -1,0 +1,33 @@
+#!/bin/sh
+
+DIR=`dirname $0`
+builddir=@builddir@
+srcdir=@srcdir@
+test_execsdir=@test_execsdir@
+test_sourcesdir=@test_sourcesdir@
+YAML_FILE=libinput-test.yml
+UINPUT_FILE=uinput-replay
+
+if [ -f $srcdir/$YAML_FILE ] ; then
+    YML=$srcdir/$YAML_FILE
+elif [ -f $test_sourcesdir/$YAML_FILE ] ; then
+    YML=$test_sourcesdir/$YAML_FILE
+elif [ -f $DIR/$YAML_FILE ] ; then
+    YML=$DIR/$YAML_FILE
+else
+    echo "Not found $YAML_FILE"
+    exit 1
+fi
+
+if [ -x $builddir/$UINPUT_FILE ] ; then
+    UINPUT=$builddir/$UINPUT_FILE
+elif [ -x $test_execsdir/$UINPUT_FILE ] ; then
+    UINPUT=$test_execsdir/$UINPUT_FILE
+elif [ -x $DIR/$UINPUT_FILE ] ; then
+    UINPUT=$DIR/$UINPUT_FILE
+else
+    echo "Not found $UINPUT_FILE"
+    exit 1
+fi
+
+sudo $UINPUT $YML

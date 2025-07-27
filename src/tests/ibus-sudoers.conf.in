@@ -1,0 +1,2 @@
+@USER@ ALL=NOPASSWD: @test_execsdir@/uinput-replay
+@USER@ ALL=NOPASSWD: @abs_top_builddir@/src/tests/uinput-replay

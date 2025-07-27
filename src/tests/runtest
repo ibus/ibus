@@ -187,6 +187,12 @@ run_test_case()
         sleep 3
 
         export GTK_IM_MODULE=ibus
+        # Gtk-WARNING **: Unable to acquire the address of the accessibility
+        # bus: GDBus.Error:org.freedesktop.DBus.Error.Spawn.ExecFailed:
+        # Failed to execute program org.a11y.Bus: Permission denied. If you are
+        # attempting to run GTK without a11y support, GTK_A11Y should be set to
+        # 'none'.
+        export GTK_A11Y=none
     fi
 
     export IBUS_COMPOSE_CACHE_DIR=$PWD

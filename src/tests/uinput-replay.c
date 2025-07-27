@@ -343,7 +343,7 @@ ibus_uidev_replay_with_yaml_data (struct libevdev_uinput *uidev,
         while (*end != '\n' && *end != '\0') ++end;
         if (*head == '#') {
             head = end;
-            if (*head != '\0')
+            if (*head != '\n' && *head != '\0')
                 ++head;
             continue;
         }
@@ -356,6 +356,23 @@ ibus_uidev_replay_with_yaml_data (struct libevdev_uinput *uidev,
         if (*head != '\0')
             ++head;
     }
+}
+
+
+struct uinput_replay_device *
+uinput_replay_create_keyboard (GError **error)
+{
+    struct libevdev_uinput *uidev;
+    struct uinput_replay_device *dev;
+
+    if (!(uidev = ibus_uidev_new (error))) {
+        return NULL;
+    }
+
+    dev = g_new0 (struct uinput_replay_device, 1);
+    dev->uidev = uidev;
+
+    return dev;
 }
 
 
@@ -389,7 +406,7 @@ uinput_replay_device_destroy (struct uinput_replay_device *dev)
 {
     g_free (dev->contents);
     libevdev_uinput_destroy (dev->uidev);
-    g_free (dev->contents);
+    g_free (dev);
 }
 
 
@@ -397,6 +414,15 @@ void
 uinput_replay_device_replay (struct uinput_replay_device *dev)
 {
     ibus_uidev_replay_with_yaml_data (dev->uidev, dev->contents);
+}
+
+
+void
+uinput_replay_device_replay_event (struct uinput_replay_device *dev,
+                                   const struct input_event    *event)
+{
+    libevdev_uinput_write_event (dev->uidev,
+                                 event->type, event->code, event->value);
 }
 
 

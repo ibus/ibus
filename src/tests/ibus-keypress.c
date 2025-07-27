@@ -6,14 +6,19 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 
+#include <linux/input-event-codes.h>
+#include <linux/input.h>
+
 #include "uinput-replay.h"
 
 #define GREEN "\033[0;32m"
 #define RED   "\033[0;31m"
 #define NC    "\033[0m"
 
+#define msleep(t) usleep((t) * 1000)
+
 typedef enum {
-    TEST_PROCESS_KEY_EVENT,
+    TEST_COMMIT_TEXT,
     TEST_CREATE_ENGINE,
     TEST_DELAYED_FOCUS_IN
 } TestIDleCategory;
@@ -23,6 +28,14 @@ typedef struct _TestIdleData {
     guint            idle_id;
 } TestIdleData;
 
+typedef struct {
+    guint source;
+    GtkWidget *window;
+} WindowDestroyData;
+
+/* FIXME */
+static int pipefds[2];
+
 static const gunichar test_results[][60] = {
    { 'a', '<', 'b', '>', 'c', '?', 'd', ':', 'e', '"', 'f', '{', 'g', '|', 0 },
 #if 0
@@ -31,17 +44,151 @@ static const gunichar test_results[][60] = {
    { 0 }
 };
 
+#define INPUT_EVENT(type_, code_, value_) { .type = type_, .code = code_, .value = value_, }
+static const struct input_event test_data[] = {
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 28),
+    INPUT_EVENT(EV_KEY, KEY_ENTER, 0),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
 
-static const gchar *m_arg0;
-static const gchar *m_srcdir;
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 30),
+    INPUT_EVENT(EV_KEY, KEY_A, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 30),
+    INPUT_EVENT(EV_KEY, KEY_A, 0),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 1),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 51),
+    INPUT_EVENT(EV_KEY, KEY_COMMA, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 51),
+    INPUT_EVENT(EV_KEY, KEY_COMMA, 0),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 0),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 48),
+    INPUT_EVENT(EV_KEY, KEY_B, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 48),
+    INPUT_EVENT(EV_KEY, KEY_B, 0),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 1),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 52),
+    INPUT_EVENT(EV_KEY, KEY_DOT, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 0),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 52),
+    INPUT_EVENT(EV_KEY, KEY_DOT, 0),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 46),
+    INPUT_EVENT(EV_KEY, KEY_C, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 46),
+    INPUT_EVENT(EV_KEY, KEY_C, 0),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 1),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 53),
+    INPUT_EVENT(EV_KEY, KEY_SLASH, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 0),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 53),
+    INPUT_EVENT(EV_KEY, KEY_SLASH, 0),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 32),
+    INPUT_EVENT(EV_KEY, KEY_D, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 32),
+    INPUT_EVENT(EV_KEY, KEY_D, 0),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 1),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 39),
+    INPUT_EVENT(EV_KEY, KEY_SEMICOLON, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 39),
+    INPUT_EVENT(EV_KEY, KEY_SEMICOLON, 0),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 0),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 18),
+    INPUT_EVENT(EV_KEY, KEY_E, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 18),
+    INPUT_EVENT(EV_KEY, KEY_E, 0),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 1),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 40),
+    INPUT_EVENT(EV_KEY, KEY_APOSTROPHE, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 0),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 40),
+    INPUT_EVENT(EV_KEY, KEY_APOSTROPHE, 0),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 33),
+    INPUT_EVENT(EV_KEY, KEY_F, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 33),
+    INPUT_EVENT(EV_KEY, KEY_F, 0),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 1),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 26),
+    INPUT_EVENT(EV_KEY, KEY_LEFTBRACE, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 0),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 26),
+    INPUT_EVENT(EV_KEY, KEY_LEFTBRACE, 0),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 34),
+    INPUT_EVENT(EV_KEY, KEY_G, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 34),
+    INPUT_EVENT(EV_KEY, KEY_G, 0),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 1),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 43),
+    INPUT_EVENT(EV_KEY, KEY_BACKSLASH, 1),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 42),
+    INPUT_EVENT(EV_KEY, KEY_LEFTSHIFT, 0),
+    INPUT_EVENT(EV_MSC, MSC_SCAN, 43),
+    INPUT_EVENT(EV_KEY, KEY_BACKSLASH, 0),
+    INPUT_EVENT(EV_SYN, SYN_REPORT, 0),
+};
+
 static gchar *m_session_name;
 static IBusBus *m_bus;
 static IBusEngine *m_engine;
 static GMainLoop *m_loop;
 static char *m_engine_is_focused;
-static guint m_process_key_id;
-#if GTK_CHECK_VERSION (4, 0, 0)
+static struct uinput_replay_device *m_replay;
 
+#if GTK_CHECK_VERSION (4, 0, 0)
 static void     event_controller_enter_cb (GtkEventController *controller,
                                            gpointer            user_data);
 #else
@@ -75,6 +222,26 @@ _wait_for_key_release_cb (gpointer user_data)
 }
 
 
+static int
+quit (gpointer userdata)
+{
+    if (userdata) {
+        g_info (".... exiting");
+        g_main_loop_quit (userdata);
+    }
+    return G_SOURCE_REMOVE;
+}
+
+
+static gboolean
+quit_on_poke (GIOChannel  *source,
+              GIOCondition condition,
+              gpointer     data)
+{
+    return quit (data);
+}
+
+
 gboolean
 idle_cb (gpointer user_data)
 {
@@ -84,15 +251,6 @@ idle_cb (gpointer user_data)
 
     g_assert (data);
     switch (data->category) {
-    case TEST_PROCESS_KEY_EVENT:
-        if (n++ < 30000) {
-            if (!(n % 10))
-                fprintf (stderr, "Waiting for process_key_event %dth times\n", n);
-            return G_SOURCE_CONTINUE;
-        }
-        fprintf (stderr, "process_key_event is timeout.\n");
-        g_main_loop_quit (m_loop);
-        break;
     case TEST_CREATE_ENGINE:
         g_test_fail_printf ("\"create-engine\" signal is timeout.");
         break;
@@ -214,9 +372,8 @@ create_engine_cb (IBusFactory *factory,
     return m_engine;
 }
 
-
-static gboolean
-register_ibus_engine ()
+static int
+register_ibus_engine (gpointer unused)
 {
     static TestIdleData data = { .category = TEST_CREATE_ENGINE, .idle_id = 0 };
     IBusFactory *factory;
@@ -269,35 +426,19 @@ window_destroy_cb (void)
 }
 
 
-static void
-exec_keypress (void)
+static gboolean
+destroy_window (gpointer user_data)
 {
-    gchar *datadir;
-    char *recording;
-    struct uinput_replay_device *replay;
+    WindowDestroyData *data = user_data;
 
-    g_assert (m_arg0);
-    if (m_srcdir) {
-        datadir = g_strdup (m_srcdir);
-    } else {
-        datadir = g_path_get_dirname (m_arg0);
-        if (g_str_has_suffix (datadir, "/.libs"))
-            *(datadir + strlen (datadir) - 6) = '\0';
-    }
+    data->source = 0;
 
-    recording = g_build_filename (datadir, "libinput-test.yml", NULL);
-    g_free (datadir);
-    replay = uinput_replay_create_device (recording, NULL);
-    g_free (recording);
+    g_info ("Destroying window after timeout");
+    gtk_window_destroy (GTK_WINDOW (data->window));
 
-    if (!replay) {
-        g_warning ("Failed to create uinput device");
-        return;
-    }
+    data->window = NULL;
 
-    g_test_message ("Started keypress");
-    uinput_replay_device_replay(replay);
-    g_test_message ("Finished keypress");
+    return G_SOURCE_REMOVE;
 }
 
 
@@ -308,8 +449,7 @@ set_engine_cb (GObject      *object,
 {
     IBusBus *bus = IBUS_BUS (object);
     GError *error = NULL;
-    static TestIdleData data = { .category = TEST_PROCESS_KEY_EVENT,
-                                 .idle_id = 0 };
+    static TestIdleData data = { .category = TEST_COMMIT_TEXT, .idle_id = 0 };
     int i;
 
     if (!ibus_bus_set_global_engine_async_finish (bus, res, &error)) {
@@ -317,6 +457,10 @@ set_engine_cb (GObject      *object,
         g_error_free (error);
         return;
     }
+
+    /* FIXME: this bit is now effectively useless, the timeout isn't called
+     * for at least 1 second but by then we've probably finished replaying
+     * our uinput device and moved to TEST_PROCESS_KEY_EVENT */
 
     /* See ibus-compose:set_engine_cb() */
     if (is_integrated_desktop () && g_getenv ("IBUS_DAEMON_WITH_SYSTEMD")) {
@@ -329,15 +473,19 @@ set_engine_cb (GObject      *object,
                 return;
         }
         g_test_message ("End tiny \"focus-in\" signal test");
-        data.category = TEST_PROCESS_KEY_EVENT;
+        data.category = TEST_COMMIT_TEXT;
     }
 
-    exec_keypress();
-
-    data.category = TEST_PROCESS_KEY_EVENT;
-    m_process_key_id = data.idle_id = g_timeout_add_seconds (1, idle_cb, &data);
-    g_main_loop_run (m_loop);
+    /* Because uinput doesn't take that long (for our recordings anyway) we can
+     * simply create and run this here this here. */
+    g_info("running uinput now");
+    for (size_t i = 0; i < G_N_ELEMENTS(test_data); i++) {
+        uinput_replay_device_event(m_replay, &test_data[i]);
+        if (test_data[i].type == EV_SYN)
+            msleep(2);
+    }
 }
+
 
 static void
 set_engine (gpointer user_data)
@@ -351,6 +499,7 @@ set_engine (gpointer user_data)
                                       set_engine_cb,
                                       user_data);
 }
+
 
 #if GTK_CHECK_VERSION (4, 0, 0)
 static gboolean
@@ -385,7 +534,7 @@ event_controller_enter_cb (GtkEventController *controller,
         return;
     /* See ibus-compose:event_controller_enter_cb() */
     if (is_integrated_desktop ()) {
-        id = g_timeout_add_seconds (3,
+        id = g_timeout_add_seconds (1,
                                     event_controller_enter_delay,
                                     controller);
     } else {
@@ -405,6 +554,7 @@ window_focus_in_event_cb (GtkWidget     *entry,
     return FALSE;
 }
 #endif
+
 
 static void
 window_inserted_text_cb (GtkEntryBuffer *buffer,
@@ -434,12 +584,12 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
                             code);
     } else if (test_results[i][j]) {
         return;
+    } else {
+        g_print (GREEN "PASS" NC " ");
+        for (k = 0; k < j; k++)
+            g_print ("%lc(%X) ", test_results[i][k], test_results[i][k]);
+        g_print ("\n");
     }
-
-    g_print (GREEN "PASS" NC " ");
-    for (k = 0; k < j; k++)
-        g_print ("%lc(%X) ", test_results[i][k], test_results[i][k]);
-    g_print ("\n");
 
     ++i;
     j = 0;
@@ -450,16 +600,19 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
 #endif
     if (!test_results[i][j]) {
        g_assert (!j);
-       if (m_process_key_id) {
-           g_source_remove (m_process_key_id);
-           m_process_key_id = 0;
-           g_main_loop_quit (m_loop);
-       }
+
+       const char buf[] = "BYE\n";
+       write(pipefds[1], buf, sizeof(buf));
+       fsync(pipefds[1]);
+       close(pipefds[1]);
+
+
        ibus_quit ();
     }
 }
 
-static void
+
+static GtkWidget *
 create_window ()
 {
     GtkWidget *window;
@@ -495,6 +648,8 @@ create_window ()
     gtk_container_add (GTK_CONTAINER (window), entry);
     gtk_widget_show_all (window);
 #endif
+
+    return window;
 }
 
 
@@ -523,12 +678,89 @@ test_init (void)
 static void
 test_keypress (void)
 {
+    WindowDestroyData destroy_data;
+
+    int rc = pipe (pipefds);
+    g_asser t(rc == 0);
+
+    pid_t pid = fork();
+    if (pid == 0) {
+        GMainContext *context;
+
+        close (pipefds[1]);
+
+        context = g_main_context_default ();
+        m_loop = g_main_loop_new (context, FALSE);
+
+        GIOChannel *channel =  g_io_channel_unix_new (pipefds[0]);
+        g_io_add_watch (channel, G_IO_IN|G_IO_ERR, quit_on_poke, m_loop);
+        g_idle_add (register_ibus_engine, NULL);
+        g_timeout_add_seconds (10, quit, m_loop);
+
+        g_main_loop_run (m_loop);
+        g_object_unref (c);
+
+        exit (rc ? EXIT_FAILURE : EXIT_SUCCESS);
+    }
+
+    /* FIXME: Calling this before the fork means we never get an ibus_bus_new().
+     * let's move this here for now.
+     */
+#if GTK_CHECK_VERSION (4, 0, 0)
+    gtk_init ();
+#else
+    gtk_init (0, NULL);;
+#endif
+
+    close(pipefds[0]);
+
+    m_bus = ibus_bus_new ();
+    m_replay = uinput_replay_create_keyboard (NULL);
+
+    if (!m_replay) {
+        g_warning ("Failed to create uinput device");
+        return;
+    }
+
+    destroy_data.window = create_window ();
+    destroy_data.source = g_timeout_add_seconds (5, destroy_window, &destroy_data);
+
+    ibus_main ();
+
+    uinput_replay_device_destroy (g_steal_pointer (&m_replay));
+    g_clear_pointer (&m_session_name, g_free);
+    if (destroy_data.source)
+	g_source_remove (destroy_data.source);
+    if (destroy_data.window)
+	gtk_window_destroy (GTK_WINDOW (destroy_data.window));
+}
+
+
+static void
+test_keypress_from_recording (void)
+{
+#if 0
+    GtkWidget *window;
+    const char *recording = getenv("IBUS_KEY_RECORDING");
+
     if (!register_ibus_engine ())
         return;
 
-    create_window ();
+    g_return_if_fail(recording);
+
+    m_replay = uinput_replay_create_device(recording, NULL);
+    if (!m_replay) {
+        g_warning ("Failed to create uinput device");
+        return;
+    }
+
+    window = create_window ();
     ibus_main ();
+
+    uinput_replay_device_destroy(g_steal_pointer (&m_replay));
     g_clear_pointer (&m_session_name, g_free);
+    gtk_window_destroy (GTK_WINDOW (window));
+#endif
 }
 
 
@@ -537,25 +769,20 @@ main (int argc, char *argv[])
 {
     setlocale (LC_ALL, "");
 
-    m_arg0 = argv[0];
-    m_srcdir = argv[1];
-
     /* Avoid a warning of "AT-SPI: Could not obtain desktop path or name"
      * with gtk_main().
      */
     if (!g_setenv ("NO_AT_BRIDGE", "1", TRUE))
         g_message ("Failed setenv NO_AT_BRIDGE\n");
     g_test_init (&argc, &argv, NULL);
-#if GTK_CHECK_VERSION (4, 0, 0)
-    gtk_init ();
-#else
-    gtk_init (&argc, &argv);
-#endif
-    ibus_init ();
 
-    g_test_add_func ("/ibus-keypress/test-init", test_init);
-    m_loop = g_main_loop_new (NULL, TRUE);
-    g_test_add_func ("/ibus-keypress/keyrepss", test_keypress);
+    ibus_init ();
+    //g_test_add_func ("/ibus-keypress/test-init", test_init);
+    //m_loop = g_main_loop_new (NULL, TRUE);
+    if (getenv("IBUS_KEY_RECORDING"))
+        g_test_add_func ("/ibus-keypress/keypress_from_recording", test_keypress_from_recording);
+    else
+        g_test_add_func ("/ibus-keypress/keypress", test_keypress);
 
     return g_test_run ();
 }

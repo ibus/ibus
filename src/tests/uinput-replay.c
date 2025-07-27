@@ -1,24 +1,29 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* vim:set et sts=4: */
-/* ibus - The Input Bus
+/*
+ * Copyright (c) 2013 Marcin Slusarz <marcin.slusarz@gmail.com>
  * Copyright (c) 2025 Peter Hutterer <peter.hutterer@who-t.net>
- * Copyright (C) 2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2025 Red Hat, Inc.
+ # Copyright (c) 2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (c) 2025 Red Hat, Inc.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * The above copyright notice and this permission notice (including the next
+ * paragraph) shall be included in all copies or substantial portions of the
+ * Software.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- * USA
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
  */
 
 #include <glib.h>
@@ -28,44 +33,136 @@
 #include <linux/input.h>
 #include <linux/input-event-codes.h>
 #include <libevdev/libevdev-uinput.h>
-#include <stdio.h>
+#include <libudev.h>
+
+#include <fcntl.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include "uinput-replay.h"
+
+
 #define msleep(t) usleep((t) * 1000)
+
+struct uinput_replay_device
+{
+    struct libevdev_uinput *uidev;
+    char                   *contents;
+};
 
 
 static gchar *
-get_case_contents (const gchar *case_path)
+get_case_contents (const gchar *case_path,
+                   GError     **error)
 {
     gchar *contents = NULL;
     gsize length = 0;
-    GError *error = NULL;
 
     g_return_val_if_fail (case_path, NULL);
-    if (!g_file_get_contents (case_path, &contents, &length, &error)) {
-        g_warning ("Failed to open %s: %s", case_path, error->message);
-        g_error_free (error);
+    if (!g_file_get_contents (case_path, &contents, &length, error)) {
+        if (error) {
+            gchar *error_message = g_strdup ((*error)->message);
+            g_clear_pointer (error, g_error_free);
+            g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                         "Failed to open %s: %s", case_path, error_message);
+            g_free (error_message);
+        }
     } else if (length == 0) {
-        g_warning ("No contents file %s", case_path);
+        if (error) {
+            g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                         "No contents file %s", case_path);
+        }
     }
     return contents;
 }
 
 
-static struct libevdev_uinput *
-ibus_uidev_new (void)
+static inline int
+streq (const char *str1, const char *str2)
 {
+    /* one NULL, one not NULL is always false */
+    if (str1 && str2)
+        return strcmp (str1, str2) == 0;
+    return str1 == str2;
+}
+
+
+/* Refer libinput/test/litest.c:udev_setup_monitor() */
+static struct udev_monitor *
+setup_udev_monitor (void)
+{
+    struct udev *udev = udev_new ();
+    struct udev_monitor *udev_monitor = NULL;
+
+    g_assert (udev);
+    udev_monitor = udev_monitor_new_from_netlink (udev, "udev");
+    g_assert (udev_monitor);
+    udev_unref (udev);
+    udev_monitor_filter_add_match_subsystem_devtype (udev_monitor,
+                                                     "input",
+                                                     NULL);
+    errno = 0;
+    if (fcntl (udev_monitor_get_fd (udev_monitor), F_SETFL, 0) < 0) {
+        g_warning ("Failed to F_SETFL %s", g_strerror (errno));
+        udev_monitor_unref (udev_monitor);
+        return NULL;
+    }
+    if (udev_monitor_enable_receiving (udev_monitor)) {
+        g_warning ("Failed to enable udev_monitor");
+        udev_monitor_unref (udev_monitor);
+        return NULL;
+    }
+    return udev_monitor;
+}
+
+
+/* Refer libinput/test/litest.c:udev_wait_for_device_event() */
+static struct udev_device *
+udev_wait_for_device_event (struct udev_monitor *udev_monitor,
+                            const char          *udev_event,
+                            const char          *syspath)
+{
+    while (1) {
+        struct udev_device *udev_device = NULL;
+        const char *udev_syspath = NULL;
+        const char *udev_action;
+
+        udev_device = udev_monitor_receive_device (udev_monitor);
+        if (!udev_device) {
+            if (errno == EAGAIN)
+                continue;
+
+            g_warning ("Failed to receive udev device from monitor: %s",
+                       g_strerror (errno));
+        }
+        udev_action = udev_device_get_action (udev_device);
+        if (!udev_action || !streq (udev_action, udev_event)) {
+            continue;
+        }
+
+        udev_syspath = udev_device_get_syspath (udev_device);
+        if (g_str_has_prefix (udev_syspath, syspath))
+            return udev_device;
+    }
+}
+
+
+static struct libevdev_uinput *
+ibus_uidev_new (GError **error)
+{
+    struct udev_monitor *udev_monitor = setup_udev_monitor ();
     struct libevdev *dev = libevdev_new ();
     unsigned int code;
     struct libevdev_uinput *uidev = NULL;
     int retval;
     const char *syspath;
     const char *devnode;
-    struct stat buf;
-    struct group *grp = NULL;
+    struct udev_device *udev_device;
+    gchar *path;
 
+    g_return_val_if_fail (udev_monitor, NULL);
+    g_return_val_if_fail (dev, NULL);
     libevdev_set_name (dev, "ibusdev");
     /* serial makes it an internal keyboard */
     libevdev_set_id_bustype (dev, BUS_I8042);
@@ -73,19 +170,20 @@ ibus_uidev_new (void)
     for (code = KEY_ESC; code < BTN_MISC; code++)
         libevdev_enable_event_code (dev, EV_KEY, code, NULL);
 
+    /* chmod a+rw /dev/uinput */
     retval = libevdev_uinput_create_from_device (
             dev,
             LIBEVDEV_UINPUT_OPEN_MANAGED,
             &uidev);
-
-    if (retval) {
-        g_warning ("Failed to create uinput: %s\n", g_strerror (-retval));
-        libevdev_free (dev);
-        return NULL;
-    }
-
     libevdev_free (dev);
 
+    if (retval) {
+        if (error) {
+            g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                         "Failed to create uinput: %s\n", g_strerror (-retval));
+        }
+        return NULL;
+    }
 
     syspath = libevdev_uinput_get_syspath (uidev);
     g_assert (syspath != NULL);
@@ -96,23 +194,12 @@ ibus_uidev_new (void)
      * sleep or checking udev until the device shows up. Use
      * libevdev_uinput_get_syspath() for the latter
      */
-    errno = 0;
-    do {
-        msleep (10);
-        if (stat (devnode, &buf)) {
-            g_warning ("Failed to get stat of %s: %s\n",
-                       devnode, g_strerror (errno));
-            libevdev_uinput_destroy (uidev);
-            return NULL;
-        }
-        if (!(grp = getgrgid (buf.st_gid))) {
-            g_warning ("Failed to get gid of %s: %s\n",
-                       devnode, g_strerror (errno));
-            libevdev_uinput_destroy (uidev);
-            return NULL;
-        }
-        g_debug ("gr_name %s", grp->gr_name);
-    } while (strcmp (grp->gr_name, "input"));
+    path = g_strdup_printf ("%s/event", syspath);
+    udev_device = udev_wait_for_device_event (udev_monitor, "add", path);
+    g_free (path);
+    g_assert (udev_device);
+    udev_device_unref (udev_device);
+    udev_monitor_unref (udev_monitor);
     msleep (100);
 
     return uidev;
@@ -271,8 +358,52 @@ ibus_uidev_replay_with_yaml_data (struct libevdev_uinput *uidev,
     }
 }
 
+
+struct uinput_replay_device *
+uinput_replay_create_device (const char *recording,
+                             GError    **error)
+{
+    gchar *contents;
+    struct libevdev_uinput *uidev;
+    struct uinput_replay_device *dev;
+
+    g_return_val_if_fail (recording != NULL, NULL);
+
+    g_return_val_if_fail ((contents = get_case_contents (recording, error)),
+                          NULL);
+    if (!(uidev = ibus_uidev_new (error))) {
+        g_free (contents);
+        return NULL;
+    }
+
+    dev = g_new0 (struct uinput_replay_device, 1);
+    dev->uidev = uidev;
+    dev->contents = contents;
+
+    return dev;
+}
+
+
+void
+uinput_replay_device_destroy (struct uinput_replay_device *dev)
+{
+    g_free (dev->contents);
+    libevdev_uinput_destroy (dev->uidev);
+    g_free (dev->contents);
+}
+
+
+void
+uinput_replay_device_replay (struct uinput_replay_device *dev)
+{
+    ibus_uidev_replay_with_yaml_data (dev->uidev, dev->contents);
+}
+
+
+#ifdef UINPUT_REPLAY_MAIN
 int
 main (int argc, char *argv[]) {
+    GError *error = NULL;
     gchar *contents;
     struct libevdev_uinput *uidev;
 
@@ -283,15 +414,16 @@ main (int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (!g_strcmp0 (argv[1], "--username")) {
-        g_print ("%s\n", g_get_user_name ());
-        return EXIT_SUCCESS;
+    if (!(contents = get_case_contents (argv[1], &error))) {
+        g_warning ("%s", error->message);
+        g_error_free (error);
+        return EXIT_FAILURE;
     }
-
-    if (!(contents = get_case_contents (argv[1])))
+    if (!(uidev = ibus_uidev_new (&error))) {
+        g_warning ("%s", error->message);
+        g_error_free (error);
         return EXIT_FAILURE;
-    if (!(uidev = ibus_uidev_new ()))
-        return EXIT_FAILURE;
+    }
 
     ibus_uidev_replay_with_yaml_data (uidev, contents);
 
@@ -300,3 +432,4 @@ main (int argc, char *argv[]) {
 
     return EXIT_SUCCESS;
 }
+#endif

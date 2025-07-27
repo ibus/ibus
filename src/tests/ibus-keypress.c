@@ -6,16 +6,14 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 
+#include "uinput-replay.h"
+
 #define GREEN "\033[0;32m"
 #define RED   "\033[0;31m"
 #define NC    "\033[0m"
 
 typedef enum {
-    TEST_START_KEYPRESS,
-    TEST_WAIT_START_KEYPRESS,
-    TEST_END_KEYPRESS,
     TEST_PROCESS_KEY_EVENT,
-    TEST_COMMIT_TEXT,
     TEST_CREATE_ENGINE,
     TEST_DELAYED_FOCUS_IN
 } TestIDleCategory;
@@ -34,10 +32,8 @@ static const gunichar test_results[][60] = {
 };
 
 
-static gchar *m_tmpfile_start;
-static gchar *m_tmpfile_end;
 static const gchar *m_arg0;
-static pid_t m_pid;
+static const gchar *m_srcdir;
 static gchar *m_session_name;
 static IBusBus *m_bus;
 static IBusEngine *m_engine;
@@ -88,55 +84,6 @@ idle_cb (gpointer user_data)
 
     g_assert (data);
     switch (data->category) {
-    case TEST_START_KEYPRESS:
-        if (g_access (m_tmpfile_start, 0) != -1) {
-            data->idle_id = 0;
-            n = 0;
-            g_unlink (m_tmpfile_start);
-            g_main_loop_quit (m_loop);
-            return G_SOURCE_REMOVE;
-        }
-        if (n++ < 600) {
-            if (!(n % 30))
-                g_test_message ("Waiting for set_engine %dth times", n);
-            return G_SOURCE_CONTINUE;
-        }
-        g_test_fail_printf ("set_engine is timeout.");
-        g_main_loop_quit (m_loop);
-        break;
-    case TEST_WAIT_START_KEYPRESS:
-        if (g_access (m_tmpfile_start, 0) == -1) {
-            data->idle_id = 0;
-            n = 0;
-            g_main_loop_quit (m_loop);
-            fprintf (stderr, "Started keypress\n");
-            return G_SOURCE_REMOVE;
-        }
-        if (n++ < 30) {
-            if (!(n % 5))
-                g_test_message ("Waiting for starting keypress %dth times", n);
-            return G_SOURCE_CONTINUE;
-        }
-        g_test_fail_printf ("Starting keypress is timeout.");
-        g_main_loop_quit (m_loop);
-        break;
-    case TEST_END_KEYPRESS:
-        if (g_access (m_tmpfile_end, 0) != -1) {
-            data->idle_id = 0;
-            n = 0;
-            g_unlink (m_tmpfile_end);
-            g_main_loop_quit (m_loop);
-            fprintf (stderr, "Finished keypress\n");
-            return G_SOURCE_REMOVE;
-        }
-        if (n++ < 600) {
-            if (!(n % 30))
-                g_test_message ("Waiting for finishing keypress %dth times", n);
-            return G_SOURCE_CONTINUE;
-        }
-        g_test_fail_printf ("Finishing keypress is timeout.");
-        g_main_loop_quit (m_loop);
-        break;
     case TEST_PROCESS_KEY_EVENT:
         if (n++ < 30000) {
             if (!(n % 10))
@@ -325,51 +272,32 @@ window_destroy_cb (void)
 static void
 exec_keypress (void)
 {
-    static TestIdleData data = { .category = TEST_START_KEYPRESS,
-                                 .idle_id = 0 };
-    gchar *build_dir;
-    gchar *keypress_path = NULL;
-    gchar *standard_output = NULL;
-    gchar *standard_error = NULL;
-    gint wait_status = 0;
-    GError *error = NULL;
-    int fd;
+    gchar *datadir;
+    char *recording;
+    struct uinput_replay_device *replay;
 
-    m_loop = g_main_loop_new (NULL, TRUE);
-    data.idle_id = g_timeout_add_seconds (1, idle_cb, &data);
-    g_main_loop_run (m_loop);
-    g_main_loop_unref (m_loop);
-    if (data.idle_id != 0)
-        return;
     g_assert (m_arg0);
-    build_dir = g_path_get_dirname (m_arg0);
-    if (g_str_has_suffix (build_dir, "/.libs"))
-        *(build_dir + strlen (build_dir) - 6) = '\0';
-    keypress_path = g_build_filename (build_dir, "uinput-replay-test.sh", NULL);
-    g_spawn_command_line_sync (keypress_path,
-                               &standard_output,
-                               &standard_error,
-                               &wait_status,
-                               &error);
-    if (standard_output) {
-        g_test_message ("keypress output: %s", standard_output);
-        g_free (standard_output);
+    if (m_srcdir) {
+        datadir = g_strdup (m_srcdir);
+    } else {
+        datadir = g_path_get_dirname (m_arg0);
+        if (g_str_has_suffix (datadir, "/.libs"))
+            *(datadir + strlen (datadir) - 6) = '\0';
     }
-    if (standard_error) {
-        if (*standard_error)
-            g_test_message ("keypress error: %s", standard_error);
-        g_free (standard_error);
-    }
-    if (error) {
-        g_test_message ("keypress error2: %s", error->message);
-        g_error_free (error);
-    }
-    g_free (keypress_path);
-    g_free (build_dir);
 
-    fd = g_creat (m_tmpfile_end, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-    g_close (fd, &error);
-    exit (EXIT_SUCCESS);
+    recording = g_build_filename (datadir, "libinput-test.yml", NULL);
+    g_free (datadir);
+    replay = uinput_replay_create_device (recording, NULL);
+    g_free (recording);
+
+    if (!replay) {
+        g_warning ("Failed to create uinput device");
+        return;
+    }
+
+    g_test_message ("Started keypress");
+    uinput_replay_device_replay(replay);
+    g_test_message ("Finished keypress");
 }
 
 
@@ -380,11 +308,9 @@ set_engine_cb (GObject      *object,
 {
     IBusBus *bus = IBUS_BUS (object);
     GError *error = NULL;
-    static TestIdleData data = { .category = TEST_COMMIT_TEXT, .idle_id = 0 };
+    static TestIdleData data = { .category = TEST_PROCESS_KEY_EVENT,
+                                 .idle_id = 0 };
     int i;
-    int fd;
-    int wstatus = 0;
-    pid_t wpid;
 
     if (!ibus_bus_set_global_engine_async_finish (bus, res, &error)) {
         g_critical ("set engine failed: %s", error->message);
@@ -403,25 +329,11 @@ set_engine_cb (GObject      *object,
                 return;
         }
         g_test_message ("End tiny \"focus-in\" signal test");
-        data.category = TEST_COMMIT_TEXT;
+        data.category = TEST_PROCESS_KEY_EVENT;
     }
 
-    fd = g_creat (m_tmpfile_start, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-    g_close (fd, &error);
+    exec_keypress();
 
-    data.category = TEST_WAIT_START_KEYPRESS;
-    data.idle_id = g_timeout_add_seconds (1, idle_cb, &data);
-    g_main_loop_run (m_loop);
-    if (data.idle_id != 0)
-        return;
-    errno = 0;
-    if ((wpid = waitpid (m_pid, &wstatus, 0)) == -1)
-        g_test_fail_printf ("keypress is failed: %s", g_strerror (errno));
-    data.category = TEST_END_KEYPRESS;
-    data.idle_id = g_timeout_add_seconds (1, idle_cb, &data);
-    g_main_loop_run (m_loop);
-    if (data.idle_id != 0)
-        return;
     data.category = TEST_PROCESS_KEY_EVENT;
     m_process_key_id = data.idle_id = g_timeout_add_seconds (1, idle_cb, &data);
     g_main_loop_run (m_loop);
@@ -623,36 +535,10 @@ test_keypress (void)
 int
 main (int argc, char *argv[])
 {
-    int fd;
-    GError *error = NULL;
-
     setlocale (LC_ALL, "");
 
-    m_tmpfile_start = g_strdup ("/tmp/ibus-keypress_start_XXXXXX.log");
-    errno = 0;
-    if ((fd = g_mkstemp (m_tmpfile_start)) == -1) {
-        /* g_warning() before g_test_init() */
-        g_warning ("mkstemp is failed: %s", g_strerror (errno));
-        g_unlink (m_tmpfile_start);
-        exit (EXIT_FAILURE);
-    }
-    g_close (fd, &error);
-    g_unlink (m_tmpfile_start);
-
-    m_tmpfile_end = g_strdup ("/tmp/ibus-keypress_end_XXXXXX.log");
-    errno = 0;
-    if ((fd = g_mkstemp (m_tmpfile_end)) == -1) {
-        /* g_warning() before g_test_init() */
-        g_warning ("mkstemp is failed: %s", g_strerror (errno));
-        g_unlink (m_tmpfile_end);
-        exit (EXIT_FAILURE);
-    }
-    g_close (fd, &error);
-    g_unlink (m_tmpfile_end);
-
     m_arg0 = argv[0];
-    if (!(m_pid = fork ()))
-        exec_keypress ();
+    m_srcdir = argv[1];
 
     /* Avoid a warning of "AT-SPI: Could not obtain desktop path or name"
      * with gtk_main().

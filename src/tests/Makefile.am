@@ -76,17 +76,12 @@ if ENABLE_GTK3_OR_4
 TESTS_C += ibus-compose
 if ENABLE_LIBEVDEV
 TESTS_C += ibus-keypress
-noinst_PROGRAMS += \
-    uinput-replay \
-    $(NULL)
 noinst_SCRIPTS += \
     ibus-build-sudoers \
-    uinput-replay-test.sh \
     $(NULL)
 CLEANFILES += \
     ibus-sudoers \
     ibus-build-sudoers \
-    uinput-replay-test.sh \
     $(NULL)
 endif
 endif
@@ -137,10 +132,8 @@ test_execs_PROGRAMS += \
     uinput-replay \
     $(NULL)
 test_execs += \
-    uinput-replay-test.sh \
     uinput-replay \
     $(NULL)
-test_execs_SCRIPTS += uinput-replay-test.sh
 sudo_DATA= ibus-sudoers
 sudodir = /etc/sudoers.d
 endif
@@ -240,7 +233,6 @@ EXTRA_DIST = \
     ibus-desktop-testing-runner.in \
     ibus-sudoers.conf.in \
     libinput-test.yml \
-    uinput-replay-test.sh.in \
     $(NULL)
 
 ibus_bus_SOURCES = ibus-bus.c
@@ -278,18 +270,18 @@ ibus_inputcontext_create_LDADD = $(prog_ldadd)
 ibus_keynames_SOURCES = ibus-keynames.c
 ibus_keynames_LDADD = $(prog_ldadd)
 
-uinput_replay_SOURCES = uinput-replay.c
-uinput_replay_CFLAGS = @GLIB2_CFLAGS@ @LIBEVDEV_CFLAGS@
+uinput_replay_SOURCES = uinput-replay.c uinput-replay.h
+uinput_replay_CFLAGS = @GLIB2_CFLAGS@ @LIBEVDEV_CFLAGS@ -DUINPUT_REPLAY_MAIN
 uinput_replay_LDADD = @GLIB2_LIBS@ @LIBEVDEV_LIBS@
 
-ibus_keypress_SOURCES = ibus-keypress.c
+ibus_keypress_SOURCES = ibus-keypress.c uinput-replay.c uinput-replay.h
 if ENABLE_GTK4
-ibus_keypress_CFLAGS = @GTK4_CFLAGS@
-ibus_keypress_LDADD = @GTK4_LIBS@ $(prog_ldadd)
+ibus_keypress_CFLAGS = @GTK4_CFLAGS@ @LIBEVDEV_CFLAGS@
+ibus_keypress_LDADD = @GTK4_LIBS@ @LIBEVDEV_LIBS@ $(prog_ldadd)
 else
 if ENABLE_GTK3
-ibus_keypress_CFLAGS = @GTK3_CFLAGS@
-ibus_keypress_LDADD = @GTK3_LIBS@ $(prog_ldadd)
+ibus_keypress_CFLAGS = @GTK3_CFLAGS@ @LIBEVDEV_CFLAGS@
+ibus_keypress_LDADD = @GTK3_LIBS@ @LIBEVDEV_LIBS@ $(prog_ldadd)
 endif
 endif
 

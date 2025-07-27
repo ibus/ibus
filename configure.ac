@@ -736,7 +736,7 @@ if test x"$enable_libnotify" = x"yes"; then
 fi
 
 PKG_CHECK_MODULES(LIBEVDEV,
-    [libevdev],
+    [libevdev libudev],
     [enable_libevdev=yes],
     [enable_libevdev=no]
 )

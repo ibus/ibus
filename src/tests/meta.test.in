@@ -1,4 +1,4 @@
 [Test]
 Type=session
-Exec=@TEST_EXEC@ --tap
+Exec=@TEST_EXEC@ @TEST_SRCDIR@ --tap
 Output=TAP

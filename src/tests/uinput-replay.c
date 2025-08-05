@@ -3,8 +3,8 @@
 /*
  * Copyright (c) 2013 Marcin Slusarz <marcin.slusarz@gmail.com>
  * Copyright (c) 2025 Peter Hutterer <peter.hutterer@who-t.net>
- # Copyright (c) 2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (c) 2025 Red Hat, Inc.
+ * Copyright (c) 2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (c) 2013-2025 Red Hat, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -30,8 +30,6 @@
 
 #include <errno.h>
 #include <grp.h>
-#include <linux/input.h>
-#include <linux/input-event-codes.h>
 #include <libevdev/libevdev-uinput.h>
 #include <libudev.h>
 
@@ -40,10 +38,22 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include "uinput-replay.h"
 
 
 #define msleep(t) usleep((t) * 1000)
+#define VERSION 0.1
+#define DATA_HEADER \
+    "const static struct evdev_uinput_event test_data%d[] = {\n"
+#define DATA_TAILER \
+    "};\n"
+#define ALL_DATA_HEADER \
+    "const static struct evdev_uinput_event *test_data[] = {\n"
+
 
 struct uinput_replay_device
 {
@@ -51,9 +61,33 @@ struct uinput_replay_device
     char                   *contents;
 };
 
+static guint m_indent = 4;
+
+#ifdef UINPUT_REPLAY_MAIN
+static gchar *m_yamlcsv;
+
+static void
+show_version (void)
+{
+    g_print ("%s - Version %3.1f\n", g_get_prgname (), VERSION);
+    exit (EXIT_SUCCESS);
+}
+
+static const GOptionEntry entries[] =
+{
+    { "version",   'V', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
+      show_version, "Show version.", NULL },
+    { "yaml2c",    'C', 0, G_OPTION_ARG_STRING, &m_yamlcsv,
+      "Conert YAML_FILE to C-lang data", "YAML_FILES" },
+    { "indent",    'i', 0, G_OPTION_ARG_INT, (int*)&m_indent,
+      "Specify INDENT value in C-lang file (default is 4)", "INDENT" },
+    { NULL }
+};
+#endif
+
 
 static gchar *
-get_case_contents (const gchar *case_path,
+get_file_contents (const gchar *case_path,
                    GError     **error)
 {
     gchar *contents = NULL;
@@ -294,28 +328,50 @@ parse_evdev (const gchar            *line,
 }
 
 
-static gboolean
-ibus_uidev_write_event_array (struct libevdev_uinput *uidev,
-                              guint                  *array)
+static void
+append_array_to_string (GString     *string,
+                        const guint *array,
+                        guint        indent)
 {
-    static guint prev_time = 0;
+    guint array0;
+
+    g_assert (string);
+    g_assert (array);
+    array0 = array[0];
+    g_string_append_printf (string, "%*s{ %3u, %6u, %3u, %3u, %6u }%s\n",
+                            indent, " ",
+                            array0, array[1], array[2], array[3], array[4],
+                            array0 != 0 ? "," : "");
+}
+
+
+static gboolean
+ibus_uidev_write_event_array (struct libevdev_uinput          *uidev,
+                              const struct evdev_uinput_event *event,
+                              guint                           *prev_time)
+{
     guint interval;
     int retval;
 
-    g_assert (array);
-    g_assert (array[1] >= prev_time);
-    interval = array[1] - prev_time;
-    prev_time = array[1];
+    g_assert (event);
+    g_assert (prev_time);
+    g_assert (event->usec >= *prev_time);
+    interval = event->usec - *prev_time;
+    *prev_time = event->usec;
     if (interval > 0) {
-        g_debug ("usleep %u", interval);
+        g_debug ("usleep(%u)", interval);
         usleep(interval);
     }
-    g_debug ("write uinput(%u, %u, %u, %u, %u)",
-             array[0], array[1], array[2], array[3], array[4]);
-    retval = libevdev_uinput_write_event (uidev, array[2], array[3], array[4]);
+    g_debug ("write_uinput(%u, %u, %u, %u, %u)",
+             event->index, event->usec, event->type, event->code, event->value);
+    retval = libevdev_uinput_write_event (uidev,
+                                          event->type,
+                                          event->code,
+                                          event->value);
     if (retval) {
-        g_warning ("Failed to write uinput(%u, %u, %u, %u, %u): %s",
-                   array[0], array[1], array[2], array[3], array[4],
+        g_warning ("Failed to write_uinput(%u, %u, %u, %u, %u): %s",
+                   event->index, event->usec, event->type, event->code,
+                   event->value,
                    g_strerror (-retval));
         return FALSE;
     }
@@ -325,20 +381,25 @@ ibus_uidev_write_event_array (struct libevdev_uinput *uidev,
 
 static void
 ibus_uidev_replay_with_yaml_data (struct libevdev_uinput *uidev,
-                                  const gchar            *contents)
+                                  const gchar            *contents,
+                                  GString                *string)
 {
     const gchar *head = contents;
     guint start_events = 0;
     guint start_evdev = 0;
     guint start_keys = 0;
+    guint prev_time = 0;
 
-    g_assert (uidev);
+    if (!string)
+        g_assert (uidev);
     g_assert (contents);
     while (*head == '\n') ++head;
     while (*head != '\0') {
         const gchar *end = head;
         gchar *line;
         guint array[5] = { 0, };
+        struct evdev_uinput_event event;
+
 
         while (*end != '\n' && *end != '\0') ++end;
         if (*head == '#') {
@@ -348,9 +409,24 @@ ibus_uidev_replay_with_yaml_data (struct libevdev_uinput *uidev,
             continue;
         }
         line = g_strndup (head, end - head);
-        if (parse_evdev (line, &start_events, &start_evdev, &start_keys, array))
-            if (!ibus_uidev_write_event_array (uidev, array))
+        if (parse_evdev (line,
+                         &start_events, &start_evdev, &start_keys,
+                         array)) {
+            event.index = array[0];
+            event.usec = array[1];
+            event.type = array[2];
+            event.code = array[3];
+            event.value = array[4];
+            if (string) {
+                /* Avoid 0 index */
+                event.index++;
+                append_array_to_string (string, array, m_indent);
+            } else if (!ibus_uidev_write_event_array (uidev,
+                                                      &event,
+                                                      &prev_time)) {
                 return;
+            }
+        }
         g_free (line);
         head = end;
         if (*head != '\0')
@@ -386,8 +462,8 @@ uinput_replay_create_device (const char *recording,
 
     g_return_val_if_fail (recording != NULL, NULL);
 
-    g_return_val_if_fail ((contents = get_case_contents (recording, error)),
-                          NULL);
+    if (!(contents = get_file_contents (recording, error)))
+        return NULL;
     if (!(uidev = ibus_uidev_new (error))) {
         g_free (contents);
         return NULL;
@@ -399,6 +475,104 @@ uinput_replay_create_device (const char *recording,
 
     return dev;
 }
+
+
+#ifdef UINPUT_REPLAY_MAIN
+static void
+append_data_var_to_string (GString     *string,
+                           guint        indent,
+                           int          index)
+{
+    g_assert (string);
+    if (index) {
+        g_string_append_printf (string, "%*stest_data%d,\n",
+                                indent, " ", index);
+    } else {
+        g_string_append_printf (string, "%*sNULL\n",
+                                indent, " ");
+    }
+}
+
+
+static gboolean
+uinput_replay_yaml2c_with_string (const char *yamlfile,
+                                  int        index,
+                                  GString   *string,
+                                  GError    **error)
+{
+    gchar *contents;
+    gchar *header;
+    const uint array[5] = { 0, };
+
+    g_assert (yamlfile);
+    if (!(contents = get_file_contents (yamlfile, error)))
+        return FALSE;
+    ibus_uidev_replay_with_yaml_data (NULL, contents, string);
+    g_free (contents);
+    if (!string->len) {
+        g_string_free (string, TRUE);
+        if (error) {
+            g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                         "Failed to parse %s", yamlfile);
+        }
+        return FALSE;
+    }
+    append_array_to_string (string, array, m_indent);
+    header = g_strdup_printf (DATA_HEADER, index);
+    g_string_prepend (string, header);
+    g_free (header);
+    g_string_append (string, DATA_TAILER);
+    g_string_append_c (string, '\n');
+    return TRUE;
+}
+
+
+static gboolean
+uinput_replay_yaml2c_all (const char *yamlcsv,
+                          GError    **error)
+{
+    gchar **yamlfiles;
+    GString *string;
+    int i, case_num;
+
+    if (!yamlcsv) {
+        if (error) {
+            g_set_error_literal (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                                 "No file");
+        }
+        return FALSE;
+    }
+    if (!(yamlfiles = g_strsplit (yamlcsv, ",",  -1))) {
+        if (error) {
+            g_set_error_literal (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                                 "Failed to split CSV file");
+        }
+        return FALSE;
+    }
+    string = g_string_new (NULL);
+    for (i = 0; yamlfiles[i]; ++i) {
+        if (!uinput_replay_yaml2c_with_string (yamlfiles[i], i + 1, string,
+                                               error)) {
+            g_string_free (string, TRUE);
+            g_strfreev (yamlfiles);
+            return FALSE;
+        }
+    }
+    g_strfreev (yamlfiles);
+    if (i) {
+        g_string_append (string, ALL_DATA_HEADER);
+        case_num = i;
+        for (i = 0; i < case_num; ++i)
+            append_data_var_to_string (string, m_indent, i + 1);
+        append_data_var_to_string (string, m_indent, 0);
+        g_string_append (string, DATA_TAILER);
+    }
+
+    g_print ("%s\n", string->str);
+    g_string_free (string, TRUE);
+    return TRUE;
+}
+#endif
 
 
 void
@@ -413,34 +587,53 @@ uinput_replay_device_destroy (struct uinput_replay_device *dev)
 void
 uinput_replay_device_replay (struct uinput_replay_device *dev)
 {
-    ibus_uidev_replay_with_yaml_data (dev->uidev, dev->contents);
+    ibus_uidev_replay_with_yaml_data (dev->uidev, dev->contents, NULL);
 }
 
 
 void
-uinput_replay_device_replay_event (struct uinput_replay_device *dev,
-                                   const struct input_event    *event)
+uinput_replay_device_replay_event (struct uinput_replay_device     *dev,
+                                   const struct evdev_uinput_event *event,
+                                   guint                           *prev_time)
 {
-    libevdev_uinput_write_event (dev->uidev,
-                                 event->type, event->code, event->value);
+    ibus_uidev_write_event_array (dev->uidev, event, prev_time);
 }
 
 
 #ifdef UINPUT_REPLAY_MAIN
 int
-main (int argc, char *argv[]) {
+main (int argc, char *argv[])
+{
+    GOptionContext *context = g_option_context_new ("libinput-test.yml");
     GError *error = NULL;
     gchar *contents;
     struct libevdev_uinput *uidev;
 
+#ifdef ENABLE_NLS
+    setlocale ();
+#endif
+    g_option_context_add_main_entries (context, entries, "");
+    if (!g_option_context_parse (context, &argc, &argv, &error)) {
+        g_printerr ("Option parsing failed: %s\n", error->message);
+        g_error_free (error);
+        exit (-1);
+    }
+
+    if (m_yamlcsv) {
+        if (!uinput_replay_yaml2c_all (m_yamlcsv, &error)) {
+            g_print ("%s\n", error->message);
+            g_error_free (error);
+            return EXIT_FAILURE;
+        }
+        return EXIT_SUCCESS;
+    }
+
     if (argc == 1) {
-        gchar *prgname = g_path_get_basename (argv[0]);
-        g_warning ("Usage: %s libinput-test.yml", prgname);
-        g_free (prgname);
+        g_warning ("Usage: %s libinput-test.yml", g_get_prgname ());
         return EXIT_FAILURE;
     }
 
-    if (!(contents = get_case_contents (argv[1], &error))) {
+    if (!(contents = get_file_contents (argv[1], &error))) {
         g_warning ("%s", error->message);
         g_error_free (error);
         return EXIT_FAILURE;
@@ -451,7 +644,7 @@ main (int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    ibus_uidev_replay_with_yaml_data (uidev, contents);
+    ibus_uidev_replay_with_yaml_data (uidev, contents, NULL);
 
     g_free (contents);
     libevdev_uinput_destroy (uidev);

@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2007-2015 Peng Huang <shawn.p.huang@gmail.com>
 # Copyright (c) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
-# Copyright (c) 2007-2018 Red Hat, Inc.
+# Copyright (c) 2007-2025 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -76,13 +76,7 @@ if ENABLE_GTK3_OR_4
 TESTS_C += ibus-compose
 if ENABLE_LIBEVDEV
 TESTS_C += ibus-keypress
-noinst_SCRIPTS += \
-    ibus-build-sudoers \
-    $(NULL)
-CLEANFILES += \
-    ibus-sudoers \
-    ibus-build-sudoers \
-    $(NULL)
+noinst_PROGRAMS += uinput-replay
 endif
 endif
 
@@ -127,16 +121,6 @@ CLEANFILES += \
 test_execs_PROGRAMS = $(TESTS_C)
 test_execs_SCRIPTS = $(TESTS_SCRIPT)
 if ENABLE_GTK3_OR_4
-if ENABLE_LIBEVDEV
-test_execs_PROGRAMS += \
-    uinput-replay \
-    $(NULL)
-test_execs += \
-    uinput-replay \
-    $(NULL)
-sudo_DATA= ibus-sudoers
-sudodir = /etc/sudoers.d
-endif
 test_execs_SCRIPTS += ibus-compose-locales
 CLEANFILES += ibus-compose-locales
 endif
@@ -157,15 +141,18 @@ endif
 $(test_metas): $(test_metas_in)
 	f=`echo $@ | sed -e 's/\.test//'`; \
 	TEST_EXEC=$(test_execsdir)/$$f; \
-	sed -e "s|@TEST_EXEC[@]|$$TEST_EXEC|g" $(srcdir)/$(test_metas_in) \
+	TEST_SRCDIR=$(test_sourcesdir); \
+	sed -e "s|@TEST_EXEC[@]|$$TEST_EXEC|g" \
+	    -e "s|@TEST_SRCDIR[@]|$$TEST_SRCDIR|g" \
+	    $(srcdir)/$(test_metas_in) \
 	    > $@.tmp && mv $@.tmp $@; \
 	$(NULL)
 
 ibus-compose-locales: ibus-compose-locales.in
 	SRCDIR=$(test_sourcesdir); \
 	sed -e "s|@SRCDIR[@]|$$SRCDIR|g" $< > $@.tmp; \
-	chmod a+x $@.tmp; \
 	mv $@.tmp $@; \
+	chmod a+x $@; \
 	$(NULL)
 
 %.sh: %.sh.in
@@ -175,28 +162,8 @@ ibus-compose-locales: ibus-compose-locales.in
 	    -e "s|@test_execsdir[@]|$(test_execsdir)|g" \
 	    -e "s|@test_sourcesdir[@]|$(test_sourcesdir)|g" \
 	$< > $@.tmp; \
-	chmod a+x $@.tmp; \
 	mv $@.tmp $@; \
-	$(NULL)
-
-# SUDO file should not have the file extension.
-ibus-sudoers: ibus-sudoers.conf.in
-	USER=itestuser; \
-	sed -e "s|@USER[@]|$$USER|g" \
-	    -e "s|@test_execsdir[@]|$(test_execsdir)|g" \
-	    -e "/@abs_top_builddir[@]/d" \
-	$< > $@.tmp; \
-	mv $@.tmp $@; \
-	$(NULL)
-
-# SUDO file should not have the file extension.
-ibus-build-sudoers: ibus-sudoers.conf.in uinput-replay
-	USER=$(shell $(builddir)/uinput-replay --username); \
-	sed -e "s|@USER[@]|$$USER|g" \
-	    -e "s|@test_execsdir[@]|$(test_execsdir)|g" \
-	    -e "s|@abs_top_builddir[@]|$(abs_top_builddir)|g" \
-	$< > $@.tmp; \
-	mv $@.tmp $@; \
+	chmod a+x $@; \
 	$(NULL)
 
 ibus-desktop-testing-autostart: ibus-desktop-testing-autostart.in
@@ -205,8 +172,8 @@ ibus-desktop-testing-autostart: ibus-desktop-testing-autostart.in
 	    -e "s|@INSTALLEDDIR[@]|$$INSTALLEDDIR|g" \
 	    -e "s|@LIBEXECDIR[@]|$(libexecdir)|g" \
 	    $< > $@.tmp; \
-	chmod a+x $@.tmp; \
 	mv $@.tmp $@; \
+	chmod a+x $@; \
 	$(NULL)
 
 ibus-desktop-testing-runner: ibus-desktop-testing-runner.in
@@ -215,8 +182,8 @@ ibus-desktop-testing-runner: ibus-desktop-testing-runner.in
 	    -e "s|@INSTALLEDDIR[@]|$$INSTALLEDDIR|g" \
 	    -e "s|@LIBEXECDIR[@]|$(libexecdir)|g" \
 	    $< > $@.tmp; \
-	chmod a+x $@.tmp; \
 	mv $@.tmp $@; \
+	chmod a+x $@; \
 	$(NULL)
 
 EXTRA_DIST = \
@@ -231,7 +198,6 @@ EXTRA_DIST = \
     ibus-desktop-testing-autostart.in \
     ibus-desktop-testing-module \
     ibus-desktop-testing-runner.in \
-    ibus-sudoers.conf.in \
     libinput-test.yml \
     $(NULL)
 
@@ -274,7 +240,12 @@ uinput_replay_SOURCES = uinput-replay.c uinput-replay.h
 uinput_replay_CFLAGS = @GLIB2_CFLAGS@ @LIBEVDEV_CFLAGS@ -DUINPUT_REPLAY_MAIN
 uinput_replay_LDADD = @GLIB2_LIBS@ @LIBEVDEV_LIBS@
 
-ibus_keypress_SOURCES = ibus-keypress.c uinput-replay.c uinput-replay.h
+ibus_keypress_SOURCES = \
+    ibus-keypress.c \
+    ibus-keypress-data.h \
+    uinput-replay.c \
+    uinput-replay.h \
+    $(NULL)
 if ENABLE_GTK4
 ibus_keypress_CFLAGS = @GTK4_CFLAGS@ @LIBEVDEV_CFLAGS@
 ibus_keypress_LDADD = @GTK4_LIBS@ @LIBEVDEV_LIBS@ $(prog_ldadd)

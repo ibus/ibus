@@ -249,6 +249,7 @@ ibus_text_append_attribute (IBusText *text,
 
     if (text->attrs == NULL) {
         text->attrs = ibus_attr_list_new ();
+        g_object_ref_sink (text->attrs);
     }
 
     attr = ibus_attribute_new (type, value, start_index, end_index);

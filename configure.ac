@@ -144,6 +144,36 @@ AC_SEARCH_LIBS([strerror],[cposix])
 
 LT_INIT
 
+AC_MSG_CHECKING([for product build])
+# --disable-product-build option.
+AC_ARG_ENABLE(product-build,
+    AS_HELP_STRING([--disable-product-build],
+                   [Disable CFLAGS for the product release]),
+    [enable_product_build="$enableval"],
+    [enable_product_build="auto"]
+)
+if test x"$enable_product_build" = xauto; then
+    if echo ibus_beta_version | grep -q "rc"; then
+        enable_product_build="yes"
+    else
+        enable_product_build="no"
+    fi
+fi
+TEST_CFLAGS="$CFLAGS"
+PRODUCT_LIB_CFLAGS=''
+if test x"$enable_product_build" = xyes; then
+    if test $ac_compiler_gnu = yes; then
+        _CFLAGS="-DG_DISABLE_CAST_CHECKS -Wl,-z,relro -Wl,-z,now $CFLAGS"
+        TEST_CFLAGS="$_CFLAGS"
+        CFLAGS="-DG_DISABLE_ASSERT $_CFLAGS"
+        PRODUCT_LIB_CFLAGS="-Wl,-Bsymbolic -fno-plt"
+    fi
+    AC_DEFINE(HAVE_PRODUCT_BUILD, 1, [Enable product build])]
+fi
+AC_SUBST(PRODUCT_LIB_CFLAGS)
+AC_SUBST(TEST_CFLAGS)
+AC_MSG_RESULT([$enable_product_build])
+
 # Check header filess.
 AC_CHECK_HEADERS([sys/prctl.h])
 

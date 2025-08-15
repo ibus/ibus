@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
- * Copyright (C) 2016-2021 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2016-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2016 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -80,6 +80,15 @@ struct _NoTransData {
     GSList      *emoji_list;
 };
 
+#ifdef HAVE_JSON_GLIB1
+static gchar *json_file = NULL;
+#endif
+static gchar *emoji_dir;
+static gchar *xml_file;
+static gchar *xml_derived_file;
+static gchar *xml_ascii_file;
+static gchar *output;
+static gchar *output_category;
 static gchar *unicode_emoji_version;
 
 
@@ -260,7 +269,7 @@ emoji_data_update_object (EmojiData     *data,
     GSList *src_annotations = data->annotations;
     GSList *dest_annotations = ibus_emoji_data_get_annotations (emoji);
     GSList *l;
-    gboolean updated_annotations = FALSE;
+    gboolean has_annotations = (dest_annotations != NULL);
     for (l = src_annotations; l; l = l->next) {
         GSList *duplicated = g_slist_find_custom (dest_annotations,
                                                   l->data,
@@ -268,16 +277,15 @@ emoji_data_update_object (EmojiData     *data,
         if (duplicated == NULL) {
             dest_annotations = g_slist_append (dest_annotations,
                                                g_strdup (l->data));
-            updated_annotations = TRUE;
+            g_assert (dest_annotations);
         }
     }
-    if (updated_annotations) {
-        ibus_emoji_data_set_annotations (
-                    emoji,
-                    g_slist_copy_deep (dest_annotations,
-                                       (GCopyFunc) g_strdup,
-                                       NULL));
-    }
+    /* If `has_annotations` is %TRUE, g_slist_append() does not change
+     * `dest_annotations` above and ibus_emoji_data_get_annotations() returns
+     * the updated annotations.
+     */
+    if (!has_annotations && dest_annotations)
+        ibus_emoji_data_set_annotations (emoji, dest_annotations);
     if (data->description)
         ibus_emoji_data_set_description (emoji, data->description);
 }
@@ -697,6 +705,8 @@ unicode_emoji_test_parse_file (const gchar *filename,
     }
     g_free (content);
     g_free (unicode_emoji_version);
+    g_clear_pointer (&data.category, g_free);
+    g_clear_pointer (&data.subcategory, g_free);
     *list = data.list;
     return TRUE;
 
@@ -1158,7 +1168,7 @@ category_file_save (const gchar *filename,
     g_string_append (buff, "const static char *unicode_emoji_categories[] = {\n");
     list_categories = g_slist_sort (list_categories, (GCompareFunc)g_strcmp0);
     g_slist_foreach (list_categories, (GFunc)category_list_dump, buff);
-    g_slist_free (list_categories);
+    g_slist_free_full (list_categories, g_free);
     g_string_append (buff, "};\n");
     g_string_append (buff, "#endif\n");
 
@@ -1170,19 +1180,23 @@ category_file_save (const gchar *filename,
     g_string_free (buff, TRUE);
 }
 
+static void
+finit (void)
+{
+#ifdef HAVE_JSON_GLIB1
+    g_free (json_file);
+#endif
+    g_free (emoji_dir);
+    g_free (xml_file);
+    g_free (xml_derived_file);
+    g_free (xml_ascii_file);
+    g_free (output);
+    g_free (output_category);
+}
+
 int
 main (int argc, char *argv[])
 {
-    gchar *prgname;
-#ifdef HAVE_JSON_GLIB1
-    gchar *json_file = NULL;
-#endif
-    gchar *emoji_dir = NULL;
-    gchar *xml_file = NULL;
-    gchar *xml_derived_file = NULL;
-    gchar *xml_ascii_file = NULL;
-    gchar *output = NULL;
-    gchar *output_category = NULL;
     GOptionEntry     entries[] = {
 #ifdef HAVE_JSON_GLIB1
         { "json", 'j', 0, G_OPTION_ARG_STRING, &json_file,
@@ -1227,23 +1241,14 @@ main (int argc, char *argv[])
     setlocale (LC_ALL, "");
 #endif
 
-    prgname = g_path_get_basename (argv[0]);
-    g_set_prgname (prgname);
-    g_free (prgname);
-
     context = g_option_context_new (NULL);
     g_option_context_add_main_entries (context, entries, NULL);
-
-    if (argc < 3) {
-        g_print ("%s", g_option_context_get_help (context, TRUE, NULL));
-        g_option_context_free (context);
-        return -1;
-    }
 
     if (!g_option_context_parse (context, &argc, &argv, &error)) {
         g_warning ("Failed options: %s", error->message);
         g_error_free (error);
-        return -1;
+        finit ();
+        return EXIT_FAILURE;
     }
     g_option_context_free (context);
 
@@ -1296,10 +1301,13 @@ main (int argc, char *argv[])
         ibus_emoji_data_save (output, list);
     if (list != NULL && output_category)
         category_file_save (output_category, list);
-    if (list)
-        g_slist_free (list);
-    else
+    if (list) {
+        g_slist_free_full (list, g_object_unref);
+    } else {
+        finit ();
         return 99;
+    }
 
-    return 0;
+    finit ();
+    return EXIT_SUCCESS;
 }

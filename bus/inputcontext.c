@@ -394,6 +394,14 @@ G_DEFINE_TYPE (BusInputContext, bus_input_context, IBUS_TYPE_SERVICE)
      && bus_ibus_impl_is_wayland_session (BUS_DEFAULT_IBUS))
 
 static void
+queue_process_key_event_free (gpointer user_data)
+{
+    SyncForwardingData *data = (SyncForwardingData *)user_data;
+    g_object_unref (data->text);
+    g_slice_free (SyncForwardingData, data);
+}
+
+static void
 _connection_destroy_cb (BusConnection   *connection,
                         BusInputContext *context)
 {
@@ -846,6 +854,8 @@ bus_input_context_destroy (BusInputContext *context)
         context->client = NULL;
     }
 
+    g_queue_free_full (context->queue_during_process_key_event,
+                       queue_process_key_event_free);
     IBUS_OBJECT_CLASS (bus_input_context_parent_class)->
             destroy (IBUS_OBJECT (context));
 }

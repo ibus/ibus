@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2024 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -489,7 +489,11 @@ bus_name_service_remove_owner (BusNameService     *service,
         }
     }
 
-    service->owners = g_slist_remove_link (service->owners, (gpointer) owners);
+    /* Should use g_slist_delete_link() instead of g_slist_remove_link(), to
+     * delete the slice link in g_slist_prepend() in
+     * bus_name_service_set_primary_owner().
+     */
+    service->owners = g_slist_delete_link (service->owners, (gpointer) owners);
 }
 
 static gboolean
@@ -661,8 +665,12 @@ bus_dbus_impl_destroy (BusDBusImpl *dbus)
     g_list_free (dbus->connections);
     dbus->connections = NULL;
 
-    g_hash_table_remove_all (dbus->unique_names);
-    g_hash_table_remove_all (dbus->names);
+    /* g_hash_table_destroy() calls both g_hash_table_remove_all() and
+     * g_hash_table_unref() and the node destruction is called in
+     * g_hash_table_remove_all_nodes().
+     */
+    g_hash_table_destroy (dbus->unique_names);
+    g_hash_table_destroy (dbus->names);
 
     dbus->unique_names = NULL;
     dbus->names = NULL;

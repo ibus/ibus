@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* IBus - The Input Bus
  * Copyright (C) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2024-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2024 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -654,7 +654,7 @@ bus_match_rule_connection_destroy_cb (BusConnection *connection,
         BusRecipient *recipient = (BusRecipient *)p->data;
 
         if (recipient->connection == connection) {
-            rule->recipients = g_list_remove_link (rule->recipients, p);
+            rule->recipients = g_list_delete_link (rule->recipients, p);
             bus_recipient_free (recipient);
             return;
         }
@@ -703,10 +703,15 @@ bus_match_rule_remove_recipient (BusMatchRule  *rule,
         BusRecipient *recipient = (BusRecipient *) p->data;
         if (connection == recipient->connection) {
             if (bus_recipient_unref (recipient)) {
-                rule->recipients = g_list_remove_link (rule->recipients, p);
-                g_signal_handlers_disconnect_by_func (connection,
-                                                      G_CALLBACK (bus_match_rule_connection_destroy_cb),
-                                                      rule);
+                /* Use g_list_delete_link() instead of g_list_remove_link()
+                 * to delete the node slice in g_list_append() in
+                 * bus_match_rule_add_recipient().
+                 */
+                rule->recipients = g_list_delete_link (rule->recipients, p);
+                g_signal_handlers_disconnect_by_func (
+                        connection,
+                        G_CALLBACK (bus_match_rule_connection_destroy_cb),
+                        rule);
             }
 
             if (rule->recipients == NULL ) {

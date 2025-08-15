@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright (c) 2011-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (c) 2015 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (c) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,8 @@
  */
 
 using IBus;
+
+static IBus.EngineSimple m_simple;
 
 class DummyEngine : IBus.EngineSimple {
 }
@@ -54,6 +56,9 @@ public int main(string[] args) {
         IBus.Engine engine = new IBus.Engine.with_type(
             typeof(IBus.EngineSimple), name,
             path.printf(++id), bus.get_connection());
+        /* the type change causes engine.ref(). */
+        m_simple = (IBus.EngineSimple)engine;
+        m_simple.unref();
 
         /* Use Idle.add() to reduce the lag caused by file io */
         GLib.Idle.add(() => {
@@ -67,8 +72,7 @@ public int main(string[] args) {
              * In /usr/share/X11/locale/en_US.UTF-8/Compose ,
              * <Multi_key> <apostrophe> <c> : U0107
              */
-            IBus.EngineSimple? simple = (IBus.EngineSimple ?) engine; 
-            simple.add_table_by_locale(null);
+            m_simple.add_table_by_locale(null);
 
             string user_file = null;
 
@@ -76,13 +80,13 @@ public int main(string[] args) {
             if (home != null) {
                 user_file = home + "/.XCompose";
                 if (GLib.FileUtils.test(user_file, GLib.FileTest.EXISTS))
-                    simple.add_compose_file(user_file);
+                    m_simple.add_compose_file(user_file);
             }
 
             user_file = GLib.Environment.get_variable("XCOMPOSEFILE");
             if (user_file != null) {
                 if (GLib.FileUtils.test(user_file, GLib.FileTest.EXISTS))
-                    simple.add_compose_file(user_file);
+                    m_simple.add_compose_file(user_file);
             }
 
             return false;
@@ -102,6 +106,7 @@ public int main(string[] args) {
     }
 
     IBus.main();
+    m_simple = null;
 
     return 0;
 }

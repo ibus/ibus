@@ -115,5 +115,6 @@ main (int argc, char *argv[])
 
     save_compose_table_endianness (compose_table, FALSE);
     save_compose_table_endianness (compose_table, TRUE);
+    ibus_compose_table_free (compose_table);
     return 0;
 }

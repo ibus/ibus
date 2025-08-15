@@ -63,6 +63,7 @@ static const gchar *m_arg0;
 static const gchar *m_srcdir;
 static gchar *m_session_name;
 static IBusBus *m_bus;
+static IBusComponent *m_component;
 static IBusEngine *m_engine;
 static GMainLoop *m_loop;
 static char *m_engine_is_focused;
@@ -306,7 +307,6 @@ register_ibus_engine_real (gpointer user_data)
 {
     TestIdleData *data = (TestIdleData *)user_data;
     IBusFactory *factory;
-    IBusComponent *component;
     IBusEngineDesc *desc;
 
     if (data->idle_id) {
@@ -319,7 +319,7 @@ register_ibus_engine_real (gpointer user_data)
     g_signal_connect (factory, "create-engine",
                       G_CALLBACK (create_engine_cb), data);
 
-    component = ibus_component_new (
+    m_component = ibus_component_new (
             "org.freedesktop.IBus.SimpleTest",
             "Simple Engine Test",
             "0.0.1",
@@ -337,8 +337,8 @@ register_ibus_engine_real (gpointer user_data)
             "Takao Fujiwara <takao.fujiwara1@gmail.com>",
             "ibus-engine",
             "us");
-    ibus_component_add_engine (component, desc);
-    ibus_bus_register_component (m_bus, component);
+    ibus_component_add_engine (m_component, desc);
+    ibus_bus_register_component (m_bus, m_component);
 
     return TRUE;
 }
@@ -405,6 +405,10 @@ exec_ibus_engine ()
     g_test_message ("Created engine");
     /* The third loop */
     ibus_main ();
+    if (m_component)
+        g_clear_object (&m_component);
+    if (m_bus)
+        g_clear_object (&m_bus);
     g_io_channel_unref (channel);
     close (m_pipe_engine[0]);
     close (m_pipe_engine[1]);

@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* bus - The Input Bus
  * Copyright (C) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2011-2022 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2011-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2021 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -367,6 +367,8 @@ bus_server_run (void)
 
     ibus_object_destroy ((IBusObject *)dbus);
     ibus_object_destroy ((IBusObject *)ibus);
+    g_object_unref (ibus);
+    g_object_unref (dbus);
 
     /* release resources */
     g_object_unref (server);

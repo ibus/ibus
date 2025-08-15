@@ -4,6 +4,7 @@
 : ${srcdir=$(dirname $0)}
 : ${srcdir:=.}
 : ${SAVE_DIST_FILES:=0}
+: ${CFLAGS:='-g -O2'}
 : ${MAKE:=make}
 : ${GTKDOCIZE:=gtkdocize}
 
@@ -19,11 +20,15 @@ FEDORA_PKG2='glib2-devel gtk2-devel gtk3-devel
 FEDORA_PKG3='cldr-emoji-annotation iso-codes-devel unicode-emoji unicode-ucd
  xkeyboard-config-devel'
 
-CFLAGS=${CFLAGS-"-Wall -Wformat -Werror=format-security"}
-(test $GCC_MAJOR_VERSION -ge 10) && {
-    CFLAGS="$CFLAGS -fanalyzer -fsanitize=address -fsanitize=leak"
-    FEDORA_PKG1="$FEDORA_PKG1 libasan"
-}
+(test $GCC_MAJOR_VERSION -ge 0) && {
+    CFLAGS="-Wall -Wformat -Werror=format-security $CFLAGS"
+} || :
+(test "x$ENABLE_ANALYZER" != "x") && {
+    (test $GCC_MAJOR_VERSION -ge 10) && {
+        CFLAGS="-fanalyzer -fsanitize=address -fsanitize=leak $CFLAGS"
+        FEDORA_PKG1="$FEDORA_PKG1 libasan"
+    } || :
+} || :
 
 cd "$srcdir"
 
@@ -118,7 +123,7 @@ autoreconf --verbose --force --install || exit 1
 cd "$olddir"
 (test "x$NOCONFIGURE" = "x" ) && {
     echo "$srcdir/configure $CONFIGFLAGS"
-    $srcdir/configure $CONFIGFLAGS || exit 1
+    $srcdir/configure $CONFIGFLAGS CFLAGS="$CFLAGS" || exit 1
     (test "$1" = "--help" ) && {
         exit 0
     } || {

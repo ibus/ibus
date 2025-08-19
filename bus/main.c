@@ -57,8 +57,7 @@ static gchar *desktop = "gnome";
 
 static gchar *panel_extension_disable_users[] = {
     "gdm",
-    "gnome-initial-setup",
-    "liveuser"
+    "gnome-initial-setup"
 };
 
 static void

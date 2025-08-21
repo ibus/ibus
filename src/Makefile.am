@@ -174,6 +174,7 @@ libibus_1_0_la_SOURCES = $(libibus_sources)
 ibusincludedir = $(includedir)/ibus-@IBUS_API_VERSION@
 ibus_public_headers =       \
     $(ibus_headers)         \
+    ibus-visibility.h       \
     ibusenumtypes.h         \
     ibusversion.h           \
     $(NULL)
@@ -181,6 +182,7 @@ ibusinclude_HEADERS =       \
     $(ibus_public_headers)  \
     $(NULL)
 ibus_private_headers =          \
+    ibusattrlistprivate.h       \
     ibuscomposetable.h          \
     ibusemojigen.h              \
     ibusenginesimpleprivate.h   \

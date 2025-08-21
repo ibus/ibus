@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* IBus - The Input Bus
  * Copyright (C) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2008-2010 Red Hat, Inc.
+ * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ibusattribute.h"
 
 /* functions prototype */
@@ -112,7 +117,8 @@ ibus_attribute_new (guint type,
     g_return_val_if_fail (
         type == IBUS_ATTR_TYPE_UNDERLINE  ||
         type == IBUS_ATTR_TYPE_FOREGROUND ||
-        type == IBUS_ATTR_TYPE_BACKGROUND, NULL);
+        type == IBUS_ATTR_TYPE_BACKGROUND ||
+        type == IBUS_ATTR_TYPE_HINT, NULL);
 
     IBusAttribute *attr = IBUS_ATTRIBUTE (g_object_new (IBUS_TYPE_ATTRIBUTE, NULL));
 
@@ -187,4 +193,14 @@ ibus_attr_background_new (guint color,
                                end_index);
 }
 
-
+IBusAttribute *
+ibus_attr_hint_new (guint hint,
+                    guint start_index,
+                    guint end_index)
+{
+    g_return_val_if_fail (hint != IBUS_ATTR_PREEDIT_NONE, NULL);
+    return ibus_attribute_new (IBUS_ATTR_TYPE_HINT,
+                               hint,
+                               start_index,
+                               end_index);
+}

@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* IBus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2008-2013 Red Hat, Inc.
+ * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +20,8 @@
  * USA
  */
 #include "ibusattrlist.h"
+#include "ibusattrlistprivate.h"
+#include "ibuserror.h"
 
 /* functions prototype */
 static void         ibus_attr_list_destroy      (IBusAttrList           *attr_list);
@@ -189,3 +191,279 @@ ibus_attr_list_get (IBusAttrList *attr_list,
 }
 
 
+static gboolean
+ibus_attr_list_has_attribution (IBusAttrList  *attr_list,
+                                IBusAttribute *attr)
+{
+    guint i;
+    IBusAttribute *_attr;
+
+    g_assert (IBUS_IS_ATTR_LIST (attr_list));
+    g_assert (IBUS_IS_ATTRIBUTE (attr));
+    for (i = 0; i < attr_list->attributes->len; ++i) {
+        _attr = g_array_index (attr_list->attributes, IBusAttribute *, i);
+        /* attr->parent would be same in this case? */
+        if (attr->type == _attr->type &&
+            attr->value == _attr->value &&
+            attr->start_index == _attr->start_index &&
+            attr->end_index == _attr->end_index) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+
+static guint
+_foreground_rgba_to_hint (guint    rgba,
+                          GError **error)
+{
+    switch (rgba) {
+    case 0x7F7F7F: /* typing-booster */
+        return IBUS_ATTR_PREEDIT_PREDICTION;
+    case 0xF90F0F: /* table */
+        return IBUS_ATTR_PREEDIT_PREFIX;
+    case 0x1EDC1A: /* table */
+        return IBUS_ATTR_PREEDIT_SUFFIX;
+    case 0xA40000: /* typing-booster, table */
+        return IBUS_ATTR_PREEDIT_ERROR_SPELLING;
+    case 0xFF00FF: /* typing-booster */
+        return IBUS_ATTR_PREEDIT_ERROR_COMPOSE;
+    case 0x0: /* Japanese */
+    case 0xFF000000:
+        return IBUS_ATTR_PREEDIT_SELECTION;
+    case 0xFFFFFF: /* Hangul */
+    case 0xFFFFFFFF:
+        return IBUS_ATTR_PREEDIT_SELECTION;
+    default: /* Custom */
+        if (error && *error == NULL) {
+            g_set_error (error, IBUS_ERROR, IBUS_ERROR_FAILED,
+            "%s does not support foreground RGBA value %X to convert hint",
+            G_STRFUNC, rgba);
+        }
+        return IBUS_ATTR_PREEDIT_NONE;
+    }
+}
+
+
+static guint
+_background_rgba_to_hint (guint    rgba,
+                          GError **error)
+{
+    switch (rgba) {
+    case 0xC8C8F0: /* Japanese */
+    case 0xFFC8C8F0:
+        return IBUS_ATTR_PREEDIT_SELECTION;
+    case 0x0: /* Hangul */
+    case 0xFF000000:
+        return IBUS_ATTR_PREEDIT_SELECTION;
+    default:; /* Custom */
+        if (error && *error == NULL) {
+            g_set_error (error, IBUS_ERROR, IBUS_ERROR_FAILED,
+            "%s does not support background RGBA value %X to convert hint",
+            G_STRFUNC, rgba);
+        }
+        return IBUS_ATTR_PREEDIT_NONE;
+    }
+}
+
+
+typedef struct _AttrTypeAndValue {
+    guint type;
+    guint value;
+} AttrTypeAndValue;
+
+
+static AttrTypeAndValue *
+_hint_to_rgba (guint    hint,
+               guint   *new_num,
+               GError **error)
+{
+    AttrTypeAndValue *values = NULL;
+
+    g_assert (new_num);
+    switch (hint) {
+    case IBUS_ATTR_PREEDIT_NONE:
+        if (error && *error == NULL) {
+            g_set_error (error, IBUS_ERROR, IBUS_ERROR_FAILED,
+            "%s should not receive the hint IBUS_ATTR_PREEDIT_NONE",
+            G_STRFUNC);
+        }
+        *new_num = 1;
+        values = g_new0 (AttrTypeAndValue, *new_num);
+        break;
+    case IBUS_ATTR_PREEDIT_WHOLE:
+        *new_num = 1;
+        values = g_new0 (AttrTypeAndValue, *new_num);
+        values[0].type = IBUS_ATTR_TYPE_UNDERLINE;
+        values[0].value = IBUS_ATTR_UNDERLINE_SINGLE;
+        break;
+    case IBUS_ATTR_PREEDIT_SELECTION:
+        *new_num = 2;
+        values = g_new0 (AttrTypeAndValue, *new_num);
+        values[0].type = IBUS_ATTR_TYPE_FOREGROUND;
+        values[0].value = 0xFFFFFFFF; /* Hangul */
+        values[1].type = IBUS_ATTR_TYPE_BACKGROUND;
+        values[1].value = 0xFF000000; /* Hangul */
+        break;
+    case IBUS_ATTR_PREEDIT_PREDICTION:
+        *new_num = 1;
+        values = g_new0 (AttrTypeAndValue, *new_num);
+        values[0].type = IBUS_ATTR_TYPE_FOREGROUND;
+        values[0].value = 0x7F7F7F; /* typing-booster */
+        break;
+    case IBUS_ATTR_PREEDIT_PREFIX:
+        *new_num = 1;
+        values = g_new0 (AttrTypeAndValue, *new_num);
+        values[0].type = IBUS_ATTR_TYPE_FOREGROUND;
+        values[0].value = 0xF90F0F; /* table */
+        break;
+    case IBUS_ATTR_PREEDIT_SUFFIX:
+        *new_num = 1;
+        values = g_new0 (AttrTypeAndValue, *new_num);
+        values[0].type = IBUS_ATTR_TYPE_FOREGROUND;
+        values[0].value = 0x1EDC1A; /* table */
+        break;
+    case IBUS_ATTR_PREEDIT_ERROR_SPELLING:
+        *new_num = 1;
+        values = g_new0 (AttrTypeAndValue, *new_num);
+        values[0].type = IBUS_ATTR_TYPE_FOREGROUND;
+        values[0].value = 0xA40000; /* typing-booster, table */
+        break;
+    case IBUS_ATTR_PREEDIT_ERROR_COMPOSE:
+        *new_num = 1;
+        values = g_new0 (AttrTypeAndValue, *new_num);
+        values[0].type = IBUS_ATTR_TYPE_FOREGROUND;
+        values[0].value = 0xFF00FF; /* typing-booster */
+        break;
+    default:
+        if (error && *error == NULL) {
+            g_set_error (error, IBUS_ERROR, IBUS_ERROR_FAILED,
+            "%s does not support the hint %u",
+            G_STRFUNC, hint);
+        }
+        *new_num = 1;
+        values = g_new0 (AttrTypeAndValue, *new_num);
+    }
+    return values;
+}
+
+
+IBusAttrList *
+ibus_attr_list_copy_format_to_rgba (IBusAttrList *attr_list,
+                                    GError      **error)
+{
+    IBusAttrList *new_attr_list;
+    guint i, j;
+
+    if (error)
+        *error = NULL;
+    g_return_val_if_fail (IBUS_IS_ATTR_LIST (attr_list), NULL);
+
+    if (attr_list->attributes->len == 0)
+        return g_object_ref (attr_list);
+
+    new_attr_list = ibus_attr_list_new ();
+    g_return_val_if_fail (IBUS_IS_ATTR_LIST (new_attr_list), NULL);
+    for (i = 0; i < attr_list->attributes->len; ++i) {
+        IBusAttribute *attr = g_array_index (attr_list->attributes,
+                                             IBusAttribute *, i);
+        guint new_num = 0;
+        AttrTypeAndValue *new_values = NULL;
+
+        switch (attr->type) {
+        case IBUS_ATTR_TYPE_UNDERLINE:
+        case IBUS_ATTR_TYPE_FOREGROUND:
+        case IBUS_ATTR_TYPE_BACKGROUND:
+            new_num = 1;
+            new_values = g_new0 (AttrTypeAndValue, new_num);
+            new_values->type = attr->type;
+            new_values->value = attr->value;
+            break;
+        case IBUS_ATTR_TYPE_HINT:
+            new_values = _hint_to_rgba (attr->value, &new_num, error);
+            break;
+        default:
+            if (error && *error == NULL) {
+                g_set_error (error, IBUS_ERROR, IBUS_ERROR_FAILED,
+                             "%s does not support attribution type %u at %u",
+                             G_STRFUNC, attr->type, i);
+            }
+        }
+        for (j = 0; j < new_num; ++j) {
+            IBusAttribute *new_attr;
+            new_attr = IBUS_ATTRIBUTE (g_object_new (IBUS_TYPE_ATTRIBUTE,
+                                                     NULL));
+            if (!IBUS_IS_ATTRIBUTE (new_attr)) {
+                g_warning ("Failed to allocate IBusAttribute");
+                g_free (new_values);
+                return new_attr_list;
+            }
+            new_attr->type = new_values[j].type;
+            new_attr->value = new_values[j].value;
+            new_attr->start_index = attr->start_index;
+            new_attr->end_index = attr->end_index;
+            ibus_attr_list_append (new_attr_list, new_attr);
+        }
+        g_free (new_values);
+    }
+    return new_attr_list;
+}
+
+
+IBusAttrList *
+ibus_attr_list_copy_format_to_hint (IBusAttrList *attr_list,
+                                    GError      **error)
+{
+    IBusAttrList *new_attr_list;
+    guint i;
+    IBusAttribute *attr, *new_attr;
+
+    if (error)
+        *error = NULL;
+    g_return_val_if_fail (IBUS_IS_ATTR_LIST (attr_list), NULL);
+
+    if (attr_list->attributes->len == 0)
+        return g_object_ref (attr_list);
+
+    new_attr_list = ibus_attr_list_new ();
+    g_return_val_if_fail (IBUS_IS_ATTR_LIST (new_attr_list), NULL);
+    for (i = 0; i < attr_list->attributes->len; ++i) {
+        attr = g_array_index (attr_list->attributes, IBusAttribute *, i);
+        new_attr = IBUS_ATTRIBUTE (g_object_new (IBUS_TYPE_ATTRIBUTE, NULL));
+        g_return_val_if_fail (IBUS_IS_ATTRIBUTE (new_attr), new_attr_list);
+        new_attr->start_index = attr->start_index;
+        new_attr->end_index = attr->end_index;
+
+        switch (attr->type) {
+        case IBUS_ATTR_TYPE_UNDERLINE:
+            new_attr->type = IBUS_ATTR_TYPE_HINT;
+            new_attr->value = IBUS_ATTR_PREEDIT_WHOLE;
+            break;
+        case IBUS_ATTR_TYPE_FOREGROUND:
+            new_attr->type = IBUS_ATTR_TYPE_HINT;
+            new_attr->value = _foreground_rgba_to_hint (attr->value, error);
+            break;
+        case IBUS_ATTR_TYPE_BACKGROUND:
+            new_attr->type = IBUS_ATTR_TYPE_HINT;
+            new_attr->value = _background_rgba_to_hint (attr->value, error);
+        case IBUS_ATTR_TYPE_HINT:
+            new_attr->type = attr->type;
+            new_attr->value = attr->value;
+            break;
+        default:
+            if (error && *error == NULL) {
+                g_set_error (error, IBUS_ERROR, IBUS_ERROR_FAILED,
+                             "%s does not support attribution type %u at %u",
+                             G_STRFUNC, attr->type, i);
+            }
+            new_attr->type = attr->type;
+            new_attr->value = attr->value;
+        }
+        if (ibus_attr_list_has_attribution (new_attr_list, new_attr))
+            g_object_unref (new_attr);
+        else
+            ibus_attr_list_append (new_attr_list, new_attr);
+    }
+    return new_attr_list;
+}

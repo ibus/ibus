@@ -144,6 +144,26 @@ AC_SEARCH_LIBS([strerror],[cposix])
 
 LT_INIT
 
+AC_MSG_CHECKING([for product build])
+# --disable-product-build option.
+AC_ARG_ENABLE(product-build,
+    AS_HELP_STRING([--disable-product-build],
+                   [Disable CFLAGS for the product release]),
+    [enable_product_build="$enableval"],
+    [enable_product_build="auto"]
+)
+if test x"$enable_product_build" = xauto; then
+    if echo ibus_beta_version | grep -q "rc"; then
+        enable_product_build="yes"
+    else
+        enable_product_build="no"
+    fi
+fi
+if test x"$enable_product_build" = xyes; then
+    AC_DEFINE(HAVE_PRODUCT_BUILD, 1, [Enable product build])
+fi
+AC_MSG_RESULT([$enable_product_build])
+
 # Check header filess.
 AC_CHECK_HEADERS([sys/prctl.h])
 
@@ -153,6 +173,16 @@ AC_CHECK_FUNCS(daemon)
 # Check dlclose() in libc.so.
 AC_CHECK_LIB(c, dlclose, LIBDL="", [AC_CHECK_LIB(dl, dlclose, LIBDL="-ldl")])
 AC_SUBST(LIBDL)
+
+# Check if static build only
+AC_MSG_CHECKING([for IBUS_STATIC_COMPILATION])
+ibus_build_static_only=0
+if test "x$enable_static" = "xyes" -a "x$enable_shared" != "xyes" ; then
+    ibus_build_static_only=1
+    AC_DEFINE(IBUS_STATIC_COMPILATION, $ibus_build_static_only,
+              [Define to build static])
+fi
+AC_MSG_RESULT([$ibus_build_static_only])
 
 # Check if cross compiling.
 AM_CONDITIONAL(CROSS_COMPILING, test "x$cross_compiling" = xyes)

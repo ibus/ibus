@@ -415,8 +415,6 @@ class Panel : IBus.PanelService {
             warning ("XDG_CURRENT_DESKTOP is not exported in your desktop " +
                      "session.");
         }
-        warning ("If you launch KDE5 on xterm, " +
-                 "export XDG_CURRENT_DESKTOP=KDE before launch KDE5.");
         return false;
     }
 
@@ -1060,10 +1058,10 @@ class Panel : IBus.PanelService {
         try {
             notification.show();
         } catch (GLib.Error e) {
-            warning (message);
+            warning(message);
         }
 #else
-        warning (message);
+        warning(message);
 #endif
     }
 

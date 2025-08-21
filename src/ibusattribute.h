@@ -2,8 +2,8 @@
 /* vim:set et sts=4: */
 /* IBus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2011-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2008-2023 Red Hat, Inc.
+ * Copyright (C) 2011-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -39,6 +39,7 @@
  * and background colors.
  */
 
+#include <ibusversion.h>
 #include "ibusserializable.h"
 
 G_BEGIN_DECLS
@@ -62,16 +63,22 @@ G_BEGIN_DECLS
 
 /**
  * IBusAttrType:
- * @IBUS_ATTR_TYPE_UNDERLINE: Decorate with underline.
+ * @IBUS_ATTR_TYPE_UNDERLINE:  Decorate with underline.
  * @IBUS_ATTR_TYPE_FOREGROUND: Foreground color.
  * @IBUS_ATTR_TYPE_BACKGROUND: Background color.
+ * @IBUS_ATTR_TYPE_HINT:       Use the preedit hint and each engine does not
+ *                             specify the RGBA values but IBus panel or the
+ *                             Wayland panel decides the actual values.
+ *                             Since: 1.5.33
  *
  * Type enumeration of IBusText attribute.
+ * Stability: Stable
  */
 typedef enum {
     IBUS_ATTR_TYPE_UNDERLINE    = 1,
     IBUS_ATTR_TYPE_FOREGROUND   = 2,
     IBUS_ATTR_TYPE_BACKGROUND   = 3,
+    IBUS_ATTR_TYPE_HINT         = 4,
 } IBusAttrType;
 
 /**
@@ -95,8 +102,10 @@ typedef enum {
 
 /**
  * IBusAttrPreedit:
- * @IBUS_ATTR_PREEDIT_DEFAULT: Default style for composing text.
- * @IBUS_ATTR_PREEDIT_NONE: Style should be the same as in non-composing text.
+ * @IBUS_ATTR_PREEDIT_DEFAULT: Default style for composing text and used in
+ *                             the internal logic only with the Wayland
+ *                             text-input protocol V1. Each #IBusEngine
+ *                             should not use it with ibus_attr_hint_new().
  * @IBUS_ATTR_PREEDIT_WHOLE: Most language engines wish to draw underline in
  *                           the typed whole preedit string except for the
  *                           prediction string. (Chinese, Japanese,
@@ -117,6 +126,8 @@ typedef enum {
  *                                    visible. (Typing-booster, Table)
  * @IBUS_ATTR_PREEDIT_ERROR_COMPOSE: A wrong compose key could be an error
  *                                   color. (Typing-booster)
+ * @IBUS_ATTR_PREEDIT_NONE: Designed for non-composing text with the Wayland
+                            text-input protocol V1 but this is deprecated.
  *
  * Type of Pre-edit style as the semantic name.
  * The Wayland specs prefers to express the semantic values rather than RGB
@@ -131,7 +142,6 @@ typedef enum {
  */
 typedef enum {
     IBUS_ATTR_PREEDIT_DEFAULT = 0,
-    IBUS_ATTR_PREEDIT_NONE,
     IBUS_ATTR_PREEDIT_WHOLE,
     IBUS_ATTR_PREEDIT_SELECTION,
     IBUS_ATTR_PREEDIT_PREDICTION,
@@ -139,6 +149,7 @@ typedef enum {
     IBUS_ATTR_PREEDIT_SUFFIX,
     IBUS_ATTR_PREEDIT_ERROR_SPELLING,
     IBUS_ATTR_PREEDIT_ERROR_COMPOSE,
+    IBUS_ATTR_PREEDIT_NONE = 1 << 8,
 } IBusAttrPreedit;
 
 typedef struct _IBusAttribute IBusAttribute;
@@ -210,7 +221,8 @@ guint                ibus_attribute_get_attr_type
  * Gets an unsigned int value relative with #IBusAttrType.
  * If the type is %IBUS_ATTR_TYPE_UNDERLINE, the return value is
  * #IBusAttrUnderline. If the type is %IBUS_ATTR_TYPE_FOREGROUND,
- * the return value is the color RGB.
+ * the return value is the color RGB. if the type is %IBUS_ATTR_TYPE_HINT,
+ * the return value is the value of #IBusAttrPreedit.
  *
  * Returns: An unsigned int value relative with #IBusAttrType.
  */
@@ -245,9 +257,12 @@ guint                ibus_attribute_get_end_index
  * @end_index: Where attribute ends.
  *
  * Creates a new underline #IBusAttribute.
- *
+ * Workaround of "transfer none" for ibus_attr_list_append().
  * Returns: (transfer none): A newly allocated #IBusAttribute.
+ *
+ * Deprecated: 1.5.33: Use ibus_attr_hint_new().
  */
+IBUS_DEPRECATED_IN_1_5_33_FOR(ibus_attr_hint_new)
 IBusAttribute       *ibus_attr_underline_new    (guint           underline_type,
                                                  guint           start_index,
                                                  guint           end_index);
@@ -258,9 +273,12 @@ IBusAttribute       *ibus_attr_underline_new    (guint           underline_type,
  * @end_index: Where attribute ends.
  *
  * Creates a new foreground #IBusAttribute.
- *
+ * Workaround of "transfer none" for ibus_attr_list_append().
  * Returns: (transfer none): A newly allocated #IBusAttribute.
+ *
+ * Deprecated: 1.5.33: Use ibus_attr_hint_new().
  */
+IBUS_DEPRECATED_IN_1_5_33_FOR(ibus_attr_hint_new)
 IBusAttribute       *ibus_attr_foreground_new   (guint           color,
                                                  guint           start_index,
                                                  guint           end_index);
@@ -271,13 +289,32 @@ IBusAttribute       *ibus_attr_foreground_new   (guint           color,
  * @end_index: Where attribute ends.
  *
  * Creates a new background #IBusAttribute.
- *
+ * Workaround of "transfer none" for ibus_attr_list_append().
  * Returns: (transfer none): A newly allocated #IBusAttribute.
+ *
+ * Deprecated: 1.5.33: Use ibus_attr_hint_new().
  */
+IBUS_DEPRECATED_IN_1_5_33_FOR(ibus_attr_hint_new)
 IBusAttribute       *ibus_attr_background_new   (guint           color,
+                                                 guint           start_index,
+                                                 guint           end_index);
+
+/**
+ * ibus_attr_hint_new:
+ * @hint: Only #IBusAttrPreedit is supported at present.
+ * @start_index: Where attribute starts.
+ * @end_index: Where attribute ends.
+ *
+ * Creates a new hint attribute #IBusAttribute.
+ * Workaround of "transfer none" for ibus_attr_list_append().
+ * Returns: (transfer none): A newly allocated #IBusAttribute.
+ *
+ * Since: 1.5.33
+ * Stability: Unstable
+ */
+IBusAttribute       *ibus_attr_hint_new         (guint           hint,
                                                  guint           start_index,
                                                  guint           end_index);
 
 G_END_DECLS
 #endif
-

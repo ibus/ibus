@@ -2,8 +2,8 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2018-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2008-2019 Red Hat, Inc.
+ * Copyright (C) 2018-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,7 @@
  */
 #include "ibusinputcontext.h"
 #include <gio/gio.h>
+#include "ibusattrlistprivate.h"
 #include "ibusshare.h"
 #include "ibusinternal.h"
 #include "ibusmarshalers.h"
@@ -69,6 +70,7 @@ struct _IBusInputContextPrivate {
     IBusText *surrounding_text;
     guint     surrounding_cursor_pos;
     guint     selection_anchor_pos;
+    guint8    preedit_format;
 };
 
 typedef struct _IBusInputContextPrivate IBusInputContextPrivate;
@@ -78,11 +80,13 @@ static guint            context_signals[LAST_SIGNAL] = { 0 };
 static IBusText *text_empty = NULL;
 
 /* functions prototype */
-static void     ibus_input_context_real_destroy (IBusProxy              *context);
-static void     ibus_input_context_g_signal     (GDBusProxy             *proxy,
-                                                 const gchar            *sender_name,
-                                                 const gchar            *signal_name,
-                                                 GVariant               *parameters);
+static void      ibus_input_context_real_destroy
+                                   (IBusProxy              *context);
+static void      ibus_input_context_g_signal
+                                   (GDBusProxy             *proxy,
+                                    const gchar            *sender_name,
+                                    const gchar            *signal_name,
+                                    GVariant               *parameters);
 
 G_DEFINE_TYPE_WITH_PRIVATE (IBusInputContext,
                             ibus_input_context,
@@ -95,7 +99,6 @@ ibus_input_context_class_init (IBusInputContextClass *class)
     GDBusProxyClass *g_dbus_proxy_class = G_DBUS_PROXY_CLASS (class);
 
     ibus_proxy_class->destroy = ibus_input_context_real_destroy;
-
     g_dbus_proxy_class->g_signal = ibus_input_context_g_signal;
 
     /* install signals */
@@ -176,8 +179,9 @@ ibus_input_context_class_init (IBusInputContextClass *class)
     /**
      * IBusInputContext::delete-surrounding-text:
      * @context: An IBusInputContext.
-     * @offset: the character offset from the cursor position of the text to be deleted.
-     *   A negative value indicates a position before the cursor.
+     * @offset: the character offset from the cursor position of the text to
+     *          be deleted. A negative value indicates a position before the
+     *          cursor.
      * @n_chars: the number of characters to be deleted.
      *
      * Emitted to delete surrounding text event from IME to client of IME.
@@ -515,6 +519,7 @@ ibus_input_context_init (IBusInputContext *context)
 
     priv = IBUS_INPUT_CONTEXT_GET_PRIVATE (context);
     priv->surrounding_text = g_object_ref_sink (text_empty);
+    priv->preedit_format = IBUS_PREEDIT_FORMAT_RGBA;
 }
 
 static void
@@ -529,6 +534,48 @@ ibus_input_context_real_destroy (IBusProxy *context)
     }
 
     IBUS_PROXY_CLASS(ibus_input_context_parent_class)->destroy (context);
+}
+
+static void
+ibus_input_context_convert_text (IBusInputContext *context,
+                                 IBusText         *text)
+{
+    IBusInputContextPrivate *priv;
+    IBusAttrList *new_attrs;
+    GError *error = NULL;
+
+    g_return_if_fail (IBUS_IS_TEXT (text));
+    g_return_if_fail (IBUS_IS_INPUT_CONTEXT (context));
+
+    priv = IBUS_INPUT_CONTEXT_GET_PRIVATE (context);
+    switch (priv->preedit_format) {
+    case IBUS_PREEDIT_FORMAT_RGBA:
+        new_attrs = ibus_attr_list_copy_format_to_rgba (text->attrs, &error);
+        if (error) {
+            g_warning ("text:%s has problem to convert to RGBA format: %s",
+                       text->text, error->message);
+            g_error_free (error);
+        }
+        if (new_attrs) {
+            g_object_unref (text->attrs);
+            text->attrs = new_attrs;
+        }
+        break;
+    case IBUS_PREEDIT_FORMAT_HINT:
+        new_attrs = ibus_attr_list_copy_format_to_hint (text->attrs, &error);
+        if (error) {
+            g_warning ("text:%s has problem to convert to HINT format: %s",
+                       text->text, error->message);
+            g_error_free (error);
+        }
+        if (new_attrs) {
+            g_object_unref (text->attrs);
+            text->attrs = new_attrs;
+        }
+        break;
+    default:
+        g_assert_not_reached ();
+    }
 }
 
 static void
@@ -560,8 +607,10 @@ ibus_input_context_g_signal (GDBusProxy  *proxy,
 
     if (g_strcmp0 (signal_name, "CommitText") == 0) {
         GVariant *variant = NULL;
+        IBusText *text;
+
         g_variant_get (parameters, "(v)", &variant);
-        IBusText *text = IBUS_TEXT (ibus_serializable_deserialize (variant));
+        text = IBUS_TEXT (ibus_serializable_deserialize (variant));
         g_variant_unref (variant);
         g_signal_emit (context, context_signals[COMMIT_TEXT], 0, text);
 
@@ -575,9 +624,12 @@ ibus_input_context_g_signal (GDBusProxy  *proxy,
         GVariant *variant = NULL;
         gint32 cursor_pos;
         gboolean visible;
+        IBusText *text;
+
         g_variant_get (parameters, "(vub)", &variant, &cursor_pos, &visible);
-        IBusText *text = IBUS_TEXT (ibus_serializable_deserialize (variant));
+        text = IBUS_TEXT (ibus_serializable_deserialize (variant));
         g_variant_unref (variant);
+        ibus_input_context_convert_text (context, text);
 
         g_signal_emit (context,
                        context_signals[UPDATE_PREEDIT_TEXT],
@@ -597,10 +649,13 @@ ibus_input_context_g_signal (GDBusProxy  *proxy,
         gint32 cursor_pos;
         gboolean visible;
         guint mode = 0;
+        IBusText *text;
+
         g_variant_get (parameters,
                        "(vubu)", &variant, &cursor_pos, &visible, &mode);
-        IBusText *text = IBUS_TEXT (ibus_serializable_deserialize (variant));
+        text = IBUS_TEXT (ibus_serializable_deserialize (variant));
         g_variant_unref (variant);
+        ibus_input_context_convert_text (context, text);
 
         g_signal_emit (context,
                        context_signals[UPDATE_PREEDIT_TEXT_WITH_MODE],
@@ -620,7 +675,8 @@ ibus_input_context_g_signal (GDBusProxy  *proxy,
     /* lookup signal in table */
     gint i;
     for (i = 0;
-         i < G_N_ELEMENTS (signals) && g_strcmp0 (signal_name, signals[i].signal_name) != 0;
+         i < G_N_ELEMENTS (signals) &&
+                 g_strcmp0 (signal_name, signals[i].signal_name) != 0;
          i++);
 
     if (i < G_N_ELEMENTS (signals)) {
@@ -631,8 +687,10 @@ ibus_input_context_g_signal (GDBusProxy  *proxy,
     if (g_strcmp0 (signal_name, "UpdateAuxiliaryText") == 0) {
         GVariant *variant = NULL;
         gboolean visible;
+        IBusText *text;
+
         g_variant_get (parameters, "(vb)", &variant, &visible);
-        IBusText *text = IBUS_TEXT (ibus_serializable_deserialize (variant));
+        text = IBUS_TEXT (ibus_serializable_deserialize (variant));
         g_variant_unref (variant);
 
         g_signal_emit (context,
@@ -650,9 +708,11 @@ ibus_input_context_g_signal (GDBusProxy  *proxy,
     if (g_strcmp0 (signal_name, "UpdateLookupTable") == 0) {
         GVariant *variant = NULL;
         gboolean visible;
+        IBusLookupTable *table;
+
         g_variant_get (parameters, "(vb)", &variant, &visible);
 
-        IBusLookupTable *table = IBUS_LOOKUP_TABLE (ibus_serializable_deserialize (variant));
+        table = IBUS_LOOKUP_TABLE (ibus_serializable_deserialize (variant));
         g_variant_unref (variant);
 
         g_signal_emit (context,
@@ -670,9 +730,10 @@ ibus_input_context_g_signal (GDBusProxy  *proxy,
 
     if (g_strcmp0 (signal_name, "RegisterProperties") == 0) {
         GVariant *variant = NULL;
-        g_variant_get (parameters, "(v)", &variant);
+        IBusPropList *prop_list;
 
-        IBusPropList *prop_list = IBUS_PROP_LIST (ibus_serializable_deserialize (variant));
+        g_variant_get (parameters, "(v)", &variant);
+        prop_list = IBUS_PROP_LIST (ibus_serializable_deserialize (variant));
         g_variant_unref (variant);
 
         g_signal_emit (context,
@@ -689,8 +750,10 @@ ibus_input_context_g_signal (GDBusProxy  *proxy,
 
     if (g_strcmp0 (signal_name, "UpdateProperty") == 0) {
         GVariant *variant = NULL;
+        IBusProperty *prop;
+
         g_variant_get (parameters, "(v)", &variant);
-        IBusProperty *prop = IBUS_PROPERTY (ibus_serializable_deserialize (variant));
+        prop = IBUS_PROPERTY (ibus_serializable_deserialize (variant));
         g_variant_unref (variant);
 
         g_signal_emit (context, context_signals[UPDATE_PROPERTY], 0, prop);
@@ -709,8 +772,8 @@ ibus_input_context_g_signal (GDBusProxy  *proxy,
 
         g_variant_get (parameters, "(uuu)", &keyval, &keycode, &state);
 
-        /* Forward key event back with IBUS_FORWARD_MASK. And process_key_event will
-         * not process key event with IBUS_FORWARD_MASK again. */
+        /* Forward key event back with IBUS_FORWARD_MASK. And process_key_event
+         * will not process key event with IBUS_FORWARD_MASK again. */
         g_signal_emit (context,
                        context_signals[FORWARD_KEY_EVENT],
                        0,
@@ -776,16 +839,17 @@ ibus_input_context_new (const gchar     *path,
     if (g_object_get_data (G_OBJECT (connection), "ibus-portal-connection"))
         service_name = IBUS_SERVICE_PORTAL;
 
-    initable = g_initable_new (IBUS_TYPE_INPUT_CONTEXT,
-                               cancellable,
-                               error,
-                               "g-connection",      connection,
-                               "g-name",            service_name,
-                               "g-flags",           flags,
-                               "g-interface-name",  IBUS_INTERFACE_INPUT_CONTEXT,
-                               "g-object-path",     path,
-                               "g-default-timeout", ibus_get_timeout (),
-                               NULL);
+    initable = g_initable_new (
+            IBUS_TYPE_INPUT_CONTEXT,
+            cancellable,
+            error,
+            "g-connection",      connection,
+            "g-name",            service_name,
+            "g-flags",           flags,
+            "g-interface-name",  IBUS_INTERFACE_INPUT_CONTEXT,
+            "g-object-path",     path,
+            "g-default-timeout", ibus_get_timeout (),
+            NULL);
     if (initable != NULL)
         return IBUS_INPUT_CONTEXT (initable);
     return NULL;
@@ -809,17 +873,17 @@ ibus_input_context_new_async (const gchar         *path,
         service_name = IBUS_SERVICE_PORTAL;
 
     g_async_initable_new_async (IBUS_TYPE_INPUT_CONTEXT,
-                                G_PRIORITY_DEFAULT,
-                                cancellable,
-                                callback,
-                                user_data,
-                                "g-connection",      connection,
-                                "g-name",            service_name,
-                                "g-flags",           flags,
-                                "g-interface-name",  IBUS_INTERFACE_INPUT_CONTEXT,
-                                "g-object-path",     path,
-                                "g-default-timeout", ibus_get_timeout (),
-                                NULL);
+            G_PRIORITY_DEFAULT,
+            cancellable,
+            callback,
+            user_data,
+            "g-connection",      connection,
+            "g-name",            service_name,
+            "g-flags",           flags,
+            "g-interface-name",  IBUS_INTERFACE_INPUT_CONTEXT,
+            "g-object-path",     path,
+            "g-default-timeout", ibus_get_timeout (),
+            NULL);
 }
 
 IBusInputContext *
@@ -899,11 +963,13 @@ ibus_input_context_get_input_context_async_finish (GAsyncResult  *res,
 void
 ibus_input_context_process_hand_writing_event (IBusInputContext   *context,
                                                const gdouble      *coordinates,
-                                               guint               coordinates_len)
+                                               guint
+                                                                coordinates_len)
 {
     g_assert (IBUS_IS_INPUT_CONTEXT (context));
     g_return_if_fail (coordinates != NULL);
-    g_return_if_fail (coordinates_len >= 4); /* The array should contain at least one line. */
+    /* The array should contain at least one line. */
+    g_return_if_fail (coordinates_len >= 4);
     g_return_if_fail ((coordinates_len & 1) == 0);
 
     guint i;
@@ -1154,7 +1220,8 @@ ibus_input_context_set_surrounding_text (IBusInputContext   *context,
         priv->selection_anchor_pos = anchor_pos;
 
         if (priv->needs_surrounding_text) {
-            GVariant *variant = ibus_serializable_serialize ((IBusSerializable *)text);
+            GVariant *variant =
+                    ibus_serializable_serialize ((IBusSerializable *)text);
             g_dbus_proxy_call ((GDBusProxy *) context,
                                "SetSurroundingText",        /* method_name */
                                g_variant_new ("(vuu)",
@@ -1278,12 +1345,12 @@ ibus_input_context_get_engine (IBusInputContext *context)
     g_assert (IBUS_IS_INPUT_CONTEXT (context));
 
     result = g_dbus_proxy_call_sync ((GDBusProxy *) context,
-                                     "GetEngine",               /* method_name */
-                                     NULL,                      /* parameters */
-                                     G_DBUS_CALL_FLAGS_NONE,    /* flags */
-                                     -1,                        /* timeout */
-                                     NULL,                      /* cancellable */
-                                     &error                     /* error */
+                                     "GetEngine",              /* method_name */
+                                     NULL,                     /* parameters */
+                                     G_DBUS_CALL_FLAGS_NONE,   /* flags */
+                                     -1,                       /* timeout */
+                                     NULL,                     /* cancellable */
+                                     &error                    /* error */
                                      );
     if (result == NULL) {
         if (g_error_matches (error, IBUS_ERROR, IBUS_ERROR_NO_ENGINE)) {
@@ -1633,6 +1700,17 @@ ibus_input_context_post_process_key_event (IBusInputContext *context)
 
     g_variant_unref (variant);
     g_variant_unref (result);
+}
+
+void
+ibus_input_context_set_preedit_format (IBusInputContext   *context,
+                                       IBusPreeditFormat   format)
+
+{
+    IBusInputContextPrivate *priv;
+    g_assert (IBUS_IS_INPUT_CONTEXT (context));
+    priv = IBUS_INPUT_CONTEXT_GET_PRIVATE (context);
+    priv->preedit_format = format;
 }
 
 #define DEFINE_FUNC(name, Name)                                         \

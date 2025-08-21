@@ -414,5 +414,26 @@ void ibus_panel_service_forward_process_key_event
  */
 void ibus_panel_service_send_message      (IBusPanelService *panel,
                                            IBusMessage      *message);
+
+/**
+ * ibus_panel_service_set_preedit_format:
+ * @panel: An #IBusPanelService.
+ * @format: An #IBusPreeditFormat.
+ *
+ * The pre-edit attributes follows the format and the default is
+ * #IBUS_PREEDIT_FORMAT_RGBA and the types of all #IBusAttribute are should be
+ * one of  #IBUS_ATTR_TYPE_UNDERLINE, #IBUS_ATTR_TYPE_FOREGROUND,
+ * #IBUS_ATTR_TYPE_BACKGROUND.
+ * In case that the format is #IBUS_PREEDIT_FORMAT_HINT, the types of all
+ * #IBusAttribute are #IBUS_ATTR_TYPE_HINT.
+ *
+ * See also ibus_text_get_attributes();
+ *
+ * Since: 1.5.33
+ * Stability: Unstable
+ */
+void ibus_panel_service_set_preedit_format
+                                          (IBusPanelService *panel,
+                                           IBusPreeditFormat format);
 G_END_DECLS
 #endif

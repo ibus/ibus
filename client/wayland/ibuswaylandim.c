@@ -497,6 +497,9 @@ ibus_wayland_im_update_preedit_style (IBusWaylandIM *wlim)
             default:; /* Custom */
             }
             break;
+        case IBUS_ATTR_TYPE_HINT:
+            istyle = attr->value;
+            break;
         default:
             istyle = IBUS_ATTR_PREEDIT_NONE;
         }
@@ -1767,6 +1770,8 @@ _create_input_context_done (GObject      *object,
         ibus_input_context_set_capabilities (priv->ibuscontext,
                                              capabilities);
         ibus_input_context_set_client_commit_preedit (priv->ibuscontext, TRUE);
+        ibus_input_context_set_preedit_format (priv->ibuscontext,
+                                               IBUS_PREEDIT_FORMAT_HINT);
         if (_use_sync_mode == 1) {
             ibus_input_context_set_post_process_key_event (priv->ibuscontext,
                                                            TRUE);

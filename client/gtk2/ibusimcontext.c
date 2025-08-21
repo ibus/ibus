@@ -2214,6 +2214,9 @@ _ibus_context_update_preedit_text_cb (IBusInputContext  *ibuscontext,
                                         ((attr->value & 0x00ff00)) | 0xff,
                                         ((attr->value & 0x0000ff) << 8) | 0xff);
                 break;
+            case IBUS_ATTR_TYPE_HINT:
+                g_warning ("IBUS_ATTR_TYPE_HINT should not happen.");
+                continue;
             default:
                 continue;
             }
@@ -2345,8 +2348,7 @@ _create_input_context_done (IBusBus       *bus,
     if (context == NULL) {
         g_warning ("Create input context failed: %s.", error->message);
         g_error_free (error);
-    }
-    else {
+    } else {
         gboolean requested_surrounding_text = FALSE;
         ibus_input_context_set_client_commit_preedit (context, TRUE);
         if (_use_sync_mode == 1)

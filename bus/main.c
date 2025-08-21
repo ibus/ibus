@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2013-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2013-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2023 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -228,6 +228,10 @@ main (gint argc, gchar **argv)
     setpgid (0, 0);
 
     ibus_init ();
+
+#ifndef HAVE_PRODUCT_BUILD
+    g_setenv ("PYTHONWARNINGS", "always", FALSE);
+#endif
 
     ibus_set_log_handler (g_verbose);
 

@@ -358,6 +358,7 @@ typedef enum
         IBUS_SUPER_MASK |                       \
         IBUS_HYPER_MASK |                       \
         IBUS_META_MASK))
+
 /**
  * IBusMessageDomain:
  * @IBUS_MESSAGE_ENGINE: The message domain for Engine messages
@@ -372,5 +373,28 @@ typedef enum
   IBUS_MESSAGE_DOMAIN_ENGINE,
   IBUS_MESSAGE_DOMAIN_PANEL
 } IBusMessageDomain;
+
+/**
+ * IBusPreeditFormat:
+ * @IBUS_PREEDIT_FORMAT_RGBA: Use #IBusAttribute with the RGBA.
+ *         This has been a default usage and ibus_attribute_get_attr_type()
+ *         returns @IBUS_ATTR_TYPE_UNDERLINE, @IBUS_ATTR_TYPE_FOREGROUND,
+ *         @IBUS_ATTR_TYPE_BACKGROUND.
+ * @IBUS_PREEDIT_FORMAT_HINT: Use #IBusAttribute with the hints.
+ *         This let #IBusPanelService decides the actual RGBA values to follow
+ *         the current desktop theme and ibus_attribute_get_attr_type()
+ *         returns @IBUS_ATTR_TYPE_HINT.
+ *
+ * You can set the "preedit-format" property of the constructor of
+ * #IBusInputContext or #IBusPanelService.
+ *
+ * Since: 1.5.33
+ * Stability: Unstable
+ */
+typedef enum
+{
+    IBUS_PREEDIT_FORMAT_RGBA,
+    IBUS_PREEDIT_FORMAT_HINT,
+} IBusPreeditFormat;
 
 #endif

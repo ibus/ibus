@@ -22,104 +22,91 @@
  */
 
 class ThemedRGBA {
-    public Gdk.RGBA *normal_fg { get; set; }
-    public Gdk.RGBA *normal_bg { get; set; }
-    public Gdk.RGBA *selected_fg { get; set; }
-    public Gdk.RGBA *selected_bg { get; set; }
+    public Gdk.RGBA? normal_fg { get; set; }
+    public Gdk.RGBA? normal_bg { get; set; }
+    public Gdk.RGBA? selected_fg { get; set; }
+    public Gdk.RGBA? selected_bg { get; set; }
 
     private Gtk.StyleContext m_style_context;
+    private Gtk.Settings m_settings;
 
-    public ThemedRGBA(Gtk.Widget widget) {
-        this.normal_fg = null;
-        this.normal_bg = null;
-        this.selected_fg = null;
-        this.selected_bg = null;
+    public ThemedRGBA(Gtk.StyleContext style_context) {
+        reset_rgba();
 
         /* Use the color of Gtk.TextView instead of Gtk.Label
          * because the selected label "color" is not configured
          * in "Adwaita" theme and the selected label "background-color"
          * is not configured in "Maia" theme.
-         * https://github.com/ibus/ibus/issues/1871
          */
-        Gtk.WidgetPath widget_path = new Gtk.WidgetPath();
-        widget_path.append_type(typeof(Gtk.TextView));
-        m_style_context = new Gtk.StyleContext();
-        m_style_context.set_path(widget_path);
-        m_style_context.add_class(Gtk.STYLE_CLASS_VIEW);
-
-        /* "-gtk-secondary-caret-color" value is different
-         * if the parent widget is set in "Menta" theme.
-         */
-        m_style_context.set_parent(widget.get_style_context());
+        m_style_context = style_context;
 
         get_rgba();
 
-        m_style_context.changed.connect(() => { get_rgba(); });
+        m_settings = Gtk.Settings.get_default();
+        // m_style_context.changed signal won't be called for the isolated
+        // Gtk.TextView widget.
+        m_settings.notify["gtk-theme-name"].connect(() => { get_rgba(); });
     }
 
     ~ThemedRGBA() {
         reset_rgba();
+        m_settings = null;
     }
 
     private void reset_rgba() {
-        if (this.normal_fg != null) {
-            this.normal_fg.free();
-            this.normal_fg = null;
-        }
-        if (this.normal_bg != null) {
-            this.normal_bg.free();
-            this.normal_bg = null;
-        }
-        if (this.selected_fg != null) {
-            this.selected_fg.free();
-            this.selected_fg = null;
-        }
-        if (this.selected_bg != null) {
-            this.selected_bg.free();
-            this.selected_bg = null;
-        }
+        this.normal_fg = null;
+        this.normal_bg = null;
+        this.selected_fg = null;
+        this.selected_bg = null;
     }
 
     private void get_rgba() {
         reset_rgba();
-        Gdk.RGBA *normal_fg = null;
-        Gdk.RGBA *normal_bg = null;
-        Gdk.RGBA *selected_fg = null;
-        Gdk.RGBA *selected_bg = null;
-        m_style_context.get(Gtk.StateFlags.NORMAL,
-                            "color",
-                            out normal_fg);
-        m_style_context.get(Gtk.StateFlags.SELECTED,
-                            "color",
-                            out selected_fg);
+        Gdk.RGBA color = { 0, };
 
-        string bg_prop = "background-color";
-        m_style_context.get(Gtk.StateFlags.NORMAL,
-                            bg_prop,
-                            out normal_bg);
-        m_style_context.get(Gtk.StateFlags.SELECTED,
-                            bg_prop,
-                            out selected_bg);
-        if (normal_bg.red   == selected_bg.red &&
-            normal_bg.green == selected_bg.green &&
-            normal_bg.blue  == selected_bg.blue &&
-            normal_bg.alpha == selected_bg.alpha) {
-            normal_bg.free();
-            normal_bg = null;
-            normal_bg.free();
-            normal_bg = null;
-            bg_prop = "-gtk-secondary-caret-color";
-            m_style_context.get(Gtk.StateFlags.NORMAL,
-                                bg_prop,
-                                out normal_bg);
-            m_style_context.get(Gtk.StateFlags.SELECTED,
-                                bg_prop,
-                                out selected_bg);
+        /* "Adwaita", "Maia-gtk" themes define "theme_fg_color".
+         * "Xfce-stellar" theme does not define "theme_fg_color".
+         * "Xfce-base" theme does not define any theme colors.
+         * https://github.com/ibus/ibus/issues/1871
+         */
+        if (m_style_context.lookup_color("theme_fg_color", out color)) {
+            ;
+        } else if (m_style_context.lookup_color("fg_normal", out color)) {
+            ;
+        } else {
+            color.parse("#2e3436");
         }
-        this.normal_fg   = normal_fg;
-        this.normal_bg   = normal_bg;
-        this.selected_fg = selected_fg;
-        this.selected_bg = selected_bg;
+        this.normal_fg = color.copy();
+
+        if (m_style_context.lookup_color("theme_selected_fg_color",
+                                         out color)) {
+            ;
+        } else if (m_style_context.lookup_color("fg_selected",
+                                                out color)) {
+            ;
+        } else {
+            color.parse("#ffffff");
+        }
+        this.selected_fg = color.copy();
+
+        if (m_style_context.lookup_color("theme_bg_color", out color)) {
+            ;
+        } else if (m_style_context.lookup_color("base_normal", out color)) {
+            ;
+        } else {
+            color.parse("#f6f5f4");
+        }
+        this.normal_bg = color.copy();
+
+        if (m_style_context.lookup_color("theme_selected_bg_color",
+                                         out color)) {
+            ;
+        } else if (m_style_context.lookup_color("base_selected", out color)) {
+            ;
+        } else {
+            color.parse("#3584e4");
+        }
+        this.selected_bg = color.copy();
     }
 }
 

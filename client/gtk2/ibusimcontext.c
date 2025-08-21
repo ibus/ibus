@@ -30,7 +30,9 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
 #include <ibus.h>
+#include <ibusattrlistprivate.h>
 #include "ibusimcontext.h"
+#include "iconwidget.h"
 
 #ifdef GDK_WINDOWING_WAYLAND
 #if GTK_CHECK_VERSION (3, 98, 4)
@@ -69,6 +71,9 @@ struct _IBusIMContext {
 #else
     GdkWindow *client_window;
 #endif
+    GtkWidget *text_view;
+    GtkSettings *settings;
+    IBusThemedRGBA *rgba;
 
     IBusInputContext *ibuscontext;
 
@@ -689,6 +694,26 @@ _set_content_type (IBusIMContext *context)
 }
 
 
+static void
+_settings_notify_gtk_theme_name_cb (GObject    *object,
+                                    GParamSpec *pspec,
+                                    gpointer    user_data)
+{
+    IBusIMContext *ibusimcontext = (IBusIMContext *)user_data;
+
+    g_return_if_fail (IBUS_IS_IM_CONTEXT (ibusimcontext));
+    if (ibusimcontext->rgba)
+        ibus_themed_rgba_get_colors (ibusimcontext->rgba);
+    if (ibusimcontext->rgba && ibusimcontext->rgba->selected_fg &&
+        ibusimcontext->rgba->selected_bg && ibusimcontext->ibuscontext) {
+        ibus_input_context_set_selected_color (
+                ibusimcontext->ibuscontext,
+                ibusimcontext->rgba->selected_fg,
+                ibusimcontext->rgba->selected_bg);
+    }
+}
+
+
 #if !GTK_CHECK_VERSION (3, 98, 4)
 static gint
 _key_snooper_cb (GtkWidget   *widget,
@@ -1109,9 +1134,10 @@ ibus_im_context_init (GObject *obj)
 #endif
 
     ibusimcontext->events_queue = g_queue_new ();
-
-    // Create slave im context
     ibusimcontext->slave = gtk_im_context_simple_new ();
+    ibusimcontext->settings = gtk_settings_get_default ();
+    if (ibusimcontext->settings)
+        g_object_ref (ibusimcontext->settings);
 
     g_signal_connect (ibusimcontext->slave,
                       "commit",
@@ -1136,6 +1162,10 @@ ibus_im_context_init (GObject *obj)
     g_signal_connect (ibusimcontext->slave,
                       "delete-surrounding",
                       G_CALLBACK (_slave_delete_surrounding_cb),
+                      ibusimcontext);
+    g_signal_connect (ibusimcontext->settings,
+                      "notify::gtk-theme-name",
+                      G_CALLBACK (_settings_notify_gtk_theme_name_cb),
                       ibusimcontext);
 
     if (ibus_bus_is_connected (_bus)) {
@@ -1175,6 +1205,15 @@ ibus_im_context_finalize (GObject *obj)
 
     if (ibusimcontext->ibuscontext) {
         ibus_proxy_destroy ((IBusProxy *)ibusimcontext->ibuscontext);
+        g_clear_object (&ibusimcontext->ibuscontext);
+    }
+
+    if (ibusimcontext->settings) {
+        g_signal_handlers_disconnect_by_func (
+                ibusimcontext->settings,
+                _settings_notify_gtk_theme_name_cb,
+                ibusimcontext);
+        g_clear_object (&ibusimcontext->settings);
     }
 
 #if GTK_CHECK_VERSION (3, 98, 4)
@@ -1574,16 +1613,31 @@ ibus_im_context_set_client_window (GtkIMContext *context,
         if (ibusimcontext->use_button_press_event && _use_sync_mode == 0)
             _connect_button_press_event (ibusimcontext, FALSE);
 #endif
-        g_object_unref (ibusimcontext->client_window);
-        ibusimcontext->client_window = NULL;
+        g_clear_object (&ibusimcontext->client_window);
     }
+    if (ibusimcontext->rgba)
+        g_clear_object (&ibusimcontext->rgba);
+    if (ibusimcontext->text_view)
+        g_clear_object (&ibusimcontext->text_view);
 
     if (client != NULL) {
+#if GTK_CHECK_VERSION (2, 91, 0)
+        GtkStyleContext *style_context;
+#else
+        GtkStyle        *style_context;
+#endif
         ibusimcontext->client_window = g_object_ref (client);
 #if !GTK_CHECK_VERSION (3, 98, 4)
         if (!ibusimcontext->use_button_press_event && _use_sync_mode == 0)
             _connect_button_press_event (ibusimcontext, TRUE);
 #endif
+        ibusimcontext->text_view = g_object_ref_sink (gtk_text_view_new ());
+#if GTK_CHECK_VERSION (2, 91, 0)
+        style_context = gtk_widget_get_style_context (ibusimcontext->text_view);
+#else
+        style_context = gtk_widget_get_style (ibusimcontext->text_view);
+#endif
+        ibusimcontext->rgba = ibus_themed_rgba_new (style_context);
     }
 #if GTK_CHECK_VERSION (3, 98, 4)
     if (ibusimcontext->slave)
@@ -2386,6 +2440,13 @@ _create_input_context_done (IBusBus       *bus,
         ibus_input_context_set_capabilities (ibusimcontext->ibuscontext,
                                              ibusimcontext->caps);
 
+        if (ibusimcontext->rgba && ibusimcontext->rgba->selected_fg &&
+            ibusimcontext->rgba->selected_bg) {
+            ibus_input_context_set_selected_color (
+                    ibusimcontext->ibuscontext,
+                    ibusimcontext->rgba->selected_fg,
+                    ibusimcontext->rgba->selected_bg);
+        }
         if (ibusimcontext->has_focus) {
             /* The time order is _create_input_context() ->
              * ibus_im_context_notify() -> ibus_im_context_focus_in() ->

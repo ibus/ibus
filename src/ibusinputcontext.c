@@ -29,6 +29,7 @@
 #include "ibusattribute.h"
 #include "ibuslookuptable.h"
 #include "ibusproplist.h"
+#include "ibustypes.h"
 #include "ibuserror.h"
 
 #define IBUS_INPUT_CONTEXT_GET_PRIVATE(o)  \
@@ -71,6 +72,8 @@ struct _IBusInputContextPrivate {
     guint     surrounding_cursor_pos;
     guint     selection_anchor_pos;
     guint8    preedit_format;
+    IBusRGBA *selected_bg;
+    IBusRGBA *selected_fg;
 };
 
 typedef struct _IBusInputContextPrivate IBusInputContextPrivate;
@@ -528,9 +531,16 @@ ibus_input_context_real_destroy (IBusProxy *context)
     IBusInputContextPrivate *priv;
     priv = IBUS_INPUT_CONTEXT_GET_PRIVATE (IBUS_INPUT_CONTEXT (context));
 
-    if (priv->surrounding_text) {
-        g_object_unref (priv->surrounding_text);
-        priv->surrounding_text = NULL;
+    if (priv->surrounding_text)
+        g_clear_object (&priv->surrounding_text);
+
+    if (priv->selected_bg) {
+        g_slice_free (IBusRGBA, priv->selected_bg);
+        priv->selected_bg = NULL;
+    }
+    if (priv->selected_fg) {
+        g_slice_free (IBusRGBA, priv->selected_fg);
+        priv->selected_fg = NULL;
     }
 
     IBUS_PROXY_CLASS(ibus_input_context_parent_class)->destroy (context);
@@ -550,7 +560,10 @@ ibus_input_context_convert_text (IBusInputContext *context,
     priv = IBUS_INPUT_CONTEXT_GET_PRIVATE (context);
     switch (priv->preedit_format) {
     case IBUS_PREEDIT_FORMAT_RGBA:
-        new_attrs = ibus_attr_list_copy_format_to_rgba (text->attrs, &error);
+        new_attrs = ibus_attr_list_copy_format_to_rgba (text->attrs,
+                                                        priv->selected_fg,
+                                                        priv->selected_bg,
+                                                        &error);
         if (error) {
             g_warning ("text:%s has problem to convert to RGBA format: %s",
                        text->text, error->message);
@@ -1702,6 +1715,7 @@ ibus_input_context_post_process_key_event (IBusInputContext *context)
     g_variant_unref (result);
 }
 
+
 void
 ibus_input_context_set_preedit_format (IBusInputContext   *context,
                                        IBusPreeditFormat   format)
@@ -1711,6 +1725,35 @@ ibus_input_context_set_preedit_format (IBusInputContext   *context,
     g_assert (IBUS_IS_INPUT_CONTEXT (context));
     priv = IBUS_INPUT_CONTEXT_GET_PRIVATE (context);
     priv->preedit_format = format;
+}
+
+
+void
+ibus_input_context_set_selected_color (IBusInputContext *context,
+                                       const IBusRGBA   *fg_color,
+                                       const IBusRGBA   *bg_color)
+
+{
+    IBusInputContextPrivate *priv;
+
+    g_assert (IBUS_IS_INPUT_CONTEXT (context));
+    g_return_if_fail (fg_color);
+    g_return_if_fail (bg_color);
+
+    priv = IBUS_INPUT_CONTEXT_GET_PRIVATE (context);
+    if (!priv->selected_fg)
+        priv->selected_fg = g_slice_new (IBusRGBA);
+    if (!priv->selected_bg)
+        priv->selected_bg = g_slice_new (IBusRGBA);
+
+    priv->selected_fg->red = fg_color->red;
+    priv->selected_fg->green = fg_color->green;
+    priv->selected_fg->blue = fg_color->blue;
+    priv->selected_fg->alpha = fg_color->alpha;
+    priv->selected_bg->red = bg_color->red;
+    priv->selected_bg->green = bg_color->green;
+    priv->selected_bg->blue = bg_color->blue;
+    priv->selected_bg->alpha = bg_color->alpha;
 }
 
 #define DEFINE_FUNC(name, Name)                                         \

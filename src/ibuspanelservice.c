@@ -21,10 +21,11 @@
  * USA
  */
 #include "ibusattrlistprivate.h"
-#include "ibusshare.h"
-#include "ibuspanelservice.h"
-#include "ibusmarshalers.h"
 #include "ibusinternal.h"
+#include "ibusmarshalers.h"
+#include "ibuspanelservice.h"
+#include "ibusshare.h"
+#include "ibustypes.h"
 
 #define IBUS_PANEL_SERVICE_GET_PRIVATE(o)  \
    ((IBusPanelServicePrivate *)ibus_panel_service_get_instance_private (o))
@@ -70,6 +71,8 @@ enum {
 
 typedef struct _IBusPanelServicePrivate {
     guint8 preedit_format;
+    IBusRGBA *selected_bg;
+    IBusRGBA *selected_fg;
 } IBusPanelServicePrivate;
 
 static guint            panel_signals[LAST_SIGNAL] = { 0 };
@@ -1143,6 +1146,18 @@ ibus_panel_service_get_property (IBusPanelService *panel,
 static void
 ibus_panel_service_real_destroy (IBusPanelService *panel)
 {
+    IBusPanelServicePrivate *priv;
+    g_return_if_fail (IBUS_IS_PANEL_SERVICE (panel));
+
+    priv = IBUS_PANEL_SERVICE_GET_PRIVATE (panel);
+    if (priv->selected_bg) {
+        g_slice_free (IBusRGBA, priv->selected_bg);
+        priv->selected_bg = NULL;
+    }
+    if (priv->selected_fg) {
+        g_slice_free (IBusRGBA, priv->selected_fg);
+        priv->selected_fg = NULL;
+    }
     IBUS_OBJECT_CLASS(ibus_panel_service_parent_class)->destroy (IBUS_OBJECT (panel));
 }
 
@@ -1179,7 +1194,10 @@ ibus_panel_convert_text (IBusPanelService *panel,
     priv = IBUS_PANEL_SERVICE_GET_PRIVATE (panel);
     switch (priv->preedit_format) {
     case IBUS_PREEDIT_FORMAT_RGBA:
-        new_attrs = ibus_attr_list_copy_format_to_rgba (text->attrs, &error);
+        new_attrs = ibus_attr_list_copy_format_to_rgba (text->attrs,
+                                                        priv->selected_fg,
+                                                        priv->selected_bg,
+                                                        &error);
         if (error) {
             g_warning ("text:%s has problem to convert to RGBA format: %s",
                        text->text, error->message);
@@ -1901,6 +1919,7 @@ ibus_panel_service_send_message (IBusPanelService *panel,
     }
 }
 
+
 void
 ibus_panel_service_set_preedit_format (IBusPanelService  *panel,
                                        IBusPreeditFormat  format)
@@ -1910,6 +1929,34 @@ ibus_panel_service_set_preedit_format (IBusPanelService  *panel,
     priv = IBUS_PANEL_SERVICE_GET_PRIVATE (panel);
     priv->preedit_format = format;
 }
+
+
+void
+ibus_panel_service_set_selected_color (IBusPanelService *panel,
+                                       const IBusRGBA   *fg_color,
+                                       const IBusRGBA   *bg_color)
+
+{
+    IBusPanelServicePrivate *priv;
+
+    g_assert (IBUS_IS_PANEL_SERVICE (panel));
+    g_return_if_fail (fg_color);
+    g_return_if_fail (bg_color);
+    priv = IBUS_PANEL_SERVICE_GET_PRIVATE (panel);
+    if (!priv->selected_fg)
+        priv->selected_fg = g_slice_new (IBusRGBA);
+    if (!priv->selected_bg)
+        priv->selected_bg = g_slice_new (IBusRGBA);
+    priv->selected_fg->red = fg_color->red;
+    priv->selected_fg->green = fg_color->green;
+    priv->selected_fg->blue = fg_color->blue;
+    priv->selected_fg->alpha = fg_color->alpha;
+    priv->selected_bg->red = bg_color->red;
+    priv->selected_bg->green = bg_color->green;
+    priv->selected_bg->blue = bg_color->blue;
+    priv->selected_bg->alpha = bg_color->alpha;
+}
+
 
 #define DEFINE_FUNC(name, Name)                             \
     void                                                    \

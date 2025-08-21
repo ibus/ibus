@@ -315,6 +315,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
 
     private bool m_is_wayland;
     private bool m_is_gnome = false;
+    private Gtk.Widget m_text_view;
     private ThemedRGBA m_rgba;
     private Gtk.Box m_vbox;
     /* If emojier is emoji category list or Unicode category list,
@@ -427,6 +428,12 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         }
 
         get_load_progress_object();
+    }
+
+
+    ~IBusEmojier() {
+        m_rgba = null;
+        m_text_view = null;
     }
 
 
@@ -841,8 +848,12 @@ public class IBusEmojier : Gtk.ApplicationWindow {
               }
           }
         }
-        if (m_rgba == null)
-            m_rgba = new ThemedRGBA(this);
+        if (m_text_view  == null)
+            m_text_view = new Gtk.TextView();
+        if (m_rgba == null) {
+            var style_context = m_text_view.get_style_context();
+            m_rgba = new ThemedRGBA(style_context);
+        }
         uint bg_red = (uint)(m_rgba.normal_bg.red * 255);
         uint bg_green = (uint)(m_rgba.normal_bg.green * 255);
         uint bg_blue = (uint)(m_rgba.normal_bg.blue * 255);

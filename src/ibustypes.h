@@ -231,6 +231,26 @@ struct _IBusRectangle {
 };
 
 /**
+ * IBusRGBA:
+ * @red: Red value.
+ * @green: Green value.
+ * @blue: Blue value.
+ * @alpha: Alpha value.
+ *
+ * RGBA definition.
+ *
+ * Since: 1.5.33
+ * Stability: Unstable
+ */
+typedef struct __IBusRGBA IBusRGBA;
+struct __IBusRGBA {
+    float red;
+    float green;
+    float blue;
+    float alpha;
+};
+
+/**
  * IBusFreeFunc:
  * @object: object to be freed.
  *

@@ -3,7 +3,7 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2010 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2007-2010 Red Hat, Inc.
+# Copyright (c) 2007-2025 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -34,6 +34,8 @@ im_ibus_la_SOURCES = \
 	ibusim.c \
 	ibusimcontext.c \
 	ibusimcontext.h \
+	iconwidget.c \
+	iconwidget.h \
 	$(NULL)
 
 im_ibus_la_DEPENDENCIES = $(libibus)

@@ -275,9 +275,11 @@ typedef struct _AttrTypeAndValue {
 
 
 static AttrTypeAndValue *
-_hint_to_rgba (guint    hint,
-               guint   *new_num,
-               GError **error)
+_hint_to_rgba (guint           hint,
+               guint          *new_num,
+               const IBusRGBA *selected_fg,
+               const IBusRGBA *selected_bg,
+               GError        **error)
 {
     AttrTypeAndValue *values = NULL;
 
@@ -302,9 +304,21 @@ _hint_to_rgba (guint    hint,
         *new_num = 2;
         values = g_new0 (AttrTypeAndValue, *new_num);
         values[0].type = IBUS_ATTR_TYPE_FOREGROUND;
-        values[0].value = 0xFFFFFFFF; /* Hangul */
         values[1].type = IBUS_ATTR_TYPE_BACKGROUND;
-        values[1].value = 0xFF000000; /* Hangul */
+        if (selected_fg && selected_bg) {
+            values[0].value = ((int)(selected_fg->alpha * 0xff) & 0xff) << 24 |\
+                              ((int)(selected_fg->red   * 0xff) & 0xff) << 16 |\
+                              ((int)(selected_fg->green * 0xff) & 0xff) << 8  |\
+                              ((int)(selected_fg->blue  * 0xff) & 0xff);
+            values[1].value = ((int)(selected_bg->alpha * 0xff) & 0xff) << 24 |\
+                              ((int)(selected_bg->red   * 0xff) & 0xff) << 16 |\
+                              ((int)(selected_bg->green * 0xff) & 0xff) << 8  |\
+                              ((int)(selected_bg->blue  * 0xff) & 0xff);
+        } else {
+            /* Hangul */
+            values[0].value = 0xFFFFFFFF;
+            values[1].value = 0xFF000000;
+        }
         break;
     case IBUS_ATTR_PREEDIT_PREDICTION:
         *new_num = 1;
@@ -350,8 +364,10 @@ _hint_to_rgba (guint    hint,
 
 
 IBusAttrList *
-ibus_attr_list_copy_format_to_rgba (IBusAttrList *attr_list,
-                                    GError      **error)
+ibus_attr_list_copy_format_to_rgba (IBusAttrList   *attr_list,
+                                    const IBusRGBA *selected_fg,
+                                    const IBusRGBA *selected_bg,
+                                    GError         **error)
 {
     IBusAttrList *new_attr_list;
     guint i, j;
@@ -381,7 +397,9 @@ ibus_attr_list_copy_format_to_rgba (IBusAttrList *attr_list,
             new_values->value = attr->value;
             break;
         case IBUS_ATTR_TYPE_HINT:
-            new_values = _hint_to_rgba (attr->value, &new_num, error);
+            new_values = _hint_to_rgba (attr->value, &new_num,
+                                        selected_fg, selected_bg,
+                                        error);
             break;
         default:
             if (error && *error == NULL) {

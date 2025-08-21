@@ -2,8 +2,8 @@
 #
 # ibus - The Input Bus
 #
-# Copyright (c) 2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
-# Copyright (c) 2020 Red Hat, Inc.
+# Copyright (c) 2020-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2020-2025 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -34,6 +34,8 @@ libim_ibus_la_SOURCES = \
 	ibusim.c \
 	ibusimcontext.c \
 	ibusimcontext.h \
+	iconwidget.c \
+	iconwidget.h \
 	$(NULL)
 
 libim_ibus_la_DEPENDENCIES = $(libibus)

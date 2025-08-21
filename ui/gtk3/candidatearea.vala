@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2011-2015 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,7 @@
 
 class CandidateArea : Gtk.Box {
     private bool m_vertical;
+    private Gtk.Widget m_text_view;
     private Gtk.Label[] m_labels;
     private Gtk.Label[] m_candidates;
     private Gtk.Widget[] m_widgets;
@@ -58,7 +59,18 @@ class CandidateArea : Gtk.Box {
     public CandidateArea(bool vertical) {
         GLib.Object();
         set_vertical(vertical, true);
-        m_rgba = new ThemedRGBA(this);
+        m_text_view = new Gtk.TextView();
+        var style_context = m_text_view.get_style_context();
+        m_rgba = new ThemedRGBA(style_context);
+    }
+
+    ~CandidateArea() {
+        m_ibus_candidates = null;
+        m_labels = null;
+        m_candidates = null;
+        m_widgets = null;
+        m_rgba = null;
+        m_text_view = null;
     }
 
     public bool candidate_scrolled(Gdk.EventScroll event) {

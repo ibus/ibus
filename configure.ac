@@ -927,7 +927,7 @@ AS_IF([test x"$enable_ui" != x"no" &&
       [AS_IF([test x"$enable_appindicator" = x"no" ||
               test x"$enable_xim" = x"no" ||
               test x"$enable_gdk3_wayland" != x"yes" ||
-              test x"$enable_emoji_dict" == x"no"
+              test x"$enable_emoji_dict" = x"no"
              ],
              [OUTPUT_TAIL="$OUTPUT_TAIL
 You invoked the \`configure\` script with either disabled appinicator, xim,

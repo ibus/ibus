@@ -109,7 +109,7 @@ done
 # IBusEngine has GSettings
 if test ! -f "$top_srcdir/data/dconf/$IBUS_SCHEMA_FILE" ; then
     echo "NOT FOUND $top_srcdir/data/dconf/$IBUS_SCHEMA_FILE"
-    exit -1
+    exit 1
 fi
 
 run_test_case()
@@ -128,7 +128,7 @@ run_test_case()
     if test $need_bus = yes; then
         if test ! -f "../$top_builddir/conf/memconf/ibus-memconf" ; then
             echo "NOT FOUNND ibus-memconf. Need configure --enable-memconf"
-            exit -1
+            exit 1
         fi
         # func_copy_component replaces s/$top_srcdir/%top_builddir/
         func_copy_component "../$top_srcdir/engine/simple.xml"
@@ -140,13 +140,25 @@ run_test_case()
         IBUS_ADDRESS_FILE=$PWD/ibus-daemon.pid
         export IBUS_ADDRESS_FILE
 
+        if test -f "../$top_builddir/client/gtk4/.libs/libim-ibus.so" ; then
+            IM_IBUS_SO="../$top_builddir/client/gtk4/.libs/libim-ibus.so"
+        elif test -f "../$top_builddir/client/gtk4/libim-ibus.so" ; then
+            IM_IBUS_SO="../$top_builddir/client/gtk4/libim-ibus.so"
+        else
+            echo "NOT FOUND $top_builddir/client/gtk4/libim-ibus.so"
+            exit 1
+        fi
+        mkdir -p "$PWD/lib/gtk-4.0/immodules"
+        cp "$IM_IBUS_SO" "$PWD/lib/gtk-4.0/immodules/."
+        export GTK_EXE_PREFIX="$PWD"
+
         if test -f "../$top_builddir/client/gtk3/.libs/im-ibus.so" ; then
             IM_IBUS_SO="../$top_builddir/client/gtk3/.libs/im-ibus.so"
         elif test -f "../$top_builddir/client/gtk3/im-ibus.so" ; then
             IM_IBUS_SO="../$top_builddir/client/gtk3/im-ibus.so"
         else
             echo "NOT FOUND $top_builddir/client/gtk3/im-ibus.so"
-            exit -1
+            exit 1
         fi
 
         GTK_IM_MODULE_FILE=$PWD/imcache

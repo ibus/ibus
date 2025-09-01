@@ -66,6 +66,7 @@ libibus_1_0_la_CFLAGS =     \
     @GLIB2_CFLAGS@          \
     @GOBJECT2_CFLAGS@       \
     @GIO2_CFLAGS@           \
+    @PRODUCT_LIB_CFLAGS@    \
     $(NULL)
 libibus_1_0_la_LDFLAGS =            \
     -no-undefined                   \

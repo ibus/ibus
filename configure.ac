@@ -159,9 +159,19 @@ if test x"$enable_product_build" = xauto; then
         enable_product_build="no"
     fi
 fi
+TEST_CFLAGS="$CFLAGS"
+PRODUCT_LIB_CFLAGS=''
 if test x"$enable_product_build" = xyes; then
+    if test $ac_compiler_gnu = yes; then
+        _CFLAGS="-DG_DISABLE_CAST_CHECKS -Wl,-z,relro -Wl,-z,now $CFLAGS"
+        TEST_CFLAGS="$_CFLAGS"
+        CFLAGS="-DG_DISABLE_ASSERT $_CFLAGS"
+        PRODUCT_LIB_CFLAGS="-Wl,-Bsymbolic -fno-plt"
+    fi
     AC_DEFINE(HAVE_PRODUCT_BUILD, 1, [Enable product build])
 fi
+AC_SUBST(PRODUCT_LIB_CFLAGS)
+AC_SUBST(TEST_CFLAGS)
 AC_MSG_RESULT([$enable_product_build])
 
 # Check header filess.

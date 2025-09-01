@@ -25,6 +25,8 @@ NULL =
 
 DEPS = $(top_builddir)/src/libibus-@IBUS_API_VERSION@.la
 
+CFLAGS = @TEST_CFLAGS@
+
 AM_CPPFLAGS = \
     -g                                      \
     @GLIB2_CFLAGS@                          \

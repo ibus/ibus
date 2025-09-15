@@ -796,9 +796,16 @@ _async_finish_void (GTask   *task,
      * g_task_propagate_pointer() clears task->error.
      */
     gboolean had_error = g_task_had_error (task);
-    g_task_propagate_pointer (task, error);
-    if (had_error)
+    GVariant *result = g_task_propagate_pointer (task, error);
+    if (had_error) {
+        g_assert (result == NULL);
         return FALSE;
+    }
+    /* glib/gio/gdbusconnection.c:decode_method_reply() always assign
+     * g_variant_new ("()") to result. E.g. org.freedesktop.DBus.Properties.Set
+     * D-Bus method.
+     */
+    g_variant_unref (result);
     return TRUE;
 }
 

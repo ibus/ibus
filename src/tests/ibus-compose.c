@@ -10,6 +10,7 @@
 static gchar *m_test_name;
 static gchar *m_session_name;
 static IBusBus *m_bus;
+static IBusComponent *m_component;
 static gchar *m_compose_file;
 static IBusComposeTableEx *m_compose_table;
 static IBusEngine *m_engine;
@@ -259,7 +260,6 @@ register_ibus_engine ()
 {
     static TestIdleData data = { .category = TEST_CREATE_ENGINE, .idle_id = 0 };
     IBusFactory *factory;
-    IBusComponent *component;
     IBusEngineDesc *desc;
 
     if (data.idle_id) {
@@ -276,7 +276,7 @@ register_ibus_engine ()
     g_signal_connect (factory, "create-engine",
                       G_CALLBACK (create_engine_cb), &data);
 
-    component = ibus_component_new (
+    m_component = ibus_component_new (
             "org.freedesktop.IBus.SimpleTest",
             "Simple Engine Test",
             "0.0.1",
@@ -294,8 +294,8 @@ register_ibus_engine ()
             "Takao Fujiwara <takao.fujiwara1@gmail.com>",
             "ibus-engine",
             "us");
-    ibus_component_add_engine (component, desc);
-    ibus_bus_register_component (m_bus, component);
+    ibus_component_add_engine (m_component, desc);
+    ibus_bus_register_component (m_bus, m_component);
 
     return TRUE;
 }
@@ -736,15 +736,22 @@ test_compose (void)
      */
     flags = g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL);
 #if GTK_CHECK_VERSION (4, 0, 0)
-    gtk_window_list_toplevels ();
-    while (m_list_toplevel)
-        g_main_context_iteration (NULL, TRUE);
+    {
+        GList *toplevels = gtk_window_list_toplevels ();
+        while (m_list_toplevel)
+            g_main_context_iteration (NULL, TRUE);
+        g_list_free (toplevels);
+    }
 #else
     gtk_main ();
 #endif
     g_log_set_always_fatal (flags);
     g_clear_pointer (&m_engine_is_focused, g_free);
     g_clear_pointer (&m_session_name, g_free);
+    if (m_component)
+        g_clear_object (&m_component);
+    if (m_bus)
+        g_clear_object (&m_bus);
 }
 
 

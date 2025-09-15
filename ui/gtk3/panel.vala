@@ -174,6 +174,7 @@ class Panel : IBus.PanelService {
         BindingCommon.unbind_switch_shortcut(
                 BindingCommon.KeyEventFuncType.ANY, m_keybindings);
         m_keybindings = null;
+        m_status_icon = null;
     }
 
     private CandidatePanel candidate_panel_new(bool no_wayland_panel) {

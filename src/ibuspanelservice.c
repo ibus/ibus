@@ -1433,6 +1433,7 @@ ibus_panel_service_service_method_call (IBusService           *service,
                        0,
                        text);
         _g_object_unref_if_floating (text);
+        g_dbus_method_invocation_return_value (invocation, NULL);
         return;
     }
     if (g_strcmp0 (method_name, "CandidateClickedLookupTable") == 0) {
@@ -1444,6 +1445,7 @@ ibus_panel_service_service_method_call (IBusService           *service,
                        panel_signals[CANDIDATE_CLICKED_LOOKUP_TABLE],
                        0,
                        index, button, state);
+        g_dbus_method_invocation_return_value (invocation, NULL);
         return;
     }
     if (g_strcmp0 (method_name, "SendMessageReceived") == 0) {
@@ -1464,6 +1466,7 @@ ibus_panel_service_service_method_call (IBusService           *service,
         }
         g_signal_emit (panel, panel_signals[SEND_MESSAGE_RECEIVED], 0, message);
         _g_object_unref_if_floating (message);
+        g_dbus_method_invocation_return_value (invocation, NULL);
         return;
     }
 
@@ -1793,7 +1796,7 @@ ibus_panel_service_panel_extension_register_keys (IBusPanelService   *panel,
             g_variant_builder_close (&child);
         }
         g_variant_builder_add (&builder, "{sv}",
-                               g_strdup (name), g_variant_builder_end (&child));
+                               name, g_variant_builder_end (&child));
     } while ((name = va_arg (var_args, const gchar *)));
     va_end (var_args);
 

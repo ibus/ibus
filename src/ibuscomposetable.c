@@ -1394,7 +1394,7 @@ ibus_compose_table_new_with_list (GList   *compose_list,
     gsize s_size_total, s_size_16bit, v_size_32bit, v_index_32bit;
     guint n = 0, m = 0;
     int i, j;
-    gpointer rawdata = NULL;
+    gpointer rawdata = NULL, rawdata2;
     guint16 *ibus_compose_seqs = NULL;
     guint16 *ibus_compose_seqs_32bit_first = NULL;
     guint32 *ibus_compose_seqs_32bit_second = NULL;
@@ -1424,24 +1424,42 @@ ibus_compose_table_new_with_list (GList   *compose_list,
                        s_size_16bit, n_index_stride);
             return NULL;
         }
+        /* The head is `ibus_compose_seqs`. */
         rawdata = (gpointer)g_new (guint16, s_size_16bit * n_index_stride);
         if (G_UNLIKELY (!rawdata)) {
             g_warning ("Failed g_new");
             return NULL;
         }
-        ibus_compose_seqs = (guint16*)rawdata;
     }
     if (s_size_total > s_size_16bit) {
         if (G_UNLIKELY (((s_size_total - s_size_16bit) * n_index_stride) >
                         (G_MAXSIZE / sizeof (guint16)))) {
             g_warning ("Too long allocation %lu x %u",
                        s_size_total - s_size_16bit, n_index_stride);
-            g_free (ibus_compose_seqs);
+            g_free (rawdata);
             return NULL;
         }
-        rawdata = (gpointer)g_new (
-                guint16,
-                (s_size_total - s_size_16bit) * n_index_stride);
+        if (s_size_16bit) {
+            g_assert (rawdata);
+            /* The head is `ibus_compose_seqs` and the 2nd pointer is
+             * `ibus_compose_seqs_32bit_first`.
+             */
+            rawdata2 = g_realloc (
+                    rawdata,
+                    sizeof (guint16) * s_size_16bit * n_index_stride
+                        + sizeof (guint16) * (s_size_total - s_size_16bit)
+                        * n_index_stride);
+        } else {
+            rawdata2 = (gpointer)g_new (
+                    guint16,
+                    (s_size_total - s_size_16bit) * n_index_stride);
+        }
+        if (G_UNLIKELY (!rawdata2)) {
+            g_warning ("Failed g_new");
+            g_free (rawdata);
+            return NULL;
+        }
+        rawdata = rawdata2;
         if (G_UNLIKELY ((sizeof (guint16) * (s_size_total - s_size_16bit)
                         * n_index_stride) / sizeof (guint32) + v_size_32bit 
                         > (G_MAXSIZE / sizeof (guint32)))) {
@@ -1449,28 +1467,41 @@ ibus_compose_table_new_with_list (GList   *compose_list,
                        s_size_total - s_size_16bit,
                        n_index_stride,
                        v_size_32bit);
-            g_free (ibus_compose_seqs);
             g_free (rawdata);
             return NULL;
         }
-        if (G_LIKELY (rawdata)) {
-            rawdata = g_realloc (
-                    rawdata,
-                    sizeof (guint16) * (s_size_total - s_size_16bit)
-                        * n_index_stride + sizeof (guint32) * v_size_32bit);
-        }
-        if (G_LIKELY (rawdata)) {
-            ibus_compose_seqs_32bit_first = (guint16*)rawdata;
+        /* The head is `ibus_compose_seqs` and the 2nd pointer is
+         * `ibus_compose_seqs_32bit_first` and the 3rd pointer is
+         * `ibus_compose_seqs_32bit_second`.
+         */
+        rawdata2 = g_realloc (
+                rawdata,
+                sizeof (guint16) * s_size_16bit * n_index_stride
+                    + sizeof (guint16) * (s_size_total - s_size_16bit)
+                    * n_index_stride
+                    + sizeof (guint32) * v_size_32bit);
+        if (G_LIKELY (rawdata2)) {
+            rawdata = rawdata2;
+            ibus_compose_seqs_32bit_first =
+                    (guint16*)(rawdata + sizeof (guint16)
+                    * s_size_16bit * n_index_stride);
             ibus_compose_seqs_32bit_second =
                     (guint32*)(rawdata + sizeof (guint16)
-                    * (s_size_total - s_size_16bit) * n_index_stride);
-        }
-        if (!ibus_compose_seqs_32bit_first || !ibus_compose_seqs_32bit_second) {
+                    * s_size_16bit * n_index_stride
+                    + sizeof (guint16) * (s_size_total - s_size_16bit)
+                    * n_index_stride);
+        } else {
             g_warning ("Failed g_new");
-            g_free (ibus_compose_seqs);
             g_free (rawdata);
             return NULL;
         }
+    }
+    if (s_size_16bit) {
+        g_assert (rawdata);
+        /* Need to assign the pointer here because realloc() frees the original
+         * pointer.
+         */
+        ibus_compose_seqs = (guint16*)rawdata;
     }
 
     v_index_32bit = 0;

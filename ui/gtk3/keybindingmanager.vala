@@ -251,7 +251,7 @@ public class KeybindingManager : GLib.Object {
                                       true,
                                       evmask,
                                       get_grab_modifiers(modifiers));
-            
+        evmask.mask = null;
         return retval == 0;
     }
 

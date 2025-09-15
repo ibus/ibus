@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
- * Copyright (C) 2018-2019 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2018-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2018-2019 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -243,6 +243,7 @@ static void
 ibus_extension_event_destroy (IBusExtensionEvent *event)
 {
     g_clear_pointer (&event->priv->name, g_free);
+    g_clear_pointer (&event->priv->params, g_free);
 
     IBUS_OBJECT_CLASS(ibus_extension_event_parent_class)->
             destroy (IBUS_OBJECT (event));

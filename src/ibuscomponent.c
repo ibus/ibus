@@ -619,7 +619,9 @@ ibus_component_parse_engines (IBusComponent *component,
 
     if (exec != NULL) {
         gchar *output = NULL;
-        if (g_spawn_command_line_sync (exec, &output, NULL, NULL, NULL)) {
+        gchar *errput = NULL;
+        GError *error = NULL;
+        if (g_spawn_command_line_sync (exec, &output, &errput, NULL, &error)) {
             engines_node = ibus_xml_parse_buffer (output);
             g_free (output);
 
@@ -628,6 +630,15 @@ ibus_component_parse_engines (IBusComponent *component,
                     node = engines_node;
                 }
             }
+            if (errput) {
+                g_warning ("Engines exec:%s is failed: %s", exec, errput);
+                g_free (errput);
+            }
+        } else {
+            g_warning ("Engines exec:%s is failed: %s: %s",
+                       exec, errput ? errput : "(null)", error->message);
+            g_error_free (error);
+            g_free (errput);
         }
     }
 

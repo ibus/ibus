@@ -382,7 +382,8 @@ bus_ibus_impl_set_panel_extension_keys (BusIBusImpl *ibus,
 
     if (ibus->extension_register_keys)
         g_variant_unref (ibus->extension_register_keys);
-    ibus->extension_register_keys = g_variant_ref_sink (parameters);
+    /* g_variant_ref_sink (parameters) has been called. */
+    ibus->extension_register_keys = g_variant_ref (parameters);
     if (ibus->focused_context)
         engine = bus_input_context_get_engine (ibus->focused_context);
     if (!engine)
@@ -1504,6 +1505,7 @@ _ibus_get_engines_by_names (BusIBusImpl           *ibus,
     }
     g_dbus_method_invocation_return_value (invocation,
                                            g_variant_new ("(av)", &builder));
+    g_free (names);
 }
 
 /**
@@ -1918,7 +1920,7 @@ _ibus_set_preload_engines (BusIBusImpl     *ibus,
     for (i = 0; names[i] != NULL; i++) {
         gboolean has_component = FALSE;
 
-        desc = bus_ibus_impl_get_engine_desc(ibus, names[i]);
+        desc = bus_ibus_impl_get_engine_desc (ibus, names[i]);
 
         if (desc == NULL) {
             g_set_error (error,
@@ -1927,6 +1929,7 @@ _ibus_set_preload_engines (BusIBusImpl     *ibus,
                          "Cannot find engine %s.",
                          names[i]);
             g_ptr_array_free (array, FALSE);
+            g_free (names);
             return FALSE;
         }
 
@@ -1948,13 +1951,14 @@ _ibus_set_preload_engines (BusIBusImpl     *ibus,
             g_ptr_array_add (array, component);
         }
     }
+    g_free (names);
 
     for (j = 0; j < array->len; j++) {
         bus_component_start ((BusComponent *) g_ptr_array_index (array, j),
                              g_verbose);
     }
 
-    g_ptr_array_free (array, FALSE);
+    g_ptr_array_free (array, TRUE);
 
     bus_ibus_impl_property_changed (ibus, "PreloadEngines", value);
 
@@ -2270,7 +2274,7 @@ bus_ibus_impl_registry_init (BusIBusImpl *ibus)
     GList *components;
     IBusRegistry *registry = ibus_registry_new ();
 
-    ibus->registry = NULL;
+    g_assert (!ibus->registry);
     ibus->components = NULL;
     ibus->engine_table = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -2291,12 +2295,14 @@ bus_ibus_impl_registry_init (BusIBusImpl *ibus)
             ibus_registry_check_modification (registry)) {
 
             ibus_object_destroy (IBUS_OBJECT (registry));
+            g_object_unref (registry);
             registry = ibus_registry_new ();
 
             if (ibus_registry_load_cache (registry, TRUE) == FALSE ||
                 ibus_registry_check_modification (registry)) {
 
                 ibus_object_destroy (IBUS_OBJECT (registry));
+                g_object_unref (registry);
                 registry = ibus_registry_new ();
                 ibus_registry_load (registry);
                 ibus_registry_save_cache (registry, TRUE);
@@ -2350,9 +2356,8 @@ bus_ibus_impl_registry_destroy (BusIBusImpl *ibus)
 
     g_clear_pointer (&ibus->engine_table, g_hash_table_destroy);
 
-    /* g_clear_pointer() does not set the cast. */
     ibus_object_destroy (IBUS_OBJECT (ibus->registry));
-    ibus->registry = NULL;
+    g_clear_object (&ibus->registry);
 
     if (ibus->extension_register_keys)
         g_clear_pointer (&ibus->extension_register_keys, g_variant_unref);

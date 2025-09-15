@@ -172,6 +172,7 @@ ibus_engine_simple_class_init (IBusEngineSimpleClass *class)
     en_compose_table = ibus_compose_table_deserialize (contents,
                                                        length,
                                                        &saved_version);
+    g_bytes_unref (data);
     if (!en_compose_table && saved_version) {
         g_warning ("Failed to parse the builtin compose due to the different "
                    "version %u. Please rebuild IBus resource files.",

@@ -418,7 +418,7 @@ static void
 bus_panel_proxy_g_signal (GDBusProxy  *proxy,
                           const gchar *sender_name,
                           const gchar *signal_name,
-                          GVariant    *parameters)
+                          GVariant    *parameters)  /* Expect ref_count is 3 */
 {
     BusPanelProxy *panel = (BusPanelProxy *)proxy;
 
@@ -1202,4 +1202,7 @@ bus_panel_proxy_send_message_received (BusPanelProxy *panel,
                        g_variant_ref (parameters),
                        G_DBUS_CALL_FLAGS_NONE,
                        -1, NULL, NULL, NULL);
+    if (!g_variant_is_floating (parameters)) {
+        g_variant_unref (parameters);
+    }
 }

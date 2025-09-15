@@ -318,6 +318,7 @@ static const gchar introspection_xml[] =
     "  </interface>"
     "</node>";
 
+
 static void
 ibus_engine_class_init (IBusEngineClass *class)
 {
@@ -990,6 +991,7 @@ ibus_engine_class_init (IBusEngineClass *class)
     g_object_ref_sink (text_empty);
 }
 
+
 static void
 ibus_engine_init (IBusEngine *engine)
 {
@@ -1002,6 +1004,15 @@ ibus_engine_init (IBusEngine *engine)
             g_free,
             g_free);
 }
+
+
+static void
+_g_object_unref_if_floating (gpointer instance)
+{
+    if (g_object_is_floating (instance))
+        g_object_unref (instance);
+}
+
 
 static void
 ibus_engine_destroy (IBusEngine *engine)
@@ -1017,6 +1028,7 @@ ibus_engine_destroy (IBusEngine *engine)
 
     IBUS_OBJECT_CLASS(ibus_engine_parent_class)->destroy (IBUS_OBJECT (engine));
 }
+
 
 static void
 ibus_engine_set_property (IBusEngine   *engine,
@@ -1039,6 +1051,7 @@ ibus_engine_set_property (IBusEngine   *engine,
     }
 }
 
+
 static void
 ibus_engine_get_property (IBusEngine *engine,
                           guint       prop_id,
@@ -1059,6 +1072,7 @@ ibus_engine_get_property (IBusEngine *engine,
         G_OBJECT_WARN_INVALID_PROPERTY_ID (engine, prop_id, pspec);
     }
 }
+
 
 static void
 ibus_engine_panel_extension (IBusEngine  *engine,
@@ -1094,6 +1108,7 @@ ibus_engine_panel_extension (IBusEngine  *engine,
                              g_variant_new ("(v)", data));
     g_object_unref (event);
 }
+
 
 static gboolean
 ibus_engine_filter_key_event (IBusEngine *engine,
@@ -1152,6 +1167,7 @@ ibus_engine_filter_key_event (IBusEngine *engine,
     return FALSE;
 }
 
+
 static gboolean
 ibus_engine_service_authorized_method (IBusService     *service,
                                        GDBusConnection *connection)
@@ -1160,6 +1176,7 @@ ibus_engine_service_authorized_method (IBusService     *service,
         return TRUE;
     return FALSE;
 }
+
 
 static void
 ibus_engine_service_panel_extension_register_keys (IBusEngine      *engine,
@@ -1252,6 +1269,7 @@ ibus_engine_service_panel_extension_register_keys (IBusEngine      *engine,
         g_variant_unref (v1);
 }
 
+
 static void
 ibus_engine_service_method_call (IBusService           *service,
                                  GDBusConnection       *connection,
@@ -1264,6 +1282,22 @@ ibus_engine_service_method_call (IBusService           *service,
 {
     IBusEngine *engine = IBUS_ENGINE (service);
     IBusEnginePrivate *priv = engine->priv;
+    gint i;
+
+    static const struct {
+        gchar *member;
+        guint  signal_id;
+    } no_arg_methods[] = {
+        { "FocusIn",     FOCUS_IN },
+        { "FocusOut",    FOCUS_OUT },
+        { "Reset",       RESET },
+        { "Enable",      ENABLE },
+        { "Disable",     DISABLE },
+        { "PageUp",      PAGE_UP },
+        { "PageDown",    PAGE_DOWN },
+        { "CursorUp",    CURSOR_UP },
+        { "CursorDown",  CURSOR_DOWN },
+    };
 
     if (g_strcmp0 (interface_name, IBUS_INTERFACE_ENGINE) != 0) {
         IBUS_SERVICE_CLASS (ibus_engine_parent_class)->
@@ -1311,6 +1345,7 @@ ibus_engine_service_method_call (IBusService           *service,
         if (arg0) {
             event = (IBusExtensionEvent *)ibus_serializable_deserialize_object (
                     arg0);
+            g_variant_unref (arg0);
         }
         if (!event) {
             g_dbus_method_invocation_return_error (
@@ -1332,6 +1367,7 @@ ibus_engine_service_method_call (IBusService           *service,
             IBusText *text = ibus_text_new_from_static_string ("");
             ibus_engine_update_preedit_text (engine, text, 0, FALSE);
         }
+        _g_object_unref_if_floating (event);
         g_dbus_method_invocation_return_value (invocation, NULL);
         return;
     }
@@ -1342,22 +1378,6 @@ ibus_engine_service_method_call (IBusService           *service,
         return;
     }
 
-    static const struct {
-        gchar *member;
-        guint  signal_id;
-    } no_arg_methods[] = {
-        { "FocusIn",     FOCUS_IN },
-        { "FocusOut",    FOCUS_OUT },
-        { "Reset",       RESET },
-        { "Enable",      ENABLE },
-        { "Disable",     DISABLE },
-        { "PageUp",      PAGE_UP },
-        { "PageDown",    PAGE_DOWN },
-        { "CursorUp",    CURSOR_UP },
-        { "CursorDown",  CURSOR_DOWN },
-    };
-
-    gint i;
     for (i = 0; i < G_N_ELEMENTS (no_arg_methods); i++) {
         if (g_strcmp0 (method_name, no_arg_methods[i].member) == 0) {
             g_signal_emit (engine, engine_signals[no_arg_methods[i].signal_id], 0);
@@ -1482,9 +1502,7 @@ ibus_engine_service_method_call (IBusService           *service,
                        text,
                        cursor_pos,
                        anchor_pos);
-        if (g_object_is_floating (text)) {
-            g_object_unref (text);
-        }
+        _g_object_unref_if_floating (text);
         g_dbus_method_invocation_return_value (invocation, NULL);
         return;
     }
@@ -1493,7 +1511,10 @@ ibus_engine_service_method_call (IBusService           *service,
         const gdouble *coordinates;
         gsize coordinates_len = 0;
 
-        coordinates = g_variant_get_fixed_array (g_variant_get_child_value (parameters, 0), &coordinates_len, sizeof (gdouble));
+        coordinates = g_variant_get_fixed_array (
+                g_variant_get_child_value (parameters, 0),
+                &coordinates_len,
+                sizeof (gdouble));
         g_return_if_fail (coordinates != NULL);
         /* The array should contain at least one line. */
         g_return_if_fail (coordinates_len >= 4);
@@ -1510,7 +1531,8 @@ ibus_engine_service_method_call (IBusService           *service,
     if (g_strcmp0 (method_name, "CancelHandWriting") == 0) {
         guint n_strokes = 0;
         g_variant_get (parameters, "(u)", &n_strokes);
-        g_signal_emit (engine, engine_signals[CANCEL_HAND_WRITING], 0, n_strokes);
+        g_signal_emit (engine, engine_signals[CANCEL_HAND_WRITING], 0,
+                       n_strokes);
         g_dbus_method_invocation_return_value (invocation, NULL);
         return;
     }
@@ -1518,6 +1540,7 @@ ibus_engine_service_method_call (IBusService           *service,
     /* should not be reached */
     g_return_if_reached ();
 }
+
 
 /**
  * _ibus_engine_get_active_surrounding_text:
@@ -1535,6 +1558,7 @@ _ibus_engine_get_active_surrounding_text (IBusEngine      *engine,
     g_assert (retval);
     return retval;
 }
+
 
 /**
  * _ibus_engine_has_focus_id:
@@ -1564,6 +1588,7 @@ _ibus_engine_has_focus_id (IBusEngine      *engine,
     g_assert (retval);
     return retval;
 }
+
 
 static GVariant *
 ibus_engine_service_get_property (IBusService        *service,
@@ -1613,6 +1638,7 @@ ibus_engine_service_get_property (IBusService        *service,
                  property_name ? property_name : "(null)");
     g_return_val_if_reached (NULL);
 }
+
 
 static gboolean
 ibus_engine_service_set_property (IBusService        *service,
@@ -1680,6 +1706,7 @@ ibus_engine_service_set_property (IBusService        *service,
     g_return_val_if_reached (FALSE);
 }
 
+
 static gboolean
 ibus_engine_process_key_event (IBusEngine *engine,
                                guint       keyval,
@@ -1689,10 +1716,12 @@ ibus_engine_process_key_event (IBusEngine *engine,
     return FALSE;
 }
 
+
 static void
 ibus_engine_focus_in (IBusEngine *engine)
 {
 }
+
 
 static void
 ibus_engine_focus_in_id (IBusEngine  *engine,
@@ -1701,10 +1730,12 @@ ibus_engine_focus_in_id (IBusEngine  *engine,
 {
 }
 
+
 static void
 ibus_engine_focus_out (IBusEngine *engine)
 {
 }
+
 
 static void
 ibus_engine_focus_out_id (IBusEngine  *engine,
@@ -1712,20 +1743,24 @@ ibus_engine_focus_out_id (IBusEngine  *engine,
 {
 }
 
+
 static void
 ibus_engine_reset (IBusEngine *engine)
 {
 }
+
 
 static void
 ibus_engine_enable (IBusEngine *engine)
 {
 }
 
+
 static void
 ibus_engine_disable (IBusEngine *engine)
 {
 }
+
 
 static void
 ibus_engine_set_cursor_location (IBusEngine *engine,
@@ -1736,31 +1771,37 @@ ibus_engine_set_cursor_location (IBusEngine *engine,
 {
 }
 
+
 static void
 ibus_engine_set_capabilities (IBusEngine *engine,
                               guint       caps)
 {
 }
 
+
 static void
 ibus_engine_page_up (IBusEngine *engine)
 {
 }
+
 
 static void
 ibus_engine_page_down (IBusEngine *engine)
 {
 }
 
+
 static void
 ibus_engine_cursor_up (IBusEngine *engine)
 {
 }
 
+
 static void
 ibus_engine_cursor_down (IBusEngine *engine)
 {
 }
+
 
 static void
 ibus_engine_candidate_clicked (IBusEngine *engine,
@@ -1770,6 +1811,7 @@ ibus_engine_candidate_clicked (IBusEngine *engine,
 {
 }
 
+
 static void
 ibus_engine_property_activate (IBusEngine  *engine,
                                const gchar *prop_name,
@@ -1777,15 +1819,18 @@ ibus_engine_property_activate (IBusEngine  *engine,
 {
 }
 
+
 static void
 ibus_engine_property_show (IBusEngine *engine, const gchar *prop_name)
 {
 }
 
+
 static void
 ibus_engine_property_hide (IBusEngine *engine, const gchar *prop_name)
 {
 }
+
 
 static void
 ibus_engine_set_surrounding_text (IBusEngine *engine,
@@ -1799,10 +1844,12 @@ ibus_engine_set_surrounding_text (IBusEngine *engine,
         g_object_unref (engine->priv->surrounding_text);
     }
 
-    engine->priv->surrounding_text = (IBusText *) g_object_ref_sink (text ? text : text_empty);
+    engine->priv->surrounding_text = (IBusText *)g_object_ref_sink (
+            text ? text : text_empty);
     engine->priv->surrounding_cursor_pos = cursor_pos;
     engine->priv->selection_anchor_pos = anchor_pos;
 }
+
 
 static void
 ibus_engine_process_hand_writing_event (IBusEngine         *engine,
@@ -1817,11 +1864,13 @@ ibus_engine_process_hand_writing_event (IBusEngine         *engine,
 #endif
 }
 
+
 static void
 ibus_engine_cancel_hand_writing (IBusEngine         *engine,
                                  guint               n_strokes)
 {
 }
+
 
 static void
 ibus_engine_set_content_type (IBusEngine *engine,
@@ -1829,6 +1878,7 @@ ibus_engine_set_content_type (IBusEngine *engine,
                               guint       hints)
 {
 }
+
 
 static void
 ibus_engine_emit_signal (IBusEngine  *engine,
@@ -1847,6 +1897,7 @@ ibus_engine_emit_signal (IBusEngine  *engine,
         g_error_free (error);
     }
 }
+
 
 static void
 ibus_engine_dbus_property_changed (IBusEngine  *engine,
@@ -1894,6 +1945,7 @@ ibus_engine_dbus_property_changed (IBusEngine  *engine,
     g_object_unref (message);
 }
 
+
 IBusEngine *
 ibus_engine_new (const gchar     *engine_name,
                  const gchar     *object_path,
@@ -1904,6 +1956,7 @@ ibus_engine_new (const gchar     *engine_name,
                                       object_path,
                                       connection);
 }
+
 
 IBusEngine  *
 ibus_engine_new_with_type (GType            engine_type,
@@ -1937,10 +1990,9 @@ ibus_engine_commit_text (IBusEngine *engine,
                              "CommitText",
                              g_variant_new ("(v)", variant));
 
-    if (g_object_is_floating (text)) {
-        g_object_unref (text);
-    }
+    _g_object_unref_if_floating (text);
 }
+
 
 void
 ibus_engine_update_preedit_text (IBusEngine      *engine,
@@ -1951,6 +2003,7 @@ ibus_engine_update_preedit_text (IBusEngine      *engine,
     ibus_engine_update_preedit_text_with_mode (engine,
             text, cursor_pos, visible, IBUS_ENGINE_PREEDIT_CLEAR);
 }
+
 
 void
 ibus_engine_update_preedit_text_with_mode (IBusEngine            *engine,
@@ -1965,12 +2018,15 @@ ibus_engine_update_preedit_text_with_mode (IBusEngine            *engine,
     GVariant *variant = ibus_serializable_serialize ((IBusSerializable *)text);
     ibus_engine_emit_signal (engine,
                              "UpdatePreeditText",
-                             g_variant_new ("(vubu)", variant, cursor_pos, visible, mode));
+                             g_variant_new ("(vubu)",
+                                            variant,
+                                            cursor_pos,
+                                            visible,
+                                            mode));
 
-    if (g_object_is_floating (text)) {
-        g_object_unref (text);
-    }
+    _g_object_unref_if_floating (text);
 }
+
 
 void ibus_engine_update_auxiliary_text (IBusEngine      *engine,
                                         IBusText        *text,
@@ -1984,9 +2040,7 @@ void ibus_engine_update_auxiliary_text (IBusEngine      *engine,
                              "UpdateAuxiliaryText",
                              g_variant_new ("(vb)", variant, visible));
 
-    if (g_object_is_floating (text)) {
-        g_object_unref (text);
-    }
+    _g_object_unref_if_floating (text);
 }
 
 
@@ -2003,10 +2057,9 @@ ibus_engine_update_lookup_table (IBusEngine        *engine,
                              "UpdateLookupTable",
                              g_variant_new ("(vb)", variant, visible));
 
-    if (g_object_is_floating (table)) {
-        g_object_unref (table);
-    }
+    _g_object_unref_if_floating (table);
 }
+
 
 void
 ibus_engine_update_lookup_table_fast (IBusEngine        *engine,
@@ -2060,10 +2113,9 @@ ibus_engine_update_lookup_table_fast (IBusEngine        *engine,
 
     ibus_engine_update_lookup_table (engine, new_table, visible);
 
-    if (g_object_is_floating (table)) {
-        g_object_unref (table);
-    }
+    _g_object_unref_if_floating (table);
 }
+
 
 void
 ibus_engine_forward_key_event (IBusEngine      *engine,
@@ -2077,6 +2129,7 @@ ibus_engine_forward_key_event (IBusEngine      *engine,
                              "ForwardKeyEvent",
                              g_variant_new ("(uuu)", keyval, keycode, state));
 }
+
 
 void ibus_engine_delete_surrounding_text (IBusEngine      *engine,
                                           gint             offset_from_cursor,
@@ -2121,8 +2174,11 @@ void ibus_engine_delete_surrounding_text (IBusEngine      *engine,
 
     ibus_engine_emit_signal (engine,
                              "DeleteSurroundingText",
-                             g_variant_new ("(iu)", offset_from_cursor, nchars));
+                             g_variant_new ("(iu)",
+                                            offset_from_cursor,
+                                            nchars));
 }
+
 
 void
 ibus_engine_get_surrounding_text (IBusEngine   *engine,
@@ -2159,6 +2215,7 @@ ibus_engine_get_surrounding_text (IBusEngine   *engine,
                              NULL);
 }
 
+
 void
 ibus_engine_get_content_type (IBusEngine *engine,
                               guint      *purpose,
@@ -2170,6 +2227,7 @@ ibus_engine_get_content_type (IBusEngine *engine,
     *hints = engine->priv->content_hints;
 }
 
+
 void
 ibus_engine_register_properties (IBusEngine   *engine,
                                  IBusPropList *prop_list)
@@ -2177,15 +2235,15 @@ ibus_engine_register_properties (IBusEngine   *engine,
     g_return_if_fail (IBUS_IS_ENGINE (engine));
     g_return_if_fail (IBUS_IS_PROP_LIST (prop_list));
 
-    GVariant *variant = ibus_serializable_serialize ((IBusSerializable *)prop_list);
+    GVariant *variant = ibus_serializable_serialize (
+            (IBusSerializable *)prop_list);
     ibus_engine_emit_signal (engine,
                              "RegisterProperties",
                              g_variant_new ("(v)", variant));
 
-    if (g_object_is_floating (prop_list)) {
-        g_object_unref (prop_list);
-    }
+    _g_object_unref_if_floating (prop_list);
 }
+
 
 void
 ibus_engine_update_property (IBusEngine   *engine,
@@ -2199,10 +2257,9 @@ ibus_engine_update_property (IBusEngine   *engine,
                              "UpdateProperty",
                              g_variant_new ("(v)", variant));
 
-    if (g_object_is_floating (prop)) {
-        g_object_unref (prop);
-    }
+    _g_object_unref_if_floating (prop);
 }
+
 
 #define DEFINE_FUNC(name, Name)                             \
     void                                                    \
@@ -2221,12 +2278,14 @@ DEFINE_FUNC (show_lookup_table, ShowLookupTable)
 DEFINE_FUNC (hide_lookup_table, HideLookupTable)
 #undef DEFINE_FUNC
 
+
 const gchar *
 ibus_engine_get_name (IBusEngine *engine)
 {
     g_return_val_if_fail (IBUS_IS_ENGINE (engine), NULL);
     return engine->priv->engine_name;
 }
+
 
 void
 ibus_engine_send_message (IBusEngine  *engine,
@@ -2240,7 +2299,5 @@ ibus_engine_send_message (IBusEngine  *engine,
     ibus_engine_emit_signal (engine,
                              "SendMessage",
                               g_variant_new ("(v)", variant));
-    if (g_object_is_floating (message)) {
-        g_object_unref (message);
-    }
+    _g_object_unref_if_floating (message);
 }

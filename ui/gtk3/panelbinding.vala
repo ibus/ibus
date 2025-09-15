@@ -478,6 +478,9 @@ class PanelBinding : IBus.PanelService {
                     "is-enabled", false,
                     "is-extension", true);
             panel_extension(event);
+            // Vala calls event.ref_sink() and panel_extension() does not unref
+            // the event and need to call event.unref() here.
+            event.unref();
         }
         string committed_string = text.text;
         string preedit_string = m_preedit.get_text();
@@ -578,6 +581,9 @@ class PanelBinding : IBus.PanelService {
                 "is-enabled", false,
                 "is-extension", true);
         panel_extension(event);
+        // Vala calls event.ref_sink() and panel_extension() does not unref
+        // the event and need to call event.unref() here.
+        event.unref();
         return false;
     }
 

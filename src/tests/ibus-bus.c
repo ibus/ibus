@@ -527,6 +527,9 @@ finish_set_global_engine_async (GObject *source_object,
                                              res,
                                              &error);
     g_debug ("ibus_bus_set_global_engine_finish: OK");
+    /* anthy not found */
+    if (error)
+        g_error_free (error);
     call_next_async_function ();
 }
 

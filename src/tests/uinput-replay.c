@@ -169,15 +169,18 @@ udev_wait_for_device_event (struct udev_monitor *udev_monitor,
 
             g_warning ("Failed to receive udev device from monitor: %s",
                        g_strerror (errno));
+            continue;
         }
         udev_action = udev_device_get_action (udev_device);
         if (!udev_action || !streq (udev_action, udev_event)) {
+            udev_device_unref (udev_device);
             continue;
         }
 
         udev_syspath = udev_device_get_syspath (udev_device);
         if (g_str_has_prefix (udev_syspath, syspath))
             return udev_device;
+        udev_device_unref (udev_device);
     }
 }
 

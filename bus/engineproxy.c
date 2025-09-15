@@ -1690,6 +1690,9 @@ bus_engine_proxy_panel_extension_register_keys (BusEngineProxy *engine,
                        NULL,
                        NULL,
                        NULL);
+    if (!g_variant_is_floating (parameters)) {
+        g_variant_unref (parameters);
+    }
 }
 
 static gboolean

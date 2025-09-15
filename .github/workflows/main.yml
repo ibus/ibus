@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        container: ["fedora:41", "fedora:42", "ubuntu:jammy"]
+        container: ["fedora:42", "fedora:43", "ubuntu:jammy"]
     steps:
       - name: Check container sha tags
         run: |
@@ -26,15 +26,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - container: fedora:41
+          - container: fedora:42
             ucd_dir: /usr/share/unicode/ucd
-          - container: fedora:41
+          - container: fedora:42
             ucd_dir: /usr/share/unicode/ucd
             test_config: '--disable-wayland'
-          - container: fedora:41
+          - container: fedora:42
             ucd_dir: /usr/share/unicode/ucd
             test_config: '--disable-appindicator'
-          - container: fedora:42
+          - container: fedora:43
             ucd_dir: /usr/share/unicode/ucd
           - container: ubuntu:jammy
             ucd_dir: /usr/share/unicode

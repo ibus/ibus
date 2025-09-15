@@ -83,9 +83,10 @@ void _Xi18nSetPropertyOffset (Xi18nOffsetCache *offset_cache, Atom key,
     }
 
     if (++offset_cache->size > offset_cache->capacity) {
-        Xi18nAtomOffsetPair *pair = (Xi18nAtomOffsetPair *) realloc (data,
-                offset_cache->capacity * sizeof (Xi18nAtomOffsetPair));
+        Xi18nAtomOffsetPair *pair;
         offset_cache->capacity *= OFFSET_CACHE_GROWTH_FACTOR;
+        pair = (Xi18nAtomOffsetPair *) realloc (data,
+                offset_cache->capacity * sizeof (Xi18nAtomOffsetPair));
         if (pair) {
             offset_cache->data = pair;
         } else {

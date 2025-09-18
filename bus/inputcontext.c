@@ -382,13 +382,12 @@ G_DEFINE_TYPE (BusInputContext, bus_input_context, IBUS_TYPE_SERVICE)
  * events, the most engines try to hide CandidatePanel and the preedit.
  * It means CandidatePanel repeats to be shown and hidden if the client does
  * not support the Wayland protocol.
- * This way ignores the focus-out events in XIM and GTK2 applications and the
+ * This way ignores the focus-out events in XIM and GTK applications and the
  * active engine can keep the focus virtually to continue to update the
  * preedit and lookup table.
  */
 #define IGNORE_FOCUS_OUT_CONDITION  \
-    ((!g_strcmp0 (context->client, "xim") || \
-      !g_ascii_strncasecmp (context->client, "gtk-im", 6)) \
+    ((g_ascii_strncasecmp (context->client, "wayland", 7) != 0) \
      && visible \
      && !context->is_extension_lookup_table \
      && bus_ibus_impl_is_wayland_session (BUS_DEFAULT_IBUS))

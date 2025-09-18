@@ -19,6 +19,7 @@ FEDORA_PKG2='glib2-devel gtk2-devel gtk3-devel
  wayland-devel vala'
 FEDORA_PKG3='cldr-emoji-annotation iso-codes-devel unicode-emoji unicode-ucd
  xkeyboard-config-devel'
+FEDORA_PKG4='gnome-desktop4 libevdev-devel systemd-devel'
 
 (test $GCC_MAJOR_VERSION -ge 0) && {
     CFLAGS="-Wall -Wformat -Werror=format-security $CFLAGS"
@@ -58,10 +59,12 @@ $(grep -q "^GTK_DOC_CHECK" configure.ac) && {
         rpm -q $FEDORA_PKG1 || exit 1
         rpm -q $FEDORA_PKG2 || exit 1
         rpm -q $FEDORA_PKG3 || exit 1
+        rpm -q $FEDORA_PKG4 || exit 1
         DNF=dnf
         $DNF update --assumeno $FEDORA_PKG1 || exit 1
         $DNF update --assumeno $FEDORA_PKG2 || exit 1
         $DNF update --assumeno $FEDORA_PKG3 || exit 1
+        $DNF update --assumeno $FEDORA_PKG4 || exit 1
     }
 }
 

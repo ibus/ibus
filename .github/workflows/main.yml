@@ -28,16 +28,21 @@ jobs:
         include:
           - container: fedora:42
             ucd_dir: /usr/share/unicode/ucd
+            latest_xkb: 0
           - container: fedora:42
             ucd_dir: /usr/share/unicode/ucd
             test_config: '--disable-wayland'
+            latest_xkb: 0
           - container: fedora:42
             ucd_dir: /usr/share/unicode/ucd
             test_config: '--disable-appindicator'
+            latest_xkb: 0
           - container: fedora:43
             ucd_dir: /usr/share/unicode/ucd
+            latest_xkb: 1
           - container: ubuntu:jammy
             ucd_dir: /usr/share/unicode
+            latest_xkb: 0
 
     container:
       image: ${{ matrix.container }}
@@ -69,6 +74,7 @@ jobs:
            libtool
            libwayland-dev
            python-gi-dev
+           python-is-python3
            python3-all
            systemd
            unicode-cldr-core
@@ -77,6 +83,11 @@ jobs:
            valac-0.56-vapi
            wayland-protocols
            wget
+         # for ibus-keypress
+         UBUNTU_PACKAGES_CI_KEY: >
+           gir1.2-gnomedesktop-4.0
+           libevdev-dev
+           libudev-dev
          FEDORA_PACKAGES_MAKE: >
            cldr-emoji-annotation
            dbus-glib-devel
@@ -109,7 +120,9 @@ jobs:
          FEDORA_PACKAGES_CI_KEY: >
            gnome-shell
            gnome-shell-extension-no-overview
-           libXtst-devel
+           gnome-desktop4
+           libevdev-devel
+           systemd-devel
          # for gcc -fanalyzer -fsanitize=address -fsanitize=leak options
          # xkeyboard-config-devel to make ibus/engine/simle.xml.in
          FEDORA_PACKAGES_DISTRO: >
@@ -128,6 +141,7 @@ jobs:
             apt-get install -q -y git
             PACKAGES=$(echo "$UBUNTU_PACKAGES_AUTOGEN" | tr -d '\n')
             PACKAGES=$(echo "$PACKAGES $UBUNTU_PACKAGES_MAKE" | tr -d '\n')
+            PACKAGES=$(echo "$PACKAGES $UBUNTU_PACKAGES_CI_KEY" | tr -d '\n')
             echo "apt-get install -y $PACKAGES"
             apt-get install -y $PACKAGES
             dpkg -l | grep unicode-data
@@ -184,12 +198,15 @@ jobs:
           wget https://gitlab.gnome.org/GNOME/vala/-/raw/0.56/vapi/wayland-client.vapi;
           mv wayland-client.vapi bindings/vala/.;
           fi;
+          export SAVE_DIST_FILES=1;
           ./autogen.sh
           --enable-gtk-doc
           --with-python=/usr/bin/python3
           --with-ucd-dir=${{ matrix.ucd_dir }}
           --enable-install-tests
-          ${{ matrix.test_config }}
+          ${{ matrix.test_config }};
+          test 0${{ matrix.latest_xkb }} -ne 1 &&
+          make -C engine maintainer-clean-generic || :
 
       - name: Run make
         # Set the cutom DESTDIR because the default DESTDIR

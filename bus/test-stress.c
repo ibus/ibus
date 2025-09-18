@@ -110,6 +110,8 @@ main (gint argc, gchar **argv)
     }
 
     g_print ("%f sec\n", g_timer_elapsed (timer, NULL));
+    g_timer_destroy (timer);
+    g_rand_free (rnd);
 
     return 0;
 }

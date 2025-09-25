@@ -141,7 +141,13 @@ ucd_names_list_parse_alias (const gchar *line,
 
     if (*line == '\0')
         return FALSE;
-    data->alias = g_strdup (line);
+    if (data->alias) {
+        gchar *new_alias = g_strdup_printf ("%s;%s", data->alias, line);
+        g_free (data->alias);
+        data->alias = new_alias;
+    } else {
+        data->alias = g_strdup (line);
+    }
     return TRUE;
 }
 
@@ -197,6 +203,7 @@ ucd_names_list_parse_line (const gchar *line,
         }
         data->code = code;
         data->name = name;
+        g_strfreev (elements);
     }
     return TRUE;
 }
@@ -521,6 +528,7 @@ main (int argc, char *argv[])
     if (output_names_list && names_list)
         ibus_unicode_data_save (output_names_list, names_list);
     g_free (output_names_list);
+    g_slist_free_full (names_list, g_object_unref);
 
     if (input_blocks) {
         ucd_parse_file (input_blocks, &blocks_list, UCD_BLOCKS);
@@ -531,6 +539,8 @@ main (int argc, char *argv[])
     if (output_blocks_trans && blocks_list)
         ucd_block_translatable_save (output_blocks_trans, blocks_list);
     g_free (output_blocks);
+    g_free (output_blocks_trans);
+    g_slist_free_full (blocks_list, g_object_unref);
 
     g_free (unicode_version);
     return 0;

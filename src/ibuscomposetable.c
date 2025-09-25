@@ -284,6 +284,7 @@ expand_include_path (const char *include_path) {
                 break;
             }
             case 'L': /* locale compose file */
+                g_free (out);
                 out = g_strdup ("%L");
                 head = i + 2;
                 while (*head || *head == ' ' || *head == '\t') head++;
@@ -315,7 +316,7 @@ expand_include_path (const char *include_path) {
                            "has been ignored", include_path, *(i+1));
                 goto fail;
             }
-            ++i;
+            break;
         }
     }
     o = out;

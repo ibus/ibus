@@ -23,7 +23,6 @@
 #include <config.h>
 #include <fcntl.h>
 #include <glib.h>
-#include <grp.h>
 #include <gio/gio.h>
 #include <ibus.h>
 #include <locale.h>
@@ -187,7 +186,7 @@ main (gint argc, gchar **argv)
 {
     int i;
     const gchar *username = ibus_get_user_name ();
-    const gchar *groupname = NULL;
+    const gchar *groupname = ibus_get_group_name ();
 
     setlocale (LC_ALL, "");
 
@@ -218,16 +217,6 @@ main (gint argc, gchar **argv)
             g_printerr ("Please run ibus-daemon with login user! Do not run ibus-daemon with sudo or su.\n");
             exit (-1);
         }
-    }
-
-    /* get group name */
-    {
-        struct group *grp = getgrgid (getgid ());
-
-        if (grp == NULL)
-            g_warning ("Couldn't get group name");
-        else
-            groupname = grp->gr_name;
     }
 
     /* daemonize process */

@@ -29,6 +29,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <glib-object.h>
+#include <grp.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -80,6 +81,20 @@ const gchar *
 ibus_get_user_name (void)
 {
     return g_get_user_name ();
+}
+
+const gchar *
+ibus_get_group_name (void)
+{
+    gid_t gid = getgid ();
+    struct group *grp = getgrgid (gid);
+
+    if (grp == NULL) {
+        g_warning ("Couldn't get group name");
+        return NULL;
+    }
+
+    return grp->gr_name;
 }
 
 glong

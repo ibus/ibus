@@ -12,9 +12,6 @@ Before=gnome-session.target
 After=gnome-session-initialized.target
 PartOf=gnome-session-initialized.target
 
-# Never run in GDM
-Conflicts=gnome-session@gnome-login.target
-
 [Service]
 Type=dbus
 # Only pull --xim in X11 session, it is done via Xwayland-session.d on Wayland

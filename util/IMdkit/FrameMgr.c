@@ -1,5 +1,7 @@
 /******************************************************************
 Copyright 1993, 1994 by Digital Equipment Corporation, Maynard, Massachusetts,
+Copyright (C) 2008-2025 Red Hat, Inc.
+Copyright (C) 2018-2025 Takao Fujiwara
  
                         All Rights Reserved
  
@@ -30,6 +32,7 @@ SOFTWARE.
 #include <assert.h>
 #include <stdlib.h>
 #include "FrameMgr.h"
+#include "XimProto.h"
 
 /* Convenient macro */
 
@@ -218,7 +221,11 @@ FrameMgr FrameMgrInit (XimFrame frame, char* area, Bool byte_swap)
 {
     FrameMgr fm;
 
-    fm = (FrameMgr) Xmalloc (sizeof (FrameMgrRec));
+    if ((fm = (FrameMgr) Xmalloc (sizeof (FrameMgrRec))) == NULL) {
+        fprintf (stderr, "(XIM-IMdkit) WARNING: malloc failed in %s:%s.\n",
+                 __FILE__, XIM_STRFUNC);
+        return NULL;
+    }
 
     fm->frame = frame;
     fm->fi = FrameInstInit (frame);
@@ -259,7 +266,8 @@ void FrameMgrFree (FrameMgr fm)
     }
     /*endwhile*/
 
-    FrameInstFree (fm->fi);
+    if (fm->fi)
+        FrameInstFree (fm->fi);
     Xfree (fm);
 }
 
@@ -868,7 +876,11 @@ static FrameInst FrameInstInit (XimFrame frame)
 {
     FrameInst fi;
 
-    fi = (FrameInst) Xmalloc (sizeof (FrameInstRec));
+    if ((fi = (FrameInst) Xmalloc (sizeof (FrameInstRec))) == NULL) {
+        fprintf (stderr, "(XIM-IMdkit) WARNING: malloc failed in %s:%s.\n",
+                 __FILE__, XIM_STRFUNC);
+        return NULL;
+    }
 
     fi->template = frame;
     fi->cur_no = 0;
@@ -884,7 +896,7 @@ static void FrameInstFree (FrameInst fi)
 
     ChainIterInit (&ci, &fi->cm);
 
-    while (ChainIterGetNext (&ci, &frame_no, &d))
+    while (ChainIterGetNext (&ci, &frame_no, &d) && fi->template)
     {
         register XimFrameType type;
         type = fi->template[frame_no].type;
@@ -912,6 +924,11 @@ static XimFrameType FrameInstGetNextType(FrameInst fi, XimFrameTypeInfo info)
 {
     XimFrameType ret_type;
 
+    if (!fi) {
+        fprintf (stderr, "(XIM-IMdkit) WARNING: fi != NULL in %s:%s.\n",
+                 __FILE__, XIM_STRFUNC);
+        return -1;
+    }
     ret_type = fi->template[fi->cur_no].type;
 
     switch (ret_type)
@@ -944,7 +961,13 @@ static XimFrameType FrameInstGetNextType(FrameInst fi, XimFrameTypeInfo info)
                 if ((d = ChainMgrGetExtraData (&fi->cm, iter_idx)) == NULL)
                 {
                     dr.iter = IterInit (&fi->template[iter_idx + 1], NO_VALUE);
+                    if (!dr.iter)
+                        return -1;
                     d = ChainMgrSetData (&fi->cm, iter_idx, dr);
+                    if (!d) {
+                        IterFree (dr.iter);
+                        return -1;
+                    }
                 }
                 /*endif*/
                 info->counter.iter = d->iter;
@@ -980,6 +1003,7 @@ static XimFrameType FrameInstGetNextType(FrameInst fi, XimFrameTypeInfo info)
             register int unit;
             register int number;
             register int size;
+            register int s;
             register int i;
 
             unit = _UNIT ((long) fi->template[fi->cur_no].data);
@@ -991,11 +1015,21 @@ static XimFrameType FrameInstGetNextType(FrameInst fi, XimFrameTypeInfo info)
             {
                 i = _FrameInstDecrement (fi->template, i);
                 assert (i >= 0);
-                size += _FrameInstGetItemSize (fi, i);
+                s = _FrameInstGetItemSize (fi, i);
+                if (s == NO_VALUE) {
+                    size = NO_VALUE;
+                    number = 0;
+                    break;
+                } else {
+                    size += s;
+                }
                 number--;
             }
             /*endwhile*/
-            info->num = (unit - (size%unit))%unit;
+            if (size == NO_VALUE)
+                info->num = NO_VALUE;
+            else
+                info->num = (unit - (size%unit))%unit;
         }
         /*endif*/
         fi->cur_no = _FrameInstIncrement (fi->template, fi->cur_no);
@@ -1011,7 +1045,13 @@ static XimFrameType FrameInstGetNextType(FrameInst fi, XimFrameTypeInfo info)
             if ((d = ChainMgrGetExtraData (&fi->cm, fi->cur_no)) == NULL)
             {
                 dr.iter = IterInit (&fi->template[fi->cur_no + 1], NO_VALUE);
+                if (!dr.iter)
+                    return -1;
                 d = ChainMgrSetData (&fi->cm, fi->cur_no, dr);
+                if (!d) {
+                    IterFree (dr.iter);
+                    return -1;
+                }
             }
             /*endif*/
             sub_type = IterGetNextType (d->iter, info);
@@ -1037,7 +1077,13 @@ static XimFrameType FrameInstGetNextType(FrameInst fi, XimFrameTypeInfo info)
             if ((d = ChainMgrGetExtraData (&fi->cm, fi->cur_no)) == NULL)
             {
                 dr.fi = FrameInstInit (fi->template[fi->cur_no + 1].data);
+                if (!dr.fi)
+                    return -1;
                 d = ChainMgrSetData (&fi->cm, fi->cur_no, dr);
+                if (!d) {
+                    FrameInstFree (dr.fi);
+                    return -1;
+                }
             }
             /*endif*/
             sub_type = FrameInstGetNextType (d->fi, info);
@@ -1064,6 +1110,11 @@ static XimFrameType FrameInstPeekNextType (FrameInst fi, XimFrameTypeInfo info)
 {
     XimFrameType ret_type;
 
+    if (!fi) {
+        fprintf (stderr, "(XIM-IMdkit) WARNING: fi != NULL in %s:%s.\n",
+                 __FILE__, XIM_STRFUNC);
+        return -1;
+    }
     ret_type = fi->template[fi->cur_no].type;
 
     switch (ret_type)
@@ -1096,7 +1147,13 @@ static XimFrameType FrameInstPeekNextType (FrameInst fi, XimFrameTypeInfo info)
                 if ((d = ChainMgrGetExtraData (&fi->cm, iter_idx)) == NULL)
                 {
                     dr.iter = IterInit (&fi->template[iter_idx + 1], NO_VALUE);
+                    if (!dr.iter)
+                        return -1;
                     d = ChainMgrSetData (&fi->cm, iter_idx, dr);
+                    if (!d) {
+                        IterFree (dr.iter);
+                        return -1;
+                    }
                 }
                 /*endif*/
                 info->counter.iter = d->iter;
@@ -1130,6 +1187,7 @@ static XimFrameType FrameInstPeekNextType (FrameInst fi, XimFrameTypeInfo info)
             register int unit;
             register int number;
             register int size;
+            register int s;
             register int i;
 
             unit = _UNIT ((long) fi->template[fi->cur_no].data);
@@ -1141,11 +1199,21 @@ static XimFrameType FrameInstPeekNextType (FrameInst fi, XimFrameTypeInfo info)
             {
                 i = _FrameInstDecrement (fi->template, i);
                 assert (i >= 0);
-                size += _FrameInstGetItemSize (fi, i);
+                s = _FrameInstGetItemSize (fi, i);
+                if (s == NO_VALUE) {
+                    size = NO_VALUE;
+                    number = 0;
+                    break;
+                } else {
+                    size += s;
+                }
                 number--;
             }
             /*endwhile*/
-            info->num = (unit - (size%unit))%unit;
+            if (size == NO_VALUE)
+                info->num = NO_VALUE;
+            else
+                info->num = (unit - (size%unit))%unit;
         }
         /*endif*/
         break;
@@ -1159,7 +1227,13 @@ static XimFrameType FrameInstPeekNextType (FrameInst fi, XimFrameTypeInfo info)
             if ((d = ChainMgrGetExtraData (&fi->cm, fi->cur_no)) == NULL)
             {
                 dr.iter = IterInit (&fi->template[fi->cur_no + 1], NO_VALUE);
+                if (!dr.iter)
+                    return -1;
                 d = ChainMgrSetData (&fi->cm, fi->cur_no, dr);
+                if (!d) {
+                    IterFree (dr.iter);
+                    return -1;
+                }
             }
             /*endif*/
             sub_type = IterPeekNextType (d->iter, info);
@@ -1180,7 +1254,13 @@ static XimFrameType FrameInstPeekNextType (FrameInst fi, XimFrameTypeInfo info)
             if ((d = ChainMgrGetExtraData (&fi->cm, fi->cur_no)) == NULL)
             {
                 dr.fi = FrameInstInit (fi->template[fi->cur_no + 1].data);
+                if (!dr.fi)
+                    return -1;
                 d = ChainMgrSetData (&fi->cm, fi->cur_no, dr);
+                if (!d) {
+                    FrameInstFree (dr.fi);
+                    return -1;
+                }
             }
             /*endif*/
             sub_type = FrameInstPeekNextType (d->fi, info);
@@ -1202,6 +1282,11 @@ static Bool FrameInstIsIterLoopEnd (FrameInst fi)
 {
     Bool ret = False;
 
+    if (!fi) {
+        fprintf (stderr, "(XIM-IMdkit) WARNING: fi != NULL in %s:%s.\n",
+                 __FILE__, XIM_STRFUNC);
+        return True;
+    }
     if (fi->template[fi->cur_no].type == ITER)
     {
         ExtraData d = ChainMgrGetExtraData (&fi->cm, fi->cur_no);
@@ -1313,6 +1398,11 @@ static FmStatus FrameInstSetSize (FrameInst fi, int num)
     XimFrameType type;
     register int i;
 
+    if (!fi) {
+        fprintf (stderr, "(XIM-IMdkit) WARNING: fi != NULL in %s:%s.\n",
+                 __FILE__, XIM_STRFUNC);
+        return FmNoMoreData;
+    }
     i = 0;
     while ((type = fi->template[i].type) != EOL)
     {
@@ -1323,6 +1413,8 @@ static FmStatus FrameInstSetSize (FrameInst fi, int num)
             {
                 dr.num = -1;
                 d = ChainMgrSetData (&fi->cm, i, dr);
+                if (!d)
+                    return FmNoMoreData;
             }
             /*endif*/
             if (d->num == NO_VALUE)
@@ -1336,7 +1428,13 @@ static FmStatus FrameInstSetSize (FrameInst fi, int num)
             if ((d = ChainMgrGetExtraData (&fi->cm, i)) == NULL)
             {
                 dr.iter = IterInit (&fi->template[i + 1], NO_VALUE);
+                if (!dr.iter)
+                    return FmNoMoreData;
                 d = ChainMgrSetData (&fi->cm, i, dr);
+                if (!d) {
+                    IterFree (dr.iter);
+                    return FmNoMoreData;
+                }
             }
             /*endif*/
             if (IterSetSize (d->iter, num) == FmSuccess)
@@ -1348,7 +1446,13 @@ static FmStatus FrameInstSetSize (FrameInst fi, int num)
             if ((d = ChainMgrGetExtraData(&fi->cm, i)) == NULL)
             {
                 dr.fi = FrameInstInit(fi->template[i + 1].data);
-                d = ChainMgrSetData(&fi->cm, i, dr);
+                if (!dr.fi)
+                    return FmNoMoreData;
+                d = ChainMgrSetData (&fi->cm, i, dr);
+                if (!d) {
+                    FrameInstFree (dr.fi);
+                    return FmNoMoreData;
+                }
             }
             /*endif*/
             if (FrameInstSetSize(d->fi, num) == FmSuccess)
@@ -1374,6 +1478,11 @@ static int FrameInstGetSize (FrameInst fi)
     ExtraDataRec dr;
     int ret_size;
 
+    if (!fi) {
+        fprintf (stderr, "(XIM-IMdkit) WARNING: fi != NULL in %s:%s.\n",
+                 __FILE__, XIM_STRFUNC);
+        return NO_VALID_FIELD;
+    }
     i = fi->cur_no;
     while ((type = fi->template[i].type) != EOL)
     {
@@ -1389,7 +1498,13 @@ static int FrameInstGetSize (FrameInst fi)
             if ((d = ChainMgrGetExtraData (&fi->cm, i)) == NULL)
             {
                 dr.iter = IterInit (&fi->template[i + 1], NO_VALUE);
+                if (!dr.iter)
+                    return NO_VALID_FIELD;
                 d = ChainMgrSetData (&fi->cm, i, dr);
+                if (!d) {
+                    IterFree (dr.iter);
+                    return NO_VALID_FIELD;
+                }
             }
             /*endif*/
             ret_size = IterGetSize(d->iter);
@@ -1402,7 +1517,13 @@ static int FrameInstGetSize (FrameInst fi)
             if ((d = ChainMgrGetExtraData (&fi->cm, i)) == NULL)
             {
                 dr.fi = FrameInstInit (fi->template[i + 1].data);
+                if (!dr.fi)
+                    return NO_VALID_FIELD;
                 d = ChainMgrSetData (&fi->cm, i, dr);
+                if (!d) {
+                    FrameInstFree (dr.fi);
+                    return NO_VALID_FIELD;
+                }
             }
             /*endif*/
             ret_size = FrameInstGetSize (d->fi);
@@ -1428,6 +1549,11 @@ static FmStatus FrameInstSetIterCount (FrameInst fi, int num)
     register int i;
     XimFrameType type;
 
+    if (!fi) {
+        fprintf (stderr, "(XIM-IMdkit) WARNING: fi != NULL in %s:%s.\n",
+                 __FILE__, XIM_STRFUNC);
+        return FmNoMoreData;
+    }
     i = 0;
     while ((type = fi->template[i].type) != EOL)
     {
@@ -1437,7 +1563,12 @@ static FmStatus FrameInstSetIterCount (FrameInst fi, int num)
             if ((d = ChainMgrGetExtraData (&fi->cm, i)) == NULL)
             {
                 dr.iter = IterInit (&fi->template[i + 1], num);
-                (void)ChainMgrSetData (&fi->cm, i, dr);
+                if (!dr.iter)
+                    return FmNoMoreData;
+                if (!ChainMgrSetData (&fi->cm, i, dr)) {
+                    IterFree (dr.iter);
+                    return FmNoMoreData;
+                }
                 return FmSuccess;
             }
             /*endif*/
@@ -1450,7 +1581,13 @@ static FmStatus FrameInstSetIterCount (FrameInst fi, int num)
             if ((d = ChainMgrGetExtraData (&fi->cm, i)) == NULL)
             {
                 dr.fi = FrameInstInit (fi->template[i + 1].data);
+                if (!dr.fi)
+                    return FmNoMoreData;
                 d = ChainMgrSetData (&fi->cm, i, dr);
+                if (!d) {
+                    FrameInstFree (dr.fi);
+                    return FmNoMoreData;
+                }
             }
             /*endif*/
             if (FrameInstSetIterCount (d->fi, num) == FmSuccess)
@@ -1472,14 +1609,26 @@ static FmStatus FrameInstSetIterCount (FrameInst fi, int num)
 static int FrameInstGetTotalSize (FrameInst fi)
 {
     register int size;
+    register int s;
     register int i;
 
     size = 0;
     i = 0;
 
+    if (!fi) {
+        fprintf (stderr, "(XIM-IMdkit) WARNING: fi != NULL in %s:%s.\n",
+                 __FILE__, XIM_STRFUNC);
+        return 0;
+    }
     while (fi->template[i].type != EOL)
     {
-        size += _FrameInstGetItemSize (fi, i);
+        s = _FrameInstGetItemSize (fi, i);
+        if (s == NO_VALUE) {
+            size = NO_VALUE;
+            break;
+        } else {
+            size += s;
+        }
         assert (i >= 0);
         i = _FrameInstIncrement (fi->template, i);
     }
@@ -1526,8 +1675,8 @@ static Iter IterInit (XimFrame frame, int count)
 
     it = (Iter) Xmalloc (sizeof (IterRec));
     if (!it) {
-        fprintf (stderr, "(XIM-IMdkit) WARNING: malloc failed in %s:%d.\n",
-                 __FILE__, __LINE__);
+        fprintf (stderr, "(XIM-IMdkit) WARNING: malloc failed in %s:%s.\n",
+                 __FILE__, XIM_STRFUNC);
         return NULL;
     }
     it->template = frame;
@@ -1600,7 +1749,7 @@ static void IterFree (Iter it)
             ExtraDataRec dr;
     
             ChainIterInit (&ci, &it->cm);
-            while (ChainIterGetNext (&ci, &count, &dr))
+            while (ChainIterGetNext (&ci, &count, &dr) && dr.fi)
                 FrameInstFree (dr.fi);
             /*endwhile*/
             ChainIterFree (&ci);
@@ -1638,8 +1787,12 @@ static Bool IterIsLoopEnd (Iter it, Bool *myself)
             }
             else
             {
-                if (FrameInstIsEnd (d->fi))
-                {
+                if (!d->fi) {
+                    fprintf (stderr, "(XIM-IMdkit) WARNING: d->fi != NULL " \
+                                     "in %s:%s.\n",
+                             __FILE__, XIM_STRFUNC);
+                    ret = True;
+                } else if (FrameInstIsEnd (d->fi)) {
                     it->cur_no++;
                     if (!it->allow_expansion  &&  it->cur_no == it->max_count)
                     {
@@ -1677,9 +1830,9 @@ static XimFrameType IterGetNextType (Iter it, XimFrameTypeInfo info)
     XimFrameType type;
 
     if (!it || !it->template) {
-        fprintf (stderr, "(XIM-IMdkit) WARNING: malloc failed in %s:%d.\n",
-                 __FILE__, __LINE__);
-	return (XimFrameType) NULL;
+        fprintf (stderr, "(XIM-IMdkit) WARNING: malloc failed in %s:%s.\n",
+                 __FILE__, XIM_STRFUNC);
+	return (XimFrameType)NULL;
     }
 
     type = it->template->type;
@@ -1732,7 +1885,13 @@ static XimFrameType IterGetNextType (Iter it, XimFrameTypeInfo info)
             if ((d = ChainMgrGetExtraData (&it->cm, it->cur_no)) == NULL)
             {
                 dr.iter = IterInit (it->template + 1, NO_VALUE);
+                if (!dr.iter)
+	            return (XimFrameType)NULL;
                 d = ChainMgrSetData (&it->cm, it->cur_no, dr);
+                if (!d) {
+                    IterFree (dr.iter);
+	            return (XimFrameType)NULL;
+                }
             }
             /*endif*/
 
@@ -1755,7 +1914,13 @@ static XimFrameType IterGetNextType (Iter it, XimFrameTypeInfo info)
             if ((d = ChainMgrGetExtraData (&it->cm, it->cur_no)) == NULL)
             {
                 dr.fi = FrameInstInit (it->template[1].data);
+                if (!dr.fi)
+	            return (XimFrameType)NULL;
                 d = ChainMgrSetData (&it->cm, it->cur_no, dr);
+                if (!d) {
+                    FrameInstFree (dr.fi);
+	            return (XimFrameType)NULL;
+                }
             }
             /*endif*/
 
@@ -1781,9 +1946,9 @@ static XimFrameType IterPeekNextType (Iter it, XimFrameTypeInfo info)
     XimFrameType type;
 
     if (!it->template) {
-        fprintf (stderr, "(XIM-IMdkit) WARNING: dereference pointer %s:%d.\n",
-                 __FILE__, __LINE__);
-        return (XimFrameType) NULL;
+        fprintf (stderr, "(XIM-IMdkit) WARNING: dereference pointer %s:%s.\n",
+                 __FILE__, XIM_STRFUNC);
+        return (XimFrameType)NULL;
     }
 
     type = it->template->type;
@@ -1823,7 +1988,13 @@ static XimFrameType IterPeekNextType (Iter it, XimFrameTypeInfo info)
             if ((d = ChainMgrGetExtraData (&it->cm, it->cur_no)) == NULL)
             {
                 dr.iter = IterInit (it->template + 1, NO_VALUE);
+                if (!dr.iter)
+                    return (XimFrameType)NULL;
                 d = ChainMgrSetData (&it->cm, it->cur_no, dr);
+                if (!d) {
+                    IterFree (dr.iter);
+                    return (XimFrameType)NULL;
+                }
             }
             /*endif*/
 
@@ -1843,7 +2014,13 @@ static XimFrameType IterPeekNextType (Iter it, XimFrameTypeInfo info)
             if ((d = ChainMgrGetExtraData (&it->cm, it->cur_no)) == NULL)
             {
                 dr.fi = FrameInstInit (it->template[1].data);
+                if (!dr.fi)
+                    return (XimFrameType)NULL;
                 d = ChainMgrSetData (&it->cm, it->cur_no, dr);
+                if (!d) {
+                    FrameInstFree (dr.fi);
+                    return (XimFrameType)NULL;
+                }
             }
             /*endif*/
 
@@ -1885,9 +2062,8 @@ static FmStatus IterSetSize (Iter it, int num)
                 {
                     dr.num = NO_VALUE;
                     d = ChainMgrSetData (&it->cm, i, dr);
-                }
-                if (!d) {
-                    return FmNoMoreData;
+                    if (!d)
+                        return FmNoMoreData;
                 }
                 /*endif*/
                 if (d->num == NO_VALUE)
@@ -1903,7 +2079,8 @@ static FmStatus IterSetSize (Iter it, int num)
                 ExtraDataRec dr;
                 
                 dr.num = num;
-                ChainMgrSetData (&it->cm, it->max_count, dr);
+                if (!ChainMgrSetData (&it->cm, it->max_count, dr))
+                    return FmNoMoreData;
                 it->max_count++;
     
                 return FmSuccess;
@@ -1922,7 +2099,13 @@ static FmStatus IterSetSize (Iter it, int num)
                 if ((d = ChainMgrGetExtraData (&it->cm, i)) == NULL)
                 {
                     dr.iter = IterInit (it->template + 1, NO_VALUE);
+                    if (!dr.iter)
+                        return FmNoMoreData;
                     d = ChainMgrSetData (&it->cm, i, dr);
+                    if (!d) {
+                        IterFree (dr.iter);
+                        return FmNoMoreData;
+                    }
                 }
                 /*endif*/
                 if (IterSetSize (d->iter, num) == FmSuccess)
@@ -1935,7 +2118,12 @@ static FmStatus IterSetSize (Iter it, int num)
                 ExtraDataRec dr;
 
                 dr.iter = IterInit (it->template + 1, NO_VALUE);
-                ChainMgrSetData (&it->cm, it->max_count, dr);
+                if (!dr.iter)
+                    return FmNoMoreData;
+                if (!ChainMgrSetData (&it->cm, it->max_count, dr)) {
+                    IterFree (dr.iter);
+                    return FmNoMoreData;
+                }
                 it->max_count++;
 
                 if (IterSetSize(dr.iter, num) == FmSuccess)
@@ -1956,7 +2144,13 @@ static FmStatus IterSetSize (Iter it, int num)
                 if ((d = ChainMgrGetExtraData (&it->cm, i)) == NULL)
                 {
                     dr.fi = FrameInstInit (it->template[1].data);
+                    if (!dr.fi)
+                        return FmNoMoreData;
                     d = ChainMgrSetData (&it->cm, i, dr);
+                    if (!d) {
+                        FrameInstFree (dr.fi);
+                        return FmNoMoreData;
+                    }
                 }
                 /*endif*/
                 if (FrameInstSetSize (d->fi, num) == FmSuccess)
@@ -1969,7 +2163,12 @@ static FmStatus IterSetSize (Iter it, int num)
                 ExtraDataRec dr;
 
                 dr.fi = FrameInstInit (it->template[1].data);
-                ChainMgrSetData (&it->cm, it->max_count, dr);
+                if (!dr.fi)
+                    return FmNoMoreData;
+                if (!ChainMgrSetData (&it->cm, it->max_count, dr)) {
+                    FrameInstFree (dr.fi);
+                    return FmNoMoreData;
+                }
                 it->max_count++;
 
                 if (FrameInstSetSize (dr.fi, num) == FmSuccess)
@@ -2013,7 +2212,13 @@ static int IterGetSize (Iter it)
             if ((d = ChainMgrGetExtraData (&it->cm, i)) == NULL)
             {
                 dr.iter = IterInit (it->template + 1, NO_VALUE);
+                if (!dr.iter)
+                    return NO_VALID_FIELD;
                 d = ChainMgrSetData (&it->cm, i, dr);
+                if (!d) {
+                    IterFree (dr.iter);
+                    return NO_VALID_FIELD;
+                }
             }
             /*endif*/
             ret_size = IterGetSize (d->iter);
@@ -2032,7 +2237,13 @@ static int IterGetSize (Iter it)
             if ((d = ChainMgrGetExtraData (&it->cm, i)) == NULL)
             {
                 dr.fi = FrameInstInit (it->template[1].data);
+                if (!dr.fi)
+                    return NO_VALID_FIELD;
                 d = ChainMgrSetData (&it->cm, i, dr);
+                if (!d) {
+                    FrameInstFree (dr.fi);
+                    return NO_VALID_FIELD;
+                }
             }
             /*endif*/
             ret_size = FrameInstGetSize (d->fi);
@@ -2077,7 +2288,12 @@ static FmStatus IterSetIterCount (Iter it, int num)
             if ((d = ChainMgrGetExtraData(&it->cm, i)) == NULL)
             {
                 dr.iter = IterInit(it->template + 1, num);
-                (void)ChainMgrSetData(&it->cm, i, dr);
+                if (!dr.iter)
+                    return FmNoMoreData;
+                if (!ChainMgrSetData(&it->cm, i, dr)) {
+                    IterFree (dr.iter);
+                    return FmNoMoreData;
+                }
                 return FmSuccess;
             }
             /*endif*/
@@ -2091,7 +2307,12 @@ static FmStatus IterSetIterCount (Iter it, int num)
             ExtraDataRec dr;
 
             dr.iter = IterInit (it->template + 1, num);
-            ChainMgrSetData (&it->cm, it->max_count, dr);
+            if (!dr.iter)
+                return FmNoMoreData;
+            if (!ChainMgrSetData (&it->cm, it->max_count, dr)) {
+                IterFree (dr.iter);
+                return FmNoMoreData;
+            }
             it->max_count++;
 
             return FmSuccess;
@@ -2108,7 +2329,13 @@ static FmStatus IterSetIterCount (Iter it, int num)
             if ((d = ChainMgrGetExtraData (&it->cm, i)) == NULL)
             {
                 dr.fi = FrameInstInit (it->template[1].data);
+                if (!dr.fi)
+                    return FmNoMoreData;
                 d = ChainMgrSetData (&it->cm, i, dr);
+                if (!d) {
+                    FrameInstFree (dr.fi);
+                    return FmNoMoreData;
+                }
             }
             /*endif*/
             if (FrameInstSetIterCount (d->fi, num) == FmSuccess)
@@ -2121,7 +2348,12 @@ static FmStatus IterSetIterCount (Iter it, int num)
             ExtraDataRec dr;
             
             dr.fi = FrameInstInit (it->template[1].data);
-            ChainMgrSetData (&it->cm, it->max_count, dr);
+            if (!dr.fi)
+                return FmNoMoreData;
+            if (!ChainMgrSetData (&it->cm, it->max_count, dr)) {
+                FrameInstFree (dr.fi);
+                return FmNoMoreData;
+            }
             it->max_count++;
 
             if (FrameInstSetIterCount (dr.fi, num) == FmSuccess)
@@ -2215,7 +2447,13 @@ static int IterGetTotalSize (Iter it)
             if ((d = ChainMgrGetExtraData (&it->cm, i)) == NULL)
             {
                 dr.fi = FrameInstInit (it->template[1].data);
+                if (!dr.fi)
+                    return NO_VALUE;
                 d = ChainMgrSetData (&it->cm, i, dr);
+                if (!d) {
+                    FrameInstFree (dr.fi);
+                    return NO_VALUE;
+                }
             }
             /*endif*/
             if ((num = FrameInstGetTotalSize (d->fi)) == NO_VALUE)
@@ -2278,8 +2516,8 @@ static ExtraData ChainMgrSetData (ChainMgr cm,
 {
     Chain cur = (Chain) Xmalloc (sizeof (ChainRec));
     if (!cur) {
-        fprintf (stderr, "(XIM-IMdkit) WARNING: malloc failed in %s:%d.\n",
-                 __FILE__, __LINE__);
+        fprintf (stderr, "(XIM-IMdkit) WARNING: malloc failed in %s:%s.\n",
+                 __FILE__, XIM_STRFUNC);
         return NULL;
     }
 
@@ -2445,6 +2683,7 @@ static int _FrameInstGetItemSize (FrameInst fi, int cur_no)
             register int unit;
             register int number;
             register int size;
+            register int s;
             register int i;
 
             unit = _UNIT ((long) fi->template[cur_no].data);
@@ -2456,11 +2695,19 @@ static int _FrameInstGetItemSize (FrameInst fi, int cur_no)
             {
                 assert (i >= 0);
                 i = _FrameInstDecrement (fi->template, i);
-                size += _FrameInstGetItemSize (fi, i);
+                s = _FrameInstGetItemSize (fi, i);
+                if (s == NO_VALUE) {
+                    size = NO_VALUE;
+                    number = 0;
+                    break;
+                } else {
+                    size += s;
+                }
                 number--;
             }
             /*endwhile*/
-            size = (unit - (size%unit))%unit;
+            if (size != NO_VALUE)
+                size = (unit - (size%unit))%unit;
             return size;
         }
 

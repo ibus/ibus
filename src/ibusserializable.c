@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2018-2019 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2018-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2019 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -269,7 +269,7 @@ GVariant *
 ibus_serializable_serialize_object (IBusSerializable *object)
 {
     g_return_val_if_fail (IBUS_IS_SERIALIZABLE (object), FALSE);
-    gboolean retval;
+    G_GNUC_UNUSED gboolean retval;
 
     GVariantBuilder builder;
     g_variant_builder_init (&builder, G_VARIANT_TYPE_TUPLE);

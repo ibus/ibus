@@ -264,6 +264,15 @@ void             ibus_write_address     (const gchar    *address);
 const gchar     *ibus_get_user_name     (void);
 
 /**
+ * ibus_get_group_name:
+ *
+ * Get the current user group name.
+ *
+ * Returns: A newly allocated string that stores current user group name.
+ */
+const gchar     *ibus_get_group_name    (void);
+
+/**
  * ibus_get_daemon_uid:
  *
  * Get UID of ibus-daemon.

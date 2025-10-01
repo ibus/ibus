@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2025-06-14 03:51+0000\n"
+"PO-Revision-Date: 2025-10-01 15:53+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ko/>\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3545,7 +3545,7 @@ msgstr "레지스트리 캐쉬의 내용 표시"
 
 #: tools/main.vala:1162
 msgid "Create registry cache"
-msgstr "레지스트리 캐시 생성"
+msgstr "레지스트리 캐쉬 생성"
 
 #: tools/main.vala:1163
 msgid "Print the D-Bus address of ibus-daemon"

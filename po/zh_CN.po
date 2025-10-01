@@ -22,13 +22,15 @@
 # Dingzhong Chen <wsxy162@gmail.com>, 2021.
 # Liu Tao <lyuutau@outlook.com>, 2021, 2023.
 # lumingzh <lumingzh@qq.com>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
 "PO-Revision-Date: 2025-09-23 02:53+0000\n"
-"Last-Translator: lumingzh <lumingzh@qq.com>\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -3744,7 +3746,7 @@ msgstr "IBus 是一个适用于 Linux/Unix 系统的智能输入平台。"
 
 #: ui/gtk3/panel.vala:1584
 msgid "Maintainers"
-msgstr ""
+msgstr "维护者"
 
 #: ui/gtk3/panel.vala:1588
 msgid "translator-credits"

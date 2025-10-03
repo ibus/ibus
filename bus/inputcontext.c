@@ -1305,8 +1305,10 @@ _ic_focus_out (BusInputContext       *context,
                GDBusMethodInvocation *invocation)
 {
     if (context->capabilities & IBUS_CAP_FOCUS) {
-        if (context->ignore_focus_out)
+        if (context->ignore_focus_out) {
+            g_dbus_method_invocation_return_value (invocation, NULL);
             return;
+        }
         bus_input_context_focus_out (context);
         g_dbus_method_invocation_return_value (invocation, NULL);
     }
@@ -1329,6 +1331,10 @@ _ic_reset (BusInputContext       *context,
            GDBusMethodInvocation *invocation)
 {
     if (context->engine) {
+        if (context->ignore_focus_out) {
+            g_dbus_method_invocation_return_value (invocation, NULL);
+            return;
+        }
         if (context->preedit_mode == IBUS_ENGINE_PREEDIT_COMMIT) {
             if (context->client_commit_preedit)
                bus_input_context_clear_preedit_text (context, FALSE);

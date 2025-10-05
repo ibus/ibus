@@ -1861,8 +1861,8 @@ input_method_deactivate (void                               *data,
 
 
     if (priv->ibuscontext) {
-        const gchar *object_path = g_dbus_proxy_get_object_path (
-                G_DBUS_PROXY (priv->ibuscontext));
+        gchar *object_path = g_strdup (g_dbus_proxy_get_object_path (
+                G_DBUS_PROXY (priv->ibuscontext)));
         ibus_input_context_focus_out (priv->ibuscontext);
         g_signal_handlers_disconnect_by_func (
                 priv->ibuscontext,
@@ -1890,6 +1890,7 @@ input_method_deactivate (void                               *data,
                        wayland_im_signals[IBUS_FOCUS_OUT],
                        0,
                        object_path);
+        g_free (object_path);
     }
 
     if (priv->preedit_text)

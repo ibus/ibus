@@ -178,7 +178,7 @@ AC_MSG_RESULT([$enable_product_build])
 AC_CHECK_HEADERS([sys/prctl.h])
 
 # Check functions.
-AC_CHECK_FUNCS(daemon)
+AC_CHECK_FUNCS(daemon getgrgid_r)
 
 # Check dlclose() in libc.so.
 AC_CHECK_LIB(c, dlclose, LIBDL="", [AC_CHECK_LIB(dl, dlclose, LIBDL="-ldl")])

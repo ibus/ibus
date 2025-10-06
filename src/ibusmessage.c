@@ -459,7 +459,7 @@ ibus_message_new (guint domain,
     GValue *values, *values_tmp;
     guint n_properties = 4, i;
     IBusMessage *msg;
-    IBusMessagePrivate *priv;
+    G_GNUC_UNUSED IBusMessagePrivate *priv;
 
     g_return_val_if_fail (domain > 0 && domain <= G_MAXUINT8, NULL);
     g_return_val_if_fail (code <= G_MAXUINT8, NULL);

@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* bus - The Input Bus
  * Copyright (C) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2020-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2020 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -729,7 +729,7 @@ ibus_component_new_varargs (const gchar *first_property_name, ...)
 {
     va_list var_args;
     IBusComponent *component;
-    IBusComponentPrivate *priv;
+    G_GNUC_UNUSED IBusComponentPrivate *priv;
 
     g_assert (first_property_name);
 

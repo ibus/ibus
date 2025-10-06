@@ -37,6 +37,7 @@ class Application {
     private static bool m_verbose;
     private static bool m_enable_wayland_im;
 #if USE_GDK_WAYLAND
+    private static ulong m_bus_connected_id;
     private static ulong m_realize_surface_id;
     private static ulong m_ibus_focus_in_id;
     private static ulong m_ibus_focus_out_id;
@@ -285,7 +286,7 @@ class Application {
         bus = new IBus.Bus();
         GLib.MainLoop? loop = null;
         if (!bus.is_connected() && m_exec_daemon) {
-            ulong handler_id = bus.connected.connect((bus) => {
+            m_bus_connected_id = bus.connected.connect((bus) => {
                 if (loop != null)
                     loop.quit();
             });
@@ -295,17 +296,31 @@ class Application {
                     loop.run();
                 }
             }
-            bus.disconnect(handler_id);
+            bus.disconnect(m_bus_connected_id);
+            m_bus_connected_id = 0;
         }
         if (!bus.is_connected()) {
-            m_log.printf("Failed to connect to ibus-daemon\n");
-            m_log.flush();
-            assert_not_reached();
+            if (m_exec_daemon) {
+                m_log.printf("Failed to connect to ibus-daemon\n");
+                m_log.flush();
+                assert_not_reached();
+            } else {
+                m_bus_connected_id = bus.connected.connect((bus) => {
+                    m_wayland_im = new IBus.WaylandIM("bus", bus,
+                                                      "wl_display", wl_display,
+                                                      "log", m_log,
+                                                      "verbose", m_verbose);
+                    bus.disconnect(m_bus_connected_id);
+                    m_bus_connected_id = 0;
+                });
+            }
         }
-        m_wayland_im = new IBus.WaylandIM("bus", bus,
-                                          "wl_display", wl_display,
-                                          "log", m_log,
-                                          "verbose", m_verbose);
+        if (bus.is_connected()) {
+            m_wayland_im = new IBus.WaylandIM("bus", bus,
+                                              "wl_display", wl_display,
+                                              "log", m_log,
+                                              "verbose", m_verbose);
+        }
     }
 
     private void set_wayland_surface(void *surface) {

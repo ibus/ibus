@@ -970,7 +970,8 @@ msgid ""
 "currently active compose sequence and the character was cancelled. Try "
 "inputting the correct character to the compose sequence again, or press "
 "Escape key to terminate whole the compose sequence."
-msgstr "您刚输入的字符未识别为当前激活合成序列的有效部分且该字符已取消。请重新尝试向"
+msgstr ""
+"您刚输入的字符未识别为当前激活合成序列的有效部分且该字符已取消。请重新尝试向"
 "合成序列输入正确的字符，或按 Esc 键终止整个合成序列。"
 
 #: src/ibusenginesimple.c:276
@@ -3382,7 +3383,8 @@ msgstr "获取全局引擎失败。\n"
 msgid ""
 "Start or restart daemon with \"direct\", \"systemd\", \"kde-wayland\" or "
 "\"wayland\" TYPE."
-msgstr "使用“direct”、“systemd”、“kde-wayland”或“wayland”类型启动或重启守护进程。"
+msgstr ""
+"使用“direct”、“systemd”、“kde-wayland”或“wayland”类型启动或重启守护进程。"
 
 #: tools/main.vala:713
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
@@ -3688,12 +3690,11 @@ msgid ""
 "you should make sure that QT_IM_MODULE and GTK_IM_MODULE environment "
 "variables are unset in the desktop session."
 msgstr ""
-"IBus 应由 %s 中的桌面会话调用。对于 "
-"KDE，您可以启动“%s”工具并前往“输入与输出”->“键盘”->“虚拟键盘”部分，选择“%s”图"
-"标并点击“应用”按钮以在 %s 中配置 "
-"IBus。对于其它桌面会话，您可以运行“%s”命令。请参阅关于“Wayland "
-"输入法”配置的每篇文档。在您配置“Wayland 输入法”前，"
-"您应确保在桌面会话中未设置 QT_IM_MODULE 和 GTK_IM_MODULE 环境变量。"
+"IBus 应由 %s 中的桌面会话调用。对于 KDE，您可以启动“%s”工具并前往“输入与输"
+"出”->“键盘”->“虚拟键盘”部分，选择“%s”图标并点击“应用”按钮以在 %s 中配置 "
+"IBus。对于其它桌面会话，您可以运行“%s”命令。请参阅关于“Wayland 输入法”配置的"
+"每篇文档。在您配置“Wayland 输入法”前，您应确保在桌面会话中未设置 "
+"QT_IM_MODULE 和 GTK_IM_MODULE 环境变量。"
 
 #: ui/gtk3/panel.vala:1029
 #, c-format
@@ -3712,8 +3713,8 @@ msgid ""
 "is Xorg so the Wayland feature is disabled. You would be better off running "
 "ibus-daemon directly instead or %s without that option."
 msgstr ""
-"看起来您使用了“--enable-wayland-im”选项运行 %s 但您的显示服务器为 Xorg "
-"因而已禁用 Wayland 功能。您最好不带那个选项直接运行 ibus-daemon 或 %s。"
+"看起来您使用了“--enable-wayland-im”选项运行 %s 但您的显示服务器为 Xorg 因而已"
+"禁用 Wayland 功能。您最好不带那个选项直接运行 ibus-daemon 或 %s。"
 
 #: ui/gtk3/panel.vala:1054
 msgid "IBus Notification"

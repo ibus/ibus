@@ -3415,8 +3415,8 @@ msgid ""
 "Start or restart daemon with \"direct\", \"systemd\", \"kde-wayland\" or "
 "\"wayland\" TYPE."
 msgstr ""
-"Inicia o reinicia el dimoni amb el TYPE \"direct\", \"systemd\", "
-"\"kde-wayland\" o \"wayland\"."
+"Inicia o reinicia el dimoni amb el TYPE \"direct\", \"systemd\", \"kde-"
+"wayland\" o \"wayland\"."
 
 #: tools/main.vala:713
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."

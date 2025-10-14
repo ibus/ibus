@@ -182,6 +182,14 @@ _on_sigusr1 (void)
 }
 #endif
 
+static inline void
+exit_and_free_context (int             status,
+                       GOptionContext *context)
+{
+    g_option_context_free (context);
+    exit (status);
+}
+
 gint
 main (gint argc, gchar **argv)
 {
@@ -203,11 +211,11 @@ main (gint argc, gchar **argv)
     if (!g_option_context_parse (context, &argc, &argv, &error)) {
         g_printerr ("Option parsing failed: %s\n", error->message);
 	g_error_free (error);
-        exit (-1);
+        exit_and_free_context (EXIT_FAILURE, context);
     }
     if (g_gdbus_timeout < -1) {
         g_printerr ("Bad timeout (must be >= -1): %d\n", g_gdbus_timeout);
-        exit (-1);
+        exit_and_free_context (EXIT_FAILURE, context);
     }
 
     if (g_mempro) {
@@ -220,7 +228,7 @@ main (gint argc, gchar **argv)
 
         if (pwd == NULL || g_strcmp0 (pwd->pw_name, username) != 0) {
             g_printerr ("Please run ibus-daemon with login user! Do not run ibus-daemon with sudo or su.\n");
-            exit (-1);
+            exit_and_free_context (EXIT_FAILURE, context);
         }
     }
 
@@ -245,7 +253,7 @@ main (gint argc, gchar **argv)
     if (daemonize) {
         if (daemon (1, 0) != 0) {
             g_printerr ("Cannot daemonize ibus.\n");
-            exit (-1);
+            exit_and_free_context (EXIT_FAILURE, context);
         }
     }
 
@@ -267,7 +275,7 @@ main (gint argc, gchar **argv)
         if (ibus_bus_is_connected (bus)) {
             if (!replace) {
                 g_printerr ("current session already has an ibus-daemon.\n");
-                exit (-1);
+                exit_and_free_context (EXIT_FAILURE, context);
             }
             ibus_bus_exit (bus, FALSE);
             while (ibus_bus_is_connected (bus)) {
@@ -301,11 +309,11 @@ main (gint argc, gchar **argv)
             }
             if (component == NULL || !bus_component_start (component, g_verbose)) {
                 g_printerr ("Can not execute default config program\n");
-                exit (-1);
+                exit_and_free_context (EXIT_FAILURE, context);
             }
         } else if (g_strcmp0 (config, "disable") != 0 && g_strcmp0 (config, "") != 0) {
             if (!execute_cmdline (config))
-                exit (-1);
+                exit_and_free_context (EXIT_FAILURE, context);
         }
 
         /* execute panel component */
@@ -318,11 +326,11 @@ main (gint argc, gchar **argv)
             }
             if (component == NULL || !bus_component_start (component, g_verbose)) {
                 g_printerr ("Can not execute default panel program\n");
-                exit (-1);
+                exit_and_free_context (EXIT_FAILURE, context);
             }
         } else if (g_strcmp0 (panel, "disable") != 0 && g_strcmp0 (panel, "") != 0) {
             if (!execute_cmdline (panel))
-                exit (-1);
+                exit_and_free_context (EXIT_FAILURE, context);
         }
     }
 
@@ -337,25 +345,25 @@ main (gint argc, gchar **argv)
         if (component != NULL &&
             !bus_component_start (component, g_verbose)) {
             g_printerr ("Can not execute default panel program\n");
-            exit (-1);
+            exit_and_free_context (EXIT_FAILURE, context);
         }
     } else if (g_strcmp0 (emoji_extension, "disable") != 0 &&
                g_strcmp0 (emoji_extension, "") != 0) {
         if (!execute_cmdline (emoji_extension))
-            exit (-1);
+            exit_and_free_context (EXIT_FAILURE, context);
     }
 #endif
 
     /* execute ibus xim server */
     if (xim) {
         if (!execute_cmdline (LIBEXECDIR "/ibus-x11 --kill-daemon"))
-            exit (-1);
+            exit_and_free_context (EXIT_FAILURE, context);
     }
 
     if (!daemonize) {
         if (getppid () == 1) {
             g_warning ("The parent process died.");
-            exit (0);
+            exit_and_free_context (EXIT_SUCCESS, context);
         }
 #ifdef HAVE_SYS_PRCTL_H
 #ifdef G_OS_UNIX
@@ -396,5 +404,6 @@ main (gint argc, gchar **argv)
 #endif
     }
     bus_server_run ();
+    g_option_context_free (context);
     return 0;
 }

@@ -910,6 +910,9 @@ class PanelBinding : IBus.PanelService {
                         "is-enabled", false,
                         "is-extension", true);
                 panel_extension(close_event);
+                // Vala calls event.ref_sink() and panel_extension() does not
+                // unref the event and need to call event.unref() here.
+                close_event.unref();
             });
             m_emojier.send_message.connect((m) => {
                 send_message(m);
@@ -1175,6 +1178,9 @@ class PanelBinding : IBus.PanelService {
                     "is-enabled", false,
                     "is-extension", true);
             panel_extension(event);
+            // Vala calls event.ref_sink() and panel_extension() does not unref
+            // the event and need to call event.unref() here.
+            event.unref();
             return;
         }
         if (m_emojier == null)

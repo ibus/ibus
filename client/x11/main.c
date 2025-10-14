@@ -1309,7 +1309,12 @@ _atexit_cb ()
 static void
 _sighandler (int sig)
 {
-    exit(EXIT_FAILURE);
+    /* rhbz#1767691 _sighandler() is called with SIGTERM
+     * and exit() causes SEGV during calling atexit functions.
+     * _atexit_cb() might be broken. _exit() does not call
+     * atexit functions.
+     */
+    _exit (EXIT_FAILURE);
 }
 
 static void

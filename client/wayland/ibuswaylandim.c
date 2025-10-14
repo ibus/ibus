@@ -924,6 +924,7 @@ _bus_global_engine_changed_cb (IBusBus       *bus,
     keymap = create_user_xkb_keymap (priv->xkb_context, desc);
     if (keymap && !ibus_wayland_im_update_xkb_state (wlim, keymap))
         xkb_keymap_unref (keymap);
+    g_object_unref (desc);
 }
 
 

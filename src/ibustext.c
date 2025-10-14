@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* IBus - The Input Bus
  * Copyright (C) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2011-2021 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2011-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2021 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -109,7 +109,7 @@ ibus_text_deserialize (IBusText *text,
     retval = IBUS_SERIALIZABLE_CLASS (ibus_text_parent_class)->deserialize (
                             (IBusSerializable *)text, variant);
 
-    if (text->is_static == FALSE)
+    if (!text->is_static)
         g_free (text->text);
     g_variant_get_child (variant, retval++, "s", &text->text);
     text->is_static = FALSE;
@@ -139,10 +139,15 @@ ibus_text_copy (IBusText       *dest,
     g_return_val_if_fail (IBUS_IS_TEXT (dest), FALSE);
     g_return_val_if_fail (IBUS_IS_TEXT (src), FALSE);
 
+    if (!dest->is_static)
+        g_free (dest->text);
     dest->text = g_strdup (src->text);
     dest->is_static = FALSE;
+    if (dest->attrs)
+        g_clear_object (&dest->attrs);
     if (src->attrs) {
-        dest->attrs = (IBusAttrList *)ibus_serializable_copy ((IBusSerializable *)src->attrs);
+        dest->attrs = (IBusAttrList *)ibus_serializable_copy (
+                (IBusSerializable *)src->attrs);
         g_object_ref_sink (dest->attrs);
     }
 

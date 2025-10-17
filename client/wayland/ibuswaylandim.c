@@ -1796,7 +1796,7 @@ input_method_activate (void                               *data,
 
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
-    if (priv->context)
+    if (priv->context || priv->ibuscontext)
         input_method_deactivate (data, input_method, context);
 
     priv->context = context;
@@ -1828,10 +1828,7 @@ input_method_activate (void                               *data,
         g_assert_not_reached ();
     }
 
-    if (priv->ibuscontext) {
-        g_object_unref (priv->ibuscontext);
-        priv->ibuscontext = NULL;
-    }
+    g_assert (!priv->ibuscontext);
 
     priv->cancellable = g_cancellable_new ();
     ibus_bus_create_input_context_async (priv->ibusbus,
@@ -1884,8 +1881,7 @@ input_method_deactivate (void                               *data,
                 priv->ibuscontext,
                 G_CALLBACK (_context_hide_preedit_text_cb),
                 wlim);
-        g_object_unref (priv->ibuscontext);
-        priv->ibuscontext = NULL;
+        g_clear_object (&priv->ibuscontext);
         g_signal_emit (wlim,
                        wayland_im_signals[IBUS_FOCUS_OUT],
                        0,

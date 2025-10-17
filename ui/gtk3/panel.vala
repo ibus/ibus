@@ -930,6 +930,10 @@ class Panel : IBus.PanelService {
                     (w, s) => this.realize_surface(s));
 #endif
             m_popup_dialogs.insert(serial, popup);
+            if (m_candidate_panel_active != null) {
+                popup.set_cursor_rect(
+                        m_candidate_panel_active.get_cursor_rect());
+            }
             popup.show();
         }
     }

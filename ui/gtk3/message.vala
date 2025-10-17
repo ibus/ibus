@@ -91,6 +91,12 @@ public class MessageDialog : Gtk.Box{
         create_ui(message);
     }
 
+    public void set_cursor_rect(Gdk.Rectangle location) {
+        if (m_cursor_location == location)
+            return;
+        m_cursor_location = location;
+    }
+
     public void set_cursor_location(int x, int y, int width, int height) {
         Gdk.Rectangle location = Gdk.Rectangle(){
             x = x, y = y, width = width, height = height };

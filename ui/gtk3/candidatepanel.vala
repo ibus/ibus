@@ -161,6 +161,10 @@ public class CandidatePanel : Gtk.Box{
         }
     }
 
+    public Gdk.Rectangle? get_cursor_rect() {
+        return m_cursor_location;
+    }
+
     public void set_cursor_location(int x, int y, int width, int height) {
         Gdk.Rectangle location = Gdk.Rectangle(){
             x = x, y = y, width = width, height = height };

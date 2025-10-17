@@ -29,6 +29,8 @@ public class IBusEmojier : Gtk.ApplicationWindow {
                 valign : Gtk.Align.FILL
             );
             this.motion_notify_event.connect((e) => {
+                if (!m_enter_notify_enable)
+                    return false;
                 Gdk.EventMotion pe = e;
                 if (m_mouse_x == pe.x_root && m_mouse_y == pe.y_root)
                     return false;
@@ -37,6 +39,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
                 var row = this.get_row_at_y((int)e.y);
                 if (row != null)
                     this.select_row(row);
+                m_category_active_index = row.get_index();
                 return false;
             });
             this.enter_notify_event.connect((e) => {
@@ -279,6 +282,12 @@ public class IBusEmojier : Gtk.ApplicationWindow {
     private const unichar[] EMOJI_VARIANT_LIST = {
             0x1f3fb, 0x1f3fc, 0x1f3fd, 0x1f3fe, 0x1f3ff, 0x200d };
 
+    // Access both class methods and instances.
+    protected static int m_category_active_index = -1;
+    protected static bool m_enter_notify_enable = true;
+    protected static double m_mouse_x;
+    protected static double m_mouse_y;
+
     // Set the actual default values in the constructor
     // because these fields are used for class_init() and static functions,
     // e.g. set_emoji_font(), can be called before class_init() is called.
@@ -348,14 +357,10 @@ public class IBusEmojier : Gtk.ApplicationWindow {
      * Unicode category list.
      */
     private bool m_candidate_panel_mode;
-    private int m_category_active_index = -1;
     private IBus.LookupTable m_lookup_table;
     private Gtk.Label[] m_candidates;
-    private bool m_enter_notify_enable = true;
     private uint m_entry_notify_show_id;
     private uint m_entry_notify_disable_id;
-    protected static double m_mouse_x;
-    protected static double m_mouse_y;
     private Gtk.ProgressBar m_unicode_progress_bar;
     private uint m_unicode_progress_id;
     private Gtk.Label m_unicode_percent_label;
@@ -988,7 +993,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
             EPaddedLabelBox widget =
                     new EPaddedLabelBox(_(category), Gtk.Align.CENTER);
             row.add(widget);
-            m_list_box.add(row);
+            m_list_box.insert(row, -1);
             if (i == m_category_active_index)
                 m_list_box.select_row(row);
         }
@@ -1113,7 +1118,7 @@ public class IBusEmojier : Gtk.ApplicationWindow {
                                         TravelDirection.NONE,
                                         caption);
             row.add(widget);
-            m_list_box.add(row);
+            m_list_box.insert(row, -1);
             if (n++ == m_category_active_index) {
                 m_list_box.select_row(row);
             }

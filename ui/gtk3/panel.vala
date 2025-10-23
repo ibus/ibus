@@ -1027,7 +1027,11 @@ class Panel : IBus.PanelService {
                         "Wayland",
                         "ibus start");
         } else if (m_is_wayland && m_is_wayland_im && !is_gnome()) {
-            if (Environment.get_variable("QT_IM_MODULE") == "ibus") {
+            var qt_im_module = Environment.get_variable("QT_IM_MODULE");
+            var qt_im_modules = Environment.get_variable("QT_IM_MODULES");
+            if ((qt_im_module != null && qt_im_module != "wayland") &&
+                (qt_im_modules == null ||
+                 !qt_im_modules.has_prefix("wayland"))) {
                 var format =
                         _("Please unset QT_IM_MODULE and GTK_IM_MODULE " +
                           "environment variables and 'ibus-daemon --panel " +

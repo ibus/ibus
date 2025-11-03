@@ -317,6 +317,8 @@ panelbinding.o: $(srcdir)/panelbinding.c
 	$(AM_V_CC_no)$(COMPILE) -c -o $@ $<
 	$(NULL)
 
+.NOTPARALLEL:
+
 MAINTAINERCLEANFILES += extension.c panelbinding.c
 
 man_seven_DATA = ibus-emoji.7

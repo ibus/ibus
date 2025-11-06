@@ -1018,7 +1018,8 @@ msgstr "Reisen & Orte"
 
 #: src/ibusenginesimple.c:263
 msgid "Detect unregistered character in your compose sequence"
-msgstr "In deiner Compose-Sequenz wurde ein nicht registriertes Zeichen erkannt"
+msgstr ""
+"In deiner Compose-Sequenz wurde ein nicht registriertes Zeichen erkannt"
 
 #: src/ibusenginesimple.c:264
 msgid ""

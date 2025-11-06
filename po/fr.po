@@ -1031,7 +1031,8 @@ msgstr "Voyages & lieux"
 
 #: src/ibusenginesimple.c:263
 msgid "Detect unregistered character in your compose sequence"
-msgstr "Détecter un caractère non enregistré dans votre séquence de composition"
+msgstr ""
+"Détecter un caractère non enregistré dans votre séquence de composition"
 
 #: src/ibusenginesimple.c:264
 msgid ""
@@ -3774,14 +3775,14 @@ msgid ""
 "variables are unset in the desktop session."
 msgstr ""
 "IBus devrait être appelé par la session de bureau dans %s. Pour KDE, vous "
-"pouvez lancer l'utilitaire \"%s\", accéder à la section \"Entrée et sortie\" "
-"> \"Clavier\" > \"Clavier virtuel\", sélectionner l'icône \"%s\" et cliquer "
-"sur le bouton \"Appliquer\" pour configurer IBus dans %s. Pour les autres "
-"sessions de bureau, vous pouvez exécuter la commande \"%s\". Référez-vous au "
-"document concernant la configuration d'une méthode de saisie dans Wayland. "
-"Avant de configurer la méthode de saisie Wayland, assurez-vous que les "
-"variables d'environnement QT_IM_MODULE et GTK_IM_MODULE ne sont pas définies "
-"dans la session de bureau."
+"pouvez lancer l'utilitaire \"%s\", accéder à la section \"Entrée et "
+"sortie\" > \"Clavier\" > \"Clavier virtuel\", sélectionner l'icône \"%s\" et "
+"cliquer sur le bouton \"Appliquer\" pour configurer IBus dans %s. Pour les "
+"autres sessions de bureau, vous pouvez exécuter la commande \"%s\". Référez-"
+"vous au document concernant la configuration d'une méthode de saisie dans "
+"Wayland. Avant de configurer la méthode de saisie Wayland, assurez-vous que "
+"les variables d'environnement QT_IM_MODULE et GTK_IM_MODULE ne sont pas "
+"définies dans la session de bureau."
 
 #: ui/gtk3/panel.vala:1029
 #, c-format

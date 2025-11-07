@@ -56,9 +56,11 @@ static gchar *config = "default";
 static gchar *desktop = "gnome";
 
 static gchar *panel_extension_disable_users[] = {
-    "gdm",
     "gnome-initial-setup",
     "liveuser"
+};
+static gchar *panel_extension_disable_groups[] = {
+    "gdm",
 };
 
 static void
@@ -184,6 +186,7 @@ main (gint argc, gchar **argv)
 {
     int i;
     const gchar *username = ibus_get_user_name ();
+    const gchar *groupname = ibus_get_group_name ();
 
     setlocale (LC_ALL, "");
 
@@ -255,6 +258,12 @@ main (gint argc, gchar **argv)
     bus_server_init ();
     for (i = 0; i < G_N_ELEMENTS(panel_extension_disable_users); i++) {
         if (!g_strcmp0 (username, panel_extension_disable_users[i]) != 0) {
+            emoji_extension = "disable";
+            break;
+        }
+    }
+    for (i = 0; i < G_N_ELEMENTS(panel_extension_disable_groups); i++) {
+        if (g_strcmp0 (groupname, panel_extension_disable_groups[i]) == 0) {
             emoji_extension = "disable";
             break;
         }

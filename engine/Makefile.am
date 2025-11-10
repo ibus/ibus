@@ -81,6 +81,7 @@ ibus_engine_simple_DEPENDENCIES = \
     $(NULL)
 
 component_DATA = \
+    component.dtd \
     simple.xml \
     $(NULL)
 
@@ -95,6 +96,7 @@ CLEANFILES = \
     $(NULL)
 
 EXTRA_DIST = \
+    component.dtd \
     denylist.txt \
     gensimple.py \
     iso639converter.py \

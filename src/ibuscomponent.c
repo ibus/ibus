@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* bus - The Input Bus
  * Copyright (C) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2020-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2020 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -673,9 +673,13 @@ ibus_component_parse_observed_paths (IBusComponent *component,
     for (p = node->sub_nodes; p != NULL; p = p->next) {
         IBusObservedPath *path;
 
-        path = ibus_observed_path_new_from_xml_node ((XMLNode *)p->data, access_fs);
+        path = ibus_observed_path_new_from_xml_node ((XMLNode *)p->data,
+                                                     access_fs);
+        if (!path)
+            continue;
         g_object_ref_sink (path);
-        component->priv->observed_paths = g_list_append (component->priv->observed_paths, path);
+        component->priv->observed_paths =
+                g_list_append (component->priv->observed_paths, path);
 
         if (access_fs && path->is_dir && path->is_exist) {
             component->priv->observed_paths =
@@ -796,8 +800,10 @@ ibus_component_new_from_file (const gchar *filename)
     else {
         IBusObservedPath *path;
         path = ibus_observed_path_new (filename, TRUE);
-        component->priv->observed_paths =
-                g_list_prepend(component->priv->observed_paths, path);
+        if (path) {
+            component->priv->observed_paths =
+                    g_list_prepend(component->priv->observed_paths, path);
+        }
     }
 
     return component;
@@ -811,6 +817,7 @@ ibus_component_add_observed_path (IBusComponent *component,
     IBusObservedPath *p;
 
     p = ibus_observed_path_new (path, access_fs);
+    g_return_if_fail (p);
     g_object_ref_sink (p);
     component->priv->observed_paths =
             g_list_append (component->priv->observed_paths, p);

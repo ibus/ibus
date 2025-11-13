@@ -248,7 +248,7 @@ class GenerateEngineXML():
                                   self._AUTHOR,
                                   self.__first)
         parser.setContentHandler(self.__handler)
-        f = codecs.open(self.__path, 'r', encoding='utf-8')
+        f = open(self.__path, 'r', encoding='utf-8')
         try:
             parser.parse(f)
         except SAXParseException:
@@ -257,7 +257,7 @@ class GenerateEngineXML():
             f.close()
     def write(self, output=None):
         if output != None:
-            od = codecs.open(output, 'w', encoding='utf-8')
+            od = open(output, 'w', encoding='utf-8')
         else:
             if PY3K:
                 od = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -311,7 +311,7 @@ class ISO639XML(XMLFilterBase):
 
 
 def parse_iso639(path):
-    f = codecs.open(path, 'r', encoding='utf-8')
+    f = open(path, 'r', encoding='utf-8')
     parser = sax_make_parser()
     parser.setFeature(sax_feature_namespaces, 0)
     handler = ISO639XML(parser)
@@ -327,7 +327,7 @@ def parse_iso639(path):
 
 def parse_denylist(denyfile):
     denylist = []
-    f = codecs.open(denyfile, 'r', encoding='utf-8')
+    f = open(denyfile, 'r', encoding='utf-8')
     for line in f.readlines():
         if line == '\n' or line[0] == '#':
             continue

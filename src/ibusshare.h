@@ -205,7 +205,7 @@ G_BEGIN_DECLS
  *
  * Obtains the machine UUID of the machine this process is running on.
  *
- * Returns: A newly allocated string that shows the UUID of the machine.
+ * Returns: A const string that shows the UUID of the machine.
  */
 const gchar     *ibus_get_local_machine_id
                                         (void);
@@ -259,9 +259,21 @@ void             ibus_write_address     (const gchar    *address);
  *    <listitem><para>Environment variable LNAME</para></listitem>
  * </orderedlist>
  *
- * Returns: A newly allocated string that stores current user name.
+ * Returns: A const string that stores current user name.
  */
 const gchar     *ibus_get_user_name     (void);
+
+/**
+ * ibus_get_group_name:
+ *
+ * Get the current user group name.
+ *
+ * Returns: A const string that stores current user group name.
+ *
+ * Since: 1.5.34
+ * Stability: Unstable
+ */
+const gchar     *ibus_get_group_name    (void);
 
 /**
  * ibus_get_daemon_uid:
@@ -280,7 +292,7 @@ glong            ibus_get_daemon_uid    (void) G_GNUC_DEPRECATED;
  *
  * Get the path of socket file.
  *
- * Returns: A newly allocated string that stores the path of socket file.
+ * Returns: A const string that stores the path of socket file.
  */
 const gchar     *ibus_get_socket_path   (void);
 

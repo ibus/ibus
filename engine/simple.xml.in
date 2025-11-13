@@ -3,7 +3,7 @@
     <name>org.freedesktop.IBus.Simple</name>
     <description>A table based simple engine</description>
     <exec>@libexecdir@/ibus-engine-simple</exec>
-    <version>1.5.33-beta1.20250916</version>
+    <version>1.5.33.20251113</version>
     <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
     <license>GPL</license>
     <homepage>https://github.com/ibus/ibus/wiki</homepage>
@@ -2738,8 +2738,20 @@
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
             <layout_variant>mac</layout_variant>
-            <longname>English (Macintosh)</longname>
-            <description>English (Macintosh)</description>
+            <longname>English (Macintosh, ABC, ANSI)</longname>
+            <description>English (Macintosh, ABC, ANSI)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
+            <name>xkb:us:mac-iso:eng</name>
+            <language>en</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>us</layout>
+            <layout_variant>mac-iso</layout_variant>
+            <longname>English (Macintosh, ABC, ISO)</longname>
+            <description>English (Macintosh, ABC, ISO)</description>
             <icon>ibus-keyboard</icon>
             <rank>1</rank>
         </engine>
@@ -2906,8 +2918,20 @@
             <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
             <layout>us</layout>
             <layout_variant>dvorak-mac</layout_variant>
-            <longname>English (Dvorak, Macintosh)</longname>
-            <description>English (Dvorak, Macintosh)</description>
+            <longname>English (Dvorak, Macintosh, ANSI)</longname>
+            <description>English (Dvorak, Macintosh, ANSI)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
+            <name>xkb:us:dvorak-mac-iso:eng</name>
+            <language>en</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>us</layout>
+            <layout_variant>dvorak-mac-iso</layout_variant>
+            <longname>English (Dvorak, Macintosh, ISO)</longname>
+            <description>English (Dvorak, Macintosh, ISO)</description>
             <icon>ibus-keyboard</icon>
             <rank>1</rank>
         </engine>
@@ -11042,6 +11066,18 @@
             <rank>1</rank>
         </engine>
         <engine>
+            <name>xkb:th:mnc:tha</name>
+            <language>th</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>th</layout>
+            <layout_variant>mnc</layout_variant>
+            <longname>Thai (Manoonchai)</longname>
+            <description>Thai (Manoonchai)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
             <name>xkb:bw::tsn</name>
             <language>tn</language>
             <license>GPL</license>
@@ -11218,6 +11254,18 @@
             <rank>1</rank>
         </engine>
         <engine>
+            <name>xkb:ua:winkeysenhanced:ukr</name>
+            <language>uk</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>ua</layout>
+            <layout_variant>winkeysenhanced</layout_variant>
+            <longname>Ukrainian (Windows Enhanced)</longname>
+            <description>Ukrainian (Windows Enhanced)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
             <name>xkb:ua:macOS:ukr</name>
             <language>uk</language>
             <license>GPL</license>
@@ -11321,6 +11369,18 @@
             <layout_variant>urd-nla</layout_variant>
             <longname>Urdu (Pakistan, NLA)</longname>
             <description>Urdu (Pakistan, NLA)</description>
+            <icon>ibus-keyboard</icon>
+            <rank>1</rank>
+        </engine>
+        <engine>
+            <name>xkb:pk:pak_urdu_phonetic:urd</name>
+            <language>ur</language>
+            <license>GPL</license>
+            <author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+            <layout>pk</layout>
+            <layout_variant>pak_urdu_phonetic</layout_variant>
+            <longname>Urdu (Pak Urdu Phonetic)</longname>
+            <description>Urdu (Pak Urdu Phonetic)</description>
             <icon>ibus-keyboard</icon>
             <rank>1</rank>
         </engine>

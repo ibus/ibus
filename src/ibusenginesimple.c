@@ -173,7 +173,9 @@ ibus_engine_simple_class_init (IBusEngineSimpleClass *class)
                                                        length,
                                                        &saved_version);
     g_bytes_unref (data);
-    if (!en_compose_table && saved_version) {
+    if (en_compose_table) {
+        en_compose_table->is_system = TRUE;
+    } else if (!en_compose_table && saved_version) {
         g_warning ("Failed to parse the builtin compose due to the different "
                    "version %u. Please rebuild IBus resource files.",
                    saved_version);
@@ -1023,6 +1025,7 @@ ibus_engine_simple_check_all_compose_table (IBusEngineSimple *simple,
     GString *output = g_string_new ("");
     gboolean success = FALSE;
     gboolean is_32bit = FALSE;
+    gboolean all_is_system = TRUE;
     gboolean can_load_en_us = FALSE;
     gunichar output_char = '\0';
 
@@ -1036,16 +1039,25 @@ ibus_engine_simple_check_all_compose_table (IBusEngineSimple *simple,
     tmp_list = global_tables;
     while (tmp_list) {
         IBusComposeTableEx *compose_table = tmp_list->data;
+        if (!compose_table->is_system) {
+            all_is_system = FALSE;
+            break;
+        }
+        tmp_list = tmp_list->next;
+    }
+    tmp_list = global_tables;
+    while (tmp_list) {
+        IBusComposeTableEx *compose_table = tmp_list->data;
         if (compose_table->can_load_en_us)
             can_load_en_us = TRUE;
-        /* If global_tables includes en_compose_table only, i.e. no user
-         * or locale compose tables, en_compose_table is used.
-         * If not, en_compose_table is used in case one of the other compose
-         * tables has can_load_en_us = %TRUE, i.e. the table file has
-         * the line of 'include "%L"'.
+        /* If global_tables includes system compose tables only, i.e. no user
+         * compose tables, en_compose_table is used.
+         * If user compose table is included in global_tables, en_compose_table
+         * is used in case that the user compose table has can_load_en_us =
+         * %TRUE, i.e. the compose file has the line of 'include "%L"'.
          * en_compose_table is always appended to the last of global_tables.
          */
-        if ((compose_table == en_compose_table) && global_tables->next != NULL
+        if ((compose_table == en_compose_table) && !all_is_system
             && !can_load_en_us) {
             tmp_list = tmp_list->next;
             continue;
@@ -1102,7 +1114,12 @@ ibus_engine_simple_check_all_compose_table (IBusEngineSimple *simple,
     g_string_free (output, TRUE);
     output = NULL;
 
-    if (ibus_check_algorithmically (priv->compose_buffer,
+    /* TODO: priv->tentative_match should not be used in case
+     * success == %TRUE? Now ibus_check_algorithmically() hits double dead
+     * keys.
+     */
+    if (!success &&
+        ibus_check_algorithmically (priv->compose_buffer,
                                     n_compose,
                                     &output_char)) {
         priv->in_compose_sequence = TRUE;
@@ -1689,42 +1706,42 @@ ibus_engine_simple_add_table_by_locale (IBusEngineSimple *simple,
     if (locale == NULL) {
         path = g_build_filename (g_get_user_config_dir (),
                                  "ibus", "Compose", NULL);
-        if (g_file_test (path, G_FILE_TEST_EXISTS)) {
+        if (g_file_test (path, G_FILE_TEST_EXISTS))
             ibus_engine_simple_add_compose_file (simple, path);
-            g_free (path);
-            return retval;
-        }
         g_clear_pointer(&path, g_free);
 
-        path = g_build_filename (g_get_user_config_dir (),
-                                 "gtk-4.0", "Compose", NULL);
-        if (g_file_test (path, G_FILE_TEST_EXISTS)) {
-            ibus_engine_simple_add_compose_file (simple, path);
-            g_free (path);
-            return retval;
+        /* If user compose is not loaded except for en_compose_table */
+        if (global_tables && !global_tables->next) {
+            path = g_build_filename (g_get_user_config_dir (),
+                                     "gtk-4.0", "Compose", NULL);
+            if (g_file_test (path, G_FILE_TEST_EXISTS))
+                ibus_engine_simple_add_compose_file (simple, path);
+            g_clear_pointer(&path, g_free);
         }
-        g_clear_pointer(&path, g_free);
 
-        path = g_build_filename (g_get_user_config_dir (),
-                                 "gtk-3.0", "Compose", NULL);
-        if (g_file_test (path, G_FILE_TEST_EXISTS)) {
-            ibus_engine_simple_add_compose_file (simple, path);
-            g_free (path);
-            return retval;
+        if (global_tables && !global_tables->next) {
+            path = g_build_filename (g_get_user_config_dir (),
+                                     "gtk-3.0", "Compose", NULL);
+            if (g_file_test (path, G_FILE_TEST_EXISTS))
+                ibus_engine_simple_add_compose_file (simple, path);
+            g_clear_pointer(&path, g_free);
         }
-        g_clear_pointer(&path, g_free);
 
         home = g_get_home_dir ();
-        if (home == NULL)
-            return retval;
 
-        path = g_build_filename (home, ".XCompose", NULL);
-        if (g_file_test (path, G_FILE_TEST_EXISTS)) {
-            ibus_engine_simple_add_compose_file (simple, path);
-            g_free (path);
-            return retval;
+        if (home && global_tables && !global_tables->next) {
+            path = g_build_filename (home, ".XCompose", NULL);
+            if (g_file_test (path, G_FILE_TEST_EXISTS))
+                ibus_engine_simple_add_compose_file (simple, path);
+            g_clear_pointer(&path, g_free);
         }
-        g_clear_pointer(&path, g_free);
+
+        /* Decide if both user compose and locale compose is loaded. */
+        if (global_tables && global_tables->next) {
+            IBusComposeTableEx *compose_table = global_tables->data;
+            if (!compose_table->can_load_en_us)
+                return retval;
+        }
 
 #if GLIB_CHECK_VERSION (2, 58, 0)
         langs = g_get_language_names_with_category ("LC_CTYPE");

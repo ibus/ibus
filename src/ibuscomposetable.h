@@ -65,6 +65,7 @@ struct _IBusComposeTableEx
     guint32 id;
     char *rawdata;
     gboolean can_load_en_us;
+    gboolean is_system;
 };
 
 

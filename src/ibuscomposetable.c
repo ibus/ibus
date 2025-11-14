@@ -1576,6 +1576,20 @@ ibus_compose_table_new_with_list (GList   *compose_list,
 }
 
 
+static gboolean
+_datafile_is_system (const gchar *compose_file)
+{
+    g_assert (compose_file);
+    if (!g_ascii_strncasecmp (compose_file, "/usr", 4) ||
+        !g_ascii_strncasecmp (compose_file, "/etc", 4) ||
+        !g_ascii_strncasecmp (compose_file, "/opt", 4) ||
+        !g_ascii_strncasecmp (compose_file, "/var/opt", 8)) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+
 IBusComposeTableEx *
 ibus_compose_table_new_with_file (const gchar *compose_file,
                                   GSList      *compose_tables)
@@ -1632,6 +1646,7 @@ ibus_compose_table_new_with_file (const gchar *compose_file,
             } else {
                 compose_table->id = g_str_hash (compose_file);
                 compose_table->can_load_en_us = can_load_en_us;
+                compose_table->is_system = _datafile_is_system (compose_file);
                 return compose_table;
             }
         }
@@ -1647,8 +1662,10 @@ ibus_compose_table_new_with_file (const gchar *compose_file,
             max_compose_len,
             n_index_stride,
             g_str_hash (compose_file));
-    if (compose_table)
+    if (compose_table) {
         compose_table->can_load_en_us = can_load_en_us;
+        compose_table->is_system = _datafile_is_system (compose_file);
+    }
 
     g_list_free_full (compose_list,
                       (GDestroyNotify) ibus_compose_list_element_free);
@@ -1793,8 +1810,10 @@ ibus_compose_table_list_add_file (GSList      *compose_tables,
 
     compose_table = ibus_compose_table_load_cache (compose_file,
                                                    &saved_version);
-    if (compose_table != NULL)
+    if (compose_table != NULL) {
+        compose_table->is_system = _datafile_is_system (compose_file);
         return g_slist_prepend (compose_tables, compose_table);
+    }
 
 parse:
     if ((compose_table = ibus_compose_table_new_with_file (compose_file,
@@ -2138,8 +2157,15 @@ ibus_check_algorithmically (const guint   *compose_buffer,
 
     for (i = 0; i < n_compose && IS_DEAD_KEY (compose_buffer[i]); i++)
         ;
-    if (i == n_compose)
+    if (i == n_compose) {
+        /* If no EN compose, double dead keys should be output? */
+        if (i == 2 && compose_buffer[0] == compose_buffer[1]) {
+            *output_char = ibus_keysym_to_unicode (compose_buffer[0],
+                                                   FALSE,
+                                                   NULL);
+        }
         return TRUE;
+    }
 
     if (i > 0 && i == n_compose - 1) {
         combination_buffer[0] = ibus_keyval_to_unicode (compose_buffer[i]);

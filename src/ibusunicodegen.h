@@ -1,8 +1,8 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
- * Copyright (C) 2018-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
- * Copyright (C) 2018-2025 Red Hat, Inc.
+ * Copyright (C) 2018-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2018-2026 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

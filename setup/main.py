@@ -4,8 +4,8 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2016 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2010-2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
-# Copyright (c) 2007-2020 Red Hat, Inc.
+# Copyright (c) 2010-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2007-2025 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -602,13 +602,22 @@ class Setup(object):
         GLib.timeout_add_seconds(timeout, lambda *args: main_loop.quit())
         self.__bus.connect("connected", lambda *args: main_loop.quit())
 
-        os.spawnlp(os.P_NOWAIT, "ibus-daemon", "ibus-daemon", "--xim", "--daemonize")
+        os.spawnlp(os.P_NOWAIT, "ibus", "ibus", "start", "--xim", "--daemonize")
 
         main_loop.run()
 
         if self.__bus.is_connected():
-            message = _("IBus has been started! "
-                "If you cannot use IBus, add the following lines to your $HOME/.bashrc; then relog into your desktop.\n"
+            message = _("IBus has been started. "
+                "If you cannot use IBus, add the following lines to your "
+                "$HOME/.bashrc; then relog into your desktop.\n"
+                "\n"
+                "  # For Wayland sessions ($XDG_SESSION_TYPE is \"wayland\")\n"
+                "  export GTK_IM_MODULE=wayland\n"
+                "  export XMODIFIERS=@im=ibus\n"
+                "  export QT_IM_MODULES=wayland;ibus\n"
+                "  export QT_IM_MODULE=ibus\n"
+                "\n"
+                "  # For X11 sessions ($XDG_SESSION_TYPE is \"x11\")\n"
                 "  export GTK_IM_MODULE=ibus\n"
                 "  export XMODIFIERS=@im=ibus\n"
                 "  export QT_IM_MODULE=ibus"

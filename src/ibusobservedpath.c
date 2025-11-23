@@ -309,9 +309,18 @@ ibus_observed_path_fill_stat (IBusObservedPath *path)
 {
     g_assert (IBUS_IS_OBSERVED_PATH (path));
 
+    gchar *real_path = NULL;
     struct stat buf;
 
-    if (g_stat (path->path, &buf) == 0) {
+    if (path->path[0] == '~') {
+        const gchar *homedir = g_get_home_dir ();
+        real_path = g_build_filename (homedir, path->path + 2, NULL);
+    }
+    else {
+        real_path = g_strdup (path->path);
+    }
+
+    if (g_stat (real_path, &buf) == 0) {
         path->is_exist = 1;
         if (S_ISDIR (buf.st_mode)) {
             path->is_dir = 1;

@@ -1,4 +1,4 @@
-/* $XConsortium: XimProto.h,v 1.2 94/01/20 18:02:24 rws Exp $ */
+/* $XConsortium: XimProto.h,v 1.3 25/09/24 00:00:00 rws Exp $ */
 /******************************************************************
 
            Copyright 1992, 1993, 1994 by FUJITSU LIMITED
@@ -226,5 +226,10 @@ typedef CARD16	XICID;		/* Input Context ID */
 	}								\
     }
 
+#if (defined(_MSC_VER) && (_MSC_VER > 1300))
+#define XIM_STRFUNC     ((const char*) (__FUNCTION__))
+#else
+#define XIM_STRFUNC     ((const char*) (__func__))
 #endif
 
+#endif

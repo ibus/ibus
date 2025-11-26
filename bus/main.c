@@ -39,7 +39,6 @@
 
 #ifdef G_OS_UNIX
 #include <glib-unix.h>
-#include <grp.h>
 #endif
 
 #include "global.h"
@@ -187,11 +186,7 @@ main (gint argc, gchar **argv)
 {
     int i;
     const gchar *username = ibus_get_user_name ();
-    const gchar *groupname = NULL;
-#ifdef HAVE_GETGRGID_R
-    char buffer[4096];
-    struct group gbuf;
-#endif
+    const gchar *groupname = ibus_get_group_name ();
 
     setlocale (LC_ALL, "");
 
@@ -219,26 +214,10 @@ main (gint argc, gchar **argv)
         struct passwd *pwd = getpwuid (getuid ());
 
         if (pwd == NULL || g_strcmp0 (pwd->pw_name, username) != 0) {
-            g_printerr ("Please run ibus-daemon with login user! Do not run ibus-daemon with sudo or su.\n");
+            g_printerr ("Please run ibus-daemon with login user! Do not run "
+                        "ibus-daemon with sudo or su.\n");
             exit (-1);
         }
-    }
-
-    /* get group name */
-    {
-        struct group *grp = NULL;
-#ifdef HAVE_GETGRGID_R
-        /* MT-Safe locale */
-        getgrgid_r (getgid (), &gbuf, buffer, sizeof(buffer), &grp);
-#else
-        /* MT-Unsafe race:grgid locale */
-        grp = getgrgid (getgid ());
-#endif
-
-        if (grp && grp->gr_name && grp->gr_name[0])
-            groupname = grp->gr_name;
-        else
-            g_warning ("Couldn't get group name");
     }
 
     /* daemonize process */
@@ -249,7 +228,9 @@ main (gint argc, gchar **argv)
         }
     }
 
-    /* create a new process group. this is important to kill all of its children by SIGTERM at a time in bus_ibus_impl_destroy. */
+    /* create a new process group. this is important to kill all of its
+     * children by SIGTERM at a time in bus_ibus_impl_destroy.
+     */
     setpgid (0, 0);
 
     ibus_init ();
@@ -299,11 +280,13 @@ main (gint argc, gchar **argv)
             if (component) {
                 bus_component_set_restart (component, restart);
             }
-            if (component == NULL || !bus_component_start (component, g_verbose)) {
+            if (component == NULL ||
+                !bus_component_start (component, g_verbose)) {
                 g_printerr ("Can not execute default config program\n");
                 exit (-1);
             }
-        } else if (g_strcmp0 (config, "disable") != 0 && g_strcmp0 (config, "") != 0) {
+        } else if (g_strcmp0 (config, "disable") != 0 &&
+                   g_strcmp0 (config, "") != 0) {
             if (!execute_cmdline (config))
                 exit (-1);
         }
@@ -316,11 +299,13 @@ main (gint argc, gchar **argv)
             if (component) {
                 bus_component_set_restart (component, restart);
             }
-            if (component == NULL || !bus_component_start (component, g_verbose)) {
+            if (component == NULL ||
+                !bus_component_start (component, g_verbose)) {
                 g_printerr ("Can not execute default panel program\n");
                 exit (-1);
             }
-        } else if (g_strcmp0 (panel, "disable") != 0 && g_strcmp0 (panel, "") != 0) {
+        } else if (g_strcmp0 (panel, "disable") != 0 &&
+                   g_strcmp0 (panel, "") != 0) {
             if (!execute_cmdline (panel))
                 exit (-1);
         }

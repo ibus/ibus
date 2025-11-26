@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2018 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -36,6 +36,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <ibus.h>
+
+#ifdef G_OS_UNIX
+#include <grp.h>
+#endif
 
 static gchar *_display = NULL;
 
@@ -80,6 +84,34 @@ const gchar *
 ibus_get_user_name (void)
 {
     return g_get_user_name ();
+}
+
+const gchar *
+ibus_get_group_name (void)
+{
+    static gchar *groupname = NULL;
+    struct group *grp = NULL;
+#ifdef HAVE_GETGRGID_R
+    char buffer[4096];
+    struct group gbuf;
+#endif
+
+    if (groupname)
+        return groupname;
+
+#ifdef HAVE_GETGRGID_R
+    /* MT-Safe locale */
+    getgrgid_r (getgid (), &gbuf, buffer, sizeof(buffer), &grp);
+#else
+    /* MT-Unsafe race:grgid locale */
+    grp = getgrgid (getgid ());
+#endif
+
+    g_return_val_if_fail (grp && grp->gr_name && grp->gr_name[0], NULL);
+
+    /* buffer will be erased out of this function. */
+    groupname = g_strdup (grp->gr_name);
+    return groupname;
 }
 
 glong

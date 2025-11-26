@@ -2,6 +2,8 @@
  
          Copyright 1994, 1995 by Sun Microsystems, Inc.
          Copyright 1993, 1994 by Hewlett-Packard Company
+         Copyright (C) 2008-2025 Red Hat, Inc.
+         Copyright (C) 2017-2025 Takao Fujiwara
  
 Permission to use, copy, modify, distribute, and sell this software
 and its documentation for any purpose is hereby granted without fee,
@@ -714,10 +716,11 @@ void _Xi18nChangeIC (XIMS ims,
         FrameMgrSetSize (fm, value_length);
         attrib_list[attrib_num].value_length = value_length;
         FrameMgrGetToken (fm, value);
-        attrib_list[attrib_num].value = (void *) malloc (value_length + 1);
+        attrib_list[attrib_num].value = (void *)malloc (value_length + 1);
         if (!attrib_list[attrib_num].value) {
             fprintf (stderr, "(XIM-IMdkit) WARNING: malloc failed in %s:%d.\n",
                      __FILE__, __LINE__);
+            break;
         } else {
             memmove (attrib_list[attrib_num].value, value, value_length);
             ((char *)attrib_list[attrib_num].value)[value_length] = '\0';

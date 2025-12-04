@@ -1741,6 +1741,27 @@ out:
 }
 
 
+gint
+find_system_comopse_table (gconstpointer  a,
+                           gconstpointer  b)
+{
+    IBusComposeTableEx *table_a = (IBusComposeTableEx *)a;
+    IBusComposeTableEx *table_b = (IBusComposeTableEx *)b;
+
+    if (a == b)
+        return 0;
+    else if (!a)
+        return -1;
+    g_assert (b);
+    if (table_a->is_system == table_b->is_system)
+        return 0;
+    if (table_a->is_system)
+        return 1;
+    else
+        return -1;
+}
+
+
 /* if ibus_compose_seqs[N - 1] is an outputed compose character,
  * ibus_compose_seqs[N * 2 - 1] is also an outputed compose character.
  * and ibus_compose_seqs[0] to ibus_compose_seqs[0 + N - 3] are the
@@ -1784,7 +1805,8 @@ ibus_compose_table_list_add_array (GSList        *compose_tables,
     compose_table->n_seqs = n_seqs;
     compose_table->id = hash;
 
-    return g_slist_prepend (compose_tables, compose_table);
+    return g_slist_insert_sorted (compose_tables, compose_table,
+                                  find_system_comopse_table);
 }
 
 
@@ -1812,7 +1834,8 @@ ibus_compose_table_list_add_file (GSList      *compose_tables,
                                                    &saved_version);
     if (compose_table != NULL) {
         compose_table->is_system = _datafile_is_system (compose_file);
-        return g_slist_prepend (compose_tables, compose_table);
+        return g_slist_insert_sorted (compose_tables, compose_table,
+                                      find_system_comopse_table);
     }
 
 parse:
@@ -1867,7 +1890,8 @@ parse:
     }
 
     ibus_compose_table_save_cache (compose_table);
-    return g_slist_prepend (compose_tables, compose_table);
+    return g_slist_insert_sorted (compose_tables, compose_table,
+                                  find_system_comopse_table);
 }
 
 

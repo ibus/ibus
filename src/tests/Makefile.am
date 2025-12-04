@@ -107,8 +107,11 @@ test_metas = $(addsuffix .test, $(_test_execs))
 test_sources_DATA = \
     $(test_metas) \
     ibus-compose.basic \
+    ibus-compose.basic2 \
     ibus-compose.emoji \
     ibus-compose.env \
+    ibus-compose.usmin \
+    ibus-compose.usmin2 \
     libinput-test.yml \
     $(NULL)
 test_sourcesdir = $(datadir)/installed-tests/ibus
@@ -193,8 +196,11 @@ EXTRA_DIST = \
     $(TESTS_SCRIPT) \
     runtest \
     ibus-compose.basic \
+    ibus-compose.basic2 \
     ibus-compose.emoji \
     ibus-compose.env \
+    ibus-compose.usmin \
+    ibus-compose.usmin2 \
     ibus-compose-locales.in \
     ibus-desktop-testing.desktop.in \
     ibus-desktop-testing-autostart.in \

@@ -1,0 +1,5 @@
+include "%L"
+# Symbol tests of Multi_key, quotedbl Cyrillic_zhe
+# This case swaps U04DC and U04DD in en-US
+<Multi_key> <quotedbl> <Cyrillic_zhe>   : "Ӝ"   U04DC
+<Multi_key> <quotedbl> <Cyrillic_ZHE>   : "ӝ"   U04DD

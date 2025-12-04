@@ -7,12 +7,15 @@
 #define RED   "\033[0;31m"
 #define NC    "\033[0m"
 
+static gchar *m_test_locale;
 static gchar *m_test_name;
 static gchar *m_session_name;
 static IBusBus *m_bus;
 static IBusComponent *m_component;
 static gchar *m_compose_file;
+static gchar *m_no_load_compose_file;
 static IBusComposeTableEx *m_compose_table;
+static IBusComposeTableEx *m_no_load_compose_table;
 static IBusEngine *m_engine;
 static gchar *m_srcdir;
 static gboolean m_is_gtk_32bit_compose_error;
@@ -83,7 +86,7 @@ get_compose_path ()
     gchar *compose_path = NULL;
 
     if (m_is_gtk_32bit_compose_error)
-        g_assert (g_setenv ("LANG", m_test_name, TRUE));
+        g_assert (g_setenv ("LANG", m_test_locale, TRUE));
 #if GLIB_CHECK_VERSION (2, 58, 0)
     langs = g_get_language_names_with_category ("LC_CTYPE");
 #else
@@ -250,7 +253,17 @@ create_engine_cb (IBusFactory *factory,
         if (m_compose_table)
             g_assert (saved_version);
     }
-    g_free (compose_path);
+    g_clear_pointer (&compose_path, g_free);
+    if (m_no_load_compose_file) {
+        compose_path = g_build_filename (m_srcdir,
+                                         m_no_load_compose_file,
+                                         NULL);
+    }
+    if (compose_path) {
+        m_no_load_compose_table =
+                ibus_compose_table_new_with_file (compose_path, NULL);
+    }
+    g_clear_pointer (&compose_path, g_free);
     return m_engine;
 }
 
@@ -313,6 +326,74 @@ window_destroy_cb (void)
 
 
 static void
+send_key_event (IBusComposeTableEx *compose_table)
+{
+    static TestIdleData data = { .category = TEST_COMMIT_TEXT, .idle_id = 0 };
+    int i, j;
+    int index_stride;
+    IBusComposeTablePrivate *priv;
+
+    index_stride = compose_table->max_seq_len + 2;
+    for (i = 0;
+         i < (compose_table->n_seqs * index_stride);
+         i += index_stride) {
+        data.idle_id = g_timeout_add_seconds (20, idle_cb, &data);
+        for (j = i; j < i + (index_stride - 2); j++) {
+            guint keyval = compose_table->data[j];
+            guint keycode = 0;
+            guint modifiers = 0;
+            gboolean retval;
+
+            if (keyval == 0)
+                break;
+            keyval += ibus_compose_key_flag (keyval);
+            g_signal_emit_by_name (m_engine, "process-key-event",
+                                   keyval, keycode, modifiers, &retval);
+            modifiers |= IBUS_RELEASE_MASK;
+            g_signal_emit_by_name (m_engine, "process-key-event",
+                                   keyval, keycode, modifiers, &retval);
+        }
+        /* Need to wait for calling window_inserted_text_cb() with
+         * g_main_loop_run() because the commit-text event could be cancelled
+         * by the next commit-text event with gnome-shell in Wayland.
+         */
+        g_main_loop_run (m_loop);
+        if (data.idle_id) {
+            g_source_remove (data.idle_id);
+            data.idle_id = 0;
+        }
+    }
+    priv = compose_table->priv;
+    if (priv) {
+        for (i = 0;
+             i < (priv->first_n_seqs * index_stride);
+             i += index_stride) {
+            data.idle_id = g_timeout_add_seconds (20, idle_cb, &data);
+            for (j = i; j < i + (index_stride - 2); j++) {
+                guint keyval = priv->data_first[j];
+                guint keycode = 0;
+                guint modifiers = 0;
+                gboolean retval;
+
+                if (keyval == 0)
+                    break;
+                keyval += ibus_compose_key_flag (keyval);
+                g_signal_emit_by_name (m_engine, "process-key-event",
+                                       keyval, keycode, modifiers, &retval);
+                modifiers |= IBUS_RELEASE_MASK;
+                g_signal_emit_by_name (m_engine, "process-key-event",
+                                       keyval, keycode, modifiers, &retval);
+            }
+            g_main_loop_run (m_loop);
+            if (data.idle_id) {
+                g_source_remove (data.idle_id);
+                data.idle_id = 0;
+            }
+        }
+    }
+}
+
+static void
 set_engine_cb (GObject      *object,
                GAsyncResult *res,
                gpointer      user_data)
@@ -325,9 +406,7 @@ set_engine_cb (GObject      *object,
 #endif
     GError *error = NULL;
     static TestIdleData data = { .category = TEST_COMMIT_TEXT, .idle_id = 0 };
-    int i, j;
-    int index_stride;
-    IBusComposeTablePrivate *priv;
+    int i;
 
     if (!ibus_bus_set_global_engine_async_finish (bus, res, &error)) {
         g_test_fail_printf ("set engine failed: %s", error->message);
@@ -357,64 +436,9 @@ set_engine_cb (GObject      *object,
         return;
     }
 
-    index_stride = m_compose_table->max_seq_len + 2;
-    for (i = 0;
-         i < (m_compose_table->n_seqs * index_stride);
-         i += index_stride) {
-        data.idle_id = g_timeout_add_seconds (20, idle_cb, &data);
-        for (j = i; j < i + (index_stride - 2); j++) {
-            guint keyval = m_compose_table->data[j];
-            guint keycode = 0;
-            guint modifiers = 0;
-            gboolean retval;
-
-            if (keyval == 0)
-                break;
-            keyval += ibus_compose_key_flag (keyval);
-            g_signal_emit_by_name (m_engine, "process-key-event",
-                                   keyval, keycode, modifiers, &retval);
-            modifiers |= IBUS_RELEASE_MASK;
-            g_signal_emit_by_name (m_engine, "process-key-event",
-                                   keyval, keycode, modifiers, &retval);
-        }
-        /* Need to wait for calling window_inserted_text_cb() with
-         * g_main_loop_run() because the commit-text event could be cancelled
-         * by the next commit-text event with gnome-shell in Wayland.
-         */
-        g_main_loop_run (m_loop);
-        if (data.idle_id) {
-            g_source_remove (data.idle_id);
-            data.idle_id = 0;
-        }
-    }
-    priv = m_compose_table->priv;
-    if (priv) {
-        for (i = 0;
-             i < (priv->first_n_seqs * index_stride);
-             i += index_stride) {
-            data.idle_id = g_timeout_add_seconds (20, idle_cb, &data);
-            for (j = i; j < i + (index_stride - 2); j++) {
-                guint keyval = priv->data_first[j];
-                guint keycode = 0;
-                guint modifiers = 0;
-                gboolean retval;
-
-                if (keyval == 0)
-                    break;
-                keyval += ibus_compose_key_flag (keyval);
-                g_signal_emit_by_name (m_engine, "process-key-event",
-                                       keyval, keycode, modifiers, &retval);
-                modifiers |= IBUS_RELEASE_MASK;
-                g_signal_emit_by_name (m_engine, "process-key-event",
-                                       keyval, keycode, modifiers, &retval);
-            }
-            g_main_loop_run (m_loop);
-            if (data.idle_id) {
-                g_source_remove (data.idle_id);
-                data.idle_id = 0;
-            }
-        }
-    }
+    send_key_event (m_compose_table);
+    if (m_no_load_compose_table)
+        send_key_event (m_no_load_compose_table);
 
 #if GTK_CHECK_VERSION (4, 0, 0)
     g_signal_handlers_disconnect_by_func (
@@ -547,6 +571,7 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
     static int n_loop = 0;
 #endif
     static guint stride = 0;
+    static gboolean start_no_load_compose = FALSE;
     static gboolean enable_32bit = FALSE;
     guint i;
     int seq;
@@ -555,12 +580,17 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
 #if ! GTK_CHECK_VERSION (4, 0, 0)
     GtkEntry *entry = GTK_ENTRY (user_data);
 #endif
+    IBusComposeTableEx *compose_table = NULL;
     IBusComposeTablePrivate *priv;
     static TestIdleData data = { .category = TEST_COMMIT_TEXT, .idle_id = 0 };
 
     g_assert (m_compose_table != NULL);
 
-    priv = m_compose_table->priv;
+    if (!start_no_load_compose)
+        compose_table = m_compose_table;
+    else
+        compose_table = m_no_load_compose_table;
+    priv = compose_table->priv;
 
 #if !GTK_CHECK_VERSION (3, 22, 16)
     if (n_loop % 2 == 1) {
@@ -572,12 +602,12 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
     if (code == 0)
         return;
 #endif
-    i = stride + (m_compose_table->max_seq_len + 2) - 2;
-    seq = (i + 2) / (m_compose_table->max_seq_len + 2);
-    if (!enable_32bit && !m_compose_table->n_seqs && priv)
+    i = stride + (compose_table->max_seq_len + 2) - 2;
+    seq = (i + 2) / (compose_table->max_seq_len + 2);
+    if (!enable_32bit && !compose_table->n_seqs && priv)
         enable_32bit = TRUE;
     if (!enable_32bit) {
-        if (m_compose_table->data[i] == code) {
+        if (compose_table->data[i] == code) {
             test = GREEN "PASS" NC;
         } else {
             test = RED "FAIL" NC;
@@ -585,9 +615,9 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
         }
         g_test_message ("%05d/%05d %s expected: %04X typed: %04X",
                         seq,
-                        m_compose_table->n_seqs,
+                        compose_table->n_seqs,
                         test,
-                        m_compose_table->data[i],
+                        compose_table->data[i],
                         code);
     } else {
         const gchar *p = chars;
@@ -619,11 +649,16 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
                         valid_output ? g_utf8_get_char (chars) : code);
     }
 
-    stride += m_compose_table->max_seq_len + 2;
+    stride += compose_table->max_seq_len + 2;
 
-    if (!enable_32bit && seq == m_compose_table->n_seqs) {
+    if (!enable_32bit && seq == compose_table->n_seqs) {
         if (priv) {
             enable_32bit = TRUE;
+            stride = 0;
+            seq = 0;
+        } else if (!start_no_load_compose && m_no_load_compose_table) {
+            start_no_load_compose = TRUE;
+            enable_32bit = FALSE;
             stride = 0;
             seq = 0;
         } else {
@@ -633,9 +668,16 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
         }
     }
     if (enable_32bit && seq == priv->first_n_seqs) {
-        /* Finish tests */
-        idle_cb (&data);
-        return;
+        if (!start_no_load_compose && m_no_load_compose_table) {
+            start_no_load_compose = TRUE;
+            enable_32bit = FALSE;
+            stride = 0;
+            seq = 0;
+        } else {
+            /* Finish tests */
+            idle_cb (&data);
+            return;
+        }
     }
 
 #if !GTK_CHECK_VERSION (3, 22, 16)
@@ -777,24 +819,25 @@ main (int argc, char *argv[])
     m_srcdir = (argc > 1 && strlen (argv[1]) < FILENAME_MAX)
             ? g_strdup (argv[1]) : g_strdup (".");
     m_compose_file = g_strdup (g_getenv ("COMPOSE_FILE"));
+    m_no_load_compose_file = g_strdup (g_getenv ("NO_LOAD_COMPOSE_FILE"));
 #if GLIB_CHECK_VERSION (2, 58, 0)
-    m_test_name = g_strdup (g_get_language_names_with_category ("LC_CTYPE")[0]);
+    m_test_locale = g_strdup (
+            g_get_language_names_with_category ("LC_CTYPE")[0]);
 #else
-    m_test_name = g_strdup (g_getenv ("LANG"));
+    m_test_locale = g_strdup (g_getenv ("LANG"));
 #endif
-    if (m_compose_file &&
-        (!m_test_name || !g_ascii_strncasecmp (m_test_name, "en_US", 5))) {
-        g_free (m_test_name);
-        m_test_name = g_path_get_basename (m_compose_file);
-    }
+    m_test_name = g_strdup_printf ("%s:%s:%s",
+            m_test_locale ? m_test_locale : "",
+            m_compose_file ? m_compose_file : "",
+            m_no_load_compose_file ? m_no_load_compose_file : "");
     /* The parent of GtkIMContextWayland is GtkIMContextSimple and
      * it outputs a warning of "Can't handle >16bit keyvals" in
      * gtk/gtkcomposetable.c:parse_compose_sequence() in pt-BR locales
      * and any warnings are treated as errors with g_test_run()
      * So export LANG=en_US.UTF-8 for GNOME Wayland as a workaround.
      */
-    if (m_test_name && (!g_ascii_strncasecmp (m_test_name, "pt_BR", 5) ||
-                        !g_ascii_strncasecmp (m_test_name, "fi_FI", 5)
+    if (m_test_locale && (!g_ascii_strncasecmp (m_test_locale, "pt_BR", 5) ||
+                          !g_ascii_strncasecmp (m_test_locale, "fi_FI", 5)
                        )) {
         m_is_gtk_32bit_compose_error = TRUE;
     }
@@ -815,5 +858,8 @@ main (int argc, char *argv[])
 
     retval = g_test_run ();
     g_free (m_test_name);
+    g_free (m_test_locale);
+    g_free (m_compose_file);
+    g_free (m_no_load_compose_file);
     return retval;
 }

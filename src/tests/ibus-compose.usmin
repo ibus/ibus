@@ -1,0 +1,8 @@
+<dead_tilde> <space>                    : "~"   asciitilde # TILDE
+<dead_tilde> <dead_tilde>               : "~"   asciitilde # TILDE
+<dead_tilde> <a>                        : "ã"   atilde # LATIN SMALL LETTER A WITH TILDE
+<Multi_key> <asciitilde> <a>            : "ã"   atilde # LATIN SMALL LETTER A WITH TILDE
+<dead_circumflex> <space>               : "^"   asciicircum # CIRCUMFLEX ACCENT
+<dead_circumflex> <dead_circumflex>     : "^"   asciicircum # CIRCUMFLEX ACCENT
+<dead_circumflex> <a>                   : "â"   acircumflex # LATIN SMALL LETTER A WITH CIRCUMFLEX
+<Multi_key> <asciicircum> <a>           : "â"   acircumflex # LATIN SMALL LETTER A WITH CIRCUMFLEX

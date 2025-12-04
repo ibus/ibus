@@ -431,8 +431,11 @@ destroy_window (gpointer user_data)
     data->source = 0;
 
     g_info ("Destroying window after timeout");
+#if GTK_CHECK_VERSION (4, 0, 0)
     gtk_window_destroy (GTK_WINDOW (data->window));
-
+#else
+    gtk_widget_destroy (data->window);
+#endif
     data->window = NULL;
 
     return G_SOURCE_REMOVE;
@@ -470,8 +473,9 @@ create_keypress (void)
 #endif
 
     if (!m_replay) {
-        g_test_fail_printf ("Failed to create uinput device: %s",
-                            error->message);
+        g_test_fail_printf ("Failed to create uinput device: %s: %s",
+                            error->message,
+                            "Probably you should run `chmod a+rw /dev/uinput`");
         g_error_free (error);
         return FALSE;
     }
@@ -741,7 +745,7 @@ test_keypress (gconstpointer user_data)
 #if GTK_CHECK_VERSION (4, 0, 0)
     gtk_init ();
 #else
-    gtk_init (data->argc, data->argv);
+    gtk_init (&data->argc, &data->argv);
 #endif
 
     g_assert ((channel =  g_io_channel_unix_new (m_pipe_engine[0])));
@@ -770,7 +774,11 @@ test_keypress (gconstpointer user_data)
     if (destroy_data.source)
 	g_source_remove (destroy_data.source);
     if (destroy_data.window)
+#if GTK_CHECK_VERSION (4, 0, 0)
 	gtk_window_destroy (GTK_WINDOW (destroy_data.window));
+#else
+        gtk_widget_destroy (destroy_data.window);
+#endif
     close (m_pipe_engine[0]);
     close (m_pipe_engine[1]);
 }

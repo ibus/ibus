@@ -54,7 +54,18 @@ public class PropertyPanel : Gtk.Box {
         set_visible(true);
 
 #if ENABLE_XIM
-        var display = BindingCommon.get_xdisplay();
+        Gdk.X11.Display? display = null;
+        // Disable X11 display in Wayland as a workaround.
+        // GTK3 causes a SEGV when the session is switched to the console
+        // in Wayland with Ctrl-Alt-F3 because it calls
+        // gdk_display_get_default() by
+        // gdk_x11_get_xatom_by_name("Wacom Serial IDs") and the display
+        // is not X11.
+        // Need to backport the fix to GTK3:
+        // https://gitlab.gnome.org/GNOME/gtk/-/commit/920259c2
+        // or need to migrate IBus panel to GTK4.
+        if (BindingCommon.default_is_xdisplay())
+            display = BindingCommon.get_xdisplay();
         if (display != null) {
             m_xdisplay = display.get_xdisplay();
             var screen = display.get_default_screen();

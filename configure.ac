@@ -931,6 +931,17 @@ AC_SUBST([GDBUS_CODEGEN], [`$PKG_CONFIG --variable gdbus_codegen gio-2.0`])
 
 OUTPUT_TAIL=''
 HAS_OUTPUT_TAIL=0
+AS_IF([test x"$enable_wayland" = x"no"],
+      [OUTPUT_TAIL="$OUTPUT_TAIL
+You invoked the \`configure\` script with disabled wayland option
+so you have to run
+\`make -C tools maintainer-clean-generic\` to regenerate C files with VALA
+before run \`make\`.
+"
+       HAS_OUTPUT_TAIL=1
+      ],
+      []
+)
 AS_IF([test x"$enable_ui" != x"no" &&
        test -f "$ac_confdir/ui/gtk3/application.c"
       ],

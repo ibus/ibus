@@ -123,6 +123,7 @@ struct _IBusWaylandIMPrivate
     guint preedit_cursor_pos;
     guint preedit_mode;
     IBusModifierType modifiers;
+    gboolean hiding_preedit_text;
 
     struct xkb_context *xkb_context;
 
@@ -142,7 +143,7 @@ struct _IBusWaylandIMPrivate
     xkb_mod_mask_t hyper_mask;
     xkb_mod_mask_t meta_mask;
 
-    uint32_t serial;
+    uint32_t im_serial;
     int32_t repeat_rate;
     int32_t repeat_delay;
 
@@ -152,7 +153,7 @@ struct _IBusWaylandIMPrivate
 struct _IBusWaylandKeyEvent
 {
     struct zwp_input_method_context_v1 *context;
-    uint32_t serial;
+    uint32_t key_serial;
     uint32_t time;
     uint32_t key;
     enum wl_keyboard_key_state state;
@@ -319,12 +320,13 @@ ibus_wayland_im_commit_text (IBusWaylandIM *wlim,
     switch (priv->version) {
     case INPUT_METHOD_V1:
         zwp_input_method_context_v1_commit_string (priv->context,
-                                                   priv->serial,
+                                                   priv->im_serial,
                                                    str);
         break;
     case INPUT_METHOD_V2:
         zwp_input_method_v2_commit_string (priv->seat->input_method_v2, str);
-        zwp_input_method_v2_commit (priv->seat->input_method_v2, priv->serial);
+        zwp_input_method_v2_commit (priv->seat->input_method_v2,
+                                    priv->im_serial);
         break;
     default:
         g_assert_not_reached ();
@@ -334,7 +336,7 @@ ibus_wayland_im_commit_text (IBusWaylandIM *wlim,
 
 static void
 ibus_wayland_im_key (IBusWaylandIM *wlim,
-                     uint32_t       serial,
+                     uint32_t       key_serial,
                      uint32_t       time,
                      uint32_t       key,
                      uint32_t       state)
@@ -345,7 +347,7 @@ ibus_wayland_im_key (IBusWaylandIM *wlim,
     switch (priv->version) {
     case INPUT_METHOD_V1:
         zwp_input_method_context_v1_key (priv->context,
-                                         serial,
+                                         key_serial,
                                          time,
                                          key,
                                          state);
@@ -362,7 +364,7 @@ ibus_wayland_im_key (IBusWaylandIM *wlim,
 
 static void
 ibus_wayland_im_keysym (IBusWaylandIM *wlim,
-                        uint32_t       serial,
+                        uint32_t       im_serial,
                         guint          keyval,
                         uint32_t       state,
                         guint          modifiers)
@@ -373,7 +375,7 @@ ibus_wayland_im_keysym (IBusWaylandIM *wlim,
     switch (priv->version) {
     case INPUT_METHOD_V1:
         zwp_input_method_context_v1_keysym (priv->context,
-                                            serial,
+                                            im_serial,
                                             0,
                                             keyval,
                                             state,
@@ -415,7 +417,7 @@ _context_forward_key_event_cb (IBusInputContext *context,
         state = WL_KEYBOARD_KEY_STATE_PRESSED;
 
     ibus_wayland_im_keysym (wlim,
-                            priv->serial,
+                            priv->im_serial,
                             keyval,
                             state,
                             modifiers);
@@ -639,7 +641,7 @@ _context_show_preedit_text_cb (IBusInputContext *context,
                                                     cursor);
         ibus_wayland_im_update_preedit_style (wlim);
         zwp_input_method_context_v1_preedit_string (priv->context,
-                                                    priv->serial,
+                                                    priv->im_serial,
                                                     priv->preedit_text->text,
                                                     commit);
         break;
@@ -649,7 +651,9 @@ _context_show_preedit_text_cb (IBusInputContext *context,
                 priv->preedit_text->text,
                 cursor,
                 strlen (priv->preedit_text->text));
-        zwp_input_method_v2_commit (priv->seat->input_method_v2, priv->serial);
+        zwp_input_method_v2_commit (priv->seat->input_method_v2,
+                                    priv->im_serial);
+        priv->hiding_preedit_text = FALSE;
         break;
     default:
         g_assert_not_reached ();
@@ -667,14 +671,16 @@ _context_hide_preedit_text_cb (IBusInputContext *context,
     switch (priv->version) {
     case INPUT_METHOD_V1:
         zwp_input_method_context_v1_preedit_string (priv->context,
-                                                    priv->serial,
+                                                    priv->im_serial,
                                                     "",
                                                     "");
         break;
     case INPUT_METHOD_V2:
         zwp_input_method_v2_set_preedit_string  (priv->seat->input_method_v2,
                                                  "", 0, 0);
-        zwp_input_method_v2_commit (priv->seat->input_method_v2, priv->serial);
+        zwp_input_method_v2_commit (priv->seat->input_method_v2,
+                                    priv->im_serial);
+        priv->hiding_preedit_text = TRUE;
         break;
     default:
         g_assert_not_reached ();
@@ -782,7 +788,7 @@ context_commit_state_v1 (void                               *data,
     IBusWaylandIMPrivate *priv;
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
-    priv->serial = serial;
+    priv->im_serial = serial;
 }
 
 
@@ -1082,7 +1088,7 @@ _process_key_event_done (GObject      *object,
     /* Check retral from ibus_wayland_im_post_key() */
     if (priv->ibuscontext && !retval) {
         ibus_wayland_im_key (event->wlim,
-                             event->serial,
+                             event->key_serial,
                              event->time,
                              event->key,
                              event->state);
@@ -1165,7 +1171,7 @@ _process_key_event_sync (IBusWaylandIM       *wlim,
                                        retval);
     if (!retval) {
         ibus_wayland_im_key (wlim,
-                             event->serial,
+                             event->key_serial,
                              event->time,
                              event->key,
                              event->state);
@@ -1195,7 +1201,7 @@ _process_key_event_async (IBusWaylandIM       *wlim,
         return;
     }
     async_event->context = priv->context;
-    async_event->serial = event->serial;
+    async_event->key_serial = event->key_serial;
     async_event->time = event->time;
     async_event->key = event->key;
     async_event->modifiers = event->modifiers & ~IBUS_RELEASE_MASK;
@@ -1267,7 +1273,7 @@ _process_key_event_hybrid_async (IBusWaylandIM       *wlim,
     }
     if (priv->ibuscontext && !async_event->retval) {
         ibus_wayland_im_key (wlim,
-                             event->serial,
+                             event->key_serial,
                              event->time,
                              event->key,
                              event->state);
@@ -1437,7 +1443,7 @@ key_event_check_repeat (IBusWaylandIM       *wlim,
 static void
 input_method_keyboard_key (void                      *data,
                            struct zwp_keyboard_union *keyboard,
-                           uint32_t                   serial,
+                           uint32_t                   key_serial,
                            uint32_t                   time,
                            uint32_t                   key,
                            uint32_t                   state)
@@ -1459,11 +1465,11 @@ input_method_keyboard_key (void                      *data,
                                                     state,
                                                     FALSE);
         if (!retval)
-            ibus_wayland_im_key (wlim, serial, time, key, state);
+            ibus_wayland_im_key (wlim, key_serial, time, key, state);
         return;
     }
 
-    event.serial = serial;
+    event.key_serial = key_serial;
     event.time = time;
     event.key = key;
     event.state = state;
@@ -1494,7 +1500,7 @@ input_method_keyboard_key (void                      *data,
 static void
 input_method_keyboard_modifiers (void                      *data,
                                  struct zwp_keyboard_union *keyboard,
-                                 uint32_t                   serial,
+                                 uint32_t                   key_serial,
                                  uint32_t                   mods_depressed,
                                  uint32_t                   mods_latched,
                                  uint32_t                   mods_locked,
@@ -1538,7 +1544,7 @@ input_method_keyboard_modifiers (void                      *data,
 
     switch (priv->version) {
     case INPUT_METHOD_V1:
-        zwp_input_method_context_v1_modifiers (priv->context, serial,
+        zwp_input_method_context_v1_modifiers (priv->context, key_serial,
                                                mods_depressed, mods_latched,
                                                mods_locked, group);
         break;
@@ -1590,21 +1596,21 @@ input_method_keyboard_keymap_v1 (void               *data,
 static void
 input_method_keyboard_key_v1 (void               *data,
                               struct wl_keyboard *keyboard_v1,
-                              uint32_t            serial,
+                              uint32_t            key_serial,
                               uint32_t            time,
                               uint32_t            key,
                               uint32_t            state)
 {
     struct zwp_keyboard_union keyboard;
     keyboard.u.keyboard_v1 = keyboard_v1;
-    input_method_keyboard_key (data, &keyboard, serial, time, key, state);
+    input_method_keyboard_key (data, &keyboard, key_serial, time, key, state);
 }
 
 
 static void
 input_method_keyboard_modifiers_v1 (void               *data,
                                     struct wl_keyboard *keyboard_v1,
-                                    uint32_t            serial,
+                                    uint32_t            key_serial,
                                     uint32_t            mods_depressed,
                                     uint32_t            mods_latched,
                                     uint32_t            mods_locked,
@@ -1614,7 +1620,7 @@ input_method_keyboard_modifiers_v1 (void               *data,
     keyboard.u.keyboard_v1 = keyboard_v1;
     input_method_keyboard_modifiers (data,
                                      &keyboard,
-                                     serial,
+                                     key_serial,
                                      mods_depressed,
                                      mods_latched,
                                      mods_locked,
@@ -1652,14 +1658,14 @@ static void
 input_method_keyboard_key_v2 (void    *data,
                               struct zwp_input_method_keyboard_grab_v2
                                       *keyboard_v2,
-                              uint32_t serial,
+                              uint32_t key_serial,
                               uint32_t time,
                               uint32_t key,
                               uint32_t state)
 {
     struct zwp_keyboard_union keyboard;
     keyboard.u.keyboard_v2 = keyboard_v2;
-    input_method_keyboard_key (data, &keyboard, serial, time, key, state);
+    input_method_keyboard_key (data, &keyboard, key_serial, time, key, state);
 }
 
 
@@ -1667,7 +1673,7 @@ static void
 input_method_keyboard_modifiers_v2 (void    *data,
                                     struct zwp_input_method_keyboard_grab_v2
                                             *keyboard_v2,
-                                    uint32_t serial,
+                                    uint32_t key_serial,
                                     uint32_t mods_depressed,
                                     uint32_t mods_latched,
                                     uint32_t mods_locked,
@@ -1677,7 +1683,7 @@ input_method_keyboard_modifiers_v2 (void    *data,
     keyboard.u.keyboard_v2 = keyboard_v2;
     input_method_keyboard_modifiers (data,
                                      &keyboard,
-                                     serial,
+                                     key_serial,
                                      mods_depressed,
                                      mods_latched,
                                      mods_locked,
@@ -1802,7 +1808,7 @@ input_method_activate (void                               *data,
 
     priv->context = context;
     if (context)
-        priv->serial = 0;
+        priv->im_serial = 0;
 
     switch (priv->version) {
     case INPUT_METHOD_V1:
@@ -2004,8 +2010,25 @@ input_method_done_v2 (void                       *data,
 
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
-    priv->serial++;
+    priv->im_serial++;
     input_method.u.input_method_v2 = input_method_v2;
+
+    /* Ghostty requires to receive the 'im_preedit_end' signal with
+     * zwp_input_method_v2_set_preedit_string() to recover the 'im_commit'
+     * signal but GtkIMContextWayland::text_input_preedit_apply() can emit
+     * the 'preedit-end' signal in case that
+     * GtkIMContextWayland->current_preedit.text is %NULL and it happens
+     * if zwp_text_input_v3_listener.done is emitted.
+     * To make sure zwp_text_input_v3_listener.done,
+     * zwp_input_method_v2_commit() is called after the im_serial is bumped.
+     */
+    if (priv->hiding_preedit_text &&
+        !priv->seat->pending_activate &&
+        priv->seat->active) {
+        zwp_input_method_v2_commit (priv->seat->input_method_v2,
+                                    priv->im_serial);
+        priv->hiding_preedit_text = FALSE;
+    }
 
     if (priv->seat->pending_activate && !priv->seat->active) {
         priv->seat->active = TRUE;
@@ -2085,7 +2108,7 @@ registry_handle_global (void               *data,
                  interface, name, version);
         fflush (priv->log);
     }
-    priv->serial = 0;
+    priv->im_serial = 0;
     if (!g_strcmp0 (interface, zwp_input_method_manager_v2_interface.name)) {
         priv->version = INPUT_METHOD_V2;
         priv->input_method_manager_v2 =

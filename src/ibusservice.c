@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2015-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2019 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -495,9 +495,15 @@ ibus_service_unregister_cb (GDBusConnection    *connection,
     guint *p = ids;
     while (*p != 0) {
         g_dbus_connection_unregister_object (connection, *p++);
+        /* g_dbus_connection_register_object(connection) calls
+         * g_object_ref(service).
+         */
+        g_object_unref (service);
     }
     g_signal_handlers_disconnect_by_func (connection,
                     G_CALLBACK (ibus_service_connection_closed_cb), service);
+    /* g_hash_table_insert(service->priv->table) calls g_object_ref(connection)
+     */
     g_object_unref (connection);
     g_free (ids);
 }
@@ -566,12 +572,19 @@ ibus_service_register (IBusService     *service,
 
     array = g_array_new (TRUE, TRUE, sizeof (guint));
     while (*p != NULL) {
+        /* Probably I think @user_data_free_func in
+         * g_dbus_connection_register_object() is not useful in this case
+         * since the free func is not called until the @connection is closed
+         * but the @connection is shared with other instances
+         * so it would be better to call g_object_unref(service)
+         * after g_dbus_connection_unregister_object() is called.
+         */
         guint id = g_dbus_connection_register_object (connection,
                                                       service->priv->object_path,
                                                       *p,
                                                       &ibus_service_interface_vtable,
                                                       g_object_ref (service),
-                                                      (GDestroyNotify)g_object_unref,
+                                                      NULL,
                                                       error);
         if (id != 0) {
             g_array_append_val (array, id);
@@ -594,6 +607,7 @@ error_out:
         guint *ids = (guint*) array->data;
         while (*ids != 0) {
             g_dbus_connection_unregister_object (connection, *ids++);
+            g_object_unref (service);
         }
         g_array_free (array, TRUE);
     }

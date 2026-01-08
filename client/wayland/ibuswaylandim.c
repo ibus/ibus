@@ -124,6 +124,11 @@ struct _IBusWaylandIMPrivate
     guint preedit_mode;
     IBusModifierType modifiers;
 
+#if ENABLE_SURROUNDING
+    IBusText *surrounding_text;
+    guint surrounding_cursor_pos;
+#endif
+
     struct xkb_context *xkb_context;
 
     struct xkb_keymap *keymap;
@@ -616,6 +621,7 @@ ibus_wayland_im_update_preedit_style (IBusWaylandIM *wlim)
     }
 }
 
+
 static void
 _context_show_preedit_text_cb (IBusInputContext *context,
                                IBusWaylandIM    *wlim)
@@ -706,6 +712,61 @@ _context_update_preedit_text_cb (IBusInputContext *context,
 }
 
 
+#if ENABLE_SURROUNDING
+static void
+_context_delete_surrounding_text_cb (IBusInputContext *context,
+                                     gint              offset,
+                                     guint             nchars,
+                                     IBusWaylandIM    *wlim)
+{
+    IBusWaylandIMPrivate *priv;
+    const char *start, *end;
+    const char *before, *after;
+    const char *cursor;
+    uint32_t before_length;
+    uint32_t after_length;
+
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+
+    if (!priv->surrounding_text)
+        return;
+
+    offset = MIN (offset, 0);
+
+    start = priv->surrounding_text->text;
+    end = start + strlen (priv->surrounding_text->text);
+    cursor = start + priv->surrounding_cursor_pos;
+
+    before = g_utf8_offset_to_pointer (cursor, offset);
+    g_return_if_fail (before >= start);
+    after = g_utf8_offset_to_pointer (cursor, offset + nchars);
+    g_return_if_fail (after <= end);
+
+    before_length = cursor - before;
+    after_length = after - cursor;
+
+    switch (priv->version) {
+    case INPUT_METHOD_V1:
+        zwp_input_method_context_v1_delete_surrounding_text (
+                priv->context,
+                -before_length,
+                before_length + after_length);
+        break;
+    case INPUT_METHOD_V2:
+        zwp_input_method_v2_delete_surrounding_text (
+                priv->seat->input_method_v2,
+                before_length,
+                after_length);
+        zwp_input_method_v2_commit (priv->seat->input_method_v2, priv->serial);
+        break;
+    default:
+        g_assert_not_reached ();
+    }
+}
+#endif
+
+
 static void
 handle_surrounding_text (void                                  *data,
                          struct zwp_input_method_context_union *context,
@@ -716,15 +777,23 @@ handle_surrounding_text (void                                  *data,
 #if ENABLE_SURROUNDING
     IBusWaylandIM *wlim = data;
     IBusWaylandIMPrivate *priv;
+    IBusText *ibustext;
 
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
+
+    ibustext = ibus_text_new_from_string (text);
+
+    if (priv->surrounding_text)
+        g_object_unref (priv->surrounding_text);
+    priv->surrounding_text = g_object_ref_sink (ibustext);
+    priv->surrounding_cursor_pos = cursor;
+
     if (priv->ibuscontext != NULL &&
         ibus_input_context_needs_surrounding_text (priv->ibuscontext)) {
         /* CURSOR_POS and ANCHOR_POS are character offset.  */
         guint cursor_pos = g_utf8_pointer_to_offset (text, text + cursor);
         guint anchor_pos = g_utf8_pointer_to_offset (text, text + anchor);
-        IBusText *ibustext = ibus_text_new_from_string (text);
 
         ibus_input_context_set_surrounding_text (priv->ibuscontext,
                                                  ibustext,
@@ -1762,8 +1831,12 @@ _create_input_context_done (GObject      *object,
         g_signal_connect (priv->ibuscontext, "hide-preedit-text",
                           G_CALLBACK (_context_hide_preedit_text_cb),
                           wlim);
-    
+
 #ifdef ENABLE_SURROUNDING
+        g_signal_connect (priv->ibuscontext, "delete-surrounding-text",
+                          G_CALLBACK (_context_delete_surrounding_text_cb),
+                          wlim);
+
         capabilities |= IBUS_CAP_SURROUNDING_TEXT;
 #endif
         if (_use_sync_mode == 1)
@@ -1882,7 +1955,14 @@ input_method_deactivate (void                               *data,
                 priv->ibuscontext,
                 G_CALLBACK (_context_hide_preedit_text_cb),
                 wlim);
+#ifdef ENABLE_SURROUNDING
+        g_signal_handlers_disconnect_by_func (
+                priv->ibuscontext,
+                G_CALLBACK (_context_delete_surrounding_text_cb),
+                wlim);
+#endif
         g_clear_object (&priv->ibuscontext);
+
         g_signal_emit (wlim,
                        wayland_im_signals[IBUS_FOCUS_OUT],
                        0,
@@ -1892,6 +1972,10 @@ input_method_deactivate (void                               *data,
 
     if (priv->preedit_text)
         g_clear_object (&priv->preedit_text);
+#if ENABLE_SURROUNDING
+    if (priv->surrounding_text)
+        g_clear_object (&priv->surrounding_text);
+#endif
 
     switch (priv->version) {
     case INPUT_METHOD_V1:

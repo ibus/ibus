@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2011 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2017-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2017-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -98,6 +98,16 @@ class Application {
                                       string         signal_name,
                                       Variant        parameters) {
         debug("signal_name = %s", signal_name);
+        if (m_panel != null) {
+            // ibus_object_destroy() is needed because g_object_unref() is
+            // called by ibus_service_unregister_cb() but another
+            // g_object_unref() is also called by g_object_run_dispose()
+            // and one g_object_unref() is not needed because Vala calls it
+            // with `m_panel = null`.
+            m_panel.ref();
+            ((IBus.Object)m_panel).destroy();
+            m_panel.disconnect_signals();
+        }
         m_panel = new Panel(bus, m_enable_wayland_im);
         if (m_log != null)
             m_panel.set_log(m_log, m_verbose);
@@ -128,7 +138,8 @@ class Application {
         // g_dbus_connection_register_object()
         debug("signal_name = %s", signal_name);
 
-        // unref m_panel
+        m_panel.ref();
+        ((IBus.Object)m_panel).destroy();
         m_panel.disconnect_signals();
 #if USE_GDK_WAYLAND
         if (m_realize_surface_id != 0) {
@@ -144,6 +155,7 @@ class Application {
             m_ibus_focus_out_id = 0;
         }
 #endif
+        // unref m_panel
         m_panel = null;
     }
 

@@ -73,6 +73,10 @@ class ExtensionGtk : Gtk.Application {
                                       string         signal_name,
                                       Variant        parameters) {
         debug("signal_name = %s", signal_name);
+        /* rhbz#1797120 Fix assert(bus.is_connected()) in
+         * panel_binding_construct()
+         */
+        return_if_fail(m_bus.is_connected());
         m_panel = new PanelBinding(m_bus, this);
         m_panel.load_settings();
     }

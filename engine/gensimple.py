@@ -36,7 +36,7 @@ import io
 import os
 import sys
 
-VERSION='0.1'
+VERSION='0.2'
 EVDEV_XML = '/usr/share/X11/xkb/rules/evdev.xml'
 EXEC_PATH='/usr/lib/ibus-engine-simple'
 ISO_PATH='/usr/share/xml/iso-codes/iso_639.xml'
@@ -73,13 +73,14 @@ Options:
 
 class EvdevXML(XMLFilterBase):
     def __init__(self, parser=None, downstream=None, iso639=None,
-                 denylist=None, author=None, first=False):
+                 denylist=None, author=None, first=False, io=False):
         XMLFilterBase.__init__(self, parser)
         self.__downstream = downstream
         self.__iso639 = iso639
         self.__denylist = denylist
         self.__author = author
         self.__first = first
+        self.__io = io
         self.__is_layout = False
         self.__is_description = False
         self.__is_config_item = False
@@ -94,6 +95,8 @@ class EvdevXML(XMLFilterBase):
     def startDocument(self):
         if self.__downstream:
             self.__downstream.startDocument()
+            dtd = '<!DOCTYPE component SYSTEM "component.dtd">'
+            self.__io.write(dtd)
             self.__downstream.startElement('engines', AttributesImpl({}))
     def endDocument(self):
         if self.__downstream:
@@ -179,12 +182,18 @@ class EvdevXML(XMLFilterBase):
             )
             self.__downstream.characters(name)
             self.__downstream.endElement('name')
+            self.__downstream.startElement('longname', AttributesImpl({}))
+            self.__downstream.characters(self.__description)
+            self.__downstream.endElement('longname')
             self.__downstream.startElement('language', AttributesImpl({}))
             iso639_1 = self.__iso639.code2to1(iso)
             if iso639_1 != None:
                 iso = iso639_1
             self.__downstream.characters(iso)
             self.__downstream.endElement('language')
+            self.__downstream.startElement('layout', AttributesImpl({}))
+            self.__downstream.characters(self.__layout)
+            self.__downstream.endElement('layout')
             self.__downstream.startElement('license', AttributesImpl({}))
             self.__downstream.characters('GPL')
             self.__downstream.endElement('license')
@@ -192,29 +201,23 @@ class EvdevXML(XMLFilterBase):
                 self.__downstream.startElement('author', AttributesImpl({}))
                 self.__downstream.characters(self.__author)
                 self.__downstream.endElement('author')
-            self.__downstream.startElement('layout', AttributesImpl({}))
-            self.__downstream.characters(self.__layout)
-            self.__downstream.endElement('layout')
-            if self.__variant != '':
-                self.__downstream.startElement('layout_variant',
-                                               AttributesImpl({}))
-                self.__downstream.characters(self.__variant)
-                self.__downstream.endElement('layout_variant')
-            self.__downstream.startElement('longname', AttributesImpl({}))
-            self.__downstream.characters(self.__description)
-            self.__downstream.endElement('longname')
-            self.__downstream.startElement('description', AttributesImpl({}))
-            self.__downstream.characters(self.__description)
-            self.__downstream.endElement('description')
             self.__downstream.startElement('icon', AttributesImpl({}))
             self.__downstream.characters('ibus-keyboard')
             self.__downstream.endElement('icon')
+            self.__downstream.startElement('description', AttributesImpl({}))
+            self.__downstream.characters(self.__description)
+            self.__downstream.endElement('description')
             self.__downstream.startElement('rank', AttributesImpl({}))
             if self.__variant == '':
                 self.__downstream.characters('50')
             else:
                 self.__downstream.characters('1')
             self.__downstream.endElement('rank')
+            if self.__variant != '':
+                self.__downstream.startElement('layout_variant',
+                                               AttributesImpl({}))
+                self.__downstream.characters(self.__variant)
+                self.__downstream.endElement('layout_variant')
             self.__downstream.endElement('engine')
             if self.__first:
                 break
@@ -246,7 +249,8 @@ class GenerateEngineXML():
                                   self.__iso639,
                                   self.__denylist,
                                   self._AUTHOR,
-                                  self.__first)
+                                  self.__first,
+                                  self.__result)
         parser.setContentHandler(self.__handler)
         f = open(self.__path, 'r', encoding='utf-8')
         try:
@@ -269,11 +273,11 @@ class GenerateEngineXML():
             author = escape(self._AUTHOR)
             contents = '%s<component><name>%s</name>\
 <description>%s</description><exec>%s</exec><version>%s</version>\
-<author>%s</author><license>%s</license><homepage>%s</homepage>\
+<license>%s</license><author>%s</author><homepage>%s</homepage>\
 <textdomain>%s</textdomain>%s</component>' % (
         contents[:index],
         self._NAME, self._DESCRIPTION,
-        self.__exec, self.__version, author, 'GPL',
+        self.__exec, self.__version, 'GPL', author,
         self._HOMEPAGE, self._DOMAIN, contents[index:] )
         parsed = minidom.parseString(contents)
         # format with indent and encoding attribute in header

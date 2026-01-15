@@ -3477,8 +3477,17 @@ bus_input_context_update_preedit_text (BusInputContext *context,
                                              context->preedit_visible);
     } else if (PREEDIT_CONDITION) {
         SyncForwardingPreData pre_data = { 'u', context->preedit_text, };
-        GVariant *variant = ibus_serializable_serialize (
-                (IBusSerializable *)context->preedit_text);
+        IBusText *real_preedit_text;
+        GVariant *variant;
+        if (context->hints & IBUS_INPUT_HINT_HIDDEN_TEXT) {
+            real_preedit_text  = g_object_ref_sink (
+                    ibus_text_new_from_static_string ("_"));
+        } else {
+            real_preedit_text  = g_object_ref (context->preedit_text);
+        }
+        pre_data.text = real_preedit_text;
+        variant = ibus_serializable_serialize (
+                    (IBusSerializable *)real_preedit_text);
         pre_data.u.uints[0] = context->preedit_cursor_pos;
         pre_data.u.uints[1] = extension_visible ? 1 : 0;
         pre_data.u.uints[2] = context->preedit_mode;
@@ -3487,6 +3496,7 @@ bus_input_context_update_preedit_text (BusInputContext *context,
         if (bus_input_context_make_post_process_key_event (context,
                                                            &pre_data)) {
             g_variant_unref (variant);
+            g_object_unref (real_preedit_text);
             return;
         } else if (context->client_commit_preedit) {
             bus_input_context_emit_signal (
@@ -3508,6 +3518,7 @@ bus_input_context_update_preedit_text (BusInputContext *context,
                                    extension_visible),
                     NULL);
         }
+        g_object_unref (real_preedit_text);
     } else {
         if (IGNORE_FOCUS_OUT_CONDITION)
             context->ignore_focus_out = TRUE;

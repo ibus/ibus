@@ -384,12 +384,14 @@ class Panel : IBus.PanelService {
     private static bool is_gnome() {
         unowned string? desktop =
             Environment.get_variable("XDG_CURRENT_DESKTOP");
-        if (desktop == "GNOME")
+        if (desktop != null && desktop.contains("GNOME"))
             return true;
         if (desktop == null || desktop == "(null)")
             desktop = Environment.get_variable("XDG_SESSION_DESKTOP");
-        if (desktop == "gnome" || desktop == "GNOME")
+        if (desktop != null &&
+            (desktop.contains("gnome") || desktop.contains("GNOME"))) {
             return true;
+        }
         return false;
     }
 

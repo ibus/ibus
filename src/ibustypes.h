@@ -330,6 +330,8 @@ typedef enum
  * @IBUS_INPUT_HINT_NO_EMOJI: Suggest not offering Emoji support. Since 1.5.24
  * @IBUS_INPUT_HINT_PRIVATE: Request that the input method should not
  *     update personalized data (like typing history). Since 1.5.26
+ * @IBUS_INPUT_HINT_HIDDEN_TEXT: The text is hidden (e.g. password fields).
+ *     Since 1.5.34
  *
  * Describes hints that might be taken into account by engines.  Note
  * that engines may already tailor their behaviour according to the
@@ -357,7 +359,8 @@ typedef enum
     IBUS_INPUT_HINT_VERTICAL_WRITING    = 1 << 8,
     IBUS_INPUT_HINT_EMOJI               = 1 << 9,
     IBUS_INPUT_HINT_NO_EMOJI            = 1 << 10,
-    IBUS_INPUT_HINT_PRIVATE             = 1 << 11
+    IBUS_INPUT_HINT_PRIVATE             = 1 << 11,
+    IBUS_INPUT_HINT_HIDDEN_TEXT         = 1 << 12
 } IBusInputHints;
 
 /**

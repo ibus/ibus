@@ -3455,12 +3455,12 @@ bus_input_context_update_preedit_text (BusInputContext *context,
     gboolean extension_visible = FALSE;
     g_assert (BUS_IS_INPUT_CONTEXT (context));
 
-    if (context->preedit_text) {
-        g_object_unref (context->preedit_text);
+    if (context->preedit_text != text) {
+        g_clear_object (&context->preedit_text);
+        context->preedit_text = (IBusText *) g_object_ref_sink (text ? text :
+                                                                text_empty);
     }
 
-    context->preedit_text = (IBusText *) g_object_ref_sink (text ? text :
-                                                            text_empty);
     context->preedit_cursor_pos = cursor_pos;
     if (use_extension) {
         context->preedit_visible = visible;

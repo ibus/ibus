@@ -1713,6 +1713,8 @@ _ic_set_content_type (BusInputContext *context,
 
     g_variant_get (value, "(uu)", &purpose, &hints);
     if (purpose != context->purpose || hints != context->hints) {
+        gboolean preedit_needs_update =
+                (context->hints ^ hints) & IBUS_INPUT_HINT_HIDDEN_TEXT;
 
         context->purpose = purpose;
         context->hints = hints;
@@ -1728,6 +1730,15 @@ _ic_set_content_type (BusInputContext *context,
                            0,
                            context->purpose,
                            context->hints);
+        }
+
+        if (preedit_needs_update && context->preedit_visible) {
+            bus_input_context_update_preedit_text (context,
+                                                   context->preedit_text,
+                                                   context->preedit_cursor_pos,
+                                                   context->preedit_visible,
+                                                   context->preedit_mode,
+                                                   FALSE);
         }
 
         retval = bus_input_context_property_changed (context,

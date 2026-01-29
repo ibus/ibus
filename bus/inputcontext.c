@@ -1713,6 +1713,8 @@ _ic_set_content_type (BusInputContext *context,
 
     g_variant_get (value, "(uu)", &purpose, &hints);
     if (purpose != context->purpose || hints != context->hints) {
+        gboolean preedit_needs_update =
+                (context->hints ^ hints) & IBUS_INPUT_HINT_HIDDEN_TEXT;
 
         context->purpose = purpose;
         context->hints = hints;
@@ -1728,6 +1730,15 @@ _ic_set_content_type (BusInputContext *context,
                            0,
                            context->purpose,
                            context->hints);
+        }
+
+        if (preedit_needs_update && context->preedit_visible) {
+            bus_input_context_update_preedit_text (context,
+                                                   context->preedit_text,
+                                                   context->preedit_cursor_pos,
+                                                   context->preedit_visible,
+                                                   context->preedit_mode,
+                                                   FALSE);
         }
 
         retval = bus_input_context_property_changed (context,
@@ -3455,12 +3466,12 @@ bus_input_context_update_preedit_text (BusInputContext *context,
     gboolean extension_visible = FALSE;
     g_assert (BUS_IS_INPUT_CONTEXT (context));
 
-    if (context->preedit_text) {
-        g_object_unref (context->preedit_text);
+    if (context->preedit_text != text) {
+        g_clear_object (&context->preedit_text);
+        context->preedit_text = (IBusText *) g_object_ref_sink (text ? text :
+                                                                text_empty);
     }
 
-    context->preedit_text = (IBusText *) g_object_ref_sink (text ? text :
-                                                            text_empty);
     context->preedit_cursor_pos = cursor_pos;
     if (use_extension) {
         context->preedit_visible = visible;
@@ -3477,8 +3488,17 @@ bus_input_context_update_preedit_text (BusInputContext *context,
                                              context->preedit_visible);
     } else if (PREEDIT_CONDITION) {
         SyncForwardingPreData pre_data = { 'u', context->preedit_text, };
-        GVariant *variant = ibus_serializable_serialize (
-                (IBusSerializable *)context->preedit_text);
+        IBusText *real_preedit_text;
+        GVariant *variant;
+        if (context->hints & IBUS_INPUT_HINT_HIDDEN_TEXT) {
+            real_preedit_text  = g_object_ref_sink (
+                    ibus_text_new_from_static_string ("_"));
+        } else {
+            real_preedit_text  = g_object_ref (context->preedit_text);
+        }
+        pre_data.text = real_preedit_text;
+        variant = ibus_serializable_serialize (
+                    (IBusSerializable *)real_preedit_text);
         pre_data.u.uints[0] = context->preedit_cursor_pos;
         pre_data.u.uints[1] = extension_visible ? 1 : 0;
         pre_data.u.uints[2] = context->preedit_mode;
@@ -3487,6 +3507,7 @@ bus_input_context_update_preedit_text (BusInputContext *context,
         if (bus_input_context_make_post_process_key_event (context,
                                                            &pre_data)) {
             g_variant_unref (variant);
+            g_object_unref (real_preedit_text);
             return;
         } else if (context->client_commit_preedit) {
             bus_input_context_emit_signal (
@@ -3508,6 +3529,7 @@ bus_input_context_update_preedit_text (BusInputContext *context,
                                    extension_visible),
                     NULL);
         }
+        g_object_unref (real_preedit_text);
     } else {
         if (IGNORE_FOCUS_OUT_CONDITION)
             context->ignore_focus_out = TRUE;

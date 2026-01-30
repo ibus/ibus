@@ -5,13 +5,13 @@
 #
 # Translators:
 # Rahman Yusri Aftian <aftian9603@gmail.com>, 2019
-# Andika Triwidada <andika@gmail.com>, 2024.
+# Andika Triwidada <andika@gmail.com>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2024-10-29 09:58+0000\n"
+"PO-Revision-Date: 2025-10-07 01:58+0000\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/id/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3680,10 +3680,8 @@ msgid "Match with the condition of the specified integer"
 msgstr ""
 
 #: ui/gtk3/panel.vala:441 ui/gtk3/panel.vala:464
-#, fuzzy
-#| msgid "IBus Update"
 msgid "IBus Panel"
-msgstr "Pembaruan IBus"
+msgstr "Panel IBus"
 
 #: ui/gtk3/panel.vala:442
 msgid ""

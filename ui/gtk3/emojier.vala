@@ -2,7 +2,7 @@
  *
  * ibus - The Input Bus
  *
- * Copyright (c) 2017-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (c) 2017-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -2190,6 +2190,35 @@ public class IBusEmojier : Gtk.ApplicationWindow {
     }
 
 
+    private string combine_annotations_string(IBus.EmojiData data,
+                                              int            max_len=-1) {
+        GLib.SList<string> annotations =
+                data.get_annotations().copy_deep(GLib.strdup);
+        var buff = new GLib.StringBuilder();
+        if (max_len == -1) {
+            uint length = annotations.length();
+            if (length >= 0 && length < 100)
+                max_len = (int)length;
+            else
+                max_len = 0;
+        }
+        int i = 0;
+        foreach (unowned string annotation in annotations) {
+            if (i++ >= max_len)
+                break;
+            if (i == 1)
+                buff.append_printf("%s", annotation);
+            else
+                buff.append_printf(" | %s", annotation);
+        }
+        if (i > 1) {
+            buff.prepend (" [");
+            buff.append_c (']');
+        }
+        return buff.str;
+    }
+
+
     public static void update_favorite_emoji_dict() {
         if (m_emoji_to_data_dict == null ||
             m_annotation_to_emojis_dict == null)
@@ -2254,13 +2283,38 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         var lookup_table = new IBus.LookupTable(EMOJI_GRID_PAGE, 0, true, true);
         uint i = 0;
         for (; i < m_lookup_table.get_number_of_candidates(); i++) {
-            IBus.Text text = new IBus.Text.from_string("");
-            text.copy(m_lookup_table.get_candidate(i));
+            unowned IBus.Text text_orig = m_lookup_table.get_candidate(i);
+            string emoji = text_orig.text;
+            unowned IBus.EmojiData? data = m_emoji_to_data_dict.lookup(emoji);
+            if (data != null)
+                emoji += combine_annotations_string(data, 4);
+            else if (emoji.char_count() <= 1)
+                emoji += " [%s]".printf(utf8_code_point(emoji));
+            IBus.Text text = new IBus.Text.from_string(emoji);
+            text.set_attributes(text_orig.get_attributes());
             lookup_table.append_candidate(text);
         }
         if (i > 0)
             lookup_table.set_cursor_pos(m_lookup_table.get_cursor_pos());
         return lookup_table;
+    }
+
+
+    public string get_auxiliary_text_for_one_dimension() {
+        uint cursor = m_lookup_table.get_cursor_pos();
+        string emoji = m_lookup_table.get_candidate(cursor).text;
+        unowned IBus.EmojiData? data = m_emoji_to_data_dict.lookup(emoji);
+        if (data != null) {
+            return data.get_description();
+        } else {
+            unichar code = emoji.get_char();
+            unowned IBus.UnicodeData? udata =
+                    m_unicode_to_data_dict.lookup(code);
+            if (udata != null) {
+                return udata.get_name();
+            }
+        }
+        return "";
     }
 
 
@@ -2303,11 +2357,21 @@ public class IBusEmojier : Gtk.ApplicationWindow {
         string main_title = _("Emoji Choice");
         if (m_show_unicode)
             main_title = _("Unicode Choice");
-        var text = new IBus.Text.from_string("%s (%s) (%u / %u)".printf(
-                main_title,
-                language,
-                this.get_cursor_pos() + 1,
-                ncandidates));
+        IBus.Text text;
+        if (m_is_gnome && m_lookup_table.get_number_of_candidates() > 0) {
+            text = new IBus.Text.from_string("%s (%s) (%u / %u)\n%s".printf(
+                    main_title,
+                    language,
+                    this.get_cursor_pos() + 1,
+                    ncandidates,
+                    get_auxiliary_text_for_one_dimension()));
+        } else {
+            text = new IBus.Text.from_string("%s (%s) (%u / %u)".printf(
+                    main_title,
+                    language,
+                    this.get_cursor_pos() + 1,
+                    ncandidates));
+        }
         int char_count = text.text.char_count();
         int start_index = -1;
         unowned string title = text.text;

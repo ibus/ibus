@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # vim:set fileencoding=utf-8 et sts=4 sw=4:
 #
 # ibus - Intelligent Input Bus for Linux / Unix OS

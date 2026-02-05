@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
- * Copyright (C) 2019-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2019-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2013 Intel Corporation
  * Copyright (C) 2013-2025 Red Hat, Inc.
  *
@@ -35,6 +35,7 @@
 #include "input-method-unstable-v1-client-protocol.h"
 #include "input-method-unstable-v2-client-protocol.h"
 #include "text-input-unstable-v1-client-protocol.h"
+#include "text-input-unstable-v3-client-protocol.h"
 #include "virtual-keyboard-unstable-v1-client-protocol.h"
 #include "ibuswaylandim.h"
 
@@ -124,6 +125,8 @@ struct _IBusWaylandIMPrivate
     guint preedit_mode;
     IBusModifierType modifiers;
     gboolean hiding_preedit_text;
+    IBusInputHints ibus_hints;
+    IBusInputPurpose ibus_purpose;
 
 #if ENABLE_SURROUNDING
     IBusText *surrounding_text;
@@ -834,9 +837,98 @@ context_reset_v1 (void                               *data,
 static void
 context_content_type_v1 (void                               *data,
                          struct zwp_input_method_context_v1 *context_v1,
-                         uint32_t                            hint,
+                         uint32_t                            hints,
                          uint32_t                            purpose)
 {
+    IBusWaylandIM *wlim = data;
+    IBusWaylandIMPrivate *priv;
+    IBusInputHints ibus_hints = IBUS_INPUT_HINT_NONE;
+    IBusInputPurpose ibus_purpose = IBUS_INPUT_PURPOSE_FREE_FORM;
+
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+
+    /* ZWP_TEXT_INPUT_V1_CONTENT_HINT_PASSWORD == HIDDEN_TEXT & SENSITIVE_DATA
+     * ZWP_TEXT_INPUT_V1_CONTENT_HINT_DEFAULT == AUTO_COMPLETION &
+     *                                           AUTO_CORRECTION &
+     *                                           AUTO_CAPITALIZATION
+     */
+    if (hints & ZWP_TEXT_INPUT_V1_CONTENT_HINT_AUTO_COMPLETION)
+        ibus_hints |= IBUS_INPUT_HINT_WORD_COMPLETION;
+    if (hints & ZWP_TEXT_INPUT_V1_CONTENT_HINT_AUTO_CORRECTION)
+        ibus_hints |= IBUS_INPUT_HINT_SPELLCHECK;
+    if (hints & ZWP_TEXT_INPUT_V1_CONTENT_HINT_AUTO_CAPITALIZATION)
+        ibus_hints |= IBUS_INPUT_HINT_UPPERCASE_SENTENCES;
+    if (hints & ZWP_TEXT_INPUT_V1_CONTENT_HINT_LOWERCASE)
+        ibus_hints |= IBUS_INPUT_HINT_LOWERCASE;
+    if (hints & ZWP_TEXT_INPUT_V1_CONTENT_HINT_UPPERCASE)
+        ibus_hints |= IBUS_INPUT_HINT_UPPERCASE_CHARS;
+    if (hints & ZWP_TEXT_INPUT_V1_CONTENT_HINT_TITLECASE)
+        ibus_hints |= IBUS_INPUT_HINT_UPPERCASE_WORDS;
+    if (hints & ZWP_TEXT_INPUT_V1_CONTENT_HINT_HIDDEN_TEXT)
+        ibus_hints |= IBUS_INPUT_HINT_HIDDEN_TEXT;
+    if (hints & ZWP_TEXT_INPUT_V1_CONTENT_HINT_SENSITIVE_DATA)
+        ibus_hints |= IBUS_INPUT_HINT_PRIVATE;
+    if (hints & ZWP_TEXT_INPUT_V1_CONTENT_HINT_LATIN)
+        ibus_hints |= IBUS_INPUT_HINT_LATIN;
+    if (hints & ZWP_TEXT_INPUT_V1_CONTENT_HINT_MULTILINE)
+        ibus_hints |= IBUS_INPUT_HINT_MULTILINE;
+
+    switch (purpose) {
+    case ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_NORMAL:
+        ibus_purpose = IBUS_INPUT_PURPOSE_FREE_FORM;
+        break;
+    case ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_ALPHA:
+        ibus_purpose = IBUS_INPUT_PURPOSE_ALPHA;
+        break;
+    case ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_DIGITS:
+        ibus_purpose = IBUS_INPUT_PURPOSE_DIGITS;
+        break;
+    case ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_NUMBER:
+        ibus_purpose = IBUS_INPUT_PURPOSE_NUMBER;
+        break;
+    case ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_PHONE:
+        ibus_purpose = IBUS_INPUT_PURPOSE_PHONE;
+        break;
+    case ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_URL:
+        ibus_purpose = IBUS_INPUT_PURPOSE_URL;
+        break;
+    case ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_EMAIL:
+        ibus_purpose = IBUS_INPUT_PURPOSE_EMAIL;
+        break;
+    case ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_NAME:
+        ibus_purpose = IBUS_INPUT_PURPOSE_NAME;
+        break;
+    case ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_PASSWORD:
+        ibus_purpose = IBUS_INPUT_PURPOSE_PASSWORD;
+        break;
+    case ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_DATE:
+        ibus_purpose = IBUS_INPUT_PURPOSE_DATE;
+        break;
+    case ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_TIME:
+        ibus_purpose = IBUS_INPUT_PURPOSE_TIME;
+        break;
+    case ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_DATETIME:
+        ibus_purpose = IBUS_INPUT_PURPOSE_DATETIME;
+        break;
+    case ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_TERMINAL:
+        ibus_purpose = IBUS_INPUT_PURPOSE_TERMINAL;
+        break;
+    default:
+        g_warning ("Wrong purpose in the input-method context: %d", purpose);
+    }
+
+    priv->ibus_hints = ibus_hints;
+    priv->ibus_purpose = ibus_purpose;
+
+    /* Update priv->ibus_[hints|purpose] after _create_input_context_done()
+     * is called.
+     */
+    if (G_UNLIKELY (priv->ibuscontext)) {
+        ibus_input_context_set_content_type (priv->ibuscontext,
+                                             ibus_purpose,
+                                             ibus_hints);
+    }
 }
 
 
@@ -1863,6 +1955,9 @@ _create_input_context_done (GObject      *object,
                        0,
                        g_dbus_proxy_get_object_path (
                                G_DBUS_PROXY (priv->ibuscontext)));
+        ibus_input_context_set_content_type (priv->ibuscontext,
+                                             priv->ibus_purpose,
+                                             priv->ibus_hints);
     }
 }
 
@@ -1908,6 +2003,9 @@ input_method_activate (void                               *data,
     default:
         g_assert_not_reached ();
     }
+
+    priv->ibus_hints = IBUS_INPUT_HINT_NONE;
+    priv->ibus_purpose = IBUS_INPUT_PURPOSE_FREE_FORM;
 
     g_assert (!priv->ibuscontext);
 
@@ -2079,9 +2177,96 @@ input_method_text_change_cause_v2 (void                       *data,
 static void
 input_method_content_type_v2 (void                       *data,
                               struct zwp_input_method_v2 *input_method_v2,
-                              uint32_t                    hint,
+                              uint32_t                    hints,
                               uint32_t                    purpose)
 {
+    IBusWaylandIM *wlim = data;
+    IBusWaylandIMPrivate *priv;
+    IBusInputHints ibus_hints = IBUS_INPUT_HINT_NONE;
+    IBusInputPurpose ibus_purpose = IBUS_INPUT_PURPOSE_FREE_FORM;
+
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+
+    if (hints & ZWP_TEXT_INPUT_V3_CONTENT_HINT_COMPLETION)
+        ibus_hints |= IBUS_INPUT_HINT_WORD_COMPLETION;
+    if (hints & ZWP_TEXT_INPUT_V3_CONTENT_HINT_SPELLCHECK)
+        ibus_hints |= IBUS_INPUT_HINT_SPELLCHECK;
+    if (hints & ZWP_TEXT_INPUT_V3_CONTENT_HINT_AUTO_CAPITALIZATION)
+        ibus_hints |= IBUS_INPUT_HINT_UPPERCASE_SENTENCES;
+    if (hints & ZWP_TEXT_INPUT_V3_CONTENT_HINT_LOWERCASE)
+        ibus_hints |= IBUS_INPUT_HINT_LOWERCASE;
+    if (hints & ZWP_TEXT_INPUT_V3_CONTENT_HINT_UPPERCASE)
+        ibus_hints |= IBUS_INPUT_HINT_UPPERCASE_CHARS;
+    if (hints & ZWP_TEXT_INPUT_V3_CONTENT_HINT_TITLECASE)
+        ibus_hints |= IBUS_INPUT_HINT_UPPERCASE_WORDS;
+    if (hints & ZWP_TEXT_INPUT_V3_CONTENT_HINT_HIDDEN_TEXT)
+        ibus_hints |= IBUS_INPUT_HINT_HIDDEN_TEXT;
+    if (hints & ZWP_TEXT_INPUT_V3_CONTENT_HINT_SENSITIVE_DATA)
+        ibus_hints |= IBUS_INPUT_HINT_PRIVATE;
+    if (hints & ZWP_TEXT_INPUT_V3_CONTENT_HINT_LATIN)
+        ibus_hints |= IBUS_INPUT_HINT_LATIN;
+    if (hints & ZWP_TEXT_INPUT_V3_CONTENT_HINT_MULTILINE)
+        ibus_hints |= IBUS_INPUT_HINT_MULTILINE;
+
+    switch (purpose) {
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_NORMAL:
+        ibus_purpose = IBUS_INPUT_PURPOSE_FREE_FORM;
+        break;
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_ALPHA:
+        ibus_purpose = IBUS_INPUT_PURPOSE_ALPHA;
+        break;
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_DIGITS:
+        ibus_purpose = IBUS_INPUT_PURPOSE_DIGITS;
+        break;
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_NUMBER:
+        ibus_purpose = IBUS_INPUT_PURPOSE_NUMBER;
+        break;
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_PHONE:
+        ibus_purpose = IBUS_INPUT_PURPOSE_PHONE;
+        break;
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_URL:
+        ibus_purpose = IBUS_INPUT_PURPOSE_URL;
+        break;
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_EMAIL:
+        ibus_purpose = IBUS_INPUT_PURPOSE_EMAIL;
+        break;
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_NAME:
+        ibus_purpose = IBUS_INPUT_PURPOSE_NAME;
+        break;
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_PASSWORD:
+        ibus_purpose = IBUS_INPUT_PURPOSE_PASSWORD;
+        break;
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_PIN:
+        ibus_purpose = IBUS_INPUT_PURPOSE_PIN;
+        break;
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_DATE:
+        ibus_purpose = IBUS_INPUT_PURPOSE_DATE;
+        break;
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_TIME:
+        ibus_purpose = IBUS_INPUT_PURPOSE_TIME;
+        break;
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_DATETIME:
+        ibus_purpose = IBUS_INPUT_PURPOSE_DATETIME;
+        break;
+    case ZWP_TEXT_INPUT_V3_CONTENT_PURPOSE_TERMINAL:
+        ibus_purpose = IBUS_INPUT_PURPOSE_TERMINAL;
+        break;
+    default:
+        g_warning ("Wrong purpose in the input-method context: %d", purpose);
+    }
+
+    priv->ibus_hints = ibus_hints;
+    priv->ibus_purpose = ibus_purpose;
+
+    /* Update priv->ibus_[hints|purpose] after _create_input_context_done()
+     * is called.
+     */
+    if (G_UNLIKELY (priv->ibuscontext)) {
+        ibus_input_context_set_content_type (priv->ibuscontext,
+                                             ibus_purpose,
+                                             ibus_hints);
+    }
 }
 
 

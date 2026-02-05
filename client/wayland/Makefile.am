@@ -3,7 +3,7 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2013 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2019-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2019-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # Copyright (c) 2007-2019 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or modify
@@ -34,6 +34,7 @@ protocol_sources = \
     input-method-unstable-v2-client-protocol.h \
     input-method-unstable-v2-protocol.c \
     text-input-unstable-v1-client-protocol.h \
+    text-input-unstable-v3-client-protocol.h \
     virtual-keyboard-unstable-v1-client-protocol.h \
     virtual-keyboard-unstable-v1-protocol.c \
     $(NULL)
@@ -93,6 +94,9 @@ input-method-unstable-v2-protocol.c: $(srcdir)/input-method-unstable-v2.xml
 	$(AM_V_GEN)$(wayland_scanner) code $< $@
 
 text-input-unstable-v1-client-protocol.h: $(wayland_text_protocoldir)/text-input-unstable-v1.xml
+	$(AM_V_GEN)$(wayland_scanner) client-header $< $@
+
+text-input-unstable-v3-client-protocol.h: $(wayland_text_protocoldir)/text-input-unstable-v3.xml
 	$(AM_V_GEN)$(wayland_scanner) client-header $< $@
 
 virtual-keyboard-unstable-v1-client-protocol.h: $(srcdir)/virtual-keyboard-unstable-v1.xml

@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2010-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2010-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -274,6 +274,12 @@ typedef void (* IBusFreeFunc) (gpointer object);
  *     characters are hidden
  * @IBUS_INPUT_PURPOSE_TERMINAL: Allow any character, in addition to control
  *     codes. Since 1.5.24
+ * @IBUS_INPUT_PURPOSE_DATE: Input a date for the Wayland text-input protocol
+ *     V1/V3. Since 1.5.34
+ * @IBUS_INPUT_PURPOSE_TIME: Input a time for the Wayland text-input protocol
+ *     V1/V3. Since 1.5.34
+ * @IBUS_INPUT_PURPOSE_DATETIME: Input a date and time for the Wayland
+ *     text-input protocol V1/V3. Since 1.5.34
  *
  * Describes primary purpose of the input context.  This information
  * is particularly useful to implement intelligent behavior in
@@ -308,7 +314,10 @@ typedef enum
     IBUS_INPUT_PURPOSE_NAME,
     IBUS_INPUT_PURPOSE_PASSWORD,
     IBUS_INPUT_PURPOSE_PIN,
-    IBUS_INPUT_PURPOSE_TERMINAL
+    IBUS_INPUT_PURPOSE_TERMINAL,
+    IBUS_INPUT_PURPOSE_DATE,
+    IBUS_INPUT_PURPOSE_TIME,
+    IBUS_INPUT_PURPOSE_DATETIME
 } IBusInputPurpose;
 
 /**
@@ -332,6 +341,10 @@ typedef enum
  *     update personalized data (like typing history). Since 1.5.26
  * @IBUS_INPUT_HINT_HIDDEN_TEXT: The text is hidden (e.g. password fields).
  *     Since 1.5.34
+ * @IBUS_INPUT_HINT_LATIN: Just latin characters should be entered for the
+ *     text-input protocol V1/V3. Since 1.5.34
+ * @IBUS_INPUT_HINT_MULTILINE: Suggest the text input is multiline for the
+ *     text-input protocol V1/V3. Since 1.5.34
  *
  * Describes hints that might be taken into account by engines.  Note
  * that engines may already tailor their behaviour according to the
@@ -360,7 +373,9 @@ typedef enum
     IBUS_INPUT_HINT_EMOJI               = 1 << 9,
     IBUS_INPUT_HINT_NO_EMOJI            = 1 << 10,
     IBUS_INPUT_HINT_PRIVATE             = 1 << 11,
-    IBUS_INPUT_HINT_HIDDEN_TEXT         = 1 << 12
+    IBUS_INPUT_HINT_HIDDEN_TEXT         = 1 << 12,
+    IBUS_INPUT_HINT_LATIN               = 1 << 13,
+    IBUS_INPUT_HINT_MULTILINE           = 1 << 14
 } IBusInputHints;
 
 /**

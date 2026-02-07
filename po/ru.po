@@ -11,13 +11,14 @@
 # yuliya <ypoyarko@redhat.com>, 2015. #zanata
 # Igor Gorbounov <igor.gorbounov@gmail.com>, 2017. #zanata
 # Alexey Rubtsov <rushills@gmail.com>, 2021, 2022.
+# Aleksandr Sidorenko <auroragamesproject@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2022-09-28 08:19+0000\n"
-"Last-Translator: Alexey Rubtsov <rushills@gmail.com>\n"
+"PO-Revision-Date: 2025-11-06 09:55+0000\n"
+"Last-Translator: Aleksandr Sidorenko <auroragamesproject@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ru/>\n"
 "Language: ru\n"
@@ -26,7 +27,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 5.14.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3595,7 +3596,7 @@ msgstr "Стр. вверх"
 
 #: ui/gtk3/emojier.vala:1180
 msgid "Show emoji variants"
-msgstr ""
+msgstr "Показать варианты эмодзи"
 
 #: ui/gtk3/emojier.vala:1181
 #, fuzzy
@@ -3655,10 +3656,8 @@ msgstr ""
 
 #: ui/gtk3/emojier.vala:2289 ui/gtk3/ibus-extension-gtk3.desktop.in:2
 #: ui/gtk3/ibus-ui-emojier.desktop.in:2 ui/gtk3/panel.vala:1633
-#, fuzzy
-#| msgid "Emoji font:"
 msgid "Emoji Choice"
-msgstr "Шрифт емодзи:"
+msgstr "Выбор эмодзи"
 
 #: ui/gtk3/emojier.vala:2291
 msgid "Unicode Choice"
@@ -3704,10 +3703,8 @@ msgid "LANG"
 msgstr "ЯЗЫК"
 
 #: ui/gtk3/emojierapp.vala:135
-#, fuzzy
-#| msgid "Emoji annotation language:"
 msgid "Emoji annotations can be match partially"
-msgstr "Язык аннотаций емодзи:"
+msgstr "Аннотации эмодзи могут частично совпадать"
 
 #: ui/gtk3/emojierapp.vala:139
 msgid "Match with the length of the specified integer"

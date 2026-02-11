@@ -1,24 +1,22 @@
-# translation of ibus.pot to Serbian
-# Serbian translation of ibus.
+# Source translation of ibus.
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
+# Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # This file is distributed under the same license as the ibus package.
 #
-# Translators:
-# Miloš Komarčević <kmilos@gmail.com>, 2009
+# Languages add-on <noreply-addon-languages@weblate.org>, 2026.
 msgid ""
 msgstr ""
-"Project-Id-Version: IBus\n"
+"Project-Id-Version: ibus 1.5.32\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2014-02-18 05:49+0000\n"
-"Last-Translator: Miloš Komarčević <kmilos@gmail.com>\n"
-"Language-Team: Serbian <fedora-trans-sr@redhat.com>\n"
-"Language: sr\n"
+"PO-Revision-Date: 2025-05-19 12:12+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -251,11 +249,11 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:208
 msgid "Use custom font"
-msgstr "Употреби прилагођени фонт"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:209
 msgid "Use custom font name for language panel"
-msgstr "Користи прилагођени фонт за језички панел"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:213
 #: data/dconf/org.freedesktop.ibus.gschema.xml:260
@@ -264,45 +262,35 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:214
 msgid "Custom font name for language panel"
-msgstr "Назив прилагођеног фонта за језички панел"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom theme"
-msgstr "Употреби прилагођени фонт"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:219
-#, fuzzy
-#| msgid "Use custom font name for language panel"
 msgid "Use custom theme name for language panel"
-msgstr "Користи прилагођени фонт за језички панел"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
 msgid "Custom theme"
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:224
-#, fuzzy
-#| msgid "Custom font name for language panel"
 msgid "Custom theme name for language panel"
-msgstr "Назив прилагођеног фонта за језички панел"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:228
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom icon"
-msgstr "Употреби прилагођени фонт"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:229
 msgid "Use custom icon name for arrow buttons on candidate window"
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:233
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Custom icon"
-msgstr "Употреби прилагођени фонт"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:234
 msgid "Custom icon name for arrow buttons on candidate window"
@@ -337,10 +325,8 @@ msgid "The shortcut keys for turning emoji typing on or off"
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:261
-#, fuzzy
-#| msgid "Custom font name for language panel"
 msgid "Custom font name for emoji characters on emoji dialog"
-msgstr "Назив прилагођеног фонта за језички панел"
+msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:265
 msgid "Default language for emoji dictionary"
@@ -431,22 +417,20 @@ msgstr ""
 
 #: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
-msgstr "Друго"
+msgstr ""
 
 #: setup/emojilang.py:67
-#, fuzzy
-#| msgid "Select an input method"
 msgid "Select a language"
-msgstr "Изаберите методу уноса"
+msgstr ""
 
 #: setup/emojilang.py:70 setup/enginedialog.py:60 setup/keyboardshortcut.py:339
 #: setup/main.py:643
 msgid "_Cancel"
-msgstr "О_дустани"
+msgstr ""
 
 #: setup/emojilang.py:71 setup/keyboardshortcut.py:340 setup/main.py:644
 msgid "_OK"
-msgstr "У _реду"
+msgstr ""
 
 #: setup/emojilang.py:235 setup/enginedialog.py:224
 msgid "More…"
@@ -454,11 +438,11 @@ msgstr ""
 
 #: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1683
 msgid "About"
-msgstr "О програму"
+msgstr ""
 
 #: setup/engineabout.py:40 setup/setup.ui:1488
 msgid "_Close"
-msgstr "_Затвори"
+msgstr ""
 
 #: setup/engineabout.py:72
 #, python-format
@@ -481,12 +465,12 @@ msgstr ""
 
 #: setup/enginecombobox.py:139 setup/enginedialog.py:57
 msgid "Select an input method"
-msgstr "Изаберите методу уноса"
+msgstr ""
 
 #. add button
 #: setup/enginedialog.py:61 setup/keyboardshortcut.py:124 setup/setup.ui:676
 msgid "_Add"
-msgstr "_Додај"
+msgstr ""
 
 #. create im name & icon column
 #: setup/enginetreeview.py:69 setup/setup.ui:850
@@ -495,7 +479,7 @@ msgstr ""
 
 #: setup/ibus-setup.desktop:2 setup/setup.ui:81
 msgid "IBus Preferences"
-msgstr "IBus поставке"
+msgstr ""
 
 #: setup/ibus-setup.desktop:3
 msgid "Set IBus Preferences"
@@ -503,37 +487,35 @@ msgstr ""
 
 #: setup/keyboardshortcut.py:55
 msgid "Keyboard shortcuts"
-msgstr "Пречице тастатуре"
+msgstr ""
 
 #: setup/keyboardshortcut.py:67
 msgid "Key code:"
-msgstr "Код тастера:"
+msgstr ""
 
 #: setup/keyboardshortcut.py:82
 msgid "Modifiers:"
-msgstr "Модификатори:"
+msgstr ""
 
 #. apply button
 #: setup/keyboardshortcut.py:130
 msgid "_Apply"
-msgstr "_Примени"
+msgstr ""
 
 #. delete button
 #: setup/keyboardshortcut.py:136
 msgid "_Delete"
-msgstr "_Обриши"
+msgstr ""
 
 #: setup/keyboardshortcut.py:252
 msgid ""
 "Please press a key (or a key combination).\n"
 "The dialog will be closed when the key is released."
 msgstr ""
-"Притисните тастер (или комбинацију тастера).\n"
-"Прозорче ће бити затворено када се тастер отпусти."
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
-msgstr "Притисните тастер (или комбинацију тастера)"
+msgstr ""
 
 #: setup/main.py:122 setup/main.py:671
 msgid "Use shortcut with shift to switch to the previous input method"
@@ -569,7 +551,7 @@ msgstr ""
 #: setup/main.py:645
 #, python-format
 msgid "Select keyboard shortcut for %s"
-msgstr "Изаберите пречицу тастатуре за %s"
+msgstr ""
 
 #. Translators: Title of the window
 #: setup/main.py:647
@@ -622,7 +604,7 @@ msgstr ""
 
 #: setup/setup.ui:127
 msgid "Next input method:"
-msgstr "Следећа метода уноса:"
+msgstr ""
 
 #: setup/setup.ui:139
 msgid "The shortcut keys for switching to previous input method in the list"
@@ -635,11 +617,11 @@ msgstr ""
 #: setup/setup.ui:169 setup/setup.ui:211 setup/setup.ui:278 setup/setup.ui:331
 #: setup/setup.ui:915 setup/setup.ui:969
 msgid "..."
-msgstr "..."
+msgstr ""
 
 #: setup/setup.ui:238
 msgid "Enable or disable:"
-msgstr "Укључи или искључи:"
+msgstr ""
 
 #: setup/setup.ui:250
 msgid "Enable:"
@@ -651,7 +633,7 @@ msgstr ""
 
 #: setup/setup.ui:357 setup/setup.ui:995
 msgid "<b>Keyboard Shortcuts</b>"
-msgstr "<b>Пречице тастатуре</b>"
+msgstr ""
 
 #: setup/setup.ui:386
 msgid "Set the orientation of candidates in lookup table"
@@ -659,7 +641,7 @@ msgstr ""
 
 #: setup/setup.ui:388
 msgid "Candidates orientation:"
-msgstr "Оријентације кандидата:"
+msgstr ""
 
 #: setup/setup.ui:419
 msgid "Set the behavior of ibus how to show or hide language bar"
@@ -691,11 +673,11 @@ msgstr ""
 
 #: setup/setup.ui:574 setup/setup.ui:1168
 msgid "<b>Font and Style</b>"
-msgstr "<b>Фонт и стил</b>"
+msgstr ""
 
 #: setup/setup.ui:591
 msgid "General"
-msgstr "Опште"
+msgstr ""
 
 #: setup/setup.ui:683
 msgid "Add the selected input method into the enabled input methods"
@@ -703,7 +685,7 @@ msgstr ""
 
 #: setup/setup.ui:694
 msgid "_Remove"
-msgstr "_Уклони"
+msgstr ""
 
 #: setup/setup.ui:701
 msgid "Remove the selected input method from the enabled input methods"
@@ -711,7 +693,7 @@ msgstr ""
 
 #: setup/setup.ui:712
 msgid "_Up"
-msgstr "_Горе"
+msgstr ""
 
 #: setup/setup.ui:719
 msgid "Move up the selected input method in the enabled input methods list"
@@ -719,7 +701,7 @@ msgstr ""
 
 #: setup/setup.ui:730
 msgid "_Down"
-msgstr "_Доле"
+msgstr ""
 
 #: setup/setup.ui:737
 msgid "Move down the selected input method in the enabled input methods"
@@ -727,7 +709,7 @@ msgstr ""
 
 #: setup/setup.ui:748
 msgid "_About"
-msgstr "_О програму"
+msgstr ""
 
 #: setup/setup.ui:755
 msgid "Show information of the selected input method"
@@ -735,7 +717,7 @@ msgstr ""
 
 #: setup/setup.ui:766
 msgid "_Preferences"
-msgstr "Пос_тавке"
+msgstr ""
 
 #: setup/setup.ui:773
 msgid "Show setup of the selected input method"
@@ -815,7 +797,7 @@ msgstr ""
 
 #: setup/setup.ui:1290
 msgid "<b>Global input method settings</b>"
-msgstr "Изаберите методу уноса"
+msgstr ""
 
 #: setup/setup.ui:1322
 msgid ""
@@ -824,30 +806,24 @@ msgid ""
 msgstr ""
 
 #: setup/setup.ui:1341
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom theme:"
-msgstr "Употреби прилагођени фонт"
+msgstr ""
 
 #: setup/setup.ui:1342
 msgid "Choose a theme of the candidate window"
 msgstr ""
 
 #: setup/setup.ui:1378
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom icon:"
-msgstr "Употреби прилагођени фонт"
+msgstr ""
 
 #: setup/setup.ui:1379
 msgid "Choose a theme of the arrow buttons on the candidate window"
 msgstr ""
 
 #: setup/setup.ui:1424
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Font and Theme</b>"
-msgstr "<b>Фонт и стил</b>"
+msgstr ""
 
 #: setup/setup.ui:1444
 msgid "Advanced"
@@ -3465,10 +3441,8 @@ msgid "Restart ibus-daemon"
 msgstr ""
 
 #: tools/main.vala:1159
-#, fuzzy
-#| msgid "Start ibus on login"
 msgid "Start ibus-daemon"
-msgstr "Покрени ibus при пријави"
+msgstr ""
 
 #: tools/main.vala:1160 ui/gtk3/application.vala:363
 msgid "Show version"
@@ -3523,10 +3497,8 @@ msgid "%s is unknown command!\n"
 msgstr ""
 
 #: ui/gtk3/application.vala:368
-#, fuzzy
-#| msgid "Select an input method"
 msgid "Connect Wayland input method protocol"
-msgstr "Изаберите методу уноса"
+msgstr ""
 
 #: ui/gtk3/application.vala:372
 msgid "Execute ibus-daemon if it's not running"
@@ -3545,10 +3517,8 @@ msgid "Favorites"
 msgstr ""
 
 #: ui/gtk3/emojier.vala:280
-#, fuzzy
-#| msgid "Other"
 msgid "Others"
-msgstr "Друго"
+msgstr ""
 
 #: ui/gtk3/emojier.vala:281
 msgid "Open Unicode choice"
@@ -3571,10 +3541,8 @@ msgid "Show emoji variants"
 msgstr ""
 
 #: ui/gtk3/emojier.vala:1197
-#, fuzzy
-#| msgid "_Close"
 msgid "Close"
-msgstr "_Затвори"
+msgstr ""
 
 #: ui/gtk3/emojier.vala:1203
 msgid "Menu"
@@ -3685,10 +3653,8 @@ msgid "Match with the condition of the specified integer"
 msgstr ""
 
 #: ui/gtk3/panel.vala:442 ui/gtk3/panel.vala:465
-#, fuzzy
-#| msgid "IBus Preferences"
 msgid "IBus Panel"
-msgstr "IBus поставке"
+msgstr ""
 
 #: ui/gtk3/panel.vala:443
 msgid ""
@@ -3750,7 +3716,7 @@ msgstr ""
 
 #: ui/gtk3/panel.vala:1588
 msgid "IBus is an intelligent input bus for Linux/Unix."
-msgstr "IBus је интелигентна магистрала уноса за Linux/Unix."
+msgstr ""
 
 #: ui/gtk3/panel.vala:1593
 msgid "Maintainers"
@@ -3758,40 +3724,22 @@ msgstr ""
 
 #: ui/gtk3/panel.vala:1597
 msgid "translator-credits"
-msgstr "Serbian <fedora-trans-sr@redhat.com>"
+msgstr ""
 
 #: ui/gtk3/panel.vala:1634
 msgid "Preferences"
-msgstr "Поставке"
+msgstr ""
 
 #: ui/gtk3/panel.vala:1689
 msgid "Restart"
-msgstr "Покрени поново"
+msgstr ""
 
 #: ui/gtk3/panel.vala:1698
 msgid "Quit"
-msgstr "Изађи"
+msgstr ""
 
 #. Translators: If your locale is RTL, the msgstr is "default:RTL".
 #. * Otherwise the msgstr is "default:LTR".
 #: ui/gtk3/propertypanel.vala:383 ui/gtk3/propertypanel.vala:391
 msgid "default:LTR"
-msgstr "default:LTR"
-
-#~ msgid ""
-#~ "<big><b>IBus</b></big>\n"
-#~ "<small>The intelligent input bus</small>\n"
-#~ "Homepage: https://github.com/ibus/ibus/wiki\n"
-#~ "\n"
-#~ "\n"
-#~ "\n"
-#~ msgstr ""
-#~ "<big><b>IBus</b></big>\n"
-#~ "<small>Интелигентна магистрала уноса</small>\n"
-#~ "Матична страница: https://github.com/ibus/ibus/wiki\n"
-#~ "\n"
-#~ "\n"
-#~ "\n"
-
-#~ msgid "<b>Startup</b>"
-#~ msgstr "<b>Покретање</b>"
+msgstr ""

@@ -3,7 +3,7 @@
 # Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # This file is distributed under the same license as the ibus package.
 #
-# ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025.
+# ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025, 2026.
 # Moonshadow <starlight@users.noreply.translate.fedoraproject.org>, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
@@ -11,9 +11,9 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2025-06-13 16:43+0000\n"
-"Last-Translator: ButterflyOfFire <butterflyoffire@users.noreply.translate."
-"fedoraproject.org>\n"
+"PO-Revision-Date: 2026-01-30 18:58+0000\n"
+"Last-Translator: ButterflyOfFire "
+"<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/kab/>\n"
 "Language: kab\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -3282,7 +3282,7 @@ msgstr ""
 #: tools/main.vala:271 tools/main.vala:462 tools/main.vala:778
 #: tools/main.vala:887
 msgid "Can't connect to IBus.\n"
-msgstr ""
+msgstr "Tuqqna ar IBus ur teddi ara.\n"
 
 #: tools/main.vala:282 tools/main.vala:787
 msgid "IBus is running."
@@ -3363,7 +3363,7 @@ msgstr "Immed"
 
 #: tools/main.vala:1154
 msgid "Set or get engine"
-msgstr ""
+msgstr "Sbaddu neɣ awi-d amsadday"
 
 #: tools/main.vala:1155
 msgid "Exit ibus-daemon"
@@ -3403,7 +3403,7 @@ msgstr ""
 
 #: tools/main.vala:1164
 msgid "Show the configuration values"
-msgstr ""
+msgstr "Sken-d azalen n tawila"
 
 #: tools/main.vala:1165
 msgid "Reset the configuration values"

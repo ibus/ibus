@@ -8,13 +8,15 @@
 # mihkel <turakas@gmail.com>, 2012
 # mihkel <turakas@gmail.com>, 2012
 # H A <contact+fedora@hen.ee>, 2022.
+# Priit Jõerüüt <jrtkbfdr@users.noreply.translate.fedoraproject.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2022-06-12 22:18+0000\n"
-"Last-Translator: H A <contact+fedora@hen.ee>\n"
+"PO-Revision-Date: 2026-01-28 14:58+0000\n"
+"Last-Translator: Priit Jõerüüt "
+"<jrtkbfdr@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Estonian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/et/>\n"
 "Language: et\n"
@@ -22,25 +24,25 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
 msgid "Preload engines"
-msgstr ""
+msgstr "Mootorite eellaadimine"
 
 #. Translators: Tooltip for the button “Preload Engines”
 #: data/dconf/org.freedesktop.ibus.gschema.xml:13
 msgid "Preload engines during ibus starts up"
-msgstr ""
+msgstr "Laadi mootorid ibusi käivitamisel"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:17
 msgid "Engines order"
-msgstr ""
+msgstr "Mootorite järjekord"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:18
 msgid "Saved engines order in input method list"
-msgstr ""
+msgstr "Salvestatud mootorite järjestus sisestusmeetodite loendis"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:22
 msgid "Popup delay milliseconds for IME switcher window"
@@ -55,13 +57,15 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"
-msgstr ""
+msgstr "Salvestatud versiooninumber"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:28
 msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
 msgstr ""
+"Salvestatud versiooninumbrit tarvitatakse varem paigaldatud ja praeguse "
+"ibusi versioonide erinevuse kontrollimisel."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:80
 msgid "Latin layouts which have no ASCII"
@@ -73,20 +77,22 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:85
 msgid "Use xmodmap"
-msgstr ""
+msgstr "Kasuta xmodmap'i"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:86
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
 msgstr ""
+"Kui .xmodmap või .Xmodmap fail on ibusi mootorite vahetamisel olemas, siis "
+"käivita „xmodmap“."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:90 setup/setup.ui:1220
 msgid "Use system keyboard layout"
-msgstr ""
+msgstr "Kasuta süsteemi klahvistikupaigutust"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:91 setup/setup.ui:1225
 msgid "Use system keyboard (XKB) layout"
-msgstr ""
+msgstr "Kasuta süsteemset klahvistiku paigutust (XKB)"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:95
 msgid "Embed Preedit Text"
@@ -98,15 +104,15 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:100
 msgid "Use global input method"
-msgstr ""
+msgstr "Kasuta üleüldist sisestusmeetodit"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:101 setup/setup.ui:1269
 msgid "Share the same input method among all applications"
-msgstr ""
+msgstr "Jaga sama sisestusmeetodit kõigis rakendustes"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:105
 msgid "Enable input method by default"
-msgstr ""
+msgstr "Kasuta sisestusmeetodit vaikimisi"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:106
 msgid "Enable input method by default when the application gets input focus"
@@ -139,35 +145,35 @@ msgstr "Võimalda kiirklahvid"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:129
 msgid "The shortcut keys for turning input method on"
-msgstr ""
+msgstr "Kiirklahvid sisendmeetodi sisselülitamiseks"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:133
 msgid "Disable shortcut keys"
-msgstr ""
+msgstr "Külita kiirklahvid välja"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:134
 msgid "The shortcut keys for turning input method off"
-msgstr ""
+msgstr "Kiirklahvid sisendmeetodi väljalülitamiseks"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:138
 #: data/dconf/org.freedesktop.ibus.gschema.xml:143
 msgid "Next engine shortcut keys"
-msgstr ""
+msgstr "Järgmise sisestusmootori kiirklahvid"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:139
 #: data/dconf/org.freedesktop.ibus.gschema.xml:144
 msgid "The shortcut keys for switching to the next input method in the list"
-msgstr ""
+msgstr "Kiirklahvid lülitamaks loendis järgmisena leiduvale sisestusmootorile"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:148
 #: data/dconf/org.freedesktop.ibus.gschema.xml:153
 msgid "Prev engine shortcut keys"
-msgstr ""
+msgstr "Eelmise sisestusmootori kiirklahvid"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:149
 #: data/dconf/org.freedesktop.ibus.gschema.xml:154
 msgid "The shortcut keys for switching to the previous input method"
-msgstr ""
+msgstr "Kiirklahvid lülitamaks loendis eelmisena leiduvale sisestusmootorile"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:160
 msgid "Auto hide"
@@ -182,7 +188,7 @@ msgstr ""
 #: data/dconf/org.freedesktop.ibus.gschema.xml:165
 #: data/dconf/org.freedesktop.ibus.gschema.xml:169
 msgid "Language panel position"
-msgstr ""
+msgstr "Keeleriba asukoht"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:173
 msgid "Follow the input cursor in case the panel is always shown"
@@ -224,11 +230,11 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:194 setup/setup.ui:501
 msgid "Show input method name on language bar"
-msgstr ""
+msgstr "Näita sisendmeetodi nime keeleribal"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:198
 msgid "RGBA value of XKB icon"
-msgstr ""
+msgstr "XKB ikooni RGBA väärtus"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:199
 msgid ""
@@ -255,7 +261,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:208
 msgid "Use custom font"
-msgstr ""
+msgstr "Kasuta sinu enda valitud kirjatüüpi"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:209
 msgid "Use custom font name for language panel"
@@ -271,40 +277,32 @@ msgid "Custom font name for language panel"
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom theme"
-msgstr "Kasuta kohandatud fonti:"
+msgstr "Kasuta kohandatud kujundust"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:219
 msgid "Use custom theme name for language panel"
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom theme"
-msgstr "Kohandatud font"
+msgstr "Kohandatud kujundus"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:224
 msgid "Custom theme name for language panel"
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:228
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom icon"
-msgstr "Kasuta kohandatud fonti:"
+msgstr "Kasuta omavalitud ikooni"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:229
 msgid "Use custom icon name for arrow buttons on candidate window"
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:233
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom icon"
-msgstr "Kohandatud font"
+msgstr "Omavalitud ikoon"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:234
 msgid "Custom icon name for arrow buttons on candidate window"
@@ -329,6 +327,7 @@ msgstr ""
 #: data/dconf/org.freedesktop.ibus.gschema.xml:251
 msgid "The shortcut keys for turning Unicode typing on or off"
 msgstr ""
+"Kiirklahvid, millega saad Unicode'i sisestamist sisse või välja lülitada"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:255
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
@@ -336,7 +335,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:256
 msgid "The shortcut keys for turning emoji typing on or off"
-msgstr ""
+msgstr "Kiirklahvid, millega saad emojide sisestamist sisse või välja lülitada"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:261
 msgid "Custom font name for emoji characters on emoji dialog"
@@ -431,13 +430,11 @@ msgstr ""
 
 #: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
-msgstr ""
+msgstr "Muu"
 
 #: setup/emojilang.py:67
-#, fuzzy
-#| msgid "Select an input method"
 msgid "Select a language"
-msgstr "Vali sisestusmeetod"
+msgstr "Vali keel"
 
 #: setup/emojilang.py:70 setup/enginedialog.py:60 setup/keyboardshortcut.py:339
 #: setup/main.py:634
@@ -450,7 +447,7 @@ msgstr "_Olgu"
 
 #: setup/emojilang.py:235 setup/enginedialog.py:224
 msgid "More…"
-msgstr ""
+msgstr "Veel…"
 
 #: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1674
 msgid "About"
@@ -503,15 +500,15 @@ msgstr "Määra IBus eelistused"
 
 #: setup/keyboardshortcut.py:55
 msgid "Keyboard shortcuts"
-msgstr ""
+msgstr "Klahvistiku kiirklahvid"
 
 #: setup/keyboardshortcut.py:67
 msgid "Key code:"
-msgstr ""
+msgstr "Klahvi kood:"
 
 #: setup/keyboardshortcut.py:82
 msgid "Modifiers:"
-msgstr ""
+msgstr "Muuteklahvid:"
 
 #. apply button
 #: setup/keyboardshortcut.py:130
@@ -596,11 +593,11 @@ msgstr "Kohandatud"
 
 #: setup/setup.ui:48
 msgid "Do not show"
-msgstr ""
+msgstr "Ära näita"
 
 #: setup/setup.ui:51
 msgid "Hide automatically"
-msgstr ""
+msgstr "Peida automaatselt"
 
 #: setup/setup.ui:54
 msgid "Always"
@@ -608,7 +605,7 @@ msgstr "Alati"
 
 #: setup/setup.ui:125
 msgid "The shortcut keys for switching to next input method in the list"
-msgstr ""
+msgstr "Kiirklahvid lülitumiseks loendi järgmisele sisestusmeetodile"
 
 #: setup/setup.ui:127
 msgid "Next input method:"
@@ -616,7 +613,7 @@ msgstr "Järgmine sisestusmeetod:"
 
 #: setup/setup.ui:139
 msgid "The shortcut keys for switching to previous input method in the list"
-msgstr ""
+msgstr "Kiirklahvid lülitumiseks loendi eelmisele sisestusmeetodile"
 
 #: setup/setup.ui:141
 msgid "Previous input method:"
@@ -625,11 +622,11 @@ msgstr "Eelmine sisestusmeetod:"
 #: setup/setup.ui:169 setup/setup.ui:211 setup/setup.ui:278 setup/setup.ui:331
 #: setup/setup.ui:915 setup/setup.ui:969
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: setup/setup.ui:238
 msgid "Enable or disable:"
-msgstr "Võimalda või keela:"
+msgstr "Lülita sisse/välja:"
 
 #: setup/setup.ui:250
 msgid "Enable:"
@@ -641,7 +638,7 @@ msgstr "Keela:"
 
 #: setup/setup.ui:357 setup/setup.ui:995
 msgid "<b>Keyboard Shortcuts</b>"
-msgstr ""
+msgstr "<b>Klahvistiku kiirklahvid</b>"
 
 #: setup/setup.ui:386
 msgid "Set the orientation of candidates in lookup table"
@@ -706,6 +703,7 @@ msgstr "_Üles"
 #: setup/setup.ui:719
 msgid "Move up the selected input method in the enabled input methods list"
 msgstr ""
+"Tõsta valitud sisestusmeetod lubatud sisestusmeetodite loendis ülespoole"
 
 #: setup/setup.ui:730
 msgid "_Down"
@@ -714,6 +712,7 @@ msgstr "_Alla"
 #: setup/setup.ui:737
 msgid "Move down the selected input method in the enabled input methods"
 msgstr ""
+"Tõsta valitud sisestusmeetod lubatud sisestusmeetodite loendis allapoole"
 
 #: setup/setup.ui:748
 msgid "_About"
@@ -721,7 +720,7 @@ msgstr "_Programmist lähemalt"
 
 #: setup/setup.ui:755
 msgid "Show information of the selected input method"
-msgstr ""
+msgstr "Näita teavet valitud sisestusmeetodi kohta"
 
 #: setup/setup.ui:766
 msgid "_Preferences"
@@ -760,10 +759,8 @@ msgid "Set a font of Unicode candidates on the emoji dialog"
 msgstr ""
 
 #: setup/setup.ui:1027
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Unicode font:"
-msgstr "Kasuta kohandatud fonti:"
+msgstr "Unicode'i kirjatüüp:"
 
 #: setup/setup.ui:1050
 msgid "Set a language of emoji annotations on the emoji dialog"
@@ -807,7 +804,7 @@ msgstr ""
 
 #: setup/setup.ui:1290
 msgid "<b>Global input method settings</b>"
-msgstr ""
+msgstr "<b>Üleüldise siseestusmeetodi seadistused</b>"
 
 #: setup/setup.ui:1322
 msgid ""
@@ -816,20 +813,16 @@ msgid ""
 msgstr ""
 
 #: setup/setup.ui:1341
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom theme:"
-msgstr "Kasuta kohandatud fonti:"
+msgstr "Kasuta kohandatud kujundust:"
 
 #: setup/setup.ui:1342
 msgid "Choose a theme of the candidate window"
 msgstr ""
 
 #: setup/setup.ui:1378
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom icon:"
-msgstr "Kasuta kohandatud fonti:"
+msgstr "Kasuta omavalitud ikooni:"
 
 #: setup/setup.ui:1379
 msgid "Choose a theme of the arrow buttons on the candidate window"
@@ -871,43 +864,43 @@ msgstr ""
 
 #: src/ibusemojigen.h:30
 msgid "Activities"
-msgstr ""
+msgstr "Tegevused"
 
 #: src/ibusemojigen.h:31
 msgid "Animals & Nature"
-msgstr ""
+msgstr "Loomad ja loodus"
 
 #: src/ibusemojigen.h:32
 msgid "Component"
-msgstr ""
+msgstr "Komponent"
 
 #: src/ibusemojigen.h:33
 msgid "Flags"
-msgstr ""
+msgstr "Lipud"
 
 #: src/ibusemojigen.h:34
 msgid "Food & Drink"
-msgstr ""
+msgstr "Toit ja jook"
 
 #: src/ibusemojigen.h:35
 msgid "Objects"
-msgstr ""
+msgstr "Esemed"
 
 #: src/ibusemojigen.h:36
 msgid "People & Body"
-msgstr ""
+msgstr "Inimesed ja keha"
 
 #: src/ibusemojigen.h:37
 msgid "Smileys & Emotion"
-msgstr ""
+msgstr "Smailid ja emotsioonid"
 
 #: src/ibusemojigen.h:38
 msgid "Symbols"
-msgstr ""
+msgstr "Sümbolid"
 
 #: src/ibusemojigen.h:39
 msgid "Travel & Places"
-msgstr ""
+msgstr "Reisimine ja kohad"
 
 #: src/ibusenginesimple.c:263
 msgid "Detect unregistered character in your compose sequence"
@@ -2028,10 +2021,8 @@ msgstr ""
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:661
-#, fuzzy
-#| msgid "Vertical"
 msgid "Vertical Forms"
-msgstr "Vertikaalne"
+msgstr "Vertikaalsed vormid"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3322,11 +3313,11 @@ msgstr ""
 
 #: tools/main.vala:566
 msgid "Set global engine failed.\n"
-msgstr ""
+msgstr "Üleüldise sisestusmootori määramine ei õnnestunud.\n"
 
 #: tools/main.vala:571
 msgid "Get global engine failed.\n"
-msgstr ""
+msgstr "Üleüldise sisestusmootori laadimine ei õnnestunud.\n"
 
 #: tools/main.vala:709
 msgid ""
@@ -3401,10 +3392,8 @@ msgid "Restart ibus-daemon"
 msgstr ""
 
 #: tools/main.vala:1159
-#, fuzzy
-#| msgid "Start ibus on login"
 msgid "Start ibus-daemon"
-msgstr "Käivita ibus sisselogiminsel"
+msgstr "Käivita ibus-daemon"
 
 #: tools/main.vala:1160 ui/gtk3/application.vala:336
 msgid "Show version"
@@ -3459,10 +3448,8 @@ msgid "%s is unknown command!\n"
 msgstr ""
 
 #: ui/gtk3/application.vala:341
-#, fuzzy
-#| msgid "Select an input method"
 msgid "Connect Wayland input method protocol"
-msgstr "Vali sisestusmeetod"
+msgstr "Ühenda Waylandi sisestusmeetodi protokolliga"
 
 #: ui/gtk3/application.vala:345
 msgid "Execute ibus-daemon if it's not running"
@@ -3505,10 +3492,8 @@ msgid "Show emoji variants"
 msgstr ""
 
 #: ui/gtk3/emojier.vala:1181
-#, fuzzy
-#| msgid "_Close"
 msgid "Close"
-msgstr "Sul_ge"
+msgstr "Sulge"
 
 #: ui/gtk3/emojier.vala:1187
 msgid "Menu"
@@ -3537,10 +3522,9 @@ msgid "Has emoji variants"
 msgstr ""
 
 #: ui/gtk3/emojier.vala:1708 ui/gtk3/emojier.vala:1721
-#, fuzzy, c-format
-#| msgid "Description:\n"
+#, c-format
 msgid "Description: %s"
-msgstr "Kirjeldus:\n"
+msgstr "Kirjeldus: %s"
 
 #: ui/gtk3/emojier.vala:1708
 msgid "None"
@@ -3620,10 +3604,8 @@ msgid "Match with the condition of the specified integer"
 msgstr ""
 
 #: ui/gtk3/panel.vala:441 ui/gtk3/panel.vala:464
-#, fuzzy
-#| msgid "IBus Preferences"
 msgid "IBus Panel"
-msgstr "IBus eelistused"
+msgstr "IBusi riba"
 
 #: ui/gtk3/panel.vala:442
 msgid ""
@@ -3701,11 +3683,11 @@ msgstr "Eelistused"
 
 #: ui/gtk3/panel.vala:1680
 msgid "Restart"
-msgstr "Restart"
+msgstr "Käivita uuesti"
 
 #: ui/gtk3/panel.vala:1689
 msgid "Quit"
-msgstr "Lõpeta"
+msgstr "Välju"
 
 #. Translators: If your locale is RTL, the msgstr is "default:RTL".
 #. * Otherwise the msgstr is "default:LTR".

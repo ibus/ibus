@@ -309,11 +309,19 @@ _xim_store_ic_values (X11IC *x11ic, IMChangeICStruct *call_data)
         }
     }
 
+    gboolean has_explicit_area = FALSE;
     for (i = 0; i < (int)call_data->preedit_attr_num; ++i, ++pre_attr) {
-        if (g_strcmp0 (XNSpotLocation, pre_attr->name) == 0) {
+        if (!has_explicit_area && g_strcmp0 (XNSpotLocation, pre_attr->name) == 0) {
             x11ic->has_preedit_area = TRUE;
             x11ic->preedit_area.x = ((XPoint *)pre_attr->value)->x;
             x11ic->preedit_area.y = ((XPoint *)pre_attr->value)->y;
+        } else if (g_strcmp0 (XNArea, pre_attr->name) == 0) {
+            has_explicit_area = TRUE;
+            x11ic->has_preedit_area = TRUE;
+            x11ic->preedit_area.x = ((XRectangle *)pre_attr->value)->x;
+            x11ic->preedit_area.y = ((XRectangle *)pre_attr->value)->y;
+            x11ic->preedit_area.width = ((XRectangle *)pre_attr->value)->width;
+            x11ic->preedit_area.height = ((XRectangle *)pre_attr->value)->height;
         }
         else {
             LOG (1, "Unknown preedit attribute: %s", pre_attr->name);

@@ -1,0 +1,26 @@
+<!ELEMENT component (name,description,exec,version,license,author,homepage,textdomain,observed-paths?,engines?)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT version (#PCDATA)>
+<!ELEMENT license (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT homepage (#PCDATA)>
+<!ELEMENT exec (#PCDATA)>
+<!ELEMENT textdomain (#PCDATA)>
+<!ELEMENT observed-paths (path)*>
+<!ELEMENT path (#PCDATA)>
+<!ATTLIST path type (dir | file) #IMPLIED >
+<!ELEMENT engines (engine)*>
+<!ATTLIST engines exec CDATA #IMPLIED >
+<!ELEMENT engine ((name,longname,language,layout,license,author,icon,description)?, rank?,hotkeys?,symbol?,layout_variant?,layout_option?,setup?,icon_prop_key?) >
+<!ELEMENT longname (#PCDATA)>
+<!ELEMENT language (#PCDATA)>
+<!ELEMENT icon (#PCDATA)>
+<!ELEMENT layout (#PCDATA)>
+<!ELEMENT layout_variant (#PCDATA)>
+<!ELEMENT layout_option (#PCDATA)>
+<!ELEMENT rank (#PCDATA)>
+<!ELEMENT hotkeys (#PCDATA)>
+<!ELEMENT symbol (#PCDATA)>
+<!ELEMENT setup (#PCDATA)>
+<!ELEMENT icon_prop_key (#PCDATA)>

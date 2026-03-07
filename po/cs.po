@@ -14,13 +14,14 @@
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
 # Krystof Cerny <cleverline1mc@gmail.com>, 2023.
 # Daniel Rusek <mail@asciiwolf.com>, 2023.
+# Jonas Hubeny <jonas.hubeny@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2023-11-22 16:01+0000\n"
-"Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
+"PO-Revision-Date: 2026-02-19 17:58+0000\n"
+"Last-Translator: Jonas Hubeny <jonas.hubeny@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/ibus/ibus/"
 "cs/>\n"
 "Language: cs\n"
@@ -28,25 +29,25 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 5.16\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
 msgid "Preload engines"
-msgstr "Přednačtené enginy"
+msgstr "Přednačítat moduly"
 
 #. Translators: Tooltip for the button “Preload Engines”
 #: data/dconf/org.freedesktop.ibus.gschema.xml:13
 msgid "Preload engines during ibus starts up"
-msgstr "Přednačtené enginy v průběhu startu IBus"
+msgstr "Přednačtené moduly při startu startu ibus"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:17
 msgid "Engines order"
-msgstr "Pořadí enginů"
+msgstr "Pořadí modulů"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:18
 msgid "Saved engines order in input method list"
-msgstr "Uložené pořadí enginů v seznamu vstupní metody"
+msgstr "Uložené pořadí modulů v seznamu vstupní metody"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:22
 msgid "Popup delay milliseconds for IME switcher window"
@@ -54,11 +55,6 @@ msgstr ""
 "Počet milisekund pro zpoždění automaticky otevřeného okna IME přepínače"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
-#, fuzzy
-#| msgid ""
-#| "Set popup delay milliseconds to show IME switcher window. The default is "
-#| "400. 0 = Show the window immediately. 0 &lt; Delay milliseconds. 0 &gt; "
-#| "Do not show the window and switch prev/next engines."
 msgid ""
 "Set popup delay milliseconds to show IME switcher window. The default is "
 "400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
@@ -67,7 +63,7 @@ msgstr ""
 "Nastavit počet milisekund pro zpoždění automaticky otevřeného okna "
 "zobrazujícího IME přepínač. Výchozí hodnota je 400. 0 = Zobrazit okno "
 "okamžitě. 0 & lt; Milisekundové zpoždění. 0 & gt; Nezobrazit okno a přejít k "
-"předchozímu / dalšímu enginu."
+"předchozímu / dalšímu modulu."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"
@@ -311,28 +307,20 @@ msgid "Custom font name for language panel"
 msgstr "Vlastní název fontu pro panel jazyku"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom theme"
-msgstr "Použít vlastní font"
+msgstr "Použít vlastní motiv"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:219
-#, fuzzy
-#| msgid "Use custom font name for language panel"
 msgid "Use custom theme name for language panel"
-msgstr "Použít vlastní název fontu pro panel jazyku"
+msgstr "Použít vlastní název motivu pro panel jazyku"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom theme"
-msgstr "Vlastní font"
+msgstr "Vlastní motiv"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:224
-#, fuzzy
-#| msgid "Custom font name for language panel"
 msgid "Custom theme name for language panel"
-msgstr "Vlastní název fontu pro panel jazyku"
+msgstr "Vlastní název motivu pro panel jazyku"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:228
 msgid "Use custom icon"
@@ -350,11 +338,11 @@ msgstr "Vlastní font"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:234
 msgid "Custom icon name for arrow buttons on candidate window"
-msgstr ""
+msgstr "Vlastní jméno ikony pro tlačitko šipky ve výběrovém okně"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:238 setup/setup.ui:1317
 msgid "Choose glyphs with input method's language on candidate window"
-msgstr ""
+msgstr "Vyberte znaky s jazykem vstupní metody ve výběrovém okně"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:239
 msgid ""
@@ -363,18 +351,17 @@ msgid ""
 "if the value is true and chooses them from the desktop locale if the value "
 "is false."
 msgstr ""
+"Některé kódové body mají různé glyfy a Pango určuje glyfy podle jazykového "
+"atributu. Pango vybírá glyfy z jazyka modulu IBus, pokud je hodnota true, a "
+"vybírá je z locale desktopu, pokud je hodnota false."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:250
-#, fuzzy
-#| msgid "Trigger shortcut keys for gtk_accelerator_parse"
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
-msgstr "Spouštěcí klávesové zkratky pro gtk_accelerator_parse"
+msgstr "Unicode klávesové zkratky pro gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:251
-#, fuzzy
-#| msgid "The shortcut keys for turning emoji typing on or off"
 msgid "The shortcut keys for turning Unicode typing on or off"
-msgstr "Klávesová zkratka pro zapínání a vypínání psaní emoji"
+msgstr "Klávesové zkratky pro zapnutí nebo vypnutí psaní v Unicode"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:255
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
@@ -458,7 +445,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:295
 msgid "Load the emoji data at the time of startup"
-msgstr ""
+msgstr "Načítat data emoji při spuštění"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:296
 msgid ""
@@ -466,10 +453,13 @@ msgid ""
 "needed to load the data. Load the emoji data when open the emoji dialog at "
 "the beginning if false."
 msgstr ""
+"Pokud je hodnota true, načtěte data emoji při spuštění. K načtení dat je "
+"potřeba přibližně 10 MB paměti. Pokud je hodnota false, načtěte data emoji "
+"při otevření dialogového okna emoji na začátku."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:300
 msgid "Load the Unicode data at the time of startup"
-msgstr ""
+msgstr "Načíst data Unicode při spuštění"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:301
 msgid ""
@@ -478,6 +468,10 @@ msgid ""
 "the beginning if false. The Unicode data is always loaded after the emoji "
 "data is loaded even if true."
 msgstr ""
+"Pokud je hodnota true, načtěte data Unicode při spuštění. K načtení dat je "
+"potřeba přibližně 15 MB paměti. Pokud je hodnota false, načtěte data Unicode "
+"při otevření dialogového okna emoji na začátku. Data Unicode se vždy načtou "
+"po načtení dat emoji, i když je hodnota true."
 
 #: ibus/_config.py.in:41
 msgid ""
@@ -510,7 +504,7 @@ msgstr "Více…"
 
 #: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1683
 msgid "About"
-msgstr "O programu"
+msgstr "O nás"
 
 #: setup/engineabout.py:40 setup/setup.ui:1488
 msgid "_Close"
@@ -542,7 +536,7 @@ msgstr "Vybrat metodu vstupu"
 #. add button
 #: setup/enginedialog.py:61 setup/keyboardshortcut.py:124 setup/setup.ui:676
 msgid "_Add"
-msgstr "_Přidat"
+msgstr "Přid_at"
 
 #. create im name & icon column
 #: setup/enginetreeview.py:69 setup/setup.ui:850
@@ -601,13 +595,6 @@ msgid "The IBus daemon is not running. Do you wish to start it?"
 msgstr "Démon IBus neběží. Přejete si jej spustit?"
 
 #: setup/main.py:610
-#, fuzzy
-#| msgid ""
-#| "IBus has been started! If you cannot use IBus, add the following lines to "
-#| "your $HOME/.bashrc; then relog into your desktop.\n"
-#| "  export GTK_IM_MODULE=ibus\n"
-#| "  export XMODIFIERS=@im=ibus\n"
-#| "  export QT_IM_MODULE=ibus"
 msgid ""
 "IBus has been started. If you cannot use IBus, add the following lines to "
 "your $HOME/.bashrc; then relog into your desktop.\n"
@@ -625,6 +612,12 @@ msgid ""
 msgstr ""
 "IBus byl spuštěn! Pokud nemůžete použít IBus, přidejte následující řádky do "
 "souboru $HOME/.bashrc. Poté se přihlaste na váš počítač.\n"
+"\n"
+"  export GTK_IM_MODULE=ibus\n"
+"  export XMODIFIERS=@im=ibus\n"
+"  export QT_IM_MODULE=ibus\n"
+"\n"
+"  # For X11 sessions ($XDG_SESSION_TYPE is \"x11\")\n"
 "  export GTK_IM_MODULE=ibus\n"
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
@@ -821,17 +814,13 @@ msgstr ""
 "za pomoci klávesové zkratky nebo kliknutím na ikonu panelu.</i></small>"
 
 #: setup/setup.ui:885
-#, fuzzy
-#| msgid "The shortcut keys for turning emoji typing on or off"
 msgid ""
 "The shortcut keys to enable conversions of emoji annotations or Unicode names"
-msgstr "Klávesová zkratka pro zapínání a vypínání psaní emoji"
+msgstr "Klávesové zkratky pro povolení převodu anotací emoji nebo názvů Unicode"
 
 #: setup/setup.ui:887
-#, fuzzy
-#| msgid "Emoji annotation language:"
 msgid "Emoji annotation:"
-msgstr "Jazyk anotací emoji:"
+msgstr "Anotace emoji:"
 
 #: setup/setup.ui:939
 #, fuzzy
@@ -3917,7 +3906,7 @@ msgstr ""
 
 #: ui/gtk3/panel.vala:1597
 msgid "translator-credits"
-msgstr "Kredit-překladatelům"
+msgstr "Jonáš Hubený (jonas@jonashubeny.dev)"
 
 #: ui/gtk3/panel.vala:1634
 msgid "Preferences"

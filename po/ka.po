@@ -10,9 +10,8 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.26\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2026-02-06 06:58+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2026-03-03 15:58+0000\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ka/>\n"
 "Language: ka\n"
@@ -20,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -84,7 +83,7 @@ msgstr "სისტემის კლავიატურის განლ�
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:91 setup/setup.ui:1225
 msgid "Use system keyboard (XKB) layout"
-msgstr ""
+msgstr "სისტემური კლავიატურის (XKB) განლაგების გამოყენება"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:95
 msgid "Embed Preedit Text"
@@ -489,7 +488,7 @@ msgstr "IBus-ის მორგება"
 
 #: setup/ibus-setup.desktop:3
 msgid "Set IBus Preferences"
-msgstr "IBus-ის მორგება"
+msgstr "IBus-ის პარამეტრების დაყენება"
 
 #: setup/keyboardshortcut.py:55
 msgid "Keyboard shortcuts"
@@ -2652,10 +2651,8 @@ msgstr "დევანაგარი გაფართოებული-A"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1021
-#, fuzzy
-#| msgid "Syriac Supplement"
 msgid "Sharada Supplement"
-msgstr "სირიულის შემცვლელი"
+msgstr "შარადას შემცვლელი"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2892,10 +2889,8 @@ msgstr ""
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1157
-#, fuzzy
-#| msgid "Mongolian Supplement"
 msgid "Tangut Components Supplement"
-msgstr "მონღოლური დამატებებით"
+msgstr "ტანგუტის კომპონენტების შემცვლელი"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2957,10 +2952,8 @@ msgstr ""
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1193
-#, fuzzy
-#| msgid "Miscellaneous Symbols"
 msgid "Miscellaneous Symbols Supplement"
-msgstr "სხვადასხვა სიმბოლოები"
+msgstr "სხვადასხვა სიმბოლოების შემცვლელი"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3092,10 +3085,8 @@ msgstr ""
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1269
-#, fuzzy
-#| msgid "Tai Le"
 msgid "Tai Yo"
-msgstr "ტაი ლე"
+msgstr "ტაი იო"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3318,10 +3309,8 @@ msgstr "CJK გაერთიანებული იდეოგრაფე�
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1397
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension J"
-msgstr "CJK გაერთიანებული იდეოგრაფების გაფართოება A"
+msgstr "CJK გაერთიანებული იდეოგრაფების გაფართოება J"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

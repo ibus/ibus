@@ -217,6 +217,7 @@ static gboolean     ibus_wayland_im_post_key           (IBusWaylandIM *wlim,
                                                         uint32_t
                                                                       modifiers,
                                                         uint32_t       state,
+                                                        xkb_keysym_t   sym,
                                                         gboolean
                                                                       filtered);
 
@@ -1178,6 +1179,7 @@ ibus_wayland_im_post_key (IBusWaylandIM *wlim,
                           uint32_t       key,
                           uint32_t       modifiers,
                           uint32_t       state,
+                          xkb_keysym_t   sym,
                           gboolean       filtered)
 {
     IBusWaylandIMPrivate *priv;
@@ -1202,6 +1204,25 @@ ibus_wayland_im_post_key (IBusWaylandIM *wlim,
     }
     if (!priv->state)
         return FALSE;
+    if (!filtered) {
+#if 0
+        /* FIXME: Need to confirm any modifiers should be ignored. */
+        if (!ibus_accelerator_valid (
+                    sym,
+                    modifiers & IBUS_MODIFIER_MASK & ~IBUS_SHIFT_MASK)) {
+            filtered = TRUE;
+        }
+#else
+        switch (sym) {
+        case IBUS_ISO_Level2_Latch:
+        case IBUS_ISO_Level3_Latch:
+        case IBUS_ISO_Level5_Latch:
+            filtered = TRUE;
+            break;
+        default:
+        }
+#endif
+    }
     if (!filtered && (state != WL_KEYBOARD_KEY_STATE_RELEASED)) {
         ch = xkb_state_key_get_utf32 (priv->state, code);
         if (!(modifiers & IBUS_MODIFIER_MASK & ~IBUS_SHIFT_MASK) &&
@@ -1260,6 +1281,7 @@ _process_key_event_done (GObject      *object,
                                            event->key,
                                            event->modifiers,
                                            event->state,
+                                           event->sym,
                                            retval);
     }
     /* Check retral from ibus_wayland_im_post_key() */
@@ -1345,6 +1367,7 @@ _process_key_event_sync (IBusWaylandIM       *wlim,
                                        event->key,
                                        event->modifiers,
                                        event->state,
+                                       event->sym,
                                        retval);
     if (!retval) {
         ibus_wayland_im_key (wlim,
@@ -1446,6 +1469,7 @@ _process_key_event_hybrid_async (IBusWaylandIM       *wlim,
                                                         event->key,
                                                         event->modifiers,
                                                         event->state,
+                                                        event->sym,
                                                         async_event->retval);
     }
     if (priv->ibuscontext && !async_event->retval) {
@@ -1640,6 +1664,7 @@ input_method_keyboard_key (void                      *data,
                                                     key,
                                                     priv->modifiers,
                                                     state,
+                                                    0,
                                                     FALSE);
         if (!retval)
             ibus_wayland_im_key (wlim, key_serial, time, key, state);

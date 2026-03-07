@@ -1,6 +1,6 @@
 # Indonesia translation of ibus.
 # Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (C) 2015-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # This file is distributed under the same license as the ibus package.
 #
 # Translators:

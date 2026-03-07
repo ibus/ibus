@@ -4,13 +4,13 @@
 # This file is distributed under the same license as the ibus package.
 #
 # Giannis Antypas <gianni.antypas@gmail.com>, 2024.
-# Jim Spentzos <jimspentzos2000@gmail.com>, 2025.
+# Jim Spentzos <jimspentzos2000@gmail.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2025-06-30 11:03+0000\n"
+"PO-Revision-Date: 2026-03-02 14:58+0000\n"
 "Last-Translator: Jim Spentzos <jimspentzos2000@gmail.com>\n"
 "Language-Team: Greek <https://translate.fedoraproject.org/projects/ibus/ibus/"
 "el/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -273,16 +273,16 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:208
 msgid "Use custom font"
-msgstr ""
+msgstr "Χρήση προσαρμοσμένης γραμματοσειράς"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:209
 msgid "Use custom font name for language panel"
-msgstr ""
+msgstr "Χρήση προσαρμοσμένου ονόματος γραμματοσειράς για τον πίνακα γλώσσας"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:213
 #: data/dconf/org.freedesktop.ibus.gschema.xml:260
 msgid "Custom font"
-msgstr ""
+msgstr "Προσαρμοσμένη γραμματοσειρά"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:214
 msgid "Custom font name for language panel"

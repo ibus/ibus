@@ -15,9 +15,9 @@
 # Michelle Kim <mkim33@gmail.com>, 2017. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
 # Young-Ho, Cha <ganadist at mizi.com>, 2003-2006. (gucharmap)
-# Changwoo Ryu <cwryu@debian.org>, 2007-2015. (gucharmap)
+# Changwoo Ryu <cwryu@debian.org>, 2007-2015. (gucharmap), 2026.
 # DaeHyun Sung <sungdh86@gmail.com>, 2016-2019. (gucharmap)
-# Changwoo Ryu <cwryu@debian.org>, 2019-2020.
+# Changwoo Ryu <cwryu@debian.org>, 2019-2020, 2026.
 # simmon <simmon@nplob.com>, 2021.
 # 김인수 <simmon@nplob.com>, 2022, 2023, 2024, 2025, 2026.
 msgid ""
@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2026-02-03 07:58+0000\n"
-"Last-Translator: 김인수 <simmon@nplob.com>\n"
+"PO-Revision-Date: 2026-03-01 07:58+0000\n"
+"Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ko/>\n"
 "Language: ko\n"
@@ -34,17 +34,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
 msgid "Preload engines"
-msgstr "이미-적재된 엔진"
+msgstr "엔진 미리 적재"
 
 #. Translators: Tooltip for the button “Preload Engines”
 #: data/dconf/org.freedesktop.ibus.gschema.xml:13
 msgid "Preload engines during ibus starts up"
-msgstr "ibus 시작 할 때에 이미 적재된 엔진"
+msgstr "ibus 시작 할 때에 엔진 미리 적재"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:17
 msgid "Engines order"
@@ -86,7 +86,7 @@ msgstr "ASCII가 없는 라틴 문자 키보드 배치"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:81
 msgid "US layout is appended to the Latin layouts. variant can be omitted."
 msgstr ""
-"US 키보드 배치가 라틴 문자 키보드 배치에 추가되었습니다. 변형 버전은 생략 될 "
+"US 키보드 배치가 라틴 문자 키보드 배치에 추가되었습니다. 변형 버전은 생략될 "
 "수 있습니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:85
@@ -346,9 +346,9 @@ msgid ""
 "if the value is true and chooses them from the desktop locale if the value "
 "is false."
 msgstr ""
-"일부 코드 포인트는 다른 글리프가 있고 Pango는 언어 속성에 따라 글리프를 결정"
-"합니다. Pango는 만약 값이 참이면 IBus 엔진의 언어에서 글리프를 선택하고 만약 "
-"값이 거짓이면 데스크톱 로케일에서 글리프를 선택합니다."
+"일부 코드 포인트는 다른 글리프가 있고 Pango는 언어 속성에 따라 글리프를 "
+"결정합니다. Pango는 만약 값이 참이면 IBus 엔진의 언어에서 글리프를 선택하고 "
+"만약 값이 거짓이면 데스크톱 로캘에서 글리프를 선택합니다."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:250
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -3551,23 +3551,23 @@ msgstr "\"direct\" 또는 \"kde-wayland\" 유형으로 데몬을 종료합니다
 
 #: tools/main.vala:908
 msgid "Read the system registry cache."
-msgstr "시스템 레지스트리 캐쉬를 읽어 들입니다."
+msgstr "시스템 레지스트리 캐시를 읽어 들입니다."
 
 #: tools/main.vala:910
 msgid "Read the registry cache FILE."
-msgstr "레지스트리 캐쉬 파일을 읽어 들입니다."
+msgstr "레지스트리 캐시 파일을 읽어 들입니다."
 
 #: tools/main.vala:928 tools/main.vala:933
 msgid "The registry cache is invalid.\n"
-msgstr "레지스트리 캐쉬가 잘못되었습니다.\n"
+msgstr "레지스트리 캐시가 잘못되었습니다.\n"
 
 #: tools/main.vala:949
 msgid "Write the system registry cache."
-msgstr "시스템 레지스트리 캐쉬를 씁니다."
+msgstr "시스템 레지스트리 캐시를 씁니다."
 
 #: tools/main.vala:951
 msgid "Write the registry cache FILE."
-msgstr "레지스트리 캐쉬 파일을 씁니다."
+msgstr "레지스트리 캐시 파일을 씁니다."
 
 #: tools/main.vala:989
 msgid ""
@@ -3614,11 +3614,11 @@ msgstr "버전 보기"
 
 #: tools/main.vala:1161
 msgid "Show the content of registry cache"
-msgstr "레지스트리 캐쉬의 내용 표시"
+msgstr "레지스트리 캐시의 내용 표시"
 
 #: tools/main.vala:1162
 msgid "Create registry cache"
-msgstr "레지스트리 캐쉬 생성"
+msgstr "레지스트리 캐시 생성"
 
 #: tools/main.vala:1163
 msgid "Print the D-Bus address of ibus-daemon"

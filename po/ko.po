@@ -19,13 +19,13 @@
 # DaeHyun Sung <sungdh86@gmail.com>, 2016-2019. (gucharmap)
 # Changwoo Ryu <cwryu@debian.org>, 2019-2020.
 # simmon <simmon@nplob.com>, 2021.
-# 김인수 <simmon@nplob.com>, 2022, 2023, 2024, 2025.
+# 김인수 <simmon@nplob.com>, 2022, 2023, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2025-10-01 15:53+0000\n"
+"PO-Revision-Date: 2026-02-03 07:58+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ko/>\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -589,13 +589,6 @@ msgid "The IBus daemon is not running. Do you wish to start it?"
 msgstr "IBus 데몬이 실행 중이 아닙니다. 시작하시겠습니까?"
 
 #: setup/main.py:610
-#, fuzzy
-#| msgid ""
-#| "IBus has been started! If you cannot use IBus, add the following lines to "
-#| "your $HOME/.bashrc; then relog into your desktop.\n"
-#| "  export GTK_IM_MODULE=ibus\n"
-#| "  export XMODIFIERS=@im=ibus\n"
-#| "  export QT_IM_MODULE=ibus"
 msgid ""
 "IBus has been started. If you cannot use IBus, add the following lines to "
 "your $HOME/.bashrc; then relog into your desktop.\n"
@@ -611,8 +604,16 @@ msgid ""
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
 msgstr ""
-"IBus를 시작했습니다! IBus를 사용 할 수 으면, 다음 행을 자신의 $HOME/.bashrc "
-"파일에 추가; 그런 후에 자신의 데스크탑에 다시 로그인하세요.\n"
+"IBus가 시작되었습니다. 만약 IBus를 사용 할 수 없으면, 다음 행을 자신의 $HOME/"
+".bashrc 에 추가하고; 그런 후에 자신의 데스크탑에 다시 로그인하세요.\n"
+"\n"
+"  # 웨이랜드 세션용 ($XDG_SESSION_TYPE is \"wayland\")\n"
+"  export GTK_IM_MODULE=wayland\n"
+"  export XMODIFIERS=@im=ibus\n"
+"  export QT_IM_MODULES=wayland;ibus\n"
+"  export QT_IM_MODULE=ibus\n"
+"\n"
+"  # X11 세션용 ($XDG_SESSION_TYPE is \"x11\")\n"
 "  export GTK_IM_MODULE=ibus\n"
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
@@ -2404,7 +2405,7 @@ msgstr "리디아 문자"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:813
 msgid "Sidetic"
-msgstr ""
+msgstr "시데틱 문자"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2788,10 +2789,8 @@ msgstr "데바나가리 확장영역-A"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1021
-#, fuzzy
-#| msgid "Syriac Supplement"
 msgid "Sharada Supplement"
-msgstr "시리아 문자 추가영역"
+msgstr "샤라다 문자 추가영역"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2834,7 +2833,7 @@ msgstr "건잘라 곤디 문자"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1045
 msgid "Tolong Siki"
-msgstr ""
+msgstr "툴롱 시키 문자"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2984,7 +2983,7 @@ msgstr "메데파이드린 문자"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1129
 msgid "Beria Erfe"
-msgstr ""
+msgstr "베리아 에르페 문자 (자가와어)"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3036,10 +3035,8 @@ msgstr "서하 문자 추가영역"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1157
-#, fuzzy
-#| msgid "Tangut Components"
 msgid "Tangut Components Supplement"
-msgstr "서하 문자 구성요소"
+msgstr "서하 문자 구성 추가영역"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3102,10 +3099,8 @@ msgstr "고전 컴퓨팅 제공용 기호 (1970~1980년대)"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1193
-#, fuzzy
-#| msgid "Miscellaneous Symbols"
 msgid "Miscellaneous Symbols Supplement"
-msgstr "여러가지 기호"
+msgstr "기타 기호 추가영역"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3239,10 +3234,8 @@ msgstr "올 오날(Bhumji 언어) 문자"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1269
-#, fuzzy
-#| msgid "Tai Le"
 msgid "Tai Yo"
-msgstr "타이레 문자"
+msgstr "타이요 문자"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3468,10 +3461,8 @@ msgstr "한중일 통합 한자 확장영역 H"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1397
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension J"
-msgstr "한중일 통합 한자 확장영역 A"
+msgstr "한중일 통합 한자 확장영역 J"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

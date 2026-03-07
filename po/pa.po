@@ -16,13 +16,13 @@
 # fujiwara <takao.fujiwara1@gmail.com>, 2015. #zanata
 # A S Alam <aalam@fedoraproject.org>, 2019. #zanata
 # A S Alam <amanpreet.alam@gmail.com>, 2022.
-# A S Alam <aalam@users.noreply.translate.fedoraproject.org>, 2023, 2024.
+# A S Alam <aalam@users.noreply.translate.fedoraproject.org>, 2023, 2024, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2024-03-04 15:36+0000\n"
+"PO-Revision-Date: 2026-02-11 11:58+0000\n"
 "Last-Translator: A S Alam <aalam@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Punjabi <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/pa/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -2681,10 +2681,8 @@ msgstr "ਦੇਵਨਾਗਰੀ ਵਧੀਕ-A"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1021
-#, fuzzy
-#| msgid "Syriac Supplement"
 msgid "Sharada Supplement"
-msgstr "ਸੀਰੀਆਈ ਵਧੀਕ"
+msgstr "ਸ਼ਾਰਦਾ ਵਧੀਕ"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2990,10 +2988,8 @@ msgstr "ਪੁਰਾਤਨ ਕੰਪਿਊਟਿੰਗ ਲਈ ਚਿੰਨ੍ਹ
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1193
-#, fuzzy
-#| msgid "Miscellaneous Symbols"
 msgid "Miscellaneous Symbols Supplement"
-msgstr "ਫੁਟਕਲ ਚਿੰਨ੍ਹ"
+msgstr "ਫੁਟਕਲ ਚਿੰਨ੍ਹ ਸਹਾਇਕ"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3014,14 +3010,14 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1205
 msgid "Musical Symbols"
-msgstr ""
+msgstr "ਸੰਗੀਤ ਚਿੰਨ੍ਹ"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1209
 msgid "Ancient Greek Musical Notation"
-msgstr ""
+msgstr "ਪੁਰਾਤਨ ਯੂਨਾਨੀ ਸੰਗੀਤ ਚਿੰਨ੍ਹ"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3125,10 +3121,8 @@ msgstr ""
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1269
-#, fuzzy
-#| msgid "Tai Le"
 msgid "Tai Yo"
-msgstr "ਟਾਈ ਲੇ"
+msgstr "ਟਾਈ ਯੋ"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3394,7 +3388,7 @@ msgstr "IBus ਨਾਲ ਨਹੀਂ ਜੁੜ ਸਕਿਆ।\n"
 
 #: tools/main.vala:282 tools/main.vala:787
 msgid "IBus is running."
-msgstr ""
+msgstr "IBus ਚੱਲ ਰਹੀ ਹੈ।"
 
 #: tools/main.vala:446
 msgid "List engine name only"
@@ -3418,15 +3412,12 @@ msgid "Get global engine failed.\n"
 msgstr "ਗਲੋਬਲ ਇੰਜਣ ਫੇਲ ਹੋਇਆ।\n"
 
 #: tools/main.vala:709
-#, fuzzy
-#| msgid ""
-#| "Start or restart daemon with \"direct\", \"systemd\" or \"kde-wayland\" "
-#| "TYPE."
 msgid ""
 "Start or restart daemon with \"direct\", \"systemd\", \"kde-wayland\" or "
 "\"wayland\" TYPE."
 msgstr ""
-"\"direct\", \"systemd\" ਜਾਂ \"kde-wayland\" ਕਿਸਮ ਨਾਲ ਡੈਮਨ ਨੂੰ ਸ਼ੁਰੂ ਜਾਂ ਮੁੜ ਸ਼ੁਰੂ ਕਰੋ।"
+"\"direct\", \"systemd\", \"kde-wayland\" ਜਾਂ \"wayland\" ਕਿਸਮ ਨਾਲ ਡੈਮਨ ਨੂੰ ਸ਼ੁਰੂ ਜਾਂ "
+"ਮੁੜ ਸ਼ੁਰੂ ਕਰੋ।"
 
 #: tools/main.vala:713
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."

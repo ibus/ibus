@@ -27,13 +27,14 @@
 # Adolfo Jayme Barrientos <fitoschido@gmail.com>, 2020.
 # Javier Francisco <fserrador@gmail.com>, 2025.
 # "Fco. Javier F. Serrador" <fserrador@gmail.com>, 2025.
+# Robbie Williams <possiblybob@proton.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2025-06-28 08:31+0000\n"
-"Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
+"PO-Revision-Date: 2026-02-17 21:58+0000\n"
+"Last-Translator: Robbie Williams <possiblybob@proton.me>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/es/>\n"
 "Language: es\n"
@@ -41,7 +42,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.16\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -617,13 +618,6 @@ msgid "The IBus daemon is not running. Do you wish to start it?"
 msgstr "El demonio IBus no se está ejecutando. ¿Desea iniciarlo?"
 
 #: setup/main.py:610
-#, fuzzy
-#| msgid ""
-#| "IBus has been started! If you cannot use IBus, add the following lines to "
-#| "your $HOME/.bashrc; then relog into your desktop.\n"
-#| "  export GTK_IM_MODULE=ibus\n"
-#| "  export XMODIFIERS=@im=ibus\n"
-#| "  export QT_IM_MODULE=ibus"
 msgid ""
 "IBus has been started. If you cannot use IBus, add the following lines to "
 "your $HOME/.bashrc; then relog into your desktop.\n"
@@ -641,6 +635,13 @@ msgid ""
 msgstr ""
 "¡IBus fue iniciado! Sin no puede usar IBus, agregue las siguientes líneas a "
 "su $HOME/.bashrc; luego vuelga a ingresar a su cuenta.\n"
+"  # Para sesiones Wayland ($XDG_SESSION_TYPE es \"wayland\")\n"
+"  export GTK_IM_MODULE=wayland\n"
+"  export XMODIFIERS=@im=ibus\n"
+"  export QT_IM_MODULES=wayland;ibus\n"
+"  export QT_IM_MODULE=ibus\n"
+"\n"
+"  # Para sesiones X11 ($XDG_SESSION_TYPE es \"x11\")\n"
 "  export GTK_IM_MODULE=ibus\n"
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"

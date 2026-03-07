@@ -15,14 +15,14 @@
 # Mateus de Melo Santos <mateusms@tutanota.com>, 2017. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2018. #zanata
 # Cássio Rodrigo Honorato Rodrigues <cassiorhr@outlook.com>, 2019. #zanata
-# Rafael Fontenelle <rafaelff@gnome.org>, 2020, 2024, 2025.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2020, 2024, 2025, 2026.
 # Henrique Roberto Gattermann Mittelstaedt <henrique.roberto97@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2025-06-26 02:25+0000\n"
+"PO-Revision-Date: 2026-02-17 21:58+0000\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/pt_BR/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.16\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -605,13 +605,6 @@ msgid "The IBus daemon is not running. Do you wish to start it?"
 msgstr "O daemon IBus não está em execução. Você deseja iniciá-lo?"
 
 #: setup/main.py:610
-#, fuzzy
-#| msgid ""
-#| "IBus has been started! If you cannot use IBus, add the following lines to "
-#| "your $HOME/.bashrc; then relog into your desktop.\n"
-#| "  export GTK_IM_MODULE=ibus\n"
-#| "  export XMODIFIERS=@im=ibus\n"
-#| "  export QT_IM_MODULE=ibus"
 msgid ""
 "IBus has been started. If you cannot use IBus, add the following lines to "
 "your $HOME/.bashrc; then relog into your desktop.\n"
@@ -627,12 +620,20 @@ msgid ""
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
 msgstr ""
-"O IBus foi iniciado! Se você não puder utilizar o IBus, adicione as "
-"seguintes linhas ao seu $HOME/.bashrc; depois autentique-se novamente no seu "
+"O IBus foi iniciado! Se você não conseguir utilizar o IBus, adicione as "
+"seguintes linhas ao seu $HOME/.bashrc; depois faça o login novamente no seu "
 "desktop.\n"
-"export GTK_IM_MODULE=ibus\n"
-"export XMODIFIERS=@im=ibus\n"
-"export QT_IM_MODULE=ibus"
+"\n"
+"  # Para sessões Wayland ($XDG_SESSION_TYPE é \"wayland\")\n"
+"  export GTK_IM_MODULE=wayland\n"
+"  export XMODIFIERS=@im=ibus\n"
+"  export QT_IM_MODULES=wayland;ibus\n"
+"  export QT_IM_MODULE=ibus\n"
+"\n"
+"  # Para sessões X11 ($XDG_SESSION_TYPE é \"x11\")\n"
+"  export GTK_IM_MODULE=ibus\n"
+"  export XMODIFIERS=@im=ibus\n"
+"  export QT_IM_MODULE=ibus"
 
 #. Translators: %d == 5 currently
 #: setup/main.py:633
@@ -2418,7 +2419,7 @@ msgstr "Lídio"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:813
 msgid "Sidetic"
-msgstr ""
+msgstr "Sidético"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2781,10 +2782,8 @@ msgstr "Devanágari estendido-A"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1021
-#, fuzzy
-#| msgid "Syriac Supplement"
 msgid "Sharada Supplement"
-msgstr "Suplemento siríaco"
+msgstr "Suplemento Sharada"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2826,7 +2825,7 @@ msgstr "Gunjala Gondi"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1045
 msgid "Tolong Siki"
-msgstr ""
+msgstr "Tolong Siki"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2973,7 +2972,7 @@ msgstr "Medefaidrin"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1129
 msgid "Beria Erfe"
-msgstr ""
+msgstr "Beria Erfe"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3021,10 +3020,8 @@ msgstr "Suplemento tangut"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1157
-#, fuzzy
-#| msgid "Tangut Components"
 msgid "Tangut Components Supplement"
-msgstr "Componentes tangut"
+msgstr "Componentes tangut suplementares"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3080,25 +3077,21 @@ msgstr "Controles de formato de taquigrafia"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1189
 msgid "Symbols for Legacy Computing Supplement"
-msgstr ""
+msgstr "Símbolos para suplemento de computação legada"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1193
-#, fuzzy
-#| msgid "Miscellaneous Symbols"
 msgid "Miscellaneous Symbols Supplement"
-msgstr "Símbolos Variados"
+msgstr "Símbolos diversos suplementares"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1197
-#, fuzzy
-#| msgid "Ancient Greek Musical Notation"
 msgid "Znamenny Musical Notation"
-msgstr "Notação musical grega antiga"
+msgstr "Notação musical Znamenny"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3125,10 +3118,8 @@ msgstr "Notação musical grega antiga"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1213
-#, fuzzy
-#| msgid "Mayan Numerals"
 msgid "Kaktovik Numerals"
-msgstr "Numeração maia"
+msgstr "Numeração Kaktovik"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3169,10 +3160,8 @@ msgstr "Escrita de sinais Sutton"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1237
-#, fuzzy
-#| msgid "Latin Extended-A"
 msgid "Latin Extended-G"
-msgstr "Latim estendido A"
+msgstr "Latim estendido G"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3185,10 +3174,8 @@ msgstr "Suplemento glagolítico"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1245
-#, fuzzy
-#| msgid "Cyrillic Extended-C"
 msgid "Cyrillic Extended-D"
-msgstr "Cirílico estendido C"
+msgstr "Cirílico estendido D"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3202,7 +3189,7 @@ msgstr "Nyiakeng Puachue Hmong"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1253
 msgid "Toto"
-msgstr ""
+msgstr "Toto"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3216,32 +3203,28 @@ msgstr "Wancho"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1261
 msgid "Nag Mundari"
-msgstr ""
+msgstr "Nag Mundari"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1265
 msgid "Ol Onal"
-msgstr ""
+msgstr "Ol Onal"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1269
-#, fuzzy
-#| msgid "Tai Le"
 msgid "Tai Yo"
-msgstr "Tai Lü"
+msgstr "Tai Yo"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1273
-#, fuzzy
-#| msgid "Ethiopic Extended-A"
 msgid "Ethiopic Extended-B"
-msgstr "Etíope estendido-A"
+msgstr "Etíope estendido-B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3388,7 +3371,7 @@ msgstr "Símbolos e pictogramas estendidas-A"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1357
 msgid "Symbols for Legacy Computing"
-msgstr ""
+msgstr "Símbolos para computação legada"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3429,10 +3412,8 @@ msgstr "Ideogramas unificados CJK extensão F"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1381
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension I"
-msgstr "Ideogramas unificados CJK extensão A"
+msgstr "Ideogramas unificados CJK extensão I"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3445,28 +3426,22 @@ msgstr "Suplemento de ideogramas de compatibilidade CJK"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1389
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension G"
-msgstr "Ideogramas unificados CJK extensão A"
+msgstr "Ideogramas unificados CJK extensão G"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1393
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension H"
-msgstr "Ideogramas unificados CJK extensão A"
+msgstr "Ideogramas unificados CJK extensão H"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1397
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension J"
-msgstr "Ideogramas unificados CJK extensão A"
+msgstr "Ideogramas unificados CJK extensão J"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3500,6 +3475,8 @@ msgstr "Área de uso privado suplementar-B"
 msgid ""
 "Set im-module TYPE to \"gtk2\",  \"gtk3\" or \"gtk4\". Default is \"gtk3\"."
 msgstr ""
+"Define o TYPE do módulo de im para \"gtk2\", \"gtk3\" ou \"gtk4\". O padrão "
+"é \"gtk3\"."
 
 #: tools/main.vala:271 tools/main.vala:462 tools/main.vala:778
 #: tools/main.vala:887
@@ -3508,7 +3485,7 @@ msgstr "Não foi possível conectar ao IBus.\n"
 
 #: tools/main.vala:282 tools/main.vala:787
 msgid "IBus is running."
-msgstr ""
+msgstr "IBus está em execução."
 
 #: tools/main.vala:446
 msgid "List engine name only"
@@ -3536,18 +3513,20 @@ msgid ""
 "Start or restart daemon with \"direct\", \"systemd\", \"kde-wayland\" or "
 "\"wayland\" TYPE."
 msgstr ""
+"Inicia ou reinicia o daemon com TYPE \"direct\", \"systemd\", \"kde-"
+"wayland\" ou \"wayland\"."
 
 #: tools/main.vala:713
 msgid "Start or restart daemon with SYSTEMD_SERVICE file."
-msgstr ""
+msgstr "Inicia ou reinicia o daemon com o arquivo SYSTEMD_SERVICE."
 
 #: tools/main.vala:716 tools/main.vala:856
 msgid "Show debug messages."
-msgstr ""
+msgstr "Mostra mensagens de depuração."
 
 #: tools/main.vala:852
 msgid "Exit daemon with \"direct\" or \"kde-wayland\" TYPE."
-msgstr ""
+msgstr "Encerra o daemon com TYPE \"direct\" ou \"kde-wayland\"."
 
 #: tools/main.vala:908
 msgid "Read the system registry cache."
@@ -3606,10 +3585,8 @@ msgid "Restart ibus-daemon"
 msgstr "Reinicia o ibus-daemon"
 
 #: tools/main.vala:1159
-#, fuzzy
-#| msgid "Restart ibus-daemon"
 msgid "Start ibus-daemon"
-msgstr "Reinicia o ibus-daemon"
+msgstr "Inicia o ibus-daemon"
 
 #: tools/main.vala:1160 ui/gtk3/application.vala:363
 msgid "Show version"
@@ -3641,7 +3618,7 @@ msgstr "Salva emoji no diálogo para a área de transferência"
 
 #: tools/main.vala:1169
 msgid "Retrieve im-module value from GTK instance"
-msgstr ""
+msgstr "Recupera o valor do módulo de im da instância GTK"
 
 #: tools/main.vala:1171
 msgid "Show this information"
@@ -3666,22 +3643,20 @@ msgid "%s is unknown command!\n"
 msgstr "%s é um comando desconhecido!\n"
 
 #: ui/gtk3/application.vala:368
-#, fuzzy
-#| msgid "Select an input method"
 msgid "Connect Wayland input method protocol"
-msgstr "Selecione um método de entrada"
+msgstr "Conecta um método de entrada do protocolo Wayland"
 
 #: ui/gtk3/application.vala:372
 msgid "Execute ibus-daemon if it's not running"
-msgstr ""
+msgstr "Executa o ibus-daemon se ele não estiver em execução"
 
 #: ui/gtk3/application.vala:376
 msgid "ibus-daemon's arguments"
-msgstr ""
+msgstr "Argumentos do ibus-daemon"
 
 #: ui/gtk3/application.vala:380
 msgid "Verbose logging"
-msgstr ""
+msgstr "Registro log detalhado"
 
 #: ui/gtk3/emojier.vala:279
 msgid "Favorites"
@@ -3729,10 +3704,8 @@ msgid "Loading a Unicode dictionary:"
 msgstr "Carregando um dicionário Unicode:"
 
 #: ui/gtk3/emojier.vala:1292
-#, fuzzy
-#| msgid "Emoji annotation:"
 msgid "IBus Emoji initialization"
-msgstr "Anotações emoji:"
+msgstr "Inicialização de Emoji IBus"
 
 #: ui/gtk3/emojier.vala:1552
 #, c-format
@@ -3838,6 +3811,8 @@ msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
 msgstr ""
+"Você pode habilitar/desabilitar o menu de contexto clicando com o botão do "
+"meio do mouse no ícone do painel."
 
 #: ui/gtk3/panel.vala:1013
 #, c-format
@@ -3851,6 +3826,15 @@ msgid ""
 "you should make sure that QT_IM_MODULE and GTK_IM_MODULE environment "
 "variables are unset in the desktop session."
 msgstr ""
+"O IBus deve ser chamado a partir da sessão de área de trabalho em %s. Para o "
+"KDE, você pode executar o utilitário '%s', acessar \"Entrada e Saída\" -> "
+"\"Teclado\" -> seção \"Teclado Virtual\", selecionar o ícone \"%s\" e clicar "
+"no botão \"Aplicar\" para configurar o IBus em %s. Para outras sessões de "
+"área de trabalho, você pode executar o comando \"%s\". Consulte a "
+"documentação específica sobre a configuração do \"método de entrada "
+"Wayland\". Antes de configurar o \"método de entrada Wayland\", certifique-"
+"se de que as variáveis de ambiente QT_IM_MODULE e GTK_IM_MODULE estejam "
+"desabilitadas na sessão de área de trabalho."
 
 #: ui/gtk3/panel.vala:1038
 #, c-format
@@ -3859,6 +3843,9 @@ msgid ""
 "daemon --panel disable' should be executed as a child process of %s "
 "component."
 msgstr ""
+"Remova as variáveis de ambiente QT_IM_MODULE e GTK_IM_MODULE e execute o "
+"comando 'ibus-daemon --panel disable' como um processo filho do componente "
+"%s."
 
 #: ui/gtk3/panel.vala:1047
 #, c-format
@@ -3867,10 +3854,14 @@ msgid ""
 "is Xorg so the Wayland feature is disabled. You would be better off running "
 "ibus-daemon directly instead or %s without that option."
 msgstr ""
+"Parece que você está executando %s com a opção '--enable-wayland-im', mas "
+"seu servidor de exibição é o Xorg, então o recurso Wayland está "
+"desabilitado. Seria melhor executar o ibus-daemon diretamente ou %s sem essa "
+"opção."
 
 #: ui/gtk3/panel.vala:1063
 msgid "IBus Notification"
-msgstr ""
+msgstr "Notificação IBus"
 
 #: ui/gtk3/panel.vala:1422
 #, c-format
@@ -3878,18 +3869,25 @@ msgid ""
 "Your configured input method %s does not exist in IBus input methods so "
 "\"US\" layout was configured instead of your input method."
 msgstr ""
+"O método de entrada configurado (%s) não existe nos métodos de entrada do "
+"IBus, portanto, o layout \"US\" foi configurado em vez do seu método de "
+"entrada."
 
 #: ui/gtk3/panel.vala:1427
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
 msgstr ""
+"Pelo menos um dos seus métodos de entrada configurados não existe nos "
+"métodos de entrada do IBus."
 
 #: ui/gtk3/panel.vala:1430
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
 msgstr ""
+"Execute o comando `ibus-setup`, abra a aba \"Método de entrada\" e configure "
+"seus métodos de entrada novamente."
 
 #: ui/gtk3/panel.vala:1588
 msgid "IBus is an intelligent input bus for Linux/Unix."
@@ -3897,7 +3895,7 @@ msgstr "IBus é um barramento de entrada inteligente para o Linux/Unix."
 
 #: ui/gtk3/panel.vala:1593
 msgid "Maintainers"
-msgstr ""
+msgstr "Mantenedores"
 
 #: ui/gtk3/panel.vala:1597
 msgid "translator-credits"

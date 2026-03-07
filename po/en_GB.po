@@ -5,13 +5,13 @@
 #
 # Translators:
 # Steven Panek <Majora700@gmail.com>, 2011
-# Andi Chandler <andi@gowling.com>, 2023.
+# Andi Chandler <andi@gowling.com>, 2023, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2023-04-08 11:20+0000\n"
+"PO-Revision-Date: 2026-03-03 15:58+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English (United Kingdom) <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/en_GB/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -576,13 +576,6 @@ msgid "The IBus daemon is not running. Do you wish to start it?"
 msgstr "The IBus daemon is not running. Do you wish to start it?"
 
 #: setup/main.py:610
-#, fuzzy
-#| msgid ""
-#| "IBus has been started! If you cannot use IBus, add the following lines to "
-#| "your $HOME/.bashrc; then relog into your desktop.\n"
-#| "  export GTK_IM_MODULE=ibus\n"
-#| "  export XMODIFIERS=@im=ibus\n"
-#| "  export QT_IM_MODULE=ibus"
 msgid ""
 "IBus has been started. If you cannot use IBus, add the following lines to "
 "your $HOME/.bashrc; then relog into your desktop.\n"
@@ -598,18 +591,25 @@ msgid ""
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
 msgstr ""
-"IBus has been started! If you cannot use IBus, add the following lines to "
+"IBus has been started. If you cannot use IBus, add the following lines to "
 "your $HOME/.bashrc; then relog into your desktop.\n"
+"\n"
+"  # For Wayland sessions ($XDG_SESSION_TYPE is \"wayland\")\n"
+"  export GTK_IM_MODULE=wayland\n"
+"  export XMODIFIERS=@im=ibus\n"
+"  export QT_IM_MODULES=wayland;ibus\n"
+"  export QT_IM_MODULE=ibus\n"
+"\n"
+"  # For X11 sessions ($XDG_SESSION_TYPE is \"x11\")\n"
 "  export GTK_IM_MODULE=ibus\n"
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
 
 #. Translators: %d == 5 currently
 #: setup/main.py:633
-#, fuzzy, python-format
-#| msgid "IBus daemon could not be started in %d seconds"
+#, python-format
 msgid "IBus daemon could not be started in %d seconds."
-msgstr "IBus daemon could not be started in %d seconds"
+msgstr "IBus daemon could not be started in %d seconds."
 
 #: setup/main.py:645
 #, python-format
@@ -3661,10 +3661,9 @@ msgid "Has emoji variants"
 msgstr ""
 
 #: ui/gtk3/emojier.vala:1722 ui/gtk3/emojier.vala:1735
-#, fuzzy, c-format
-#| msgid "Description:\n"
+#, c-format
 msgid "Description: %s"
-msgstr "Description:\n"
+msgstr "Description: %s"
 
 #: ui/gtk3/emojier.vala:1722
 msgid "None"

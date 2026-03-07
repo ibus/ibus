@@ -95,6 +95,7 @@ struct _IBusWaylandSeat
     gboolean active;
     gboolean pending_activate;
     gboolean pending_deactivate;
+    gboolean has_keymap;
 };
 
 typedef struct _IBusWaylandIMPrivate IBusWaylandIMPrivate;
@@ -361,8 +362,14 @@ ibus_wayland_im_key (IBusWaylandIM *wlim,
                                          state);
         break;
     case INPUT_METHOD_V2:
-        zwp_virtual_keyboard_v1_key (priv->seat->virtual_keyboard,
-                                     time, key, state);
+        /* wlroots/types/wlr_virtual_keyboard_v1.c:virtual_keyboard_key()
+         * returns "Cannot send a keypress before defining a keymap"
+         * if `has_keymap` is %FALSE.
+         */
+        if (priv->seat->has_keymap) {
+            zwp_virtual_keyboard_v1_key (priv->seat->virtual_keyboard,
+                                         time, key, state);
+        }
         break;
     default:
         g_assert_not_reached ();
@@ -1110,9 +1117,17 @@ input_method_keyboard_keymap (void                      *data,
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
 
-    if (priv->version != INPUT_METHOD_V1) {
+    /* wlroots/types/wlr_virtual_keyboard_v1.c:virtual_keyboard_keymap()
+     * calls wl_client_post_no_memory(client) in case mmap() is failed with
+     * `size` = 0.
+     */
+    if (priv->version != INPUT_METHOD_V1 && size != 0) {
         zwp_virtual_keyboard_v1_keymap (priv->seat->virtual_keyboard,
                                         format, fd, size);
+        /* wlroots/types/wlr_virtual_keyboard_v1.c:virtual_keyboard_keymap()
+         * sets %TRUE to `has_keymap`.
+         */
+        priv->seat->has_keymap = TRUE;
     }
     if (priv->keymap && priv->state && priv->state_system)
         return;
@@ -1711,9 +1726,15 @@ input_method_keyboard_modifiers (void                      *data,
                                                mods_locked, group);
         break;
     case INPUT_METHOD_V2:
-        zwp_virtual_keyboard_v1_modifiers (priv->seat->virtual_keyboard,
-                                           mods_depressed, mods_latched,
-                                           mods_locked, group);
+        /* wlroots/types/wlr_virtual_keyboard_v1.c:virtual_keyboard_modifiers()
+         * returns "Cannot send a modifier state before defining a keymap"
+         * if `has_keymap` is %FALSE.
+         */
+        if (priv->seat->has_keymap) {
+            zwp_virtual_keyboard_v1_modifiers (priv->seat->virtual_keyboard,
+                                               mods_depressed, mods_latched,
+                                               mods_locked, group);
+        }
         break;
     default:
         g_assert_not_reached ();
@@ -1901,10 +1922,8 @@ _create_input_context_done (GObject      *object,
     priv = ibus_wayland_im_get_instance_private (wlim);
     context = ibus_bus_create_input_context_async_finish (
             priv->ibusbus, res, &error);
-    if (priv->cancellable != NULL) {
-        g_object_unref (priv->cancellable);
-        priv->cancellable = NULL;
-    }
+    if (priv->cancellable != NULL)
+        g_clear_object (&priv->cancellable);
 
     if (context == NULL) {
         g_warning ("Create input context failed: %s.", error->message);
@@ -1993,6 +2012,10 @@ input_method_activate (void                               *data,
         priv->seat->virtual_keyboard =
                 zwp_virtual_keyboard_manager_v1_create_virtual_keyboard (
                         _virtual_keyboard_manager, priv->seat->seat);
+        /* Regenerating `virtual_keyboard` causes `size` = 0 in
+         * input_method_keyboard_keymap() with focus changes in Sway session.
+         */
+        priv->seat->has_keymap = FALSE;
         priv->seat->keyboard_v2 = zwp_input_method_v2_grab_keyboard (
                 input_method->u.input_method_v2);
         zwp_input_method_keyboard_grab_v2_add_listener (

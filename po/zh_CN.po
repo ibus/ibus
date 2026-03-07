@@ -21,16 +21,15 @@
 # Whired Planck <fungdaat31@outlook.com>, 2020.
 # Dingzhong Chen <wsxy162@gmail.com>, 2021.
 # Liu Tao <lyuutau@outlook.com>, 2021, 2023.
-# lumingzh <lumingzh@qq.com>, 2025.
+# lumingzh <lumingzh@qq.com>, 2025, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2025-09-23 02:53+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2026-02-28 01:58+0000\n"
+"Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -38,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -576,13 +575,6 @@ msgid "The IBus daemon is not running. Do you wish to start it?"
 msgstr "IBus 守护进程尚未运行。您希望启动它吗？"
 
 #: setup/main.py:610
-#, fuzzy
-#| msgid ""
-#| "IBus has been started! If you cannot use IBus, add the following lines to "
-#| "your $HOME/.bashrc; then relog into your desktop.\n"
-#| "  export GTK_IM_MODULE=ibus\n"
-#| "  export XMODIFIERS=@im=ibus\n"
-#| "  export QT_IM_MODULE=ibus"
 msgid ""
 "IBus has been started. If you cannot use IBus, add the following lines to "
 "your $HOME/.bashrc; then relog into your desktop.\n"
@@ -598,8 +590,16 @@ msgid ""
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
 msgstr ""
-"IBus 已经启动！如果您无法使用 IBus，添加以下行至 $HOME/.bashrc；然后重新登录"
+"IBus 已经启动。如果您无法使用 IBus，添加以下行至 $HOME/.bashrc，然后重新登录"
 "您的桌面。\n"
+"\n"
+"  # For Wayland sessions ($XDG_SESSION_TYPE is \"wayland\")\n"
+"  export GTK_IM_MODULE=wayland\n"
+"  export XMODIFIERS=@im=ibus\n"
+"  export QT_IM_MODULES=wayland;ibus\n"
+"  export QT_IM_MODULE=ibus\n"
+"\n"
+"  # For X11 sessions ($XDG_SESSION_TYPE is \"x11\")\n"
 "  export GTK_IM_MODULE=ibus\n"
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
@@ -2363,7 +2363,7 @@ msgstr "吕底亚文"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:813
 msgid "Sidetic"
-msgstr ""
+msgstr "锡迪亚文"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2726,10 +2726,8 @@ msgstr "天城文扩展-A"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1021
-#, fuzzy
-#| msgid "Syriac Supplement"
 msgid "Sharada Supplement"
-msgstr "叙利亚文补充"
+msgstr "夏拉达文补充"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2771,7 +2769,7 @@ msgstr "贡贾拉贡德文"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1045
 msgid "Tolong Siki"
-msgstr ""
+msgstr "托隆希基文"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2918,7 +2916,7 @@ msgstr "梅德法伊德林文"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1129
 msgid "Beria Erfe"
-msgstr ""
+msgstr "贝里亚埃尔菲文"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2966,10 +2964,8 @@ msgstr "西夏文补充"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1157
-#, fuzzy
-#| msgid "Tangut Components"
 msgid "Tangut Components Supplement"
-msgstr "西夏文偏旁"
+msgstr "西夏文偏旁补充"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3031,10 +3027,8 @@ msgstr "传统计算符号补充"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1193
-#, fuzzy
-#| msgid "Miscellaneous Symbols"
 msgid "Miscellaneous Symbols Supplement"
-msgstr "杂项符号"
+msgstr "杂项符号补充"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3166,10 +3160,8 @@ msgstr "奥纳尔文"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1269
-#, fuzzy
-#| msgid "Tai Le"
 msgid "Tai Yo"
-msgstr "傣仂文"
+msgstr "傣月文"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3392,10 +3384,8 @@ msgstr "中日韩统一表意文字扩展 H"
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1397
-#, fuzzy
-#| msgid "CJK Unified Ideographs Extension A"
 msgid "CJK Unified Ideographs Extension J"
-msgstr "中日韩统一表意文字扩展 A"
+msgstr "中日韩统一表意文字扩展 J"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

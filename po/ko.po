@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2026-03-01 07:58+0000\n"
-"Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
+"PO-Revision-Date: 2026-03-07 05:58+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ko/>\n"
 "Language: ko\n"
@@ -34,17 +34,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16.1\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
 msgid "Preload engines"
-msgstr "엔진 미리 적재"
+msgstr "이미 적재된 엔진"
 
 #. Translators: Tooltip for the button “Preload Engines”
 #: data/dconf/org.freedesktop.ibus.gschema.xml:13
 msgid "Preload engines during ibus starts up"
-msgstr "ibus 시작 할 때에 엔진 미리 적재"
+msgstr "ibus 시작 할 때에 이미 적재된 엔진"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:17
 msgid "Engines order"
@@ -3573,8 +3573,7 @@ msgstr "레지스트리 캐시 파일을 씁니다."
 msgid ""
 "Use engine schema paths instead of ibus core, which can be comma-separated "
 "values."
-msgstr ""
-"IBus 코어 대신 엔진 스키마 경로를 사용합니다. 쉼표로 구분한 경로 값 목록."
+msgstr "IBus 코어 대신 엔진 스키마 경로를 사용하며, 쉼표로 구분된 값일 수 있습니다."
 
 #: tools/main.vala:1078
 msgid "Resetting…"

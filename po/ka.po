@@ -4,14 +4,15 @@
 # This file is distributed under the same license as the ibus package.
 #
 # Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2022, 2023, 2024, 2025.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.26\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2025-03-04 13:53+0000\n"
-"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"PO-Revision-Date: 2026-01-21 11:58+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/ka/>\n"
 "Language: ka\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -79,7 +80,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:90 setup/setup.ui:1220
 msgid "Use system keyboard layout"
-msgstr ""
+msgstr "აშშ კლავიატურის განლაგების გამოყენება"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:91 setup/setup.ui:1225
 msgid "Use system keyboard (XKB) layout"
@@ -482,7 +483,7 @@ msgstr "შეტანის მეთოდი"
 
 #: setup/ibus-setup.desktop:2 setup/setup.ui:81
 msgid "IBus Preferences"
-msgstr ""
+msgstr "IBus-ის ცხრილის პარამეტრები"
 
 #: setup/ibus-setup.desktop:3
 msgid "Set IBus Preferences"
@@ -515,6 +516,8 @@ msgid ""
 "Please press a key (or a key combination).\n"
 "The dialog will be closed when the key is released."
 msgstr ""
+"დააჭირეთ ღილაკს (ან მათ კომბინაციას).\n"
+"დიალოგი დაიხურება, როცა ღილაკს გაუშვებთ."
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
@@ -3113,7 +3116,7 @@ msgstr "დამატებით შემოსაზღვრული ი�
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1289
 msgid "Miscellaneous Symbols and Pictographs"
-msgstr ""
+msgstr "სხვადასხვა სიმბოლოები და ისრები"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

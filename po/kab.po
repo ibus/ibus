@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2026-01-30 18:58+0000\n"
+"PO-Revision-Date: 2026-02-09 14:58+0000\n"
 "Last-Translator: ButterflyOfFire "
 "<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/ibus/"
@@ -254,11 +254,11 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:208
 msgid "Use custom font"
-msgstr ""
+msgstr "Seqdec tasefsit tudmawant"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:209
 msgid "Use custom font name for language panel"
-msgstr ""
+msgstr "Seqdec tasefsit tudmawant i ugalis utlayan"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:213
 #: data/dconf/org.freedesktop.ibus.gschema.xml:260
@@ -271,11 +271,11 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
 msgid "Use custom theme"
-msgstr ""
+msgstr "Seqdec asentel udmawan"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:219
 msgid "Use custom theme name for language panel"
-msgstr ""
+msgstr "Seqdec asentel udmawan i ugalis utlayan"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
 msgid "Custom theme"
@@ -287,7 +287,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:228
 msgid "Use custom icon"
-msgstr ""
+msgstr "Seqdec tignit tudmawant"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:229
 msgid "Use custom icon name for arrow buttons on candidate window"
@@ -492,11 +492,11 @@ msgstr ""
 
 #: setup/keyboardshortcut.py:55
 msgid "Keyboard shortcuts"
-msgstr ""
+msgstr "Inegzumen n unasiw"
 
 #: setup/keyboardshortcut.py:67
 msgid "Key code:"
-msgstr ""
+msgstr "Angal n tqeffalt:"
 
 #: setup/keyboardshortcut.py:82
 msgid "Modifiers:"
@@ -593,11 +593,11 @@ msgstr "Yugen"
 
 #: setup/setup.ui:48
 msgid "Do not show"
-msgstr ""
+msgstr "Ur-d skan ara"
 
 #: setup/setup.ui:51
 msgid "Hide automatically"
-msgstr ""
+msgstr "Ffer-it s wudem awurman"
 
 #: setup/setup.ui:54
 msgid "Always"
@@ -609,7 +609,7 @@ msgstr ""
 
 #: setup/setup.ui:127
 msgid "Next input method:"
-msgstr ""
+msgstr "Tarrayt n usekcem tudfiṛt:"
 
 #: setup/setup.ui:139
 msgid "The shortcut keys for switching to previous input method in the list"
@@ -617,7 +617,7 @@ msgstr ""
 
 #: setup/setup.ui:141
 msgid "Previous input method:"
-msgstr ""
+msgstr "Tarrayt n usekcem tuzwirt:"
 
 #: setup/setup.ui:169 setup/setup.ui:211 setup/setup.ui:278 setup/setup.ui:331
 #: setup/setup.ui:915 setup/setup.ui:969
@@ -626,7 +626,7 @@ msgstr "..."
 
 #: setup/setup.ui:238
 msgid "Enable or disable:"
-msgstr ""
+msgstr "Sermed / Kkes armad:"
 
 #: setup/setup.ui:250
 msgid "Enable:"
@@ -638,7 +638,7 @@ msgstr "Kkes armad:"
 
 #: setup/setup.ui:357 setup/setup.ui:995
 msgid "<b>Keyboard Shortcuts</b>"
-msgstr ""
+msgstr "<b>Inegzumen n unasiw</b>"
 
 #: setup/setup.ui:386
 msgid "Set the orientation of candidates in lookup table"
@@ -758,7 +758,7 @@ msgstr ""
 
 #: setup/setup.ui:1027
 msgid "Unicode font:"
-msgstr ""
+msgstr "Tasefsit n Unicode:"
 
 #: setup/setup.ui:1050
 msgid "Set a language of emoji annotations on the emoji dialog"
@@ -820,7 +820,7 @@ msgstr ""
 
 #: setup/setup.ui:1378
 msgid "Use custom icon:"
-msgstr ""
+msgstr "Seqdec tignit tudmawant:"
 
 #: setup/setup.ui:1379
 msgid "Choose a theme of the arrow buttons on the candidate window"
@@ -828,7 +828,7 @@ msgstr ""
 
 #: setup/setup.ui:1424
 msgid "<b>Font and Theme</b>"
-msgstr ""
+msgstr "<b>Tasefsit akked usentel</b>"
 
 #: setup/setup.ui:1444
 msgid "Advanced"
@@ -1621,7 +1621,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:433
 msgid "Tifinagh"
-msgstr ""
+msgstr "Tifinaɣ"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3435,7 +3435,7 @@ msgstr ""
 
 #: tools/main.vala:1156
 msgid "Show available engines"
-msgstr ""
+msgstr "Sken-d imsaddayen yellan"
 
 #: tools/main.vala:1157
 msgid "(Not implemented)"
@@ -3451,7 +3451,7 @@ msgstr ""
 
 #: tools/main.vala:1160 ui/gtk3/application.vala:363
 msgid "Show version"
-msgstr ""
+msgstr "Sken-d lqem"
 
 #: tools/main.vala:1161
 msgid "Show the content of registry cache"
@@ -3527,7 +3527,7 @@ msgstr "Wiyyaḍ"
 
 #: ui/gtk3/emojier.vala:281
 msgid "Open Unicode choice"
-msgstr ""
+msgstr "Ldi tafrayt Unicode"
 
 #: ui/gtk3/emojier.vala:1079
 msgid "Bring back emoji choice"
@@ -3578,7 +3578,7 @@ msgstr ""
 #: ui/gtk3/emojier.vala:1722 ui/gtk3/emojier.vala:1735
 #, c-format
 msgid "Description: %s"
-msgstr ""
+msgstr "Aglam: %s"
 
 #: ui/gtk3/emojier.vala:1722
 msgid "None"
@@ -3592,7 +3592,7 @@ msgstr ""
 #: ui/gtk3/emojier.vala:1772
 #, c-format
 msgid "Name: %s"
-msgstr ""
+msgstr "Isem: %s"
 
 #: ui/gtk3/emojier.vala:1780
 #, c-format
@@ -3659,7 +3659,7 @@ msgstr ""
 
 #: ui/gtk3/panel.vala:442 ui/gtk3/panel.vala:465
 msgid "IBus Panel"
-msgstr ""
+msgstr "Agalis n IBus"
 
 #: ui/gtk3/panel.vala:443
 msgid ""

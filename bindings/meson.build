@@ -1,4 +1,4 @@
-if enable_vapigen
+if enable_vapi
   subdir('vala')
 endif
 

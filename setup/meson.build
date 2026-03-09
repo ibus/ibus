@@ -6,7 +6,7 @@ ibus_setup = configure_file(
     'datarootdir': get_option('prefix') / get_option('datadir'),
     'localedir': get_option('prefix') / get_option('localedir'),
     'libexecdir': get_option('prefix') / get_option('libexecdir'),
-    'PYTHON': python.find_installation().path(),
+    'PYTHON': python.full_path(),
   },
   install_dir: get_option('bindir'),
   install_mode: 'rwxr-xr-x',

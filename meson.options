@@ -16,27 +16,28 @@ option('wayland',
 option('appindicator',
   type: 'boolean',
   value: true,
-  description: 'Build appindicator support',
+  description: 'Build Appindicator support',
 )
 option('engine',
   type: 'boolean',
   value: true,
-  description: 'Build ibus simple engine',
+  description: 'Build IBus simple engine',
 )
 option('ui',
   type: 'boolean',
   value: true,
-  description: 'Build ibus default user interface',
+  description: 'Build IBus default panel interface',
 )
 option('socket-dir',
   type: 'string',
   value: '',
-  description: 'The socket directory to connect ibus-daemon with D-Bus connections (default: "$XDG_CACHE_HOME/ibus", or "/tmp" on BSD systems.',
+  description: 'The socket directory to connect ibus-daemon with D-Bus ' +
+    'connections (default: "$XDG_CACHE_HOME/ibus", or "/tmp" on BSD systems.',
 )
 option('setup',
   type: 'boolean',
   value: true,
-  description: 'Install the ibus setup UI',
+  description: 'Install the IBus setup UI',
 )
 # Supported GTK versions
 option('gtk2',
@@ -47,27 +48,46 @@ option('gtk2',
 option('gtk2-im-module-dir',
   type: 'string',
   value: '',
-  description: 'Path to a custom GTK2 immodule dir (if empty, uses the default)',
+  description:
+    'Path to a GTK2 immodule directory (if empty, uses the default)',
 )
 option('gtk3',
-  type: 'feature',
-  value: 'auto',
+  type: 'boolean',
+  value: true,
   description: 'Build GTK3 IM Module',
 )
 option('gtk3-im-module-dir',
   type: 'string',
   value: '',
-  description: 'Path to a custom GTK3 immodule dir (if empty, uses the default)',
+  description:
+    'Path to a GTK3 immodule directory (if empty, uses the default)',
 )
 option('gtk4',
-  type: 'feature',
-  value: 'auto',
+  type: 'boolean',
+  value: true,
   description: 'Build GTK4 IM Module',
 )
 option('gtk4-im-module-dir',
   type: 'string',
   value: '',
-  description: 'Path to a custom GTK4 immodule dir (if empty, uses the default)',
+  description:
+    'Path to a GTK4 immodule directory (if empty, uses the default)',
+)
+option('x11-localedata-dir',
+  type: 'string',
+  value: '',
+  description:
+    'Path to an X11 localedata directory (if empty, uses the default)',
+)
+option('systemd-services',
+  type: 'feature',
+  value: 'auto',
+  description: 'Build IBus systemd service files',
+)
+option('libnotify',
+  type: 'boolean',
+  value: true,
+  description: 'Build with libnotify'
 )
 # Configuration
 option('memconf',
@@ -78,13 +98,13 @@ option('memconf',
 option('dconf',
   type: 'feature',
   value: 'auto',
-  description: 'Perform configure based on dconf',
+  description: 'Perform configure based on DConf',
 )
 # Emoji / Unicode
 option('emoji-dict',
   type: 'boolean',
   value: true,
-  description: 'Build Emoji dict files',
+  description: 'Build Emoji dictionary files',
 )
 option('unicode-dict',
   type: 'boolean',
@@ -110,7 +130,7 @@ option('emoji-annotation-dir',
 option('snooper',
   type: 'boolean',
   value: true,
-  description: 'Enable key snooper in GTK IM module',
+  description: 'Enable key snooper in GTK IM modules',
 )
 option('no-snooper-apps',
   type: 'array',
@@ -123,18 +143,13 @@ option('no-snooper-apps',
   description: 'Disable key snooper in these applications',
 )
 # Bindings
-option('vapigen',
-  type: 'feature',
-  value: 'auto',
-  description: 'Build with vapigen support',
-)
-option('pygobject',
-  type: 'feature',
-  value: 'auto',
-  description: 'Build with pygobject support',
-)
-option('python2_lib',
+option('introspection',
   type: 'boolean',
-  value: false,
-  description: 'Build ibus Python 2 library'
+  value: true,
+  description: 'Build GObject introspection files',
+)
+option('vapi',
+  type: 'feature',
+  value: 'auto',
+  description: 'Build VAPI files',
 )

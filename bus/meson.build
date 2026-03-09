@@ -19,6 +19,7 @@ ibus_daemon_sources = files(
 ibus_daemon_marshalers = gnome.genmarshal('marshalers',
   prefix: 'bus_marshal',
   sources: 'marshalers.list',
+  valist_marshallers: true,
 )
 
 ibus_daemon_deps = [
@@ -42,7 +43,6 @@ ibus_daemon = executable('ibus-daemon',
 
 # Tests
 if get_option('tests')
-
   ibus_daemon_tests = [
     {
       'name': 'test-matchrule',
@@ -71,11 +71,12 @@ if get_option('tests')
       include_directories: config_h_inc,
     )
 
+    if enable_run_tests
     test(_test['name'], test_bin,
-      suite: 'ibus-daemon',
+      suite: 'bus',
     )
+    endif
   endforeach
-
 endif
 
 # manpages
@@ -89,14 +90,4 @@ configure_file(
   install_dir: get_option('mandir') / 'man1',
 )
 
-# D-Bus service file
-configure_file(
-  input: 'org.freedesktop.IBus.service.in',
-  output: '@BASENAME@',
-  configuration: {
-    'bindir': get_option('prefix') / get_option('bindir'),
-    'xim_cli_arg': enable_xim? '--xim' : '',
-  },
-  install: true,
-  install_dir: get_option('datadir') / 'dbus-1' / 'services',
-)
+subdir('services')

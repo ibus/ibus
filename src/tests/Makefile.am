@@ -3,7 +3,7 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2015 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2015-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # Copyright (c) 2007-2025 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
@@ -216,10 +216,12 @@ ibus_compose_SOURCES = ibus-compose.c
 if ENABLE_GTK4
 ibus_compose_CFLAGS = @GTK4_CFLAGS@
 ibus_compose_LDADD = $(prog_ldadd) @GTK4_LIBS@
+TESTS_ENVIRONMENT += TEST_GTK_VERSION=4
 else
 if ENABLE_GTK3
 ibus_compose_CFLAGS = @GTK3_CFLAGS@
 ibus_compose_LDADD = $(prog_ldadd) @GTK3_LIBS@
+TESTS_ENVIRONMENT += TEST_GTK_VERSION=3
 endif
 endif
 

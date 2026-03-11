@@ -1115,7 +1115,10 @@ input_method_keyboard_keymap (void                      *data,
     IBusWaylandIMPrivate *priv;
     struct xkb_keymap *keymap;
 
-    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    if (!IBUS_IS_WAYLAND_IM (wlim)) {
+        close (fd);
+        g_return_if_reached ();
+    }
     priv = ibus_wayland_im_get_instance_private (wlim);
 
     /* wlroots/types/wlr_virtual_keyboard_v1.c:virtual_keyboard_keymap()

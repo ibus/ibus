@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        container: ["fedora:42", "fedora:43", "ubuntu:jammy"]
+        container: ["fedora:43", "fedora:44", "ubuntu:jammy"]
     steps:
       - name: Check container sha tags
         run: |
@@ -26,26 +26,35 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - container: fedora:42
-            ucd_dir: /usr/share/unicode/ucd
-            latest_xkb: 0
-          - container: fedora:42
-            ucd_dir: /usr/share/unicode/ucd
-            test_config: '--disable-wayland'
-            latest_xkb: 0
-          - container: fedora:42
-            ucd_dir: /usr/share/unicode/ucd
-            test_config: '--disable-appindicator'
-            latest_xkb: 0
           - container: fedora:43
             ucd_dir: /usr/share/unicode/ucd
-            latest_xkb: 1
+            build: BUILD_AUTOTOOL
+          - container: fedora:43
+            ucd_dir: /usr/share/unicode/ucd
+            test_config: '--disable-wayland'
+            build: BUILD_AUTOTOOL
+          - container: fedora:43
+            ucd_dir: /usr/share/unicode/ucd
+            test_config: '--disable-appindicator'
+            build: BUILD_AUTOTOOL
+          - container: fedora:44
+            ucd_dir: /usr/share/unicode/ucd
+            build: BUILD_MESON
+            latest_xkb: KEEP_XKB_XML
+          - container: fedora:44
+            ucd_dir: /usr/share/unicode/ucd
+            build: BUILD_AUTOTOOL
+            latest_xkb: KEEP_XKB_XML
           - container: ubuntu:jammy
             ucd_dir: /usr/share/unicode
-            latest_xkb: 0
+            build: BUILD_AUTOTOOL
 
     container:
       image: ${{ matrix.container }}
+
+    env:
+      BUILD_AUTOTOOL: 0
+      BUILD_MESON: 1
 
     steps:
       - name: Install distro packages
@@ -56,7 +65,7 @@ jobs:
            strace
          # For make from
          # https://packages.ubuntu.com/search?searchon=sourcenames&keywords=ibus
-         UBUNTU_PACKAGES_MAKE: >
+         UBUNTU_PACKAGES_BUILD: >
            desktop-file-utils
            dbus-x11
            gobject-introspection
@@ -88,7 +97,7 @@ jobs:
            gir1.2-gnomedesktop-4.0
            libevdev-dev
            libudev-dev
-         FEDORA_PACKAGES_MAKE: >
+         FEDORA_PACKAGES_BUILD: >
            cldr-emoji-annotation
            dbus-glib-devel
            dbus-python-devel
@@ -113,6 +122,8 @@ jobs:
            vala
            wayland-devel
            wayland-protocols-devel
+         FEDORA_PACKAGES_MESON: >
+           meson
          # for gtkdoc-fixxref
          FEDORA_PACKAGES_GTKDOC: >
            glib2-doc
@@ -140,7 +151,7 @@ jobs:
             echo "apt-get install -q -y git"
             apt-get install -q -y git
             PACKAGES=$(echo "$UBUNTU_PACKAGES_AUTOGEN" | tr -d '\n')
-            PACKAGES=$(echo "$PACKAGES $UBUNTU_PACKAGES_MAKE" | tr -d '\n')
+            PACKAGES=$(echo "$PACKAGES $UBUNTU_PACKAGES_BUILD" | tr -d '\n')
             PACKAGES=$(echo "$PACKAGES $UBUNTU_PACKAGES_CI_KEY" | tr -d '\n')
             echo "apt-get install -y $PACKAGES"
             apt-get install -y $PACKAGES
@@ -156,10 +167,13 @@ jobs:
             # dbus-glib-devel, dconf-devel gtk*-devel should be rebuilt with
             # the latest pcre2 in Fedora 43.
             test "${{ matrix.container }}" = "fedora:43" && $DNF -y install pcre2-devel
-            PACKAGES=$(echo "$FEDORA_PACKAGES_MAKE" | tr -d '\n')
+            PACKAGES=$(echo "$FEDORA_PACKAGES_BUILD" | tr -d '\n')
             PACKAGES=$(echo "$PACKAGES $FEDORA_PACKAGES_GTKDOC" | tr -d '\n')
             PACKAGES=$(echo "$PACKAGES $FEDORA_PACKAGES_CI_KEY" | tr -d '\n')
             PACKAGES=$(echo "$PACKAGES $FEDORA_PACKAGES_DISTRO" | tr -d '\n')
+            if test $${{ matrix.build }} -eq $BUILD_MESON; then
+              PACKAGES=$(echo "$PACKAGES $FEDORA_PACKAGES_MESON" | tr -d '\n')
+            fi
             echo "$DNF -y install $PACKAGES"
             $DNF -y install $PACKAGES
             rpm -q gnome-shell
@@ -202,14 +216,21 @@ jobs:
           bindings/vala/wayland-client.vapi;
           fi;
           export SAVE_DIST_FILES=1;
+          if test $${{ matrix.build }} -eq $BUILD_MESON;
+          then
+          meson setup builddir;
+          else
           ./autogen.sh
           --enable-gtk-doc
           --with-python=/usr/bin/python3
           --with-ucd-dir=${{ matrix.ucd_dir }}
           --enable-install-tests
           ${{ matrix.test_config }};
-          test 0${{ matrix.latest_xkb }} -ne 1 &&
-          make -C engine maintainer-clean-generic || :
+          TEST_KEEP_XKB_XML=1;
+          TEST_=0;
+          test $TEST_${{ matrix.latest_xkb }} -ne 1 &&
+          make -C engine maintainer-clean-generic || :;
+          fi;
 
       - name: Run make
         # Set the cutom DESTDIR because the default DESTDIR
@@ -218,6 +239,13 @@ jobs:
         # bindings/pygobject/IBus.py
         run: >
           export DISABLE_DAEMONIZE_IN_TESTS=1;
+          if test $${{ matrix.build }} -eq $BUILD_MESON;
+          then
+          cd builddir;
+          meson dist;
+          ninja;
+          cd ..;
+          else
           make -j$(nproc) distcheck
           DISTCHECK_CONFIGURE_FLAGS="
           --enable-gtk-doc
@@ -232,5 +260,6 @@ jobs:
           ibus-compose ibus-keypress test-stress xkb-latin-layouts
           "
           VERBOSE=1
-          DESTDIR="$HOME/build/$USER/dest"
+          DESTDIR="$HOME/build/$USER/dest";
+          fi;
 

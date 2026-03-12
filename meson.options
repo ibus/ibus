@@ -1,0 +1,155 @@
+option('tests',
+  type: 'boolean',
+  value: true,
+  description: 'Build tests',
+)
+option('xim',
+  type: 'feature',
+  value: 'auto',
+  description: 'Build XIM server',
+)
+option('wayland',
+  type: 'feature',
+  value: 'auto',
+  description: 'Build wayland support',
+)
+option('appindicator',
+  type: 'boolean',
+  value: true,
+  description: 'Build Appindicator support',
+)
+option('engine',
+  type: 'boolean',
+  value: true,
+  description: 'Build IBus simple engine',
+)
+option('ui',
+  type: 'boolean',
+  value: true,
+  description: 'Build IBus default panel interface',
+)
+option('socket-dir',
+  type: 'string',
+  value: '',
+  description: 'The socket directory to connect ibus-daemon with D-Bus ' +
+    'connections (default: "$XDG_CACHE_HOME/ibus", or "/tmp" on BSD systems.',
+)
+option('setup',
+  type: 'boolean',
+  value: true,
+  description: 'Install the IBus setup UI',
+)
+# Supported GTK versions
+option('gtk2',
+  type: 'feature',
+  value: 'auto',
+  description: 'Build GTK2 IM Module',
+)
+option('gtk2-im-module-dir',
+  type: 'string',
+  value: '',
+  description:
+    'Path to a GTK2 immodule directory (if empty, uses the default)',
+)
+option('gtk3',
+  type: 'boolean',
+  value: true,
+  description: 'Build GTK3 IM Module',
+)
+option('gtk3-im-module-dir',
+  type: 'string',
+  value: '',
+  description:
+    'Path to a GTK3 immodule directory (if empty, uses the default)',
+)
+option('gtk4',
+  type: 'boolean',
+  value: true,
+  description: 'Build GTK4 IM Module',
+)
+option('gtk4-im-module-dir',
+  type: 'string',
+  value: '',
+  description:
+    'Path to a GTK4 immodule directory (if empty, uses the default)',
+)
+option('x11-localedata-dir',
+  type: 'string',
+  value: '',
+  description:
+    'Path to an X11 localedata directory (if empty, uses the default)',
+)
+option('systemd-services',
+  type: 'feature',
+  value: 'auto',
+  description: 'Build IBus systemd service files',
+)
+option('libnotify',
+  type: 'boolean',
+  value: true,
+  description: 'Build with libnotify'
+)
+# Configuration
+option('memconf',
+  type: 'boolean',
+  value: false,
+  description: 'Perform configure based on memory',
+)
+option('dconf',
+  type: 'feature',
+  value: 'auto',
+  description: 'Perform configure based on DConf',
+)
+# Emoji / Unicode
+option('emoji-dict',
+  type: 'boolean',
+  value: true,
+  description: 'Build Emoji dictionary files',
+)
+option('unicode-dict',
+  type: 'boolean',
+  value: true,
+  description: 'Build Unicode dict files',
+)
+option('unicode-emoji-dir',
+  type: 'string',
+  value: '/usr/share/unicode/emoji',
+  description: 'Directory of Unicode Emoji',
+)
+option('ucd-dir',
+  type: 'string',
+  value: '/usr/share/unicode/ucd',
+  description: 'Directory of UCD (Unicode Character Database) files',
+)
+option('emoji-annotation-dir',
+  type: 'string',
+  value: '/usr/share/unicode/cldr/common/annotations',
+  description: 'Directory of CLDR annotation files',
+)
+# Snooper
+option('snooper',
+  type: 'boolean',
+  value: true,
+  description: 'Enable key snooper in GTK IM modules',
+)
+option('no-snooper-apps',
+  type: 'array',
+  value: [
+    'firefox.*',
+    '.*chrome.*',
+    '.*chromium.*',
+    'terminator',
+  ],
+  description: 'Disable key snooper in these applications',
+)
+# Bindings
+option('introspection',
+  type: 'boolean',
+  value: true,
+  description: 'Build GObject introspection files',
+)
+option('vapi',
+  type: 'feature',
+  value: 'auto',
+  description: 'Build VAPI files',
+)

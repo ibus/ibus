@@ -216,12 +216,12 @@ ibus_compose_SOURCES = ibus-compose.c
 if ENABLE_GTK4
 ibus_compose_CFLAGS = @GTK4_CFLAGS@
 ibus_compose_LDADD = $(prog_ldadd) @GTK4_LIBS@
-TESTS_ENVIRONMENT += TEST_GTK_VERSION=4
+TESTS_ENVIRONMENT += TEST_GTK=1 TEST_GTK_VERSION=4
 else
 if ENABLE_GTK3
 ibus_compose_CFLAGS = @GTK3_CFLAGS@
 ibus_compose_LDADD = $(prog_ldadd) @GTK3_LIBS@
-TESTS_ENVIRONMENT += TEST_GTK_VERSION=3
+TESTS_ENVIRONMENT += TEST_GTK=1 TEST_GTK_VERSION=3
 endif
 endif
 

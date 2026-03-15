@@ -24,6 +24,7 @@
 : ${DISABLE_GUI_TESTS:=''}
 : ${DISABLE_DAEMONIZE_IN_TESTS:=''}
 : ${TEST_GTK_VERSION:=0}
+: ${TEST_GTK:=0}
 
 BUS_REQUIRED_TESTS="
 ibus-bus
@@ -141,7 +142,7 @@ run_test_case()
         IBUS_ADDRESS_FILE=$PWD/ibus-daemon.pid
         export IBUS_ADDRESS_FILE
 
-        case $TEST_GTK_VERSION in
+        test $TEST_GTK -eq 1 && case $TEST_GTK_VERSION in
         4)
             if test -f "../$top_builddir/client/gtk4/.libs/libim-ibus.so" ; then
                 IM_IBUS_SO="../$top_builddir/client/gtk4/.libs/libim-ibus.so"
@@ -172,7 +173,7 @@ run_test_case()
             echo "NOT SUPPORT GTK_VERSION $TEST_GTK_VERSION"
             exit 1
             ;;
-        esac
+        esac || :
 
         cp "../$top_srcdir/data/dconf/$IBUS_SCHEMA_FILE" $PWD
         glib-compile-schemas $PWD

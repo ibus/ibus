@@ -153,9 +153,6 @@ jobs:
             $DNF -y update
             echo "$DNF -y install git which"
             $DNF -y install git which
-            # dbus-glib-devel, dconf-devel gtk*-devel should be rebuilt with
-            # the latest pcre2 in Fedora 43.
-            test "${{ matrix.container }}" = "fedora:43" && $DNF -y install pcre2-devel
             PACKAGES=$(echo "$FEDORA_PACKAGES_MAKE" | tr -d '\n')
             PACKAGES=$(echo "$PACKAGES $FEDORA_PACKAGES_GTKDOC" | tr -d '\n')
             PACKAGES=$(echo "$PACKAGES $FEDORA_PACKAGES_CI_KEY" | tr -d '\n')

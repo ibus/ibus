@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2015-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2014-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -528,7 +528,8 @@ ibus_engine_simple_update_preedit_text (IBusEngineSimple *simple)
                         gchar *layout = NULL;
                         gchar *layout_end;
                         g_object_get (simple, "engine-name", &name, NULL);
-                        if (!g_ascii_strncasecmp (name, "xkb:", 4)) {
+                        if (!g_ascii_strncasecmp (name, "xkb:", 4) ||
+                            !g_ascii_strncasecmp (name, "xkbtest:", 8)) {
                             layout_end = name + 4;
                             while (*layout_end && *layout_end != ':')
                                 layout_end++;
@@ -537,7 +538,8 @@ ibus_engine_simple_update_preedit_text (IBusEngineSimple *simple)
                                                     layout_end - name - 4);
                             }
                         } else {
-                            g_warning ("Unexpected engine is used: %s", name);
+                            g_warning ("Unexpected engine received sym:%X: %s",
+                                       keysym, name);
                         }
                         g_free (name);
                         if (layout) {

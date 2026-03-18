@@ -1224,7 +1224,7 @@ ibus_wayland_im_post_key (IBusWaylandIM *wlim,
         case IBUS_ISO_Level5_Latch:
             filtered = TRUE;
             break;
-        default:
+        default:;
         }
 #endif
     }

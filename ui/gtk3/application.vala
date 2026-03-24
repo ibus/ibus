@@ -210,9 +210,13 @@ class Application {
                 Path.build_filename(directory, "wayland.log");
         m_log = FileStream.open(path, "w");
         unowned Posix.Passwd? pw = Posix.getpwuid(Posix.getuid());
-        m_user = pw.pw_name.substring(0, 6);
-        if (m_user == null)
-            m_user = GLib.Environment.get_variable("USER").substring(0, 6);
+        if (pw != null)
+            m_user = pw.pw_name.substring(0, 6);
+        if (m_user == null) {
+            var user_env = GLib.Environment.get_variable("USER");
+            if (user_env != null)
+                m_user = user_env.substring(0, 6);
+        }
         if (m_user == null)
             m_user = "UNKNOW";
         GLib.DateTime now = new GLib.DateTime.now_local();

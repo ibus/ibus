@@ -2763,6 +2763,19 @@ ibus_wayland_im_destroy (IBusObject *object)
         g_clear_pointer (&priv->input_method_manager_v2,
                          zwp_input_method_manager_v2_destroy);
     }
+    if (priv->state_system)
+        xkb_state_unref (priv->state_system);
+    if (priv->state)
+        xkb_state_unref (priv->state);
+    if (priv->keymap)
+        xkb_keymap_unref (priv->keymap);
+    if (priv->xkb_context)
+        xkb_context_unref (priv->xkb_context);
+    if (priv->log)
+        fclose (priv->log);
+    g_clear_object (&priv->preedit_text);
+    g_clear_object (&priv->surrounding_text);
+    g_clear_object (&priv->cancellable);
 
 
     IBUS_OBJECT_CLASS (ibus_wayland_im_parent_class)->destroy (object);

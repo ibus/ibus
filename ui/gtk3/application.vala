@@ -216,9 +216,9 @@ class Application {
         if (m_user == null)
             m_user = "UNKNOW";
         GLib.DateTime now = new GLib.DateTime.now_local();
-        var msec = now.get_microsecond() / 1000;
-        m_log.printf("Start %02d:%02d:%02d:%06d\n",
-                     now.get_hour(), now.get_minute(), now.get_second(), msec);
+        m_log.printf("Start %02d:%02d:%02d.%06d\n",
+                     now.get_hour(), now.get_minute(), now.get_second(),
+                     now.get_microsecond());
         m_log.flush();
         return true;
     }

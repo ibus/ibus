@@ -28,6 +28,7 @@
 #include <ibus.h>
 #include <ibusinternal.h>
 #include <limits.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
 #include <wayland-client.h>
@@ -138,8 +139,10 @@ struct _IBusWaylandIMPrivate
     struct xkb_context *xkb_context;
 
     struct xkb_keymap *keymap;
+    struct xkb_keymap *keymap_system;
     struct xkb_state *state;
     struct xkb_state *state_system;
+    gboolean active_keymap_is_system;
 
     xkb_mod_mask_t shift_mask;
     xkb_mod_mask_t lock_mask;
@@ -1059,8 +1062,39 @@ create_system_xkb_keymap (struct xkb_context *xkb_context,
 
 
 static gboolean
+xkb_keymap_matches (struct xkb_keymap *keymap1,
+                    struct xkb_keymap *keymap2)
+{
+    char *keymap1_str;
+    char *keymap2_str;
+    gboolean retval;
+
+    if (keymap1 == keymap2)
+        return TRUE;
+    if (!keymap1 || !keymap2)
+        return FALSE;
+
+    keymap1_str = xkb_keymap_get_as_string (keymap1,
+                                            XKB_KEYMAP_FORMAT_TEXT_V1);
+    keymap2_str = xkb_keymap_get_as_string (keymap2,
+                                            XKB_KEYMAP_FORMAT_TEXT_V1);
+    if (!keymap1_str || !keymap2_str) {
+        free (keymap1_str);
+        free (keymap2_str);
+        return FALSE;
+    }
+
+    retval = !strcmp (keymap1_str, keymap2_str);
+    free (keymap1_str);
+    free (keymap2_str);
+    return retval;
+}
+
+
+static gboolean
 ibus_wayland_im_update_xkb_state (IBusWaylandIM     *wlim,
-                                  struct xkb_keymap *keymap)
+                                  struct xkb_keymap *keymap,
+                                  gboolean           keymap_is_system)
 {
     IBusWaylandIMPrivate *priv;
     struct xkb_state *state;
@@ -1097,6 +1131,29 @@ ibus_wayland_im_update_xkb_state (IBusWaylandIM     *wlim,
         xkb_keymap_unref (priv->keymap);
     priv->keymap = keymap;
     priv->state = state;
+    priv->active_keymap_is_system = keymap_is_system;
+    return TRUE;
+}
+
+
+static gboolean
+ibus_wayland_im_update_system_xkb_state (IBusWaylandIM     *wlim,
+                                         struct xkb_keymap *keymap)
+{
+    IBusWaylandIMPrivate *priv;
+    struct xkb_state *state;
+
+    g_return_val_if_fail (IBUS_IS_WAYLAND_IM (wlim), FALSE);
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    g_return_val_if_fail (keymap, FALSE);
+    g_return_val_if_fail ((state = xkb_state_new (keymap)), FALSE);
+
+    if (priv->state_system)
+        xkb_state_unref (priv->state_system);
+    if (priv->keymap_system)
+        xkb_keymap_unref (priv->keymap_system);
+    priv->keymap_system = xkb_keymap_ref (keymap);
+    priv->state_system = state;
     return TRUE;
 }
 
@@ -1109,6 +1166,7 @@ _bus_global_engine_changed_cb (IBusBus       *bus,
     IBusWaylandIMPrivate *priv;
     IBusEngineDesc *desc;
     struct xkb_keymap *keymap;
+    struct xkb_keymap *system_keymap;
 
     g_return_if_fail (IBUS_IS_BUS (bus));
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
@@ -1117,8 +1175,19 @@ _bus_global_engine_changed_cb (IBusBus       *bus,
     g_assert (desc);
     g_assert (!g_strcmp0 (ibus_engine_desc_get_name (desc), engine_name));
     keymap = create_user_xkb_keymap (priv->xkb_context, desc);
-    if (keymap && !ibus_wayland_im_update_xkb_state (wlim, keymap))
+    if (keymap && !ibus_wayland_im_update_xkb_state (wlim, keymap, FALSE))
         xkb_keymap_unref (keymap);
+    else if (!keymap) {
+        priv->active_keymap_is_system = TRUE;
+        if (priv->keymap_system) {
+            system_keymap = xkb_keymap_ref (priv->keymap_system);
+            if (!ibus_wayland_im_update_xkb_state (wlim,
+                                                   system_keymap,
+                                                   TRUE)) {
+                xkb_keymap_unref (system_keymap);
+            }
+        }
+    }
     g_object_unref (desc);
 }
 
@@ -1133,6 +1202,7 @@ input_method_keyboard_keymap (void                      *data,
     IBusWaylandIM *wlim = data;
     IBusWaylandIMPrivate *priv;
     struct xkb_keymap *keymap;
+    gboolean active_keymap_is_system;
 
     if (!IBUS_IS_WAYLAND_IM (wlim)) {
         close (fd);
@@ -1152,15 +1222,41 @@ input_method_keyboard_keymap (void                      *data,
          */
         priv->seat->has_keymap = TRUE;
     }
-    if (priv->keymap && priv->state && priv->state_system) {
-        close (fd);
+    keymap = create_system_xkb_keymap (priv->xkb_context, format, fd, size);
+    if (!keymap)
+        return;
+
+    /* Focus changes can recreate the input-method keyboard grab and resend the
+     * same system keymap.  The new virtual keyboard still needs the keymap
+     * forwarded above, but IBus must not use the fd number as identity: fd
+     * numbers are just process-local slots and can be reused.  Compare the
+     * serialized XKB keymap instead.
+     */
+    if (xkb_keymap_matches (priv->keymap_system, keymap)) {
+        xkb_keymap_unref (keymap);
         return;
     }
-    keymap = create_system_xkb_keymap (priv->xkb_context, format, fd, size);
-    if (keymap && !ibus_wayland_im_update_xkb_state (wlim, keymap))
+
+    /* A real system keymap change should update the system keymap used for
+     * Compose/Multi_key lookup.  It should replace the active keymap only
+     * when the active keymap came from a previous system keymap; otherwise an
+     * engine keymap installed by global-engine-changed would be clobbered by a
+     * later focus-change keymap event.  Content equality is not enough to
+     * decide ownership because an engine keymap can serialize identically to
+     * the system keymap and still be selected by the engine.
+     */
+    active_keymap_is_system =
+            !priv->keymap || priv->active_keymap_is_system;
+    if (!ibus_wayland_im_update_system_xkb_state (wlim, keymap)) {
         xkb_keymap_unref (keymap);
-    if (priv->state)
-        priv->state_system = xkb_state_ref (priv->state);
+        return;
+    }
+    if (active_keymap_is_system) {
+        if (!ibus_wayland_im_update_xkb_state (wlim, keymap, TRUE))
+            xkb_keymap_unref (keymap);
+    } else {
+        xkb_keymap_unref (keymap);
+    }
 }
 
 
@@ -1261,6 +1357,11 @@ ibus_wayland_im_post_key (IBusWaylandIM *wlim,
     xkb_state_update_key (priv->state, code,
                           (state == WL_KEYBOARD_KEY_STATE_RELEASED)
                           ? XKB_KEY_UP : XKB_KEY_DOWN);
+    if (priv->state_system && priv->state_system != priv->state) {
+        xkb_state_update_key (priv->state_system, code,
+                              (state == WL_KEYBOARD_KEY_STATE_RELEASED)
+                              ? XKB_KEY_UP : XKB_KEY_DOWN);
+    }
     return filtered;
 }
 
@@ -1741,6 +1842,10 @@ input_method_keyboard_modifiers (void                      *data,
     priv = ibus_wayland_im_get_instance_private (wlim);
     xkb_state_update_mask (priv->state, mods_depressed,
                            mods_latched, mods_locked, 0, 0, group);
+    if (priv->state_system && priv->state_system != priv->state) {
+        xkb_state_update_mask (priv->state_system, mods_depressed,
+                               mods_latched, mods_locked, 0, 0, group);
+    }
     mask = xkb_state_serialize_mods (priv->state,
                                      XKB_STATE_DEPRESSED |
                                      XKB_STATE_LATCHED);
@@ -2747,7 +2852,7 @@ ibus_wayland_im_constructor (GType                  type,
     desc = ibus_bus_get_global_engine (priv->ibusbus);
     if (desc)
         keymap = create_user_xkb_keymap (priv->xkb_context, desc);
-    if (keymap && !ibus_wayland_im_update_xkb_state (wlim, keymap))
+    if (keymap && !ibus_wayland_im_update_xkb_state (wlim, keymap, FALSE))
         xkb_keymap_unref (keymap);
     ibus_bus_set_watch_ibus_signal (priv->ibusbus, TRUE);
     g_signal_connect (priv->ibusbus, "global-engine-changed",
@@ -2826,6 +2931,7 @@ ibus_wayland_im_destroy (IBusObject *object)
     }
     g_clear_pointer (&priv->state_system, xkb_state_unref);
     g_clear_pointer (&priv->state, xkb_state_unref);
+    g_clear_pointer (&priv->keymap_system, xkb_keymap_unref);
     g_clear_pointer (&priv->keymap, xkb_keymap_unref);
     g_clear_pointer (&priv->xkb_context, xkb_context_unref);
     if (priv->log) {

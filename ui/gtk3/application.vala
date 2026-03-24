@@ -25,7 +25,7 @@ const string IBUS_WAYLAND_VERSION="1.1";
 const ulong G_USEC_PER_SEC=1000000L;
 const ulong SLEEP_DIV_PER_SEC = 100L;
 const ulong MAX_DISPLAY_IDLE_TIME =
-        G_USEC_PER_SEC * SLEEP_DIV_PER_SEC * 60 * 3;
+        SLEEP_DIV_PER_SEC * 60 * 3;
 
 static string prgname;
 static IBus.Bus bus;

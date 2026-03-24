@@ -1133,15 +1133,14 @@ input_method_keyboard_keymap (void                      *data,
          */
         priv->seat->has_keymap = TRUE;
     }
-    if (priv->keymap && priv->state && priv->state_system) {
-        close (fd);
-        return;
-    }
     keymap = create_system_xkb_keymap (priv->xkb_context, format, fd, size);
     if (keymap && !ibus_wayland_im_update_xkb_state (wlim, keymap))
         xkb_keymap_unref (keymap);
-    if (priv->state)
+    if (priv->state) {
+        if (priv->state_system)
+            xkb_state_unref (priv->state_system);
         priv->state_system = xkb_state_ref (priv->state);
+    }
 }
 
 

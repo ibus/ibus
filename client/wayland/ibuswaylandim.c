@@ -432,6 +432,22 @@ _context_forward_key_event_cb (IBusInputContext *context,
     else
         state = WL_KEYBOARD_KEY_STATE_PRESSED;
 
+    /* IMv2 has no keysym request; the only way to forward a key is via
+     * the virtual keyboard, which takes an evdev keycode.  Use the
+     * keycode from the engine when available.  Engines that synthesize
+     * key events without a real keycode pass keycode=0; for those we
+     * fall through to ibus_wayland_im_keysym() which logs a warning
+     * in IMv2 (keysym-to-keycode reverse lookup is not yet implemented).
+     */
+    if (priv->version == INPUT_METHOD_V2 && keycode != 0) {
+        ibus_wayland_im_key (wlim,
+                             priv->im_serial,
+                             0,
+                             keycode,
+                             state);
+        return;
+    }
+
     ibus_wayland_im_keysym (wlim,
                             priv->im_serial,
                             keyval,

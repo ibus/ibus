@@ -667,7 +667,7 @@ _context_show_preedit_text_cb (IBusInputContext *context,
                 priv->seat->input_method_v2,
                 priv->preedit_text->text,
                 cursor,
-                strlen (priv->preedit_text->text));
+                cursor);
         zwp_input_method_v2_commit (priv->seat->input_method_v2,
                                     priv->im_serial);
         priv->hiding_preedit_text = FALSE;

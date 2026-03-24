@@ -250,13 +250,11 @@ class Application {
         string[] args = { "ibus-daemon" };
         foreach (var arg in m_daemon_args.split(" "))
             args += arg;
-        GLib.Pid child_pid = 0;
         try {
             GLib.Process.spawn_async (null, args, null,
-                                      GLib.SpawnFlags.DO_NOT_REAP_CHILD
-                                      | GLib.SpawnFlags.SEARCH_PATH,
+                                      GLib.SpawnFlags.SEARCH_PATH,
                                       null,
-                                      out child_pid);
+                                      null);
         } catch (GLib.SpawnError e) {
             m_log.printf("ibus-daemon error: %s\n", e.message);
             warning("%s\n", e.message);

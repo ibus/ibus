@@ -1049,28 +1049,25 @@ ibus_wayland_im_update_xkb_state (IBusWaylandIM     *wlim,
     g_return_val_if_fail (keymap, FALSE);
     g_return_val_if_fail ((state = xkb_state_new (keymap)), FALSE);
 
-    priv->shift_mask =
-        1 << xkb_map_mod_get_index (keymap, "Shift");
-    priv->lock_mask =
-        1 << xkb_map_mod_get_index (keymap, "Lock");
-    priv->control_mask =
-        1 << xkb_map_mod_get_index (keymap, "Control");
-    priv->mod1_mask =
-        1 << xkb_map_mod_get_index (keymap, "Mod1");
-    priv->mod2_mask =
-        1 << xkb_map_mod_get_index (keymap, "Mod2");
-    priv->mod3_mask =
-        1 << xkb_map_mod_get_index (keymap, "Mod3");
-    priv->mod4_mask =
-        1 << xkb_map_mod_get_index (keymap, "Mod4");
-    priv->mod5_mask =
-        1 << xkb_map_mod_get_index (keymap, "Mod5");
-    priv->super_mask =
-        1 << xkb_map_mod_get_index (keymap, "Super");
-    priv->hyper_mask =
-        1 << xkb_map_mod_get_index (keymap, "Hyper");
-    priv->meta_mask =
-        1 << xkb_map_mod_get_index (keymap, "Meta");
+    /* xkb_map_mod_get_index() returns XKB_MOD_INVALID ((xkb_mod_index_t)-1)
+     * when the modifier name does not exist in the keymap.  Shifting by
+     * that value is undefined behavior in C.
+     */
+#define _WL_MOD_MASK(keymap, name) \
+    ({ xkb_mod_index_t idx = xkb_map_mod_get_index (keymap, name); \
+       (idx != XKB_MOD_INVALID) ? (1u << idx) : 0; })
+    priv->shift_mask   = _WL_MOD_MASK (keymap, "Shift");
+    priv->lock_mask    = _WL_MOD_MASK (keymap, "Lock");
+    priv->control_mask = _WL_MOD_MASK (keymap, "Control");
+    priv->mod1_mask    = _WL_MOD_MASK (keymap, "Mod1");
+    priv->mod2_mask    = _WL_MOD_MASK (keymap, "Mod2");
+    priv->mod3_mask    = _WL_MOD_MASK (keymap, "Mod3");
+    priv->mod4_mask    = _WL_MOD_MASK (keymap, "Mod4");
+    priv->mod5_mask    = _WL_MOD_MASK (keymap, "Mod5");
+    priv->super_mask   = _WL_MOD_MASK (keymap, "Super");
+    priv->hyper_mask   = _WL_MOD_MASK (keymap, "Hyper");
+    priv->meta_mask    = _WL_MOD_MASK (keymap, "Meta");
+#undef _WL_MOD_MASK
 
     if (priv->state)
         xkb_state_unref (priv->state);

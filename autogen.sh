@@ -41,7 +41,6 @@ cd "$srcdir"
 }
 
 CONFIGFLAGS="$@"
-(test "x$NOCONFIGURE" = "x" ) &&
 $(grep -q "^GTK_DOC_CHECK" configure.ac) && {
     # $WANT_GTK_DOC: If the source files require gtk-doc
     # Specify "--disable-gtk-doc" option for autogen.sh if you wish to disable

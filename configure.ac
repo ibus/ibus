@@ -943,13 +943,11 @@ before run \`make\`.
       []
 )
 AS_IF([test x"$enable_ui" != x"no" &&
-       test -f "$ac_confdir/ui/gtk3/application.c"
-      ],
+       test -f "$ac_confdir/ui/gtk3/application.c"],
       [AS_IF([test x"$enable_appindicator" = x"no" ||
               test x"$enable_xim" = x"no" ||
               test x"$enable_gdk3_wayland" != x"yes" ||
-              test x"$enable_emoji_dict" = x"no"
-             ],
+              test x"$enable_emoji_dict" = x"no"],
              [OUTPUT_TAIL="$OUTPUT_TAIL
 You invoked the \`configure\` script with either disabled appinicator, xim,
 gdk3_wayland or emoji_dict option so you have to run

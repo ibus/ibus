@@ -570,8 +570,7 @@ ibus_input_context_convert_text (IBusInputContext *context,
             g_error_free (error);
         }
         if (new_attrs) {
-            g_object_unref (text->attrs);
-            text->attrs = new_attrs;
+            ibus_text_set_attributes (text, new_attrs);
         }
         break;
     case IBUS_PREEDIT_FORMAT_HINT:
@@ -582,8 +581,7 @@ ibus_input_context_convert_text (IBusInputContext *context,
             g_error_free (error);
         }
         if (new_attrs) {
-            g_object_unref (text->attrs);
-            text->attrs = new_attrs;
+            ibus_text_set_attributes (text, new_attrs);
         }
         break;
     default:

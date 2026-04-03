@@ -209,7 +209,7 @@ IBusAttrList *   ibus_text_get_attributes           (IBusText       *text);
 /**
  * ibus_text_set_attributes:
  * @text: An IBusText.
- * @attrs: An IBusAttrList
+ * @attrs: (transfer full): An IBusAttrList
  */
 void             ibus_text_set_attributes           (IBusText       *text,
                                                      IBusAttrList   *attrs);

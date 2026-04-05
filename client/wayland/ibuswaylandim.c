@@ -44,7 +44,8 @@ enum {
     PROP_BUS,
     PROP_DISPLAY,
     PROP_LOG,
-    PROP_VERBOSE
+    PROP_VERBOSE,
+    PROP_USE_SYS_KEYMAP
 };
 
 enum {
@@ -103,6 +104,7 @@ struct _IBusWaylandIMPrivate
 {
     FILE *log;
     gboolean verbose;
+    gboolean use_sys_keymap;
     struct wl_display *display;
     IMProtocolVersion version;
 
@@ -1099,7 +1101,7 @@ _bus_global_engine_changed_cb (IBusBus       *bus,
 {
     IBusWaylandIMPrivate *priv;
     IBusEngineDesc *desc;
-    struct xkb_keymap *keymap;
+    struct xkb_keymap *keymap = NULL;
 
     g_return_if_fail (IBUS_IS_BUS (bus));
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
@@ -1107,7 +1109,13 @@ _bus_global_engine_changed_cb (IBusBus       *bus,
     desc = ibus_bus_get_global_engine (bus);
     g_assert (desc);
     g_assert (!g_strcmp0 (ibus_engine_desc_get_name (desc), engine_name));
-    keymap = create_user_xkb_keymap (priv->xkb_context, desc);
+    if (!priv->use_sys_keymap) {
+        keymap = create_user_xkb_keymap (priv->xkb_context, desc);
+    } else if (priv->state_system && priv->state_system != priv->state) {
+        if (priv->state)
+            xkb_state_ref (priv->state);
+        priv->state = xkb_state_ref (priv->state_system);
+    }
     if (keymap && !ibus_wayland_im_update_xkb_state (wlim, keymap))
         g_clear_pointer (&keymap, xkb_keymap_unref);
     if (priv->verbose) {
@@ -1334,7 +1342,7 @@ ibus_wayland_im_post_key (IBusWaylandIM *wlim,
 #endif
         if ((!filtered && !(modifiers & _IBUS_NO_TEXT_INPUT_MOD_MASK) &&
              !g_unichar_iscntrl (ch)) || filtered) {
-            if (!filtered) {
+            if (!filtered && !priv->use_sys_keymap) {
                 gchar buff[8] = { 0, };
                 buff[g_unichar_to_utf8 (ch, buff)] = '\0';
                 ibus_wayland_im_commit_text (wlim, buff);
@@ -2759,6 +2767,21 @@ ibus_wayland_im_class_init (IBusWaylandIMClass *class)
                         FALSE,
                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
+    /**
+     * IBusWaylandIM:use-system-keymap:
+     *
+     * Use system keymap.
+     * %TRUE if the session keymap is used forcibly instead of keymaps of the
+     * IBus XKB engines, otherwise %FALSE.
+     */
+    g_object_class_install_property (gobject_class,
+                    PROP_USE_SYS_KEYMAP,
+                    g_param_spec_boolean ("use-system-keymap",
+                        "use system keymap",
+                        "Use system keymap",
+                        FALSE,
+                        G_PARAM_READWRITE));
+
     /* install signals */
     /* this module can call ibus_input_context_focus_in() and the focus-in
      * signal can reach the IBus panel and this also can call
@@ -2895,7 +2918,7 @@ ibus_wayland_im_constructor (GType                  type,
         return NULL;
     }
     desc = ibus_bus_get_global_engine (priv->ibusbus);
-    if (desc)
+    if (desc && !priv->use_sys_keymap)
         keymap = create_user_xkb_keymap (priv->xkb_context, desc);
     if (keymap && !ibus_wayland_im_update_xkb_state (wlim, keymap))
         g_clear_pointer (&keymap, xkb_keymap_unref);
@@ -2985,6 +3008,9 @@ ibus_wayland_im_set_property (IBusWaylandIM *wlim,
         g_assert (!priv->verbose);
         priv->verbose = g_value_get_boolean (value);
         break;
+    case PROP_USE_SYS_KEYMAP:
+        priv->use_sys_keymap = g_value_get_boolean (value);
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (wlim, prop_id, pspec);
     }
@@ -3013,6 +3039,9 @@ ibus_wayland_im_get_property (IBusWaylandIM *wlim,
         break;
     case PROP_VERBOSE:
         g_value_set_boolean (value, priv->verbose);
+        break;
+    case PROP_USE_SYS_KEYMAP:
+        g_value_set_boolean (value, priv->use_sys_keymap);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (wlim, prop_id, pspec);

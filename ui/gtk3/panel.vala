@@ -104,9 +104,7 @@ class Panel : IBus.PanelService {
 #if USE_GDK_WAYLAND
     private string? m_wayland_object_path;
     public signal void realize_surface(void *surface);
-    public signal void update_shortcut_keys(
-            IBus.ProcessKeyEventData[] data,
-            BindingCommon.KeyEventFuncType ftype);
+    public signal void use_system_keymap(bool use_sys_keymap);
 #endif
 
     public Panel(IBus.Bus bus,
@@ -747,6 +745,9 @@ class Panel : IBus.PanelService {
     private void set_use_system_keyboard_layout() {
         m_use_system_keyboard_layout =
                 m_settings_general.get_boolean("use-system-keyboard-layout");
+#if USE_GDK_WAYLAND
+        use_system_keymap(m_use_system_keyboard_layout);
+#endif
     }
 
     private void set_embed_preedit_text() {

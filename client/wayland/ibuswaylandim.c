@@ -334,6 +334,8 @@ ibus_wayland_im_commit_text (IBusWaylandIM *wlim,
                                                    str);
         break;
     case INPUT_METHOD_V2:
+        if (!priv->seat)
+            break;
         zwp_input_method_v2_commit_string (priv->seat->input_method_v2, str);
         zwp_input_method_v2_commit (priv->seat->input_method_v2,
                                     priv->im_serial);
@@ -367,6 +369,8 @@ ibus_wayland_im_key (IBusWaylandIM *wlim,
          * returns "Cannot send a keypress before defining a keymap"
          * if `has_keymap` is %FALSE.
          */
+        if (!priv->seat)
+            break;
         if (priv->seat->has_keymap) {
             zwp_virtual_keyboard_v1_key (priv->seat->virtual_keyboard,
                                          time, key, state);
@@ -663,6 +667,8 @@ _context_show_preedit_text_cb (IBusInputContext *context,
                                                     commit);
         break;
     case INPUT_METHOD_V2:
+        if (!priv->seat)
+            break;
         zwp_input_method_v2_set_preedit_string  (
                 priv->seat->input_method_v2,
                 priv->preedit_text->text,
@@ -693,6 +699,8 @@ _context_hide_preedit_text_cb (IBusInputContext *context,
                                                     "");
         break;
     case INPUT_METHOD_V2:
+        if (!priv->seat)
+            break;
         zwp_input_method_v2_set_preedit_string  (priv->seat->input_method_v2,
                                                  "", 0, 0);
         zwp_input_method_v2_commit (priv->seat->input_method_v2,
@@ -771,6 +779,8 @@ _context_delete_surrounding_text_cb (IBusInputContext *context,
                 before_length + after_length);
         break;
     case INPUT_METHOD_V2:
+        if (!priv->seat)
+            break;
         zwp_input_method_v2_delete_surrounding_text (
                 priv->seat->input_method_v2,
                 before_length,
@@ -1201,7 +1211,7 @@ ibus_wayland_im_post_key (IBusWaylandIM *wlim,
             return FALSE;
         break;
     case INPUT_METHOD_V2:
-        if (!priv->seat->active)
+        if (!priv->seat || !priv->seat->active)
             return FALSE;
         break;
     default:
@@ -1760,6 +1770,8 @@ input_method_keyboard_modifiers (void                      *data,
          * returns "Cannot send a modifier state before defining a keymap"
          * if `has_keymap` is %FALSE.
          */
+        if (!priv->seat)
+            break;
         if (priv->seat->has_keymap) {
             zwp_virtual_keyboard_v1_modifiers (priv->seat->virtual_keyboard,
                                                mods_depressed, mods_latched,

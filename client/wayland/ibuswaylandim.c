@@ -2431,13 +2431,14 @@ registry_handle_global (void               *data,
                  interface, name, version);
         fflush (priv->log);
     }
-    priv->im_serial = 0;
     if (!g_strcmp0 (interface, zwp_input_method_manager_v2_interface.name)) {
+        priv->im_serial = 0;
         priv->version = INPUT_METHOD_V2;
         priv->input_method_manager_v2 =
                 wl_registry_bind (registry, name,
                                   &zwp_input_method_manager_v2_interface, 1);
     } else if (!g_strcmp0 (interface, zwp_input_method_v1_interface.name)) {
+        priv->im_serial = 0;
         if (version >= 4)
             version = 4;
         priv->version = INPUT_METHOD_V1;

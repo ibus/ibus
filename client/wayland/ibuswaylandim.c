@@ -1361,8 +1361,22 @@ _process_key_event_sync (IBusWaylandIM       *wlim,
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     g_assert (event);
     priv = ibus_wayland_im_get_instance_private (wlim);
-    if (!priv->ibuscontext)
+    if (!priv->ibuscontext) {
+        retval = ibus_wayland_im_post_key (wlim,
+                                           event->key,
+                                           event->modifiers,
+                                           event->state,
+                                           0,
+                                           FALSE);
+        if (!retval) {
+            ibus_wayland_im_key (wlim,
+                                 event->key_serial,
+                                 event->time,
+                                 event->key,
+                                 event->state);
+        }
         return;
+    }
     retval = ibus_input_context_process_key_event (priv->ibuscontext,
                                                    event->sym,
                                                    event->key,

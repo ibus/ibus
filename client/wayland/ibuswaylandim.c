@@ -1132,6 +1132,23 @@ input_method_keyboard_keymap (void                      *data,
          * sets %TRUE to `has_keymap`.
          */
         priv->seat->has_keymap = TRUE;
+        /* Resynchronize modifier state on the new virtual keyboard.
+         * Modifier events that arrived before the keymap were dropped
+         * (the virtual keyboard rejects them without a keymap), so the
+         * virtual keyboard's modifier state may be stale.
+         */
+        if (priv->state) {
+            zwp_virtual_keyboard_v1_modifiers (
+                    priv->seat->virtual_keyboard,
+                    xkb_state_serialize_mods (priv->state,
+                                              XKB_STATE_MODS_DEPRESSED),
+                    xkb_state_serialize_mods (priv->state,
+                                              XKB_STATE_MODS_LATCHED),
+                    xkb_state_serialize_mods (priv->state,
+                                              XKB_STATE_MODS_LOCKED),
+                    xkb_state_serialize_layout (priv->state,
+                                                XKB_STATE_LAYOUT_EFFECTIVE));
+        }
     }
     if (priv->keymap && priv->state && priv->state_system) {
         close (fd);

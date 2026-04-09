@@ -1368,6 +1368,8 @@ main (int argc, char **argv)
     gdk_set_allowed_backends ("x11");
 #endif
 
+    /* gdk_init() does not call setlocale() */
+    setlocale (LC_ALL, "");
     gdk_init (&argc, &argv);
     XSetErrorHandler (_xerror_handler);
     XSetIOErrorHandler (_xerror_io_handler);

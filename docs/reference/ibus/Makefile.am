@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2007-2015 Peng Huang <shawn.p.huang@gmail.com>
 # Copyright (c) 2007-2020 Red Hat, Inc.
-# Copyright (c) 2015-2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2015-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -69,10 +69,13 @@ CFILE_GLOB=$(top_srcdir)/src/*.c
 # Header files to ignore when scanning. Use base file/dir names
 # e.g. IGNORE_HFILES=gtkdebug.h gtkintl.h
 IGNORE_HFILES= \
+	ibusattrlistprivate.h \
 	ibuscomposetable.h \
 	ibusconfigprivate.h \
+	ibusenginesimpleprivate.h \
 	ibusinternal.h \
 	keyname-table.h \
+	keynamesprivate.h \
 	keysymdef.h \
 	ibusenumtypes.h \
 	stamp-ibusenumtypes.h \

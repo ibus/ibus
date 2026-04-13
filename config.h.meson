@@ -1,0 +1,163 @@
+#mesondefine BINDIR
+
+#mesondefine DATADIR
+
+#mesondefine LIBEXECDIR
+
+/* dconf is 0.13.4 or later */
+#mesondefine DCONF_0_13_4
+
+/* Define to 1 if translation of program messages to the user's native
+   language is requested. */
+#mesondefine ENABLE_NLS
+
+/* Enable key snooper */
+#mesondefine ENABLE_SNOOPER
+
+/* Enable surrounding-text support */
+#mesondefine ENABLE_SURROUNDING
+
+/* The prefix for out gettext translation domains. */
+#mesondefine GETTEXT_PACKAGE
+
+/* glib2 include errno.h */
+#mesondefine GLIB2_EMBED_ERRNO_H
+
+/* Define to 1 if you have the Mac OS X function CFLocaleCopyCurrent in the
+   CoreFoundation framework. */
+#mesondefine HAVE_CFLOCALECOPYCURRENT
+
+/* Define to 1 if you have the Mac OS X function CFPreferencesCopyAppValue in
+   the CoreFoundation framework. */
+#mesondefine HAVE_CFPREFERENCESCOPYAPPVALUE
+
+/* Define to 1 if you have the 'daemon' function. */
+#mesondefine HAVE_DAEMON
+
+/* Define if the GNU dcgettext() function is already present or preinstalled.
+   */
+#mesondefine HAVE_DCGETTEXT
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#mesondefine HAVE_DLFCN_H
+
+/* Define to 1 if you have the 'getgrgid_r' function. */
+#mesondefine HAVE_GETGRGID_R
+
+/* Define if the GNU gettext() function is already present or preinstalled. */
+#mesondefine HAVE_GETTEXT
+
+/* Define if you have the iconv() function and it works. */
+#mesondefine HAVE_ICONV
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#mesondefine HAVE_INTTYPES_H
+
+/* Define to 1 if you have the <minix/config.h> header file. */
+#mesondefine HAVE_MINIX_CONFIG_H
+
+/* Enable product build */
+#mesondefine HAVE_PRODUCT_BUILD
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#mesondefine HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#mesondefine HAVE_STDIO_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#mesondefine HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#mesondefine HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#mesondefine HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/prctl.h> header file. */
+#mesondefine HAVE_SYS_PRCTL_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#mesondefine HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#mesondefine HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#mesondefine HAVE_UNISTD_H
+
+/* Define to 1 if you have the <wchar.h> header file. */
+#mesondefine HAVE_WCHAR_H
+
+/* Define to 1 if you have the <X11/XKBlib.h> header file. */
+#mesondefine HAVE_X11_XKBLIB_H
+
+/* Define to enable XFixes */
+#mesondefine HAVE_XFIXES
+
+/* Define to enable XIM */
+#mesondefine HAVE_XIM
+
+/* The default socket directory to connect ibus-daemon. */
+#mesondefine IBUS_SOCKET_DIR
+
+/* Define to build static */
+#mesondefine IBUS_STATIC_COMPILATION
+
+/* Define the location where the catalogs will be installed */
+#mesondefine LOCALEDIR
+
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
+#mesondefine LT_OBJDIR
+
+/* Does not enbale keyboard snooper in those applications */
+#mesondefine NO_SNOOPER_APPS
+
+/* Name of package */
+#mesondefine PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#mesondefine PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#mesondefine PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#mesondefine PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#mesondefine PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#mesondefine PACKAGE_URL
+
+/* Define to the version of this package. */
+#mesondefine PACKAGE_VERSION
+
+/* Define to 1 if all of the C89 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
+#mesondefine STDC_HEADERS
+
+/* Desktop filename of IBus Wayland UI. */
+#mesondefine UI_WAYLAND_DESKTOP
+
+/* Version number of package */
+#mesondefine VERSION
+
+/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
+   significant byte first (like Motorola and SPARC, unlike Intel). */
+#if defined AC_APPLE_UNIVERSAL_BUILD
+# if defined __BIG_ENDIAN__
+#  define WORDS_BIGENDIAN 1
+# endif
+#else
+# ifndef WORDS_BIGENDIAN
+#  undef WORDS_BIGENDIAN
+# endif
+#endif
+
+
+#ifndef GLIB2_EMBED_ERRNO_H
+#  include <errno.h>
+#endif

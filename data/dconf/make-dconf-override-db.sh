@@ -2,11 +2,23 @@
 
 set -e
 
+if [ ! -z $1 ]; then
+  BUILDDIR="$1"
+else
+  BUILDDIR="$PWD"
+fi
+
+if [ ! -z $2 ]; then
+  SRCDIR="$2"
+else
+  SRCDIR="$PWD"
+fi
+
 # gnome-continuous doesn't have a machine-id set, which
 # breaks dbus-launch.  There's dbus-run-session which is
 # better, but not everyone has it yet.
 export DBUS_FATAL_WARNINGS=0
-export TMPDIR=$(mktemp -d -p "$PWD")
+export TMPDIR=$(mktemp -d --tmpdir="$BUILDDIR")
 export XDG_CONFIG_HOME="$TMPDIR/config"
 export XDG_CACHE_HOME="$TMPDIR/cache"
 export GSETTINGS_SCHEMA_DIR="$TMPDIR/schemas"
@@ -22,7 +34,7 @@ cleanup() {
 }
 
 # in case that schema is not installed on the system
-glib-compile-schemas --targetdir "$GSETTINGS_SCHEMA_DIR" "$PWD"
+glib-compile-schemas --targetdir "$GSETTINGS_SCHEMA_DIR" "$SRCDIR"
 
 cat <<EOF
 # This file is a part of the IBus packaging and should not be changed.

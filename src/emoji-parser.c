@@ -1327,16 +1327,20 @@ main (int argc, char *argv[])
             g_slist_free_full (no_trans_data.emoji_list, g_free);
         }
     }
-    if (list != NULL && output)
-        ibus_emoji_data_save (output, list);
+    if (output) {
+        if (list) {
+            ibus_emoji_data_save (output, list);
+        } else if (!g_file_set_contents (output, NULL, 0, &error)) {
+            g_warning ("Failed to touch %s: %s", output, error->message);
+            g_error_free (error);
+            finit ();
+            return EXIT_FAILURE;
+        }
+    }
     if (list != NULL && output_category)
         category_file_save (output_category, list);
-    if (list) {
+    if (list)
         g_slist_free_full (list, g_object_unref);
-    } else {
-        finit ();
-        return 99;
-    }
 
     finit ();
     return EXIT_SUCCESS;

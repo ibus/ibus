@@ -14,6 +14,18 @@ config_vapi = declare_dependency(
   include_directories: config_h_inc,
 )
 
+dbus_vapi = declare_dependency(
+  dependencies: valac.find_library('dbus-1',
+    dirs: meson.current_source_dir(),
+  ),
+)
+
+glibmacro_vapi = declare_dependency(
+  dependencies: valac.find_library('glibmacro',
+    dirs: meson.current_source_dir(),
+  ),
+)
+
 gdk3_wayland_vapi = valac.find_library('gdk-wayland',
   dirs: meson.current_source_dir(),
 )

@@ -1,15 +1,23 @@
 get_overridedir = '''
 import os
+import sys
+from pathlib import Path
 import sysconfig
-libdir = sysconfig.get_config_var('SCRIPTDIR')
+libdir = sysconfig.get_config_var('LIBDIR')
 if not libdir:
   libdir = '/usr/lib'
+if '.' in sys.path:
+  sys.path.remove('.')
+self_dir = str(Path(__file__).resolve().parent)
+print(self_dir)
+if self_dir in sys.path:
+  sys.path.remove(self_dir)
 try:
   import gi
   overridedir = gi._overridesdir
 except ImportError:
-  purelibdir = sysconfig.get_path('purelib')
-  overridedir = os.path.join(purelibdir, 'gi', 'overrides')
+  platlibdir = sysconfig.get_path('platlib')
+  overridedir = os.path.join(platlibdir, 'gi', 'overrides')
 if overridedir.startswith(libdir): # Should always be True..
   overridedir = overridedir[len(libdir) + 1:]
 print(overridedir)

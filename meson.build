@@ -1,7 +1,8 @@
 project('ibus',
   [ 'c', 'vala' ],
   version: '1.5.25',
-  meson_version: '>= 0.53',
+  meson_version: '>= 1.5',
+  license: 'LGPL-2.1-or-later'
 )
 
 # Modules
@@ -11,7 +12,7 @@ fs = import('fs')
 gnome = import('gnome')
 i18n = import('i18n')
 pkgconfig = import('pkgconfig')
-python = import('python')
+python = import('python').find_installation('python3')
 
 # Versioning
 #-------------------------------------------------
@@ -25,7 +26,9 @@ ibus_api_version = ibus_major_version.to_string() + '.0'
 ibus_abi_current = 5
 ibus_abi_age = 0
 ibus_abi_revision = (100 * ibus_minor_version) + ibus_micro_version
-ibus_abi_version = '@0@.@1@.@2@'.format(ibus_abi_current, ibus_abi_age, ibus_abi_revision)
+ibus_abi_version = '@0@.@1@.@2@'.format(ibus_abi_current,
+                                        ibus_abi_age,
+                                        ibus_abi_revision)
 
 # Some variables
 #-------------------------------------------------
@@ -38,6 +41,7 @@ package_string = meson.project_name() + '-' + ibus_api_version
 pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
 ibus_log_domain = 'IBUS'
 gettext_package = 'ibus10'
+endian = host_machine.endian()
 
 if get_option('socket-dir') == ''
   if target_machine.system() == 'linux'
@@ -51,27 +55,32 @@ endif
 
 if get_option('emoji-dict')
   if not fs.is_file(get_option('unicode-emoji-dir') / 'emoji-test.txt')
-    error('Couldn\'t find $UNICODE_EMOJI_DIR/emoji-test.txt. You can get the emoji files from http://www.unicode.org/Public/emoji/4.0/')
+    error('No $UNICODE_EMOJI_DIR/emoji-test.txt found: You can get the emoji ' +
+          'files from http://www.unicode.org/Public/emoji/4.0/')
   endif
 
   emoji_annotation_dir = get_option('emoji-annotation-dir')
   if not fs.is_file(emoji_annotation_dir / 'en.xml')
-    error('Couldn\'t find $EMOJI_ANNOTATION_DIR/en.xml. You can get it from https://github.com/fujiwarat/cldr-emoji-annotation')
+    error('No $EMOJI_ANNOTATION_DIR/en.xml found: You can get it from ' +
+          'https://github.com/fujiwarat/cldr-emoji-annotation')
   endif
 endif
 
 if get_option('unicode-dict')
   if not fs.is_file(get_option('ucd-dir') / 'NamesList.txt')
-    error('Couldn\'t find $UCD_DIR/NamesList.txt. You can get UCD files from https://www.unicode.org/Public/UNIDATA/')
+    error('No find $UCD_DIR/NamesList.txt found: You can get UCD files from ' +
+          'https://www.unicode.org/Public/UNIDATA/')
   endif
   if not fs.is_file(get_option('ucd-dir') / 'Blocks.txt')
-    error('Couldn\'t find $UCD_DIR/Blocks.txt. You can get UCD files from https://www.unicode.org/Public/UNIDATA/')
+    error('No $UCD_DIR/Blocks.txt found: You can get UCD ' +
+          'files from https://www.unicode.org/Public/UNIDATA/')
   endif
 endif
 
 # Dependencies
 #-------------------------------------------------
-min_glib_version = '2.46' # Also used for Vala's --target-glib, so no micro version.
+# Also used for Vala's --target-glib, so no micro version.
+min_glib_version = '2.46'
 glib_dep = dependency('glib-2.0', version: '>=' + min_glib_version)
 gobject_dep = dependency('gobject-2.0', version: '>=' + min_glib_version)
 gio_dep = dependency('gio-2.0', version: '>=' + min_glib_version)
@@ -88,32 +97,41 @@ if enable_gtk2
     gtk2_im_module_dir = get_option('gtk2-im-module-dir')
   else
     gtk2_binary_version = gtk2_dep.get_variable(pkgconfig: 'gtk_binary_version')
-    gtk2_im_module_dir = get_option('prefix') / get_option('libdir') / 'gtk-2.0' / gtk2_binary_version / 'immodules'
+    gtk2_im_module_dir = get_option('prefix') / get_option('libdir') / \
+        'gtk-2.0' / gtk2_binary_version / 'immodules'
   endif
 endif
 
-gtk3_dep = dependency('gtk+-3.0', version: '>= 3.12.0', required: get_option('gtk3'))
-enable_gtk3 = gtk3_dep.found()
+enable_gtk3 = get_option('gtk3')
 if enable_gtk3
-  gdk3_x11_dep = dependency('gdk-x11-3.0')
+  gtk3_dep = dependency('gtk+-3.0', version: '>= 3.12.0')
+  gtk_dep = gtk3_dep
+  gdk3_x11_dep = dependency('gdk-x11-3.0', required: false)
   gdk3_wayland_dep = dependency('gdk-wayland-3.0', required: false)
 
   if get_option('gtk3-im-module-dir') != ''
     gtk3_im_module_dir = get_option('gtk3-im-module-dir')
   else
     gtk3_binary_version = gtk3_dep.get_variable(pkgconfig: 'gtk_binary_version')
-    gtk3_im_module_dir = get_option('prefix') / get_option('libdir') / 'gtk-3.0' / gtk3_binary_version / 'immodules'
+    gtk3_im_module_dir = get_option('prefix') / get_option('libdir') / \
+        'gtk-3.0' / gtk3_binary_version / 'immodules'
+  endif
+else
+  if get_option('ui')
+    error('UI option requires GTK3')
   endif
 endif
 
-gtk4_dep = dependency('gtk4', required: get_option('gtk4'))
-enable_gtk4 = gtk4_dep.found()
+enable_gtk4 = get_option('gtk4')
 if enable_gtk4
+  gtk4_dep = dependency('gtk4')
+  gtk_dep = gtk4_dep
   if get_option('gtk4-im-module-dir') != ''
     gtk4_im_module_dir = get_option('gtk4-im-module-dir')
   else
     gtk4_binary_version = gtk4_dep.get_variable(pkgconfig: 'gtk_binary_version')
-    gtk4_im_module_dir = get_option('prefix') / get_option('libdir') / 'gtk-4.0' / gtk4_binary_version / 'immodules'
+    gtk4_im_module_dir = get_option('prefix') / get_option('libdir') / \
+        'gtk-4.0' / gtk4_binary_version / 'immodules'
   endif
 endif
 
@@ -127,15 +145,16 @@ if enable_xim
   xfixes_dep = dependency('xfixes', required: false)
   have_xfixes = xfixes_dep.found()
 
-  xtest_dep = dependency('xtst', required: false)
-  have_xtest = xfixes_dep.found()
-
   x11_prefix = x11_dep.get_variable(pkgconfig: 'prefix')
 else
   have_xkblib = false
   have_xfixes = false
-  have_xtest = false
   x11_prefix = get_option('prefix')
+endif
+
+x11_localedatadir = get_option('x11-localedata-dir')
+if x11_localedatadir == ''
+  x11_localedatadir = x11_prefix / 'share' / 'X11' / 'locale'
 endif
 
 xkbconfig = dependency('xkeyboard-config', required: false)
@@ -146,22 +165,79 @@ else
 endif
 
 # Wayland
-wayland_dep = dependency('wayland-client', version: '>= 1.2.0', required: get_option('wayland'))
+wayland_dep = dependency('wayland-client', version: '>= 1.2.0',
+                         required: get_option('wayland'))
 enable_wayland = wayland_dep.found() and xkbcommon_dep.found()
+if enable_wayland
+  if meson.version().version_compare('>= 1.8.0')
+    wl_mod = import('wayland')
+  else
+    wl_mod = import('unstable-wayland')
+  endif
+endif
 
 # Bindings
-vapigen = find_program('vapigen', required: get_option('vapigen'))
-enable_vapigen = vapigen.found()
+introspection_dep = dependency('gobject-introspection-1.0', version: '>= 0.6.8',
+                               required: get_option('introspection'))
+enable_introspection = introspection_dep.found()
+if enable_introspection
+  introspection_args = [ '--warn-all', ]
+  if introspection_dep.version().version_compare('>=1.83.2')
+    introspection_args += [ '--doc-format=gi-docgen', ]
+  endif
+endif
 
-pygobject_dep = dependency('pygobject', version: '>= 3.0.0', required: get_option('pygobject'))
+vapigen_bin = find_program('vapigen', required: get_option('vapi'))
+enable_vapi = vapigen_bin.found()
+if enable_vapi and not enable_introspection
+  error('VAPI support requires GObject introspection support')
+endif
+
+# Python
+pygobject_dep = dependency('pygobject-3.0', version: '>= 3.0.0',
+                           required: false)
 enable_pygobject = pygobject_dep.found()
 
 # DConf
-dconf_dep = dependency('dconf', version: '>= 0.7.5', required: get_option('dconf'))
+dconf_dep = dependency('dconf', version: '>= 0.7.5',
+                       required: get_option('dconf'))
 enable_dconf = dconf_dep.found()
 
 # iso-codes
 isocodes_prefix = dependency('iso-codes').get_variable(pkgconfig: 'prefix')
+
+# systemd
+systemd_dep = dependency('systemd',
+                         version: '>= 0.7.5',
+                         required: get_option('systemd-services'))
+enable_systemd = systemd_dep.found()
+if enable_systemd
+  # systemd supports the '/usr/local' prefix
+  # https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html
+  systemduserunitdir = systemd_dep.get_variable(
+      pkgconfig: 'systemduserunitdir',
+      pkgconfig_define: ['prefix', get_option('prefix')])
+endif
+
+# libnotify
+enable_libnotify = get_option('libnotify')
+if enable_libnotify
+  libnotify_dep = dependency('libnotify', version: '>= 0.7')
+endif
+
+# AppIndicator
+if get_option('appindicator')
+  dbusmenu_glib_dep = dependency('dbusmenu-glib-0.4', method: 'pkg-config')
+  dbusmenu_gtk3_dep = dependency('dbusmenu-gtk3-0.4', method: 'pkg-config')
+endif
+
+libevdev_dep = dependency(['libevdev'], required: false)
+libudev_dep = dependency(['libudev'], required: false)
+
+# FIXME
+enable_gtk_doc = false
+enable_run_tests = false
+enable_install_tests = false
 
 # config.h
 #-------------------------------------------------
@@ -174,16 +250,21 @@ conf.set_quoted('BINDIR', get_option('prefix') / get_option('bindir'))
 conf.set_quoted('LIBEXECDIR', get_option('prefix') / get_option('libexecdir'))
 conf.set_quoted('LOCALEDIR', get_option('prefix') / get_option('localedir'))
 conf.set_quoted('PACKAGE_DATADIR', pkgdatadir)
+conf.set_quoted('DATADIR', get_option('prefix') / get_option('datadir'))
 conf.set10('ENABLE_SNOOPER', get_option('snooper'))
 conf.set_quoted('NO_SNOOPER_APPS', ','.join(get_option('no-snooper-apps')))
 conf.set_quoted('IBUS_SOCKET_DIR', ibus_socket_dir)
+conf.set_quoted('UI_WAYLAND_DESKTOP',
+                'org.freedesktop.IBus.Panel.Wayland.Gtk3.desktop')
 conf.set('HAVE_DAEMON', cc.has_function('daemon'))
 conf.set('HAVE_LOCALE_H', cc.has_header_symbol('locale.h', 'LC_ALL'))
 conf.set('HAVE_SYS_PRCTL_H', cc.has_header_symbol('sys/prctl.h', 'prctl'))
 conf.set('HAVE_JSON_GLIB1', json_glib_dep.found())
 conf.set('HAVE_XFIXES', have_xfixes)
 conf.set('HAVE_X11_XKBLIB_H', have_xkblib)
-conf.set('DCONF_0_13_4', dconf_dep.found() and dconf_dep.version().version_compare('>= 0.13.4'))
+conf.set('DCONF_0_13_4', dconf_dep.found() and
+                         dconf_dep.version().version_compare('>= 0.13.4'))
+conf.set('ENABLE_SURROUNDING', 'TRUE')
 
 configure_file(output: 'config.h', configuration: conf)
 
@@ -211,9 +292,6 @@ if get_option('ui')
 endif
 subdir('tools')
 subdir('bus')
-if get_option('python2_lib')
-  subdir('ibus')
-endif
 if get_option('setup')
   subdir('setup')
 endif
@@ -225,6 +303,7 @@ ibus_rpm_spec = configure_file(
   output: '@BASENAME@',
   configuration: {
     'IBUS_VERSION': meson.project_version(),
-    'DATE_DISPLAY': run_command('date', '+%a %b %d %Y').stdout().strip(),
+    'DATE_DISPLAY': run_command('date', '+%a %b %d %Y',
+                                check: true).stdout().strip(),
   },
 )

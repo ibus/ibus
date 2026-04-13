@@ -15,9 +15,10 @@ ibus_sources = files(
   'ibushotkey.c',
   'ibusinputcontext.c',
   'ibuskeymap.c',
-  'ibuskeynames.c',
+  'ibuskeys.c',
   'ibuskeyuni.c',
   'ibuslookuptable.c',
+  'ibusmessage.c',
   'ibusobject.c',
   'ibusobservedpath.c',
   'ibuspanelservice.c',
@@ -58,6 +59,7 @@ ibus_headers = files(
   'ibuskeysyms-compat.h',
   'ibuskeysyms.h',
   'ibuslookuptable.h',
+  'ibusmessage.h',
   'ibusobject.h',
   'ibusobservedpath.h',
   'ibuspanelservice.h',
@@ -103,6 +105,22 @@ ibus_enums = gnome.mkenums('ibusenumtypes',
   install_dir: get_option('includedir') / package_string,
 )
 
+ibus_gresources_xml = configure_file(
+  input: 'ibus.gresources.xml.in',
+  output: '@BASENAME@',
+  configuration: {
+    'ENDIAN': endian,
+  },
+)
+
+gen_internal_compose_table_sources = files([
+  'gencomposetable.c',
+  'ibuscomposetable.c',
+  'ibuserror.c',
+  'ibuskeys.c',
+  'ibuskeyuni.c',
+])
+
 ibus_deps = [
   glib_dep,
   gobject_dep,
@@ -117,7 +135,7 @@ ibus_cflags = [
   '-DIBUS_DISABLE_DEPRECATION_WARNINGS',
   '-DIBUS_COMPILATION',
   '-DISOCODES_PREFIX="@0@"'.format(isocodes_prefix),
-  '-DX11_DATA_PREFIX="@0@"'.format(x11_prefix),
+  '-DX11_LOCALEDATADIR="@0@"'.format(x11_localedatadir),
 ]
 
 ibus_symbolmap = meson.current_source_dir() / 'libibus.map'
@@ -125,12 +143,34 @@ ibus_linkflags = cc.get_supported_link_arguments(
   '-Wl,--version-script,@0@'.format(ibus_symbolmap),
 )
 
-ibus_lib = library('ibus-@0@'.format(ibus_api_version),
+gen_internal_compose_table = executable('gen-internal-compose-table',
+  sources: gen_internal_compose_table_sources,
+  c_args: ibus_cflags,
+  include_directories: config_h_inc,
+  dependencies: ibus_deps,
+)
+
+subdir('compose')
+
+ibusresources = gnome.compile_resources('ibusresources',
+  ibus_gresources_xml,
+  dependencies: ibus_gresources_data_gen,
+  source_dir: [
+      # List in order of preference
+      meson.current_build_dir(),
+      meson.current_source_dir(),
+  ],
+  c_name: '_ibus',
+  extra_args: '--manual-register',
+)
+
+libibus = library('ibus-@0@'.format(ibus_api_version),
   [
     ibus_sources,
     ibus_version_h,
     ibus_marshalers,
     ibus_enums,
+    ibusresources,
     files('ibuscomposetable.c'),
   ],
   dependencies: ibus_deps,
@@ -143,7 +183,7 @@ ibus_lib = library('ibus-@0@'.format(ibus_api_version),
 
 # Easy-to-reuse dependency
 ibus_dep = declare_dependency(
-  link_with: ibus_lib,
+  link_with: libibus,
   sources: [
     ibus_enums,
     ibus_marshalers,
@@ -152,7 +192,7 @@ ibus_dep = declare_dependency(
 )
 
 # pkgconfig
-pkgconfig.generate(ibus_lib,
+pkgconfig.generate(libibus,
   filebase: 'ibus-@0@'.format(ibus_api_version),
   name: 'IBus',
   description: 'IBus Library',
@@ -166,25 +206,31 @@ pkgconfig.generate(ibus_lib,
 )
 
 # GObject Introspection (GIR) file
-ibus_gir = gnome.generate_gir(ibus_lib,
-  sources: [
-    ibus_headers,
-    ibus_sources,
-    ibus_enums,
-    ibus_version_h,
-  ],
-  namespace: 'IBus',
-  nsversion: ibus_api_version,
-  identifier_prefix: 'IBus',
-  symbol_prefix: [
-    'ibus',
-  ],
-  header: 'ibus.h',
-  includes: [ 'GLib-2.0', 'GObject-2.0', 'Gio-2.0', ],
-  extra_args: ibus_cflags,
-  export_packages: 'ibus-1.0',
-  install: true,
-)
+if enable_introspection
+  ibus_gir_args = ibus_cflags + introspection_args
+  if not introspection_dep.version().version_compare('>=0.9.6')
+    ibus_gir_args += [ '--strip-prefix=IBus', ]
+  endif
+  ibus_gir = gnome.generate_gir(libibus,
+    sources: [
+      ibus_headers,
+      ibus_sources,
+      ibus_enums,
+      ibus_version_h,
+    ],
+    namespace: 'IBus',
+    nsversion: ibus_api_version,
+    identifier_prefix: 'IBus',
+    symbol_prefix: [
+      'ibus',
+    ],
+    header: 'ibus.h',
+    includes: [ 'GLib-2.0', 'GObject-2.0', 'Gio-2.0', ],
+    extra_args: ibus_gir_args,
+    export_packages: 'ibus-1.0',
+    install: true,
+  )
+endif
 
 if get_option('emoji-dict')
   emoji_parser_deps = [
@@ -243,7 +289,8 @@ if get_option('emoji-dict')
 
     # There are cases where there was no .dict file to output
     # so don't try to install them (or Meson complains)
-    if fs.exists(meson.current_build_dir() / gen_emoji_dict)
+    if fs.exists(meson.current_build_dir() / gen_emoji_dict) and
+       fs.size(gen_emoji_dict) > 0
       install_data(meson.current_build_dir() / gen_emoji_dict,
         install_dir: pkgdatadir / 'dicts',
       )

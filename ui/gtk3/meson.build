@@ -41,6 +41,7 @@ ibus_ui_gtk3_sources = files(
   'iconwidget.vala',
   'indicator.vala',
   'keybindingmanager.vala',
+  'message.vala',
   'panel.vala',
   'pango.vala',
   'property.vala',
@@ -55,13 +56,11 @@ ibus_ui_gtk3_deps = [
   gobject_dep,
   gio_dep,
   gtk3_dep,
-  gdk3_x11_dep,
   posix_dep,
-  x11_dep,
-  xi_vapi,
   ibus_dep,
   ibus_vapi,
   config_vapi,
+  glibmacro_vapi,
 ]
 
 ibus_ui_gtk3_cflags = [
@@ -72,17 +71,32 @@ ibus_ui_gtk3_cflags = [
 
 ibus_ui_gtk3_valaflags = []
 
+if enable_xim
+  ibus_ui_gtk3_deps += [ x11_dep, xi_vapi, gdk3_x11_dep, ]
+  ibus_ui_gtk3_valaflags += [ '-D', 'ENABLE_XIM' ]
+endif
+
+if enable_libnotify
+  ibus_ui_gtk3_deps += [ libnotify_dep ]
+  ibus_ui_gtk3_valaflags += [ '-D', 'ENABLE_LIBNOTIFY' ]
+endif
+
 if get_option('emoji-dict')
   ibus_ui_gtk3_valaflags += [ '-D', 'EMOJI_DICT' ]
 endif
 
 if gdk3_wayland_dep.found()
-  ibus_ui_gtk3_deps += [ gdk3_wayland_vapi ]
+  ibus_ui_gtk3_deps += [ gdk3_wayland_vapi,
+                         libibuswaylandim_dep, ibuswaylandim_vapi,
+                       ]
   ibus_ui_gtk3_valaflags += [ '-D', 'USE_GDK_WAYLAND' ]
 endif
 
 if get_option('appindicator')
-  ibus_ui_gtk3_valaflags += [ '-D', 'INDICATOR' ]
+  ibus_ui_gtk3_valaflags += [ '-D', 'INDICATOR',
+    '--pkg', 'Dbusmenu-0.4',
+    '--pkg', 'DbusmenuGtk3-0.4',
+  ]
 endif
 
 ibus_ui_gtk3 = executable('ibus-ui-gtk3',
@@ -95,17 +109,6 @@ ibus_ui_gtk3 = executable('ibus-ui-gtk3',
 )
 
 if get_option('emoji-dict')
-  configure_file(
-    input: 'gtkextension.xml.in',
-    output: '@BASENAME@',
-    configuration: {
-      'VERSION': meson.project_version(),
-      'libexecdir': get_option('prefix') / get_option('libexecdir'),
-    },
-    install: true,
-    install_dir: pkgdatadir / 'component',
-  )
-
   # ibus-ui-emojier
   ibus_ui_emojier_sources = files(
     'emojier.vala',
@@ -125,6 +128,17 @@ if get_option('emoji-dict')
   )
 
   # ibus-extension-gtk3
+  configure_file(
+    input: 'gtkextension.xml.in',
+    output: '@BASENAME@',
+    configuration: {
+      'VERSION': meson.project_version(),
+      'libexecdir': get_option('prefix') / get_option('libexecdir'),
+    },
+    install: true,
+    install_dir: pkgdatadir / 'component',
+  )
+
   ibus_extension_gtk3_sources = files(
     'bindingcommon.vala',
     'emojier.vala',
@@ -157,8 +171,10 @@ if get_option('emoji-dict')
 
   # Desktop files
   desktop_filenames = [
-    [ 'ibus-ui-emojier.desktop.in',     'org.freedesktop.IBus.Panel.Emojier.desktop'        ],
-    [ 'ibus-extension-gtk3.desktop.in', 'org.freedesktop.IBus.Panel.Extension.Gtk3.desktop' ],
+    [ 'ibus-ui-emojier.desktop.in',
+      'org.freedesktop.IBus.Panel.Emojier.desktop'        ],
+    [ 'ibus-extension-gtk3.desktop.in',
+      'org.freedesktop.IBus.Panel.Extension.Gtk3.desktop' ],
   ]
   foreach desktop_entry : desktop_filenames
     i18n.merge_file(

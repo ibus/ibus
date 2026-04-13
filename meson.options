@@ -153,3 +153,9 @@ option('vapi',
   value: 'auto',
   description: 'Build VAPI files',
 )
+# Docs
+option('gtk-doc',
+  type: 'boolean',
+  value: true,
+  description: 'Build document',
+)

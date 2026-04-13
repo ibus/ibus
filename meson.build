@@ -260,7 +260,6 @@ libevdev_dep = dependency(['libevdev'], required: false)
 libudev_dep = dependency(['libudev'], required: false)
 
 # FIXME
-enable_gtk_doc = false
 enable_run_tests = false
 enable_install_tests = false
 
@@ -313,8 +312,6 @@ subdir('client')
 subdir('portal')
 subdir('data')
 subdir('po')
-# XXX
-# subdir('docs')
 if get_option('engine')
   subdir('engine')
 endif
@@ -326,6 +323,10 @@ subdir('bus')
 if get_option('setup')
   subdir('setup')
 endif
+if get_option('gtk-doc')
+  subdir('docs')
+endif
+
 
 # RPM Spec file
 #-------------------------------------------------
@@ -360,7 +361,7 @@ summary({
   'Build introspection':           enable_introspection,
   'IBus-1.0.gir scannerflags':     introspection_args,
   'Build vala binding':            true,
-  'Build document':                enable_gtk_doc,
+  'Build document':                get_option('gtk-doc'),
   'Build UI':                      get_option('ui'),
   'Build engine':                  get_option('engine'),
   'Enable key snooper':            get_option('snooper'),

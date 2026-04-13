@@ -7,9 +7,12 @@ ibus_docs_sgml = configure_file(
 )
 
 ibus_docs_ignore_headers = [
+  'ibusattrlistprivate.h',
   'ibuscomposetable.h',
   'ibusconfigprivate.h',
+  'ibusenginesimpleprivate.h',
   'ibusinternal.h',
+  'keynamesprivate.h',
   'keyname-table.h',
   'keysymdef.h',
   'ibusenumtypes.h',
@@ -19,10 +22,10 @@ ibus_docs_ignore_headers = [
 ]
 
 gnome.gtkdoc('ibus',
-  # XXX
-  main_sgml: 'ibus-docs.sgml',
+  main_sgml: meson.current_build_dir() / 'ibus-docs.sgml',
   src_dir: [
     source_root / 'src',
+    build_root / 'src',
   ],
   ignore_headers: ibus_docs_ignore_headers,
   dependencies: ibus_dep,

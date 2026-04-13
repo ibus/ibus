@@ -197,6 +197,11 @@ endif
 pygobject_dep = dependency('pygobject-3.0', version: '>= 3.0.0',
                            required: false)
 enable_pygobject = pygobject_dep.found()
+if enable_pygobject
+  pyoverridesdir = run_command(python.full_path(), '-c',
+                               'import gi; print(gi._overridesdir)',
+                               check: true).stdout().strip()
+endif
 
 # DConf
 dconf_dep = dependency('dconf', version: '>= 0.7.5',
@@ -227,8 +232,28 @@ endif
 
 # AppIndicator
 if get_option('appindicator')
-  dbusmenu_glib_dep = dependency('dbusmenu-glib-0.4', method: 'pkg-config')
-  dbusmenu_gtk3_dep = dependency('dbusmenu-gtk3-0.4', method: 'pkg-config')
+  # dependency('dbusmenu-glib-0.4', method: 'pkg-config') searches pkg-config
+  # files but it's expanded to '--pkg dbusmenu-glib-0.4' with
+  # executable('ibus-ui-gtk3'). However dbusmenu-glib does not provide VAPI
+  # files but Typelib files only.
+  # My understanding is, currently dependency('Dbusmenu-0.4') does not support
+  # Typelib files so I cannot use dependency() but use declare_dependency().
+  dependency('dbusmenu-glib-0.4', method: 'pkg-config')
+  dependency('dbusmenu-gtk3-0.4', method: 'pkg-config')
+  dbusmenu_glib_dep = declare_dependency(
+    compile_args: run_command('pkg-config', '--cflags', 'dbusmenu-glib-0.4',
+                              check: true).stdout().strip().split(),
+    link_args: run_command('pkg-config', '--libs', 'dbusmenu-glib-0.4',
+                           check: true).stdout().strip().split(),
+    variables: { 'vala': '--pkg Dbusmenu-0.4' },
+  )
+  dbusmenu_gtk3_dep = declare_dependency(
+    compile_args: run_command('pkg-config', '--cflags', 'dbusmenu-gtk3-0.4',
+                              check: true).stdout().strip().split(),
+    link_args: run_command('pkg-config', '--libs', 'dbusmenu-gtk3-0.4',
+                           check: true).stdout().strip().split(),
+    variables: { 'vala': '--pkg DbusmenuGtk3-0.4' },
+  )
 endif
 
 libevdev_dep = dependency(['libevdev'], required: false)
@@ -262,11 +287,17 @@ conf.set('HAVE_SYS_PRCTL_H', cc.has_header_symbol('sys/prctl.h', 'prctl'))
 conf.set('HAVE_JSON_GLIB1', json_glib_dep.found())
 conf.set('HAVE_XFIXES', have_xfixes)
 conf.set('HAVE_X11_XKBLIB_H', have_xkblib)
+conf.set('GLIB2_EMBED_ERRNO_H', glib_dep.found() and
+         glib_dep.version().version_compare('>= 2.65.0'))
 conf.set('DCONF_0_13_4', dconf_dep.found() and
                          dconf_dep.version().version_compare('>= 0.13.4'))
 conf.set('ENABLE_SURROUNDING', 'TRUE')
 
-configure_file(output: 'config.h', configuration: conf)
+configure_file(
+  input: 'config.h.meson',
+  output: '@BASENAME@',
+  configuration: conf
+)
 
 config_h_inc = include_directories('.')
 
@@ -307,3 +338,42 @@ ibus_rpm_spec = configure_file(
                                 check: true).stdout().strip(),
   },
 )
+
+summary({
+  'Install prefix':                get_option('prefix'),
+  'Build endianness':              endian,
+  'PYTHON':                        python.full_path(),
+  'Build PyGObject':               enable_pygobject,
+  'Python overrides dir':          pyoverridesdir,
+  'Gtk2 immodule dir':             gtk2_im_module_dir,
+  'Gtk3 immodule dir':             gtk3_im_module_dir,
+  'Gtk4 immodule dir':             gtk4_im_module_dir,
+  'Build gtk2 immodule':           enable_gtk2,
+  'Build gtk3 immodule':           enable_gtk3,
+  'Build gtk4 immodule':           enable_gtk4,
+  'Build XIM agent server':        enable_xim,
+  'Build wayland support':         enable_wayland,
+  'Build gdk3 wayland support':    gdk3_wayland_dep.found(),
+  'Build appindicator support':    get_option('appindicator'),
+  'Build memconf modules':         get_option('memconf'),
+  'Build dconf modules':           enable_dconf,
+  'Build introspection':           enable_introspection,
+  'IBus-1.0.gir scannerflags':     introspection_args,
+  'Build vala binding':            true,
+  'Build document':                enable_gtk_doc,
+  'Build UI':                      get_option('ui'),
+  'Build engine':                  get_option('engine'),
+  'Enable key snooper':            get_option('snooper'),
+  'No snooper regexes':            get_option('no-snooper-apps'),
+  'Enable libnotify':              enable_libnotify,
+  'Enable Emoji dict':             get_option('emoji-dict'),
+  'Unicode Emoji directory':       get_option('unicode-emoji-dir'),
+  'CLDR annotation directory':     get_option('emoji-annotation-dir'),
+  'Enable Unicode dict':           get_option('unicode-dict'),
+  'UCD directory':                 get_option('ucd-dir'),
+  'Socket directory':              ibus_socket_dir,
+  'XFixes client disconnect':      have_xfixes,
+  'Install systemd service':       enable_systemd,
+  'Run test cases':                enable_run_tests,
+  'Install tests':                 enable_install_tests,
+}, section: 'Options')

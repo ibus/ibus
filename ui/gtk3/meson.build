@@ -93,9 +93,10 @@ if gdk3_wayland_dep.found()
 endif
 
 if get_option('appindicator')
+  ibus_ui_gtk3_deps += [ dbusmenu_glib_dep, dbusmenu_gtk3_dep ]
   ibus_ui_gtk3_valaflags += [ '-D', 'INDICATOR',
-    '--pkg', 'Dbusmenu-0.4',
-    '--pkg', 'DbusmenuGtk3-0.4',
+    dbusmenu_glib_dep.get_variable('vala').split(),
+    dbusmenu_gtk3_dep.get_variable('vala').split(),
   ]
 endif
 

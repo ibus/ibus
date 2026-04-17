@@ -885,6 +885,9 @@ class PanelBinding : IBus.PanelService {
         m_enable_extension = event.is_enabled;
         if (!m_enable_extension) {
             hide_emoji_lookup_table();
+            update_preedit_text_received(new IBus.Text.from_string(""),
+                                         0,
+                                         false);
             return;
         }
         if (!m_loaded_emoji)

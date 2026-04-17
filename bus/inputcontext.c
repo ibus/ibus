@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2014 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2015-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -3473,10 +3473,17 @@ bus_input_context_update_preedit_text (BusInputContext *context,
     }
 
     context->preedit_cursor_pos = cursor_pos;
-    if (use_extension) {
-        context->preedit_visible = visible;
-        context->preedit_mode = mode;
-    }
+    /* The `visible` flag is set whether use_extension is enabled or not.
+     * I.e. If both an emoji preedit text and an engine preedit exist,
+     * the engine preedit is expected to exist in the emoji preedit like
+     * <emoji_preedit  <engine_preedit /> />, so if the emoji preedit is
+     * hidden, the engine preedit is also hidden in the nested state.
+     * If some engines would need the reverse case like
+     * <engine_preedit  <emoji_preedit /> />, probably another API is needed
+     * like ibus_engine_show_emoji_candidate_in_preedit().
+     */
+    context->preedit_visible = visible;
+    context->preedit_mode = mode;
     context->ignore_focus_out = FALSE;
     extension_visible = context->preedit_visible ||
                         (context->emoji_extension != NULL);

@@ -5,19 +5,23 @@
 #
 # Translators:
 # Miloš Komarčević <kmilos@gmail.com>, 2009
+# "Марко Костић (Marko Kostić)" <marko.m.kostic@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2014-02-18 13:46+0900\n"
-"PO-Revision-Date: 2014-02-18 05:49+0000\n"
-"Last-Translator: Miloš Komarčević <kmilos@gmail.com>\n"
-"Language-Team: Serbian <fedora-trans-sr@redhat.com>\n"
+"PO-Revision-Date: 2026-04-17 08:16+0000\n"
+"Last-Translator: \"Марко Костић (Marko Kostić)\" <marko.m.kostic@gmail.com>\n"
+"Language-Team: Serbian <https://translate.fedoraproject.org/projects/ibus/"
+"ibus/sr/>\n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sr\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.17\n"
 
 #: ../setup/setup.ui.h:1
 msgid "Horizontal"
@@ -158,7 +162,7 @@ msgstr "Опште"
 #. add button
 #: ../setup/setup.ui.h:35 ../setup/keyboardshortcut.py:127
 msgid "_Add"
-msgstr "_Додај"
+msgstr "Д_одај"
 
 #: ../setup/setup.ui.h:36
 msgid "Add the selected input method into the enabled input methods"
@@ -182,7 +186,7 @@ msgstr ""
 
 #: ../setup/setup.ui.h:41
 msgid "_Down"
-msgstr "_Доле"
+msgstr "_Усправно"
 
 #: ../setup/setup.ui.h:42
 msgid "Move down the selected input method in the enabled input methods"
@@ -260,7 +264,7 @@ msgstr "<b>Покретање</b>"
 
 #: ../setup/setup.ui.h:64 ../setup/engineabout.py:34 ../ui/gtk3/panel.vala:736
 msgid "About"
-msgstr "О програму"
+msgstr "O нама"
 
 #: ../setup/setup.ui.h:65 ../setup/engineabout.py:36
 msgid "_Close"
@@ -500,7 +504,7 @@ msgstr "_Примени"
 #. delete button
 #: ../setup/keyboardshortcut.py:139
 msgid "_Delete"
-msgstr "_Обриши"
+msgstr "О_бриши"
 
 #: ../setup/keyboardshortcut.py:254
 msgid ""
@@ -510,15 +514,15 @@ msgstr "Притисните тастер (или комбинацију тас�
 
 #: ../setup/keyboardshortcut.py:256
 msgid "Please press a key (or a key combination)"
-msgstr "Притисните тастер (или комбинацију тастера)"
+msgstr "Молим притисните тастер (или комбинацију тастера)"
 
 #: ../setup/keyboardshortcut.py:338 ../setup/main.py:374
 msgid "_Cancel"
-msgstr "О_дустани"
+msgstr "От_кажи"
 
 #: ../setup/keyboardshortcut.py:339 ../setup/main.py:375
 msgid "_OK"
-msgstr "У _реду"
+msgstr "_У реду"
 
 #: ../setup/main.py:102 ../setup/main.py:395
 msgid "Use shortcut with shift to switch to the previous input method"

@@ -22,8 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
 "PO-Revision-Date: 2026-03-23 06:58+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"Last-Translator: Jonas Hubeny <jonas.hubeny@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/ibus/ibus/"
 "cs/>\n"
 "Language: cs\n"
@@ -333,10 +332,8 @@ msgid "Use custom icon name for arrow buttons on candidate window"
 msgstr "Vlastní jméno ikony pro tlačitko šipky ve výběrovém okně"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:233
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom icon"
-msgstr "Vlastní font"
+msgstr "Vlastní ikona"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:234
 msgid "Custom icon name for arrow buttons on candidate window"

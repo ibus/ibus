@@ -22,13 +22,14 @@
 # Nathan <nathan95@live.it>, 2022, 2026.
 # Luis Pixeltux <luis.pardus@gmail.com>, 2023.
 # Salvatore Cocuzza <info@salvatorecocuzza.it>, 2025.
+# Ali Ciloqlu <ali.ciloqlu@murena.io>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2026-02-03 07:58+0000\n"
-"Last-Translator: Nathan <nathan95@live.it>\n"
+"PO-Revision-Date: 2026-04-08 09:58+0000\n"
+"Last-Translator: Ali Ciloqlu <ali.ciloqlu@murena.io>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/it/>\n"
 "Language: it\n"
@@ -36,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -521,7 +522,7 @@ msgstr "_OK"
 
 #: setup/emojilang.py:235 setup/enginedialog.py:224
 msgid "More…"
-msgstr "Altro..."
+msgstr "Altro…"
 
 #: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1683
 msgid "About"
@@ -752,7 +753,7 @@ msgstr "Orientamento dei candidati:"
 #: setup/setup.ui:419
 msgid "Set the behavior of ibus how to show or hide language bar"
 msgstr ""
-"Imposta il comportamento di IBus su come mostrare o nascondere la barra "
+"Imposta il comportamento di Ibus su come mostrare o nascondere la barra "
 "della lingua"
 
 #: setup/setup.ui:421
@@ -923,7 +924,7 @@ msgstr "<b>Disposizione tastiera</b>"
 
 #: setup/setup.ui:1290
 msgid "<b>Global input method settings</b>"
-msgstr "Seleziona un metodo di input"
+msgstr "<b>Seleziona un metodo di input</b>"
 
 #: setup/setup.ui:1322
 msgid ""
@@ -1030,7 +1031,7 @@ msgstr "Persone e corpo"
 
 #: src/ibusemojigen.h:37
 msgid "Smileys & Emotion"
-msgstr "Smileys & Emotion"
+msgstr "Faccine ed emozioni"
 
 #: src/ibusemojigen.h:38
 msgid "Symbols"
@@ -3911,7 +3912,7 @@ msgstr "Manutentori"
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Sergio Zanchetta https://launchpad.net/~primes2h"
+" Sergio Zanchetta https://launchpad.net/~primes2h"
 
 #: ui/gtk3/panel.vala:1634
 msgid "Preferences"

@@ -795,11 +795,21 @@ handle_surrounding_text (void                                  *data,
 #if ENABLE_SURROUNDING
     IBusWaylandIM *wlim = data;
     IBusWaylandIMPrivate *priv;
+    size_t len;
     IBusText *ibustext;
 
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    g_return_if_fail (text);
     priv = ibus_wayland_im_get_instance_private (wlim);
 
+    len = strlen (text);
+    if (G_UNLIKELY (len > G_MAXUINT32 || len < cursor || len < anchor)) {
+        /* Should not show the text as a security reason. */
+        g_warning ("Received a wrong surrounding text length %zu < cursor %u "
+                   "anchor %u",
+                   len, cursor, anchor);
+        return;
+    }
     ibustext = ibus_text_new_from_string (text);
 
     if (priv->surrounding_text)

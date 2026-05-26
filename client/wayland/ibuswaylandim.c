@@ -325,7 +325,7 @@ ibus_wayland_im_commit_text (IBusWaylandIM *wlim,
                              const char    *str)
 {
     IBusWaylandIMPrivate *priv;
-    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    g_assert (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
     switch (priv->version) {
     case INPUT_METHOD_V1:
@@ -411,6 +411,14 @@ _context_commit_text_cb (IBusInputContext *context,
                          IBusText         *text,
                          IBusWaylandIM    *wlim)
 {
+    IBusWaylandIMPrivate *priv;
+
+    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    /* FIXME: rhbz#2480408 If priv->ibuscontext exists,
+     * priv->context also should exists.
+     */
+    g_assert (priv->ibuscontext);
     ibus_wayland_im_commit_text (wlim, text->text);
 }
 
@@ -427,6 +435,8 @@ _context_forward_key_event_cb (IBusInputContext *context,
 
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
+    /* FIXME: rhbz#2480408 */
+    g_assert (priv->ibuscontext);
     if (modifiers & IBUS_RELEASE_MASK)
         state = WL_KEYBOARD_KEY_STATE_RELEASED;
     else
@@ -644,6 +654,8 @@ _context_show_preedit_text_cb (IBusInputContext *context,
     const char *commit = "";
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
+    /* FIXME: rhbz#2480408 */
+    g_assert (priv->ibuscontext);
     /* CURSOR is byte offset.  */
     cursor =
         g_utf8_offset_to_pointer (priv->preedit_text->text,
@@ -685,6 +697,8 @@ _context_hide_preedit_text_cb (IBusInputContext *context,
     IBusWaylandIMPrivate *priv;
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
+    /* FIXME: rhbz#2480408 */
+    g_assert (priv->ibuscontext);
     switch (priv->version) {
     case INPUT_METHOD_V1:
         zwp_input_method_context_v1_preedit_string (priv->context,
@@ -722,6 +736,8 @@ _context_update_preedit_text_cb (IBusInputContext *context,
     priv->preedit_cursor_pos = cursor_pos;
     priv->preedit_mode = mode;
 
+    /* FIXME: rhbz#2480408 */
+    g_assert (priv->ibuscontext);
     if (visible)
         _context_show_preedit_text_cb (context, wlim);
     else
@@ -746,6 +762,8 @@ _context_delete_surrounding_text_cb (IBusInputContext *context,
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
 
+    /* FIXME: rhbz#2480408 */
+    g_assert (priv->ibuscontext);
     if (!priv->surrounding_text)
         return;
 

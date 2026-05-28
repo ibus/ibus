@@ -102,23 +102,6 @@ public class PropertyPanel : Gtk.Box {
     public void set_properties(IBus.PropList props) {
         debug("set_properties()\n");
 
-        // When click PropMenuToolButton, the focus is changed and
-        // set_properties() is called here while the menu button is active.
-        // Ignore that case here not to remove items.
-        bool has_active = false;
-        foreach (var item in m_items) {
-            Type type = item.get_type();
-            if (type == typeof(PropMenuToolButton) ||
-                type == typeof(PropToggleToolButton)) {
-                if (((Gtk.ToggleToolButton)item).get_active()) {
-                    has_active = true;
-                    break;
-                }
-            }
-        }
-        if (has_active)
-            return;
-
         foreach (var item in m_items)
             remove((item as Gtk.Widget));
         m_items = {};

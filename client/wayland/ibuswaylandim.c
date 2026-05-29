@@ -47,7 +47,8 @@ enum {
     PROP_BUS,
     PROP_DISPLAY,
     PROP_LOG,
-    PROP_VERBOSE
+    PROP_VERBOSE,
+    PROP_USE_SYS_KEYMAP
 };
 
 enum {
@@ -138,6 +139,7 @@ struct _IBusWaylandIMPrivate
 {
     FILE *log;
     gboolean verbose;
+    gboolean use_sys_keymap;
     struct wl_display *display;
     IMProtocolVersion version;
 
@@ -443,7 +445,16 @@ ibus_wayland_im_commit_key_event (IBusWaylandIM  *wlim,
     }
 #undef _IBUS_NO_TEXT_INPUT_MOD_MASK
 
-    if (!filtered && !g_unichar_iscntrl (ch)) {
+    /* In case `use_sys_keymap` is %TRUE, IBus does not commit ASCII chars
+     * but forwards the key events to the focused application here.
+     * Because some applications treat the printable keys as control keys,
+     * E.g. game apps "hjkl" use the cursor move like VI mode.
+     * Unfortunately the Wayland input-method protocol does not provide
+     * the fallback logic after apps handle the key events like GTK3/2
+     * IM modules. But The input-method always should handles key events
+     * prior to apps.
+     */
+    if (!filtered && !g_unichar_iscntrl (ch) && !priv->use_sys_keymap) {
         gchar buff[8] = { 0, };
         buff[g_unichar_to_utf8 (ch, buff)] = '\0';
         ibus_wayland_im_commit_text (wlim, buff);
@@ -1512,7 +1523,7 @@ _bus_global_engine_changed_cb (IBusBus       *bus,
 {
     IBusWaylandIMPrivate *priv;
     IBusEngineDesc *desc;
-    struct xkb_keymap *keymap;
+    struct xkb_keymap *keymap = NULL;
 
     g_return_if_fail (IBUS_IS_BUS (bus));
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
@@ -1521,7 +1532,8 @@ _bus_global_engine_changed_cb (IBusBus       *bus,
     ibus_wayland_im_reset_modifiers (wlim);
     g_assert (desc);
     g_assert (!g_strcmp0 (ibus_engine_desc_get_name (desc), engine_name));
-    keymap = create_user_xkb_keymap (priv->xkb_context, desc);
+    if (!priv->use_sys_keymap)
+        keymap = create_user_xkb_keymap (priv->xkb_context, desc);
     if (keymap && !ibus_xkb_keymap_update_with_keymap (&priv->key_user,
                                                        keymap,
                                                        0)) {
@@ -3179,6 +3191,21 @@ ibus_wayland_im_class_init (IBusWaylandIMClass *class)
                         FALSE,
                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
+    /**
+     * IBusWaylandIM:use-system-keymap:
+     *
+     * Use system keymap.
+     * %TRUE if the session keymap is used forcibly instead of keymaps of the
+     * IBus XKB engines, otherwise %FALSE.
+     */
+    g_object_class_install_property (gobject_class,
+                    PROP_USE_SYS_KEYMAP,
+                    g_param_spec_boolean ("use-system-keymap",
+                        "use system keymap",
+                        "Use system keymap",
+                        FALSE,
+                        G_PARAM_READWRITE));
+
     /* install signals */
     /* this module can call ibus_input_context_focus_in() and the focus-in
      * signal can reach the IBus panel and this also can call
@@ -3315,7 +3342,7 @@ ibus_wayland_im_constructor (GType                  type,
         return NULL;
     }
     desc = ibus_bus_get_global_engine (priv->ibusbus);
-    if (desc)
+    if (desc && !priv->use_sys_keymap)
         keymap = create_user_xkb_keymap (priv->xkb_context, desc);
     if (keymap && !ibus_xkb_keymap_update_with_keymap (&priv->key_user,
                                                        keymap,
@@ -3408,6 +3435,9 @@ ibus_wayland_im_set_property (IBusWaylandIM *wlim,
         g_assert (!priv->verbose);
         priv->verbose = g_value_get_boolean (value);
         break;
+    case PROP_USE_SYS_KEYMAP:
+        priv->use_sys_keymap = g_value_get_boolean (value);
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (wlim, prop_id, pspec);
     }
@@ -3436,6 +3466,9 @@ ibus_wayland_im_get_property (IBusWaylandIM *wlim,
         break;
     case PROP_VERBOSE:
         g_value_set_boolean (value, priv->verbose);
+        break;
+    case PROP_USE_SYS_KEYMAP:
+        g_value_set_boolean (value, priv->use_sys_keymap);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (wlim, prop_id, pspec);

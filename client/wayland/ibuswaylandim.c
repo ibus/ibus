@@ -62,6 +62,13 @@ typedef enum
     INPUT_METHOD_V2,
 } IMProtocolVersion;
 
+typedef enum {
+    IBUS_KEY_ISO_LEVEL_INVALID,
+    IBUS_KEY_ISO_LEVEL_2,
+    IBUS_KEY_ISO_LEVEL_3,
+    IBUS_KEY_ISO_LEVEL_5
+} IBusKeyIsoLevelValue;
+
 struct zwp_input_method_context_union {
     union {
         struct zwp_input_method_context_v1 *context_v1;
@@ -161,6 +168,8 @@ struct _IBusWaylandIMPrivate
 
     IBusXkbKeymap key_user;
     IBusXkbKeymap key_sys;
+    gboolean is_pressed_mod3;
+    gboolean is_pressed_mod5;
 
     uint32_t im_serial;
     int32_t repeat_rate;
@@ -340,6 +349,28 @@ ibus_wayland_source_new (struct wl_display *display)
 
 
 static void
+ibus_wayland_im_reset_modifiers (IBusWaylandIM *wlim)
+{
+    IBusWaylandIMPrivate *priv;
+    xkb_layout_index_t  group = 0;
+
+    g_assert (IBUS_IS_WAYLAND_IM (wlim));
+
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    priv->is_virtual_latch_state = FALSE;
+    priv->is_pressed_mod3 = FALSE;
+    priv->is_pressed_mod5 = FALSE;
+    if (priv->key_user.state && priv->key_sys.state) {
+        group = xkb_state_serialize_layout (priv->key_sys.state,
+                                            XKB_STATE_LAYOUT_LOCKED);
+        input_method_keyboard_modifiers (wlim, NULL, 0, 0, 0, 0, group);
+    } else {
+        priv->modifiers = 0;
+    }
+}
+
+
+static void
 ibus_wayland_im_commit_text (IBusWaylandIM *wlim,
                              const char    *str)
 {
@@ -515,7 +546,8 @@ ibus_wayland_im_update_virtual_depressed (IBusWaylandIM  *wlim,
                                           xkb_keysym_t    sym,
                                           IBusXkbKeymap  *active_key,
                                           gboolean        filtered,
-                                          xkb_mod_mask_t *mods_depressed)
+                                          xkb_mod_mask_t *mods_depressed,
+                                          gboolean       *clear_virtual_state)
 {
     IBusWaylandIMPrivate *priv;
     uint32_t code = key + 8;
@@ -528,6 +560,7 @@ ibus_wayland_im_update_virtual_depressed (IBusWaylandIM  *wlim,
     g_assert (IBUS_IS_WAYLAND_IM (wlim));
     g_assert (active_key);
     g_assert (mods_depressed);
+    g_assert (clear_virtual_state);
 
     priv = ibus_wayland_im_get_instance_private (wlim);
     new_mods_depressed = *mods_depressed;
@@ -543,25 +576,87 @@ ibus_wayland_im_update_virtual_depressed (IBusWaylandIM  *wlim,
         break;
     /* Level3_latch is caused by TLDE key in lv(tilde) keymap.
      * Level3_Shift is caused by Alt key in lv(tilde) keymap.
+     * Level5_Latch is caused by Shift+Alt key in de(T3) keymap.
      */
     case IBUS_KEY_ISO_Level3_Latch:
     case IBUS_KEY_ISO_Level3_Shift:
-        if (state == WL_KEYBOARD_KEY_STATE_PRESSED) {
-            new_mods_depressed |= active_key->mod5_mask;
-            if (sym != system_sym)
-                priv->is_virtual_latch_state = TRUE;
-            filtered = TRUE;
-        }
-        break;
-    /* Level5_Latch is caused by Shift+Alt key in de(T3) keymap.
-     */
     case IBUS_KEY_ISO_Level5_Latch:
     case IBUS_KEY_ISO_Level5_Shift:
         if (state == WL_KEYBOARD_KEY_STATE_PRESSED) {
-            new_mods_depressed |= active_key->mod3_mask;
+            switch (sym) {
+            case IBUS_KEY_ISO_Level3_Latch:
+            case IBUS_KEY_ISO_Level3_Shift:
+                priv->is_pressed_mod5 = TRUE;
+                new_mods_depressed |= active_key->mod5_mask;
+                break;
+            case IBUS_KEY_ISO_Level5_Latch:
+            case IBUS_KEY_ISO_Level5_Shift:
+                priv->is_pressed_mod3 = TRUE;
+                new_mods_depressed |= active_key->mod3_mask;
+                break;
+            default:
+                g_assert_not_reached ();
+            }
             if (sym != system_sym)
                 priv->is_virtual_latch_state = TRUE;
             filtered = TRUE;
+        } else {
+            IBusKeyIsoLevelValue current_level = IBUS_KEY_ISO_LEVEL_INVALID;
+            gboolean *is_pressed_current_mod = NULL;
+            gboolean *is_pressed_reverse_mod = NULL;
+            xkb_mod_mask_t current_mode_mask = 0;
+            xkb_mod_mask_t reverse_mode_mask = 0;
+            switch (sym) {
+            case IBUS_KEY_ISO_Level3_Latch:
+            case IBUS_KEY_ISO_Level3_Shift:
+                current_level = IBUS_KEY_ISO_LEVEL_3;
+                is_pressed_current_mod = &priv->is_pressed_mod5;
+                is_pressed_reverse_mod = &priv->is_pressed_mod3;
+                current_mode_mask = active_key->mod5_mask;
+                reverse_mode_mask = active_key->mod3_mask;
+                break;
+            case IBUS_KEY_ISO_Level5_Latch:
+            case IBUS_KEY_ISO_Level5_Shift:
+                current_level = IBUS_KEY_ISO_LEVEL_5;
+                is_pressed_current_mod = &priv->is_pressed_mod3;
+                is_pressed_reverse_mod = &priv->is_pressed_mod5;
+                current_mode_mask = active_key->mod3_mask;
+                reverse_mode_mask = active_key->mod5_mask;
+                break;
+            default:;
+            }
+            g_assert (current_level != IBUS_KEY_ISO_LEVEL_INVALID);
+            g_assert (is_pressed_current_mod && is_pressed_reverse_mod);
+            if (G_LIKELY (*is_pressed_current_mod)) {
+                *is_pressed_current_mod = FALSE;
+            } else if (*is_pressed_reverse_mod &&
+                       (new_mods_depressed & active_key->mod3_mask)) {
+                /* The unlikely case !priv->is_pressed_mod3 and
+                 * priv->is_pressed_mod5 means that "de(T3)" keymap gives
+                 * the pressed "Level3_Shift" keysym and
+                 * the released "Level5_Latch" keysym for the key <RALT>.
+                 * Maybe a bug in "de(T3)" so need to clear the MOD5 state
+                 * by the pressed "Level3_Shift" keysym.
+                 */
+                *is_pressed_reverse_mod = FALSE;
+                new_mods_depressed &= ~reverse_mode_mask;
+                *clear_virtual_state = TRUE;
+                g_debug ("Got a wrong released %s key without the "
+                         "pressed one. Maybe a bug in XKB.",
+                         current_level == IBUS_KEY_ISO_LEVEL_3 ?
+                                 "Level3" : "Level5");
+            }
+            /* The "lv(tilde)" keymap gives the "Level3_Shift" keysym
+             * with the key <RALT>.
+             */
+            if ((current_level == IBUS_KEY_ISO_LEVEL_3 &&
+                 sym == IBUS_KEY_ISO_Level3_Shift) ||
+                (current_level == IBUS_KEY_ISO_LEVEL_5 &&
+                 sym == IBUS_KEY_ISO_Level5_Shift)) {
+                new_mods_depressed &= ~current_mode_mask;
+                if (sym != system_sym)
+                    clear_virtual_state = TRUE;
+            }
         }
         break;
     case IBUS_KEY_Shift_L:
@@ -634,6 +729,23 @@ ibus_wayland_im_update_virtual_xkb_state (IBusWaylandIM *wlim,
         xkb_state_update_key (active_key->state, code,
                               (state == WL_KEYBOARD_KEY_STATE_RELEASED)
                               ? XKB_KEY_UP : XKB_KEY_DOWN);
+    }
+    if (priv->is_virtual_latch_state &&
+        (new_mods_depressed != mods_depressed) &&
+        (state != WL_KEYBOARD_KEY_STATE_RELEASED)) {
+        xkb_mod_mask_t new2_mods_depressed;
+        new2_mods_depressed = xkb_state_serialize_mods (active_key->state,
+                                                        XKB_STATE_DEPRESSED |
+                                                        XKB_STATE_LATCHED);
+        /* "de(T3)" keymap gives the pressed "Level3_Shift" keysym and
+         * sets both MOD3(Level5) and MOD5(Level3) states after
+         * xkb_state_update_key() is called with the keypress.
+         * Maybe a bug in "de(T3)" and sets MOD5(Level3) again here.
+         */
+        if (G_UNLIKELY (new_mods_depressed != new2_mods_depressed)) {
+            xkb_state_update_mask (active_key->state, new_mods_depressed,
+                                   0, mods_locked, 0, 0, group);
+        }
     }
 }
 
@@ -1350,6 +1462,7 @@ _bus_global_engine_changed_cb (IBusBus       *bus,
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
     desc = ibus_bus_get_global_engine (bus);
+    ibus_wayland_im_reset_modifiers (wlim);
     g_assert (desc);
     g_assert (!g_strcmp0 (ibus_engine_desc_get_name (desc), engine_name));
     keymap = create_user_xkb_keymap (priv->xkb_context, desc);
@@ -1512,7 +1625,8 @@ ibus_wayland_im_post_key (IBusWaylandIM *wlim,
                                                          sym,
                                                          active_key,
                                                          filtered,
-                                                         &new_mods_depressed);
+                                                         &new_mods_depressed,
+                                                         &clear_virtual_state);
     filtered = ibus_wayland_im_commit_key_event (wlim,
                                                  key,
                                                  modifiers,
@@ -2378,6 +2492,7 @@ _create_input_context_done (GObject      *object,
                                                            TRUE);
         }
         ibus_input_context_focus_in (priv->ibuscontext);
+        ibus_wayland_im_reset_modifiers (wlim);
         g_signal_emit (wlim,
                        wayland_im_signals[IBUS_FOCUS_IN],
                        0,

@@ -39,6 +39,7 @@ class Application {
 #if USE_GDK_WAYLAND
     private static ulong m_bus_connected_id;
     private static ulong m_realize_surface_id;
+    private static ulong m_use_system_keymap_id;
     private static ulong m_ibus_focus_in_id;
     private static ulong m_ibus_focus_out_id;
     private static string m_user;
@@ -115,6 +116,8 @@ class Application {
         if (m_wayland_im != null) {
             m_realize_surface_id = m_panel.realize_surface.connect(
                     (w, s) => this.set_wayland_surface(s));
+            m_use_system_keymap_id = m_panel.use_system_keymap.connect(
+                    (w, b) => m_wayland_im.use_system_keymap = b);
             m_ibus_focus_in_id = m_wayland_im.ibus_focus_in.connect(
                     (w, o) => m_panel.set_wayland_object_path(o));
             m_ibus_focus_out_id = m_wayland_im.ibus_focus_out.connect(
@@ -145,6 +148,10 @@ class Application {
         if (m_realize_surface_id != 0) {
             GLib.SignalHandler.disconnect(m_panel, m_realize_surface_id);
             m_realize_surface_id = 0;
+        }
+        if (m_use_system_keymap_id != 0) {
+            GLib.SignalHandler.disconnect(m_panel, m_use_system_keymap_id);
+            m_use_system_keymap_id = 0;
         }
         if (m_ibus_focus_in_id != 0) {
             GLib.SignalHandler.disconnect(m_wayland_im, m_ibus_focus_in_id);

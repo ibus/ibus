@@ -35,12 +35,6 @@ G_BEGIN_DECLS
  */
 #define IBUS_COMPOSE_ERROR (ibus_compose_error_quark ())
 
-/* Checks if a keysym is a dead key. Dead key keysym values are defined in
- * ibuskeysyms.h and the first is GDK_KEY_dead_grave.
- */
-#define IS_DEAD_KEY(k) \
-      ((k) >= IBUS_KEY_dead_grave && (k) <= IBUS_KEY_dead_greek)
-
 
 struct _IBusComposeTablePrivate
 {
@@ -57,8 +51,10 @@ struct _IBusComposeTablePrivate
  * Since: 1.5.33
  * Stability: Unstable
  */
+G_GNUC_INTERNAL
 GQuark   ibus_compose_error_quark   (void);
 guint    ibus_compose_key_flag      (guint                       key);
+G_GNUC_INTERNAL
 gboolean ibus_check_algorithmically (const guint                *compose_buffer,
                                      int                         n_compose,
                                      gunichar                   *output);
@@ -67,11 +63,13 @@ GVariant *
                                     (IBusComposeTableEx
                                                                 *compose_table,
                                      gboolean                   reverse_endian);
+G_GNUC_INTERNAL
 IBusComposeTableEx *
          ibus_compose_table_deserialize
                                     (const char                 *contents,
                                      gsize                       length,
                                      guint16                    *saved_version);
+G_GNUC_INTERNAL
 gboolean ibus_compose_table_check   (const IBusComposeTableEx   *table,
                                      guint                      *compose_buffer,
                                      int                         n_compose,
@@ -79,6 +77,7 @@ gboolean ibus_compose_table_check   (const IBusComposeTableEx   *table,
                                      gboolean                   *compose_match,
                                      GString                    *output,
                                      gboolean                    is_32bit);
+G_GNUC_INTERNAL
 gunichar ibus_keysym_to_unicode     (guint                       keysym,
                                      gboolean                    combining,
                                      gboolean                   *need_space);
@@ -88,6 +87,7 @@ gunichar ibus_keysym_to_unicode     (guint                       keysym,
  * Since: 1.5.33
  * Stability: Unstable
  */
+G_GNUC_INTERNAL
 gunichar ibus_keysym_to_unicode_with_layout
                                     (guint                       keysym,
                                      gboolean                    combining,

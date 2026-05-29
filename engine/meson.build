@@ -40,17 +40,21 @@ simple_xml = custom_target('simple.xml',
   install_dir: pkgdatadir / 'component',
 )
 
-if get_option('tests')
-  pyoverrides_tests = [
-    {
-      'name': 'test-gnome',
-    },
+disrro_tests_env = {
+  'lib_srcdir': source_root / 'src',
+}
+
+if get_option('tests') and get_option('distro-tests')
+  distro_tests = [
+    { 'name': 'test-dead', },
+    { 'name': 'test-gnome', },
   ]
 
-  foreach _test : pyoverrides_tests
+  foreach _test : distro_tests
     timeout = _test.get('timeout', 30)
     test(_test['name'], files([python.full_path()])[0],
       args: [ meson.current_source_dir() / '@0@.py'.format(_test['name']) ],
+      env: environment(disrro_tests_env),
       suite: 'engine',
       timeout: timeout,
     )

@@ -62,5 +62,14 @@
 G_GNUC_INTERNAL void
 ibus_g_variant_get_child_string (GVariant *variant, gsize index, char **str);
 
-#endif
+#ifdef IBUS_KEY_dead_grave
+#ifdef IBUS_KEY_dead_longsolidusoverlay
+/* Checks if a keysym is a dead key. Dead key keysym values are defined in
+ * ibuskeysyms.h and the first is GDK_KEY_dead_grave.
+ */
+#define IS_DEAD_KEY(k) \
+      ((k) >= IBUS_KEY_dead_grave && (k) <= IBUS_KEY_dead_longsolidusoverlay)
+#endif /* IBUS_KEY_dead_longsolidusoverlay */
+#endif /* IBUS_KEY_dead_grave */
 
+#endif

@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2010-2016, Google Inc. All rights reserved.
 # Copyright (c) 2007-2016 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2013-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2013-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -57,10 +57,17 @@ AM_VALAFLAGS = \
     --target-glib="$(VALA_TARGET_GLIB_VERSION)" \
     $(NULL)
 
+TESTS_ENVIRONMENT = \
+    lib_srcdir=$(srcdir)/../src \
+    $(NULL)
+
 TESTS =
 
+if ENABLE_DISTRO_TESTS
+TESTS += test-dead.py
 if ENABLE_PYGNOME_DESKTOP
 TESTS += test-gnome.py
+endif
 endif
 
 libexec_PROGRAMS = \
@@ -99,6 +106,7 @@ EXTRA_DIST = \
     gensimple.py \
     iso639converter.py \
     simple.xml.in \
+    test-dead.py \
     test-gnome.py \
     $(NULL)
 

@@ -39,6 +39,7 @@ jobs:
             build: BUILD_MESON
           - container: fedora:44
             ucd_dir: /usr/share/unicode/ucd
+            test_config: '-Ddistro-tests=true'
             build: BUILD_MESON
             latest_xkb: KEEP_XKB_XML
           - container: ubuntu:resolute
@@ -57,6 +58,7 @@ jobs:
             build: BUILD_AUTOTOOL
           - container: fedora:44
             ucd_dir: /usr/share/unicode/ucd
+            test_config: '--enable-distro-tests'
             build: BUILD_AUTOTOOL
             latest_xkb: KEEP_XKB_XML
           - container: ubuntu:jammy

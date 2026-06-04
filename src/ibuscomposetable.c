@@ -36,6 +36,7 @@
 #include "ibustypes.h"
 
 #include "ibusenginesimpleprivate.h"
+#include "ibusinternal.h"
 
 
 #define IBUS_COMPOSE_TABLE_MAGIC "IBusComposeTable"
@@ -101,8 +102,8 @@ parse_compose_value (IBusComposeData  *compose_data,
                      const char       *val,
                      const char       *line)
 {
-    char *head, *end, *p;
-    char *ustr = NULL;
+    const char *head, *end, *p;
+    char *ustr = NULL, *comment;
     gunichar *uchars = NULL, *up;
     GError *error = NULL;
     int n_uchars = 0;
@@ -165,7 +166,9 @@ parse_compose_value (IBusComposeData  *compose_data,
 
     g_free (ustr);
     g_free (uchars);
-    compose_data->comment = g_strdup (g_strstrip (end + 1));
+    comment = g_strdup (end + 1);
+    compose_data->comment = g_strdup (g_strstrip (comment));
+    g_free (comment);
 
     return TRUE;
 
@@ -1991,7 +1994,7 @@ ibus_compose_table_check (const IBusComposeTableEx *table,
     int row_stride = table->max_seq_len + 2;
     const guint16 *data_first;
     int n_seqs;
-    guint16 *seq;
+    const guint16 *seq, *prev_seq;
 
     if (compose_finish)
         *compose_finish = FALSE;
@@ -2020,8 +2023,6 @@ ibus_compose_table_check (const IBusComposeTableEx *table,
     if (seq == NULL)
         return FALSE;
 
-    guint16 *prev_seq;
-
     /* Back up to the first sequence that matches to make sure
      * we find the exact match if their is one.
      */
@@ -2034,7 +2035,7 @@ ibus_compose_table_check (const IBusComposeTableEx *table,
 
     /* complete sequence */
     if (n_compose == table->max_seq_len || seq[n_compose] == 0) {
-        guint16 *next_seq;
+        const guint16 *next_seq;
         gunichar value = 0;
         int num = 0;
         int index = 0;

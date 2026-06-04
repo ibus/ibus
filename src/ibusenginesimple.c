@@ -28,11 +28,13 @@
 #include "ibuscomposetable.h"
 #include "ibusemoji.h"
 #include "ibusenginesimple.h"
-#include "ibusenginesimpleprivate.h"
 
 #include "ibuskeys.h"
 #include "ibuskeysyms.h"
 #include "ibusutil.h"
+
+#include "ibusenginesimpleprivate.h"
+#include "ibusinternal.h"
 
 #include <memory.h>
 #include <stdlib.h>

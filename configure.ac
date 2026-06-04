@@ -793,6 +793,18 @@ PKG_CHECK_MODULES(XFIXES,
     [have_xfixes="no (libXfixes version is lower than 6)"]
 )
 
+# --enable-distro-tests
+AC_ARG_ENABLE(distro-tests,
+    AS_HELP_STRING([--enable-distro-tests],
+                   [Enable to test distro files]),
+    [enable_distro_tests=$enableval],
+    [enable_distro_tests=no]
+)
+AM_CONDITIONAL([ENABLE_DISTRO_TESTS], [test x"$enable_distro_tests" = x"yes"])
+if test x"$enable_distro_tests" = x"no"; then
+    enable_distro_tests="no (disabled, use --enable-distro-tests to enable)"
+fi
+
 # --enable-install-tests
 AC_ARG_ENABLE(install-tests,
     AS_HELP_STRING([--enable-install-tests],
@@ -1069,6 +1081,7 @@ Build options:
   XFixes client disconnect      $have_xfixes
   Install systemd service       $enable_systemd
   Run test cases                $enable_tests
+  Distro tests                  $enable_distro_tests
   Install tests                 $enable_install_tests
 ])
 AS_IF([test $HAS_OUTPUT_TAIL -eq 1],

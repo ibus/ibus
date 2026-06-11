@@ -7,13 +7,13 @@
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2017. #zanata, 2020.
 # Toni Rantala <trantalafilo@gmail.com>, 2017. #zanata
 # Jan Kuparinen <copper_fin@hotmail.com>, 2021.
-# Ricky Tigg <ricky.tigg@gmail.com>, 2021, 2025.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2021, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2025-06-01 21:56+0900\n"
-"PO-Revision-Date: 2025-04-04 10:32+0000\n"
+"PO-Revision-Date: 2026-04-21 11:58+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/fi/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.17\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -295,20 +295,16 @@ msgid "Custom theme name for language panel"
 msgstr "Näytä syötetavan nimi kielipalkissa"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:228
-#, fuzzy
-#| msgid "Use custom font"
 msgid "Use custom icon"
-msgstr "Käytä omavalintaista fonttia"
+msgstr "Käytä mukautettua kuvaketta"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:229
 msgid "Use custom icon name for arrow buttons on candidate window"
 msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:233
-#, fuzzy
-#| msgid "Custom font"
 msgid "Custom icon"
-msgstr "Omavalintainen fontti"
+msgstr "Mukautettu kuvake"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:234
 msgid "Custom icon name for arrow buttons on candidate window"
@@ -573,7 +569,7 @@ msgstr ""
 #. Translators: Title of the window
 #: setup/main.py:638
 msgid "switching input methods"
-msgstr ""
+msgstr "syöttötapojen vaihtaminen"
 
 #: setup/setup.ui:11
 msgid "Horizontal"
@@ -658,7 +654,7 @@ msgstr ""
 
 #: setup/setup.ui:388
 msgid "Candidates orientation:"
-msgstr ""
+msgstr "Ehdokkaiden asento:"
 
 #: setup/setup.ui:419
 msgid "Set the behavior of ibus how to show or hide language bar"
@@ -836,20 +832,16 @@ msgid "Choose a theme of the candidate window"
 msgstr ""
 
 #: setup/setup.ui:1378
-#, fuzzy
-#| msgid "Use custom font:"
 msgid "Use custom icon:"
-msgstr "Käytä mukautettua fonttia:"
+msgstr "Käytä mukautettua kuvaketta:"
 
 #: setup/setup.ui:1379
 msgid "Choose a theme of the arrow buttons on the candidate window"
 msgstr ""
 
 #: setup/setup.ui:1424
-#, fuzzy
-#| msgid "<b>Font and Style</b>"
 msgid "<b>Font and Theme</b>"
-msgstr "<b>Fontti ja tyyli</b>"
+msgstr "<b>Fontti ja teema</b>"
 
 #: setup/setup.ui:1444
 msgid "Advanced"
@@ -970,7 +962,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:49
 msgid "IPA Extensions"
-msgstr ""
+msgstr "IPA-laajennukset"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

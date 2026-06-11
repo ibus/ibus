@@ -252,23 +252,45 @@ class Application {
         m_log.flush();
     }
 
-    private static bool run_ibus_daemon() {
-        string[] args = { "ibus-daemon" };
-        foreach (var arg in m_daemon_args.split(" "))
-            args += arg;
-        GLib.Pid child_pid = 0;
-        try {
-            GLib.Process.spawn_async (null, args, null,
-                                      GLib.SpawnFlags.DO_NOT_REAP_CHILD
-                                      | GLib.SpawnFlags.SEARCH_PATH,
-                                      null,
-                                      out child_pid);
-        } catch (GLib.SpawnError e) {
-            m_log.printf("ibus-daemon error: %s\n", e.message);
-            warning("%s\n", e.message);
-            return false;
+    private static GLib.Pid run_ibus_daemon() {
+        string[] daemon_args = {};
+        if (m_daemon_args != null && m_daemon_args != "") {
+            try {
+                GLib.Shell.parse_argv(m_daemon_args, out daemon_args);
+            } catch (GLib.ShellError e) {
+                var message = "Failed to parse daemon arguments: %s".printf(
+                        e.message);
+                m_log.printf("ibus-daemon error: %s\n", message);
+                warning("%s", message);
+                return 0;
+            }
         }
-        return true;
+
+        string[] args = { "ibus-daemon" };
+        foreach (var arg in daemon_args)
+            args += arg;
+        /*
+         * Launch ibus-daemon without GLib.Process.spawn_async() here because
+         * on some systems, g_spawn_async() uses a short-lived helper process,
+         * which reparents ibus-daemon to PID 1 before it reaches main().
+         * ibus-daemon then treats that as parent death and exits.
+         */
+        Posix.errno = 0;
+        GLib.Pid child_pid = Posix.fork();
+        if (child_pid < 0) {
+            var message = "fork failed: %s".printf(Posix.strerror(Posix.errno));
+            m_log.printf("ibus-daemon error: %s\n", message);
+            warning("%s", message);
+            return 0;
+        }
+        if (child_pid == 0) {
+            Posix.execvp("ibus-daemon", args);
+            var message = "execvp(ibus-daemon) failed: %s".printf(
+                    Posix.strerror(Posix.errno));
+            warning("%s", message);
+            Posix._exit(Posix.EXIT_FAILURE);
+        }
+        return child_pid;
     }
 
     private static void make_wayland_im() {
@@ -305,10 +327,20 @@ class Application {
         GLib.MainLoop? loop = null;
         if (!bus.is_connected() && m_exec_daemon) {
             m_bus_connected_id = bus.connected.connect((bus) => {
-                if (loop != null)
+                if (loop != null) {
                     loop.quit();
+                    loop = null;
+                }
             });
-            if (run_ibus_daemon()) {
+            var daemon_pid = run_ibus_daemon();
+            if (daemon_pid > 0) {
+                GLib.ChildWatch.add(daemon_pid, (pid, status) => {
+                    GLib.Process.close_pid(pid);
+                    if (loop != null) {
+                        loop.quit();
+                        loop = null;
+                    }
+                });
                 if (!bus.is_connected()) {
                     loop = new GLib.MainLoop();
                     loop.run();
@@ -332,8 +364,7 @@ class Application {
                     m_bus_connected_id = 0;
                 });
             }
-        }
-        if (bus.is_connected()) {
+        } else {
             m_wayland_im = new IBus.WaylandIM("bus", bus,
                                               "wl_display", wl_display,
                                               "log", m_log,

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2026-03-02 14:58+0000\n"
+"PO-Revision-Date: 2026-05-12 18:59+0000\n"
 "Last-Translator: Jim Spentzos <jimspentzos2000@gmail.com>\n"
 "Language-Team: Greek <https://translate.fedoraproject.org/projects/ibus/ibus/"
 "el/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -450,7 +450,7 @@ msgstr ""
 
 #: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
-msgstr ""
+msgstr "Άλλη"
 
 #: setup/emojilang.py:67
 msgid "Select a language"
@@ -894,19 +894,19 @@ msgstr ""
 
 #: src/ibusemojigen.h:31
 msgid "Animals & Nature"
-msgstr "Ζώα & Φύση"
+msgstr "Ζώα και φύση"
 
 #: src/ibusemojigen.h:32
 msgid "Component"
-msgstr ""
+msgstr "Στοιχείο"
 
 #: src/ibusemojigen.h:33
 msgid "Flags"
-msgstr ""
+msgstr "Σημαίες"
 
 #: src/ibusemojigen.h:34
 msgid "Food & Drink"
-msgstr "Φαγητό & Ποτό"
+msgstr "Φαγητό και ποτό"
 
 #: src/ibusemojigen.h:35
 msgid "Objects"
@@ -914,7 +914,7 @@ msgstr "Αντικείμενα"
 
 #: src/ibusemojigen.h:36
 msgid "People & Body"
-msgstr "Άνθρωποι & Σώμα"
+msgstr "Άνθρωποι και σώμα"
 
 #: src/ibusemojigen.h:37
 msgid "Smileys & Emotion"
@@ -1026,14 +1026,14 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:77
 msgid "Hebrew"
-msgstr ""
+msgstr "Εβραϊκά"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:81
 msgid "Arabic"
-msgstr ""
+msgstr "Αραβικά"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1138,7 +1138,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:141
 msgid "Tamil"
-msgstr ""
+msgstr "Ταμίλ"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1495,7 +1495,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:345
 msgid "Arrows"
-msgstr ""
+msgstr "Βέλη"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1768,7 +1768,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:501
 msgid "CJK Compatibility"
-msgstr ""
+msgstr "Συμβατότητα CJK"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

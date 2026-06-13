@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input IBus
  * Copyright (C) 2008-2015 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2020 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2020-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2020 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include "ibusinternal.h"
 #include "ibusobservedpath.h"
+#include "ibusshare.h"
 
 
 enum {
@@ -304,25 +305,65 @@ end_check_modification:
     return retval;
 }
 
-static void
+static gboolean
 ibus_observed_path_fill_stat (IBusObservedPath *path)
 {
-    g_assert (IBUS_IS_OBSERVED_PATH (path));
-
+    const gchar *full_path;
+    gchar *real_path;
     struct stat buf;
 
-    if (g_stat (path->path, &buf) == 0) {
+    g_assert (IBUS_IS_OBSERVED_PATH (path));
+    g_assert (path->path);
+
+    full_path = path->path;
+    if (full_path[0] == '~') {
+        g_assert (full_path[1] == G_DIR_SEPARATOR);
+        real_path = g_build_filename (g_get_home_dir (), full_path + 2, NULL);
+    } else {
+        real_path = g_strdup (path->path);
+    }
+
+    if (g_stat (real_path, &buf) == 0) {
         path->is_exist = 1;
         if (S_ISDIR (buf.st_mode)) {
             path->is_dir = 1;
         }
         path->mtime = buf.st_mtime;
-    }
-    else {
-        path->is_dir = 0;
+    } else {
+        /* path->is_dir should not be reset. */
         path->is_exist = 0;
         path->mtime = 0;
     }
+    g_free (real_path);
+
+    if (full_path[0] == '~' || full_path[0] == '.') {
+        if (path->is_dir) {
+            ibus_set_log_handler (TRUE);
+            g_warning ("IBusObservedPath should not observe user directories "
+                       "not to increase the registry updates: %s",
+                       full_path);
+            ibus_unset_log_handler ();
+            return FALSE;
+        } else if (!g_str_has_suffix (full_path, ".xml")) {
+            /* ibus_observed_path_new() also supports XML files only. */
+            gchar *sys_cache = g_build_filename (IBUS_DATA_DIR,
+                                                 "component", NULL);
+            ibus_set_log_handler (TRUE);
+            g_warning ("IBusObservedPath supports the compose file format(XML) "
+                       "only except for the IBus compose directory(%s): %s",
+                       sys_cache, full_path);
+            ibus_unset_log_handler ();
+            g_free (sys_cache);
+            return FALSE;
+        }
+    } else {
+        g_debug ("IBusObservedPath could observe the system directories "
+                 "started with /usr, /etc or /opt only for distro "
+                 "maintenances but $IBUS_COMPONENT_PATH could be "
+                 "configured with the test directories. We may limit "
+                 "the supported directories in the future.");
+    }
+    return TRUE;
 }
 
 GList *
@@ -347,8 +388,9 @@ ibus_observed_path_traverse (IBusObservedPath *path,
         g_object_ref_sink (sub);
         sub->path = g_build_filename (path->path, name, NULL);
 
-        ibus_observed_path_fill_stat (sub);
-        if (sub->is_exist && sub->is_dir) {
+        if (!ibus_observed_path_fill_stat (sub)) {
+            g_object_unref (sub);
+        } else if (sub->is_exist && sub->is_dir) {
             paths = g_list_append (paths, sub);
             paths = g_list_concat (paths,
                                    ibus_observed_path_traverse (sub, dir_only));
@@ -470,11 +512,10 @@ ibus_observed_path_new_from_xml_node (XMLNode *node,
     path = (IBusObservedPath *) g_object_new (IBUS_TYPE_OBSERVED_PATH, NULL);
 
     if (!ibus_observed_path_parse_xml_node (path, node)) {
-        g_object_unref (path);
-        path = NULL;
-    }
-    else if (fill_stat) {
-        ibus_observed_path_fill_stat (path);
+        g_clear_object (&path);
+    } else if (fill_stat) {
+        if (!ibus_observed_path_fill_stat (path))
+            g_clear_object (&path);
     }
 
     return path;
@@ -491,6 +532,7 @@ ibus_observed_path_new (const gchar *path,
 
     g_assert (path);
     op = (IBusObservedPath *) g_object_new (IBUS_TYPE_OBSERVED_PATH, NULL);
+    g_return_val_if_fail (op, NULL);
     op->path = g_strdup (path);
 
     priv = IBUS_OBSERVED_PATH_GET_PRIVATE (op);
@@ -522,9 +564,10 @@ ibus_observed_path_new (const gchar *path,
     }
     g_list_free_full (file_list, (GDestroyNotify)g_object_unref);
 
-    if (fill_stat)
-        ibus_observed_path_fill_stat (op);
+    if (fill_stat) {
+        if (!ibus_observed_path_fill_stat (op))
+            g_clear_object (&op);
+    }
 
     return op;
 }
-

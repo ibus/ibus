@@ -81,6 +81,7 @@ ibus_engine_simple_DEPENDENCIES = \
     $(NULL)
 
 component_DATA = \
+    component.dtd \
     simple.xml \
     $(NULL)
 
@@ -95,6 +96,7 @@ CLEANFILES = \
     $(NULL)
 
 EXTRA_DIST = \
+    component.dtd \
     denylist.txt \
     gensimple.py \
     iso639converter.py \
@@ -119,5 +121,17 @@ simple.xml.in:
 
 $(libibus):
 	$(MAKE) -C $(top_builddir)/src
+
+check-am: all-am simple.xml
+	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
+	cp_dtd=0; \
+	if test ! -f $(builddir)/component.dtd ; then \
+	cp $(srcdir)/component.dtd $(builddir)/.; \
+	cp_dtd=1; \
+	fi; \
+	xmllint --noout --valid --postvalid $(builddir)/simple.xml && \
+	if test $$cp_dtd -eq 1 ; then \
+	rm $(builddir)/component.dtd; \
+	fi
 
 -include $(top_srcdir)/git.mk

@@ -40,6 +40,9 @@
 #include "virtual-keyboard-unstable-v1-client-protocol.h"
 #include "ibuswaylandim.h"
 
+/* keysym & keycode should not be logged for the security issue. */
+/* #define IBUS_LOG_SHOW_KEYSYM */
+
 enum {
     PROP_0 = 0,
     PROP_BUS,
@@ -60,6 +63,19 @@ typedef enum
     INPUT_METHOD_V1,
     INPUT_METHOD_V2,
 } IMProtocolVersion;
+
+typedef enum {
+    IBUS_KEY_ISO_LEVEL_INVALID,
+    IBUS_KEY_ISO_LEVEL_2,
+    IBUS_KEY_ISO_LEVEL_3,
+    IBUS_KEY_ISO_LEVEL_5
+} IBusKeyIsoLevelValue;
+
+typedef enum {
+    IBUS_KEY_ISO_LEVEL_STATE_RELEASE,
+    IBUS_KEY_ISO_LEVEL_STATE_SHIFT,
+    IBUS_KEY_ISO_LEVEL_STATE_LATCH
+} IBusKeyIsoLevelState;
 
 struct zwp_input_method_context_union {
     union {
@@ -146,6 +162,7 @@ struct _IBusWaylandIMPrivate
     guint preedit_cursor_pos;
     guint preedit_mode;
     IBusModifierType modifiers;
+    gboolean is_virtual_latch_state;
     gboolean hiding_preedit_text;
     IBusInputHints ibus_hints;
     IBusInputPurpose ibus_purpose;
@@ -159,10 +176,14 @@ struct _IBusWaylandIMPrivate
 
     IBusXkbKeymap key_user;
     IBusXkbKeymap key_sys;
+    IBusKeyIsoLevelState iso_level3_state;
+    IBusKeyIsoLevelState iso_level5_state;
 
     uint32_t im_serial;
     int32_t repeat_rate;
     int32_t repeat_delay;
+    xkb_keysym_t pressed_dead_key;
+    xkb_keysym_t released_dead_key_wo_press;
 
     GCancellable *cancellable;
 };
@@ -203,10 +224,6 @@ static char _use_sync_mode = 1;
 
 static guint wayland_im_signals[LAST_SIGNAL] = { 0 };
 
-static void         input_method_deactivate
-                              (void                               *data,
-                               struct zwp_input_method_union      *input_method,
-                               struct zwp_input_method_context_v1 *context);
 static GObject     *ibus_wayland_im_constructor        (GType          type,
                                                         guint          n_params,
                                                         GObjectConstructParam
@@ -228,6 +245,19 @@ static gboolean     ibus_wayland_im_post_key           (IBusWaylandIM *wlim,
                                                         xkb_keysym_t   sym,
                                                         gboolean
                                                                       filtered);
+static void         input_method_deactivate
+                              (void                               *data,
+                               struct zwp_input_method_union      *input_method,
+                               struct zwp_input_method_context_v1 *context);
+static void         input_method_keyboard_modifiers
+                              (void                               *data,
+                               struct zwp_keyboard_union          *keyboard,
+                               uint32_t                            key_serial,
+                               uint32_t
+                                                                 mods_depressed,
+                               uint32_t                            mods_latched,
+                               uint32_t                            mods_locked,
+                               uint32_t                            group);
 
 
 static char
@@ -329,6 +359,30 @@ ibus_wayland_source_new (struct wl_display *display)
 
 
 static void
+ibus_wayland_im_reset_modifiers (IBusWaylandIM *wlim)
+{
+    IBusWaylandIMPrivate *priv;
+    xkb_layout_index_t  group = 0;
+
+    g_assert (IBUS_IS_WAYLAND_IM (wlim));
+
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    priv->is_virtual_latch_state = FALSE;
+    priv->iso_level3_state = IBUS_KEY_ISO_LEVEL_STATE_RELEASE;
+    priv->iso_level5_state = IBUS_KEY_ISO_LEVEL_STATE_RELEASE;
+    priv->pressed_dead_key = 0;
+    priv->released_dead_key_wo_press = 0;
+    if (priv->key_user.state && priv->key_sys.state) {
+        group = xkb_state_serialize_layout (priv->key_sys.state,
+                                            XKB_STATE_LAYOUT_LOCKED);
+        input_method_keyboard_modifiers (wlim, NULL, 0, 0, 0, 0, group);
+    } else {
+        priv->modifiers = 0;
+    }
+}
+
+
+static void
 ibus_wayland_im_commit_text (IBusWaylandIM *wlim,
                              const char    *str)
 {
@@ -351,6 +405,107 @@ ibus_wayland_im_commit_text (IBusWaylandIM *wlim,
     default:
         g_assert_not_reached ();
     }
+}
+
+
+static gboolean
+ibus_wayland_im_commit_key_event (IBusWaylandIM  *wlim,
+                                  uint32_t        key,
+                                  uint32_t        modifiers,
+                                  uint32_t        state,
+                                  xkb_keysym_t    sym,
+                                  IBusXkbKeymap  *active_key,
+                                  gboolean        filtered,
+                                  xkb_mod_mask_t *new_mods_depressed,
+                                  gboolean       *clear_virtual_state,
+                                  gboolean       *is_invalid_key)
+{
+    IBusWaylandIMPrivate *priv;
+    uint32_t code = key + 8;
+    uint32_t ch;
+
+    g_return_val_if_fail (IBUS_IS_WAYLAND_IM (wlim), filtered);
+    priv = ibus_wayland_im_get_instance_private (wlim);
+
+    ch = ibus_keyval_to_unicode (sym);
+    if (ch == 0 || g_unichar_iscntrl (ch))
+        ch = xkb_state_key_get_utf32 (active_key->state, code);
+
+/* No text with Control & Alt & Super keys */
+#ifndef GDK_WINDOWING_QUARTZ
+#  define _IBUS_NO_TEXT_INPUT_MOD_MASK (\
+    IBUS_CONTROL_MASK | IBUS_MOD1_MASK | IBUS_MOD4_MASK)
+#else
+#  define _IBUS_NO_TEXT_INPUT_MOD_MASK (\
+    IBUS_CONTROL_MASK | IBUS_MOD2_MASK | IBUS_MOD4_MASK)
+#endif
+    if ((state == WL_KEYBOARD_KEY_STATE_RELEASED) ||
+        (modifiers & _IBUS_NO_TEXT_INPUT_MOD_MASK)) {
+        return filtered;
+    }
+#undef _IBUS_NO_TEXT_INPUT_MOD_MASK
+
+    /* In case `use_sys_keymap` is %TRUE, IBus does not commit ASCII chars
+     * but forwards the key events to the focused application here.
+     * Because some applications treat the printable keys as control keys,
+     * E.g. game apps "hjkl" use the cursor move like VI mode.
+     * Unfortunately the Wayland input-method protocol does not provide
+     * the fallback logic after apps handle the key events like GTK3/2
+     * IM modules. But the input-method always should handle key events
+     * prior to apps.
+     */
+    if (!filtered && !g_unichar_iscntrl (ch) && !priv->use_sys_keymap) {
+        gchar buff[8] = { 0, };
+        g_unichar_to_utf8 (ch, buff);
+        ibus_wayland_im_commit_text (wlim, buff);
+        filtered = TRUE;
+    }
+    if (!g_unichar_iscntrl (ch) || IS_DEAD_KEY (sym)) {
+        /* If `filtered` is %TRUE, the keysym can be eaten for the compose
+         * preedit by IBus XKB engine. E.g. AltGr-Shift-V key produces
+         * `Level3_Shift' and `Greek_OMEGA` keysym with "us(symbolic)" keymap.
+         * However if you configure multiple keymaps, AltGr-Shift may produce
+         * the keymap switch although AltGr-Shift-V produces `Greek_OMEGA`.
+         * I'm not clarified with "level3(ralt_switch)" in us XKB keymaps.
+         */
+        if (modifiers & IBUS_MOD3_MASK) {
+            /* With the "fr(ergol)" keymap, Typing the key <AD09> twice
+             * produces the "ISO_Level5_Latch" keysym for the first KeyPress
+             * and the "dead_diaeresis" keysym for the first KeyReleease
+             * because the release key event has MOD3(level5) state.
+             * And the second KeyPress has the "dead_diaeresis" keysym and
+             * the second KeyRelease has the "ISO_Level5_Latch" keysym.
+             * The latch state should be cleared with the dead keys.
+             * I downgrade the latch state to the shift state here and
+             * the shift state will be cleared by the released
+             * "ISO_Level5_Latch" keysym but not the pressed dead keys
+             * because xkb_state_update_key() will revert the MOD3(level5)
+             * state of the depressed xkb_state_serialize_mods()
+             * with the dead keys.
+             */
+            if (priv->iso_level5_state == IBUS_KEY_ISO_LEVEL_STATE_LATCH) {
+                priv->iso_level5_state = IBUS_KEY_ISO_LEVEL_STATE_SHIFT;
+                if (is_invalid_key)
+                    *is_invalid_key = TRUE;
+            } else if (clear_virtual_state) {
+                *clear_virtual_state = TRUE;
+            }
+            if (new_mods_depressed)
+                *new_mods_depressed &= ~active_key->mod3_mask;
+        }
+        if (modifiers & IBUS_MOD5_MASK) {
+            if (priv->iso_level3_state == IBUS_KEY_ISO_LEVEL_STATE_LATCH) {
+                priv->iso_level3_state = IBUS_KEY_ISO_LEVEL_STATE_SHIFT;
+                if (is_invalid_key)
+                    *is_invalid_key = TRUE;
+            } else if (clear_virtual_state) {
+                *clear_virtual_state = TRUE;
+            }
+            if (new_mods_depressed)
+                *new_mods_depressed &= ~active_key->mod5_mask;
+        }
+    }
+    return filtered;
 }
 
 
@@ -414,6 +569,253 @@ ibus_wayland_im_keysym (IBusWaylandIM *wlim,
         break;
     default:
         g_assert_not_reached ();
+    }
+}
+
+
+/**
+ * ibus_wayland_im_update_virtual_depressed:
+ *
+ * If the IBus keymap is different from the compositor keymap,
+ * IBus needs to maintain the modifiers state by itself to call
+ * xkb_state_update_mask(), E.g. IBus keymap is "lv(tilde)" and the system
+ * one is "us", because input_method_keyboard_modifiers()
+ * is not called by the Wayland compositor in that case.
+ * So this API updates @mods_depressed with ISO level3 and level5
+ * latch and shift states, and send it to
+ * ibus_wayland_im_update_virtual_xkb_state().
+ */
+static gboolean
+ibus_wayland_im_update_virtual_depressed (IBusWaylandIM  *wlim,
+                                          uint32_t        key,
+                                          uint32_t        modifiers,
+                                          uint32_t        state,
+                                          xkb_keysym_t    sym,
+                                          IBusXkbKeymap  *active_key,
+                                          gboolean        filtered,
+                                          xkb_mod_mask_t *mods_depressed,
+                                          gboolean       *clear_virtual_state,
+                                          gboolean       *is_invalid_key)
+{
+    IBusWaylandIMPrivate *priv;
+    uint32_t code = key + 8;
+    xkb_mod_mask_t new_mods_depressed;
+    xkb_keysym_t system_sym = sym;
+
+    if (filtered)
+        return filtered;
+
+    g_assert (IBUS_IS_WAYLAND_IM (wlim));
+    g_assert (active_key);
+    g_assert (mods_depressed);
+    g_assert (clear_virtual_state);
+    g_assert (is_invalid_key);
+
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    new_mods_depressed = *mods_depressed;
+
+    if ((modifiers & ~IBUS_RELEASE_MASK ) != new_mods_depressed) {
+        g_warning ("IBus modifiers %X is different from XKB depressed %X",
+                   modifiers, new_mods_depressed);
+    }
+    if (priv->key_sys.state)
+        system_sym = xkb_state_key_get_one_sym (priv->key_sys.state, code);
+    switch (sym) {
+    case IBUS_KEY_ISO_Level2_Latch:
+        filtered = TRUE;
+        break;
+    /* Level3_latch is caused by TLDE key in lv(tilde) keymap.
+     * Level3_Shift is caused by Alt key in lv(tilde) keymap.
+     * Level5_Latch is caused by Shift+Alt key in de(T3) keymap.
+     */
+    case IBUS_KEY_ISO_Level3_Latch:
+    case IBUS_KEY_ISO_Level3_Shift:
+    case IBUS_KEY_ISO_Level5_Latch:
+    case IBUS_KEY_ISO_Level5_Shift:
+        if (state == WL_KEYBOARD_KEY_STATE_PRESSED) {
+            switch (sym) {
+            case IBUS_KEY_ISO_Level3_Latch:
+                priv->iso_level3_state = IBUS_KEY_ISO_LEVEL_STATE_LATCH;
+                new_mods_depressed |= active_key->mod5_mask;
+                break;
+            case IBUS_KEY_ISO_Level3_Shift:
+                priv->iso_level3_state = IBUS_KEY_ISO_LEVEL_STATE_SHIFT;
+                new_mods_depressed |= active_key->mod5_mask;
+                break;
+            case IBUS_KEY_ISO_Level5_Latch:
+                priv->iso_level5_state = IBUS_KEY_ISO_LEVEL_STATE_LATCH;
+                new_mods_depressed |= active_key->mod3_mask;
+                break;
+            case IBUS_KEY_ISO_Level5_Shift:
+                priv->iso_level5_state = IBUS_KEY_ISO_LEVEL_STATE_SHIFT;
+                new_mods_depressed |= active_key->mod3_mask;
+                break;
+            default:
+                g_assert_not_reached ();
+            }
+            if (sym != system_sym)
+                priv->is_virtual_latch_state = TRUE;
+            filtered = TRUE;
+        } else {
+            IBusKeyIsoLevelValue current_level = IBUS_KEY_ISO_LEVEL_INVALID;
+            IBusKeyIsoLevelState *current_state = NULL;
+            IBusKeyIsoLevelState *reverse_state = NULL;
+            switch (sym) {
+            case IBUS_KEY_ISO_Level3_Latch:
+            case IBUS_KEY_ISO_Level3_Shift:
+                current_level = IBUS_KEY_ISO_LEVEL_3;
+                current_state = &priv->iso_level3_state;
+                reverse_state = &priv->iso_level5_state;
+                break;
+            case IBUS_KEY_ISO_Level5_Latch:
+            case IBUS_KEY_ISO_Level5_Shift:
+                current_level = IBUS_KEY_ISO_LEVEL_5;
+                current_state = &priv->iso_level5_state;
+                reverse_state = &priv->iso_level3_state;
+                break;
+            default:;
+            }
+            g_assert (current_level != IBUS_KEY_ISO_LEVEL_INVALID);
+            g_assert (current_state && reverse_state);
+            /* The "lv(tilde)" keymap gives the "Level3_Shift" keysym
+             * with the key <RALT>.
+             *
+             * Handle the "ISO_Level5_Latch" keysym in the "fr(ergol)" keymap.
+             * Do not use keysym but `current_state` because the latch state
+             * can be changed to the shift state with some key conditions.
+             */
+            if (*current_state == IBUS_KEY_ISO_LEVEL_STATE_SHIFT) {
+                *current_state = IBUS_KEY_ISO_LEVEL_STATE_RELEASE;
+                if (current_level == IBUS_KEY_ISO_LEVEL_3)
+                    new_mods_depressed &= ~active_key->mod5_mask;
+                else if (current_level == IBUS_KEY_ISO_LEVEL_5)
+                    new_mods_depressed &= ~active_key->mod3_mask;
+                else
+                    g_assert_not_reached ();
+                if (sym != system_sym)
+                    *clear_virtual_state = TRUE;
+            } else if (!*current_state && *reverse_state &&
+                       (((current_level == IBUS_KEY_ISO_LEVEL_3) &&
+                         (new_mods_depressed & active_key->mod3_mask)) ||
+                        ((current_level == IBUS_KEY_ISO_LEVEL_5) &&
+                         (new_mods_depressed & active_key->mod5_mask))
+                       )) {
+                /* The unlikely case !priv->is_pressed_mod3 and
+                 * priv->is_pressed_mod5 means that "de(T3)" keymap gives
+                 * the pressed "Level3_Shift" keysym and
+                 * the released "Level5_Latch" keysym for the key <RALT>.
+                 * This case can happen if the normal keysym and shift keysym
+                 * are different.
+                 */
+                *reverse_state = IBUS_KEY_ISO_LEVEL_STATE_RELEASE;
+                *is_invalid_key = TRUE;
+                if (current_level == IBUS_KEY_ISO_LEVEL_3)
+                    new_mods_depressed &= ~active_key->mod3_mask;
+                else if (current_level == IBUS_KEY_ISO_LEVEL_5)
+                    new_mods_depressed &= ~active_key->mod5_mask;
+                else
+                    g_assert_not_reached ();
+                *clear_virtual_state = TRUE;
+                g_debug ("Got a wrong released %s key without the "
+                         "pressed one. Maybe the next Shift state will "
+                         "produce the delayed pressed one.",
+                         current_level == IBUS_KEY_ISO_LEVEL_3 ?
+                                 "Level3" : "Level5");
+            }
+        }
+        break;
+    case IBUS_KEY_Shift_L:
+    case IBUS_KEY_Shift_R:
+        if (state == WL_KEYBOARD_KEY_STATE_PRESSED)
+            new_mods_depressed |= active_key->shift_mask;
+        else
+            new_mods_depressed &= ~active_key->shift_mask;
+        break;
+    default:;
+    }
+#ifdef IBUS_LOG_SHOW_KEYSYM
+    if (priv->verbose) {
+        fprintf (priv->log, "%s key:%u sym:%x system_sym:%x modifiers:%x "
+                            "state:%s filtered:%d\n",
+                 G_STRFUNC,
+                 key, sym, system_sym, modifiers, state ? "press" : "release",
+                 filtered);
+        fflush (priv->log);
+    }
+#endif
+    *mods_depressed = new_mods_depressed;
+    return filtered;
+}
+
+
+/**
+ * ibus_wayland_im_update_virtual_xkb_state:
+ *
+ * Update virtual IBus xkb_state by KeyPress and KeyRelease.
+ */
+static void
+ibus_wayland_im_update_virtual_xkb_state (IBusWaylandIM *wlim,
+                                          uint32_t       key,
+                                          uint32_t       state,
+                                          IBusXkbKeymap *active_key,
+                                          xkb_mod_mask_t mods_depressed,
+                                          xkb_mod_mask_t new_mods_depressed,
+                                          gboolean       clear_virtual_state,
+                                          gboolean       is_invalid_key)
+{
+    IBusWaylandIMPrivate *priv;
+    uint32_t code = key + 8;
+    xkb_mod_mask_t mods_locked;
+    xkb_layout_index_t  group = 0;
+
+    g_assert (IBUS_IS_WAYLAND_IM (wlim));
+
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    mods_locked = xkb_state_serialize_mods (active_key->state,
+                                            XKB_STATE_MODS_LOCKED);
+    /* XKB group layout is configured in the system keymap but not the
+     * user keymap which always includes a single layout.
+     */
+    if (priv->key_sys.state) {
+        group = xkb_state_serialize_layout (priv->key_sys.state,
+                                            XKB_STATE_LAYOUT_LOCKED);
+    }
+
+    if (priv->is_virtual_latch_state) {
+        if (new_mods_depressed != mods_depressed) {
+            input_method_keyboard_modifiers (wlim, NULL, 0,
+                                             new_mods_depressed,
+                                             0,
+                                             mods_locked,
+                                             group);
+        }
+        if (clear_virtual_state)
+            priv->is_virtual_latch_state = FALSE;
+    }
+    if (G_LIKELY (!is_invalid_key) &&
+        (!priv->is_virtual_latch_state ||
+         (state != WL_KEYBOARD_KEY_STATE_RELEASED))) {
+        xkb_state_update_key (active_key->state, code,
+                              (state == WL_KEYBOARD_KEY_STATE_RELEASED)
+                              ? XKB_KEY_UP : XKB_KEY_DOWN);
+    }
+    if (priv->is_virtual_latch_state &&
+        (new_mods_depressed != mods_depressed) &&
+        (state != WL_KEYBOARD_KEY_STATE_RELEASED)) {
+        xkb_mod_mask_t new2_mods_depressed;
+        new2_mods_depressed = xkb_state_serialize_mods (active_key->state,
+                                                        XKB_STATE_DEPRESSED |
+                                                        XKB_STATE_LATCHED);
+        /* "de(T3)" keymap gives the pressed "Level3_Shift" keysym and
+         * sets both MOD3(Level5) and MOD5(Level3) states after
+         * xkb_state_update_key() is called with the keypress.
+         * FIXME: Should set `is_invalid_key` in this case of the "de(T3)"
+         * keymap too not to call xkb_state_update_key() here?
+         */
+        if (G_UNLIKELY (new_mods_depressed != new2_mods_depressed)) {
+            xkb_state_update_mask (active_key->state, new_mods_depressed,
+                                   0, mods_locked, 0, 0, group);
+        }
     }
 }
 
@@ -1079,7 +1481,7 @@ ibus_xkb_keymap_update_with_keymap (IBusXkbKeymap     *ibus_keymap,
         xkb_state_unref (ibus_keymap->state);
     if (ibus_keymap->keymap)
         xkb_keymap_unref (ibus_keymap->keymap);
-    ibus_keymap->keymap = keymap;
+    ibus_keymap->keymap = xkb_keymap_ref (keymap);
     ibus_keymap->state = state;
 
     /* xkb_map_mod_get_index() can return any xkb_mod_index_t value, including
@@ -1115,11 +1517,13 @@ _bus_global_engine_changed_cb (IBusBus       *bus,
     IBusWaylandIMPrivate *priv;
     IBusEngineDesc *desc;
     struct xkb_keymap *keymap;
+    gboolean has_keymap = FALSE;
 
     g_return_if_fail (IBUS_IS_BUS (bus));
     g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
     priv = ibus_wayland_im_get_instance_private (wlim);
     desc = ibus_bus_get_global_engine (bus);
+    ibus_wayland_im_reset_modifiers (wlim);
     g_assert (desc);
     g_assert (!g_strcmp0 (ibus_engine_desc_get_name (desc), engine_name));
     /* Always update priv->key_user even if priv->use_sys_keymap is %FALSE
@@ -1127,9 +1531,17 @@ _bus_global_engine_changed_cb (IBusBus       *bus,
      * immediately without checking the Gsettings.
      */
     keymap = create_user_xkb_keymap (priv->xkb_context, desc);
-    if (keymap && !ibus_xkb_keymap_update_with_keymap (&priv->key_user,
-                                                       keymap)) {
+    if (keymap) {
+        has_keymap = ibus_xkb_keymap_update_with_keymap (&priv->key_user,
+                                                         keymap);
         xkb_keymap_unref (keymap);
+    }
+    if (priv->verbose) {
+        fprintf (priv->log, "New engine:%s keymap:%s state:%s\n",
+                 ibus_engine_desc_get_name (desc),
+                 has_keymap ? "TRUE" : "FALSE",
+                 priv->key_user.state ? "TRUE" : "FALSE");
+        fflush (priv->log);
     }
     g_object_unref (desc);
 }
@@ -1145,6 +1557,7 @@ input_method_keyboard_keymap (void                      *data,
     IBusWaylandIM *wlim = data;
     IBusWaylandIMPrivate *priv;
     struct xkb_keymap *keymap;
+    gboolean has_keymap = FALSE;
 
     if (!IBUS_IS_WAYLAND_IM (wlim)) {
         close (fd);
@@ -1194,25 +1607,25 @@ input_method_keyboard_keymap (void                      *data,
         return;
     }
     keymap = create_system_xkb_keymap (priv->xkb_context, format, fd, size);
-    if (keymap &&
-        !ibus_xkb_keymap_update_with_keymap (&priv->key_sys,
-                                             xkb_keymap_ref (keymap))) {
-        xkb_keymap_unref (keymap);
-        g_clear_pointer (&keymap, xkb_keymap_unref);
+    if (keymap) {
+        has_keymap = ibus_xkb_keymap_update_with_keymap (&priv->key_sys,
+                                                         keymap);
+        if (!has_keymap)
+            g_clear_pointer (&keymap, xkb_keymap_unref);
     }
-    if (keymap && !priv->key_user.state &&
-        !ibus_xkb_keymap_update_with_keymap (&priv->key_user,
-                                             xkb_keymap_ref (keymap))) {
-        xkb_keymap_unref (keymap);
-        g_clear_pointer (&keymap, xkb_keymap_unref);
+    if (has_keymap && !priv->key_user.state) {
+        has_keymap = ibus_xkb_keymap_update_with_keymap (&priv->key_user,
+                                                         keymap);
+        if (!has_keymap)
+            g_clear_pointer (&keymap, xkb_keymap_unref);
     }
-    if (keymap)
+    if (has_keymap)
         xkb_keymap_unref (keymap);
     if (priv->verbose) {
         fprintf (priv->log, "System keymap format:%u fd:%d size:%u "
                             "keymap:%s state:%s\n",
                  format, fd, size,
-                 keymap ? "TRUE" : "FALSE",
+                 has_keymap ? "TRUE" : "FALSE",
                  priv->key_sys.state ? "TRUE" : "FALSE");
         fflush (priv->log);
     }
@@ -1253,6 +1666,7 @@ _get_seat_with_name (GPtrArray *seats,
     return NULL;
 }
 
+
 static gboolean
 ibus_wayland_im_post_key (IBusWaylandIM *wlim,
                           uint32_t       key,
@@ -1263,8 +1677,9 @@ ibus_wayland_im_post_key (IBusWaylandIM *wlim,
 {
     IBusWaylandIMPrivate *priv;
     IBusXkbKeymap *active_key;
-    uint32_t code = key + 8;
-    uint32_t ch;
+    xkb_mod_mask_t mods_depressed, new_mods_depressed;
+    gboolean clear_virtual_state = FALSE;
+    gboolean is_invalid_key = FALSE;
 
     g_return_val_if_fail (IBUS_IS_WAYLAND_IM (wlim), FALSE);
     priv = ibus_wayland_im_get_instance_private (wlim);
@@ -1288,49 +1703,38 @@ ibus_wayland_im_post_key (IBusWaylandIM *wlim,
         active_key = &priv->key_user;
     if (!active_key->state)
         return FALSE;
-    if (!filtered) {
-#if 0
-        /* FIXME: Need to confirm any modifiers should be ignored. */
-        if (!ibus_accelerator_valid (
-                    sym,
-                    modifiers & IBUS_MODIFIER_MASK & ~IBUS_SHIFT_MASK)) {
-            filtered = TRUE;
-        }
-#else
-        switch (sym) {
-        case IBUS_ISO_Level2_Latch:
-        case IBUS_ISO_Level3_Latch:
-        case IBUS_ISO_Level5_Latch:
-            filtered = TRUE;
-            break;
-        default:;
-        }
-#endif
-    }
-    /* In case `use_sys_keymap` is %TRUE, IBus does not commit ASCII chars
-     * but forwards the key events to the focused application here.
-     * Because some applications treat the printable keys as control keys,
-     * E.g. game apps "hjkl" use the cursor move like VI mode.
-     * Unfortunately the Wayland input-method protocol does not provide
-     * the fallback logic after apps handle the key events like GTK3/2
-     * IM modules. But The input-method always should handles key events
-     * prior to apps.
-     */
-    if (!filtered && (state != WL_KEYBOARD_KEY_STATE_RELEASED) &&
-        !priv->use_sys_keymap) {
-        ch = xkb_state_key_get_utf32 (active_key->state, code);
-        if (!(modifiers & IBUS_MODIFIER_MASK & ~IBUS_SHIFT_MASK) &&
-            ch && ch != '\n' && ch != '\b' && ch != '\r' && ch != '\t' &&
-            ch != '\033' && ch != '\x7f') {
-            gchar buff[8] = { 0, };
-            buff[g_unichar_to_utf8 (ch, buff)] = '\0';
-            ibus_wayland_im_commit_text (wlim, buff);
-            filtered = TRUE;
-        }
-    }
-    xkb_state_update_key (active_key->state, code,
-                          (state == WL_KEYBOARD_KEY_STATE_RELEASED)
-                          ? XKB_KEY_UP : XKB_KEY_DOWN);
+    mods_depressed = xkb_state_serialize_mods (active_key->state,
+                                               XKB_STATE_DEPRESSED |
+                                               XKB_STATE_LATCHED);
+    new_mods_depressed = mods_depressed;
+    filtered = ibus_wayland_im_update_virtual_depressed (wlim,
+                                                         key,
+                                                         modifiers,
+                                                         state,
+                                                         sym,
+                                                         active_key,
+                                                         filtered,
+                                                         &new_mods_depressed,
+                                                         &clear_virtual_state,
+                                                         &is_invalid_key);
+    filtered = ibus_wayland_im_commit_key_event (wlim,
+                                                 key,
+                                                 modifiers,
+                                                 state,
+                                                 sym,
+                                                 active_key,
+                                                 filtered,
+                                                 &new_mods_depressed,
+                                                 &clear_virtual_state,
+                                                 &is_invalid_key);
+    ibus_wayland_im_update_virtual_xkb_state (wlim,
+                                              key,
+                                              state,
+                                              active_key,
+                                              mods_depressed,
+                                              new_mods_depressed,
+                                              clear_virtual_state,
+                                              is_invalid_key);
     return filtered;
 }
 
@@ -1709,6 +2113,21 @@ key_event_check_repeat (IBusWaylandIM       *wlim,
         g_clear_pointer (&repeating_event.ibus_object_path, g_free);
         if (!priv->ibuscontext)
             return FALSE;
+        if (IS_DEAD_KEY (event->sym)) {
+            /* With "fr(ergol)" keymap, in case that key <AD09> is typed
+             * twice, the second pressed keysym is "dead_diaeresis" and
+             * the second released keysym is "ISO_Level5_Latch".
+             * The keysym "dead_diaeresis" should not be auto-repeated
+             * in this case.
+             */
+            if (priv->released_dead_key_wo_press == event->sym) {
+                priv->released_dead_key_wo_press = 0;
+                return TRUE;
+            }
+            priv->pressed_dead_key = event->sym;
+        } else {
+            priv->released_dead_key_wo_press = 0;
+        }
         source = g_timeout_source_new (priv->repeat_delay);
         g_source_attach (source, NULL);
         g_source_unref (source);
@@ -1722,6 +2141,30 @@ key_event_check_repeat (IBusWaylandIM       *wlim,
         g_source_set_callback (source, _process_key_event_repeat_delay_cb,
                                &repeating_event, NULL);
     } else {
+        if (event->sym != repeating_event.sym) {
+            if (IS_DEAD_KEY (event->sym)) {
+                if (event->sym == priv->pressed_dead_key) {
+                    priv->pressed_dead_key = 0;
+                } else if (!priv->pressed_dead_key) {
+                    /* With "fr(ergol)" keymap, in case that key <AD09> is
+                     * typed twice, the first pressed keysym is
+                     * "ISO_Level5_Latch" and the first released keysym is
+                     * "dead_diaeresis" with the MOD3(the level5) mask,
+                     * the second pressed keysym is "dead_diaeresis" and
+                     * the second released keysym is "ISO_Level5_Latch".
+                     * So the first released "dead_diaeresis" is invalid and
+                     * the second pressed "dead_diaeresis" should be released
+                     * immediately.
+                     */
+                    priv->released_dead_key_wo_press = event->sym;
+                }
+            }
+        } else if (IS_DEAD_KEY (repeating_event.sym)) {
+            if (repeating_event.sym == priv->pressed_dead_key)
+                priv->pressed_dead_key = 0;
+        } else {
+            priv->released_dead_key_wo_press = 0;
+        }
         if (repeating_event.repeat_rate_id) {
             g_source_remove (repeating_event.repeat_rate_id);
             repeating_event.repeat_rate_id = 0;
@@ -1777,12 +2220,36 @@ input_method_keyboard_key (void                      *data,
     /* xkb_key_get_syms() does not return the capital syms with Shift key. */
     if (priv->key_sys.state)
         event.sym = xkb_state_key_get_one_sym (priv->key_sys.state, code);
-    if (event.sym != IBUS_KEY_Multi_key && priv->key_user.state)
-        event.sym = xkb_state_key_get_one_sym (priv->key_user.state, code);
+    switch (event.sym) {
+    case IBUS_KEY_Multi_key:
+    case IBUS_KEY_ISO_Next_Group:
+        break;
+    default:
+        if (priv->key_user.state)
+            event.sym = xkb_state_key_get_one_sym (priv->key_user.state, code);
+    }
     event.modifiers = priv->modifiers;
     if (state == WL_KEYBOARD_KEY_STATE_RELEASED)
         event.modifiers |= IBUS_RELEASE_MASK;
     event.wlim = wlim;
+#ifdef IBUS_LOG_SHOW_KEYSYM
+    if (priv->verbose) {
+        fprintf (priv->log, "%s serial:%u time:%u key:%u "
+                            "sym:%x system_user:%x system_sym:%x "
+                            "modifiers:%x state:%s\n",
+                 G_STRFUNC,
+                 key_serial, time, key,
+                 event.sym,
+                 priv->key_user.state ?
+                     xkb_state_key_get_one_sym (priv->key_user.state, code) :
+                     0,
+                 priv->key_sys.state ?
+                     xkb_state_key_get_one_sym (priv->key_sys.state, code) :
+                     0,
+                 event.modifiers, state ? "press" : "release");
+        fflush (priv->log);
+    }
+#endif
 
     key_event_check_repeat (wlim, &event);
     switch (_use_sync_mode) {
@@ -1796,6 +2263,29 @@ input_method_keyboard_key (void                      *data,
 }
 
 
+/**
+ * input_method_keyboard_modifiers:
+ *
+ * This is a common API of input_method_keyboard_modifiers_v1() and
+ * input_method_keyboard_modifiers_v2().
+ * If you configure multiple XKB layouts in the system with
+ * /etc/vconsole.conf file, you can switch the active layout with
+ * the XKB options and @group is changed with the shortcut key like
+ * "grp:lalt_lshift_toggle" but If you click the keyboard icon in
+ * Plasma KDE and change the active layout with GUI, @group is not
+ * changed and I assume it's a bug [1].
+ * Currently there are two cases of the combinations of the IBus keymap and
+ * the system keymap supported by IBus:
+ * 1. Always Same keymaps
+ *    E.g. IBus keymap is "lv(tilde)" and system one is "lv(tilde)"
+ * 2. System keymap is "US" and switch IBus keymaps with Super-space key
+ *    E.g. IBus keymap is "lv(tilde)" and system one is "us"
+ * So you should use both XKB option keys and IBus shortcutkeys to switch the
+ * keymaps to change both XKB keymaps and IBus keymaps but you should not
+ * click the keyboard icon in KDE.
+ *
+ * [1] https://bugs.kde.org/show_bug.cgi?id=518371
+ */
 static void
 input_method_keyboard_modifiers (void                      *data,
                                  struct zwp_keyboard_union *keyboard,
@@ -1816,27 +2306,59 @@ input_method_keyboard_modifiers (void                      *data,
         active_key = &priv->key_sys;
     else
         active_key = &priv->key_user;
-    if (priv->key_user.state) {
-        xkb_state_update_mask (priv->key_user.state, mods_depressed,
-                               mods_latched, mods_locked, 0, 0, group);
-    }
-    /* Pressing XKB group key likes Alt_R with grp:toggle calls
-     * input_method_keyboard_modifiers() with the updated `group`
-     * and need to update priv->key_sys.state to switch the XKB group
-     * in the system keymap.
-     *
-     * XKB group key can switch `group` but clicking the keyboard icon
-     * of KDE does not change `group` at present. Maybe a bug in the
-     * KDE Wayland compositor.
+    /* Do not reset Latch modifiers by system in case the system keymap
+     * has no the Latch key.
+     * In case the user keymap is "lv(tilde)" and the system one is "us",
+     * input_method_keyboard_modifiers() clears state of Level3_Latch key
+     * immediately after the Level3_Latch key is released because the "us"
+     * keymap does not have the latch keys.
+     * The behavior is different in case both user and system keymaps are
+     * "lv(tilde)".
+     * So `is_virtual_latch_state` keeps the virtual state of the latch keys
+     * not to override the state of the "us" keymap.
      */
-    if (priv->key_sys.state) {
-        xkb_state_update_mask (priv->key_sys.state, mods_depressed,
-                               mods_latched, mods_locked, 0, 0, group);
+    if (!priv->is_virtual_latch_state || key_serial == 0) {
+        if (priv->key_user.state) {
+            xkb_state_update_mask (priv->key_user.state, mods_depressed,
+                                   mods_latched, mods_locked, 0, 0, group);
+        }
+        /* Pressing XKB group key likes Alt_R with grp:toggle calls
+         * input_method_keyboard_modifiers() with the updated `group`
+         * and need to update priv->key_sys.state to switch the XKB group
+         * in the system keymap.
+         *
+         * XKB group key can switch `group` but clicking the keyboard icon
+         * of KDE does not change `group` at present. Maybe a bug in the
+         * KDE Wayland compositor.
+         */
+        if (priv->key_sys.state) {
+            xkb_state_update_mask (priv->key_sys.state, mods_depressed,
+                                   mods_latched, mods_locked, 0, 0, group);
+        }
     }
     if (active_key->state) {
+        /* CapsLock needs XKB_STATE_MODS_LOCKED */
         mask = xkb_state_serialize_mods (active_key->state,
                                          XKB_STATE_DEPRESSED |
-                                         XKB_STATE_LATCHED);
+                                         XKB_STATE_LATCHED |
+                                         XKB_STATE_MODS_LOCKED);
+    }
+    if (priv->verbose) {
+        struct xkb_state *state = active_key->state;
+        fprintf (priv->log, "Update modifiers serial:%u depress:%X latch:%X "
+                             "lock:%X group:%X orig_depre:%X orig_latch:%X "
+                             "orig_lock:%X\n",
+                 key_serial, mods_depressed, mods_latched, mods_locked, group,
+                 state ?
+                     xkb_state_serialize_mods (state, XKB_STATE_DEPRESSED) :
+                     0xFFFFFFFF,
+                 state ?
+                     xkb_state_serialize_mods (state, XKB_STATE_LATCHED) :
+                     0xFFFFFFFF,
+                 state ?
+                     xkb_state_serialize_mods (state, XKB_STATE_MODS_LOCKED) :
+                     0xFFFFFFFF);
+        fflush (priv->log);
     }
 
     priv->modifiers = 0;
@@ -1862,6 +2384,9 @@ input_method_keyboard_modifiers (void                      *data,
         priv->modifiers |= IBUS_HYPER_MASK;
     if (mask & active_key->meta_mask)
         priv->modifiers |= IBUS_META_MASK;
+
+    if (!key_serial)
+        return;
 
     switch (priv->version) {
     case INPUT_METHOD_V1:
@@ -2115,6 +2640,7 @@ _create_input_context_done (GObject      *object,
                                                            TRUE);
         }
         ibus_input_context_focus_in (priv->ibuscontext);
+        ibus_wayland_im_reset_modifiers (wlim);
         g_signal_emit (wlim,
                        wayland_im_signals[IBUS_FOCUS_IN],
                        0,
@@ -2834,6 +3360,7 @@ ibus_wayland_im_constructor (GType                  type,
     IBusWaylandSeat *seat = NULL;
     IBusEngineDesc *desc;
     struct xkb_keymap *keymap = NULL;
+    gboolean has_keymap = FALSE;
 
     object = G_OBJECT_CLASS (ibus_wayland_im_parent_class)->constructor (
             type, n_params, params);
@@ -2882,9 +3409,21 @@ ibus_wayland_im_constructor (GType                  type,
     desc = ibus_bus_get_global_engine (priv->ibusbus);
     if (desc)
         keymap = create_user_xkb_keymap (priv->xkb_context, desc);
-    if (keymap && !ibus_xkb_keymap_update_with_keymap (&priv->key_user,
-                                                       keymap)) {
-        g_clear_pointer (&keymap, xkb_keymap_unref);
+    if (keymap) {
+        has_keymap = ibus_xkb_keymap_update_with_keymap (&priv->key_user,
+                                                         keymap);
+        xkb_keymap_unref (keymap);
+    }
+    if (priv->verbose) {
+        if (!desc) {
+            fprintf (priv->log, "Constructor has no global engine\n");
+        } else {
+            fprintf (priv->log, "Constructor engine %s keymap:%s state:%s\n",
+                     ibus_engine_desc_get_name (desc),
+                     has_keymap ? "TRUE" : "FALSE",
+                     priv->key_user.state ? "TRUE" : "FALSE");
+        }
+        fflush (priv->log);
     }
     ibus_bus_set_watch_ibus_signal (priv->ibusbus, TRUE);
     g_signal_connect (priv->ibusbus, "global-engine-changed",

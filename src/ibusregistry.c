@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* bus - The Input Bus
  * Copyright (C) 2015 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2021 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2015-2020 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -556,10 +556,11 @@ ibus_registry_load_in_dir (IBusRegistry *registry,
     }
 
     observed_path = ibus_observed_path_new (dirname, TRUE);
-
-    registry->priv->observed_paths =
-            g_list_append (registry->priv->observed_paths,
-                           observed_path);
+    if (observed_path) {
+        registry->priv->observed_paths =
+                g_list_append (registry->priv->observed_paths,
+                               observed_path);
+    }
 
     while ((filename = g_dir_read_name (dir)) != NULL) {
         glong size;

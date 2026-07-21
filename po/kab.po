@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2026-02-09 14:58+0000\n"
+"PO-Revision-Date: 2026-05-11 17:59+0000\n"
 "Last-Translator: ButterflyOfFire "
 "<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/ibus/"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -263,11 +263,11 @@ msgstr "Seqdec tasefsit tudmawant i ugalis utlayan"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:213
 #: data/dconf/org.freedesktop.ibus.gschema.xml:260
 msgid "Custom font"
-msgstr ""
+msgstr "Tasefsit tudmawant"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:214
 msgid "Custom font name for language panel"
-msgstr ""
+msgstr "Tasefsit tudmawant i ugalis utlayan"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:218
 msgid "Use custom theme"
@@ -279,11 +279,11 @@ msgstr "Seqdec asentel udmawan i ugalis utlayan"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:223
 msgid "Custom theme"
-msgstr ""
+msgstr "Asentel udmawan"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:224
 msgid "Custom theme name for language panel"
-msgstr ""
+msgstr "Asentel udmawan i ugalis utlayan"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:228
 msgid "Use custom icon"
@@ -295,7 +295,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:233
 msgid "Custom icon"
-msgstr ""
+msgstr "Tignit tudmawant"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:234
 msgid "Custom icon name for arrow buttons on candidate window"
@@ -470,7 +470,7 @@ msgstr "Aglam:\n"
 
 #: setup/enginecombobox.py:139 setup/enginedialog.py:57
 msgid "Select an input method"
-msgstr ""
+msgstr "Fren tarrayt n usekcem"
 
 #. add button
 #: setup/enginedialog.py:61 setup/keyboardshortcut.py:124 setup/setup.ui:676
@@ -674,11 +674,11 @@ msgstr ""
 
 #: setup/setup.ui:539
 msgid "Use custom font:"
-msgstr ""
+msgstr "Seqdec tasefsit tudmawant:"
 
 #: setup/setup.ui:574 setup/setup.ui:1168
 msgid "<b>Font and Style</b>"
-msgstr ""
+msgstr "<b>Tafesit d uɣanib</b>"
 
 #: setup/setup.ui:591
 msgid "General"
@@ -812,7 +812,7 @@ msgstr ""
 
 #: setup/setup.ui:1341
 msgid "Use custom theme:"
-msgstr ""
+msgstr "Seqdec asentel udmawan:"
 
 #: setup/setup.ui:1342
 msgid "Choose a theme of the candidate window"
@@ -1467,7 +1467,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:345
 msgid "Arrows"
-msgstr ""
+msgstr "Tineccabin"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -2132,7 +2132,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:725
 msgid "Old Italic"
-msgstr ""
+msgstr "Uknan aqbur"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3000,7 +3000,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1221
 msgid "Tai Xuan Jing Symbols"
-msgstr ""
+msgstr "Izamulen n Tai Xuan Jing"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

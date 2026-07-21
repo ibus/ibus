@@ -16,13 +16,14 @@
 # Daniel Rusek <mail@asciiwolf.com>, 2023.
 # Jonas Hubeny <jonas.hubeny@gmail.com>, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2026-03-23 06:58+0000\n"
-"Last-Translator: Jonas Hubeny <jonas.hubeny@gmail.com>\n"
+"PO-Revision-Date: 2026-07-09 19:17+0000\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/ibus/ibus/"
 "cs/>\n"
 "Language: cs\n"
@@ -30,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -40,7 +41,7 @@ msgstr "Přednačítat moduly"
 #. Translators: Tooltip for the button “Preload Engines”
 #: data/dconf/org.freedesktop.ibus.gschema.xml:13
 msgid "Preload engines during ibus starts up"
-msgstr "Přednačtené moduly při startu startu ibus"
+msgstr "Přednačtené moduly při startu ibus"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:17
 msgid "Engines order"
@@ -503,7 +504,7 @@ msgstr "Více…"
 
 #: setup/engineabout.py:37 setup/setup.ui:1465 ui/gtk3/panel.vala:1683
 msgid "About"
-msgstr "O nás"
+msgstr "O programu"
 
 #: setup/engineabout.py:40 setup/setup.ui:1488
 msgid "_Close"
@@ -582,7 +583,7 @@ msgstr ""
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
-msgstr "Stiskněte prosím klávesu (či kombinaci kláves)."
+msgstr "Stiskněte prosím klávesu (či kombinaci kláves)"
 
 #: setup/main.py:122 setup/main.py:671
 msgid "Use shortcut with shift to switch to the previous input method"

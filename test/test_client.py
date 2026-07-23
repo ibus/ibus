@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/env python
 # Test program for client APIs.
 
 import os

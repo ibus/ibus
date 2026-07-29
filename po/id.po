@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: IBus\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2026-02-01 04:58+0000\n"
+"PO-Revision-Date: 2026-03-23 06:58+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/id/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -46,19 +46,14 @@ msgid "Popup delay milliseconds for IME switcher window"
 msgstr "Tundaan popup mili detik untuk jendela pengalih IME"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
-#, fuzzy
-#| msgid ""
-#| "Set popup delay milliseconds to show IME switcher window. The default is "
-#| "400. 0 = Show the window immediately. 0 &lt; Delay milliseconds. 0 &gt; "
-#| "Do not show the window and switch prev/next engines."
 msgid ""
 "Set popup delay milliseconds to show IME switcher window. The default is "
 "400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
 "show the window and switch prev/next engines."
 msgstr ""
 "Tetapkan mili detik tunda munculnya popup untuk menampilkan jendela pengalih "
-"IME. Bakunya adalah 400. 0 = Tunjukkan jendela seketika. 0 &lt; Tunda mili "
-"detik. 0 &gt; Jangan perlihatkan jendela dan alihkan mesin sebelum/sesudah."
+"IME. Bakunya adalah 400. 0 = Tunjukkan jendela seketika. 0 < Tunda mili "
+"detik. 0 > Jangan perlihatkan jendela dan alihkan mesin sebelum/sesudah."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"

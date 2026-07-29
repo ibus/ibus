@@ -4,20 +4,23 @@
 # This file is distributed under the same license as the ibus package.
 #
 # Manuela Silva <mmsrs@sky.com>, 2019. #zanata
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2019-10-24 19:18+0900\n"
+"PO-Revision-Date: 2026-04-24 23:58+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
+"Language-Team: Portuguese <https://translate.fedoraproject.org/projects/ibus/"
+"ibus/pt/>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-09-16 11:26+0000\n"
-"Last-Translator: Manuela Silva <mmsrs@sky.com>\n"
-"Language-Team: Portuguese\n"
-"Language: pt\n"
-"X-Generator: Zanata 4.6.2\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Weblate 5.17\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -271,7 +274,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:174
 msgid "The shortcut keys for turning Unicode typing on or off"
-msgstr ""
+msgstr "As teclas de atalho para ativar ou desativar o método de entrada"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:178
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
@@ -279,7 +282,7 @@ msgstr ""
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:179
 msgid "The shortcut keys for turning emoji typing on or off"
-msgstr ""
+msgstr "As teclas de atalho para ativar ou desativar o método de entrada"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:184
 msgid "Custom font name for emoji characters on emoji dialog"
@@ -483,6 +486,7 @@ msgstr ""
 #: setup/main.py:121 setup/main.py:588
 msgid "Use shortcut with shift to switch to the previous input method"
 msgstr ""
+"As teclas de atalho para mudar para o método de entrada anterior na lista"
 
 #: setup/main.py:515
 msgid "The IBus daemon is not running. Do you wish to start it?"
@@ -567,7 +571,7 @@ msgstr ""
 
 #: setup/setup.ui:129
 msgid "Previous input method:"
-msgstr ""
+msgstr "Método de entrada de pré-edição"
 
 #: setup/setup.ui:157 setup/setup.ui:199 setup/setup.ui:266 setup/setup.ui:319
 #: setup/setup.ui:903 setup/setup.ui:957
@@ -596,7 +600,7 @@ msgstr ""
 
 #: setup/setup.ui:376
 msgid "Candidates orientation:"
-msgstr ""
+msgstr "Orientação da janela de candidatos"
 
 #: setup/setup.ui:407
 msgid "Set the behavior of ibus how to show or hide language bar"
@@ -676,7 +680,7 @@ msgstr "_Preferências"
 
 #: setup/setup.ui:761
 msgid "Show setup of the selected input method"
-msgstr ""
+msgstr "Mostrar informação do método de entrada selecionado"
 
 #: setup/setup.ui:812
 msgid ""
@@ -1088,7 +1092,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:185
 msgid "Ethiopic Supplement"
-msgstr ""
+msgstr "Suporte para Etiópio"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1508,7 +1512,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:425
 msgid "Georgian Supplement"
-msgstr ""
+msgstr "Suplemento de Mongolian"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

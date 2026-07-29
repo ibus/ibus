@@ -7,7 +7,7 @@
 # Charles-Antoine Couret <cacouret@wanadoo.fr>, 2009
 # dominique bribanick <chepioq@gmail.com>, 2011,2014
 # Jérôme Fenal <jfenal@gmail.com>, 2012-2013
-# Julien Humbert <julroy67@gmail.com>, 2009-2015, 2020, 2021, 2022, 2024.
+# Julien Humbert <julroy67@gmail.com>, 2009-2015, 2020, 2021, 2022, 2024, 2026.
 # Sam Friedmann <sam.friedmann@redhat.com>, 2010
 # Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2016-2019, 2020.
 # José Fournier <jaaf64@zoraldia.com>, 2016, 2017. #zanata
@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2026-02-03 07:58+0000\n"
-"Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
+"PO-Revision-Date: 2026-04-26 03:58+0000\n"
+"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/fr/>\n"
 "Language: fr\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.17\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -271,12 +271,12 @@ msgstr ""
 "L’icône XKB affiche la chaîne de caractères de la disposition et cette "
 "chaîne de caractères est affichée avec sa valeur RGBA. Cette valeur RGBA "
 "peut être 1. le nom d’une couleur X11, 2. une valeur hexadécimale sous la "
-"forme « #rrggbb » où « r », « g » et « b » sont des chiffres hexadécimaux "
+"forme « #rrggbb » où « r », « g » et « b » sont des chiffres hexadécimaux "
 "correspondant respectivement au rouge, vert et bleu, 3. une couleur RGB sous "
-"la forme « rgb(r,g,b) » ou 4. une couleur RGBA sous la forme "
-"« rgba(r,g,b,a) » où « r », « g » et « b » sont soit des entiers compris "
-"entre 0 et 255, soit un pourcentage compris entre 0 et 100 %, et « a » la "
-"valeur alpha, est un nombre à virgule flottante compris entre 0 et 1."
+"la forme « rgb(r,g,b) » ou 4. une couleur RGBA sous la forme « rgba(r,g,b,a) "
+"» où « r », « g » et « b » sont soit des entiers compris entre 0 et 255, "
+"soit un pourcentage compris entre 0 et 100 %, et « a » la valeur alpha, est "
+"un nombre à virgule flottante compris entre 0 et 1."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:203
 msgid "The milliseconds to show the panel icon for a property"
@@ -461,7 +461,7 @@ msgid ""
 "0 == Prefix match, 1 == Suffix match, 2 == Containing match"
 msgstr ""
 "Choisissez une des conditions suivantes pour la correspondance partielle "
-"d’annotations d’émoticônes : 0 == correspondance de préfixe, 1 == "
+"d’annotations d’émoticônes : 0 == correspondance de préfixe, 1 == "
 "correspondance de suffixe, 2 == correspondance de contenu"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:295
@@ -501,8 +501,8 @@ msgid ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
 msgstr ""
-"Copyright (c) 2007-2010 Peng Huang\n"
-"Copyright (c) 2007-2010 Red Hat, Inc."
+"Copyright © 2007-2010 Peng Huang\n"
+"Copyright © 2007-2010 Red Hat, Inc."
 
 #: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
@@ -635,8 +635,16 @@ msgid ""
 "  export QT_IM_MODULE=ibus"
 msgstr ""
 "IBus a été démarré. Si vous ne pouvez pas utiliser IBus, veuillez ajouter "
-"les lignes suivantes dans le fichier « $HOME/.bashrc », et veuillez vous "
+"les lignes suivantes dans le fichier $HOME/.bashrc, et veuillez vous "
 "reconnecter.\n"
+"\n"
+"# Pour les sessions Wayland (où $XDG_SESSION_TYPE est « wayland »)\n"
+"  export GTK_IM_MODULE=wayland\n"
+"  export XMODIFIERS=@im=ibus\n"
+"  export QT_IM_MODULES=wayland;ibus\n"
+"  export QT_IM_MODULE=ibus\n"
+"\n"
+"# Pour les sessions X11 (où $XDG_SESSION_TYPE est « x11 »)\n"
 "  export GTK_IM_MODULE=ibus\n"
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
@@ -879,7 +887,7 @@ msgstr ""
 
 #: setup/setup.ui:1052
 msgid "Emoji annotation language:"
-msgstr "Langue d’annotations des émoticônes :"
+msgstr "Langue d’annotations des émoticônes :"
 
 #: setup/setup.ui:1074
 msgid ""
@@ -887,7 +895,7 @@ msgid ""
 "the number of characters:"
 msgstr ""
 "Correspondances partielles d’annotations des émoticônes ayant les conditions "
-"suivantes et plus que le nombre de caractères :"
+"suivantes et plus que le nombre de caractères :"
 
 #: setup/setup.ui:1079
 msgid ""
@@ -965,10 +973,9 @@ msgid ""
 "has been added to the Compose file:\n"
 "%s.\n"
 msgstr ""
-"À partir de IBus 1.5.33, les fichiers Compose\n"
-"remplacent les séquences de composition. Pour les\n"
-"conserver et ajouter vos propres séquences, la\n"
-"ligne :\n"
+"À partir de IBus 1.5.33, les fichiers Compose remplacent\n"
+"les séquences de composition. Pour les conserver et\n"
+"ajouter vos propres séquences, la ligne :\n"
 "\n"
 "  include \"%%L\"\n"
 "\n"
@@ -987,10 +994,9 @@ msgid ""
 "to the Compose file:\n"
 "%s."
 msgstr ""
-"À partir de IBus 1.5.33, les fichiers Compose\n"
-"remplacent les séquences de composition. Pour les\n"
-"conserver et ajouter vos propres séquences, vous\n"
-"devez ajouter la ligne\n"
+"À partir de IBus 1.5.33, les fichiers Compose remplacent\n"
+"les séquences de composition. Pour les conserver et\n"
+"ajouter vos propres séquences, vous devez ajouter la ligne :\n"
 "\n"
 "  include \"%%L\"\n"
 "\n"
@@ -1049,15 +1055,15 @@ msgid ""
 "inputting the correct character to the compose sequence again, or press "
 "Escape key to terminate whole the compose sequence."
 msgstr ""
-"Le caractère que vous venez de saisir n'est pas reconnu comme étant valide "
-"dans le contexte de la séquence de composition actuelle, et vient d'être "
+"Le caractère que vous venez de saisir n’est pas reconnu comme étant valide "
+"dans le contexte de la séquence de composition actuelle, et vient d’être "
 "annulé. Essayez de saisir un caractère correct pour cette séquence de "
 "composition, ou appuyez sur Échap pour mettre fin à la séquence de "
 "composition toute entière."
 
 #: src/ibusenginesimple.c:279
 msgid "Compose file update"
-msgstr "Mise à jour d'un fichier Compose"
+msgstr "Mise à jour d’un fichier Compose"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1848,7 +1854,7 @@ msgstr "Compatibilité Hangeul Jamo"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:481
 msgid "Kanbun"
-msgstr "Kanbun"
+msgstr "Kanboun"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3066,7 +3072,7 @@ msgstr "Extension de petits Kana"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1177
 msgid "Nushu"
-msgstr "Nushu"
+msgstr "Nüshu"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3087,7 +3093,7 @@ msgstr "Réglages du format abrégé"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1189
 msgid "Symbols for Legacy Computing Supplement"
-msgstr "Supplément de symboles pour l'informatique ancienne"
+msgstr "Supplément de symboles pour l’informatique ancienne"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3495,7 +3501,7 @@ msgstr "Connexion à IBus impossible.\n"
 
 #: tools/main.vala:282 tools/main.vala:787
 msgid "IBus is running."
-msgstr "IBus est en cours d'exécution."
+msgstr "IBus est en cours d’exécution."
 
 #: tools/main.vala:446
 msgid "List engine name only"
@@ -3628,7 +3634,7 @@ msgstr "Copie l’émoticône dans la boite de dialogue vers le presse-papier"
 
 #: tools/main.vala:1169
 msgid "Retrieve im-module value from GTK instance"
-msgstr "Récupérer la valeur im-module à partir de l'instance GTK"
+msgstr "Récupérer la valeur im-module à partir de l’instance GTK"
 
 #: tools/main.vala:1171
 msgid "Show this information"
@@ -3658,7 +3664,7 @@ msgstr "Connecter le protocole Wayland input-method"
 
 #: ui/gtk3/application.vala:372
 msgid "Execute ibus-daemon if it's not running"
-msgstr "Exécuter ibus-daemon s'il n'est pas encore en cours d'exécution"
+msgstr "Exécuter ibus-daemon s’il n’est pas encore en cours d’exécution"
 
 #: ui/gtk3/application.vala:376
 msgid "ibus-daemon's arguments"
@@ -3711,11 +3717,11 @@ msgstr "Cliquez pour voir le message d’avertissement"
 #: ui/gtk3/emojier.vala:1258 ui/gtk3/emojier.vala:1293
 #: ui/gtk3/emojier.vala:2298
 msgid "Loading a Unicode dictionary:"
-msgstr "Chargement d’un dictionnaire Unicode :"
+msgstr "Chargement d’un dictionnaire Unicode :"
 
 #: ui/gtk3/emojier.vala:1292
 msgid "IBus Emoji initialization"
-msgstr "Initialisation d'IBus Emoji en cours"
+msgstr "Initialisation d’IBus Emoji en cours"
 
 #: ui/gtk3/emojier.vala:1552
 #, c-format
@@ -3729,7 +3735,7 @@ msgstr "A des variantes d’émoticônes"
 #: ui/gtk3/emojier.vala:1722 ui/gtk3/emojier.vala:1735
 #, c-format
 msgid "Description: %s"
-msgstr "Description : %s"
+msgstr "Description : %s"
 
 #: ui/gtk3/emojier.vala:1722
 msgid "None"
@@ -3748,7 +3754,7 @@ msgstr "Nom : %s"
 #: ui/gtk3/emojier.vala:1780
 #, c-format
 msgid "Alias: %s"
-msgstr "Alias : %s"
+msgstr "Alias : %s"
 
 #: ui/gtk3/emojier.vala:2303 ui/gtk3/ibus-extension-gtk3.desktop.in:2
 #: ui/gtk3/ibus-ui-emojier.desktop.in:2 ui/gtk3/panel.vala:1642
@@ -3783,7 +3789,7 @@ msgstr "Une émoticône a été copiée dans le presse-papier."
 #.
 #: ui/gtk3/emojierapp.vala:126
 msgid "\"FONT\" for emoji characters on emoji dialog"
-msgstr "« POLICE » des émoticônes dans la boite de dialogue"
+msgstr "« POLICE » des émoticônes dans la boite de dialogue"
 
 #: ui/gtk3/emojierapp.vala:127
 msgid "FONT"
@@ -3795,8 +3801,8 @@ msgstr "POLICE"
 #: ui/gtk3/emojierapp.vala:132
 msgid "\"LANG\" for annotations on emoji dialog. E.g. \"en\""
 msgstr ""
-"« LANGUE » des annotations dans la boite de dialogue des émoticône. Par ex : "
-"« fr »"
+"« LANGUE » des annotations dans la boite de dialogue des émoticône. P. ex. : "
+"« fr »"
 
 #: ui/gtk3/emojierapp.vala:133
 msgid "LANG"
@@ -3823,8 +3829,8 @@ msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
 msgstr ""
-"Vous pouvez activer/désactiver le menu d'activation et le menu contextuel en "
-"effectuant un clic milieu sur l'icône du panneau."
+"Vous pouvez activer/désactiver le menu d’activation et le menu contextuel en "
+"effectuant un clic milieu sur l’icône du panneau."
 
 #: ui/gtk3/panel.vala:1013
 #, c-format
@@ -3839,14 +3845,14 @@ msgid ""
 "variables are unset in the desktop session."
 msgstr ""
 "IBus devrait être appelé par la session de bureau dans %s. Pour KDE, vous "
-"pouvez lancer l'utilitaire \"%s\", accéder à la section \"Entrée et "
-"sortie\" > \"Clavier\" > \"Clavier virtuel\", sélectionner l'icône \"%s\" et "
-"cliquer sur le bouton \"Appliquer\" pour configurer IBus dans %s. Pour les "
-"autres sessions de bureau, vous pouvez exécuter la commande \"%s\". Référez-"
-"vous au document concernant la configuration d'une méthode de saisie dans "
-"Wayland. Avant de configurer la méthode de saisie Wayland, assurez-vous que "
-"les variables d'environnement QT_IM_MODULE et GTK_IM_MODULE ne sont pas "
-"définies dans la session de bureau."
+"pouvez lancer l’utilitaire « %s », accéder à la section « Entrée et sortie » "
+"→ « Clavier » → « Clavier virtuel », sélectionner l’icône « %s » et cliquer "
+"sur le bouton « Appliquer » pour configurer IBus dans %s. Pour les autres "
+"sessions de bureau, vous pouvez exécuter la commande « %s » Référez-vous au "
+"document concernant la configuration d’une méthode de saisie dans Wayland. "
+"Avant de configurer la méthode de saisie Wayland, assurez-vous que les "
+"variables d’environnement QT_IM_MODULE et GTK_IM_MODULE ne sont pas définies "
+"dans la session de bureau."
 
 #: ui/gtk3/panel.vala:1038
 #, c-format
@@ -3855,9 +3861,9 @@ msgid ""
 "daemon --panel disable' should be executed as a child process of %s "
 "component."
 msgstr ""
-"Veuillez supprimer la définition des variables d'environnement QT_IM_MODULE "
-"et GTK_IM_MODULE et \"ibus-daemon --panel disable\" doit être exécuté en "
-"tant que sous-processus d'un composant %s."
+"Veuillez supprimer la définition des variables d’environnement QT_IM_MODULE "
+"et GTK_IM_MODULE et « ibus-daemon --panel disable » doit être exécuté en "
+"tant que sous-processus d’un composant %s."
 
 #: ui/gtk3/panel.vala:1047
 #, c-format
@@ -3866,10 +3872,10 @@ msgid ""
 "is Xorg so the Wayland feature is disabled. You would be better off running "
 "ibus-daemon directly instead or %s without that option."
 msgstr ""
-"Il semble que vous avez exécuté %s avec l'option '--enable-wayland-im', mais "
-"votre serveur d'affichage est Xorg et les fonctionnalités Wayland sont donc "
-"désactivées. Exécutez plutôt directement ibus-daemon, ou exécutez %s sans "
-"cette option."
+"Il semble que vous avez exécuté %s avec l’option « --enable-wayland-im », "
+"mais votre serveur d’affichage est Xorg et les fonctionnalités Wayland sont "
+"donc désactivées. Exécutez plutôt directement ibus-daemon, ou exécutez %s "
+"sans cette option."
 
 #: ui/gtk3/panel.vala:1063
 msgid "IBus Notification"

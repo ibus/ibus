@@ -49,6 +49,7 @@
 #include <getopt.h>
 
 #define ESC_SEQUENCE_ISO10646_1 "\033%G"
+#define ESC_SEQUENCE_ISO10646_1_END "\033%@"
 /* Wait for about 120 secs to return a key from async process-key-event. */
 #define MAX_WAIT_KEY_TIME       120000
 
@@ -1049,8 +1050,10 @@ _context_commit_text_cb (IBusInputContext *context,
     g_assert (IBUS_IS_TEXT (text));
     g_assert (x11ic != NULL);
 
-    XTextProperty tp;
+    XTextProperty tp = {0};
     IMCommitStruct cms = {0};
+    gchar *commit_string;
+    gboolean commit_string_from_glib = FALSE;
     int ret;
 
     ret = Xutf8TextListToTextProperty (
@@ -1065,21 +1068,29 @@ _context_commit_text_cb (IBusInputContext *context,
      * , and the encoding is UTF-8 with utf8_wctomb():
      * https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/master/src/xlibi18n/lcUniConv/utf8.h
      */
-    if (ret == EXIT_FAILURE) {
-        XFree (tp.value);
-        tp.value = (unsigned char *)g_strdup_printf ("%s%s",
-                                                     ESC_SEQUENCE_ISO10646_1,
-                                                     text->text);
+    if (ret != Success || (text->text[0] != '\0' && tp.nitems == 0)) {
+        if (tp.value != NULL)
+            XFree (tp.value);
+        commit_string = g_strconcat (ESC_SEQUENCE_ISO10646_1,
+                                     text->text,
+                                     ESC_SEQUENCE_ISO10646_1_END,
+                                     NULL);
+        commit_string_from_glib = TRUE;
+    } else {
+        commit_string = (gchar *)tp.value;
     }
 
     cms.major_code = XIM_COMMIT;
     cms.icid = x11ic->icid;
     cms.connect_id = x11ic->connect_id;
     cms.flag = XimLookupChars;
-    cms.commit_string = (gchar *)tp.value;
+    cms.commit_string = commit_string;
     IMCommitString (_xims, (XPointer) & cms);
 
-    XFree (tp.value);
+    if (commit_string_from_glib)
+        g_free (commit_string);
+    else
+        XFree (commit_string);
 }
 
 static void

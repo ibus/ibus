@@ -2317,13 +2317,12 @@ msgstr "カフカース・アルバニア文字"
 msgid "Vithkuqi"
 msgstr "ビタクチェ文字"
 
-#  FIXME: トドリ文字 or トズリ文字
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:773
 msgid "Todhri"
-msgstr ""
+msgstr "トズリ文字"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3090,13 +3089,12 @@ msgstr "音楽記号"
 msgid "Ancient Greek Musical Notation"
 msgstr "古代ギリシア記譜法"
 
-# FIXME: カクトビック数字、カットビック数字、カクトヴィク数字 or カクトビク数字
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1213
 msgid "Kaktovik Numerals"
-msgstr ""
+msgstr "カクトヴィク数字"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -3182,15 +3180,16 @@ msgstr "ワンチョ文字"
 msgid "Nag Mundari"
 msgstr "ナーグ・ムンダリ文字"
 
-# FIXME: オル・と オナイ or オナル
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:1265
 msgid "Ol Onal"
-msgstr ""
+msgstr "オル・オナル文字"
 
 # FIXME: Only Wikipedia has the translation タイ・ヨー文字
+# FIXME: Most people uses a Quoc Ngu script and this is a crisis script so the translation
+# FIXME: data is still small. (From AI)
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot

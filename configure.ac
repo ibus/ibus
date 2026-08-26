@@ -29,7 +29,7 @@ m4_define([ibus_released], [m4_esyscmd(sh -c '. ./meson.config 2>/dev/null;
 m4_define([ibus_major_version], [1])
 m4_define([ibus_minor_version], [5])
 m4_define([ibus_micro_version], [35])
-m4_define([ibus_beta_version], [beta2])
+m4_define([ibus_beta_version], [beta1])
 m4_define([ibus_abi_current], [5])
 m4_define([ibus_abi_revision],
           [m4_eval(100 * ibus_minor_version + ibus_micro_version)])

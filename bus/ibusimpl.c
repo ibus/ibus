@@ -637,7 +637,7 @@ bus_ibus_impl_init (BusIBusImpl *ibus)
     ibus->fake_context = bus_input_context_new (NULL, "fake");
     g_object_ref_sink (ibus->fake_context);
     bus_dbus_impl_register_object (BUS_DEFAULT_DBUS,
-                                   (IBusService *) ibus->fake_context);
+                                   (IBusService *)ibus->fake_context);
     bus_input_context_set_capabilities (ibus->fake_context,
                                         IBUS_CAP_PREEDIT_TEXT |
                                         IBUS_CAP_FOCUS |
@@ -733,8 +733,15 @@ bus_ibus_impl_destroy (BusIBusImpl *ibus)
     g_clear_pointer (&ibus->global_engine_name, g_free);
     g_clear_pointer (&ibus->global_previous_engine_name, g_free);
 
-    if (ibus->fake_context)
+    if (ibus->fake_context) {
+        bus_dbus_impl_unregister_object (BUS_DEFAULT_DBUS,
+                                         (IBusService *)ibus->fake_context);
+        g_signal_handlers_disconnect_by_func (
+                ibus->fake_context,
+                G_CALLBACK (_context_engine_changed_cb),
+                ibus);
         g_clear_pointer (&ibus->fake_context, g_object_unref);
+    }
 
     bus_ibus_impl_registry_destroy (ibus);
 

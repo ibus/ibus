@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        container: ["fedora:43", "fedora:44", "ubuntu:jammy", "ubuntu:resolute"]
+        container: ["fedora:44", "fedora:45", "ubuntu:jammy", "ubuntu:resolute"]
     steps:
       - name: Check container sha tags
         run: |
@@ -26,18 +26,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - container: fedora:43
+          - container: fedora:44
             ucd_dir: /usr/share/unicode/ucd
             build: BUILD_MESON
-          - container: fedora:43
+          - container: fedora:44
             ucd_dir: /usr/share/unicode/ucd
             test_config: '-Dwayland=disabled'
             build: BUILD_MESON
-          - container: fedora:43
+          - container: fedora:44
             ucd_dir: /usr/share/unicode/ucd
             test_config: '-Dappindicator=false'
             build: BUILD_MESON
-          - container: fedora:44
+          - container: fedora:45
             ucd_dir: /usr/share/unicode/ucd
             test_config: '-Ddistro-tests=true'
             build: BUILD_MESON
@@ -45,18 +45,18 @@ jobs:
           - container: ubuntu:resolute
             ucd_dir: /usr/share/unicode
             build: BUILD_MESON
-          - container: fedora:43
+          - container: fedora:44
             ucd_dir: /usr/share/unicode/ucd
             build: BUILD_AUTOTOOL
-          - container: fedora:43
+          - container: fedora:44
             ucd_dir: /usr/share/unicode/ucd
             test_config: '--disable-wayland'
             build: BUILD_AUTOTOOL
-          - container: fedora:43
+          - container: fedora:44
             ucd_dir: /usr/share/unicode/ucd
             test_config: '--disable-appindicator'
             build: BUILD_AUTOTOOL
-          - container: fedora:44
+          - container: fedora:45
             ucd_dir: /usr/share/unicode/ucd
             test_config: '--enable-distro-tests'
             build: BUILD_AUTOTOOL

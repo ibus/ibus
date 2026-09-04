@@ -149,7 +149,9 @@ spell_checking()
         # Spell check
         (look $word > /dev/null) && continue || :
         # Source file path check
-        (grep -q "$word" <(find . -depth)) && continue || :
+        # `grep -q` causes find to stderr 'standard output': Broken pipe
+        # so the stderr is redirected to /dev/null
+        find . -depth 2>/dev/null | grep -qs "$word" && continue || :
         # System file path check
         test -f "$word" && continue || :
         # Variable check

@@ -139,14 +139,15 @@ _load_lang()
 const static gchar *
 ibus_get_untranslated_raw_language_name (const gchar *_locale)
 {
+    const gchar *sub;
     const gchar *retval;
     gchar *p = NULL;
     gchar *lang = NULL;
 
     if (__languages_dict == NULL )
         _load_lang();
-    if ((p = strchr (_locale, '_')) !=  NULL)
-        p = g_strndup (_locale, p - _locale);
+    if ((sub = (const gchar *)strchr (_locale, '_')) !=  NULL)
+        p = g_strndup (_locale, sub - _locale);
     else
         p = g_strdup (_locale);
     lang = g_ascii_strdown (p, -1);

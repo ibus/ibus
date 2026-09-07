@@ -353,9 +353,17 @@ engine_focus_in_cb (IBusEngine *engine,
     m_engine_is_focused = g_strdup_printf ("%s%s\n",
                                            FOCUSED_ENGINE, "No named");
 #endif
-    write (m_sv[1], m_engine_is_focused,
-                             strlen (m_engine_is_focused) + 1);
-    fsync (m_sv[1]);
+    errno = 0;
+    /* Fix a warning: ignoring return value of ‘write’ declared with attribute
+     * ‘warn_unused_result’ [-Wunused-result]
+     * The '-Wunused-result' flag requires the C compiler optimization. E.g.
+     * CFLAGS='-Wall -g -O2 -D_FORTIFY_SOURCE=3'
+     */
+    if (write (m_sv[1], m_engine_is_focused,
+        strlen (m_engine_is_focused) + 1) < 0) {
+        g_warning ("Failed to send to FOCUSED_IN_ENGINE to parent: %s",
+                   g_strerror (errno));
+    }
 }
 
 
@@ -372,9 +380,11 @@ engine_focus_out_cb (IBusEngine *engine,
     g_test_message ("Engine:focus-out-cb()");
 #endif
     g_clear_pointer (&m_engine_is_focused, g_free);
-    write (m_sv[1], FOCUSED_ENGINE "\n",
-                             strlen (FOCUSED_ENGINE) + 2);
-    fsync (m_sv[1]);
+    errno = 0;
+    if (write (m_sv[1], FOCUSED_ENGINE "\n", strlen (FOCUSED_ENGINE) + 2) < 0) {
+        g_warning ("Failed to send to FOCUSED_OUT_ENGINE to parent: %s",
+                   g_strerror (errno));
+    }
 }
 
 
@@ -547,8 +557,11 @@ exec_ibus_engine ()
 
     g_main_loop_run (m_loop);
     if (_data.idle_id) {
-        write (m_sv[1], FAILED_ENGINE, sizeof (FAILED_ENGINE));
-        fsync (m_sv[1]);
+        errno = 0;
+        if (write (m_sv[1], FAILED_ENGINE, sizeof (FAILED_ENGINE)) < 0) {
+            g_warning ("Failed to send to FAILED_ENGINE to parent: %s",
+                       g_strerror (errno));
+        }
         close (m_sv[1]);
         exit (EXIT_FAILURE);
     }
@@ -815,8 +828,11 @@ window_inserted_text_cb (GtkEntryBuffer *buffer,
     if (!test_results[i][j]) {
         g_assert (!j);
 
-        write (m_sv[0], RECV_KEY, sizeof (RECV_KEY));
-        fsync (m_sv[0]);
+        errno = 0;
+        if (write (m_sv[0], RECV_KEY, sizeof (RECV_KEY)) < 0) {
+            g_warning ("Failed to send to RECV_KEY to child: %s",
+                       g_strerror (errno));
+        }
         g_info ("Sent RECV");
         /* Wait for calling ibus_quit() until the client receives RECV_KEY */
         data.idle_id = g_timeout_add_seconds (1, idle_cb, &data);

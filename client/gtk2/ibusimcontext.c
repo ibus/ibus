@@ -26,9 +26,15 @@
 #endif
 
 #include <string.h>
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+/* GTK2 has no GDK_DISABLE_DEPRECATION_WARNINGS */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include <gtk/gtk.h>
+#pragma GCC diagnostic pop
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
+#undef GDK_DISABLE_DEPRECATION_WARNINGS
 #include <ibus.h>
 #include <ibusattrlistprivate.h>
 #include "ibusimcontext.h"
@@ -1695,13 +1701,15 @@ static gboolean
 _set_cursor_location_internal (IBusIMContext *ibusimcontext)
 {
     GdkRectangle area;
-    GdkDisplay *display = NULL;
 #if GTK_CHECK_VERSION (3, 98, 4)
     GtkWidget *root;
     GtkNative *native;
     graphene_point_t p;
     int tx = 0, ty = 0;
     double nx = 0., ny = 0.;
+    GdkDisplay *display = NULL;
+#elif defined(GDK_WINDOWING_WAYLAND)
+    GdkDisplay *display = NULL;
 #endif
 
     if(ibusimcontext->client_window == NULL ||

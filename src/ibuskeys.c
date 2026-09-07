@@ -45,12 +45,12 @@ const gchar*
 ibus_keyval_name (guint keyval)
 {
   static gchar buf[100];
-  gdk_key *found;
+  const gdk_key *found;
 
   /* <ohorn> with 0x01000000 is supported in gdk_keys_by_keyval */
 
-  found = bsearch (&keyval, gdk_keys_by_keyval,
-                   IBUS_NUM_KEYS, sizeof (gdk_key),
+  found = (const gdk_key *)bsearch (&keyval, gdk_keys_by_keyval,
+                                    IBUS_NUM_KEYS, sizeof (gdk_key),
            gdk_keys_keyval_compare);
 
   if (found != NULL)
@@ -80,13 +80,13 @@ gdk_keys_name_compare (const void *pkey, const void *pbase)
 guint
 ibus_keyval_from_name (const gchar *keyval_name)
 {
-  gdk_key *found;
+  const gdk_key *found;
 
   g_return_val_if_fail (keyval_name != NULL, 0);
 
-  found = bsearch (keyval_name, gdk_keys_by_name,
-           IBUS_NUM_KEYS, sizeof (gdk_key),
-           gdk_keys_name_compare);
+  found = (const gdk_key *)bsearch (keyval_name, gdk_keys_by_name,
+                                    IBUS_NUM_KEYS, sizeof (gdk_key),
+                                    gdk_keys_name_compare);
   if (found != NULL)
     return found->keyval;
   else

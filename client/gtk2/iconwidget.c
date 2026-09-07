@@ -21,7 +21,11 @@
  */
 
 #define GDK_DISABLE_DEPRECATION_WARNINGS
+/* GTK2 has no GDK_DISABLE_DEPRECATION_WARNINGS */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include <gtk/gtk.h>
+#pragma GCC diagnostic pop
 #undef GDK_DISABLE_DEPRECATION_WARNINGS
 
 #include "iconwidget.h"

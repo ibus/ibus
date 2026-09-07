@@ -26,8 +26,13 @@ class ExtensionGtk : Gtk.Application {
     private PanelBinding m_panel;
 
     public ExtensionGtk(string[] args) {
+#if GLIB_DEPRECATED_IN_2_74
+        GLib.ApplicationFlags flags = ApplicationFlags.DEFAULT_FLAGS;
+#else
+        GLib.ApplicationFlags flags = ApplicationFlags.FLAGS_NONE;
+#endif
         Object(application_id: "org.freedesktop.IBus.Panel.Extension.Gtk3",
-               flags: ApplicationFlags.FLAGS_NONE);
+               flags: flags);
         GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALEDIR);
         GLib.Intl.bind_textdomain_codeset(Config.GETTEXT_PACKAGE, "UTF-8");
         IBus.init();

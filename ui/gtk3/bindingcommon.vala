@@ -272,6 +272,8 @@ class BindingCommon {
             return m_xdisplay;
         var display = Gdk.Display.get_default();
         if (display == null) {
+            if (check_only)
+                return null;
             error("You should open a display for IBus panel.");
         }
         Type instance_type = display.get_type();

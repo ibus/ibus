@@ -71,6 +71,10 @@ ibus_ui_gtk3_cflags = [
 
 ibus_ui_gtk3_valaflags = []
 
+if glib_dep.version().version_compare('>= 2.74.0')
+  ibus_ui_gtk3_valaflags += [ '-D', 'GLIB_DEPRECATED_IN_2_74' ]
+endif
+
 if enable_xim
   ibus_ui_gtk3_deps += [ x11_dep, xi_vapi, gdk3_x11_dep, ]
   ibus_ui_gtk3_valaflags += [ '-D', 'ENABLE_XIM' ]

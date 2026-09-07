@@ -100,7 +100,7 @@ endif
 # Dependencies
 #-------------------------------------------------
 # Also used for Vala's --target-glib, so no micro version.
-min_glib_version = '2.46'
+min_glib_version = '2.60'
 glib_dep = dependency('glib-2.0', version: '>=' + min_glib_version)
 gobject_dep = dependency('gobject-2.0', version: '>=' + min_glib_version)
 gio_dep = dependency('gio-2.0', version: '>=' + min_glib_version)
@@ -180,15 +180,15 @@ xkbcommon_dep = dependency('xkbcommon', required: false)
 x11_dep = dependency('x11', required: get_option('xim'))
 enable_xim = x11_dep.found()
 if enable_xim
-  have_xkblib = cc.has_header('X11/XKBlib.h')
+  enable_xkblib = cc.has_header('X11/XKBlib.h')
 
   xfixes_dep = dependency('xfixes', required: false)
-  have_xfixes = xfixes_dep.found()
+  enable_xfixes = xfixes_dep.found()
 
   x11_prefix = x11_dep.get_variable(pkgconfig: 'prefix')
 else
-  have_xkblib = false
-  have_xfixes = false
+  enable_xkblib = false
+  enable_xfixes = false
   x11_prefix = get_option('prefix')
 endif
 
@@ -336,24 +336,27 @@ conf.set_quoted('NO_SNOOPER_APPS', ','.join(get_option('no-snooper-apps')))
 conf.set_quoted('IBUS_SOCKET_DIR', ibus_socket_dir)
 conf.set_quoted('UI_WAYLAND_DESKTOP',
                 'org.freedesktop.IBus.Panel.Wayland.Gtk3.desktop')
+
 conf.set('ENABLE_NLS', enable_nls)
 conf.set('HAVE_DAEMON', cc.has_function('daemon'))
 conf.set('HAVE_GETGRGID_R', cc.has_header_symbol('grp.h', 'getgrgid_r'))
 conf.set('HAVE_GETTEXT', enable_gnu_gettext)
 conf.set('HAVE_LOCALE_H', cc.has_header_symbol('locale.h', 'LC_ALL'))
+conf.set('HAVE_PRODUCT_BUILD', buildtype == 'release')
 conf.set('HAVE_SYS_PRCTL_H', cc.has_header_symbol('sys/prctl.h', 'prctl'))
 conf.set('HAVE_JSON_GLIB1', json_glib_dep.found())
-conf.set('HAVE_X11_XKBLIB_H', have_xkblib)
-conf.set('HAVE_XFIXES', have_xfixes)
+conf.set('HAVE_X11_XKBLIB_H', enable_xkblib)
+conf.set('HAVE_XFIXES', enable_xfixes)
 conf.set('HAVE_XIM', enable_xim)
+# glib 2.65 was generated after 2020
 conf.set('GLIB2_EMBED_ERRNO_H', glib_dep.found() and
          glib_dep.version().version_compare('>= 2.65.0'))
 conf.set('DCONF_0_13_4', dconf_dep.found() and
                          dconf_dep.version().version_compare('>= 0.13.4'))
+
+# Apply 'TRUE' but not true because the 'ENABLE_SURROUNDING' is used
+# for not "#ifdef" only but also "#if"
 conf.set('ENABLE_SURROUNDING', 'TRUE')
-if buildtype == 'release'
-    conf.set('HAVE_PRODUCT_BUILD', 'TRUE')
-endif
 
 configure_file(
   input: 'config.h.meson',
@@ -368,12 +371,20 @@ _ibus_tests_cflags = []
 _ibus_link_args = []
 
 cc_default_multi_warn_arguments = [
-  ['-Wformat', '-Werror=format-security']
+  [ '-Werror=format-security' ]
 ]
 
 env_CFLAGS = run_command(python, '-c',
                          'import os; print(os.getenv("CFLAGS", ""))',
                          check: true).stdout().strip()
+env_CFLAGS_has_fortify = false
+
+foreach e : env_CFLAGS.split() + get_option('c_args')
+  if e.contains('-D_FORTIFY_SOURCE=')
+    env_CFLAGS_has_fortify = true
+    break
+  endif
+endforeach
 
 if buildtype == 'release'
   _ibus_cflags += [ '-DG_DISABLE_CAST_CHECKS', '-Wl,-z,relro', '-Wl,-z,now' ]
@@ -393,10 +404,22 @@ endif
 # Set default single arguments
 ibus_cflags =  cc.get_supported_arguments(_ibus_cflags)
 
+# Need '-Wall -O2 -D_FORTIFY_SOURCE=2' to enable '-Wunused-result'
+if not env_CFLAGS_has_fortify and get_option('optimization') != '0'
+  foreach i : [ 3, 2 ]
+    _ibus_cflags2 = '-D_FORTIFY_SOURCE=@0@'.format(i)
+    if cc.has_argument(_ibus_cflags2)
+      ibus_cflags += _ibus_cflags2
+      break
+    endif
+  endforeach
+endif
+
 # cc.get_supported_arguments() does not support long nested arguments
-if env_CFLAGS == ''
+if env_CFLAGS == '' and get_option('warning_level') != '0'
   foreach args : cc_default_multi_warn_arguments
-    if cc.has_multi_arguments(args)
+    test_args = [ '-Wall' ] + args
+    if cc.has_multi_arguments(test_args)
       ibus_cflags +=  args
     endif
   endforeach
@@ -494,7 +517,7 @@ summary({
   'Enable Unicode dict':           get_option('unicode-dict'),
   'UCD directory':                 get_option('ucd-dir'),
   'Socket directory':              ibus_socket_dir,
-  'XFixes client disconnect':      have_xfixes,
+  'XFixes client disconnect':      enable_xfixes,
   'Install systemd service':       enable_systemd,
 }, section: 'Components')
 

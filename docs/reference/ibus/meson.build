@@ -30,6 +30,8 @@ gnome.gtkdoc('ibus',
   ignore_headers: ibus_docs_ignore_headers,
   dependencies: ibus_dep,
   gobject_typesfile: 'ibus.types',
+  # In case of get_option('warning_level') = 1 and c_args = '-Werror=format-security'
+  c_args: get_option('warning_level') != '0' ? [ '-Wall' ] : [],
   scan_args: [
     '--rebuild-sections',
   ],

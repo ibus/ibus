@@ -4,7 +4,7 @@
 #
 # ibus - The Input Bus
 #
-# Copyright (c) 2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2023-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
 # USA
 
-# You can copy this file to .git/hooks/commit-msg with the file permission
+# You can copy this file to .git/hooks/ with the file permission
 # '0755'.
 # This script is useful not to commit invalid commit IDs every time and
 # leave a temporary version(1.5.00) in source files when a release is
@@ -46,7 +46,7 @@ TOOLS="autoconf|aclocal|libtool|keymap|keysym|keycode|pointerkey|gzip|xev"
 TOOLS="$TOOLS|d-bus|emojier"
 ACRONYMS="i18n|l10n|m17n|a11y"
 
-echo -e "\033[37;1mIBus commit-msg\033[0m"
+echo -e "\033[1;30;47mIBus commit-msg\033[0m"
 
 
 check_if_hook_is_latest()
@@ -66,6 +66,19 @@ check_if_hook_is_latest()
     diff "$GITHUB_DIR/$IBUS_FILE" "$GIT_DIR/hooks/$IBUS_FILE" || {
         echo >&2 ""
         echo >&2 "ERROR: $1 is older than $GITHUB_DIR/$IBUS_FILE"
+        exit 1
+    }
+}
+
+check_if_gh_is_active()
+{
+    which gh > /dev/null 2>&1 || {
+        echo >&2 "Please install gh command from https://github.com/cli/cli"
+        exit 1
+    }
+
+    gh auth status > /dev/null || {
+        echo >&2 "You are not logged into any GitHub hosts. To log in, run: gh auth login"
         exit 1
     }
 }
@@ -143,7 +156,8 @@ spell_checking()
         (echo "$word" | grep -q "$BSH$DLL") && continue || :
         MISSPELLINGS="$MISSPELLINGS $word"
     done << EOF_ENVS_INTERNAL
-    `cat </dev/stdin | grep -v "^#" | grep -vi "^fixes: " |\
+    `cat </dev/stdin | grep -v "^#" | grep -vi "^closes: " |\
+      grep -vi "^fixes:" | grep -vi "^part-of: " |\
       tr "$DELIM" " " | tr " 	" "\n" |\
      grep -Ev "http:|https:|ftp:|rdp:|nfs:|smb:|file:" | grep -Eiv "$EX_APIS" |\
      grep -Eiv "$DISTROS" | grep -Eiv "$PLATFORMS" | grep -Eiv "$TOOLS" |\
@@ -162,5 +176,52 @@ EOF_ENVS_INTERNAL
     MISSPELLINGS="$(expr "$MISSPELLINGS" : ' \(.*\)')"
     test x"$MISSPELLINGS" = x"" || {
         echo "WARNING: Possible spelling errors \"$MISSPELLINGS\""
+    }
+}
+
+insert_pr_id()
+{
+    grep -qis "^part-of: " "$1" && return || :
+    # Exclude merge command
+    test "x$2" != "x" && return || :
+    GIT_BRANCH=$(git branch --show-current)
+    {
+        test "x$GIT_BRANCH" = "xmain" || test "x$GIT_BRANCH" = "xmaster"
+    } && {
+        echo >&2 "Need to create another branch to insert Part-of instead of $GIT_BRANCH"
+        return
+    } || :
+    {
+        ! MAX_ISSUE_ID=$(gh issue list --state all --limit 1 --json number --jq '.[0].number' --repo $REPO) || test "x$MAX_ISSUE_ID" = x
+    } && {
+        echo >&2 "Failed to fetch the latest issue ID for $REPO"
+        return
+    } || :
+    {
+        ! MAX_PR_ID=$(gh pr list --state all --limit 1 --json number --jq '.[0].number' --repo $REPO) || test "x$MAX_PR_ID" = x
+    } && {
+        echo >&2 "Failed to fetch the latest pull request ID for $REPO"
+        return
+    } || :
+    test $MAX_ISSUE_ID -ge $MAX_PR_ID && MAX_ID=$MAX_ISSUE_ID || MAX_ID=$MAX_PR_ID
+    MAX_ID=$(($MAX_ID + 1))
+    inserted_lines="Part-of: #$MAX_ID"
+    grep -qis "^Closes: " "$1" || echo "$0" | grep -qis 'applypatch-msg' || {
+        inserted_lines="${inserted_lines}\nCloses: #"
+    }
+    # If you use GIT_EDITOR=vi, you have to run ":cq" to cancel `git commit`
+    # because `git/hook/prepare-commit-msg` already changed the edit buffer so
+    # you cannot use ":q!" to cancel the command.
+    VIM_COMMENT="# Please enter the commit message for your changes."
+    grep -qis "^$VIM_COMMENT" "$1" && {
+        sed -i "/^$VIM_COMMENT/i \
+$inserted_lines
+" "$1"
+        echo -e \
+"\033[33mType ':cq' to cancel 'git commit' instead of ':q!' in case of GIT_EDITOR=vi\033[0m"
+    } || {
+        # Add a null line to separate the subject and description in `git am`.
+        echo "" >> "$1"
+        echo "$inserted_lines" >> "$1"
     }
 }

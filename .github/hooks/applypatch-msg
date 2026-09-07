@@ -4,7 +4,7 @@
 #
 # ibus - The Input Bus
 #
-# Copyright (c) 2023 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -35,10 +35,6 @@ test -x "$IBUS_HOOK" &&
     exit 1
 }
 
-check_if_hook_is_latest "$IBUS_HOOK" || exit 1
-cat "$1" | check_signed_off_by || exit 1
-cat "$1" | check_commit_id_from_stdin || exit 1
-cat "$1" | check_tmp_version || exit 1
-spell_checking << EOF_ENVS_MAIN
-`cat "$1"`
-EOF_ENVS_MAIN
+check_if_gh_is_active || exit 1
+insert_pr_id $@
+exit 0

@@ -38,7 +38,9 @@ from gi.repository import Gio
 
 class TestOverride(unittest.TestCase):
     __bus = None
+    __context = None
     __text = None
+    __panel = None
     __attrs = None
     __invocation = None
 
@@ -66,51 +68,66 @@ class TestOverride(unittest.TestCase):
               self.__text.get_text(), cursor, visible, mode)
 
 
-    def test_deserialized_input_context(self):
+    def __test_deserialized_input_context_real(self, case):
         text = IBus.Text.new_from_string('test')
-        text.append_attribute(IBus.AttrType.HINT,
-                              IBus.AttrPreedit.WHOLE,
-                              0,
-                              text.get_length())
+        if case == 1:
+            text.append_attribute(IBus.AttrType.HINT,
+                                  IBus.AttrPreedit.WHOLE,
+                                  0,
+                                  text.get_length())
         text_variant = text.serialize_object()
         update_preedit_variant = GLib.Variant.new_tuple(
             GLib.Variant.new_variant(text_variant),
             GLib.Variant.new_uint32(0),
             GLib.Variant.new_boolean(True),
             GLib.Variant.new_uint32(0))
-        context = self.__bus.create_input_context('test')
-        context.connect('update-preedit-text-with-mode',
-                        self.update_preedit_text_with_mode_cb)
-        context.do_g_signal(context,
-                            'org.freedesktop.DBus',
-                            'UpdatePreeditTextWithMode',
-                            update_preedit_variant)
+        self.__context.do_g_signal(self.__context,
+                                   'org.freedesktop.DBus',
+                                   'UpdatePreeditTextWithMode',
+                                   update_preedit_variant)
         print('# Last', self.__attrs, self.__text.get_text())
+        self.__attrs = None
+        self.__text = None
 
-    def test_deserialized_panel(self):
+    def __test_deserialized_panel_real(self, case):
         text = IBus.Text.new_from_string('test')
-        text.append_attribute(IBus.AttrType.HINT,
-                              IBus.AttrPreedit.WHOLE,
-                              0,
-                              text.get_length())
+        if case == 1:
+            text.append_attribute(IBus.AttrType.HINT,
+                                  IBus.AttrPreedit.WHOLE,
+                                  0,
+                                  text.get_length())
         text_variant = text.serialize_object()
         update_preedit_variant = GLib.Variant.new_tuple(
             GLib.Variant.new_variant(text_variant),
             GLib.Variant.new_uint32(0),
             GLib.Variant.new_boolean(True))
-        panel = IBus.PanelService.new(self.__bus.get_connection())
-        panel.connect('update-preedit-text',
-                      self.update_preedit_text_cb)
-        self.__invocation = Gio.DBusMethodInvocation()
-        panel.do_service_method_call(panel,
-                                     self.__bus.get_connection(),
-                                     'org.freedesktop.IBus.NullInvocation',
-                                     IBus.PATH_PANEL + '/DryTest',
-                                     IBus.INTERFACE_PANEL,
-                                     'UpdatePreeditText',
-                                     update_preedit_variant.ref(),
-                                     self.__invocation)
+        self.__panel.do_service_method_call(
+                self.__panel,
+                self.__bus.get_connection(),
+                'org.freedesktop.IBus.NullInvocation',
+                IBus.PATH_PANEL + '/DryTest',
+                IBus.INTERFACE_PANEL,
+                'UpdatePreeditText',
+                update_preedit_variant.ref(),
+                self.__invocation)
         print('# Last', self.__attrs, self.__text.get_text())
+        self.__attrs = None
+        self.__text = None
+
+    def test_deserialized_input_context(self):
+        self.__context = self.__bus.create_input_context('test')
+        self.__context.connect('update-preedit-text-with-mode',
+                               self.update_preedit_text_with_mode_cb)
+        self.__test_deserialized_input_context_real(0)
+        self.__test_deserialized_input_context_real(1)
+
+    def test_deserialized_panel(self):
+        self.__panel = IBus.PanelService.new(self.__bus.get_connection())
+        self.__panel.connect('update-preedit-text',
+                             self.update_preedit_text_cb)
+        self.__invocation = Gio.DBusMethodInvocation()
+        self.__test_deserialized_panel_real(0)
+        self.__test_deserialized_panel_real(1)
 
 
 if __name__ == '__main__':

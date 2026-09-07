@@ -362,7 +362,8 @@ msgstr "Эмодзи теруді қосу немесе өшіруге арна�
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:261
 msgid "Custom font name for emoji characters on emoji dialog"
-msgstr "Эмодзи сұхбат терезесіндегі эмодзи таңбалары үшін пайдаланушы қаріп аты"
+msgstr ""
+"Эмодзи сұхбат терезесіндегі эмодзи таңбалары үшін пайдаланушы қаріп аты"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:265
 msgid "Default language for emoji dictionary"
@@ -736,7 +737,8 @@ msgstr "Қолданба терезесіне енгізу алдындағы м
 
 #: setup/setup.ui:525
 msgid "Embed the preedit text of input method in the application window"
-msgstr "Қолданба терезесіне енгізу тәсілінің енгізу алдындағы мәтінін кірістіру"
+msgstr ""
+"Қолданба терезесіне енгізу тәсілінің енгізу алдындағы мәтінін кірістіру"
 
 #: setup/setup.ui:539
 msgid "Use custom font:"

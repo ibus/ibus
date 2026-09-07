@@ -138,7 +138,8 @@ msgstr "Comenzi rapide de la tastatură"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:119
 #: data/dconf/org.freedesktop.ibus.gschema.xml:124 setup/setup.ui:236
 msgid "The shortcut keys for turning input method on or off"
-msgstr "Tastele rapide pentru activarea sau dezactivarea metodei de introducere"
+msgstr ""
+"Tastele rapide pentru activarea sau dezactivarea metodei de introducere"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:123
 msgid "Trigger shortcut keys for gtk_accelerator_parse"
@@ -268,14 +269,15 @@ msgstr ""
 "RGBA. Valoarea RGBA poate fi: 1. - un nume de culoare din X11, 2. - o "
 "valoare hexazecimală sub forma „#rrggbb” unde „r”, „g” și «b» sunt cifrele "
 "hexazecimale ale culorilor roșu, verde și albastru, 3. - o culoare RGB sub "
-"forma „rgb(r,g,b)” sau 4. - o culoare RGBA sub forma „rgba(r,g,b,a)”, unde „r"
-"”, „g” și «b» sunt fie numere întregi între 0 și 255, fie valori procentuale "
-"între 0% și 100%, iar „a” este o valoare în virgulă mobilă între 0 și 1 a "
-"alfa (transparența)."
+"forma „rgb(r,g,b)” sau 4. - o culoare RGBA sub forma „rgba(r,g,b,a)”, unde "
+"„r”, „g” și «b» sunt fie numere întregi între 0 și 255, fie valori "
+"procentuale între 0% și 100%, iar „a” este o valoare în virgulă mobilă între "
+"0 și 1 a alfa (transparența)."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:203
 msgid "The milliseconds to show the panel icon for a property"
-msgstr "Milisecundele pentru afișarea pictogramei panoului pentru o proprietate"
+msgstr ""
+"Milisecundele pentru afișarea pictogramei panoului pentru o proprietate"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:204
 msgid ""
@@ -742,7 +744,8 @@ msgstr "Orientarea variantelor:"
 
 #: setup/setup.ui:419
 msgid "Set the behavior of ibus how to show or hide language bar"
-msgstr "Stabilește comportamentul ibus pentru a afișa sau ascunde bara de limbă"
+msgstr ""
+"Stabilește comportamentul ibus pentru a afișa sau ascunde bara de limbă"
 
 #: setup/setup.ui:421
 msgid "Show property panel:"
@@ -3832,8 +3835,8 @@ msgstr ""
 "Tastatură virtuală, selectați pictograma „%s” și faceți clic pe butonul "
 "Aplicare pentru a configura IBus în %s. Pentru alte sesiuni de birou, puteți "
 "rula comanda „%s”. Vă rugăm să consultați fiecare document despre "
-"configurarea „metodei de introducere Wayland”. Înainte de a configura „"
-"metoda de introducere Wayland”, trebuie să vă asigurați că variabilele de "
+"configurarea „metodei de introducere Wayland”. Înainte de a configura "
+"„metoda de introducere Wayland”, trebuie să vă asigurați că variabilele de "
 "mediu QT_IM_MODULE și GTK_IM_MODULE nu sunt definite în sesiunea de birou."
 
 #: ui/gtk3/panel.vala:1038

@@ -48,9 +48,9 @@ msgid ""
 "400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
 "show the window and switch prev/next engines."
 msgstr ""
-"ກຳນົດເວລາໜ່ວງການປາກົດເປັນມິລິວິນາທີເພື່ອສະແດງປ່ອງຢ້ຽມສະຫຼັບ IME. ຄ່າເລີ່ມຕົ້ນແມ່ນ 400. 0 = ສະແດງປ່"
-"ອງຢ້ຽມທັນທີ. 0 < ເວລາໜ່ວງເປັນມິລິວິນາທີ. 0 > ບໍ່ຕ້ອງສະແດງປ່ອງຢ້ຽມ ແລະ ໃຫ້ສະຫຼັບເຄື່ອງມືກ່ອນໜ້າ/ຖັດໄປ"
-"ເລີຍ."
+"ກຳນົດເວລາໜ່ວງການປາກົດເປັນມິລິວິນາທີເພື່ອສະແດງປ່ອງຢ້ຽມສະຫຼັບ IME. ຄ່າເລີ່ມຕົ້ນແມ່ນ 400. 0 = "
+"ສະແດງປ່ອງຢ້ຽມທັນທີ. 0 < ເວລາໜ່ວງເປັນມິລິວິນາທີ. 0 > ບໍ່ຕ້ອງສະແດງປ່ອງຢ້ຽມ ແລະ "
+"ໃຫ້ສະຫຼັບເຄື່ອງມືກ່ອນໜ້າ/ຖັດໄປເລີຍ."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"
@@ -61,8 +61,8 @@ msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
 msgstr ""
-"ໝາຍເລກເວີຊັນທີ່ບັນທຶກໄວ້ຈະຖືກໃຊ້ເພື່ອທົດສອບຄວາມແຕກຕ່າງລະຫວ່າງເວີຊັນຂອງ IBus ທີ່ຕິດຕັ້ງກ່ອນໜ້ານີ້ ແລະ ເ"
-"ວີຊັນປັດຈຸບັນ."
+"ໝາຍເລກເວີຊັນທີ່ບັນທຶກໄວ້ຈະຖືກໃຊ້ເພື່ອທົດສອບຄວາມແຕກຕ່າງລະຫວ່າງເວີຊັນຂອງ IBus ທີ່ຕິດຕັ້ງກ່ອນໜ້ານີ້ ແລະ "
+"ເວີຊັນປັດຈຸບັນ."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:80
 msgid "Latin layouts which have no ASCII"
@@ -79,8 +79,7 @@ msgstr "ໃຊ້ xmodmap"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:86
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
-msgstr ""
-"ເອີ້ນໃຊ້ xmodmap ຖ້າມີໄຟລ໌ .xmodmap ຫຼື .Xmodmap ໃນເວລາທີ່ສະຫຼັບເຄື່ອງມື IBus."
+msgstr "ເອີ້ນໃຊ້ xmodmap ຖ້າມີໄຟລ໌ .xmodmap ຫຼື .Xmodmap ໃນເວລາທີ່ສະຫຼັບເຄື່ອງມື IBus."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:90 setup/setup.ui:1220
 msgid "Use system keyboard layout"
@@ -112,8 +111,7 @@ msgstr "ເປີດໃຊ້ວິທີປ້ອນຂໍ້ມູນເປັ
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:106
 msgid "Enable input method by default when the application gets input focus"
-msgstr ""
-"ເປີດໃຊ້ວິທີປ້ອນຂໍ້ມູນເປັນຄ່າເລີ່ມຕົ້ນເມື່ອແອັບພລິເຄຊັນຖືກເລືອກເພື່ອປ້ອນຂໍ້ມູນ"
+msgstr "ເປີດໃຊ້ວິທີປ້ອນຂໍ້ມູນເປັນຄ່າເລີ່ມຕົ້ນເມື່ອແອັບພລິເຄຊັນຖືກເລືອກເພື່ອປ້ອນຂໍ້ມູນ"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:110
 msgid "DConf preserve name prefixes"
@@ -180,8 +178,7 @@ msgstr "ເຊື່ອງອັດຕະໂນມັດ"
 msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
-msgstr ""
-"ພຶດຕິກຳຂອງແຜງຄຸນສົມບັດ. 0 = ບໍ່ສະແດງ, 1 = ເຊື່ອງອັດຕະໂນມັດ, 2 = ສະແດງຕະຫຼອດເວລາ"
+msgstr "ພຶດຕິກຳຂອງແຜງຄຸນສົມບັດ. 0 = ບໍ່ສະແດງ, 1 = ເຊື່ອງອັດຕະໂນມັດ, 2 = ສະແດງຕະຫຼອດເວລາ"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:165
 #: data/dconf/org.freedesktop.ibus.gschema.xml:169
@@ -197,8 +194,8 @@ msgid ""
 "If true, the panel follows the input cursor in case the panel is always "
 "shown. If false, the panel is shown at a fixed location."
 msgstr ""
-"ຖ້າເປັນຈິງ, ແຜງຈະເຄື່ອນຍ້າຍຕາມຕົວຊີ້ການປ້ອນຂໍ້ມູນໃນກໍລະນີທີ່ສະແດງຕະຫຼອດເວລາ. ຖ້າເປັນເທັດ, ແຜງຈະສະແ"
-"ດງຢູ່ຕຳແໜ່ງທີ່ກຳນົດໄວ້ຕາຍຕົວ."
+"ຖ້າເປັນຈິງ, ແຜງຈະເຄື່ອນຍ້າຍຕາມຕົວຊີ້ການປ້ອນຂໍ້ມູນໃນກໍລະນີທີ່ສະແດງຕະຫຼອດເວລາ. ຖ້າເປັນເທັດ, "
+"ແຜງຈະສະແດງຢູ່ຕຳແໜ່ງທີ່ກຳນົດໄວ້ຕາຍຕົວ."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:178
 msgid "The milliseconds to show property panel"
@@ -247,9 +244,9 @@ msgid ""
 "to 255 or percentage values in the range 0% to 100%, and 'a' is a floating "
 "point value in the range 0 to 1 of the alpha."
 msgstr ""
-"ໄອຄອນ XKB ຈະສະແດງຂໍ້ຄວາມຂອງຜັງແປ້ນພິມ ແລະ ຂໍ້ຄວາມນັ້ນຈະຖືກສະແດງດ້ວຍຄ່າ RGBA. ຄ່າ RGBA ສາມາ"
-"ດເປັນ: 1. ຊື່ສີຈາກ X11, 2. ຄ່າຖານສິບຫົກໃນຮູບແບບ '#rrggbb', 3. ສີ RGB ໃນຮູບແບບ 'rgb"
-"(r,g,b)' ຫຼື 4. ສີ RGBA ໃນຮູບແບບ 'rgba(r,g,b,a)'."
+"ໄອຄອນ XKB ຈະສະແດງຂໍ້ຄວາມຂອງຜັງແປ້ນພິມ ແລະ ຂໍ້ຄວາມນັ້ນຈະຖືກສະແດງດ້ວຍຄ່າ RGBA. ຄ່າ RGBA "
+"ສາມາດເປັນ: 1. ຊື່ສີຈາກ X11, 2. ຄ່າຖານສິບຫົກໃນຮູບແບບ '#rrggbb', 3. ສີ RGB ໃນຮູບແບບ "
+"'rgb(r,g,b)' ຫຼື 4. ສີ RGBA ໃນຮູບແບບ 'rgba(r,g,b,a)'."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:203
 msgid "The milliseconds to show the panel icon for a property"
@@ -262,8 +259,8 @@ msgid ""
 "of icon-prop-key in IBusEngineDesc. If the value is 0, no delay time and the "
 "property icon is shown immediately."
 msgstr ""
-"ເວລາເປັນມິລິວິນາທີໃນການສະແດງໄອຄອນແຜງ ເມື່ອມີການສະຫຼັບເຄື່ອງມືປ້ອນຂໍ້ມູນ. ຖ້າຄ່າເປັນ 0, ຈະບໍ່ມີການໜ່ວງ"
-"ເວລາ ແລະ ໄອຄອນຈະຖືກສະແດງທັນທີ."
+"ເວລາເປັນມິລິວິນາທີໃນການສະແດງໄອຄອນແຜງ ເມື່ອມີການສະຫຼັບເຄື່ອງມືປ້ອນຂໍ້ມູນ. ຖ້າຄ່າເປັນ 0, "
+"ຈະບໍ່ມີການໜ່ວງເວລາ ແລະ ໄອຄອນຈະຖືກສະແດງທັນທີ."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:208
 msgid "Use custom font"
@@ -325,8 +322,8 @@ msgid ""
 "if the value is true and chooses them from the desktop locale if the value "
 "is false."
 msgstr ""
-"ບາງລະຫັດຕົວອັກສອນມີຮູບຮ່າງ (Glyphs) ທີ່ແຕກຕ່າງກັນ. ຖ້າເປັນຈິງ, Pango ຈະເລືອກຮູບຮ່າງຕາມພາສາຂອງ"
-"ເຄື່ອງມື IBus. ຖ້າເປັນເທັດ, ຈະເລືອກຕາມພາສາທ້ອງຖິ່ນຂອງເດັສທັອບ."
+"ບາງລະຫັດຕົວອັກສອນມີຮູບຮ່າງ (Glyphs) ທີ່ແຕກຕ່າງກັນ. ຖ້າເປັນຈິງ, Pango "
+"ຈະເລືອກຮູບຮ່າງຕາມພາສາຂອງເຄື່ອງມື IBus. ຖ້າເປັນເທັດ, ຈະເລືອກຕາມພາສາທ້ອງຖິ່ນຂອງເດັສທັອບ."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:250
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
@@ -406,8 +403,7 @@ msgstr "ເລືອກເງື່ອນໄຂໃນການຄົ້ນຫາ
 msgid ""
 "Choose one of the following conditions to match emoji annotations partially: "
 "0 == Prefix match, 1 == Suffix match, 2 == Containing match"
-msgstr ""
-"ເລືອກເງື່ອນໄຂໃດໜຶ່ງ: 0 == ກົງກັບສ່ວນໜ້າ, 1 == ກົງກັບສ່ວນທ້າຍ, 2 == ມີຂໍ້ຄວາມນັ້ນຢູ່ພາຍໃນ"
+msgstr "ເລືອກເງື່ອນໄຂໃດໜຶ່ງ: 0 == ກົງກັບສ່ວນໜ້າ, 1 == ກົງກັບສ່ວນທ້າຍ, 2 == ມີຂໍ້ຄວາມນັ້ນຢູ່ພາຍໃນ"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:295
 msgid "Load the emoji data at the time of startup"
@@ -419,8 +415,8 @@ msgid ""
 "needed to load the data. Load the emoji data when open the emoji dialog at "
 "the beginning if false."
 msgstr ""
-"ຖ້າເປັນຈິງ, ຈະໂຫຼດຂໍ້ມູນອີໂມຈິທັນທີທີ່ເລີ່ມຕົ້ນ (ໃຊ້ໜ່ວຍຄວາມຈຳປະມານ 10MB). ຖ້າເປັນເທັດ, ຈະໂຫຼດຂໍ້ມູນເມື່ອ"
-"ເປີດປ່ອງຢ້ຽມອີໂມຈິຄັ້ງທຳອິດ."
+"ຖ້າເປັນຈິງ, ຈະໂຫຼດຂໍ້ມູນອີໂມຈິທັນທີທີ່ເລີ່ມຕົ້ນ (ໃຊ້ໜ່ວຍຄວາມຈຳປະມານ 10MB). ຖ້າເປັນເທັດ, "
+"ຈະໂຫຼດຂໍ້ມູນເມື່ອເປີດປ່ອງຢ້ຽມອີໂມຈິຄັ້ງທຳອິດ."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:300
 msgid "Load the Unicode data at the time of startup"
@@ -433,8 +429,8 @@ msgid ""
 "the beginning if false. The Unicode data is always loaded after the emoji "
 "data is loaded even if true."
 msgstr ""
-"ຖ້າເປັນຈິງ, ຈະໂຫຼດຂໍ້ມູນຢູນິໂຄດທັນທີທີ່ເລີ່ມຕົ້ນ (ໃຊ້ໜ່ວຍຄວາມຈຳປະມານ 15MB). ຖ້າເປັນເທັດ, ຈະໂຫຼດຂໍ້ມູນເມື່"
-"ອເປີດປ່ອງຢ້ຽມອີໂມຈິຄັ້ງທຳອິດ."
+"ຖ້າເປັນຈິງ, ຈະໂຫຼດຂໍ້ມູນຢູນິໂຄດທັນທີທີ່ເລີ່ມຕົ້ນ (ໃຊ້ໜ່ວຍຄວາມຈຳປະມານ 15MB). ຖ້າເປັນເທັດ, "
+"ຈະໂຫຼດຂໍ້ມູນເມື່ອເປີດປ່ອງຢ້ຽມອີໂມຈິຄັ້ງທຳອິດ."
 
 #: ibus/_config.py.in:41
 msgid ""
@@ -572,8 +568,8 @@ msgid ""
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
 msgstr ""
-"IBus ໄດ້ເລີ່ມເຮັດວຽກແລ້ວ. ຫາກທ່ານບໍ່ສາມາດນຳໃຊ້ IBus ໄດ້, ໃຫ້ເພີ່ມແຖວຂໍ້ຄວາມຕໍ່ໄປນີ້ໃສ່ $HOME/"
-".bashrc; ຈາກນັ້ນໃຫ້ເຂົ້າສູ່ລະບົບເດັສທັອບຂອງທ່ານຄືນໃໝ່.\n"
+"IBus ໄດ້ເລີ່ມເຮັດວຽກແລ້ວ. ຫາກທ່ານບໍ່ສາມາດນຳໃຊ້ IBus ໄດ້, ໃຫ້ເພີ່ມແຖວຂໍ້ຄວາມຕໍ່ໄປນີ້ໃສ່ "
+"$HOME/.bashrc; ຈາກນັ້ນໃຫ້ເຂົ້າສູ່ລະບົບເດັສທັອບຂອງທ່ານຄືນໃໝ່.\n"
 "\n"
 "  # ສຳລັບເຊດຊັນ Wayland ($XDG_SESSION_TYPE ແມ່ນ \"wayland\")\n"
 "  export GTK_IM_MODULE=wayland\n"
@@ -773,8 +769,8 @@ msgid ""
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
 "the panel icon.</i></small>"
 msgstr ""
-"<small><i>ວິທີປ້ອນຂໍ້ມູນທີ່ກຳລັງໃຊ້ງານ ສາມາດສະຫຼັບໄປມາໄດ້ລະຫວ່າງລາຍການທີ່ເລືອກໄວ້ຂ້າງເທິງ ໂດຍການກົ"
-"ດປຸ່ມລັດ ຫຼື ຄລິກທີ່ໄອຄອນເທິງແຜງ.</i></small>"
+"<small><i>ວິທີປ້ອນຂໍ້ມູນທີ່ກຳລັງໃຊ້ງານ ສາມາດສະຫຼັບໄປມາໄດ້ລະຫວ່າງລາຍການທີ່ເລືອກໄວ້ຂ້າງເທິງ "
+"ໂດຍການກົດປຸ່ມລັດ ຫຼື ຄລິກທີ່ໄອຄອນເທິງແຜງ.</i></small>"
 
 #: setup/setup.ui:885
 msgid ""
@@ -813,15 +809,13 @@ msgstr "ພາສາຄຳອະທິບາຍອີໂມຈິ:"
 msgid ""
 "Match emoji annotations partially with the following condition and more than "
 "the number of characters:"
-msgstr ""
-"ຄົ້ນຫາຄຳອະທິບາຍອີໂມຈິແບບບາງສ່ວນດ້ວຍເງື່ອນໄຂຕໍ່ໄປນີ້ ແລະ ມີຈຳນວນຕົວອັກສອນຫຼາຍກວ່າ:"
+msgstr "ຄົ້ນຫາຄຳອະທິບາຍອີໂມຈິແບບບາງສ່ວນດ້ວຍເງື່ອນໄຂຕໍ່ໄປນີ້ ແລະ ມີຈຳນວນຕົວອັກສອນຫຼາຍກວ່າ:"
 
 #: setup/setup.ui:1079
 msgid ""
 "If emoji annotations can be matched with a partial string instead of the "
 "exact match"
-msgstr ""
-"ຖ້າຄຳອະທິບາຍອີໂມຈິສາມາດຄົ້ນຫາດ້ວຍຂໍ້ຄວາມບາງສ່ວນໄດ້ ແທນທີ່ຈະຕ້ອງກົງກັນທັງໝົດ"
+msgstr "ຖ້າຄຳອະທິບາຍອີໂມຈິສາມາດຄົ້ນຫາດ້ວຍຂໍ້ຄວາມບາງສ່ວນໄດ້ ແທນທີ່ຈະຕ້ອງກົງກັນທັງໝົດ"
 
 #: setup/setup.ui:1113
 msgid "Prefix match"
@@ -851,8 +845,7 @@ msgstr "<b>ການຕັ້ງຄ່າວິທີປ້ອນຂໍ້ມູ
 msgid ""
 "Choose glyphs with the input method's language on the candidate window for "
 "the duplicated code points"
-msgstr ""
-"ເລືອກຮູບຮ່າງຕົວອັກສອນຕາມພາສາຂອງວິທີປ້ອນຂໍ້ມູນໃນປ່ອງຢ້ຽມຕົວເລືອກ ສຳລັບລະຫັດທີ່ຊໍ້າກັນ"
+msgstr "ເລືອກຮູບຮ່າງຕົວອັກສອນຕາມພາສາຂອງວິທີປ້ອນຂໍ້ມູນໃນປ່ອງຢ້ຽມຕົວເລືອກ ສຳລັບລະຫັດທີ່ຊໍ້າກັນ"
 
 #: setup/setup.ui:1341
 msgid "Use custom theme:"
@@ -971,9 +964,9 @@ msgid ""
 "inputting the correct character to the compose sequence again, or press "
 "Escape key to terminate whole the compose sequence."
 msgstr ""
-"ຕົວອັກສອນທີ່ທ່ານຫາກໍ່ປ້ອນເຂົ້າ ບໍ່ຖືກຮັບຮູ້ວ່າເປັນສ່ວນໜຶ່ງທີ່ຖືກຕ້ອງຂອງລຳດັບການປະກອບທີ່ກຳລັງໃຊ້ງານຢູ່ ແລະ ຕົວອັ"
-"ກສອນນັ້ນຖືກຍົກເລີກ. ກະລຸນາລອງປ້ອນຕົວອັກສອນທີ່ຖືກຕ້ອງອີກຄັ້ງ ຫຼື ກົດປຸ່ມ Escape ເພື່ອຢຸດລຳດັບການປະກອບທັງ"
-"ໝົດ."
+"ຕົວອັກສອນທີ່ທ່ານຫາກໍ່ປ້ອນເຂົ້າ ບໍ່ຖືກຮັບຮູ້ວ່າເປັນສ່ວນໜຶ່ງທີ່ຖືກຕ້ອງຂອງລຳດັບການປະກອບທີ່ກຳລັງໃຊ້ງານຢູ່ ແລະ "
+"ຕົວອັກສອນນັ້ນຖືກຍົກເລີກ. ກະລຸນາລອງປ້ອນຕົວອັກສອນທີ່ຖືກຕ້ອງອີກຄັ້ງ ຫຼື ກົດປຸ່ມ Escape "
+"ເພື່ອຢຸດລຳດັບການປະກອບທັງໝົດ."
 
 #: src/ibusenginesimple.c:279
 msgid "Compose file update"
@@ -3684,8 +3677,8 @@ msgid ""
 "mode, click your desktop and click your text application again."
 msgstr ""
 "ບໍ່ສາມາດດຶງຂໍ້ມູນແອັບພລິເຄຊັນຂໍ້ຄວາມໃນປັດຈຸບັນໄດ້. ກະລຸນາເລືອກແອັບພລິເຄຊັນຂອງທ່ານໃໝ່. ຕົວຢ່າງ: ກົດປຸ່ມ "
-"Esc ຫຼາຍໆຄັ້ງເພື່ອອອກຈາກໂໝດພິມອິໂມຈິ, ຄລິກທີ່ເດັສທັອບຂອງທ່ານ ແລ້ວຄລິກທີ່ແອັບພລິເຄຊັນຂໍ້ຄວາມຂອງທ່ານຄືນໃ"
-"ໝ່."
+"Esc ຫຼາຍໆຄັ້ງເພື່ອອອກຈາກໂໝດພິມອິໂມຈິ, ຄລິກທີ່ເດັສທັອບຂອງທ່ານ "
+"ແລ້ວຄລິກທີ່ແອັບພລິເຄຊັນຂໍ້ຄວາມຂອງທ່ານຄືນໃໝ່."
 
 #: ui/gtk3/emojierapp.vala:47
 msgid "Canceled to choose an emoji."
@@ -3737,8 +3730,7 @@ msgstr "ແຜງຄວບຄຸມ IBus"
 msgid ""
 "You can toggle the activate menu and context one with clicking the mouse "
 "middle button on the panel icon."
-msgstr ""
-"ທ່ານສາມາດສະຫຼັບການເປີດເມນູ ແລະ ບໍລິບົດໄດ້ໂດຍການຄລິກປຸ່ມກາງຂອງເມົ້າຢູ່ທີ່ໄອຄອນແຜງຄວບຄຸມ."
+msgstr "ທ່ານສາມາດສະຫຼັບການເປີດເມນູ ແລະ ບໍລິບົດໄດ້ໂດຍການຄລິກປຸ່ມກາງຂອງເມົ້າຢູ່ທີ່ໄອຄອນແຜງຄວບຄຸມ."
 
 #: ui/gtk3/panel.vala:1013
 #, c-format
@@ -3754,9 +3746,9 @@ msgid ""
 msgstr ""
 "IBus ຄວນຖືກຮຽກໃຊ້ຈາກເຊດຊັນເດັສທັອບໃນ %s. ສຳລັບ KDE, ທ່ານສາມາດເປີດເຄື່ອງມື '%s' ແລ້ວໄປທີ່ "
 "\"Input & Output\" -> \"Keyboard\" -> \"Virtual Keyboard\" ແລະ ເລືອກໄອຄອນ "
-"\"%s\" ແລ້ວກົດປຸ່ມ \"Apply\" ເພື່ອຕັ້ງຄ່າ IBus ໃນ %s. ສຳລັບເຊດຊັນເດັສທັອບອື່ນໆ, ທ່ານສາມາດຮັນຄຳ"
-"ສັ່ງ \"%s\". ກະລຸນາເບິ່ງເອກະສານກ່ຽວກັບການຕັ້ງຄ່າ \"Wayland input method\". ກ່ອນທີ່ທ່ານຈະຕັ້ງຄ່"
-"າ \"Wayland input method\", ທ່ານຄວນກວດສອບໃຫ້ແນ່ໃຈວ່າຕົວປ່ຽນສະພາບແວດລ້ອມ "
+"\"%s\" ແລ້ວກົດປຸ່ມ \"Apply\" ເພື່ອຕັ້ງຄ່າ IBus ໃນ %s. ສຳລັບເຊດຊັນເດັສທັອບອື່ນໆ, "
+"ທ່ານສາມາດຮັນຄຳສັ່ງ \"%s\". ກະລຸນາເບິ່ງເອກະສານກ່ຽວກັບການຕັ້ງຄ່າ \"Wayland input method\". "
+"ກ່ອນທີ່ທ່ານຈະຕັ້ງຄ່າ \"Wayland input method\", ທ່ານຄວນກວດສອບໃຫ້ແນ່ໃຈວ່າຕົວປ່ຽນສະພາບແວດລ້ອມ "
 "QT_IM_MODULE ແລະ GTK_IM_MODULE ບໍ່ໄດ້ຖືກຕັ້ງຄ່າໄວ້ໃນເຊດຊັນເດັສທັອບ."
 
 #: ui/gtk3/panel.vala:1038
@@ -3776,9 +3768,9 @@ msgid ""
 "is Xorg so the Wayland feature is disabled. You would be better off running "
 "ibus-daemon directly instead or %s without that option."
 msgstr ""
-"ເບິ່ງຄືວ່າທ່ານຮັນ %s ດ້ວຍຕົວເລືອກ '--enable-wayland-im' ແຕ່ເຊີບເວີສະແດງຜົນຂອງທ່ານແມ່ນ Xorg ດັ່"
-"ງນັ້ນຄຸນສົມບັດ Wayland ຈຶ່ງຖືກປິດໃຊ້ງານ. ທ່ານຄວນຮັນ ibus-daemon ໂດຍກົງ ຫຼື ຮັນ %s ໂດຍບໍ່ມີຕົວເລືອກ"
-"ນັ້ນຈະດີກວ່າ."
+"ເບິ່ງຄືວ່າທ່ານຮັນ %s ດ້ວຍຕົວເລືອກ '--enable-wayland-im' ແຕ່ເຊີບເວີສະແດງຜົນຂອງທ່ານແມ່ນ Xorg "
+"ດັ່ງນັ້ນຄຸນສົມບັດ Wayland ຈຶ່ງຖືກປິດໃຊ້ງານ. ທ່ານຄວນຮັນ ibus-daemon ໂດຍກົງ ຫຼື ຮັນ %s "
+"ໂດຍບໍ່ມີຕົວເລືອກນັ້ນຈະດີກວ່າ."
 
 #: ui/gtk3/panel.vala:1063
 msgid "IBus Notification"
@@ -3790,23 +3782,22 @@ msgid ""
 "Your configured input method %s does not exist in IBus input methods so "
 "\"US\" layout was configured instead of your input method."
 msgstr ""
-"ວິທີການປ້ອນຂໍ້ມູນ %s ທີ່ທ່ານຕັ້ງຄ່າໄວ້ບໍ່ມີຢູ່ໃນວິທີການປ້ອນຂໍ້ມູນຂອງ IBus ດັ່ງນັ້ນຈຶ່ງໄດ້ຕັ້ງຄ່າແປ້ນພິມ \"US\" ແທ"
-"ນ."
+"ວິທີການປ້ອນຂໍ້ມູນ %s ທີ່ທ່ານຕັ້ງຄ່າໄວ້ບໍ່ມີຢູ່ໃນວິທີການປ້ອນຂໍ້ມູນຂອງ IBus ດັ່ງນັ້ນຈຶ່ງໄດ້ຕັ້ງຄ່າແປ້ນພິມ \"US\" "
+"ແທນ."
 
 #: ui/gtk3/panel.vala:1427
 msgid ""
 "At least one of your configured input methods does not exist in IBus input "
 "methods."
-msgstr ""
-"ມີຢ່າງໜ້ອຍໜຶ່ງວິທີການປ້ອນຂໍ້ມູນທີ່ທ່ານຕັ້ງຄ່າໄວ້ ບໍ່ມີຢູ່ໃນວິທີການປ້ອນຂໍ້ມູນຂອງ IBus."
+msgstr "ມີຢ່າງໜ້ອຍໜຶ່ງວິທີການປ້ອນຂໍ້ມູນທີ່ທ່ານຕັ້ງຄ່າໄວ້ ບໍ່ມີຢູ່ໃນວິທີການປ້ອນຂໍ້ມູນຂອງ IBus."
 
 #: ui/gtk3/panel.vala:1430
 msgid ""
 "Please run `ibus-setup` command, open \"Input Method\" tab, and configure "
 "your input methods again."
 msgstr ""
-"ກະລຸນາຮັນຄຳສັ່ງ `ibus-setup`, ເປີດແທັບ \"Input Method\", ແລະ ຕັ້ງຄ່າວິທີການປ້ອນຂໍ້ມູນຂອງທ່ານຄື"
-"ນໃໝ່."
+"ກະລຸນາຮັນຄຳສັ່ງ `ibus-setup`, ເປີດແທັບ \"Input Method\", ແລະ "
+"ຕັ້ງຄ່າວິທີການປ້ອນຂໍ້ມູນຂອງທ່ານຄືນໃໝ່."
 
 #: ui/gtk3/panel.vala:1588
 msgid "IBus is an intelligent input bus for Linux/Unix."

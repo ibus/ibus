@@ -816,7 +816,8 @@ msgstr ""
 #: setup/setup.ui:885
 msgid ""
 "The shortcut keys to enable conversions of emoji annotations or Unicode names"
-msgstr "Klávesové zkratky pro povolení převodu anotací emoji nebo názvů Unicode"
+msgstr ""
+"Klávesové zkratky pro povolení převodu anotací emoji nebo názvů Unicode"
 
 #: setup/setup.ui:887
 msgid "Emoji annotation:"

@@ -656,11 +656,10 @@ bus_match_rule_connection_destroy_cb (BusConnection *connection,
         if (recipient->connection == connection) {
             rule->recipients = g_list_delete_link (rule->recipients, p);
             bus_recipient_free (recipient);
+            if (rule->recipients == NULL) {
+                ibus_object_destroy (IBUS_OBJECT (rule));
+            }
             return;
-        }
-
-        if (rule->recipients == NULL) {
-            ibus_object_destroy (IBUS_OBJECT (rule));
         }
     }
     g_assert_not_reached ();

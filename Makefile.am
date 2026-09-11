@@ -3,7 +3,7 @@
 # ibus - The Input Bus
 #
 # Copyright (c) 2007-2016 Peng Huang <shawn.p.huang@gmail.com>
-# Copyright (c) 2015-2019 Takao Fujiwara <takao.fujiwara1@gmail.com>
+# Copyright (c) 2015-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # Copyright (c) 2007-2019 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
@@ -35,10 +35,6 @@ if ENABLE_SETUP
 SETUP_DIR = setup
 endif
 
-if ENABLE_PYTHON_LIBRARY
-PYTHON_LIB_DIRS = ibus
-endif
-
 if ENABLE_DAEMON
 DAEMON_DIR = \
 	bus \
@@ -59,7 +55,6 @@ SUBDIRS = \
 	$(UI_DIR) \
 	tools \
 	$(DAEMON_DIR) \
-	$(PYTHON_LIB_DIRS) \
 	$(SETUP_DIR) \
 	docs \
 	$(NULL)

@@ -47,7 +47,7 @@ ignore_file_pairs = [
       'paths': [ 'conf/gconf',
                  'data/ibus.schemas.in', 'data/icons/ibus-help.png',
                  'data/icons/ibus-locale.svg', 'data/icons/ibus-zh.svg',
-                 'data/keymaps', 'ibus', 'src/python',
+                 'data/keymaps', 'ibus', 'python-config.py', 'src/python',
                  'src/tests/ibus-engine.c',
                  'src/tests/ibus-global-engine.c',
                  'src/tests/ibus-keymap.c',

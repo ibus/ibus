@@ -42,7 +42,7 @@ m4_define([ibus_version],
     ibus_major_version.ibus_minor_version.ibus_micro_version[]ibus_beta_suffix)
 m4_define([ibus_api_version], [ibus_major_version.0])
 
-AC_PREFEQ([2.62])
+AC_PREREQ([2.70])
 AC_INIT([ibus], [ibus_version],
         [https://github.com/ibus/ibus/issues],
         [ibus])

@@ -42,7 +42,7 @@ m4_define([ibus_version],
     ibus_major_version.ibus_minor_version.ibus_micro_version[]ibus_beta_suffix)
 m4_define([ibus_api_version], [ibus_major_version.0])
 
-AC_PREFEQ([2.62])
+AC_PREREQ([2.70])
 AC_INIT([ibus], [ibus_version],
         [https://github.com/ibus/ibus/issues],
         [ibus])
@@ -520,13 +520,6 @@ AC_ARG_ENABLE(python2,
     [enable_python2=yes]
 )
 
-AC_ARG_ENABLE(python-library,
-    AS_HELP_STRING([--enable-python-library],
-                   [Use ibus python library]),
-    [enable_python_library=$enableval],
-    [enable_python_library=no]
-)
-
 AC_ARG_ENABLE(setup,
     AS_HELP_STRING([--disable-setup],
                    [Do not use setup ui.]),
@@ -592,34 +585,6 @@ if test "x$enable_pygobject" = "xyes"; then
 fi
 
 AM_CONDITIONAL(ENABLE_PYGOBJECT, test x"$enable_pygobject" = "xyes")
-
-if test x"$enable_python_library" = x"yes"; then
-    # Check python.
-    AC_PATH_PROG(PYTHON_CONFIG, python$PYTHON_VERSION-config)
-    if test x"$PYTHON_CONFIG" = x""; then
-        AC_PATH_PROG(PYTHON_CONFIG, python-config)
-    fi
-    if test x"$PYTHON_CONFIG" != x""; then
-        PYTHON_CFLAGS=`$PYTHON_CONFIG --includes`
-        PYTHON_LIBS=`$PYTHON_CONFIG --libs`
-    else
-        PYTHON_CFLAGS=`$PYTHON $srcdir/python-config.py --includes`
-        PYTHON_LIBS=`$PYTHON $srcdir/python-config.py --libs`
-    fi
-    PYTHON_INCLUDES="$PYTHON_CFLAGS"
-    AC_SUBST(PYTHON_CFLAGS)
-    AC_SUBST(PYTHON_INCLUDES)
-    AC_SUBST(PYTHON_LIBS)
-
-    PYTHON2_PREFIX=`$PYTHON2 -c "import sys; sys.stdout.write(sys.prefix)"`
-    PYTHON2_VERSION=`$PYTHON2 -c "import sys; sys.stdout.write(sys.version[[:3]])"`
-    PYTHON2_LIBDIR="$PYTHON2_PREFIX/lib/python$PYTHON2_VERSION"
-    python2dir="$PYTHON2_LIBDIR/site-packages"
-    pkgpython2dir="$python2dir/ibus"
-    AC_SUBST(pkgpython2dir)
-else
-    enable_python_library="no (disabled, use --enable-python-library to enable)"
-fi
 
 # Define gtk2 immodule dir.
 AC_ARG_WITH(gtk2-im-module-dir,
@@ -1011,9 +976,6 @@ docs/reference/Makefile
 docs/reference/ibus/ibus-docs.sgml
 docs/reference/ibus/Makefile
 engine/Makefile
-ibus/_config.py
-ibus/Makefile
-ibus/interface/Makefile
 m4/Makefile
 portal/Makefile
 setup/Makefile
@@ -1058,7 +1020,6 @@ Build options:
   Build wayland support         $enable_wayland
   Build gdk3 wayland support    $enable_gdk3_wayland
   Build appindicator support    $enable_appindicator
-  Build python library          $enable_python_library
   Build memconf modules         $enable_memconf
   Build dconf modules           $enable_dconf
   Build introspection           $found_introspection

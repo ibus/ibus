@@ -120,8 +120,13 @@ AC_DEFUN([GTK_DOC_CHECK],
 _EOF_M4
 }
 
-ACLOCAL_FLAGS="$ACLOCAL_FLAGS -I m4" REQUIRED_AUTOMAKE_VERSION=1.11 \
-autoreconf --verbose --force --install || exit 1
+test -f "$srcdir/NO-AUTO-GEN" && echo "skipping autoreconf with NO-AUTO-GEN" || {
+    test ! -w "$srcdir" && echo "skipping autoreconf due to read only" || {
+        echo "Processing autoreconf"
+        ACLOCAL_FLAGS="$ACLOCAL_FLAGS -I m4" REQUIRED_AUTOMAKE_VERSION=1.11 \
+        autoreconf --verbose --force --install || exit 1
+    }
+}
 
 cd "$olddir"
 (test "x$NOCONFIGURE" = "x" ) && {

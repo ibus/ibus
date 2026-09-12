@@ -35,5 +35,6 @@ test -x "$IBUS_HOOK" &&
     exit 1
 }
 
+check_if_hook_is_latest "$IBUS_HOOK" || exit 1
 check_if_gh_is_active || exit 1
 insert_pr_id $@

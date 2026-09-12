@@ -42,7 +42,7 @@ EX_APIS="${EX_APIS}|^lv|bksl|libdbusmenu"
 DISTROS="redhat|suse|linux|unix|bsd|microsoft|openoffice|mozilla|google"
 DISTROS="$DISTROS|unicode|intel|amd"
 PLATFORMS="fedora|centos|ubuntu|windows|firefox|chrome|rhbz"
-TOOLS="autoconf|aclocal|libtool|keymap|keysym|keycode|pointerkey|gzip|xev"
+TOOLS="autoconf|autoreconf|automake|aclocal|libtool|itstool|keymap|keysym|keycode|pointerkey|gzip|xz|xev|wev"
 TOOLS="$TOOLS|d-bus|emojier"
 ACRONYMS="i18n|l10n|m17n|a11y"
 

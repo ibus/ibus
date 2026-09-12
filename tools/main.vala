@@ -3,7 +3,7 @@
  * ibus - The Input Bus
  *
  * Copyright(c) 2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright(c) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright(c) 2015-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -227,9 +227,14 @@ void registry_global_cb(void       *data,
     if (interface == "zwp_input_method_manager_v2") {
         is_wayland_session = true;
     } else if (interface == "zwp_input_method_v1") {
-        stderr.printf("Wayland input-method protocol version 1 does not " +
-                      "work with the forked application.\n");
-        is_wayland_session = true;
+        if (verbose || daemon_type == "wayland") {
+            stderr.printf("Wayland input-method protocol version 1 does not " +
+                          "work with the forked application.\n");
+        }
+        // Running ibus-ui-gtk3 directly does not work in Plasma KDE yet.
+        // E.g. The Wayland IM does not work after you type Suer key to show
+        // the KDE system menu in case you run ibus-ui-gtk3 directly.
+        is_wayland_session = false;
     }
 }
 

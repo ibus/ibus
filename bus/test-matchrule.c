@@ -1,6 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4; indent-tabs-mode: nil; -*- */
 
 #include "matchrule.h"
+#include "connection.h"
 
 struct _BusMatchRule {
     IBusObject parent;
@@ -62,6 +63,34 @@ test (void)
     g_object_unref (rule);
 }
 
+static void
+test_connection_destroy (void)
+{
+    BusMatchRule *rule;
+    BusConnection *connection1;
+    BusConnection *connection2;
+
+    rule = bus_match_rule_new ("type='signal'");
+    connection1 = BUS_CONNECTION (g_object_new (BUS_TYPE_CONNECTION, NULL));
+    connection2 = BUS_CONNECTION (g_object_new (BUS_TYPE_CONNECTION, NULL));
+
+    bus_match_rule_add_recipient (rule, connection1);
+    bus_match_rule_add_recipient (rule, connection2);
+    g_assert_cmpuint (g_list_length (rule->recipients), ==, 2);
+
+    ibus_object_destroy (IBUS_OBJECT (connection1));
+    g_assert_false (IBUS_OBJECT_DESTROYED (rule));
+    g_assert_cmpuint (g_list_length (rule->recipients), ==, 1);
+
+    ibus_object_destroy (IBUS_OBJECT (connection2));
+    g_assert_true (IBUS_OBJECT_DESTROYED (rule));
+    g_assert_null (rule->recipients);
+
+    g_object_unref (connection1);
+    g_object_unref (connection2);
+    g_object_unref (rule);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -70,5 +99,6 @@ main (int argc, char *argv[])
     g_type_init ();
 #endif
     g_test_add_func ("/test-matchrule", test);
+    g_test_add_func ("/test-matchrule/connection-destroy", test_connection_destroy);
     return g_test_run ();
 }

@@ -514,6 +514,7 @@ static void
 ibus_wayland_im_reset_modifiers (IBusWaylandIM *wlim)
 {
     IBusWaylandIMPrivate *priv;
+    xkb_mod_mask_t mods_depressed = 0;
     xkb_mod_mask_t mods_locked = 0;
     xkb_layout_index_t  group = 0;
 
@@ -526,11 +527,21 @@ ibus_wayland_im_reset_modifiers (IBusWaylandIM *wlim)
     priv->pressed_dead_key = 0;
     priv->released_dead_key_wo_press = 0;
     if (priv->key_user.state && priv->key_sys.state) {
+        /* Preserve physically held modifiers across focus changes:
+         * _create_input_context_done() calls this on every activation
+         * and zeroing the depressed mods here erased a modifier held
+         * across the window switch until the next modifier transition
+         * event arrived (e.g. Ctrl+N, new window, Ctrl+V => "v").
+         * Composition state (latches, ISO level3/5, dead keys) is
+         * still cleared above and latched mods are still reset below.
+         */
+        mods_depressed = xkb_state_serialize_mods (priv->key_sys.state,
+                                                   XKB_STATE_MODS_DEPRESSED);
         mods_locked = xkb_state_serialize_mods (priv->key_sys.state,
                                                 XKB_STATE_LOCKED);
         group = xkb_state_serialize_layout (priv->key_sys.state,
                                             XKB_STATE_LAYOUT_LOCKED);
-        input_method_keyboard_modifiers (wlim, NULL, 0, 0, 0,
+        input_method_keyboard_modifiers (wlim, NULL, 0, mods_depressed, 0,
                                          mods_locked,
                                          group);
     } else {

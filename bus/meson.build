@@ -49,6 +49,11 @@ ibus_daemon = executable('ibus-daemon',
 if get_option('tests')
   ibus_daemon_tests = [
     {
+      'name': 'test-engineproxy',
+      'extra_sources': [],
+      'extra_deps': [],
+    },
+    {
       'name': 'test-matchrule',
       'extra_sources': [],
       'extra_deps': [],

@@ -115,6 +115,7 @@ endif
 
 if ENABLE_TESTS
 TESTS = \
+	test-engineproxy \
 	test-matchrule \
 	test-stress	\
 	$(NULL)
@@ -133,6 +134,20 @@ TESTS_ENVIRONMENT = \
 LOG_COMPILER = $(top_srcdir)/src/tests/runtest
 
 noinst_PROGRAMS = $(TESTS)
+
+test_engineproxy_DEPENDENCIES = \
+	$(libibus) \
+	$(NULL)
+test_engineproxy_SOURCES = \
+	$(commonsrc) \
+	test-engineproxy.c \
+	$(NULL)
+test_engineproxy_CFLAGS = \
+	$(AM_CFLAGS) \
+	$(NULL)
+test_engineproxy_LDADD = \
+	$(AM_LDADD) \
+	$(NULL)
 
 test_matchrule_DEPENDENCIES = \
 	$(libibus) \

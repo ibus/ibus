@@ -1019,9 +1019,21 @@ static void
 cancelled_cb (GCancellable       *cancellable,
               EngineProxyNewData *data)
 {
+    /* From now on only cancelled_idle_cb() may complete the task and free
+     * @data, so stop waiting for the factory and for the timeout here. */
+    if (data->handler_id != 0) {
+        g_signal_handler_disconnect (data->component, data->handler_id);
+        data->handler_id = 0;
+    }
+    if (data->timeout_id != 0) {
+        g_source_remove (data->timeout_id);
+        data->timeout_id = 0;
+    }
     /* Cancel the bus_engine_proxy_new() in idle to avoid deadlock.
-     * And use HIGH priority to avoid timeout event happening before
-     * idle callback. */
+     * Use HIGH priority to avoid timeout event happening before
+     * idle callback but timeout_cb() can be called earlier than
+     * cancelled_idle_cb() so delete data->handler_id & data->timeout_id above.
+     */
     g_idle_add_full (G_PRIORITY_HIGH,
                     (GSourceFunc) cancelled_idle_cb,
                     data, NULL);

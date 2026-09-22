@@ -530,6 +530,9 @@ ibus_wayland_im_reset_modifiers (IBusWaylandIM *wlim)
                                                 XKB_STATE_LOCKED);
         group = xkb_state_serialize_layout (priv->key_sys.state,
                                             XKB_STATE_LAYOUT_LOCKED);
+        /* Reset the depressed latch key state as a workaround until all
+         * bugs are fixed around the local state with key release.
+         */
         input_method_keyboard_modifiers (wlim, NULL, 0, 0, 0,
                                          mods_locked,
                                          group);
@@ -2968,7 +2971,6 @@ _create_input_context_done (GObject      *object,
                                                            TRUE);
         }
         ibus_input_context_focus_in (priv->ibuscontext);
-        ibus_wayland_im_reset_modifiers (wlim);
         g_signal_emit (wlim,
                        wayland_im_signals[IBUS_FOCUS_IN],
                        0,

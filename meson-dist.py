@@ -128,6 +128,7 @@ run_git_subprocess_withreturncode(
 try:
     shutil.copy2('autogen.sh', f'{DIST_ROOT}')
     # Do you wish to copy configure and Makefile.in ?
+    shutil.copy2('meson.config', f'{DIST_ROOT}')
 except OSError as e:
     print(f'Failed to copy autogen.sh: {e}', file=sys.stderr)
     sys.exit(1)

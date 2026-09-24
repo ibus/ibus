@@ -91,6 +91,27 @@ test_connection_destroy (void)
     g_object_unref (rule);
 }
 
+static void
+test_connection_destroy_repeated (void)
+{
+    BusMatchRule *rule;
+    BusConnection *connection;
+
+    rule = bus_match_rule_new ("type='signal'");
+    connection = BUS_CONNECTION (g_object_new (BUS_TYPE_CONNECTION, NULL));
+
+    bus_match_rule_add_recipient (rule, connection);
+    bus_match_rule_add_recipient (rule, connection);
+    g_assert_cmpuint (g_list_length (rule->recipients), ==, 1);
+
+    ibus_object_destroy (IBUS_OBJECT (connection));
+    g_assert_true (IBUS_OBJECT_DESTROYED (rule));
+    g_assert_null (rule->recipients);
+
+    g_object_unref (connection);
+    g_object_unref (rule);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -100,5 +121,7 @@ main (int argc, char *argv[])
 #endif
     g_test_add_func ("/test-matchrule", test);
     g_test_add_func ("/test-matchrule/connection-destroy", test_connection_destroy);
+    g_test_add_func ("/test-matchrule/connection-destroy-repeated",
+                     test_connection_destroy_repeated);
     return g_test_run ();
 }

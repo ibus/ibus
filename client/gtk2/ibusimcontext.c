@@ -408,12 +408,13 @@ _process_key_event_done (GObject      *object,
 
     ProcessKeyEventData *data = (ProcessKeyEventData *)user_data;
     GdkEvent *event = data->event;
-#if GTK_CHECK_VERSION (3, 98, 4)
-    IBusIMContext *ibusimcontext = data->ibusimcontext;
-#endif
     GError *error = NULL;
     gboolean retval;
+#if GTK_CHECK_VERSION (3, 98, 4)
+    IBusIMContext *ibusimcontext = data->ibusimcontext;
 
+    g_assert (IBUS_IS_IM_CONTEXT (ibusimcontext));
+#endif
     g_slice_free (ProcessKeyEventData, data);
     retval = ibus_input_context_process_key_event_async_finish (context,
                                                                 res,
@@ -426,7 +427,6 @@ _process_key_event_done (GObject      *object,
 
     if (retval == FALSE) {
 #if GTK_CHECK_VERSION (3, 98, 4)
-        g_return_if_fail (GTK_IS_IM_CONTEXT (ibusimcontext));
         gtk_im_context_filter_key (
                 GTK_IM_CONTEXT (ibusimcontext),
                 gdk_event_get_event_type (event) == GDK_KEY_PRESS,
@@ -443,9 +443,11 @@ _process_key_event_done (GObject      *object,
     }
 #if GTK_CHECK_VERSION (3, 98, 4)
     gdk_event_unref (event);
+    g_object_unref (ibusimcontext);
 #else
     gdk_event_free (event);
 #endif
+    g_object_unref (context);
 }
 
 
@@ -458,11 +460,16 @@ _process_key_event_sync (IBusInputContext *context,
     gboolean retval;
 
     g_assert (IBUS_IS_INPUT_CONTEXT (context));
+    /* Refer `context` because it can be freed during the D-Bus methods in
+     * ibus_input_context_process_key_event().
+     */
+    g_object_ref (context);
     retval = ibus_input_context_process_key_event (context,
                                                    keyval,
                                                    keycode - 8,
                                                    state);
     ibus_input_context_post_process_key_event (context);
+    g_object_unref (context);
     return retval;
 }
 
@@ -475,20 +482,25 @@ _process_key_event_async (IBusInputContext *context,
                           GdkEvent         *event,
                           IBusIMContext    *ibusimcontext)
 {
-    ProcessKeyEventData *data = g_slice_new0 (ProcessKeyEventData);
+    ProcessKeyEventData *data;
 
     g_assert (event);
+    g_assert (IBUS_IS_INPUT_CONTEXT (context));
+
+    data = g_slice_new0 (ProcessKeyEventData);
     if (!data) {
         g_warning ("Cannot allocate async data");
         return _process_key_event_sync (context, keyval, keycode, state);
     }
 #if GTK_CHECK_VERSION (3, 98, 4)
     data->event = gdk_event_ref (event);
+    data->ibusimcontext = g_object_ref (ibusimcontext);
 #else
+    /* `data->ibusimcontext` is not needed in GTK3, 2. */
     data->event = gdk_event_copy (event);
 #endif
-    data->ibusimcontext = ibusimcontext;
-    ibus_input_context_process_key_event_async (context,
+    ibus_input_context_process_key_event_async (
+            g_object_ref (context),
             keyval,
             keycode - 8,
             state,
@@ -654,7 +666,7 @@ _key_snooper_cb (GtkWidget   *widget,
         ibuscontext = _fake_context;
     }
 
-    if (ibuscontext == NULL)
+    if (!IBUS_IS_INPUT_CONTEXT (ibuscontext))
         return FALSE;
 
     if (G_UNLIKELY (event->state & IBUS_HANDLED_MASK))
@@ -1250,7 +1262,7 @@ ibus_im_context_filter_keypress (GtkIMContext *context,
     ibusimcontext->time = event->time;
 #endif
 
-    if (ibusimcontext->ibuscontext) {
+    if (IBUS_IS_INPUT_CONTEXT (ibusimcontext->ibuscontext)) {
         if (_process_key_event (ibusimcontext->ibuscontext,
                                 event,
                                 ibusimcontext)) {
@@ -1873,7 +1885,7 @@ _bus_connected_cb (IBusBus          *bus,
                    IBusIMContext    *ibusimcontext)
 {
     IDEBUG ("%s", __FUNCTION__);
-    if (ibusimcontext)
+    if (IBUS_IS_IM_CONTEXT (ibusimcontext))
         _create_input_context (ibusimcontext);
     else
         _create_fake_input_context ();
@@ -1969,7 +1981,9 @@ _create_gdk_event (IBusIMContext *ibusimcontext,
     gunichar c = 0;
     gchar buf[8];
 
-    GdkEventKey *event = (GdkEventKey *)gdk_event_new ((state & IBUS_RELEASE_MASK) ? GDK_KEY_RELEASE : GDK_KEY_PRESS);
+    GdkEventKey *event =
+            (GdkEventKey *)gdk_event_new ((state & IBUS_RELEASE_MASK) ?
+            GDK_KEY_RELEASE : GDK_KEY_PRESS);
 
     if (ibusimcontext && ibusimcontext->client_window)
         event->window = g_object_ref (ibusimcontext->client_window);
@@ -2324,6 +2338,7 @@ _create_input_context_done (IBusBus       *bus,
     IBusInputContext *context = ibus_bus_create_input_context_async_finish (
             _bus, res, &error);
 
+    g_assert (IBUS_IS_IM_CONTEXT (ibusimcontext));
     if (ibusimcontext->cancellable != NULL) {
         g_object_unref (ibusimcontext->cancellable);
         ibusimcontext->cancellable = NULL;
@@ -2408,14 +2423,31 @@ _create_input_context_done (IBusBus       *bus,
 #else
             GdkEventKey *event;
 #endif
+            /* Refer `context` because it can be unref during while(). */
+            g_object_ref (context);
+            g_object_ref (ibusimcontext);
             while ((event = g_queue_pop_head (ibusimcontext->events_queue))) {
-                _process_key_event (context, event, ibusimcontext);
+                /* `ibusimcontext->ibuscontext` can be null in
+                 * _ibus_context_destroy_cb(). If `ibusimcontext->ibuscontext`
+                 * is null but `context` is *not* null, _process_key_event()
+                 * should not be called.
+                 */
+                if (IBUS_IS_INPUT_CONTEXT (ibusimcontext->ibuscontext) &&
+                    ibusimcontext->ibuscontext == context) {
+                    if (!_process_key_event (context, event, ibusimcontext) &&
+                        GTK_IS_IM_CONTEXT (ibusimcontext->slave)) {
+                        gtk_im_context_filter_keypress (ibusimcontext->slave,
+                                                        event);
+                    }
+                }
 #if GTK_CHECK_VERSION (3, 98, 4)
                 gdk_event_unref (event);
 #else
                 gdk_event_free ((GdkEvent *)event);
 #endif
             }
+            g_object_unref (context);
+            g_object_unref (ibusimcontext);
         }
     }
 
@@ -2429,6 +2461,7 @@ _create_input_context (IBusIMContext *ibusimcontext)
     gchar *client_name;
     IDEBUG ("%s", __FUNCTION__);
 
+    g_assert (IBUS_IS_IM_CONTEXT (ibusimcontext));
     g_assert (ibusimcontext->ibuscontext == NULL);
 
     g_return_if_fail (ibusimcontext->cancellable == NULL);

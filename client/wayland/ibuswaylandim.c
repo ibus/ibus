@@ -2067,10 +2067,11 @@ _process_key_event_done (GObject      *object,
             &error);
     IBusWaylandIMPrivate *priv = NULL;
 
+    g_assert (event);
+    g_assert (IBUS_IS_WAYLAND_IM (event->wlim));
+
     if (error != NULL) {
-        if (event && event->wlim && IBUS_IS_WAYLAND_IM (event->wlim)) {
-            priv = ibus_wayland_im_get_instance_private (event->wlim);
-        }
+        priv = ibus_wayland_im_get_instance_private (event->wlim);
         if (priv && priv->log) {
             fprintf (priv->log, "Process Key Event failed: %s\n",
                      error->message);
@@ -2080,15 +2081,13 @@ _process_key_event_done (GObject      *object,
         }
         g_error_free (error);
     }
-    g_return_if_fail (event);
-    g_return_if_fail (IBUS_IS_WAYLAND_IM (event->wlim));
 
     priv = ibus_wayland_im_get_instance_private (event->wlim);
     /* Should ignore key events after input_method_deactivate() is called
      * even if context->ref_count is not 0 yet but priv->ibuscontext is null
      * because of the async time lag.
      */
-    if (priv->ibuscontext) {
+    if (IBUS_IS_INPUT_CONTEXT (priv->ibuscontext)) {
         retval = ibus_wayland_im_post_key (event->wlim,
                                            event->key,
                                            event->modifiers,
@@ -2097,7 +2096,7 @@ _process_key_event_done (GObject      *object,
                                            retval);
     }
     /* Check retral from ibus_wayland_im_post_key() */
-    if (priv->ibuscontext && !retval) {
+    if (IBUS_IS_INPUT_CONTEXT (priv->ibuscontext) && !retval) {
         ibus_wayland_im_keycode (event->wlim,
                                  event->key_serial,
                                  event->time,
@@ -2105,7 +2104,9 @@ _process_key_event_done (GObject      *object,
                                  event->state);
     }
 
+    g_object_unref (event->wlim);
     g_slice_free (IBusWaylandKeyEvent, event);
+    g_object_unref (context);
 }
 
 
@@ -2114,18 +2115,30 @@ _process_key_event_sync (IBusWaylandIM       *wlim,
                          IBusWaylandKeyEvent *event)
 {
     IBusWaylandIMPrivate *priv;
+    IBusInputContext *ibuscontext;
     gboolean retval;
 
-    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    /* `wlim` cannot be %NULL here because
+     * input_method_keyboard_key() already checks it.
+     */
+    g_assert (IBUS_IS_WAYLAND_IM (wlim));
     g_assert (event);
     priv = ibus_wayland_im_get_instance_private (wlim);
-    if (!priv->ibuscontext)
-        return;
-    retval = ibus_input_context_process_key_event (priv->ibuscontext,
+    /* `priv->ibuscontext` cannot be %NULL here even if `G_DISABLE_ASSERT`
+     * is defined because input_method_keyboard_key() already checks it.
+     */
+    g_assert (IBUS_IS_INPUT_CONTEXT (priv->ibuscontext));
+
+    /* Use the local `ibuscontext` instead of `priv->ibuscontext` because
+     * `priv->ibuscontext` can be %NULL during the D-Bus method in
+     * ibus_input_context_process_key_event().
+     */
+    ibuscontext = g_object_ref (priv->ibuscontext);
+    retval = ibus_input_context_process_key_event (ibuscontext,
                                                    event->sym,
                                                    event->key,
                                                    event->modifiers);
-    ibus_input_context_post_process_key_event (priv->ibuscontext);
+    ibus_input_context_post_process_key_event (ibuscontext);
     retval = ibus_wayland_im_post_key (wlim,
                                        event->key,
                                        event->modifiers,
@@ -2139,6 +2152,7 @@ _process_key_event_sync (IBusWaylandIM       *wlim,
                                  event->key,
                                  event->state);
     }
+    g_object_unref (ibuscontext);
 }
 
 
@@ -2149,9 +2163,11 @@ _process_key_event_async (IBusWaylandIM       *wlim,
     IBusWaylandIMPrivate *priv;
     IBusWaylandKeyEvent *async_event;
 
-    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
+    g_assert (IBUS_IS_WAYLAND_IM (wlim));
     g_assert (event);
     priv = ibus_wayland_im_get_instance_private (wlim);
+    g_assert (IBUS_IS_INPUT_CONTEXT (priv->ibuscontext));
+
     async_event = g_slice_new0 (IBusWaylandKeyEvent);
     if (!async_event) {
         if (priv->log) {
@@ -2170,15 +2186,16 @@ _process_key_event_async (IBusWaylandIM       *wlim,
     async_event->sym = event->sym;
     async_event->modifiers = event->modifiers & ~IBUS_RELEASE_MASK;
     async_event->state = event->state;
-    async_event->wlim = wlim;
-    ibus_input_context_process_key_event_async (priv->ibuscontext,
-                                                event->sym,
-                                                event->key,
-                                                event->modifiers,
-                                                -1,
-                                                NULL,
-                                                _process_key_event_done,
-                                                async_event);
+    async_event->wlim = g_object_ref (wlim);
+    ibus_input_context_process_key_event_async (
+            g_object_ref (priv->ibuscontext),
+            event->sym,
+            event->key,
+            event->modifiers,
+            -1,
+            NULL,
+            _process_key_event_done,
+            async_event);
 }
 
 
@@ -2199,7 +2216,7 @@ _process_key_event_repeat_rate_cb (gpointer user_data)
     }
     priv = ibus_wayland_im_get_instance_private (wlim);
 
-    if (!priv->ibuscontext) {
+    if (!IBUS_IS_INPUT_CONTEXT (priv->ibuscontext)) {
         event->repeat_rate_id = 0;
         return G_SOURCE_REMOVE;
     }
@@ -2239,7 +2256,7 @@ _process_key_event_repeat_delay_cb (gpointer user_data)
     priv = ibus_wayland_im_get_instance_private (wlim);
 
     /* The key release event was sent to non-Wayland apps likes xterm. */
-    if (!priv->ibuscontext) {
+    if (!IBUS_IS_INPUT_CONTEXT (priv->ibuscontext)) {
         event->count_cb_id = 0;
         return G_SOURCE_REMOVE;
     }
@@ -2404,7 +2421,7 @@ input_method_keyboard_key (void                      *data,
         return;
     }
 
-    if (!priv->ibuscontext) {
+    if (!IBUS_IS_INPUT_CONTEXT (priv->ibuscontext)) {
         gboolean retval = ibus_wayland_im_post_key (wlim,
                                                     key,
                                                     priv->modifiers,

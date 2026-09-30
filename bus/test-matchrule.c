@@ -62,6 +62,120 @@ test (void)
     g_object_unref (rule);
 }
 
+static void
+test_connection_destroy (void)
+{
+    BusMatchRule *rule;
+    BusConnection *connection1;
+    BusConnection *connection2;
+
+    rule = bus_match_rule_new ("type='signal'");
+    connection1 = BUS_CONNECTION (g_object_new (BUS_TYPE_CONNECTION, NULL));
+    connection2 = BUS_CONNECTION (g_object_new (BUS_TYPE_CONNECTION, NULL));
+
+    bus_match_rule_add_recipient (rule, connection1);
+    bus_match_rule_add_recipient (rule, connection2);
+    g_assert_cmpuint (g_list_length (rule->recipients), ==, 2);
+
+    ibus_object_destroy (IBUS_OBJECT (connection1));
+    g_assert_false (IBUS_OBJECT_DESTROYED (rule));
+    g_assert_cmpuint (g_list_length (rule->recipients), ==, 1);
+
+    ibus_object_destroy (IBUS_OBJECT (connection2));
+    g_assert_true (IBUS_OBJECT_DESTROYED (rule));
+    g_assert_null (rule->recipients);
+
+    g_object_unref (connection1);
+    g_object_unref (connection2);
+    g_object_unref (rule);
+}
+
+static void
+test_connection_destroy_repeated (void)
+{
+    BusMatchRule *rule;
+    BusConnection *connection;
+
+    rule = bus_match_rule_new ("type='signal'");
+    connection = BUS_CONNECTION (g_object_new (BUS_TYPE_CONNECTION, NULL));
+
+    bus_match_rule_add_recipient (rule, connection);
+    bus_match_rule_add_recipient (rule, connection);
+    g_assert_cmpuint (g_list_length (rule->recipients), ==, 1);
+
+    ibus_object_destroy (IBUS_OBJECT (connection));
+    g_assert_true (IBUS_OBJECT_DESTROYED (rule));
+    g_assert_null (rule->recipients);
+
+    g_object_unref (connection);
+    g_object_unref (rule);
+}
+
+static gboolean
+connection_close_timeout (gpointer data)
+{
+    gboolean *timed_out = data;
+    *timed_out = TRUE;
+    return G_SOURCE_REMOVE;
+}
+
+static void
+test_dbus_connection_closed (void)
+{
+    GTestDBus *test_dbus;
+    GDBusConnection *dbus_connection;
+    BusConnection *connection;
+    BusMatchRule *rule;
+    GSource *timeout;
+    GError *error = NULL;
+    gboolean timed_out = FALSE;
+    gchar *dbus_daemon;
+
+    dbus_daemon = g_find_program_in_path ("dbus-daemon");
+    if (dbus_daemon == NULL) {
+        g_test_skip ("dbus-daemon is not available");
+        return;
+    }
+    g_free (dbus_daemon);
+
+    test_dbus = g_test_dbus_new (G_TEST_DBUS_NONE);
+    g_test_dbus_up (test_dbus);
+    dbus_connection = g_dbus_connection_new_for_address_sync (
+            g_test_dbus_get_bus_address (test_dbus),
+            G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT |
+            G_DBUS_CONNECTION_FLAGS_MESSAGE_BUS_CONNECTION,
+            NULL, NULL, &error);
+    g_assert_no_error (error);
+    g_assert_nonnull (dbus_connection);
+    g_dbus_connection_set_exit_on_close (dbus_connection, FALSE);
+
+    connection = bus_connection_new (dbus_connection);
+    rule = bus_match_rule_new ("type='signal'");
+    bus_match_rule_add_recipient (rule, connection);
+
+    g_assert_true (g_dbus_connection_close_sync (dbus_connection,
+                                                 NULL, &error));
+    g_assert_no_error (error);
+
+    timeout = g_timeout_source_new_seconds (5);
+    g_source_set_callback (timeout, connection_close_timeout, &timed_out, NULL);
+    g_source_attach (timeout, NULL);
+    while (!IBUS_OBJECT_DESTROYED (connection) && !timed_out)
+        g_main_context_iteration (NULL, TRUE);
+    g_source_destroy (timeout);
+    g_source_unref (timeout);
+
+    g_assert_true (IBUS_OBJECT_DESTROYED (connection));
+    g_assert_true (IBUS_OBJECT_DESTROYED (rule));
+    g_assert_null (rule->recipients);
+
+    g_object_unref (connection);
+    g_object_unref (rule);
+    g_object_unref (dbus_connection);
+    g_test_dbus_down (test_dbus);
+    g_object_unref (test_dbus);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -70,5 +184,10 @@ main (int argc, char *argv[])
     g_type_init ();
 #endif
     g_test_add_func ("/test-matchrule", test);
+    g_test_add_func ("/test-matchrule/connection-destroy", test_connection_destroy);
+    g_test_add_func ("/test-matchrule/connection-destroy-repeated",
+                     test_connection_destroy_repeated);
+    g_test_add_func ("/test-matchrule/dbus-connection-closed",
+                     test_dbus_connection_closed);
     return g_test_run ();
 }

@@ -7,19 +7,20 @@
 # Copyright (c) 2018-2024 Takao Fujiwara <takao.fujiwara1@gmail.com>
 # Copyright (c) 2018 Red Hat, Inc.
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# SPDX-License-Identifier: LGPL-2.1-or-later
 #
-# This program is distributed in the hope that it will be useful,
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, see <https://www.gnu.org/licenses/>.
 
 
 # POSIX sh has no 'echo -e'
@@ -516,19 +517,37 @@ init_gnome()
     # debug messages to gsettings output and could not get the result correctly.
     backup_G_MESSAGES_DEBUG="$G_MESSAGES_DEBUG"
     unset G_MESSAGES_DEBUG
+    sudo -u "$LOGIN_USER" systemctl status --no-pager dbus
+    LOGIN_UID=`id -u "$LOGIN_USER"`
+    LOGIN_GID=`id -g "$LOGIN_USER"`
+    RUNNING_USER_SYSTEMD=1
+    if ! systemctl status --no-pager "user@${LOGIN_UID}" ; then
+        RUNNING_USER_SYSTEMD=0
+        systemctl start "user@${LOGIN_UID}"
+    fi
+    systemctl status --no-pager "user@${LOGIN_UID}"
+    ls -al "/run/user/$LOGIN_UID" || :
+    df "/run/user/$LOGIN_UID"
+    if test ! -d "/run/user/$LOGIN_UID/dconf" ; then
+        mkdir -p "/run/user/$LOGIN_UID/dconf"
+        chown "$LOGIN_USER:$LOGIN_GID" "/run/user/$LOGIN_UID/dconf"
+        chmod 700 "/run/user/$LOGIN_UID/dconf"
+    fi
+    # `dbus-run-session` deletes the `XDG_RUNTIME_DIR` env variable.
+    DBUS_RUN_SESSION="env XDG_RUNTIME_DIR=/run/user/$LOGIN_UID DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$LOGIN_UID/bus"
     # Disable Tour dialog to get focus
     GET_WELCOME_DIALOG="gsettings get org.gnome.shell welcome-dialog-last-shown-version"
     if test $LOGIN_USER = $USER ; then
-        V=`dbus-run-session $GET_WELCOME_DIALOG`
+        V=`$DBUS_RUN_SESSION $GET_WELCOME_DIALOG`
     else
-        V=`sudo -u $LOGIN_USER dbus-run-session $GET_WELCOME_DIALOG`
+        V=`sudo -u $LOGIN_USER $DBUS_RUN_SESSION $GET_WELCOME_DIALOG`
     fi
     if [ x"$V" = x"''" ] ; then
         SET_WELCOME_DIALOG="gsettings set org.gnome.shell welcome-dialog-last-shown-version '100'"
         if test $LOGIN_USER = $USER ; then
-            dbus-run-session $SET_WELCOME_DIALOG
+            $DBUS_RUN_SESSION $SET_WELCOME_DIALOG
         else
-            sudo -u $LOGIN_USER dbus-run-session $SET_WELCOME_DIALOG
+            sudo -u $LOGIN_USER $DBUS_RUN_SESSION $SET_WELCOME_DIALOG
         fi
     fi
     # gnome-shell now starts overview mode by login.
@@ -613,23 +632,23 @@ _EOF_LOCALE_CONF
     fi
     GET_DISABLE_USER_EX="gsettings get org.gnome.shell disable-user-extensions"
     if test $LOGIN_USER = $USER ; then
-        V=`dbus-run-session $GET_DISABLE_USER_EX`
+        V=`$DBUS_RUN_SESSION $GET_DISABLE_USER_EX`
     else
-        V=`sudo -u $LOGIN_USER dbus-run-session $GET_DISABLE_USER_EX`
+        V=`sudo -u $LOGIN_USER $DBUS_RUN_SESSION $GET_DISABLE_USER_EX`
     fi
     if [ x"$V" = x"true" ] ; then
         SET_DISABLE_USER_EX="gsettings set org.gnome.shell disable-user-extensions false"
         if test $LOGIN_USER = $USER ; then
-            dbus-run-session $SET_DISABLE_USER_EX
+            $DBUS_RUN_SESSION $SET_DISABLE_USER_EX
         else
-            sudo -u $LOGIN_USER dbus-run-session $SET_DISABLE_USER_EX
+            sudo -u $LOGIN_USER $DBUS_RUN_SESSION $SET_DISABLE_USER_EX
         fi
     fi
     GET_ENABLED_EXS="gsettings get org.gnome.shell enabled-extensions"
     if test $LOGIN_USER = $USER ; then
-        V=`dbus-run-session $GET_ENABLED_EXS`
+        V=`$DBUS_RUN_SESSION $GET_ENABLED_EXS`
     else
-        V=`sudo -u $LOGIN_USER dbus-run-session $GET_ENABLED_EXS`
+        V=`sudo -u $LOGIN_USER $DBUS_RUN_SESSION $GET_ENABLED_EXS`
     fi
     echo "$V" | grep "no-overview" > /dev/null
     V2=$?
@@ -642,21 +661,25 @@ _EOF_LOCALE_CONF
         fi
         SET_ENABLED_EXS="gsettings set org.gnome.shell enabled-extensions \"$V4\""
         if test $LOGIN_USER = $USER ; then
-            eval dbus-run-session $SET_ENABLED_EXS
+            eval $DBUS_RUN_SESSION $SET_ENABLED_EXS
         else
-            eval sudo -u $LOGIN_USER dbus-run-session $SET_ENABLED_EXS
+            eval sudo -u $LOGIN_USER $DBUS_RUN_SESSION $SET_ENABLED_EXS
         fi
     fi
     # Disable notify dialog when the disk usage is low.
     SET_NOTIFY_DISK="gsettings set org.gnome.settings-daemon.plugins.housekeeping free-size-gb-no-notify 0"
     if test $LOGIN_USER = $USER ; then
-            eval dbus-run-session $SET_NOTIFY_DISK
+            eval $DBUS_RUN_SESSION $SET_NOTIFY_DISK
     else
-            eval sudo -u $LOGIN_USER dbus-run-session $SET_NOTIFY_DISK
+            eval sudo -u $LOGIN_USER $DBUS_RUN_SESSION $SET_NOTIFY_DISK
     fi
     if [ x"$backup_G_MESSAGES_DEBUG" != x ] ; then
         export G_MESSAGES_DEBUG="$backup_G_MESSAGES_DEBUG"
     fi
+    if test $RUNNING_USER_SYSTEMD -eq 0 ; then
+        systemctl stop "user@${LOGIN_UID}"
+    fi
+    systemctl status --no-pager "user@${LOGIN_UID}" || :
 }
 
 

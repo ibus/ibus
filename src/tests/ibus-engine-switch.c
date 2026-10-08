@@ -247,6 +247,110 @@ test_context_engine_set_by_focus (void)
     g_object_unref (another_context);
 }
 
+typedef struct {
+    GMainLoop *loop;
+    guint      n_pending;
+    guint      timeout_id;
+    gboolean   superseded_ok;
+    GError    *superseded_error;
+    gboolean   latest_ok;
+    GError    *latest_error;
+} SupersededData;
+
+static void
+superseded_reply_cb (SupersededData *data)
+{
+    if (--data->n_pending == 0)
+        g_main_loop_quit (data->loop);
+}
+
+static void
+set_global_engine_superseded_cb (GObject      *object,
+                                 GAsyncResult *res,
+                                 gpointer      user_data)
+{
+    SupersededData *data = user_data;
+    data->superseded_ok = ibus_bus_set_global_engine_async_finish (
+            bus, res, &data->superseded_error);
+    superseded_reply_cb (data);
+}
+
+static void
+set_global_engine_latest_cb (GObject      *object,
+                             GAsyncResult *res,
+                             gpointer      user_data)
+{
+    SupersededData *data = user_data;
+    data->latest_ok = ibus_bus_set_global_engine_async_finish (
+            bus, res, &data->latest_error);
+    superseded_reply_cb (data);
+}
+
+static gboolean
+superseded_timeout_cb (gpointer user_data)
+{
+    g_error ("SetGlobalEngine did not reply in time");
+    return G_SOURCE_REMOVE;
+}
+
+static void
+test_global_engine_superseded (void)
+{
+    IBusEngineDesc *engine_desc;
+    IBusInputContext *context;
+    guint n_cancelled = 0;
+    gint i;
+
+    if (!ibus_bus_get_use_global_engine (bus))
+        return;
+
+    context = ibus_bus_create_input_context (bus, "test");
+    ibus_input_context_set_capabilities (context, IBUS_CAP_FOCUS);
+    ibus_input_context_focus_in (context);
+    ibus_bus_set_global_engine (bus, BEFORE_ENGINE);
+
+    /* A SetGlobalEngine that arrives while an earlier one is still creating
+     * its engine supersedes it. The earlier caller gets G_IO_ERROR_CANCELLED,
+     * not a generic failure, so that it does not treat the switch as failed.
+     * Whether the second call arrives before the engine of the first one is
+     * created depends on scheduling, so send several pairs. */
+    for (i = 0; i < 10; i++) {
+        const gchar *superseded = (i % 2) ? BEFORE_ENGINE : AFTER_ENGINE;
+        const gchar *latest = (i % 2) ? AFTER_ENGINE : BEFORE_ENGINE;
+        SupersededData data = { NULL, };
+
+        data.loop = g_main_loop_new (NULL, FALSE);
+        data.n_pending = 2;
+        data.timeout_id = g_timeout_add_seconds (10, superseded_timeout_cb,
+                                                 NULL);
+        ibus_bus_set_global_engine_async (bus, superseded, -1, NULL,
+                                          set_global_engine_superseded_cb,
+                                          &data);
+        ibus_bus_set_global_engine_async (bus, latest, -1, NULL,
+                                          set_global_engine_latest_cb,
+                                          &data);
+        g_main_loop_run (data.loop);
+        g_source_remove (data.timeout_id);
+        g_main_loop_unref (data.loop);
+
+        if (!data.superseded_ok) {
+            g_assert_error (data.superseded_error,
+                            G_IO_ERROR, G_IO_ERROR_CANCELLED);
+            g_clear_error (&data.superseded_error);
+            n_cancelled++;
+        }
+        g_assert_no_error (data.latest_error);
+        g_assert_true (data.latest_ok);
+
+        engine_desc = ibus_bus_get_global_engine (bus);
+        g_assert_cmpstr (ibus_engine_desc_get_name (engine_desc), ==, latest);
+        g_object_unref (engine_desc);
+    }
+    g_assert_cmpuint (n_cancelled, >, 0);
+
+    g_object_unref (context);
+}
+
 gint
 main (gint    argc,
       gchar **argv)
@@ -272,6 +376,8 @@ main (gint    argc,
                      test_context_engine_set_by_global);
     g_test_add_func ("/ibus/engine-switch/context-engine-set-by-focus",
                      test_context_engine_set_by_focus);
+    g_test_add_func ("/ibus/engine-switch/global-engine-superseded",
+                     test_global_engine_superseded);
 
     result = g_test_run ();
     g_object_unref (bus);

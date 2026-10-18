@@ -205,6 +205,9 @@ struct _IBusWaylandIMPrivate
 
     IBusXkbKeymap key_user;
     IBusXkbKeymap key_sys;
+    guint keymap_sys_hash;
+    gchar *keymap_sys_text;
+    gsize keymap_sys_size;
     IBusKeyIsoLevelState iso_level3_state;
     IBusKeyIsoLevelState iso_level5_state;
 
@@ -1745,18 +1748,24 @@ create_user_xkb_keymap (struct xkb_context *xkb_context,
 
 
 static struct xkb_keymap *
-create_system_xkb_keymap (struct xkb_context *xkb_context,
-                          uint32_t            format,
-                          int32_t             fd,
-                          uint32_t            size)
+create_system_xkb_keymap (IBusWaylandIM  *wlim,
+                          uint32_t        format,
+                          int32_t         fd,
+                          uint32_t        size,
+                          guint          *keymap_hash,
+                          gchar         **keymap_text)
 {
+    IBusWaylandIMPrivate *priv;
     GMappedFile *map;
     GError *error = NULL;
-    struct xkb_keymap *xkb_keymap;
+    const gchar *keymap_str;
+    struct xkb_keymap *xkb_keymap = NULL;
 
-    g_assert (xkb_context);
-    if (format != WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1) {
-        close(fd);
+    g_assert (IBUS_IS_WAYLAND_IM (wlim));
+    priv = ibus_wayland_im_get_instance_private (wlim);
+    g_assert (priv->xkb_context);
+    if (format != WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1 || size == 0) {
+        close (fd);
         return NULL;
     }
 
@@ -1770,12 +1779,34 @@ create_system_xkb_keymap (struct xkb_context *xkb_context,
         return NULL;
     }
 
-    xkb_keymap = xkb_map_new_from_string (xkb_context,
-                                          g_mapped_file_get_contents (map),
+    keymap_str = g_mapped_file_get_contents (map);
+    if (size > g_mapped_file_get_length (map) || keymap_str[size - 1] != '\0')
+        goto out;
+
+    /* An fd number can be reused for a different keymap file.  Compare the
+     * contents so changed keymaps are applied even when the fd number is
+     * unchanged, and duplicate keymaps do not reset state.
+     * Check for an installed keymap too, since zero is a valid hash value.
+     * Matching hashes still need a byte comparison to rule out collisions.
+     */
+    *keymap_hash = g_str_hash (keymap_str);
+    if (priv->key_sys.keymap && priv->key_sys.state &&
+        *keymap_hash == priv->keymap_sys_hash &&
+        priv->keymap_sys_text && size == priv->keymap_sys_size &&
+        !memcmp (keymap_str, priv->keymap_sys_text, size))
+        goto out;
+
+    xkb_keymap = xkb_map_new_from_string (priv->xkb_context,
+                                          keymap_str,
                                           XKB_KEYMAP_FORMAT_TEXT_V1,
                                           0);
+    if (xkb_keymap) {
+        *keymap_text = g_malloc (size);
+        memcpy (*keymap_text, keymap_str, size);
+    }
+out:
     g_mapped_file_unref (map);
-    close(fd);
+    close (fd);
     return xkb_keymap;
 }
 
@@ -1845,10 +1876,16 @@ _bus_global_engine_changed_cb (IBusBus       *bus,
      * immediately without checking the Gsettings.
      */
     keymap = create_user_xkb_keymap (priv->xkb_context, desc);
+    if (!keymap && priv->key_sys.keymap)
+        keymap = xkb_keymap_ref (priv->key_sys.keymap);
     if (keymap) {
         has_keymap = ibus_xkb_keymap_update_with_keymap (&priv->key_user,
                                                          keymap);
         xkb_keymap_unref (keymap);
+    } else {
+        g_clear_pointer (&priv->key_user.state, xkb_state_unref);
+        g_clear_pointer (&priv->key_user.keymap, xkb_keymap_unref);
+        clear_keycode2sym (&priv->key_user.keycode2sym);
     }
     if (priv->verbose) {
         fprintf (priv->log, "New engine:%s keymap:%s state:%s\n",
@@ -1871,6 +1908,9 @@ input_method_keyboard_keymap (void                      *data,
     IBusWaylandIM *wlim = data;
     IBusWaylandIMPrivate *priv;
     struct xkb_keymap *keymap;
+    guint keymap_hash;
+    gchar *keymap_text = NULL;
+    gboolean update_user_keymap;
     gboolean has_keymap = FALSE;
 
     if (!IBUS_IS_WAYLAND_IM (wlim)) {
@@ -1916,25 +1956,30 @@ input_method_keyboard_keymap (void                      *data,
                                                 XKB_STATE_LAYOUT_EFFECTIVE));
         }
     }
-    if (priv->key_user.keymap && priv->key_user.state && priv->key_sys.state) {
-        close (fd);
+    keymap = create_system_xkb_keymap (wlim, format, fd, size,
+                                       &keymap_hash, &keymap_text);
+    if (!keymap)
         return;
+
+    /* The user keymap shares the system keymap only as a fallback.  Pointer
+     * identity preserves an engine keymap even if its contents are identical.
+     */
+    update_user_keymap = !priv->key_user.state ||
+            priv->key_user.keymap == priv->key_sys.keymap;
+    has_keymap = ibus_xkb_keymap_update_with_keymap (&priv->key_sys, keymap);
+    if (has_keymap) {
+        priv->keymap_sys_hash = keymap_hash;
+        g_free (priv->keymap_sys_text);
+        priv->keymap_sys_text = keymap_text;
+        priv->keymap_sys_size = size;
+        keymap_text = NULL;
+        if (update_user_keymap) {
+            has_keymap = ibus_xkb_keymap_update_with_keymap (&priv->key_user,
+                                                             keymap);
+        }
     }
-    keymap = create_system_xkb_keymap (priv->xkb_context, format, fd, size);
-    if (keymap) {
-        has_keymap = ibus_xkb_keymap_update_with_keymap (&priv->key_sys,
-                                                         keymap);
-        if (!has_keymap)
-            g_clear_pointer (&keymap, xkb_keymap_unref);
-    }
-    if (has_keymap && !priv->key_user.state) {
-        has_keymap = ibus_xkb_keymap_update_with_keymap (&priv->key_user,
-                                                         keymap);
-        if (!has_keymap)
-            g_clear_pointer (&keymap, xkb_keymap_unref);
-    }
-    if (has_keymap)
-        xkb_keymap_unref (keymap);
+    g_free (keymap_text);
+    xkb_keymap_unref (keymap);
     if (priv->verbose) {
         fprintf (priv->log, "System keymap format:%u fd:%d size:%u "
                             "keymap:%s state:%s\n",
@@ -3834,6 +3879,7 @@ ibus_wayland_im_destroy (IBusObject *object)
     g_clear_pointer (&priv->key_sys.state, xkb_state_unref);
     g_clear_pointer (&priv->key_user.keymap, xkb_keymap_unref);
     g_clear_pointer (&priv->key_sys.keymap, xkb_keymap_unref);
+    g_clear_pointer (&priv->keymap_sys_text, g_free);
     g_clear_pointer (&priv->xkb_context, xkb_context_unref);
     clear_keycode2sym (&priv->key_user.keycode2sym);
     clear_keycode2sym (&priv->key_sys.keycode2sym);

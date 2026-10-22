@@ -21,13 +21,14 @@
 # Liu Tao <lyuutau@outlook.com>, 2021, 2023.
 # lumingzh <lumingzh@qq.com>, 2025, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# Kung Kun <kun17.kung317@silomails.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.20\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2026-02-28 01:58+0000\n"
-"Last-Translator: lumingzh <lumingzh@qq.com>\n"
+"PO-Revision-Date: 2026-10-06 15:17+0000\n"
+"Last-Translator: Kung Kun <kun17.kung317@silomails.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -35,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16.1\n"
+"X-Generator: Weblate 2026.10\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -789,8 +790,8 @@ msgid ""
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
 "the panel icon.</i></small>"
 msgstr ""
-"<small><i>可以通过按下键盘快捷键或者点击面板图标来在上述列表中切换选中的输入"
-"法</i></small>"
+"<small><i>可通过键盘快捷键或点击面板图标，在上述已选输入法间进行切换。</i></"
+"small>"
 
 #: setup/setup.ui:885
 msgid ""

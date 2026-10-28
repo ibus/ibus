@@ -9,6 +9,18 @@ configure_file(
   install_dir: get_option('datadir') / 'dbus-1' / 'services',
 )
 
+if enable_systemd
+  configure_file(
+    input: 'ibus-portal.service.in',
+    output: '@BASENAME@',
+    configuration: {
+      'libexecdir': get_option('prefix') / get_option('libexecdir'),
+    },
+    install: true,
+    install_dir: systemduserunitdir,
+  )
+endif
+
 # Portal executable
 ibus_portal_sources = files(
   'portal.c',

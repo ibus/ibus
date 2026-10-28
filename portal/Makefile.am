@@ -72,8 +72,14 @@ dbusservice_in_files = org.freedesktop.portal.IBus.service.in
 dbusservice_DATA = $(dbusservice_in_files:.service.in=.service)
 dbusservicedir=${datadir}/dbus-1/services
 
-org.freedesktop.portal.IBus.service: org.freedesktop.portal.IBus.service.in
+%.service: %.service.in
 	$(AM_V_GEN) sed -e "s|\@libexecdir\@|$(libexecdir)|"  $< > $@.tmp && mv $@.tmp $@
+
+if ENABLE_SYSTEMD
+systemdservice_in_files = ibus-portal.service.in
+systemdservice_DATA = $(systemdservice_in_files:.service.in=.service)
+systemdservicedir = $(SYSTEMD_USER_UNIT_DIR)
+endif
 
 $(ibus_dbus_built_sources) : org.freedesktop.IBus.Portal.xml
 	$(AM_V_GEN) $(GDBUS_CODEGEN)                            \
@@ -85,11 +91,13 @@ $(ibus_dbus_built_sources) : org.freedesktop.IBus.Portal.xml
 
 EXTRA_DIST = \
     $(dbusservice_in_files) \
+    $(systemdservice_in_files) \
     org.freedesktop.IBus.Portal.xml \
     $(NULL)
 
 CLEANFILES = \
     $(dbusservice_DATA) \
+    $(systemdservice_DATA) \
     $(NULL)
 
 

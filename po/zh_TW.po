@@ -16,13 +16,15 @@
 # Peter Pan <pan93412@gmail.com>, 2019. #zanata
 # fujiwara <takao.fujiwara1@gmail.com>, 2019. #zanata
 # Yi-Jyun Pan <pan93412@gmail.com>, 2020.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.21\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2023-08-02 17:20+0900\n"
-"PO-Revision-Date: 2023-10-07 12:36+0000\n"
-"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
+"PO-Revision-Date: 2026-10-29 20:18+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/ibus/ibus/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -30,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
@@ -719,7 +721,7 @@ msgstr "<b>字型與風格</b>"
 
 #: setup/setup.ui:591
 msgid "General"
-msgstr "通用"
+msgstr "一般"
 
 #: setup/setup.ui:683
 msgid "Add the selected input method into the enabled input methods"

@@ -13,7 +13,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
 "PO-Revision-Date: 2026-11-01 20:18+0000\n"
-"Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/kab/>\n"
 "Language: kab\n"
@@ -1210,7 +1211,7 @@ msgstr "Gurmukhi"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:133
 msgid "Gujarati"
-msgstr ""
+msgstr "Tagujaratit"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1259,14 +1260,14 @@ msgstr "Tasinhalat"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:161
 msgid "Thai"
-msgstr ""
+msgstr "Taṭaylandit"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:165
 msgid "Lao"
-msgstr ""
+msgstr "Lawus"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1287,7 +1288,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:177
 msgid "Georgian"
-msgstr ""
+msgstr "Tajyuṛjit"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

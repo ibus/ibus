@@ -1650,14 +1650,19 @@ _set_cursor_location_internal (IBusIMContext *ibusimcontext)
     }
 
     native = gtk_widget_get_native (ibusimcontext->client_window);
+    if (!native)
+        return G_SOURCE_REMOVE;
+
     /* Translates from the surface coordinates into the widget coordinates. */
     gtk_native_get_surface_transform (native, &nx, &ny);
 
 #ifdef HAVE_XIM
     display = gtk_widget_get_display (ibusimcontext->client_window);
     if (GDK_IS_X11_DISPLAY (display)) {
-        GdkSurface *surface = gtk_native_get_surface
-            (gtk_widget_get_native (ibusimcontext->client_window));
+        GdkSurface *surface = gtk_native_get_surface (native);
+        if (!surface)
+            return G_SOURCE_REMOVE;
+
         Window child;
         int scale_factor = gtk_widget_get_scale_factor
             (ibusimcontext->client_window);

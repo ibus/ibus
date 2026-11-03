@@ -5,7 +5,7 @@
 #
 # ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025, 2026.
 # Moonshadow <starlight@users.noreply.translate.fedoraproject.org>, 2025.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025, 2026.
 # Massii Aqvayli <massiin@proton.me>, 2026.
 msgid ""
 msgstr ""
@@ -13,7 +13,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
 "PO-Revision-Date: 2026-10-30 21:18+0000\n"
-"Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/kab/>\n"
 "Language: kab\n"
@@ -547,7 +548,7 @@ msgstr "Ismenyifen n IBus"
 
 #: setup/ibus-setup.desktop:3
 msgid "Set IBus Preferences"
-msgstr ""
+msgstr "Sbadu imenyafen n IBus"
 
 #: setup/keyboardshortcut.py:55
 msgid "Keyboard shortcuts"
@@ -559,7 +560,7 @@ msgstr "Angal n tqeffalt:"
 
 #: setup/keyboardshortcut.py:82
 msgid "Modifiers:"
-msgstr ""
+msgstr "Asenfal:"
 
 #. apply button
 #: setup/keyboardshortcut.py:130

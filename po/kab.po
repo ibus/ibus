@@ -6,14 +6,14 @@
 # ButterflyOfFire <butterflyoffire@users.noreply.translate.fedoraproject.org>, 2024, 2025, 2026.
 # Moonshadow <starlight@users.noreply.translate.fedoraproject.org>, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# Massii Aqvayli <massiin@proton.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2026-05-11 17:59+0000\n"
-"Last-Translator: ButterflyOfFire "
-"<butterflyoffire@users.noreply.translate.fedoraproject.org>\n"
+"PO-Revision-Date: 2026-10-30 21:18+0000\n"
+"Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/kab/>\n"
 "Language: kab\n"
@@ -21,29 +21,30 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #. Translators: Here “Preload” is a verb
 #: data/dconf/org.freedesktop.ibus.gschema.xml:11
 msgid "Preload engines"
-msgstr ""
+msgstr "Ssali imsaddayen s uzwir"
 
 #. Translators: Tooltip for the button “Preload Engines”
 #: data/dconf/org.freedesktop.ibus.gschema.xml:13
 msgid "Preload engines during ibus starts up"
-msgstr ""
+msgstr "Ssali imsaddayen s uzwir mi ara yekker ibus"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:17
 msgid "Engines order"
-msgstr ""
+msgstr "Amizzwer n yimsaddayen"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:18
 msgid "Saved engines order in input method list"
-msgstr ""
+msgstr "Amizzwer n yimsaddayen yettwaseklsen deg tebdart n tarrayin n usekcem"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:22
 msgid "Popup delay milliseconds for IME switcher window"
 msgstr ""
+"Amenḍar s mili-tasinin uqbel abeggeḍ n usfaylu n usenfal n tarrayin n usekcem"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:23
 msgid ""
@@ -51,132 +52,145 @@ msgid ""
 "400. 0 = Show the window immediately. 0 < Delay milliseconds. 0 > Do not "
 "show the window and switch prev/next engines."
 msgstr ""
+"Sbadu amenḍar s mili-tasinin uqbel abeggeḍ n usfaylu n usenfal n tarrayin n "
+"usekcem. Azal n lexṣas d 400. 0 = Sken asfaylu imiren. Azal yugar 0 = Rǧu "
+"amḍan-nni n mili-tasinin uqbel abeggeḍ. Azal ddaw 0 = Ur d-skan ara asfaylu "
+"yerna senfel ɣer umsadday yezrin neɣ win i d-iteddun."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:27
 msgid "Saved version number"
-msgstr ""
+msgstr "Uṭṭun n lqem yettwaseklsen"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:28
 msgid ""
 "The saved version number will be used to check the difference between the "
 "version of the previous installed ibus and one of the current ibus."
 msgstr ""
+"Uṭṭun n lqem yettwaseklsen ad yettwaseqdec i usenqed n umgired gar lqem n "
+"ibus i yettwasbedden yakan d lqem-is amiran."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:80
 msgid "Latin layouts which have no ASCII"
-msgstr ""
+msgstr "Tineɣrufin tilatiniyin ur nesɛi ara ASCII"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:81
 msgid "US layout is appended to the Latin layouts. variant can be omitted."
 msgstr ""
+"Taneɣruft US tettwarna ɣer tneɣrufin tilatiniyin. Timzarayin zemrent ad "
+"ttwazeglent."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:85
 msgid "Use xmodmap"
-msgstr ""
+msgstr "Seqdec xmodmap"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:86
 msgid ""
 "Run xmodmap if .xmodmap or .Xmodmap exists when ibus engines are switched."
 msgstr ""
+"Selkem xmodmap ma yella ufaylu .xmodmap neɣ .Xmodmap mi ara ttwasenfalen "
+"yimsaddayen n ibus."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:90 setup/setup.ui:1220
 msgid "Use system keyboard layout"
-msgstr ""
+msgstr "Seqdec taneɣruft n unasiw n unagraw"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:91 setup/setup.ui:1225
 msgid "Use system keyboard (XKB) layout"
-msgstr ""
+msgstr "Seqdec taneɣruft n unasiw n unagraw (XKB)"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:95
 msgid "Embed Preedit Text"
-msgstr ""
+msgstr "Ger aḍris n uzarẓrag"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:96
 msgid "Embed Preedit Text in Application Window"
-msgstr ""
+msgstr "Ger aḍris n uzarẓrag deg usfaylu n usnas"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:100
 msgid "Use global input method"
-msgstr ""
+msgstr "Seqdec tarrayt tamatut n usekcem"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:101 setup/setup.ui:1269
 msgid "Share the same input method among all applications"
-msgstr ""
+msgstr "Bḍu yiwet n tarrayt n usekcem gar meṛṛa isnasen"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:105
 msgid "Enable input method by default"
-msgstr ""
+msgstr "Sermed tarrayt n usekcem s lexṣas"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:106
 msgid "Enable input method by default when the application gets input focus"
-msgstr ""
+msgstr "Sermed tarrayt n usekcem s lexṣas mi ara yawi usnas asaḍas n usekcem"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:110
 msgid "DConf preserve name prefixes"
-msgstr ""
+msgstr "Aḥraz n yezwiren n yismawen n DConf"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:111
 msgid "Prefixes of DConf keys to stop name conversion"
-msgstr ""
+msgstr "Izwiren n tsura n DConf i useḥbes n uselket n yismawen"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:118
 msgid "Trigger shortcut keys"
-msgstr ""
+msgstr "Inegzumen n unasiw n usenker"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:119
 #: data/dconf/org.freedesktop.ibus.gschema.xml:124 setup/setup.ui:236
 msgid "The shortcut keys for turning input method on or off"
-msgstr ""
+msgstr "Inegzumen n unasiw i usermed neɣ usensi n tarrayt n usekcem"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:123
 msgid "Trigger shortcut keys for gtk_accelerator_parse"
-msgstr ""
+msgstr "Inegzumen n unasiw n usenker i gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:128
 msgid "Enable shortcut keys"
-msgstr ""
+msgstr "Sermed inegzumen n unasiw"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:129
 msgid "The shortcut keys for turning input method on"
-msgstr ""
+msgstr "Inegzumen n unasiw i usermed n tarrayt n usekcem"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:133
 msgid "Disable shortcut keys"
-msgstr ""
+msgstr "Sens inegzumen n unasiw"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:134
 msgid "The shortcut keys for turning input method off"
-msgstr ""
+msgstr "Inegzumen n unasiw i usensi n tarrayt n usekcem"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:138
 #: data/dconf/org.freedesktop.ibus.gschema.xml:143
 msgid "Next engine shortcut keys"
-msgstr ""
+msgstr "Inegzumen n unasiw i usenfel ɣer umsadday i d-iteddun"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:139
 #: data/dconf/org.freedesktop.ibus.gschema.xml:144
 msgid "The shortcut keys for switching to the next input method in the list"
 msgstr ""
+"Inegzumen n unasiw i usenfel ɣer tarrayt n usekcem i d-iteddun deg tebdart"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:148
 #: data/dconf/org.freedesktop.ibus.gschema.xml:153
 msgid "Prev engine shortcut keys"
-msgstr ""
+msgstr "Inegzumen n unasiw i tuɣalin ɣer umsadday yezrin"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:149
 #: data/dconf/org.freedesktop.ibus.gschema.xml:154
 msgid "The shortcut keys for switching to the previous input method"
-msgstr ""
+msgstr "Inegzumen n unasiw i tuɣalin ɣer tarrayt n usekcem yezrin"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:160
 msgid "Auto hide"
-msgstr ""
+msgstr "Tuffra tawurmant"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:161
 msgid ""
 "The behavior of property panel. 0 = Do not show, 1 = Auto hide, 2 = Always "
 "show"
 msgstr ""
+"Tikli n ugalis n yiraten. 0 = Ur d-skan ara, 1 = Ffer s wudem awurman, 2 = "
+"Sken yal ass"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:165
 #: data/dconf/org.freedesktop.ibus.gschema.xml:169
@@ -185,49 +199,53 @@ msgstr "Adeg n ufeggag n tutlayt"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:173
 msgid "Follow the input cursor in case the panel is always shown"
-msgstr ""
+msgstr "Ḍfer asewwaṛ n usekcem mi ara yettwaskan ugalis yal tikelt"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:174
 msgid ""
 "If true, the panel follows the input cursor in case the panel is always "
 "shown. If false, the panel is shown at a fixed location."
 msgstr ""
+"Ma yermed, agalis yeṭṭafar asewwaṛ n usekcem mi ara yettwaskan ugalis yal "
+"tikelt. Ma yensa, agalis yettwaskan deg umḍiq usbiḍ."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:178
 msgid "The milliseconds to show property panel"
-msgstr ""
+msgstr "Akud s mili-tasinin i ubeggeḍ n ugalis n yiraten"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:179
 msgid ""
 "The milliseconds to show property panel after focus-in or properties are "
 "changed."
 msgstr ""
+"Akud s mili-tasinin i ubeggeḍ n ugalis n yiraten seld awway n usaḍas neɣ "
+"abeddel n yiraten."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:183
 msgid "Orientation of lookup table"
-msgstr ""
+msgstr "Tanila n tfelwit n unadi"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:184
 msgid "Orientation of lookup table. 0 = Horizontal, 1 = Vertical"
-msgstr ""
+msgstr "Tanila n tfelwit n unadi. 0 = Taglawant, 1 = Taratakt"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:188
 #: data/dconf/org.freedesktop.ibus.gschema.xml:189 setup/setup.ui:482
 #: setup/setup.ui:487
 msgid "Show icon on system tray"
-msgstr ""
+msgstr "Sken tignit deg tɣezzut n yilɣa"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:193
 msgid "Show input method name"
-msgstr ""
+msgstr "Sken isem n tarrayt n usekcem"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:194 setup/setup.ui:501
 msgid "Show input method name on language bar"
-msgstr ""
+msgstr "Sken isem n tarrayt n usekcem deg tfeggagt n tutlayin"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:198
 msgid "RGBA value of XKB icon"
-msgstr ""
+msgstr "Azal RGBA n tignit XKB"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:199
 msgid ""
@@ -239,10 +257,17 @@ msgid ""
 "to 255 or percentage values in the range 0% to 100%, and 'a' is a floating "
 "point value in the range 0 to 1 of the alpha."
 msgstr ""
+"Tignit XKB teskan-d azrar n yisekkilen n tneɣruft, yerna azrar-a "
+"yettwabeqqeḍ s wazal RGBA. Azal RGBA yezmer ad yili d 1. isem n yini seg "
+"X11, 2. azal hexadécimal s talɣa '#rrggbb', anda 'r', 'g' d 'b' d izwilen "
+"isḍisamrawanen n uzeggaɣ, adal d uzegzaw s umseḍfer, 3. ini RGB s talɣa 'rgb"
+"(r,g,b)' neɣ 4. ini RGBA s talɣa 'rgba(r,g,b,a)', anda 'r', 'g' d 'b' d "
+"imḍanen ummiden deg uzilal seg 0 ar 255 neɣ d azalen s ufmiḍi deg uzilal seg "
+"0% ar 100%, ma d 'a' d azal alpha s ticcert yettifliwen gar 0 d 1."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:203
 msgid "The milliseconds to show the panel icon for a property"
-msgstr ""
+msgstr "Akud s mili-tasinin i ubeggeḍ n tignit n ugalis i urat"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:204
 msgid ""
@@ -251,6 +276,10 @@ msgid ""
 "of icon-prop-key in IBusEngineDesc. If the value is 0, no delay time and the "
 "property icon is shown immediately."
 msgstr ""
+"Akud s mili-tasinin uqbel ad tbeddel tignit n ugalis seg tignit n umsadday "
+"ɣer tignit n urat mi ara ttwasenfalen yimsaddayen, ma yella arat yettwabder "
+"s wazal n icon-prop-key deg IBusEngineDesc. Ma yella azal d 0, ulac amenḍar "
+"yerna tignit n urat tettwaskan imiren."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:208
 msgid "Use custom font"
@@ -292,6 +321,7 @@ msgstr "Seqdec tignit tudmawant"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:229
 msgid "Use custom icon name for arrow buttons on candidate window"
 msgstr ""
+"Seqdec isem yugnen n tignit i tqeffalin n yineccaben deg usfaylu n yisumar"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:233
 msgid "Custom icon"
@@ -299,11 +329,13 @@ msgstr "Tignit tudmawant"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:234
 msgid "Custom icon name for arrow buttons on candidate window"
-msgstr ""
+msgstr "Isem yugnen n tignit i tqeffalin n yineccaben deg usfaylu n yisumar"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:238 setup/setup.ui:1317
 msgid "Choose glyphs with input method's language on candidate window"
 msgstr ""
+"Fren talɣiwin n yisekkilen ilmend n tutlayt n tarrayt n usekcem deg usfaylu "
+"n yisumar"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:239
 msgid ""
@@ -312,88 +344,104 @@ msgid ""
 "if the value is true and chooses them from the desktop locale if the value "
 "is false."
 msgstr ""
+"Kra n tneqqiḍin n tengalt sɛant talɣiwin yemgaraden n yisekkilen, yerna "
+"Pango isbadu talɣiwin-a ilmend n urat n tutlayt. Pango iferren talɣiwin n "
+"yisekkilen ilmend n tutlayt n umsadday IBus ma yella azal d tidet, yerna "
+"iferren-tent ilmend n yiɣewwaren idiganen n tnarit ma yella azal d arameɣtu."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:250
 msgid "Unicode shortcut keys for gtk_accelerator_parse"
-msgstr ""
+msgstr "Inegzumen n unasiw Unicode i gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:251
 msgid "The shortcut keys for turning Unicode typing on or off"
-msgstr ""
+msgstr "Inegzumen n unasiw i usermed neɣ usensi n usekcem s uskar Unicode"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:255
 msgid "Emoji shortcut keys for gtk_accelerator_parse"
-msgstr ""
+msgstr "Inegzumen n unasiw n yimuji i gtk_accelerator_parse"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:256
 msgid "The shortcut keys for turning emoji typing on or off"
-msgstr ""
+msgstr "Inegzumen n unasiw i usermed neɣ usensi n usekcem n yimuji"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:261
 msgid "Custom font name for emoji characters on emoji dialog"
 msgstr ""
+"Isem yugnen n tsefsit i yisekkilen n yimuji deg usfaylu n udiwenni n yimuji"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:265
 msgid "Default language for emoji dictionary"
-msgstr ""
+msgstr "Tutlayt n lexṣas i umawal n yimuji"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:266
 msgid ""
 "Choose a default language of emoji dictionaries on the emoji dialog. The "
 "value $lang is applied to /usr/share/ibus/dicts/emoji-$lang.dict ."
 msgstr ""
+"Fren tutlayt n lexṣas i yimawalen n yimuji deg usfaylu n udiwenni n yimuji. "
+"Azal $lang yettwasnas deg /usr/share/ibus/dicts/emoji-$lang.dict ."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:270
 msgid "favorite emoji list on emoji dialog"
-msgstr ""
+msgstr "Tabdart n yimuji imenyafen deg usfaylu n udiwenni n yimuji"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:271
 msgid ""
 "You can show the favorite emojis on emoji list if this list has any "
 "characters."
 msgstr ""
+"Tzemreḍ ad d-tsekneḍ imujiten imenyafen deg tebdart n yimujiten ma tesɛa "
+"tebdart-a isekkilen."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:275
 msgid "favorite emoji annotation list on emoji dialog"
 msgstr ""
+"Tabdart n tezmilin n yimujiten imenyafen deg usfaylu n udiwenni n yimujiten"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:276
 msgid "You can assign an annotation for a favorite emoji in this list."
-msgstr ""
+msgstr "Tzemreḍ ad tesdukleḍ tazmilt d umuji amenyaf deg tebdart-a."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:280
 msgid "Whether emoji annotations can be match partially or not"
-msgstr ""
+msgstr "Ma zemrent tezmilin n yimujiten ad mṣadant s imuren neɣ ala"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:281
 msgid ""
 "Whether emoji annotations can be matched with a partial string instead of "
 "the exact match or not."
 msgstr ""
+"Ma zemrent tezmilin n yimujiten ad mṣadant d uḥric n uzrar n yisekkilen deg "
+"umḍiq n uzrar ummid neɣ ala."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:285
 msgid "Match emoji annotations with the specified length"
-msgstr ""
+msgstr "Smṣada tizmilin n yimujiten yesɛan teɣzi yettwasbadun"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:286
 msgid ""
 "Match emoji annotations partially with more than the specified number of "
 "characters instead of the exact match."
 msgstr ""
+"Smṣada tizmilin n yimujiten s imuren s umḍan n yisekkilen yugaren win "
+"yettwasbadun, deg umḍiq n umṣada usdid."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:290
 msgid "Choose a condition to match emoji annotations partially"
-msgstr ""
+msgstr "Fren tawtilt i umṣada s imuren n tezmilin n yimujiten"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:291
 msgid ""
 "Choose one of the following conditions to match emoji annotations partially: "
 "0 == Prefix match, 1 == Suffix match, 2 == Containing match"
 msgstr ""
+"Fren yiwet seg tewtilin-a i umṣada s imuren n tezmilin n yimujiten: 0 == "
+"Amṣada n uzwir, 1 == Amṣada n uḍfir, 2 == Amṣada n ugbur"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:295
 msgid "Load the emoji data at the time of startup"
-msgstr ""
+msgstr "Ssali isefka n yimujiten mi ara yekker usnas"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:296
 msgid ""
@@ -401,10 +449,14 @@ msgid ""
 "needed to load the data. Load the emoji data when open the emoji dialog at "
 "the beginning if false."
 msgstr ""
+"Ssali isefka n yimujiten ticki yekker IBus, u yella yermed ufran-a. Asali n "
+"yisefka-a yesra azal n 10 MB n tkatut. Ma yensa ufran-a, isefka n yimujiten "
+"ad ttwasalin mi ara yettweldi usfaylu n udiwenni n yimujiten i tikkelt "
+"tamezwarut."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:300
 msgid "Load the Unicode data at the time of startup"
-msgstr ""
+msgstr "Ssali isefka Unicode mi ara yekker Ibus"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:301
 msgid ""
@@ -413,12 +465,19 @@ msgid ""
 "the beginning if false. The Unicode data is always loaded after the emoji "
 "data is loaded even if true."
 msgstr ""
+"Ssali isefka Unicode ticki yekker IBus, u yella yermed ufran-a. Asali n "
+"yisefka-a yesra azal n 15 MB n tkatut. Ma yensa ufran-a, isefka Unicode ad "
+"ttwasalin mi ara yettweldi usfaylu n udiwenni n yimujiten i tikkelt "
+"tamezwarut. Isefka Unicode ttwasalin yal tikelt seld yisefka n yimujiten, "
+"ula ma yermed ufran-a."
 
 #: ibus/_config.py.in:41
 msgid ""
 "Copyright (c) 2007-2010 Peng Huang\n"
 "Copyright (c) 2007-2010 Red Hat, Inc."
 msgstr ""
+"Izerfan n umeskar © 2007-2010 Peng Huang\n"
+"Izerfan n umeskar © 2007-2010 Red Hat, Inc."
 
 #: ibus/lang.py:41 src/ibusutil.c:209
 msgid "Other"
@@ -484,7 +543,7 @@ msgstr "Tarrayt n usekcem"
 
 #: setup/ibus-setup.desktop:2 setup/setup.ui:81
 msgid "IBus Preferences"
-msgstr ""
+msgstr "Ismenyifen n IBus"
 
 #: setup/ibus-setup.desktop:3
 msgid "Set IBus Preferences"
@@ -517,6 +576,8 @@ msgid ""
 "Please press a key (or a key combination).\n"
 "The dialog will be closed when the key is released."
 msgstr ""
+"Ttxil-k·m, ssed ɣef tsarut (neɣ tuddsa n tsura).\n"
+"Asfaylu n udiwenni ad yettwamedel mi ara tserḥeḍ i tsarut."
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
@@ -525,10 +586,11 @@ msgstr "Ttxil-k sit ɣef tqeffalt (neɣ taggayt n tqeffalin)"
 #: setup/main.py:122 setup/main.py:671
 msgid "Use shortcut with shift to switch to the previous input method"
 msgstr ""
+"Seqdec anegzum n unasiw akked Maj i tuɣalin ɣer tarrayt n usekcem yezrin"
 
 #: setup/main.py:589
 msgid "The IBus daemon is not running. Do you wish to start it?"
-msgstr ""
+msgstr "Akala ugilal n IBus ur yetteddu ara. Tebɣiḍ ad t-tsekkerḍ?"
 
 #: setup/main.py:610
 msgid ""
@@ -546,22 +608,35 @@ msgid ""
 "  export XMODIFIERS=@im=ibus\n"
 "  export QT_IM_MODULE=ibus"
 msgstr ""
+"IBus yettwasekker. Ma ur tezmireḍ ara ad tesqedceḍ IBus, rnu izirigen-a ɣer "
+"ufaylu $HOME/.bashrc; syin ales anekcum ɣer tnarit-ik·im.\n"
+"\n"
+"  # I tɣimiyin Wayland ($XDG_SESSION_TYPE d \"wayland\")\n"
+"  export GTK_IM_MODULE=wayland\n"
+"  export XMODIFIERS=@im=ibus\n"
+"  export QT_IM_MODULES=wayland;ibus\n"
+"  export QT_IM_MODULE=ibus\n"
+"\n"
+"  # I tɣimiyin X11 ($XDG_SESSION_TYPE d \"x11\")\n"
+"  export GTK_IM_MODULE=ibus\n"
+"  export XMODIFIERS=@im=ibus\n"
+"  export QT_IM_MODULE=ibus"
 
 #. Translators: %d == 5 currently
 #: setup/main.py:633
 #, python-format
 msgid "IBus daemon could not be started in %d seconds."
-msgstr ""
+msgstr "Akala ugilal n IBus ur yezmir ara ad yekker deg %d n tsinin."
 
 #: setup/main.py:645
 #, python-format
 msgid "Select keyboard shortcut for %s"
-msgstr ""
+msgstr "Fren anegzum n unasiw i %s"
 
 #. Translators: Title of the window
 #: setup/main.py:647
 msgid "switching input methods"
-msgstr ""
+msgstr "Asenfel n tarrayin n usekcem"
 
 #: setup/setup.ui:11
 msgid "Horizontal"
@@ -573,19 +648,19 @@ msgstr "Ubdid"
 
 #: setup/setup.ui:25
 msgid "Top left corner"
-msgstr ""
+msgstr "Tiɣmert n ufella ɣer zelmaḍ"
 
 #: setup/setup.ui:28
 msgid "Top right corner"
-msgstr ""
+msgstr "Tiɣmert n ufella ɣer yeffus"
 
 #: setup/setup.ui:31
 msgid "Bottom left corner"
-msgstr ""
+msgstr "Tiɣmert n wadda ɣer zelmaḍ"
 
 #: setup/setup.ui:34
 msgid "Bottom right corner"
-msgstr ""
+msgstr "Tiɣmert n wadda ɣer yeffus"
 
 #: setup/setup.ui:37
 msgid "Custom"
@@ -606,6 +681,7 @@ msgstr "Yal tikkelt"
 #: setup/setup.ui:125
 msgid "The shortcut keys for switching to next input method in the list"
 msgstr ""
+"Inegzumen n unasiw i usenfel ɣer tarrayt n usekcem i d-iteddun deg tebdart"
 
 #: setup/setup.ui:127
 msgid "Next input method:"
@@ -613,7 +689,7 @@ msgstr "Tarrayt n usekcem tudfiṛt:"
 
 #: setup/setup.ui:139
 msgid "The shortcut keys for switching to previous input method in the list"
-msgstr ""
+msgstr "Inegzumen n unasiw i tuɣalin ɣer tarrayt n usekcem yezrin deg tebdart"
 
 #: setup/setup.ui:141
 msgid "Previous input method:"
@@ -642,19 +718,19 @@ msgstr "<b>Inegzumen n unasiw</b>"
 
 #: setup/setup.ui:386
 msgid "Set the orientation of candidates in lookup table"
-msgstr ""
+msgstr "Sbadu tanila n yisumar deg tfelwit n unadi"
 
 #: setup/setup.ui:388
 msgid "Candidates orientation:"
-msgstr ""
+msgstr "Tanila n yisumar:"
 
 #: setup/setup.ui:419
 msgid "Set the behavior of ibus how to show or hide language bar"
-msgstr ""
+msgstr "Sbadu tikli n ibus i ubeggeḍ neɣ tuffra n tfeggagt n tutlayin"
 
 #: setup/setup.ui:421
 msgid "Show property panel:"
-msgstr ""
+msgstr "Sken agalis n yiraten:"
 
 #: setup/setup.ui:435
 msgid "Language panel position:"
@@ -663,14 +739,16 @@ msgstr "Adeg n ufeggag n tutlayt:"
 #: setup/setup.ui:506
 msgid "Show input method's name on language bar when check the checkbox"
 msgstr ""
+"Sken isem n tarrayt n usekcem deg tfeggagt n tutlayin mi ara tettwercem "
+"texxamt n ṛṛcem"
 
 #: setup/setup.ui:520
 msgid "Embed preedit text in application window"
-msgstr ""
+msgstr "Ger aḍris n uzarẓrag deg usfaylu n usnas"
 
 #: setup/setup.ui:525
 msgid "Embed the preedit text of input method in the application window"
-msgstr ""
+msgstr "Ger aḍris n uzarẓrag n tarrayt n usekcem deg usfaylu n usnas"
 
 #: setup/setup.ui:539
 msgid "Use custom font:"
@@ -686,7 +764,7 @@ msgstr "Amatu"
 
 #: setup/setup.ui:683
 msgid "Add the selected input method into the enabled input methods"
-msgstr ""
+msgstr "Rnu tarrayt n usekcem yettwafernen ɣer tarrayin n usekcem yermden"
 
 #: setup/setup.ui:694
 msgid "_Remove"
@@ -694,7 +772,7 @@ msgstr "Kkes (_R)"
 
 #: setup/setup.ui:701
 msgid "Remove the selected input method from the enabled input methods"
-msgstr ""
+msgstr "Kkes tarrayt n usekcem yettwafernen seg tarrayin n usekcem yermden"
 
 #: setup/setup.ui:712
 msgid "_Up"
@@ -703,6 +781,8 @@ msgstr "_Usawen"
 #: setup/setup.ui:719
 msgid "Move up the selected input method in the enabled input methods list"
 msgstr ""
+"Smutti d asawen tarrayt n usekcem yettwafernen deg tebdart n tarrayin n "
+"usekcem yermden"
 
 #: setup/setup.ui:730
 msgid "_Down"
@@ -711,6 +791,8 @@ msgstr "Ukessar (_D)"
 #: setup/setup.ui:737
 msgid "Move down the selected input method in the enabled input methods"
 msgstr ""
+"Smutti d akessar tarrayt n usekcem yettwafernen deg tebdart n tarrayin n "
+"usekcem yermden"
 
 #: setup/setup.ui:748
 msgid "_About"
@@ -718,7 +800,7 @@ msgstr "Ɣef (_A)"
 
 #: setup/setup.ui:755
 msgid "Show information of the selected input method"
-msgstr ""
+msgstr "Sken talɣut ɣef tarrayt n usekcem yettwafernen"
 
 #: setup/setup.ui:766
 msgid "_Preferences"
@@ -726,7 +808,7 @@ msgstr "Imenyafen (_P)"
 
 #: setup/setup.ui:773
 msgid "Show setup of the selected input method"
-msgstr ""
+msgstr "Sken aswel n tarrayt n usekcem yettwafernen"
 
 #: setup/setup.ui:824
 msgid ""
@@ -734,27 +816,32 @@ msgid ""
 "ones in the above list by pressing the keyboard shortcut keys or clicking "
 "the panel icon.</i></small>"
 msgstr ""
+"<small><i>Tzemreḍ ad tesnefleḍ tarrayt n usekcem yermden ɣer yiwet seg "
+"tarrayin yettwafernen deg tebdart n ufella s ussed ɣef tsura n unegzum n "
+"unasiw neɣ s usiti ɣef tignit n ugalis.</i></small>"
 
 #: setup/setup.ui:885
 msgid ""
 "The shortcut keys to enable conversions of emoji annotations or Unicode names"
 msgstr ""
+"Inegzumen n unasiw i usermed n uselket n tezmilin n yimujiten neɣ n yismawen "
+"Unicode"
 
 #: setup/setup.ui:887
 msgid "Emoji annotation:"
-msgstr ""
+msgstr "Tazmilt n yimujiten:"
 
 #: setup/setup.ui:939
 msgid "The shortcut keys to enable Unicode code point conversions"
-msgstr ""
+msgstr "Inegzumen n unasiw i usermed n uselket n tneqqiḍin n tengalt Unicode"
 
 #: setup/setup.ui:941
 msgid "Unicode code point:"
-msgstr ""
+msgstr "Taneqqiṭ n tengalt Unicode:"
 
 #: setup/setup.ui:1025
 msgid "Set a font of Unicode candidates on the emoji dialog"
-msgstr ""
+msgstr "Sbadu tasefsit n yisumar Unicode deg usfaylu n udiwenni n yimujiten"
 
 #: setup/setup.ui:1027
 msgid "Unicode font:"

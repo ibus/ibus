@@ -44,5 +44,13 @@ MSGID_BUGS_ADDRESS = $(PACKAGE_BUGREPORT)
 EXTRA_LOCALE_CATEGORIES =
 
 # https://wiki.gnome.org/Initiatives/GnomeGoals/GettextMigration
-PO_DEPENDS_ON_POT = "no"
-DIST_DEPENDS_ON_UPDAE_PO = "no"
+PO_DEPENDS_ON_POT = no
+DIST_DEPENDS_ON_UPDATE_PO = no
+
+# FIXME: `make -j$(nproc) -C po` calls duplicated msgfmt:
+# https://bugzilla.redhat.com/show_bug.cgi?id=2567178
+#   rm -f it.gmo && msgfmt -c --statistics --verbose -o it.gmo it.po
+#   rm -f ja.gmo && msgfmt -c --statistics --verbose -o ja.gmo ja.po
+#   rm -f it.gmo && msgfmt -c --statistics --verbose -o it.gmo it.po
+# Force sequential execution inside the po directory to protect msgfmt
+.NOTPARALLEL:

@@ -1058,13 +1058,14 @@ bus_ibus_impl_check_global_engine (BusIBusImpl *ibus)
 
     /* The current global engine is not removed, so do nothing. */
     if (ibus->global_engine_name != NULL &&
-        _find_engine_desc_by_name (ibus, ibus->global_engine_name)) {
+        bus_ibus_impl_get_engine_desc (ibus, ibus->global_engine_name)) {
         return;
     }
 
     /* If the previous engine is available, then just switch to it. */
     if (ibus->global_previous_engine_name != NULL &&
-        _find_engine_desc_by_name (ibus, ibus->global_previous_engine_name)) {
+        bus_ibus_impl_get_engine_desc (ibus,
+                                       ibus->global_previous_engine_name)) {
         bus_ibus_impl_set_global_engine_by_name (
             ibus, ibus->global_previous_engine_name);
         return;

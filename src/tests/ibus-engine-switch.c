@@ -247,6 +247,84 @@ test_context_engine_set_by_focus (void)
     g_object_unref (another_context);
 }
 
+static void
+register_component (GDBusConnection *connection)
+{
+    IBusComponent *component;
+    GVariant *result;
+    GError *error = NULL;
+
+    component = ibus_component_new ("test.dynamic", "", "", "", "", "", "",
+                                    "");
+    ibus_component_add_engine (
+            component,
+            ibus_engine_desc_new ("test-dynamic", "", "", "", "", "", "",
+                                  "us"));
+    result = g_dbus_connection_call_sync (
+            connection,
+            IBUS_SERVICE_IBUS,
+            IBUS_PATH_IBUS,
+            IBUS_INTERFACE_IBUS,
+            "RegisterComponent",
+            g_variant_new ("(v)",
+                           ibus_serializable_serialize (
+                                   IBUS_SERIALIZABLE (component))),
+            NULL,
+            G_DBUS_CALL_FLAGS_NONE,
+            -1,
+            NULL,
+            &error);
+    g_assert_no_error (error);
+    g_variant_unref (result);
+    g_object_unref (component);
+}
+
+static gboolean
+quit_cb (gpointer user_data)
+{
+    g_main_loop_quit ((GMainLoop *) user_data);
+    return G_SOURCE_REMOVE;
+}
+
+static void
+test_global_engine_survives_component_exit (void)
+{
+    GDBusConnection *connection;
+    IBusEngineDesc *engine_desc;
+    GMainLoop *loop;
+    GError *error = NULL;
+
+    if (!ibus_bus_get_use_global_engine (bus))
+        return;
+
+    ibus_bus_set_global_engine (bus, BEFORE_ENGINE);
+
+    connection = g_dbus_connection_new_for_address_sync (
+            ibus_get_address (),
+            G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT |
+            G_DBUS_CONNECTION_FLAGS_MESSAGE_BUS_CONNECTION,
+            NULL,
+            NULL,
+            &error);
+    g_assert_no_error (error);
+    register_component (connection);
+    g_dbus_connection_close_sync (connection, NULL, &error);
+    g_assert_no_error (error);
+    g_object_unref (connection);
+
+    loop = g_main_loop_new (NULL, FALSE);
+    g_timeout_add (500, quit_cb, loop);
+    g_main_loop_run (loop);
+    g_main_loop_unref (loop);
+
+    engine_desc = ibus_bus_get_global_engine (bus);
+    g_assert_nonnull (engine_desc);
+    g_assert_cmpstr (ibus_engine_desc_get_name (engine_desc),
+                     ==,
+                     BEFORE_ENGINE);
+    g_object_unref (engine_desc);
+}
+
 gint
 main (gint    argc,
       gchar **argv)
@@ -272,6 +350,8 @@ main (gint    argc,
                      test_context_engine_set_by_global);
     g_test_add_func ("/ibus/engine-switch/context-engine-set-by-focus",
                      test_context_engine_set_by_focus);
+    g_test_add_func ("/ibus/engine-switch/global-engine-survives-component-exit",
+                     test_global_engine_survives_component_exit);
 
     result = g_test_run ();
     g_object_unref (bus);

@@ -191,10 +191,10 @@ jobs:
           fedora*)
             cat /etc/fedora-release
             DNF=dnf
-            echo "$DNF -y update"
-            $DNF -y update
-            echo "$DNF -y install git which"
-            $DNF -y install git which
+            echo "$DNF -y update --enablerepo=updates-testing"
+            $DNF -y update --enablerepo=updates-testing
+            echo "$DNF -y install --enablerepo=updates-testing git which"
+            $DNF -y install --enablerepo=updates-testing git which
             PACKAGES=$(echo "$FEDORA_PACKAGES_BUILD" | tr -d '\n')
             PACKAGES=$(echo "$PACKAGES $FEDORA_PACKAGES_GTKDOC" | tr -d '\n')
             PACKAGES=$(echo "$PACKAGES $FEDORA_PACKAGES_CI_KEY" | tr -d '\n')
@@ -202,8 +202,8 @@ jobs:
             if test $${{ matrix.build }} -eq $BUILD_MESON; then
               PACKAGES=$(echo "$PACKAGES $FEDORA_PACKAGES_MESON" | tr -d '\n')
             fi
-            echo "$DNF -y install $PACKAGES"
-            $DNF -y install $PACKAGES
+            echo "$DNF -y install --enablerepo=updates-testing $PACKAGES"
+            $DNF -y install --enablerepo=updates-testing $PACKAGES
             rpm -q gnome-shell
             V=$(rpm -q gnome-shell | sed -e 's/gnome-shell-\([0-9]*\)[.-~].*/\1/')
             grep $V /usr/share/gnome-shell/extensions/no-overview@fthx/metadata.json
@@ -270,6 +270,7 @@ jobs:
         # be too long and failed to set DESTDIR to install
         # bindings/pygobject/IBus.py
         run: >
+          echo "Parallel build with $(nproc) CPUs";
           export DISABLE_DAEMONIZE_IN_TESTS=1;
           if test $${{ matrix.build }} -eq $BUILD_MESON;
           then

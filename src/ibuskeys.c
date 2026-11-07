@@ -170,6 +170,10 @@ ibus_key_event_from_string (const gchar *string,
     *keyval = 0;
     *modifiers = 0;
 
+    /* g_strsplit() returns an empty vector for "". */
+    if (*tokens == NULL)
+        goto _out;
+
     for (p = tokens; *(p + 1) != NULL; p++) {
         gint i;
         for (i = 0; i < 32; i++) {

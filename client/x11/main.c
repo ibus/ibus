@@ -467,18 +467,28 @@ xim_unset_ic_focus (XIMS xims, IMChangeFocusStruct *call_data)
 
 
 static void
-_xim_forward_key_event_done (X11IC   *x11ic,
+_xim_forward_key_event_done (CARD16   icid,
                              XEvent  *event,
                              gboolean processed)
 {
+    X11IC *x11ic;
     IMForwardEventStruct fe;
+
+    /* The client can destroy the IC while ibus-daemon processes the key
+     * event asynchronously. The key event must not be forwarded to the
+     * destroyed IC: the client would not reply with XIM_SYNC_REPLY and
+     * IMdkit would then queue all the later key events of the connection.
+     */
+    x11ic = (X11IC *) g_hash_table_lookup (_x11_ic_table,
+                                           GINT_TO_POINTER ((gint) icid));
+    if (x11ic == NULL)
+        return;
     if (processed) {
         if (!x11ic->has_preedit_area) {
             _xim_set_cursor_location (x11ic);
         }
         return;
     }
-    g_assert (x11ic);
     g_assert (event);
 
     memset (&fe, 0, sizeof (fe));
@@ -496,7 +506,7 @@ typedef struct {
     int                   count;
     guint                 count_cb_id;
     gboolean              retval;
-    X11IC                *x11ic;
+    CARD16                icid;
     CARD16                connect_id;
     XEvent                event;
 } ProcessKeyEventReplyData;
@@ -529,7 +539,7 @@ _process_key_event_done (GObject      *object,
     }
 
     if (retval == FALSE)
-        _xim_forward_key_event_done (data->x11ic, &data->event, retval);
+        _xim_forward_key_event_done (data->icid, &data->event, retval);
     g_slice_free (ProcessKeyEventReplyData, data);
 }
 
@@ -566,7 +576,7 @@ _process_key_event_reply_done (GObject      *object,
      * _process_key_event_reply_done(), the key events order
      * can be swapped.
      */
-    _xim_forward_key_event_done (data->x11ic, &data->event, retval);
+    _xim_forward_key_event_done (data->icid, &data->event, retval);
     data->count = 0;
     g_source_remove (data->count_cb_id);
 }
@@ -603,7 +613,7 @@ _process_key_event_sync (X11IC                *x11ic,
             event->hardware_keycode - 8,
             event->state);
     ibus_input_context_post_process_key_event (x11ic->context);
-    _xim_forward_key_event_done (x11ic, &call_data->event, retval);
+    _xim_forward_key_event_done (x11ic->icid, &call_data->event, retval);
     return 1;
 }
 
@@ -623,7 +633,7 @@ _process_key_event_async (X11IC                *x11ic,
         return _process_key_event_sync (x11ic, call_data, event);
     }
     data->connect_id = call_data->connect_id;
-    data->x11ic = x11ic;
+    data->icid = call_data->icid;
     data->event = call_data->event;
     ibus_input_context_process_key_event_async (x11ic->context,
                                                 event->keyval,
@@ -665,7 +675,7 @@ _process_key_event_hybrid_async (X11IC                *x11ic,
     g_source_unref (source);
     data->count_cb_id = g_source_get_id (source);
     data->connect_id = call_data->connect_id;
-    data->x11ic = x11ic;
+    data->icid = call_data->icid;
     data->event = call_data->event;
     ibus_input_context_process_key_event_async (x11ic->context,
                                                 event->keyval,
@@ -693,7 +703,8 @@ _process_key_event_hybrid_async (X11IC                *x11ic,
         == NULL) {
         return 1;
     }
-    _xim_forward_key_event_done (x11ic, &call_data->event, bus_retval);
+    _xim_forward_key_event_done (call_data->icid, &call_data->event,
+                                 bus_retval);
     return 1;
 }
 
@@ -1028,7 +1039,7 @@ _xim_forward_key_event (X11IC   *x11ic,
     xkp.xkey.state = state;
     xkp.xkey.keycode = (keycode == 0) ? 0 : keycode + 8;
 
-    _xim_forward_key_event_done (x11ic, &xkp, FALSE);
+    _xim_forward_key_event_done (x11ic->icid, &xkp, FALSE);
 }
 
 static void

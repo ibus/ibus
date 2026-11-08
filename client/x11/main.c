@@ -85,6 +85,8 @@ struct _X11IC {
     gboolean         preedit_visible;
     gboolean         preedit_started;
     gint             onspot_preedit_length;
+    gboolean         ibus_connected;
+    GCancellable    *context_cancellable;
 };
 
 static void     _xim_set_cursor_location    (X11IC              *x11ic);
@@ -327,39 +329,53 @@ _xim_store_ic_values (X11IC *x11ic, IMChangeICStruct *call_data)
     return 1;
 }
 
-
-static int
-xim_create_ic (XIMS xims, IMChangeICStruct *call_data)
+static void
+ibus_ic_connection_closed_cb (GDBusConnection *connection,
+                              gboolean         remote_peer_vanished,
+                              GError          *error,
+                              X11IC           *x11ic)
 {
-    static int base_icid = 1;
-    X11IC *x11ic;
+    /* rhbz#2195895 The moment of the IBusBus disconnection would be
+     * different from the moment of XIM_DISCONNECT.
+     */
+    x11ic->ibus_connected = FALSE;
+}
+
+
+static void
+_xim_create_input_context_cb (GObject      *source_object,
+                              GAsyncResult *res,
+                              gpointer      data)
+{
+    X11IC *x11ic = (X11IC *)data;
+    GError *error = NULL;
     guint32 capabilities = IBUS_CAP_FOCUS;
+    IBusInputContext *ibus_context;
+    GDBusConnection *connection;
 
-    call_data->icid = base_icid ++;
+    g_return_if_fail (x11ic);
 
-    LOG (1, "XIM_CREATE_IC ic=%d connect_id=%d",
-                call_data->icid, call_data->connect_id);
+    /* Should not use x11ic->context here since it might be deallocated. */
+    ibus_context = ibus_bus_create_input_context_async_finish (
+            (IBusBus *)source_object,
+            res,
+            &error);
 
-    x11ic = g_slice_new0 (X11IC);
-    g_return_val_if_fail (x11ic != NULL, 0);
-
-    x11ic->icid = call_data->icid;
-    x11ic->connect_id = call_data->connect_id;
-    x11ic->conn = (X11ICONN *)g_hash_table_lookup (_connections,
-                                                   GINT_TO_POINTER ((gint) call_data->connect_id));
-    if (x11ic->conn == NULL) {
-        g_slice_free (X11IC, x11ic);
-        g_return_val_if_reached (0);
+    if (!ibus_context) {
+        /* Probably cancelled the async task. */
+        g_warning ("Failed to create IBusInputContext: %s", error->message);
+        g_error_free (error);
+        return;
     }
-
-    _xim_store_ic_values (x11ic, call_data);
-
-    x11ic->context = ibus_bus_create_input_context (_bus, "xim");
-
-    if (x11ic->context == NULL) {
-        g_slice_free (X11IC, x11ic);
-        g_return_val_if_reached (0);
+    if (!x11ic->context_cancellable) {
+        g_warning ("Cancelled IBusInputContext");
+        g_clear_object (&ibus_context);
+        return;
     }
+    x11ic->context = ibus_context;
+
+    LOG (1, "Create async IBusInputContext ic=%d connect_id=%d",
+         x11ic->icid, x11ic->connect_id);
 
     g_signal_connect (x11ic->context, "commit-text",
                         G_CALLBACK (_context_commit_text_cb), x11ic);
@@ -376,19 +392,104 @@ xim_create_ic (XIMS xims, IMChangeICStruct *call_data)
                         G_CALLBACK (_context_enabled_cb), x11ic);
     g_signal_connect (x11ic->context, "disabled",
                         G_CALLBACK (_context_disabled_cb), x11ic);
-
+    connection = g_dbus_proxy_get_connection (G_DBUS_PROXY (x11ic->context));
+    x11ic->ibus_connected = !g_dbus_connection_is_closed (connection);
+    g_signal_connect (connection, "closed",
+                      G_CALLBACK (ibus_ic_connection_closed_cb), x11ic);
 
     if (x11ic->input_style & XIMPreeditCallbacks)
         capabilities |= IBUS_CAP_PREEDIT_TEXT;
     ibus_input_context_set_capabilities (x11ic->context, capabilities);
     if (_use_sync_mode == 1)
         ibus_input_context_set_post_process_key_event (x11ic->context, TRUE);
+}
+
+
+static int
+xim_create_ic (XIMS xims, IMChangeICStruct *call_data)
+{
+    static int base_icid = 1;
+    X11IC *x11ic;
+
+    call_data->icid = base_icid++;
+
+    LOG (1, "XIM_CREATE_IC ic=%d connect_id=%d",
+         call_data->icid, call_data->connect_id);
+
+    x11ic = g_slice_new0 (X11IC);
+    g_return_val_if_fail (x11ic != NULL, 0);
+
+    x11ic->icid = call_data->icid;
+    x11ic->connect_id = call_data->connect_id;
+    x11ic->conn = (X11ICONN *)g_hash_table_lookup (
+            _connections,
+            GINT_TO_POINTER ((gint) call_data->connect_id));
+    if (x11ic->conn == NULL) {
+        g_slice_free (X11IC, x11ic);
+        g_return_val_if_reached (0);
+    }
+
+    _xim_store_ic_values (x11ic, call_data);
+
+    if (!(x11ic->context_cancellable = g_cancellable_new ())) {
+        g_slice_free (X11IC, x11ic);
+        g_return_val_if_reached (0);
+    }
+
+    ibus_bus_create_input_context_async (_bus,
+                                         "xim",
+                                         -1,
+                                         x11ic->context_cancellable,
+                                         _xim_create_input_context_cb,
+                                         x11ic);
 
     g_hash_table_insert (_x11_ic_table,
                          GINT_TO_POINTER (x11ic->icid), (gpointer)x11ic);
     x11ic->conn->clients = g_list_append (x11ic->conn->clients,
                          (gpointer)x11ic);
     return 1;
+}
+
+
+static void
+_x11_ic_disconnect_ibus_ic_signals (X11IC *x11ic)
+{
+    g_assert (x11ic);
+    GDBusConnection *connection =
+            g_dbus_proxy_get_connection (G_DBUS_PROXY (x11ic->context));
+    x11ic->ibus_connected = FALSE;
+    g_signal_handlers_disconnect_by_func (
+            x11ic->context,
+            (GCallback)_context_commit_text_cb,
+            x11ic);
+    g_signal_handlers_disconnect_by_func (
+            x11ic->context,
+            (GCallback)_context_forward_key_event_cb,
+            x11ic);
+    g_signal_handlers_disconnect_by_func (
+            x11ic->context,
+            (GCallback)_context_update_preedit_text_cb,
+            x11ic);
+    g_signal_handlers_disconnect_by_func (
+            x11ic->context,
+            (GCallback)_context_show_preedit_text_cb,
+            x11ic);
+    g_signal_handlers_disconnect_by_func (
+            x11ic->context,
+            (GCallback)_context_hide_preedit_text_cb,
+            x11ic);
+    g_signal_handlers_disconnect_by_func (
+            x11ic->context,
+            (GCallback)_context_enabled_cb,
+            x11ic);
+    g_signal_handlers_disconnect_by_func (
+            x11ic->context,
+            (GCallback)_context_disabled_cb,
+            x11ic);
+    g_signal_handlers_disconnect_by_func (
+            connection,
+            (GCallback)ibus_ic_connection_closed_cb,
+            x11ic);
 }
 
 
@@ -400,11 +501,16 @@ xim_destroy_ic (XIMS xims, IMChangeICStruct *call_data)
     LOG (1, "XIM_DESTROY_IC ic=%d connect_id=%d",
                 call_data->icid, call_data->connect_id);
 
-    x11ic = (X11IC *)g_hash_table_lookup (_x11_ic_table,
-                                          GINT_TO_POINTER ((gint) call_data->icid));
+    x11ic = (X11IC *)g_hash_table_lookup (
+            _x11_ic_table,
+            GINT_TO_POINTER ((gint) call_data->icid));
     g_return_val_if_fail (x11ic != NULL, 0);
 
-    if (x11ic->context) {
+    if (x11ic->context_cancellable) {
+        g_cancellable_cancel (x11ic->context_cancellable);
+        g_clear_object (&x11ic->context_cancellable);
+    } else if (x11ic->context) {
+        _x11_ic_disconnect_ibus_ic_signals (x11ic);
         ibus_proxy_destroy ((IBusProxy *)x11ic->context);
         g_object_unref (x11ic->context);
         x11ic->context = NULL;
@@ -412,7 +518,8 @@ xim_destroy_ic (XIMS xims, IMChangeICStruct *call_data)
 
     g_hash_table_remove (_x11_ic_table,
                          GINT_TO_POINTER ((gint) call_data->icid));
-    x11ic->conn->clients = g_list_remove (x11ic->conn->clients, (gconstpointer)x11ic);
+    x11ic->conn->clients = g_list_remove (x11ic->conn->clients,
+                                          (gconstpointer)x11ic);
 
     g_free (x11ic->preedit_string);
     x11ic->preedit_string = NULL;
@@ -439,6 +546,8 @@ xim_set_ic_focus (XIMS xims, IMChangeFocusStruct *call_data)
     x11ic = (X11IC *) g_hash_table_lookup (_x11_ic_table,
                                            GINT_TO_POINTER ((gint) call_data->icid));
     g_return_val_if_fail (x11ic != NULL, 0);
+    if (!x11ic->ibus_connected)
+        return 1;
 
     ibus_input_context_focus_in (x11ic->context);
     _xim_set_cursor_location (x11ic);
@@ -458,6 +567,8 @@ xim_unset_ic_focus (XIMS xims, IMChangeFocusStruct *call_data)
     x11ic = (X11IC *) g_hash_table_lookup (_x11_ic_table,
                                            GINT_TO_POINTER ((gint) call_data->icid));
     g_return_val_if_fail (x11ic != NULL, 0);
+    if (!x11ic->ibus_connected)
+        return 1;
 
     ibus_input_context_focus_out (x11ic->context);
 
@@ -712,6 +823,8 @@ xim_forward_event (XIMS xims, IMForwardEventStruct *call_data)
             _x11_ic_table,
             GINT_TO_POINTER ((gint) call_data->icid));
     g_return_val_if_fail (x11ic != NULL, 0);
+    if (!x11ic->ibus_connected)
+        return 0;
 
     xevent = (XKeyEvent*) &(call_data->event);
 
@@ -774,10 +887,13 @@ _free_ic (gpointer data, gpointer user_data)
         x11ic->preedit_attrs = NULL;
     }
 
-    if (x11ic->context) {
+    if (x11ic->context_cancellable) {
+        g_cancellable_cancel (x11ic->context_cancellable);
+        g_clear_object (&x11ic->context_cancellable);
+    } else if (x11ic->context) {
+        _x11_ic_disconnect_ibus_ic_signals (x11ic);
         ibus_proxy_destroy ((IBusProxy *)x11ic->context);
-        g_object_unref (x11ic->context);
-        x11ic->context = NULL;
+        g_clear_object (&x11ic->context);
     }
 
     /* Remove the IC from g_client dictionary */
@@ -870,6 +986,8 @@ _xim_set_cursor_location (X11IC *x11ic)
         }
     }
 
+    if (!x11ic->ibus_connected)
+        return;
     ibus_input_context_set_cursor_location (x11ic->context,
             preedit_area.x,
             preedit_area.y,
@@ -950,6 +1068,8 @@ xim_reset_ic (XIMS xims, IMResetICStruct *call_data)
     x11ic = (X11IC *) g_hash_table_lookup (_x11_ic_table,
                                            GINT_TO_POINTER ((gint) call_data->icid));
     g_return_val_if_fail (x11ic != NULL, 0);
+    if (!x11ic->ibus_connected)
+        return 1;
 
     ibus_input_context_reset (x11ic->context);
 

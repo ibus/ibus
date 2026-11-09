@@ -49,8 +49,6 @@
 #include <getopt.h>
 
 #define ESC_SEQUENCE_ISO10646_1 "\033%G"
-/* Wait for about 120 secs to return a key from async process-key-event. */
-#define MAX_WAIT_KEY_TIME       120000
 
 #define LOG(level, fmt_args...) \
     if (g_debug_level >= (level)) { \
@@ -493,9 +491,6 @@ _xim_forward_key_event_done (X11IC   *x11ic,
 
 
 typedef struct {
-    int                   count;
-    guint                 count_cb_id;
-    gboolean              retval;
     X11IC                *x11ic;
     CARD16                connect_id;
     XEvent                event;
@@ -531,59 +526,6 @@ _process_key_event_done (GObject      *object,
     if (retval == FALSE)
         _xim_forward_key_event_done (data->x11ic, &data->event, retval);
     g_slice_free (ProcessKeyEventReplyData, data);
-}
-
-
-static void
-_process_key_event_reply_done (GObject      *object,
-                               GAsyncResult *res,
-                               gpointer      user_data)
-{
-    IBusInputContext *context = (IBusInputContext *)object;
-    ProcessKeyEventReplyData *data = (ProcessKeyEventReplyData *)user_data;
-    GError *error = NULL;
-    gboolean retval = ibus_input_context_process_key_event_async_finish (
-            context,
-            res,
-            &error);
-    if (error != NULL) {
-        g_warning ("Process Key Event failed: %s.", error->message);
-        g_error_free (error);
-    }
-    g_return_if_fail (data);
-    data->retval = retval;
-    if (g_hash_table_lookup (_connections,
-                             GINT_TO_POINTER ((gint)data->connect_id))
-        == NULL) {
-        return;
-    }
-    /* _xim_forward_key_event_done() should be called in
-     * _process_key_event_reply_done() because g_main_context_iteration()
-     * can call another xim_forward_event() and xim_forward_event() can be
-     * nested and the first _process_key_event_reply_done() is returned
-     * at last with g_main_context_iteration() so
-     * if _xim_forward_key_event_done() is called out of
-     * _process_key_event_reply_done(), the key events order
-     * can be swapped.
-     */
-    _xim_forward_key_event_done (data->x11ic, &data->event, retval);
-    data->count = 0;
-    g_source_remove (data->count_cb_id);
-}
-
-
-static gboolean
-_process_key_event_count_cb (gpointer user_data)
-{
-    ProcessKeyEventReplyData *data = (ProcessKeyEventReplyData *)user_data;
-    g_return_val_if_fail (data, G_SOURCE_REMOVE);
-    if (!data->count)
-        return G_SOURCE_REMOVE;
-    if (data->count++ == MAX_WAIT_KEY_TIME) {
-        g_warning ("Key event is not returned for %usecs.", MAX_WAIT_KEY_TIME);
-        return G_SOURCE_REMOVE;
-    }
-    return G_SOURCE_CONTINUE;
 }
 
 
@@ -638,67 +580,6 @@ _process_key_event_async (X11IC                *x11ic,
 
 
 static int
-_process_key_event_hybrid_async (X11IC                *x11ic,
-                                 IMForwardEventStruct *call_data,
-                                 GdkEventKey          *event)
-{
-    GSource *source;
-    ProcessKeyEventReplyData *data = NULL;
-    gboolean bus_retval;
-
-    g_assert (x11ic);
-    g_assert (call_data);
-    g_assert (event);
-    source = g_timeout_source_new (1);
-    if (source)
-        data = g_slice_new0 (ProcessKeyEventReplyData);
-    if (!data) {
-        int xim_retval;
-        g_warning ("Cannot wait for the reply of the process key event.");
-        xim_retval = _process_key_event_sync (x11ic, call_data, event);
-        if (source)
-            g_source_destroy (source);
-        return xim_retval;
-    }
-    data->count = 1;
-    g_source_attach (source, NULL);
-    g_source_unref (source);
-    data->count_cb_id = g_source_get_id (source);
-    data->connect_id = call_data->connect_id;
-    data->x11ic = x11ic;
-    data->event = call_data->event;
-    ibus_input_context_process_key_event_async (x11ic->context,
-                                                event->keyval,
-                                                event->hardware_keycode - 8,
-                                                event->state,
-                                                -1,
-                                                NULL,
-                                                _process_key_event_reply_done,
-                                                data);
-    g_source_set_callback (source, _process_key_event_count_cb,
-                           data, NULL);
-    while (data->count > 0 && data->count < MAX_WAIT_KEY_TIME)
-        g_main_context_iteration (NULL, TRUE);
-    /* #2498 Checking source->ref_count might cause Nautilus hang up
-     */
-    bus_retval = data->retval;
-    if (data->count == 0) {
-        g_slice_free (ProcessKeyEventReplyData, data);
-        return 1;
-    }
-
-    g_slice_free (ProcessKeyEventReplyData, data);
-    if (g_hash_table_lookup (_connections,
-                             GINT_TO_POINTER ((gint)call_data->connect_id))
-        == NULL) {
-        return 1;
-    }
-    _xim_forward_key_event_done (x11ic, &call_data->event, bus_retval);
-    return 1;
-}
-
-
-static int
 xim_forward_event (XIMS xims, IMForwardEventStruct *call_data)
 {
     X11IC *x11ic;
@@ -728,8 +609,6 @@ xim_forward_event (XIMS xims, IMForwardEventStruct *call_data)
     switch (_use_sync_mode) {
     case 1:
         return _process_key_event_sync (x11ic, call_data, &event);
-    case 2:
-        return _process_key_event_hybrid_async (x11ic, call_data, &event);
     default:
         return _process_key_event_async (x11ic, call_data, &event);
     }
@@ -1193,6 +1072,7 @@ _get_char_env (const gchar *name,
     if (value == NULL)
         return defval;
 
+    /* The mode 0 and 2 have the same behavior for the back compatibility. */
     if (g_strcmp0 (value, "") == 0 ||
         g_strcmp0 (value, "0") == 0 ||
         g_strcmp0 (value, "false") == 0 ||
@@ -1200,7 +1080,7 @@ _get_char_env (const gchar *name,
         g_strcmp0 (value, "FALSE") == 0) {
         return 0;
     } else if (!g_strcmp0 (value, "2")) {
-        return 2;
+        return 0;
     }
 
     return 1;

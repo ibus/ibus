@@ -231,7 +231,6 @@ struct _IBusWaylandKeyEvent
     guint count_cb_id;
     guint repeat_rate_id;
     char *ibus_object_path;
-    gboolean retval;
 };
 typedef struct _IBusWaylandKeyEvent IBusWaylandKeyEvent;
 
@@ -298,6 +297,7 @@ _get_char_env (const gchar *name,
     if (value == NULL)
         return defval;
 
+    /* The mode 0 and 2 have the same behavior for the back compatibility. */
     if (g_strcmp0 (value, "") == 0 ||
         g_strcmp0 (value, "0") == 0 ||
         g_strcmp0 (value, "false") == 0 ||
@@ -305,7 +305,7 @@ _get_char_env (const gchar *name,
         g_strcmp0 (value, "FALSE") == 0) {
         return 0;
     } else if (!g_strcmp0 (value, "2")) {
-        return 2;
+        return 0;
     }
 
     return 1;
@@ -2110,55 +2110,6 @@ _process_key_event_done (GObject      *object,
 
 
 static void
-_process_key_event_reply_done (GObject      *object,
-                               GAsyncResult *res,
-                               gpointer      user_data)
-{
-    IBusInputContext *context = (IBusInputContext *)object;
-    IBusWaylandKeyEvent *event = (IBusWaylandKeyEvent *)user_data;
-    GError *error = NULL;
-    gboolean retval = ibus_input_context_process_key_event_async_finish (
-            context,
-            res,
-            &error);
-    if (error != NULL) {
-        IBusWaylandIMPrivate *priv = NULL;
-        if (event && event->wlim && IBUS_IS_WAYLAND_IM (event->wlim)) {
-            priv = ibus_wayland_im_get_instance_private (event->wlim);
-        }
-        if (priv && priv->log) {
-            fprintf (priv->log, "Process Key Event failed: %s\n",
-                     error->message);
-            fflush (priv->log);
-        } else {
-            g_warning ("Process Key Event failed: %s", error->message);
-        }
-        g_error_free (error);
-    }
-    g_return_if_fail (event);
-    event->retval = retval;
-    event->count = 0;
-    g_source_remove (event->count_cb_id);
-}
-
-
-static gboolean
-_process_key_event_count_cb (gpointer user_data)
-{
-    IBusWaylandKeyEvent *event = (IBusWaylandKeyEvent *)user_data;
-    g_return_val_if_fail (event, G_SOURCE_REMOVE);
-    if (!event->count)
-        return G_SOURCE_REMOVE;
-    /* Wait for about 10 secs. */
-    if (event->count++ == 10000) {
-        event->count = 0;
-        return G_SOURCE_REMOVE;
-    }
-    return G_SOURCE_CONTINUE;
-}
-
-
-static void
 _process_key_event_sync (IBusWaylandIM       *wlim,
                          IBusWaylandKeyEvent *event)
 {
@@ -2231,71 +2182,6 @@ _process_key_event_async (IBusWaylandIM       *wlim,
 }
 
 
-static void
-_process_key_event_hybrid_async (IBusWaylandIM       *wlim,
-                                 IBusWaylandKeyEvent *event)
-{
-    IBusWaylandIMPrivate *priv;
-    GSource *source;
-    IBusWaylandKeyEvent *async_event = NULL;
-
-    g_return_if_fail (IBUS_IS_WAYLAND_IM (wlim));
-    g_assert (event);
-    priv = ibus_wayland_im_get_instance_private (wlim);
-    source = g_timeout_source_new (1);
-    if (source)
-        async_event = g_slice_new0 (IBusWaylandKeyEvent);
-    if (!async_event) {
-        if (priv->log) {
-            fprintf (priv->log, "Cannot wait for the reply of the "
-                                "process key event.\n");
-            fflush (priv->log);
-        } else {
-            g_warning ("Cannot wait for the reply of the process key event.");
-        }
-        _process_key_event_sync (wlim, event);
-        if (source)
-            g_source_destroy (source);
-        return;
-    }
-    async_event->count = 1;
-    async_event->wlim = wlim;
-    g_source_attach (source, NULL);
-    g_source_unref (source);
-    async_event->count_cb_id = g_source_get_id (source);
-    ibus_input_context_process_key_event_async (priv->ibuscontext,
-                                                event->sym,
-                                                event->key,
-                                                event->modifiers,
-                                                -1,
-                                                NULL,
-                                                _process_key_event_reply_done,
-                                                async_event);
-    g_source_set_callback (source, _process_key_event_count_cb,
-                           async_event, NULL);
-    while (async_event->count)
-        g_main_context_iteration (NULL, TRUE);
-    /* #2498 Checking source->ref_count might cause Nautilus hang up
-     */
-    if (priv->ibuscontext) {
-        async_event->retval = ibus_wayland_im_post_key (wlim,
-                                                        event->key,
-                                                        event->modifiers,
-                                                        event->state,
-                                                        event->sym,
-                                                        async_event->retval);
-    }
-    if (priv->ibuscontext && !async_event->retval) {
-        ibus_wayland_im_keycode (wlim,
-                                 event->key_serial,
-                                 event->time,
-                                 event->key,
-                                 event->state);
-    }
-    g_slice_free (IBusWaylandKeyEvent, async_event);
-}
-
-
 static gboolean
 _process_key_event_repeat_rate_cb (gpointer user_data)
 {
@@ -2326,9 +2212,6 @@ _process_key_event_repeat_rate_cb (gpointer user_data)
     switch (_use_sync_mode) {
     case 1:
         _process_key_event_sync (wlim, event);
-        break;
-    case 2:
-        _process_key_event_hybrid_async (wlim, event);
         break;
     default:
         _process_key_event_async (wlim, event);
@@ -2376,9 +2259,6 @@ _process_key_event_repeat_delay_cb (gpointer user_data)
     switch (_use_sync_mode) {
     case 1:
         _process_key_event_sync (event->wlim, event);
-        break;
-    case 2:
-        _process_key_event_hybrid_async (event->wlim, event);
         break;
     default:
         _process_key_event_async (event->wlim, event);
@@ -2586,8 +2466,6 @@ input_method_keyboard_key (void                      *data,
     switch (_use_sync_mode) {
     case 1:
         return _process_key_event_sync (wlim, &event);
-    case 2:
-        return _process_key_event_hybrid_async (wlim, &event);
     default:
         return _process_key_event_async (wlim, &event);
     }

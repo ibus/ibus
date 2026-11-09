@@ -2,7 +2,7 @@
 /* vim:set et sts=4: */
 /* ibus - The Input Bus
  * Copyright (C) 2008-2013 Peng Huang <shawn.p.huang@gmail.com>
- * Copyright (C) 2015-2025 Takao Fujiwara <takao.fujiwara1@gmail.com>
+ * Copyright (C) 2015-2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
  * Copyright (C) 2008-2025 Red Hat, Inc.
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
@@ -398,12 +398,6 @@ typedef struct {
     IBusIMContext *ibusimcontext;
 } ProcessKeyEventData;
 
-typedef struct {
-    int       count;
-    guint     count_cb_id;
-    gboolean  retval;
-} ProcessKeyEventReplyData;
-
 
 static void
 _process_key_event_done (GObject      *object,
@@ -452,45 +446,6 @@ _process_key_event_done (GObject      *object,
 #else
     gdk_event_free (event);
 #endif
-}
-
-
-static void
-_process_key_event_reply_done (GObject      *object,
-                               GAsyncResult *res,
-                               gpointer      user_data)
-{
-    IBusInputContext *context = (IBusInputContext *)object;
-    ProcessKeyEventReplyData *data = (ProcessKeyEventReplyData *)user_data;
-    GError *error = NULL;
-    gboolean retval = ibus_input_context_process_key_event_async_finish (
-            context,
-            res,
-            &error);
-    if (error != NULL) {
-        g_warning ("Process Key Event failed: %s.", error->message);
-        g_error_free (error);
-    }
-    g_return_if_fail (data);
-    data->retval = retval;
-    data->count = 0;
-    g_source_remove (data->count_cb_id);
-}
-
-
-static gboolean
-_process_key_event_count_cb (gpointer user_data)
-{
-    ProcessKeyEventReplyData *data = (ProcessKeyEventReplyData *)user_data;
-    g_return_val_if_fail (data, G_SOURCE_REMOVE);
-    if (!data->count)
-        return G_SOURCE_REMOVE;
-    /* Wait for about 10 secs. */
-    if (data->count++ == 10000) {
-        data->count = 0;
-        return G_SOURCE_REMOVE;
-    }
-    return G_SOURCE_CONTINUE;
 }
 
 
@@ -547,48 +502,6 @@ _process_key_event_async (IBusInputContext *context,
 
 
 static gboolean
-_process_key_event_hybrid_async (IBusInputContext *context,
-                                 guint             keyval,
-                                 guint             keycode,
-                                 guint             state)
-{
-    GSource *source = g_timeout_source_new (1);
-    ProcessKeyEventReplyData *data = NULL;
-    gboolean retval = FALSE;
-
-    if (source)
-        data = g_slice_new0 (ProcessKeyEventReplyData);
-    if (!data) {
-        g_warning ("Cannot wait for the reply of the process key event.");
-        retval = _process_key_event_sync (context, keyval, keycode, state);
-        if (source)
-            g_source_destroy (source);
-        return retval;
-    }
-    data->count = 1;
-    g_source_attach (source, NULL);
-    g_source_unref (source);
-    data->count_cb_id = g_source_get_id (source);
-    ibus_input_context_process_key_event_async (context,
-            keyval,
-            keycode - 8,
-            state,
-            -1,
-            NULL,
-            _process_key_event_reply_done,
-            data);
-    g_source_set_callback (source, _process_key_event_count_cb, data, NULL);
-    while (data->count)
-        g_main_context_iteration (NULL, TRUE);
-    /* #2498 Checking source->ref_count might cause Nautilus hang up
-     */
-    retval = data->retval;
-    g_slice_free (ProcessKeyEventReplyData, data);
-    return retval;
-}
-
-
-static gboolean
 _process_key_event (IBusInputContext *context,
 #if GTK_CHECK_VERSION (3, 98, 4)
                     GdkEvent         *event,
@@ -622,11 +535,6 @@ _process_key_event (IBusInputContext *context,
     switch (_use_sync_mode) {
     case 1: {
         retval = _process_key_event_sync (context, keyval, keycode, state);
-        break;
-    }
-    case 2: {
-        retval = _process_key_event_hybrid_async (context,
-                                                  keyval, keycode, state);
         break;
     }
     default: {
@@ -867,6 +775,7 @@ _get_char_env (const gchar *name,
     if (value == NULL)
         return defval;
 
+    /* The mode 0 and 2 have the same behavior for the back compatibility. */
     if (g_strcmp0 (value, "") == 0 ||
         g_strcmp0 (value, "0") == 0 ||
         g_strcmp0 (value, "false") == 0 ||
@@ -874,7 +783,7 @@ _get_char_env (const gchar *name,
         g_strcmp0 (value, "FALSE") == 0) {
         return 0;
     } else if (!g_strcmp0 (value, "2")) {
-        return 2;
+        return 0;
     }
 
     return 1;
@@ -997,11 +906,6 @@ ibus_im_context_class_init (IBusIMContextClass *class)
      *    the IBus client does not perform anything. Otherwise the IBus client
      *    forwards the key event with the gdk_event_put() in GTK3,
      *    gtk_im_context_filter_key() in GTK4, IMForwardEvent() in XIM API.
-     * 2: Hybrid asynchronous process key event:
-     *    Wait for the return of the IBus "ProcessKeyEvent" D-Bus method
-     *    *asynchronously* with a GSource loop and forward the return value
-     *    to the IBus event owner synchronously. So IBus clients perform
-     *    virtually synchronously to cover problems of IBus synchronous APIs.
      *
      * The purpose of the asynchronous process is that each IBus input
      * method can process the key events without D-Bus timeout and also

@@ -654,13 +654,28 @@ bus_match_rule_connection_destroy_cb (BusConnection *connection,
         BusRecipient *recipient = (BusRecipient *)p->data;
 
         if (recipient->connection == connection) {
+            /* Drop all registrations for this connection, regardless of
+             * the recipient's reference count.
+             * bus_match_rule_remove_recipient() removes one registration
+             * at a time. Disposal also clears the connection's destroy
+             * handler.
+             *
+             * E.g. With two accidental "AddMatch" D-Bus methods,
+             * bus_match_rule_add_recipient() increases the refcount of
+             * the recipient but the caller does not know if it's called
+             * twice due to the void API.
+             * With two accidental "RemoveMatch" D-Bus methods,
+             * bus_match_rule_remove_recipient() decreases the refcount of
+             * the recipient.
+             * bus_match_rule_connection_destroy_cb() destroys the recipient
+             * with any refcounts when the #BusConnection is destoryed.
+             */
             rule->recipients = g_list_delete_link (rule->recipients, p);
             bus_recipient_free (recipient);
+            if (rule->recipients == NULL) {
+                ibus_object_destroy (IBUS_OBJECT (rule));
+            }
             return;
-        }
-
-        if (rule->recipients == NULL) {
-            ibus_object_destroy (IBUS_OBJECT (rule));
         }
     }
     g_assert_not_reached ();

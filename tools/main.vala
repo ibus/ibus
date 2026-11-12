@@ -79,17 +79,6 @@ IBus.Bus? get_bus() {
 
 
 private void
-name_appeared_handler(GLib.DBusConnection connection,
-                      string name,
-                      string name_owner) {
-    if (verbose)
-        stderr.printf("NameAquired %s:%s\n", name, name_owner);
-    loop.quit();
-    loop = null;
-}
-
-
-private void
 kde_virtual_keyboard_avail_cb(GLib.DBusConnection connection,
                               string?             sender_name,
                               string              object_path,
@@ -107,30 +96,16 @@ kde_virtual_keyboard_avail_cb(GLib.DBusConnection connection,
 
 
 GLib.DBusConnection? get_session_bus(bool verbose) {
-    loop = new GLib.MainLoop();
-    assert(loop != null);
-    GLib.Bus.watch_name (GLib.BusType.SESSION,
-                         DBus.SERVICE_DBUS,
-                         GLib.BusNameWatcherFlags.NONE,
-                         name_appeared_handler,
-                         null);
-    GLib.DBusConnection? connection = null;
-    GLib.Bus.get.begin(GLib.BusType.SESSION, null,
-                           (obj, res) => {
-        try {
-            connection = GLib.Bus.get.end(res);
-            if (verbose)
-                stderr.printf("The session bus is generated.\n");
-        } catch(GLib.IOError e) {
-            if (verbose)
-                stderr.printf("The session bus error: %s\n", e.message);
-            if (loop != null) {
-                loop.quit();
-                loop = null;
-            }
-        }
-    });
-    loop.run();
+    GLib.DBusConnection connection;
+    try {
+        connection = GLib.Bus.get_sync(GLib.BusType.SESSION);
+    } catch (GLib.Error e) {
+        if (verbose)
+            stderr.printf("The session bus error: %s\n", e.message);
+        return null;
+    }
+    if (verbose)
+        stderr.printf("The session bus is generated.\n");
     if (connection.is_closed()) {
         if (verbose)
             stderr.printf("The session bus is closed.\n");

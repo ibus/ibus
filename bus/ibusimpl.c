@@ -1759,9 +1759,12 @@ _ibus_set_global_engine_ready_cb (BusInputContext       *context,
 
     GError *error = NULL;
     if (!bus_input_context_set_engine_by_desc_finish (context, res, &error)) {
+        /* Keep the error domain and code so that a caller can tell a request
+         * superseded by a newer SetGlobalEngine (G_IO_ERROR_CANCELLED) from
+         * a real failure. */
         g_dbus_method_invocation_return_error (data->invocation,
-                                               G_DBUS_ERROR,
-                                               G_DBUS_ERROR_FAILED,
+                                               error->domain,
+                                               error->code,
                                                "Set global engine failed: %s",
                                                error->message);
         g_error_free (error);

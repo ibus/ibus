@@ -150,6 +150,30 @@ class BindingCommon {
 #endif
     }
 
+    private static string
+    escape_css_string(string text) {
+        var escaped = new GLib.StringBuilder("\"");
+        int length = text.char_count();
+
+        for (int i = 0; i < length; i++) {
+            unichar ch = text.get_char(0);
+
+            if (ch == '"' || ch == '\\') {
+                escaped.append_c('\\');
+                escaped.append_unichar(ch);
+            } else if (ch < 0x20 || ch == 0x7f) {
+                // CSS hexadecimal escapes need trailing whitespace when the
+                // following character could be another hexadecimal digit.
+                escaped.append("\\%x ".printf(ch));
+            } else {
+                escaped.append_unichar(ch);
+            }
+            text = text.next_char();
+        }
+        escaped.append_c('"');
+        return escaped.str;
+    }
+
     public static void set_custom_font(GLib.Settings?       settings_panel,
                                        GLib.Settings?       settings_emoji,
                                        ref Gtk.CssProvider? css_provider) {
@@ -195,15 +219,17 @@ class BindingCommon {
         Pango.FontDescription font_desc =
                 Pango.FontDescription.from_string(custom_font);
         string font_family = font_desc.get_family();
+        string font_family_css = escape_css_string(font_family);
         int font_size = font_desc.get_size() / Pango.SCALE;
         string data;
 
         if (Gtk.MAJOR_VERSION < 3 ||
             (Gtk.MAJOR_VERSION == 3 && Gtk.MINOR_VERSION < 20)) {
-            data = "GtkLabel { font: %s; }".printf(custom_font);
+            data = "GtkLabel { font-family: %s; font-size: %dpt; }"
+                           .printf(font_family_css, font_size);
         } else {
             data = "label { font-family: %s; font-size: %dpt; }"
-                           .printf(font_family, font_size);
+                           .printf(font_family_css, font_size);
         }
 
         css_provider = new Gtk.CssProvider();

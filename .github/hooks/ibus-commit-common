@@ -160,6 +160,7 @@ spell_checking()
     done << EOF_ENVS_INTERNAL
     `cat </dev/stdin | grep -v "^#" | grep -vi "^closes: " |\
       grep -vi "^fixes:" | grep -vi "^part-of: " |\
+      grep -vi "^co-authored-by: " |\
       tr "$DELIM" " " | tr " 	" "\n" |\
      grep -Ev "http:|https:|ftp:|rdp:|nfs:|smb:|file:" | grep -Eiv "$EX_APIS" |\
      grep -Eiv "$DISTROS" | grep -Eiv "$PLATFORMS" | grep -Eiv "$TOOLS" |\

@@ -1759,9 +1759,22 @@ _ibus_set_global_engine_ready_cb (BusInputContext       *context,
 
     GError *error = NULL;
     if (!bus_input_context_set_engine_by_desc_finish (context, res, &error)) {
+        /* Keep the error domain and code so that a caller can tell a request
+         * superseded by a newer SetGlobalEngine (G_IO_ERROR_CANCELLED) from
+         * a real failure.
+         *
+         * The double SetGlobalEngine could call g_cancellable_cancel() in
+         * bus_input_context_set_engine_by_desc() -> cancel_set_engine_by_desc()
+         * and once g_cancellable_cancel() is called, libgio.so sets the
+         * G_IO_ERROR_CANCELLED error code with the "Operation was cancelled"
+         * error message.
+         * gnome-shell/js/misc/ibusManager.js:_setEngine() calls
+         * logErrorUnlessCancelled() for the error check, which can ignore
+         * the cancelled error with G_IO_ERROR_CANCELLED.
+         */
         g_dbus_method_invocation_return_error (data->invocation,
-                                               G_DBUS_ERROR,
-                                               G_DBUS_ERROR_FAILED,
+                                               error->domain,
+                                               error->code,
                                                "Set global engine failed: %s",
                                                error->message);
         g_error_free (error);

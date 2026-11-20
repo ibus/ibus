@@ -1,0 +1,45 @@
+#!/bin/bash
+# vim:set et sts=4 sw=4:
+# -*- coding: utf-8 -*-
+#
+# ibus - The Input Bus
+#
+# Copyright (c) 2026 Takao Fujiwara <takao.fujiwara1@gmail.com>
+#
+# SPDX-License-Identifier: LGPL-2.1-or-later
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, see <https://www.gnu.org/licenses/>.
+
+# You can copy this file to .git/hooks/post-merge with the file permission
+# '0755'.
+# This script is useful not to commit invalid commit IDs every time and
+# leave a temporary version(1.5.00) in source files when a release is
+# bumped.
+# Unfortunately .git/hooks/pre-merge-commit does not run for git merge
+# fast-forwarding and I use post-merge instead as a workaround
+# but post-merge succeed the last merge so need to run git reset --hard
+# if this script outputs warnings.
+
+. git-sh-setup
+IBUS_HOOK="$GIT_DIR/hooks/ibus-commit-common"
+test -x "$IBUS_HOOK" &&
+    . "$IBUS_HOOK" || {
+    echo >&2 "Not found $IBUS_HOOK"
+    exit 1
+}
+
+check_if_hook_is_latest "$IBUS_HOOK" || exit 1
+check_push_repo "$@" || exit 1
+
+exit 0

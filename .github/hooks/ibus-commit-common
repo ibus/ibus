@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # vim:set et sts=4 sw=4:
 # -*- coding: utf-8 -*-
 #
@@ -52,7 +52,12 @@ echo -e "\033[1;30;47mIBus commit-msg\033[0m"
 check_if_hook_is_latest()
 {
     eval ORIG_FILE=\"$(basename "$0")\"
-    CONFIG_FILE="$GIT_DIR/hooks/ibus-commit-config"
+    OLD_CONFIG_FILE="$GIT_DIR/hooks/ibus-commit-config"
+    test -f  "$OLD_CONFIG_FILE" && {
+        echo >&2 "ERROR: Now $OLD_CONFIG_FILE is renamed to '.config' file"
+        exit 1
+    } || :
+    CONFIG_FILE="$GIT_DIR/hooks/.config"
     test -f  "$CONFIG_FILE" && . "$CONFIG_FILE" || \
         echo >&2 "WARNING: No $CONFIG_FILE for GITHUB_DIR parameter"
     test "x$GITHUB_DIR" = "x" && \
@@ -70,6 +75,7 @@ check_if_hook_is_latest()
     }
 }
 
+
 check_if_gh_is_active()
 {
     which gh > /dev/null 2>&1 || {
@@ -83,6 +89,7 @@ check_if_gh_is_active()
     }
 }
 
+
 check_signed_off_by()
 {
     test "" = "$(cat </dev/stdin |
@@ -92,6 +99,7 @@ check_signed_off_by()
         exit 1
     }
 }
+
 
 check_commit_id()
 {
@@ -108,6 +116,7 @@ check_commit_id()
         exit 1
     }
 }
+
 
 check_commit_id_from_stdin()
 {
@@ -126,6 +135,7 @@ check_commit_id_from_stdin()
     done
 }
 
+
 check_tmp_version()
 {
     cat < /dev/stdin | sed -e "s?Subject: \[PATCH\] \(Release .*\)?\1?" |\
@@ -138,6 +148,7 @@ check_tmp_version()
         fi
     } || :
 }
+
 
 spell_checking()
 {
@@ -181,6 +192,7 @@ EOF_ENVS_INTERNAL
         echo "WARNING: Possible spelling errors \"$MISSPELLINGS\""
     }
 }
+
 
 insert_pr_id()
 {
@@ -227,4 +239,37 @@ $inserted_lines
         echo "" >> "$1"
         echo "$inserted_lines" >> "$1"
     }
+}
+
+
+check_push_repo()
+{
+    REMOTE_NAME="$1"
+    REMOTE_URL="$2"
+
+    REMOTE_PROJECT=$(basename $REMOTE_URL .git)
+
+    LOCAL_PROJECT=''
+    test -f ./meson.build && {
+        LOCAL_PROJECT=$(grep 'project(' ./meson.build | head -1 | sed -e 's/.*project(//' | awk -F, '{print $1}')
+        LOCAL_PROJECT="${LOCAL_PROJECT%\'}"
+        LOCAL_PROJECT="${LOCAL_PROJECT#\'}"
+    } || {
+        test -f ./configure.ac || test -f ./configure.in
+    } && {
+        if test -f ./configure.ac ; then
+            CONFIG_FILE='./configure.ac'
+        else
+            CONFIG_FILE='./configure.in'
+        fi
+        LOCAL_PROJECT=$(grep 'AC_INIT(' $CONFIG_FILE | head -1 | sed -e 's/.*AC_INIT(//' | awk -F, '{print $1}')
+        LOCAL_PROJECT="${LOCAL_PROJECT%\]}"
+        LOCAL_PROJECT="${LOCAL_PROJECT#\[}"
+    } || :
+
+    test "$REMOTE_PROJECT" != "$LOCAL_PROJECT" && {
+        echo >&2 "Local project is $LOCAL_PROJECT but remote is $REMOTE_PROJECT"
+        exit 1
+    } || :
+    return 0
 }

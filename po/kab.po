@@ -12,9 +12,8 @@ msgstr ""
 "Project-Id-Version: ibus 1.5.30\n"
 "Report-Msgid-Bugs-To: https://github.com/ibus/ibus/issues\n"
 "POT-Creation-Date: 2026-01-29 18:21+0900\n"
-"PO-Revision-Date: 2026-10-30 21:18+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2026-11-01 20:18+0000\n"
+"Last-Translator: Massii Aqvayli <massiin@proton.me>\n"
 "Language-Team: Kabyle <https://translate.fedoraproject.org/projects/ibus/"
 "ibus/kab/>\n"
 "Language: kab\n"
@@ -369,7 +368,8 @@ msgstr "Inegzumen n unasiw i usermed neɣ usensi n usekcem n yimuji"
 #: data/dconf/org.freedesktop.ibus.gschema.xml:261
 msgid "Custom font name for emoji characters on emoji dialog"
 msgstr ""
-"Isem yugnen n tsefsit i yisekkilen n yimuji deg usfaylu n udiwenni n yimuji"
+"Isem yugnen n tsefsit i yisekkilen n yimujiten deg tnaka n udiwenni n "
+"yimujiten"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:265
 msgid "Default language for emoji dictionary"
@@ -380,12 +380,12 @@ msgid ""
 "Choose a default language of emoji dictionaries on the emoji dialog. The "
 "value $lang is applied to /usr/share/ibus/dicts/emoji-$lang.dict ."
 msgstr ""
-"Fren tutlayt n lexṣas i yimawalen n yimuji deg usfaylu n udiwenni n yimuji. "
-"Azal $lang yettwasnas deg /usr/share/ibus/dicts/emoji-$lang.dict ."
+"Fren tutlayt n lexṣas i yimawalen n yimujiten deg tnaka n udiwenni n "
+"yimujiten. Azal $lang yettwasnas deg /usr/share/ibus/dicts/emoji-$lang.dict ."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:270
 msgid "favorite emoji list on emoji dialog"
-msgstr "Tabdart n yimuji imenyafen deg usfaylu n udiwenni n yimuji"
+msgstr "Tabdart n yimujiten imenyafen deg tnaka n udiwenni n yimujiten"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:271
 msgid ""
@@ -398,7 +398,7 @@ msgstr ""
 #: data/dconf/org.freedesktop.ibus.gschema.xml:275
 msgid "favorite emoji annotation list on emoji dialog"
 msgstr ""
-"Tabdart n tezmilin n yimujiten imenyafen deg usfaylu n udiwenni n yimujiten"
+"Tabdart n tezmilin n yimujiten imenyafen deg tnaka n udiwenni n yimujiten"
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:276
 msgid "You can assign an annotation for a favorite emoji in this list."
@@ -452,7 +452,7 @@ msgid ""
 msgstr ""
 "Ssali isefka n yimujiten ticki yekker IBus, u yella yermed ufran-a. Asali n "
 "yisefka-a yesra azal n 10 MB n tkatut. Ma yensa ufran-a, isefka n yimujiten "
-"ad ttwasalin mi ara yettweldi usfaylu n udiwenni n yimujiten i tikkelt "
+"ad ttwasalin mi ara tettweldi tnaka n udiwenni n yimujiten i tikkelt "
 "tamezwarut."
 
 #: data/dconf/org.freedesktop.ibus.gschema.xml:300
@@ -468,7 +468,7 @@ msgid ""
 msgstr ""
 "Ssali isefka Unicode ticki yekker IBus, u yella yermed ufran-a. Asali n "
 "yisefka-a yesra azal n 15 MB n tkatut. Ma yensa ufran-a, isefka Unicode ad "
-"ttwasalin mi ara yettweldi usfaylu n udiwenni n yimujiten i tikkelt "
+"ttwasalin mi ara tettweldi tnaka n udiwenni n yimujiten i tikkelt "
 "tamezwarut. Isefka Unicode ttwasalin yal tikelt seld yisefka n yimujiten, "
 "ula ma yermed ufran-a."
 
@@ -578,7 +578,7 @@ msgid ""
 "The dialog will be closed when the key is released."
 msgstr ""
 "Ttxil-k·m, ssed ɣef tsarut (neɣ tuddsa n tsura).\n"
-"Asfaylu n udiwenni ad yettwamedel mi ara tserḥeḍ i tsarut."
+"Tanaka n udiwenni ad temdel mi ara tserḥeḍ i tsarut."
 
 #: setup/keyboardshortcut.py:255
 msgid "Please press a key (or a key combination)"
@@ -842,7 +842,7 @@ msgstr "Taneqqiṭ n tengalt Unicode:"
 
 #: setup/setup.ui:1025
 msgid "Set a font of Unicode candidates on the emoji dialog"
-msgstr "Sbadu tasefsit n yisumar Unicode deg usfaylu n udiwenni n yimujiten"
+msgstr "Sbadu tasefsit n yisumar Unicode deg tnaka n udiwenni n yimujiten"
 
 #: setup/setup.ui:1027
 msgid "Unicode font:"
@@ -850,35 +850,39 @@ msgstr "Tasefsit n Unicode:"
 
 #: setup/setup.ui:1050
 msgid "Set a language of emoji annotations on the emoji dialog"
-msgstr ""
+msgstr "Sbadu tutlayt n tezmilin n yimujiten deg tnaka n udiwenni n yimujiten"
 
 #: setup/setup.ui:1052
 msgid "Emoji annotation language:"
-msgstr ""
+msgstr "Tutlayt n tezmilin n yimujiten:"
 
 #: setup/setup.ui:1074
 msgid ""
 "Match emoji annotations partially with the following condition and more than "
 "the number of characters:"
 msgstr ""
+"Smṣada tizmilin n yimujiten s imuren ilmend n tewtilt-a d umḍan n yisekkilen "
+"yugaren win yettwasbadun:"
 
 #: setup/setup.ui:1079
 msgid ""
 "If emoji annotations can be matched with a partial string instead of the "
 "exact match"
 msgstr ""
+"Ma zemrent tezmilin n yimujiten ad mṣadant d uḥric n uzrar n yisekkilen deg "
+"umḍiq n umṣada usdid"
 
 #: setup/setup.ui:1113
 msgid "Prefix match"
-msgstr ""
+msgstr "Amṣada n uzwir"
 
 #: setup/setup.ui:1127
 msgid "Suffix match"
-msgstr ""
+msgstr "Amṣada deg taggara"
 
 #: setup/setup.ui:1142
 msgid "Containing match"
-msgstr ""
+msgstr "Amṣada deg ugbur"
 
 #: setup/setup.ui:1188
 msgid "Emoji"
@@ -890,13 +894,15 @@ msgstr "<b>Tamudemt n unasiw</b>"
 
 #: setup/setup.ui:1290
 msgid "<b>Global input method settings</b>"
-msgstr ""
+msgstr "<b>Iɣewwaren n tarrayt tamatut n usekcem</b>"
 
 #: setup/setup.ui:1322
 msgid ""
 "Choose glyphs with the input method's language on the candidate window for "
 "the duplicated code points"
 msgstr ""
+"Fren talɣiwin n yisekkilen ilmend n tutlayt n tarrayt n usekcem deg usfaylu "
+"n yisumar i tneqqiḍin n tengalt yettwaɛawden"
 
 #: setup/setup.ui:1341
 msgid "Use custom theme:"
@@ -904,7 +910,7 @@ msgstr "Seqdec asentel udmawan:"
 
 #: setup/setup.ui:1342
 msgid "Choose a theme of the candidate window"
-msgstr ""
+msgstr "Fren asentel n usfaylu n yisumar"
 
 #: setup/setup.ui:1378
 msgid "Use custom icon:"
@@ -912,7 +918,7 @@ msgstr "Seqdec tignit tudmawant:"
 
 #: setup/setup.ui:1379
 msgid "Choose a theme of the arrow buttons on the candidate window"
-msgstr ""
+msgstr "Fren asentel n tqeffalin n yineccaben deg usfaylu n yisumar"
 
 #: setup/setup.ui:1424
 msgid "<b>Font and Theme</b>"
@@ -934,6 +940,14 @@ msgid ""
 "has been added to the Compose file:\n"
 "%s.\n"
 msgstr ""
+"Seg IBus 1.5.33, ifuyla Compose semselsin\n"
+"tigezmiwin n usuddes yeddan yakan d IBus. Iwakken ad tent-tḥerzeḍ\n"
+"yerna ad ternuḍ tigezmiwin-ik·im, izirig:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"yettwarna ɣer ufaylu Compose:\n"
+"%s.\n"
 
 #: src/ibuscomposetable.c:1875
 #, c-format
@@ -947,6 +961,14 @@ msgid ""
 "to the Compose file:\n"
 "%s."
 msgstr ""
+"Seg IBus 1.5.33, ifuyla Compose semselsin\n"
+"tigezmiwin n usuddes yeddan yakan d IBus. Iwakken ad tent-tḥerzeḍ\n"
+"yerna ad ternuḍ tigezmiwin-ik·im, ilaq ad ternuḍ izirig:\n"
+"\n"
+"  include \"%%L\"\n"
+"\n"
+"ɣer ufaylu Compose:\n"
+"%s."
 
 #: src/ibusemojigen.h:30
 msgid "Activities"
@@ -954,11 +976,11 @@ msgstr "Irmad"
 
 #: src/ibusemojigen.h:31
 msgid "Animals & Nature"
-msgstr ""
+msgstr "Iɣersiwen & ugama"
 
 #: src/ibusemojigen.h:32
 msgid "Component"
-msgstr ""
+msgstr "Isger"
 
 #: src/ibusemojigen.h:33
 msgid "Flags"
@@ -966,7 +988,7 @@ msgstr "Anayen"
 
 #: src/ibusemojigen.h:34
 msgid "Food & Drink"
-msgstr ""
+msgstr "Učči & tissit"
 
 #: src/ibusemojigen.h:35
 msgid "Objects"
@@ -974,11 +996,11 @@ msgstr "Tiɣawsiwin"
 
 #: src/ibusemojigen.h:36
 msgid "People & Body"
-msgstr ""
+msgstr "Imdanen & iḥricen n tfekka"
 
 #: src/ibusemojigen.h:37
 msgid "Smileys & Emotion"
-msgstr ""
+msgstr "Udmawen n teḍsa & iḥulfan"
 
 #: src/ibusemojigen.h:38
 msgid "Symbols"
@@ -986,11 +1008,11 @@ msgstr "Izamulen"
 
 #: src/ibusemojigen.h:39
 msgid "Travel & Places"
-msgstr ""
+msgstr "Asikel & imukan"
 
 #: src/ibusenginesimple.c:266
 msgid "Detect unregistered character in your compose sequence"
-msgstr ""
+msgstr "Af-d asekkil ur nettwasekles ara deg tgezmi-inek·inem n usuddes"
 
 #: src/ibusenginesimple.c:267
 msgid ""
@@ -999,66 +1021,70 @@ msgid ""
 "inputting the correct character to the compose sequence again, or press "
 "Escape key to terminate whole the compose sequence."
 msgstr ""
+"Asekkil i teskecmeḍ tura ur yettwaɛqel ara d aḥric ameɣtu n tgezmi n usuddes "
+"yermden tura, yerna yettwasefsex. Ɛreḍ ad teskecmeḍ tikkelt nniḍen asekkil "
+"iṣeḥḥan i tgezmi-a n usuddes, neɣ ssed ɣef tsarut Escape iwakken ad tfakkeḍ "
+"tigezmi n usuddes meṛṛa."
 
 #: src/ibusenginesimple.c:279
 msgid "Compose file update"
-msgstr ""
+msgstr "Aleqqem n ufaylu Compose"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:33
 msgid "Basic Latin"
-msgstr ""
+msgstr "Alatin azaduran"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:37
 msgid "Latin-1 Supplement"
-msgstr ""
+msgstr "Asemmad n Latin-1"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:41
 msgid "Latin Extended-A"
-msgstr ""
+msgstr "Alatin yettwasiɣzfen-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:45
 msgid "Latin Extended-B"
-msgstr ""
+msgstr "Alatin yettwasiɣzfen-B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:49
 msgid "IPA Extensions"
-msgstr ""
+msgstr "Isiɣzaf n IPA"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:53
 msgid "Spacing Modifier Letters"
-msgstr ""
+msgstr "Isekkilen n ubeddel yeṭṭafen tallunt"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:57
 msgid "Combining Diacritical Marks"
-msgstr ""
+msgstr "Ticṛaḍ n umgired yettwasdukkulen d yisekkilen"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:61
 msgid "Greek and Coptic"
-msgstr ""
+msgstr "Agrigi d ukebṭi"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1072,7 +1098,7 @@ msgstr "Asirilik"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:69
 msgid "Cyrillic Supplement"
-msgstr ""
+msgstr "Asemmad n usirilik"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1100,21 +1126,21 @@ msgstr "Aɛrab"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:85
 msgid "Syriac"
-msgstr ""
+msgstr "Tasuryanit"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:89
 msgid "Arabic Supplement"
-msgstr ""
+msgstr "Asemmad n taɛrabt"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:93
 msgid "Thaana"
-msgstr ""
+msgstr "Thaana"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1135,49 +1161,49 @@ msgstr "Samaritan"
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:105
 msgid "Mandaic"
-msgstr ""
+msgstr "Amandayi"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:109
 msgid "Syriac Supplement"
-msgstr ""
+msgstr "Asemmad n usuryani"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:113
 msgid "Arabic Extended-B"
-msgstr ""
+msgstr "Taɛrabt yettwasiɣzfen-B"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:117
 msgid "Arabic Extended-A"
-msgstr ""
+msgstr "Taɛrabt yettwasiɣzfen-A"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:121
 msgid "Devanagari"
-msgstr ""
+msgstr "Devanagari"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:125
 msgid "Bengali"
-msgstr ""
+msgstr "Tabengalit"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:129
 msgid "Gurmukhi"
-msgstr ""
+msgstr "Gurmukhi"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1191,42 +1217,42 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:137
 msgid "Oriya"
-msgstr ""
+msgstr "Turiyat"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:141
 msgid "Tamil"
-msgstr ""
+msgstr "Tatamilt"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:145
 msgid "Telugu"
-msgstr ""
+msgstr "Tatelugut"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:149
 msgid "Kannada"
-msgstr ""
+msgstr "Takannadat"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:153
 msgid "Malayalam"
-msgstr ""
+msgstr "Tamalayalamt"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:157
 msgid "Sinhala"
-msgstr ""
+msgstr "Tasinhalat"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1247,7 +1273,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:169
 msgid "Tibetan"
-msgstr ""
+msgstr "Tatibitant"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1275,28 +1301,28 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:185
 msgid "Ethiopic"
-msgstr ""
+msgstr "Taḥabact"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:189
 msgid "Ethiopic Supplement"
-msgstr ""
+msgstr "Asemmad n tḥabact"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:193
 msgid "Cherokee"
-msgstr ""
+msgstr "Tacerukit"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:197
 msgid "Unified Canadian Aboriginal Syllabics"
-msgstr ""
+msgstr "Agemmay n tunṭiqin yedduklen n yimezdaɣ ineṣliyen n Kanada"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1310,21 +1336,21 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:205
 msgid "Runic"
-msgstr ""
+msgstr "Arunik"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:209
 msgid "Tagalog"
-msgstr ""
+msgstr "Tatagalugt"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:213
 msgid "Hanunoo"
-msgstr ""
+msgstr "Tahanunut"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1345,14 +1371,14 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:225
 msgid "Khmer"
-msgstr ""
+msgstr "Takemrit"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:229
 msgid "Mongolian"
-msgstr ""
+msgstr "Tamungulit"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1360,6 +1386,7 @@ msgstr ""
 #: src/ibusunicodegen.h:233
 msgid "Unified Canadian Aboriginal Syllabics Extended"
 msgstr ""
+"Agemmay n tunṭiqin yedduklen yettwasiɣzfen n yimezdaɣ ineṣliyen n Kanada"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:
@@ -1387,7 +1414,7 @@ msgstr ""
 #. msgmerge -C gucharmap.po ibus.po ibus.pot
 #: src/ibusunicodegen.h:249
 msgid "Khmer Symbols"
-msgstr ""
+msgstr "Izamulen n tkemrit"
 
 #. TRANSLATORS: You might refer the translations from gucharmap with
 #. the following command:

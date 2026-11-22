@@ -1587,6 +1587,7 @@ ibus_input_context_fwd_text_to_update_preedit (IBusInputContext *context,
     array = g_strsplit (position->text, ",", -1);
     cursor_pos = g_ascii_strtoull (array[0], NULL, 10);
     visible = g_ascii_strtoull (array[1], NULL, 10) ? TRUE : FALSE;
+    ibus_input_context_convert_text (context, text);
     if (type == 'u') {
                 g_signal_emit (context,
                                context_signals[UPDATE_PREEDIT_TEXT],

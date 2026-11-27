@@ -159,8 +159,8 @@ option('no-snooper-apps',
 )
 # Bindings
 option('introspection',
-  type: 'boolean',
-  value: true,
+  type: 'feature',
+  value: 'auto',
   description: 'Build GObject introspection files',
 )
 option('vapi',

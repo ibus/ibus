@@ -220,8 +220,9 @@ endif
 introspection_dep = dependency('gobject-introspection-1.0', version: '>= 0.6.8',
                                required: get_option('introspection'))
 enable_introspection = introspection_dep.found()
+introspection_args = []
 if enable_introspection
-  introspection_args = [ '--warn-all', ]
+  introspection_args += [ '--warn-all', ]
   if introspection_dep.version().version_compare('>=1.83.2')
     introspection_args += [ '--doc-format=gi-docgen', ]
   endif
@@ -233,14 +234,28 @@ if enable_vapi and not enable_introspection
   error('VAPI support requires GObject introspection support')
 endif
 
+if not enable_vapi
+  foreach dep : [
+                  { 'option': 'engine', 'name': 'Engine' },
+                  { 'option': 'ui', 'name': 'UI' },
+                ]
+    if get_option(dep['option'])
+      error('@0@ requires VAPI support'.format(dep['name']))
+    endif
+  endforeach
+endif
+
+
+
 # Python
 pygobject_dep = dependency('pygobject-3.0', version: '>= 3.0.0',
                            required: false)
-enable_pygobject = pygobject_dep.found()
+enable_pygobject = pygobject_dep.found() and enable_introspection
+pyoverridesdir = ''
 if enable_pygobject
   pyoverridesdir = get_option('python-overrides-dir')
   if pyoverridesdir == ''
-    pyoverridesdir = run_command(python.full_path(), '-c',
+    pyoverridesdir = run_command(python, '-c',
                                  'import gi; print(gi._overridesdir)',
                                  check: true).stdout().strip()
   endif
@@ -447,7 +462,9 @@ endif
 if get_option('ui')
   subdir('ui')
 endif
-subdir('tools')
+if enable_vapi
+  subdir('tools')
+endif
 subdir('bus')
 if get_option('setup')
   subdir('setup')
